@@ -40,6 +40,7 @@ use App\Http\Controllers\Admin\PropertyTransactionController;
 use App\Http\Controllers\Admin\NotificationTemplateController;
 use App\Http\Controllers\Admin\Property_SubCategoryController;
 use App\Http\Controllers\Admin\AdvertisementPackagesController;
+use App\Http\Controllers\Admin\AdvertisementController;
 
 
 /*
@@ -446,8 +447,14 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('ads-packages/uplaod_file', 'upload_file');
         Route::post('ads-packages/change-status', 'change_status');
     });
-      
 
+    Route::controller(AdvertisementController::class)->group(function () {
+        Route::get('advertisement/ads_list', 'ads_list');
+        Route::get('advertisement/ajax_page', 'load_ajax_page');
+        Route::get('advertisement/options', 'get_option_value');
+        Route::POST('advertisement/add', 'add');
+    });
+      
     Route::prefix('membership')->controller(MembershipPlanController::class)->group(function () {
         Route::get('plan', 'index')->name('plan.index');
         Route::post('plan/add', 'store')->name('plan.store');

@@ -107,7 +107,7 @@ class AdvertisementPackages extends Model
                     ->leftJoin('advertisement_packages_names as p_n', 'p.package_id', '=', 'p_n.package_id')
                     ->select('p.*','p_n.package_name','p_n.package_lang');
         
-        //$query->groupBy('p_n.package_if');
+        $query->groupBy('p_n.package_id');
         // if(!empty($srch['lead_for']) && $srch['lead_for'] == 'project') {
         //     $query->where('e.project_id', '!=' ,'');
         // }

@@ -1114,3 +1114,16 @@ if (!function_exists('get_property_sub_category_name')) {
         return $result->name;
     }
 }
+
+if (!function_exists('get_all_country')) {
+    function get_all_city()
+    {
+        $result = DB::table('city as c')
+                    ->select('c.city_id','c_n.name')
+                   ->leftJoin('city_names as c_n', 'c.city_id', '=', 'c_n.city_id')
+                   ->where(['c.status'=>'1','c_n.lang'=>'en']) 
+                   ->get();
+
+        return $result;
+    }
+}

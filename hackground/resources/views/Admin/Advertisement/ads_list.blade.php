@@ -51,19 +51,25 @@
         <section class="content-header mb-2">
             <div class="row">
                 <div class="col-md-3 col-sm-4">
-                    <label for="lead_for">Type</label>
+                    <label for="lead_for">Page</label>
                     <div class="form-group">
                         <select class="form-control" name="lead_for" id="lead_for">
                             <option value="" >All</option>
-                            <option value="property" {{ request('lead_for') == 'property' ? 'selected' : ''; }}>Property</option>
-                            <option value="project" {{ request('lead_for') == 'project' ? 'selected' : ''; }}>Project</option>
+                            {{-- <option value="property" {{ request('lead_for') == 'property' ? 'selected' : ''; }}>Property</option> --}}
+                            @if($pages)
+                                @foreach($pages as $k=>$p)
+                                <option value="{{ $p['slug'] }}">{{ $p['name'] }}</option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-4">
-                    <label for="lead_type">Leads Date</label>
+                    <label for="category_key">Position </label>
                     <div class="form-group">
-                        <input type="date" class="form-control" id="enquery_date" name="enquery_date" value="{{ request('enquery_date') }}" />
+                        <select class="form-control" name="position">
+                            <option value="">-Select-</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-4">
@@ -189,7 +195,7 @@
 @push('custom-js')
 <script>
     function add(){
-        $.get(`{{ url('ads-packages/ajax_page?page='.$add_command) }}`, function(data) {
+        $.get(`{{ url('advertisement/ajax_page?page='.$add_command) }}`, function(data) {
             $('#ajax_modal').modal('show');
             $('#ajax_modal .modal-content').html(data);
         });
@@ -204,12 +210,6 @@
         });
     }
 
-    function view(id) {
-        $('.form-control').removeClass('is-invalid');
-        $('.invalid-feedback').empty();
-        viewLead('Lead Details', '', id);
-    }
-
     function viewLead(id) {
         if (id) {
             $.get(`{{ url('/enquiry/details') }}/${id}`, function(data) {
@@ -218,6 +218,31 @@
             });
         }
         
+    }
+
+    function get_position(){
+        reset_select([$('[name="position"]'), $('[name="ad_size"]')]);
+        var page = $('[name="page"] :selected').val();
+        $.get('<?php echo url('ads-packages/options?option=page_position&page=')?>'+page, function(res){
+            $('[name="position"]').html(res);
+        });
+    }
+    
+    function get_size(){
+        reset_select([$('[name="ad_size"]')]);
+        var position = $('[name="position"] :selected').val();
+        var page = $('[name="page"] :selected').val();
+        $.get('<?php echo url('ads-packages/options?option=ad_size&page=')?>'+page+'&position='+position, function(res){
+            $('[name="ad_size"]').html(res);
+        });
+    }
+
+    function reset_select(opt){
+        if(opt.length > 0 && opt instanceof Array){
+            opt.forEach(function(item, ind){
+                $(item).html('<option value="">-Select-</option>');
+            });
+        }
     }
 
     function add_edit() {

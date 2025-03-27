@@ -9,7 +9,7 @@
             <form role="form" id="add_form" action="<?php echo $form_action;?>" onsubmit="submitForm(this, event)">
                   <div class="box-body">
                     
-                    {{-- @php
+                    @php
                         $langs = explode(',', admin_default_lang());
                     @endphp
                     @foreach ($langs as $lang)
@@ -19,27 +19,7 @@
                                 name="lang[package_name][{{ $lang }}]" autocomplete="off">
                             <div class="invalid-feedback" id="package_name{{ $lang }}_error"></div>
                         </div>
-                    @endforeach --}}
-
-                    <div class="form-group">
-                        <label for="category_key">Category </label>
-                        <select class="form-control" name="category">
-                          <option value="">-Select-</option>
-                          <?php foreach($city as $c){ ?>
-                          <option value="<?php echo $c->city_id;?>"><?php echo $c->name;?></option>
-                          <?php } ?>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="category_key">City </label>
-                        <select class="form-control" name="city">
-                          <option value="">-Select-</option>
-                          <?php foreach($city as $c){ ?>
-                          <option value="<?php echo $c->city_id;?>"><?php echo $c->name;?></option>
-                          <?php } ?>
-                        </select>
-                    </div>
+                    @endforeach
                     
                     <div class="form-group">
                       <label for="category_key">Page </label>
@@ -66,23 +46,43 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="category_key">Type </label>
-                        <select class="form-control" name="ad_type" onchange="checkAdType()">
-                            <option value="admin">Admin</option>
-                            <option value="script">Script</option>
-                            <option value="image">Image</option>
-                        </select>
+                      <label for="duration">Duration In Week(s) </label>
+                      <input type="text" class="form-control reset_field" id="duration" name="duration" autocomplete="off">
+                    </div>
+
+                    <div class="form-group" id="ad_code_wrapper">
+                        <p><b>Creative</b></p>
+                        <div class="radio-inline">
+                            <input type="radio" name="creative" value="1" class="magic-radio" id="creative_1">
+                            <label for="creative_1">Yes</label> 
+                        </div>
+                        <div class="radio-inline">
+                            <input type="radio" name="creative" value="0" class="magic-radio" id="creative_0" checked>
+                            <label for="creative_0">No</label> 
+                        </div>
+                    </div>
+    
+                    <div class="form-group">
+                      <label for="price">Price(With Banner) </label>
+                      <input type="text" class="form-control reset_field" id="price" name="price" autocomplete="off">
+                    </div>
+    
+                    <div class="row" style="display:none" id="price-without-banner">
+                        <div class="col-12 form-group">
+                          <label for="price_without_banner">Price in INR(Without Banner) </label>
+                          <input type="text" class="form-control reset_field" id="price_without_banner" name="price_without_banner" autocomplete="off">
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="ufile">Advertisement Image</label>
+                        <label for="ufile">Advertisement Demo Image</label>
                         <div class="input-group">
                             <div class="custom-file">
                                 <input type="file" name="upload_file1" id="upload_file1"
                                     class="custom-file-input" >
                                 <label class="custom-file-label" for="ufile">Choose file</label>
                             </div>
-                            <input type="hidden" name="ad_image" id="ad_image" />
+                            <input type="hidden" name="demo_image" id="demo_image" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -92,30 +92,20 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="ufile">Advertisement Image Mobile</label>
+                        <label for="ufile">Advertisement Demo Image Mobile</label>
                         <div class="input-group">
                             <div class="custom-file">
                                 <input type="file" name="upload_file2" id="upload_file2"
                                     class="custom-file-input">
                                 <label class="custom-file-label" for="ufile">Choose file</label>
                             </div>
-                            <input type="hidden" name="ad_image_mobile" id="ad_image_mobile" />
+                            <input type="hidden" name="demo_image_mobile" id="demo_image_mobile" />
                         </div>
                     </div>
                     <div class="form-group">
                         <img id="image_preview2" src=" " style="display:none; width: 100px; height: auto;" />
                         <button type="button" id="delete_image_btn2" style="display:none;"
                             class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
-                    </div>
-
-                    <div class="form-group" id="ad_code_wrapper">
-                        <label for="ad_code">Advertisement Code </label>
-                        <textarea class="form-control" name="ad_code"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="ad_url">Ad URL </label>
-                        <input type="text" class="form-control reset_field" id="ad_url" name="ad_url" autocomplete="off">
                     </div>
 
                     <div class="form-group">
@@ -157,28 +147,8 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             dataType : 'JSON',
-            success : function(res){ 
-                if(res.status == 'OK')
-                {
-                    Swal.fire({
-                        title: "Success!",
-                        text: msg.message,
-                        icon: "success",
-                        confirmButtonText: "OK"
-                        }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location = location.href;
-                        }
-                    });
-                }else{
-                    Swal.fire({
-                        title: "Failed!",
-                        text: msg.message,
-                        icon: "error",
-                        confirmButtonText: "OK"
-                        }).then((result) => {
-                    });
-                }
+            success : function(res){
+                
             },
             error: function(xhr) {
                 var res = xhr.responseJSON;
@@ -218,7 +188,7 @@
     function get_position(){
         reset_select([$('[name="position"]'), $('[name="ad_size"]')]);
         var page = $('[name="page"] :selected').val();
-        $.get('<?php echo url('advertisement/options?option=page_position&page=')?>'+page, function(res){
+        $.get('<?php echo url('ads-packages/options?option=page_position&page=')?>'+page, function(res){
             $('[name="position"]').html(res);
         });
     }
@@ -227,7 +197,7 @@
         reset_select([$('[name="ad_size"]')]);
         var position = $('[name="position"] :selected').val();
         var page = $('[name="page"] :selected').val();
-        $.get('<?php echo url('advertisement/options?option=ad_size&page=')?>'+page+'&position='+position, function(res){
+        $.get('<?php echo url('ads-packages/options?option=ad_size&page=')?>'+page+'&position='+position, function(res){
             $('[name="ad_size"]').html(res);
         });
     }
@@ -269,8 +239,9 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(data) {
+                alert(data.status);
                 if (data.status == 'OK') { 
-                    $("#ad_image").val(data.file_name);
+                    $("#demo_image").val(data.file_name);
                     $("#image_preview1").show();
                     $("#delete_image_btn1").show();
                     $("#image_preview1").attr('src',data.file_path);
@@ -298,7 +269,7 @@
             success: function(data) {
                 alert(data.status);
                 if (data.status == 'OK') { 
-                    $("#ad_image_mobile").val(data.file_name);
+                    $("#demo_image_mobile").val(data.file_name);
                     $("#image_preview2").show();
                     $("#delete_image_btn2").show();
                     $("#image_preview2").attr('src',data.file_path);

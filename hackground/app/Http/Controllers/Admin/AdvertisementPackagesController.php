@@ -26,9 +26,10 @@ class AdvertisementPackagesController extends Controller
         $main_title = 'Ads Packages Management';
 		$second_title = 'All Packages';
 		$title = 'Packages List';
+        $pages = $this->package->get_pages();
         $list = $this->package->get_list($srch, $paginate);
        
-        return view('Admin.Advertisement.package_list', 
+        return view('Admin.Advertisement_package.package_list', 
         compact(
             'main_title',
             'second_title',
@@ -36,7 +37,8 @@ class AdvertisementPackagesController extends Controller
             'list',
             'add_command',
             'edit_command',
-            'add_btn'
+            'add_btn',
+            'pages'
         ));
     }
 
@@ -120,7 +122,7 @@ class AdvertisementPackagesController extends Controller
             // print_r($pages);exit;
         }
 
-        return view('Admin.Advertisement.ajax_page', compact('page', 'title', 'form_action','pages','positions', 'sizes', 'ID', 'detail'));
+        return view('Admin.Advertisement_package.ajax_page', compact('page', 'title', 'form_action','pages','positions', 'sizes', 'ID', 'detail'));
     }
 
     public function get_option_value(Request $request){
