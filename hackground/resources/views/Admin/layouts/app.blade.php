@@ -15,8 +15,7 @@
     <meta name="msapplication-tap-highlight" content="no">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/base.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/style.css') }}">
+
     @stack('custom-css')
 </head>
 
@@ -100,5 +99,11 @@
 
     @stack('custom-js')
 </body>
+<div class="modal fade" id="ajax_modal" tabindex="-1" role="dialog" aria-labelledby="ajax_modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
 
+        </div>
+    </div>
+</div>
 </html>

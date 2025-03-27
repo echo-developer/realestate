@@ -23,7 +23,7 @@ class SendPasswordResetEmail implements ShouldQueue
     public function __construct($email, $message)
     {
         $this->email = $email;
-        $this->message = $message; // Add message to constructor
+        $this->message = $message;
     }
 
     /**
@@ -31,14 +31,10 @@ class SendPasswordResetEmail implements ShouldQueue
      */
     public function handle()
     {
-        Log::info("SendPasswordResetEmail job started for email: {$this->email}");
 
-        // Use Mail::raw to send the message content
         Mail::raw($this->message, function ($message) {
             $message->to($this->email)
-                ->subject('Reset Password'); // Add the subject
+                ->subject('Reset Password');
         });
-
-        Log::info("SendPasswordResetEmail job completed.");
     }
 }

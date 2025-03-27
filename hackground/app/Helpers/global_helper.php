@@ -1,20 +1,21 @@
 <?php
 
-use App\Models\PrefProject;
-use App\Models\PrefProperty;
-use App\Models\ProjectSetting;
-use App\Models\ProjectView;
-use App\Models\PropertyView;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Schema;
-use Tymon\JWTAuth\Facades\JWTAuth;
-
+use App\Models\PrefProject;
+use App\Models\ProjectView;
+use App\Models\PrefProperty;
+use App\Models\PropertyView;
+use App\Models\ProjectSetting;
 use function PHPSTORM_META\type;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use PHPMailer\PHPMailer\PHPMailer;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Eloquent\Model;
 
 if (!function_exists('auth_user_id')) {
     function auth_user_id(): ?int
@@ -38,7 +39,63 @@ if (!function_exists('auth_user_id')) {
     }
 }
 
+if (!function_exists('SendMail')) {
+    function SendMail($to,  $mail_unique_title, $data_parse = [])
+    {
+        $mail = new PHPMailer(true);
+        $send='';
+        try {
+            $mail->isSMTP();
+            $mail->Host = get_setting('smtp-host');
+            $mail->SMTPAuth = true;
+            $mail->Username = get_setting('smtp-user');
+            $mail->Password = get_setting('smtp-pass');
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = get_setting('smtp-port');
+            $mail->SMTPOptions = [
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true,
+                ],
+            ];
 
+          
+            $mail->setFrom(get_setting('smtp-user'), 'Realestate');
+            $mail->addAddress($to);
+            $mail->addReplyTo(get_setting('smtp-user'));
+            $mailContent = DB::table('email_templates AS et')
+                ->select('etn.subject', 'etn.content')
+                ->join('email_templates_names AS etn', 'et.id', '=', 'etn.email_template_id')
+                ->where([
+                    ['et.key', '=', $mail_unique_title],
+                    ['etn.lang', '=', 'en']
+                ])
+                ->first();
+
+            $subject = $mailContent->subject;
+            $contents = html_entity_decode($mailContent->content);
+
+            foreach ($data_parse as $key => $val) {
+                $contents = str_replace('{' . $key . '}', $val, $contents);
+            }
+            $mail->isHTML(true);
+            $mail->CharSet = 'UTF-8';
+            $mail->ContentType = 'text/html';
+            $mail->Subject = $subject;
+            $mail->Body = nl2br($contents);
+            $mail->AltBody = strip_tags($contents);
+            $send = $mail->send();
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Email failed to send',
+                'error' => $mail->ErrorInfo
+            ]);
+        }
+        return $send;
+    }
+}
 if (!function_exists('UniquePropertyCode')) {
     function UniquePropertyCode($propertyId)
     {

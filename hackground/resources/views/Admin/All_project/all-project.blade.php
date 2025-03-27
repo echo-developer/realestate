@@ -208,12 +208,18 @@
         </div>
     </div>
 </div>
+
+
 @endsection
 
 
 
 
+
+
+
 @push('custom-js')
+
 <script>
     $(document).ready(function() {
 

@@ -392,6 +392,9 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/edit/{project_id}', 'ProjectEdit')->name('project.edit');
         Route::post('store_project_image', 'ProjectImageStore')->name('project.image');
         Route::post('savedata', 'saveProjectData')->name('project.saveProjectData');
+        Route::post('edit-project', 'editProjectData')->name('project.editproject');
+        Route::get('load-modal', 'loadModalPage')->name('project.modal');
+
     });
     Route::get('floor_plan', [FloorPlanController::class, 'view']);
     Route::post('add_floor_plan', [FloorPlanController::class, 'addFloorPlan']);
@@ -474,4 +477,7 @@ Route::get('/artisan-run', function () {
     Artisan::call('config:cache');
 
     return response()->json(['message' => 'Cache cleared and config cached successfully']);
+});
+Route::get('/send-mail', function () {
+    SendMail();
 });

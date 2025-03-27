@@ -24,10 +24,18 @@ class MailServiceProvider extends ServiceProvider
             'transport' => 'smtp',
             'host' => get_setting('smtp-host'),
             'port' => get_setting('smtp-port'),
-            'encryption' => get_setting('smtp-encryption') ?? 'tls',
+            'encryption' => env('MAIL_ENCRYPTION','smtp'),
             'username' => get_setting('smtp-user'),
             'password' => get_setting('smtp-pass'),
+            'stream' => [
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true,
+                ],
+            ],
         ]);
+        
 
         Config::set('mail.from', [
             'address' => get_setting('smtp-user') ?? 'default@example.com',

@@ -44,25 +44,16 @@ class VerifyUserMailController extends Controller
                 'expires_at' => $expiresAt,
             ]);
 
-            $template = DB::table('email_templates_names')
-                ->where('email_template_id', 1) //getting template id 1
-                ->where('lang', $request->input('lang', 'en'))
-                ->first();
 
-            if ($template) {
-                $emailContent = str_replace('{{ otp }}', $otp, $template->content);
-                $subject = $template->subject;
-            } else {
-                $subject = 'Email Verification';
-                $emailContent = "
-                    <h1>Email Verification</h1>
-                    <p>Your OTP Code is: <strong>{$otp}</strong></p>
-                    <p>This OTP is valid for 10 minutessss.</p>
-                ";
-            }
+            $mail_unique_title = 'email-verification';
 
-            Mail::to($request->email)->send(new SendOtpToVerifyMail($otp, $subject, $emailContent));
-
+            SendMail(
+                $request->email,
+                $mail_unique_title,
+                [
+                    'VERIFICATION_CODE' => $otp,
+                ],
+            );
             return response()->json(['message' => 'OTP sent successfully.'], 200);
         } catch (\Exception $e) {
             logError($e);

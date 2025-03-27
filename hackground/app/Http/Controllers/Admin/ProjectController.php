@@ -26,8 +26,8 @@ class ProjectController extends Controller
         $SubCategoryModel = new SubCategoryModel;
         $project_type = $SubCategoryModel->getCategories();
         $lang = $request->input('lang', 'en');
-        $uid= $request->input('uid', '');
-  
+        $uid = $request->input('uid', '');
+
         $homeontroller = new HomeController();
 
         $cities = json_decode($homeontroller->city($request)->getContent(), true)['data'] ?? [];
@@ -39,12 +39,12 @@ class ProjectController extends Controller
 
         //load Furnishes
         $propertyFurnishes = json_decode($postController->furnish($request)->getContent(), true)['data'] ?? [];
-        return view('Admin.All_project.add_project', compact('project_type', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus','uid'));
+        return view('Admin.All_project.add_project', compact('project_type', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus', 'uid'));
     }
 
     public function ProjectImageStore(Request $request)
     {
-     
+
 
         // Validate the request
         $request->validate([
@@ -168,6 +168,102 @@ class ProjectController extends Controller
             'message' => 'Validation passed, proceed to next step'
         ]);
     }
+    public function editProjectData(Request $request)
+    {
+        // Ensure `proj_id` is provided
+        if (!$request->has('project_id')) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Project ID is required for updating.'
+            ], 400);
+        }
+
+        // Find existing project
+        $project = PrefProject::find($request->project_id);
+
+        if (!$project) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Project not found.'
+            ], 404);
+        }
+
+        $step = $request->input('step');
+
+        // Define validation rules based on step
+        $rules = [];
+
+        switch ($step) {
+            case 1:
+                $rules = [
+                    'project_type' => 'required',
+                    'developer_name' => 'required|string',
+                    'developer_details' => 'required|string',
+                ];
+                break;
+
+            case 2:
+                $rules = [
+                    'city' => 'required|integer',
+                    'project_name' => 'required|string|max:255',
+                    'project_address' => 'required|string',
+                    'description' => 'required|string',
+                ];
+                break;
+
+            case 3:
+                $rules = [
+                    'occupied_area' => 'required|numeric',
+                    'total_area' => 'required|numeric',
+                    'total_unit' => 'required|integer',
+                    'parking' => 'required|string',
+                    'total_tower' => 'required|integer',
+                    'project_facing' => 'required|string',
+                    'main_road_facing' => 'required|string',
+                ];
+                break;
+
+            case 4:
+                $rules = [
+                    'expected_price' => 'required|numeric',
+                ];
+                break;
+        }
+
+        // Validate request data
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        // If step 6, update project details
+        if ($step == 6) {
+            try {
+                // Update project details
+                $this->saveProject($project, $request);
+                $this->saveProjectLocation($project->id, $request);
+                $this->saveProjectSettings($project->id, $request);
+                $this->saveProjectAdditional($project->id, $request);
+                $this->saveProjectGalleries($project->id, $request);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Project updated successfully',
+                    'data' => ['project_id' => $project->id]
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Something went wrong, please try again later.',
+                    'error' => $e->getMessage()
+                ]);
+            }
+        }
+    }
 
     private function saveProject($project, $request)
     {
@@ -268,7 +364,7 @@ class ProjectController extends Controller
         $SubCategoryModel = new SubCategoryModel;
         $project_type = $SubCategoryModel->getCategories();
         $lang = $request->input('lang', 'en');
-        $project_id=$request->project_id;
+        $project_id = $request->project_id;
         $homeontroller = new HomeController();
 
         $cities = json_decode($homeontroller->city($request)->getContent(), true)['data'] ?? [];
@@ -278,46 +374,47 @@ class ProjectController extends Controller
         $proepertyAmenities = json_decode($postController->get_property_amnity($request)->getContent(), true)['data'] ?? [];
         $propertyFurnishes = json_decode($postController->furnish($request)->getContent(), true)['data'] ?? [];
 
-        $projectData = PrefProject::where('id',  $project_id)->with([
+        $projectData = PrefProject::with([
             'settings',
             'additional',
             'location',
             'gallery',
             'landmarks',
             'gallery.images'
-        ])->first();
+        ])->findOrFail($project_id);
 
-    //  dd($projectData->settings);
-    $landmark_categories = [
-        'education' => [],
-        'healthcare' => [],
-        'shopping' => [],
-        'commercial' => [],
-        'transportation' => []
-    ];
+        $groupedGallery = $projectData->gallery->groupBy('image_type');
+        $landmark_categories = [
+            'education' => [],
+            'healthcare' => [],
+            'shopping' => [],
+            'commercial' => [],
+            'transportation' => []
+        ];
 
-    foreach ($projectData->landmarks as $landmark) {
-        $details = json_decode($landmark->landmark_details, true);
+        foreach ($projectData->landmarks as $landmark) {
+            $details = json_decode($landmark->landmark_details, true);
 
 
-        if (strpos($landmark->landmark_type, 'education') !== false) {
-            $landmark_categories['education'][] = $details;
-        } elseif (strpos($landmark->landmark_type, 'healthcare') !== false) {
-            $landmark_categories['healthcare'][] = $details;
-        } elseif (strpos($landmark->landmark_type, 'shopping_center') !== false) {
-            $landmark_categories['shopping'][] = $details;
-        } elseif (strpos($landmark->landmark_type, 'commercial') !== false) {
-            $landmark_categories['commercial'][] = $details;
-        } elseif (strpos($landmark->landmark_type, 'transportation') !== false) {
-            $landmark_categories['transportation'][] = $details;
+            if (strpos($landmark->landmark_type, 'education') !== false) {
+                $landmark_categories['education'][] = $details;
+            } elseif (strpos($landmark->landmark_type, 'healthcare') !== false) {
+                $landmark_categories['healthcare'][] = $details;
+            } elseif (strpos($landmark->landmark_type, 'shopping_center') !== false) {
+                $landmark_categories['shopping'][] = $details;
+            } elseif (strpos($landmark->landmark_type, 'commercial') !== false) {
+                $landmark_categories['commercial'][] = $details;
+            } elseif (strpos($landmark->landmark_type, 'transportation') !== false) {
+                $landmark_categories['transportation'][] = $details;
+            }
         }
+
+
+        return view('Admin.All_project.edit_project', compact('project_type', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus', 'projectData', 'project_id', 'landmark_categories', 'groupedGallery'));
     }
 
-
-        return view('Admin.All_project.edit_project', compact('project_type', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus', 'projectData','project_id','landmark_categories'));
-    }
-
-    public function getProjectDetails(Request $request){
+    public function getProjectDetails(Request $request)
+    {
 
         $projectData = PrefProject::where('id', $request->id)->with([
             'settings',
@@ -327,6 +424,21 @@ class ProjectController extends Controller
             'gallery.images'
         ])->first();
 
-      return view('Admin.All_project.project-details', compact('projectData'));
+        return view('Admin.All_project.project-details', compact('projectData'));
+    }
+
+    public function loadModalPage(Request $request)
+    {
+        $step = $request->query('step');
+        $projectData = PrefProject::with([
+            'settings',
+            'additional',
+            'location',
+            'gallery',
+            'landmarks',
+            'gallery.images'
+        ])->findOrFail($request->query('project_id'));
+
+        return view('Admin.All_project.project_modal', compact('step', 'projectData'));
     }
 }

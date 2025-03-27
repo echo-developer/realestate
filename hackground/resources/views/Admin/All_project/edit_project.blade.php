@@ -1,5 +1,47 @@
 @extends('Admin.layouts.app')
 @push('custom-css')
+<link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/style.css') }}">
+
+<style>
+  .upload-gallery img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin: 5px;
+
+  }
+
+  .upload-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .image-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 150px;
+    text-align: center;
+  }
+
+  .image-box img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+
+  .image-caption {
+    font-size: 14px;
+    color: #333;
+    margin-top: 5px;
+    white-space: nowrap;
+  }
+</style>
+
 
 @endpush
 @section('content')
@@ -29,15 +71,15 @@
     <div class="container-fluid">
       <ul id="myTab" class="nav nav-underline mb-3" role="tablist">
         <li class="nav-item">
-          <a class="nav-link {{ request('tab') == 'property-details' || !request('tab') ? 'active' : '' }}"
-            href="{{ route('project.edit', ['project_id' => $projectData->id, 'tab' => 'property-details']) }}">
-            Property Details
+          <a class="nav-link {{ request('tab') == 'project-details' || !request('tab') ? 'active' : '' }}"
+            href="{{ route('project.edit', ['project_id' => $projectData->id, 'tab' => 'project-details']) }}">
+            Project Details
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{ request('tab') == 'property-photos' ? 'active' : '' }}"
-            href="{{ route('project.edit', ['project_id' => $projectData->id, 'tab' => 'property-photos']) }}">
-            Property Photos
+          <a class="nav-link phototab {{ request('tab') == 'project-photos' ? 'active' : '' }}"
+            href="{{ route('project.edit', ['project_id' => $projectData->id, 'tab' => 'project-photos']) }}">
+            Project Photos
           </a>
         </li>
       </ul>
@@ -45,12 +87,12 @@
       <div class="tab-content">
 
         <!-- Property Details Tab -->
-        <div class="tab-pane fade {{ request('tab') == 'property-details' || !request('tab') ? 'show active' : '' }}" 
-         id="property-details" role="tabpanel">
+        <div class="tab-pane fade {{ request('tab') == 'project-details' || !request('tab') ? 'show active' : '' }}"
+          id="project-details" role="tabpanel">
           <div class="card">
             <div class="card-header d-flex">
               <h4 class="card-title">Basic Details </h4>
-              <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_profile_modal(9, 125)"><i class="fa fa-edit"></i></a>
+              <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_profile_modal(1, <?php echo $projectData->id ?>)"><i class="fa fa-edit"></i></a>
             </div>
             <div class="card-body">
               <ul class="list-info">
@@ -81,7 +123,7 @@
           <div class="card">
             <div class="card-header d-flex">
               <h4 class="card-title">Project Features </h4>
-              <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_profile_modal(9, 125)"><i class="fa fa-edit"></i></a>
+              <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_profile_modal(2, <?php echo $projectData->id ?>)"><i class="fa fa-edit"></i></a>
             </div>
             <div class="card-body">
               <ul class="list-info">
@@ -185,7 +227,7 @@
           <div class="card">
             <div class="card-header d-flex">
               <h4 class="card-title">Additional Information </h4>
-              <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_profile_modal(9, 125)"><i class="fa fa-edit"></i></a>
+              <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_profile_modal(3, <?php echo $projectData->id ?>)"><i class="fa fa-edit"></i></a>
             </div>
             <div class="card-body">
               <ul class="list-info">
@@ -210,7 +252,7 @@
           <div class="card">
             <div class="card-header d-flex">
               <h4 class="card-title">Project Landmark </h4>
-              <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_profile_modal(9, 125)"><i class="fa fa-edit"></i></a>
+              <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_profile_modal(4, <?php echo $projectData->id ?>)"><i class="fa fa-edit"></i></a>
             </div>
             <div class="card-body">
               <div class="list-container">
@@ -233,85 +275,85 @@
         </div>
       </div>
 
-      <div class="tab-pane fade{{ request('tab') == 'property-photos' || !request('tab') ? 'show active' : '' }}" 
-         id="property-details" role="tabpanel">
+      <div class="tab-pane fade{{ request('tab') == 'project-photos' || !request('tab') ? 'show active' : '' }} "
+        id="project-photos" role="tabpanel" style="{{ request('tab') == '' ? 'display: none;' : 'display: block;' }}">
         <div class="card">
           <div class="card-header d-flex">
             <h4 class="card-title">Property Photos</h4>
-            <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_profile_modal(9, 125)"><i class="fa fa-edit"></i></a>
+            <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_profile_modal(5, <?php echo $projectData->id ?>)"><i class="fa fa-edit"></i></a>
 
           </div>
           <div class="card-body">
             <div class="form-field">
               <div class="image-tab-content">
                 <ul class="nav nav-underline nav-custom">
-
-                  <li class="nav-item"><a class="nav-link active" data-tab='living'
-                      href="javascript:void(0)">Living room</a>
+                  @foreach($groupedGallery as $type => $images)
+                  <li class="nav-item">
+                    <a class="nav-link {{ $loop->first ? 'active' : '' }}" data-tab="{{ $type }}" href="javascript:void(0)">
+                      {{ ucfirst($type) }}
+                    </a>
                   </li>
-                  <li class="nav-item"><a class="nav-link" data-tab='bathroom'
-                      href="javascript:void(0)">Bathroom</a></li>
-                  <li class="nav-item"><a class="nav-link" data-tab='balcony'
-                      href="javascript:void(0)">Balconies</a>
-                  </li>
-                  <li class="nav-item"><a class="nav-link" data-tab='floor'
-                      href="javascript:void(0)">Floor Plan</a>
-                  </li>
-                  <li class="nav-item"><a class="nav-link" data-tab='master'
-                      href="javascript:void(0)">Master Plan</a>
-                  </li>
-                  <li class="nav-item"><a class="nav-link" data-tab='exterior'
-                      href="javascript:void(0)">Exterior View</a></li>
-                  <li class="nav-item"><a class="nav-link" data-tab='other'
-                      href="javascript:void(0)">Others</a></li>
+                  @endforeach
                 </ul>
               </div>
             </div>
-            <!-- Hidden Field to Store Image Names -->
 
-            <div class="img-content" id="tab-content-living">
-              <div class="upload-gallery" id="preview-living"></div>
-              <div class="form-field">
-                <label class="form-label">Description</label>
-                <textarea rows="3" class="form-control" name="image_desc[living]" placeholder="Write something..."></textarea>
+            @foreach($groupedGallery as $type => $images)
+            <div class="img-content" id="tab-content-{{ $type }}" style="{{ $loop->first ? '' : 'display: none;' }}">
+              <div class="upload-gallery" id="preview-{{ $type }}">
+                @foreach($images as $galleryItem)
+                @foreach($galleryItem->images as $image)
+                <div class="image-box">
+                  <img src="{{ asset('user_upload/project_images/' . $image->filename) }}" alt="Image">
+                  <p class="image-caption">{{ $image->caption ?? 'No caption available' }}</p>
+                </div>
+                @endforeach
+                @endforeach
               </div>
             </div>
+            @endforeach
 
-    
           </div>
+
         </div>
-      </div>
-
-    </div>
   </section>
-</div>
-<div class="modal fade" id="ajaxModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-
-    </div>
-  </div>
 </div>
 
 @endsection
+
 @push('custom-js')
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    let uploadBox = document.querySelector(".upload-area");
-    let fileInput = document.getElementById("fileinput");
+    const tabs = document.querySelectorAll(".nav-link");
+    const phototab = document.querySelector(".phototab");
+    const contents = document.querySelectorAll(".img-content");
 
-    // Upload box click karein to file input open ho
-    uploadBox.addEventListener("click", function() {
-      fileInput.click();
-    });
+    tabs.forEach(tab => {
+      tab.addEventListener("click", function() {
+        tabs.forEach(t => t.classList.remove("active"));
+        this.classList.add("active");
+        contents.forEach(content => content.style.display = "none");
 
-    // File select hone ke baad filename show karein
-    fileInput.addEventListener("change", function() {
-      let files = fileInput.files;
-      if (files.length > 0) {
-        uploadBox.innerHTML = `<i class="bi bi-upload"></i><p>${files.length} file(s) selected</p>`;
-      }
+
+        const selectedTab = this.getAttribute("data-tab");
+        document.getElementById(`tab-content-${selectedTab}`).style.display = "block";
+      });
     });
   });
+
+
+  edit_profile_modal = (step, project_id) => {
+    $.ajax({
+      url: '{{url("project/load-modal")}}' + '?step=' + step + '&project_id=' + project_id,
+      type: 'GET',
+      success: function(response) {
+        $('.modal-content').html(response);
+        $('#ajax_modal').modal('show');
+      },
+      error: function(xhr) {
+        console.error("Error loading modal:", xhr.responseText);
+      }
+    });
+  }
 </script>
 @endpush
