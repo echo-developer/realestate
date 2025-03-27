@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
+use function PHPSTORM_META\type;
+
 if (!function_exists('auth_user_id')) {
     function auth_user_id(): ?int
     {
@@ -894,6 +896,29 @@ if (!function_exists('recordView')) {
     }
 }
 
+if (!function_exists('getGalleriesCount')) {
+    function getGalleriesCount(?int $id = null, string $type = ''): ?int
+    {
+        if ($id === null || $type === '') {
+            return null;
+        }
+
+        $modelClass = match ($type) {
+            'project' => PrefProject::class,
+            'property' => PrefProperty::class,
+            default => null,
+        };
+
+        if (!$modelClass) {
+            return null;
+        }
+
+        $model = $modelClass::with('gallery.images')->find($id);
+
+        return $model?->gallery ? collect($model->gallery)->sum(fn($gallery) => $gallery->images->count()) : 0;
+    }
+}
+
 if (!function_exists('getUserDetails')) {
     function getUserDetails($uid)
     {
@@ -1015,8 +1040,8 @@ if (!function_exists('get_property_category_name')) {
     function get_property_category_name()
     {
         $result = DB::table('property_category as p_c')
-                   ->join('property_category_names as p_c_n', 'p_c.id', '=', 'p_c_n.category_id') 
-                   ->first();
+            ->join('property_category_names as p_c_n', 'p_c.id', '=', 'p_c_n.category_id')
+            ->first();
 
         return $result->name;
     }
@@ -1026,8 +1051,8 @@ if (!function_exists('get_property_sub_category_name')) {
     function get_property_sub_category_name()
     {
         $result = DB::table('property_sub_category as p_s')
-                   ->join('property_sub_category_names as p_s_n', 'p_s.id', '=', 'p_s_n.sub_category_id') 
-                   ->first();
+            ->join('property_sub_category_names as p_s_n', 'p_s.id', '=', 'p_s_n.sub_category_id')
+            ->first();
 
         return $result->name;
     }

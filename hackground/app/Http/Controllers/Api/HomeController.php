@@ -182,7 +182,7 @@ class HomeController extends Controller
                 // }
                 // $transformedData = array_values($galleries);
 
-                
+
                 $galleries = [];
                 $getGalleries = GetProperties_GalleryImages($property->property_id);
 
@@ -191,6 +191,7 @@ class HomeController extends Controller
 
                     $galleries[] = [
                         'gallery' => $image->image_type,
+                        'image_count' => getGalleriesCount($property->property_id, 'property'),
                         'images' => [
                             [
                                 'image_id' => $image->image_id,
