@@ -270,7 +270,7 @@ const Index = () => {
     { id: 2, key: "buyer_message", name: "Message to Buyer" },
     { id: 3, key: "address", name: "Address" },
     { id: 4, key: "locality", name: "Locality" },
-    { id: 5, key: "project_name", name: "Project or Society Name" },
+    { id: 5, key: "project_name", name: "Name of Building" },
     { id: 6, key: "configuration", name: "Configuration" },
     { id: 7, key: "area", name: "Area" },
     { id: 8, key: "possession_status", name: "Possession Status" },
@@ -366,7 +366,7 @@ const Index = () => {
       case "expected_price":
         return (
           <>
-            <FloatingLabel controlId="" label="Select Property Budget:">
+            <FloatingLabel controlId="" label="Select Property Budget:" >
               <Form.Control
                 type="number"
                 placeholder="Enter property budget"
@@ -793,6 +793,16 @@ const Index = () => {
     { name: "Price Includes", percentage: 2 },
   ];
 
+  const formatTabName = (name) => {
+    return name
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
+  const handleCloseForm = () => {
+    setShowContactForm(false);
+  };
+
   return (
     <DashboardLayout>
       <div className="col-lg col-12">
@@ -877,7 +887,7 @@ const Index = () => {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Edit {selectedItem}</Modal.Title>
+          <Modal.Title>Edit {formatTabName(selectedItem)}</Modal.Title>
         </Modal.Header>
         <Modal.Body>{renderModalContent()}</Modal.Body>
         {selectedItem !== "galleries" ? (

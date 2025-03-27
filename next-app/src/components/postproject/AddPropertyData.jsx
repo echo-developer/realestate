@@ -412,7 +412,7 @@ const AddPropertyData = ({
                     <div className="col-md-4 col-sm-6 mb-3">
                       <div className="form-floating">
                         <input
-                          type="text"
+                          type="number"
                           className="form-control"
                           value={flat.floor_no}
                           onChange={(e) =>
@@ -442,7 +442,7 @@ const AddPropertyData = ({
                     <div className="col-md-4 col-sm-6 mb-3">
                     <div className="form-floating">
                       <input
-                        type="text"
+                        type="number"
                         className="form-control"
                         value={flat.flat_no}
                         onChange={(e) =>

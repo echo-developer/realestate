@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import useTranslation from "@/hooks/useTranslation";
 import "./favourite.css";
 
+
 const CardImageSlider = ({
   data,
   keyword,
@@ -41,6 +42,8 @@ const CardImageSlider = ({
       setAllImages(images);
     }
   }, [data]);
+
+  console.log(data?.image_count)
 
   return (
     <div className="card-image">
@@ -106,7 +109,7 @@ const CardImageSlider = ({
         <i className="icon-line-awesome-heart-o"></i>
       </span>
       <span className="total-ad-pic">
-        <i className="bi bi-camera"></i> {allImages?.length}
+        <i className="bi bi-camera"></i>{data.image_count}
       </span>
     </div>
   );

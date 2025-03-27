@@ -13,6 +13,7 @@ import "react-range-slider-input/dist/style.css";
 import { useAuth } from "@/context/AuthProvider";
 import useTranslation from "@/hooks/useTranslation";
 import LocalityOption from "@/components/MapData/LocalitySelector";
+import { ShimmerContentBlock } from "react-shimmer-effects";
 import {
   filterOptions,
   CommercialFilterOptions,
@@ -250,7 +251,6 @@ const index = () => {
 
   useEffect(() => {
     if (router?.isReady) {
-
       const queryObject = getSearchParamsData();
       // SET THE STATES
       if (queryObject?.post_for) {
@@ -268,7 +268,6 @@ const index = () => {
 
       let data = {};
       if (router?.query?.searchData) {
-
         data = {
           // ...SearchData,
           ...JSON.parse(router?.query?.searchData),
@@ -450,7 +449,6 @@ const index = () => {
     e.preventDefault();
     e.stopPropagation();
     setSelectedPropertyType(eventKey);
-
   };
 
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
@@ -618,6 +616,7 @@ const index = () => {
   };
 
   const getAdvanceSearch = async (loadMore, recent_page, SearchData) => {
+    setLoading(true);
     if (!loadMore) {
       setLoading(true);
     }
@@ -749,7 +748,6 @@ const index = () => {
 
     setPropertyList(newList);
   };
-
 
   const advanceFilters =
     selectedPropertyType == "1" ? filterOptions : CommercialFilterOptions;
@@ -1481,7 +1479,17 @@ const index = () => {
                 </div>
               </div>
               <div className="list-display">
-                {propertyList?.length === 0 && !loading && (
+                {/* Show shimmer when loading */}
+                {loading ? (
+                  <ShimmerContentBlock
+                    title
+                    text
+                    cta
+                    thumbnailWidth={350}
+                    thumbnailHeight={50}
+                  />
+                ) : !loading && propertyList?.length === 0 ? (
+                  // Show No Result Found only when loading is false and no data is present
                   <div
                     style={{
                       display: "flex",
@@ -1496,146 +1504,139 @@ const index = () => {
                   >
                     <p>{translation?.no_result_found || "No result found"}</p>
                   </div>
-                )}
-
-                {propertyList?.length > 0 &&
-                  propertyList?.map((property, i) => {
-                    return (
-                      <div key={property.property_id} className="card card-ads">
-                        <div className="row g-0">
-                          <div className="col-lg-3 col-sm-3">
-                            <CardImageSlider
-                              data={property}
-                              showSq={true}
-                              icons={true}
-                              addRemoveFav={() =>
-                                SaveFavouriteProperty(property.property_id)
-                              }
-                            />
+                ) : (
+                  // Render Property Cards
+                  propertyList?.map((property, i) => (
+                    <div key={property.property_id} className="card card-ads">
+                      <div className="row g-0">
+                        <div className="col-lg-3 col-sm-3">
+                          <CardImageSlider
+                            data={property}
+                            showSq={true}
+                            icons={true}
+                            addRemoveFav={() =>
+                              SaveFavouriteProperty(property.property_id)
+                            }
+                          />
+                        </div>
+                        <div className="col-lg-9 col-sm-9 position-relative">
+                          <div className="card-body">
+                            <h4 className="mb-1">
+                              <Link href={`/property-details/${property.slug}`}>
+                                {property.property_name}
+                              </Link>
+                            </h4>
+                            <h5 className="mb-0">
+                              {property?.price_currency && property?.exp_price
+                                ? `${
+                                    property.price_currency
+                                  } ${new Intl.NumberFormat("en-US").format(
+                                    property.exp_price
+                                  )}`
+                                : "Price not available"}
+                            </h5>
+                            <p className="mb-1">
+                              <small>
+                                Average Price:{" "}
+                                {property?.price_currency ||
+                                  property?.currency ||
+                                  ""}{" "}
+                                {property?.area_in_sqft || ""} {" sq/ft"}
+                              </small>
+                            </p>
+                            <ul className="list-info mb-2">
+                              <li>
+                                <i
+                                  className="icon-img-bed"
+                                  title="Bedrooms:"
+                                ></i>
+                                <span>
+                                  {property?.bedrooms || "Not Available"}
+                                </span>
+                                {property?.bedrooms && " Beds"}
+                              </li>
+                              <li>
+                                <i
+                                  className="icon-img-tub"
+                                  title="Bathrooms:"
+                                ></i>
+                                <span>
+                                  {property?.bathroom || "Not Available"}
+                                </span>
+                                {property?.bathroom && " Bath"}
+                              </li>
+                              <li>
+                                <i
+                                  className="icon-img-ratio"
+                                  title="Carpet Area:"
+                                ></i>
+                                <span>
+                                  {property?.carpet_area || "Not Available"}{" "}
+                                  {property?.carpet_area && property?.unit_type}
+                                </span>
+                                {property?.carpet_area && " Carpet Area"}
+                              </li>
+                              <li>
+                                <i
+                                  className="icon-img-check"
+                                  title="Possession Status"
+                                ></i>
+                                <span>
+                                  {translation?.possession_status ||
+                                    "Possession Status: "}
+                                  {property?.possession_status ||
+                                    "Not Available"}
+                                </span>
+                              </li>
+                            </ul>
+                            <p>
+                              <span className="text-primary">
+                                <GeoAlt color="currentColor" size={14} />
+                              </span>{" "}
+                              {property.address}
+                            </p>
                           </div>
-
-                          <div className="col-lg-9 col-sm-9 position-relative">
-                            <div className="card-body">
-                              <h4 className="mb-1">
-                                <Link
-                                  href={`/property-details/${property.slug}`}
-                                >
-                                  {property.property_name}
-                                </Link>
-                              </h4>
-                              <h5 className="mb-0">
-                                {property?.price_currency && property?.exp_price
-                                  ? `${
-                                      property.price_currency
-                                    } ${new Intl.NumberFormat("en-US").format(
-                                      property.exp_price
-                                    )}`
-                                  : "Price not available"}
-                              </h5>
-
-                              <p className="mb-1">
-                                <small>
-                                  Average Price:{" "}
-                                  {property?.price_currency ||
-                                    property?.currency ||
-                                    ""}{" "}
-                                  {property?.area_in_sqft || ""}
-                                  {" sq/ft"}
-                                </small>{" "}
-                              </p>
-                              <ul className="list-info mb-2">
-                                <li>
-                                  <i
-                                    className="icon-img-bed"
-                                    title="Bedrooms:"
-                                  ></i>
-                                  <span>
-                                    {property?.bedrooms || "Not Available"}
-                                  </span>{" "}
-                                  {property?.bedrooms && "Beds"}
-                                </li>
-                                <li>
-                                  <i
-                                    className="icon-img-tub"
-                                    title="Bathrooms:"
-                                  ></i>
-                                  <span>
-                                    {property?.bathroom || "Not Available"}
-                                  </span>{" "}
-                                  {property?.bedrooms && "Bath"}
-                                </li>
-                                <li>
-                                  <i
-                                    className="icon-img-ratio"
-                                    title="Carpet Area:"
-                                  ></i>
-                                  <span>
-                                    {property?.carpet_area || "Not Available"}{property?.carpet_area && property?.unit_type}
-                                  </span>{" "}
-                                  {property?.carpet_area  && "Carpet Area"}
-                                </li>
-                                <li>
-                                  <i
-                                    className="icon-img-check"
-                                    title="Possession Status"
-                                  ></i>
-                                  <span>
-                                    {translation?.possession_status ||
-                                      "Possession Status:"}{" "}
-                                    {property?.possession_status ||
-                                      "Not Available"}
-                                  </span>
-                                </li>
-                              </ul>
-                              <p>
-                                <span className="text-primary">
-                                  <GeoAlt color="currentColor" size={14} />
-                                </span>{" "}
-                                {property.address}
-                              </p>
-                            </div>
-                            <div className="card-footer d-flex justify-content-between align-items-center">
-                              <div className="d-flex">
-                                <img
-                                  className="rounded-circle"
-                                  src={`${
-                                    property?.user_image ||
-                                    "/assets/images/user.jpg"
-                                  }`}
-                                  alt="Company"
-                                  height={36}
-                                  width={36}
-                                />
-                                <div className="ps-2">
-                                  <h6 className="mb-0">
-                                    {property?.user_name || "User"}
-                                  </h6>
-                                  <p className="small text-muted">
-                                    {property?.user_type === "A"
-                                      ? "Agent"
-                                      : property?.user_type === "/"
-                                      ? "Builder"
-                                      : property?.user_type === "O"
-                                      ? "Owner"
-                                      : "Not Available"}
-                                  </p>
-                                </div>
+                          <div className="card-footer d-flex justify-content-between align-items-center">
+                            <div className="d-flex">
+                              <img
+                                className="rounded-circle"
+                                src={`${
+                                  property?.user_image ||
+                                  "/assets/images/user.jpg"
+                                }`}
+                                alt="Company"
+                                height={36}
+                                width={36}
+                              />
+                              <div className="ps-2">
+                                <h6 className="mb-0">
+                                  {property?.user_name || "User"}
+                                </h6>
+                                <p className="small text-muted">
+                                  {property?.user_type === "A"
+                                    ? "Agent"
+                                    : property?.user_type === "/"
+                                    ? "Builder"
+                                    : property?.user_type === "O"
+                                    ? "Owner"
+                                    : "Not Available"}
+                                </p>
                               </div>
-                              <button
-                                className="btn btn-primary btn-sm"
-                                onClick={() =>
-                                  handleClick(property.property_id)
-                                }
-                              >
-                                {translation?.contact_now || "Contact Now"}
-                              </button>
                             </div>
+                            <button
+                              className="btn btn-primary btn-sm"
+                              onClick={() => handleClick(property.property_id)}
+                            >
+                              {translation?.contact_now || "Contact Now"}
+                            </button>
                           </div>
                         </div>
                       </div>
-                    );
-                  })}
+                    </div>
+                  ))
+                )}
               </div>
+
               {/* LOAD MORE  */}
               {!loading && currentPage < totalPage && (
                 <button

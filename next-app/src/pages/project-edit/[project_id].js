@@ -317,7 +317,7 @@ const Index = () => {
     { id: 2, key: "instruction", name: "Instruction" },
     { id: 3, key: "address", name: "Address" },
     { id: 4, key: "locality", name: "Locality" },
-    { id: 5, key: "project_name", name: "Project or Society Name" },
+    { id: 5, key: "project_name", name: "Project Name" },
     // { id: 6, key: "configuration", name: "Configuration" },
     { id: 7, key: "area", name: "Area" },
     { id: 8, key: "possession_status", name: "Possession Status" },
@@ -857,6 +857,11 @@ const Index = () => {
       </div>
     );
   }
+  const formatTabName = (name) => {
+    return name
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  };
 
   return (
     <DashboardLayout>
@@ -949,8 +954,7 @@ const Index = () => {
       >
         <Modal.Header closeButton>
           <Modal.Title>
-            {translation?.edit || "Edit"}
-            {selectedItem}
+            {translation?.edit || "Edit"} {formatTabName(selectedItem)}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>{renderModalContent()}</Modal.Body>

@@ -3,8 +3,6 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import "../../app/globals.css";
 import AuthUser from "../Authentication/AuthUser";
-import Offcanvas from "react-bootstrap/Offcanvas";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Collapse } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -16,7 +14,8 @@ import MobileMenu from "../addtional/Mmenu";
 const Header = () => {
   const { callApi, isLogin, logout, GetMemberId } = AuthUser();
   const { defaultCity, handleDefaultCityChange } = useAuth();
-
+  const [isDesktopLogoLoaded, setIsDesktopLogoLoaded] = useState(false);
+  const [isMobileLogoLoaded, setIsMobileLogoLoaded] = useState(false);
   const [showLocationDrop, setShowLocationDrop] = useState(false);
   const [mobileView, setMobileView] = useState(false);
   const [menu, setMenu] = useState(false);
@@ -35,7 +34,6 @@ const Header = () => {
   const [userData, setUserData] = useState();
   const memberId = GetMemberId();
   const [currentLang, setCurrentLang] = useState("en");
-  
 
   useEffect(() => {
     const storedLang = localStorage.getItem("lang") || "en";
@@ -65,9 +63,7 @@ const Header = () => {
       } else {
         toast.error(response.message);
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -79,10 +75,8 @@ const Header = () => {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      console.log('from header');
-      //setValidLogin(isLogin());
     }
-  },[]);
+  }, []);
 
   useEffect(() => {
     handleScroll();
@@ -179,20 +173,31 @@ const Header = () => {
   };
 
   const renderLink = (link) => {
-  const isProjectLink = link.includes("/project-listing");
-  if (isProjectLink) {
-    router.replace("/project-listing");
-  } else {
-    router.replace(link);
-  }
-};
-
+    const isProjectLink = link.includes("/project-listing");
+    if (isProjectLink) {
+      router.replace("/project-listing");
+    } else {
+      router.replace(link);
+    }
+  };
 
   const handlePropertyCrmClick = (e) => {
     if (e.currentTarget.getAttribute("data-id") === "property-crm") {
       setOffCanvasPropertyCrm(!offCanvasPropertyCrm);
     }
   };
+
+  useEffect(() => {
+    const desktopImage = new Image();
+    desktopImage.src = "/assets/images/logo.png";
+    desktopImage.onload = () => setIsDesktopLogoLoaded(true);
+    desktopImage.onerror = () => setIsDesktopLogoLoaded(false);
+
+    const mobileImage = new Image();
+    mobileImage.src = "/assets/images/logo-mobile.png";
+    mobileImage.onload = () => setIsMobileLogoLoaded(true);
+    mobileImage.onerror = () => setIsMobileLogoLoaded(false);
+  }, []);
 
   return (
     <>
@@ -201,18 +206,77 @@ const Header = () => {
           <div className="container-fluid position-relative">
             <div className="d-flex align-items-center">
               <Link href="/" className="navbar-brand">
-                <img
-                  src="/assets/images/logo.png"
-                  alt="Logo"
+                {/* Desktop Logo with Shimmer */}
+                <div
                   className="d-none d-md-block"
-                  loading="lazy"
-                />
-                <img
-                  src="/assets/images/logo-mobile.png"
-                  alt="Logo"
+                  style={{
+                    width: "173px",
+                    height: "64px",
+                    position: "relative",
+                  }}
+                >
+                  {!isDesktopLogoLoaded && (
+                    <div className="shimmer-placeholder"></div>
+                  )}
+                  {isDesktopLogoLoaded && (
+                    <img
+                      src="/assets/images/logo.png"
+                      alt="Logo"
+                      loading="lazy"
+                      style={{ width: "173px", height: "64px" }}
+                    />
+                  )}
+                </div>
+
+                {/* Mobile Logo with Shimmer */}
+                <div
                   className="d-md-none"
-                  loading="lazy"
-                />
+                  style={{
+                    width: "173px",
+                    height: "64px",
+                    position: "relative",
+                  }}
+                >
+                  {!isMobileLogoLoaded && (
+                    <div className="shimmer-placeholder"></div>
+                  )}
+                  {isMobileLogoLoaded && (
+                    <img
+                      src="/assets/images/logo-mobile.png"
+                      alt="Logo"
+                      loading="lazy"
+                      style={{ width: "173px", height: "64px" }}
+                    />
+                  )}
+                </div>
+
+                <style jsx>{`
+                  .shimmer-placeholder {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 8px;
+                    background: linear-gradient(
+                      90deg,
+                      #f0f0f0 25%,
+                      #e0e0e0 50%,
+                      #f0f0f0 75%
+                    );
+                    background-size: 200% 100%;
+                    animation: shimmer 2s infinite;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                  }
+
+                  @keyframes shimmer {
+                    0% {
+                      background-position: -200% 0;
+                    }
+                    100% {
+                      background-position: 200% 0;
+                    }
+                  }
+                `}</style>
               </Link>
 
               <div className="dropdown ms-4">
@@ -987,16 +1051,16 @@ const Header = () => {
                               className="nav-link dropdown-toggle"
                               role="button"
                               style={{
-                                marginTop: "15px",
+                                marginTop: "7px",
                                 display: "inline-block",
-                                width: "120px", // Set the width according to your needs
+                                width: "120px",
                                 height: "30px",
                                 borderRadius: "4px",
                                 background:
                                   "linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)",
                                 backgroundSize: "200% 100%",
                                 animation: "shimmer 2s infinite",
-                                color: "transparent", // Hide text during shimmer
+                                color: "transparent",
                               }}
                             >
                               <i className="icon-feather-user"></i> My Account
@@ -1096,8 +1160,14 @@ const Header = () => {
                   </li>
                 </ul>
               </div>
-              
-             <MobileMenu handleLogout={handleLogout} selectedCity={selectedCity} currentLang={currentLang} changeLanguage={changeLanguage} translation={translation}/>
+
+              <MobileMenu
+                handleLogout={handleLogout}
+                selectedCity={selectedCity}
+                currentLang={currentLang}
+                changeLanguage={changeLanguage}
+                translation={translation}
+              />
             </div>
           </div>
         </nav>
@@ -1225,7 +1295,10 @@ const Menu = () => {
               text: `Property Valuation in ${selectedCity || "Kolkata"}`,
               url: "/property-valuation?post_for=sale",
             },
-            { text: `Top Agents in ${selectedCity || "Kolkata"}`, url: "/agent-list?post_for=sale" },
+            {
+              text: `Top Agents in ${selectedCity || "Kolkata"}`,
+              url: "/agent-list?post_for=sale",
+            },
           ],
         },
       ],
