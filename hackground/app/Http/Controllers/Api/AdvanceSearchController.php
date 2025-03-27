@@ -238,6 +238,7 @@ class AdvanceSearchController extends Controller
                 return [
                     'post_for' => $property->post_for,
                     'property_id' => $property->property_id,
+                    'image_count' => getGalleriesCount($property->property_id,'property'),
                     'is_favorite' => $is_fav,
                     'user_name' => $get_User->name ?? null,
                     'user_type' => $get_User->user_type ?? null,

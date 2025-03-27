@@ -130,6 +130,7 @@ class PropertyUpdateControler extends Controller
                 'floor' => $floor_details['floor_number'] ?? null,
                 'flat_each_floor' => $floor_details['flat_each_floor'] ?? null,
                 'lifts_in_tower' => $floor_details['lifts_in_tower'] ?? null,
+                'total_floor' => $floor_details['total_floor'] ?? null,
             ];
 
             $datatoupdate = array_filter(

@@ -106,6 +106,8 @@ class ProjectDashboardController extends Controller
                 unset($flattenedData['uid']);
             }
 
+            $flattenedData['image_count'] = getGalleriesCount($flattenedData['id'], 'project');
+
             if (isset($flattenedData['gallery'])) {
                 foreach ($flattenedData['gallery'] as &$gallery) {
                     if (isset($gallery['images'])) {

@@ -127,13 +127,13 @@ class DashboardController extends Controller
                 'status' => 0,
                 'message' => 'File size limit exceeded. Max size 5 MB',
                 // 'errors' => $e->errors(),
-            ],200);
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 0,
                 'message' => 'An error occurred while updating the profile image.',
                 'error' => $e->getMessage(),
-            ],500);
+            ], 500);
         }
     }
 
@@ -182,6 +182,7 @@ class DashboardController extends Controller
 
                     return [
                         'property_id' => $property->property_id,
+                        'image_count' => getGalleriesCount($property->property_id, 'property'),
                         'user' => get_user_name($property->uid),
                         'unit_type' => $property->unit_type,
                         'property_size' => $property->super_area,
@@ -748,6 +749,7 @@ class DashboardController extends Controller
 
                 return [
                     'property_id' => $property->property_id,
+                    'image_count' => getGalleriesCount($property->property_id, 'property'),
                     'user' => get_user_name($property->uid),
                     'property_size' => $property->super_area,
                     'unit_type' => $property->unit_type,
@@ -958,6 +960,7 @@ class DashboardController extends Controller
                             }),
                         ];
                     }),
+                    'image_count' => getGalleriesCount($project->id, 'project'),
                     'post_for' => $project->settings->post_for ?? null,
                     'unit_type' => $project->settings->unit_type ?? null,
                     'area_in_sqft' => $project->settings->area_in_sqft ?? null,

@@ -95,6 +95,7 @@ class ProjectListandSearchController extends Controller
                             }),
                         ];
                     }),
+                    'image_count' => getGalleriesCount($project->id, 'project'),
                     'project_budget' => $project->settings->project_budget ?? null,
                     'parking_availability' => $project->settings->parking_availability ?? null,
                     'floor' => $project->settings->floor ?? null,
@@ -132,7 +133,7 @@ class ProjectListandSearchController extends Controller
 
 
             if ($customArray->isNotEmpty() && array_key_exists($sortKey, $customArray->first())) {
-                $customArray = $sortOrder === 'desc'? $customArray->sortByDesc($sortKey): $customArray->sortBy($sortKey);
+                $customArray = $sortOrder === 'desc' ? $customArray->sortByDesc($sortKey) : $customArray->sortBy($sortKey);
             }
 
 
