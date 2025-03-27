@@ -1127,3 +1127,16 @@ if (!function_exists('get_all_country')) {
         return $result;
     }
 }
+
+if (!function_exists('get_all_property_category')) {
+    function get_all_property_category()
+    {
+        $result = DB::table('property_category as p_c')
+            ->select('p_c.*','p_c_n.name')
+            ->join('property_category_names as p_c_n', 'p_c.id', '=', 'p_c_n.category_id')
+            ->where(['p_c.status'=>'1','p_c_n.lang'=>'en'])
+            ->get();
+
+        return $result;
+    }
+}

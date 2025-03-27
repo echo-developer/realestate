@@ -103,13 +103,11 @@
                     <thead>
                         <tr>
                             <th style="width:5%">ID</th>
-                            <th style="width:10%">Page</th>
-                            <th style="width:10%">Position</th>
-                            <th style="width:10%">Size</th>
-                            <th style="width:10%">Creative</th>
-                            <th style="width:10%">Duration(In Weeks)</th>
-                            <th style="width:10%">Price</th>
-                            <th style="width:10%">Status</th>
+                            <th>Page</th>
+                            <th>Position</th>
+                            <th>Views</th>
+                            <th>Type</th>
+                            <th>Status</th>
                             <th class="text-right">Action</th>
                         </tr>
                     </thead>
@@ -117,20 +115,18 @@
                         @if($list)
                         @foreach($list as $item)
                         <tr>
-                            <td>{{ $item->package_id }}</td>
+                            <td>{{ $item->advertisement_id }}</td>
                             <td>{{ $item->page }}</td>
                             <td>{{ $item->position }}</td>
-                            <td>{{ $item->size }}</td>
-                            <td>{{ $item->creative == '1' ? 'Yes' : 'No' }}</td>
-                            <td>{{ $item->duration }}</td>
-                            <td>{{ $item->price }}</td>
+                            <td>-</td>
+                            <td>{{ $item->ad_type }}</td>
                             <td>
-                                <input type="checkbox" class="package_status d-none" data-id="{{ $item->package_id }}" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ $item->status ? 'checked' : '' }} >
+                                <input type="checkbox" class="package_status d-none" data-id="{{ $item->advertisement_id }}" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ $item->status ? 'checked' : '' }} >
                             </td>
                             <td class="text-right">
-                                <i class="fa fa-edit text-primary fa-md" onclick="edit('{{ $item->package_id }}')"></i>
+                                <i class="fa fa-edit text-primary fa-md" onclick="edit('{{ $item->advertisement_id }}')"></i>
                                 {{-- <i class="fa fa-eye text-success fa-md" onclick="view('{{ $item->package_id }}')"></i> --}}
-                                <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->package_id }}')"></i>
+                                <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->advertisement_id }}')"></i>
                             </td>
                         </tr>
                         @endforeach
@@ -203,7 +199,7 @@
 
     function edit(id){
         let editCommand = "{{ $edit_command }}";
-        let url = `{{ url('ads-packages/ajax_page') }}?page=${editCommand}&id=${id}`;
+        let url = `{{ url('advertisement/ajax_page') }}?page=${editCommand}&id=${id}`;
         $.get(url, function(data) {
             $('#ajax_modal').modal('show');
             $('#ajax_modal .modal-content').html(data);

@@ -453,6 +453,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('advertisement/ajax_page', 'load_ajax_page');
         Route::get('advertisement/options', 'get_option_value');
         Route::POST('advertisement/add', 'add');
+        Route::POST('advertisement/edit', 'edit');
     });
       
     Route::prefix('membership')->controller(MembershipPlanController::class)->group(function () {

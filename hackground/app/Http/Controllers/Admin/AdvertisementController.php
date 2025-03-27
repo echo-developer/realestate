@@ -29,7 +29,8 @@ class AdvertisementController extends Controller
         $list = '';
         $pages = $this->advertisement->get_pages();
         $list = $this->advertisement->get_list($srch, $paginate);
-       
+        // echo "<pre>";
+        // print_r($list);exit;
         return view('Admin.Advertisement.ads_list', 
         compact(
             'main_title',
@@ -39,7 +40,7 @@ class AdvertisementController extends Controller
             'add_command',
             'edit_command',
             'add_btn',
-            'pages'
+            'pages',
         ));
     }
 
@@ -53,7 +54,7 @@ class AdvertisementController extends Controller
         $ID = "";
         $detail = "";
         $city = get_all_city();
-        //print_r($city);exit;
+        $property_category = get_all_property_category();
         if($page == 'add'){
 			$pages = $this->advertisement->get_pages();
 			$title = 'Add Advertisement';
@@ -62,10 +63,13 @@ class AdvertisementController extends Controller
         {
             $id = $srch['id'];
 			$ID = $id;
-			$form_action = url('ads-packages/edit');
+			$form_action = url('advertisement/edit');
 			$detail = $this->advertisement->getDetail($id);
-            // echo "<pre>";
-            // print_r($detail);
+            if($detail)
+            {
+                $detail['ad_locations'] = $this->advertisement->getAdLocations($detail['advertisement_id']);
+                $detail['ad_cats'] = $this->advertisement->getAdCategory($detail['advertisement_id']);
+            }
 			$title = 'Edit Advertisement';
 			$pages = $this->advertisement->get_pages();
 			if(!empty($detail['page'])){
@@ -74,19 +78,15 @@ class AdvertisementController extends Controller
 					$sizes = $this->advertisement->get_size($detail['page'], $detail['position']);
 				}
 			}
-            // echo "<pre>";
-            // print_r($pages);exit;
         }
 
-        return view('Admin.Advertisement.ajax_page', compact('page', 'title', 'form_action','pages','positions', 'sizes', 'ID', 'detail', 'city'));
+        return view('Admin.Advertisement.ajax_page', compact('page', 'title', 'form_action','pages','positions', 'sizes', 'ID', 'detail', 'city','property_category'));
     }
 
     public function add(Request $request)
     {
         $msg = array();
         $postData = $request->all();
-        // echo "<pre>";
-        // print_r($postData);exit;
         $ins_id = $this->advertisement->addRecord($postData);
         if($ins_id)
         {
@@ -95,6 +95,23 @@ class AdvertisementController extends Controller
         }else{
             $msg['status'] = 'FAIL';
             $msg['message'] = 'Failed to add Advertisement !';
+        }
+        echo json_encode($msg);
+    }
+
+    public function edit(Request $request)
+    {
+        $msg = array();
+        $postData = $request->all();
+        $id = $postData['ID'];
+        $ins_id = $this->advertisement->editRecord($postData,$id);
+        if($ins_id)
+        {
+            $msg['status'] = 'OK';
+            $msg['message'] = 'Advertisement updated successfully !';
+        }else{
+            $msg['status'] = 'FAIL';
+            $msg['message'] = 'Failed to update Advertisement !';
         }
         echo json_encode($msg);
     }

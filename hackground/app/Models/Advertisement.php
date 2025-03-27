@@ -32,9 +32,11 @@ class Advertisement extends Model
         'status'
     ];
 
-    public function get_list($srch, $paginate)
+    public function get_list($srch=array(),$paginate)
     {
-
+        $query = DB::table('advertisements as a')->select('a.*');
+        $query->orderBy('a.advertisement_id', 'desc');
+        return $query->paginate($paginate);
     }
 
     public function addRecord($data)
@@ -50,11 +52,138 @@ class Advertisement extends Model
 			'ad_url' => $data['ad_url'] ? $data['ad_url'] : '',
 			'status' => $data['status'] ? $data['status'] : ''
 		);
-
+        // echo "<pre>";
+        // print_r($ins_data);exit;
+        $cities = !empty($data['city']) ? $data['city'] : array();
+        $categories = !empty($data['category']) ? $data['category'] : array();
         $insert_id = DB::table($this->table)->insert($ins_data);
+        if($insert_id)
+        {
+            if($cities)
+            {
+                $loc_table = "advertisement_locations";
+                DB::table($loc_table)->where($this->primary_key, $insert_id)->delete();
+                $city_arr = array();
+                foreach($cities as $city)
+                {
+                    $city_arr['advertisement_id'] = $insert_id;
+                    $city_arr['city_id'] = $city;
+                }
+                DB::table($loc_table)->insert($city_arr);
+            }else{
+                $loc_table = "advertisement_locations";
+                DB::table($loc_table)->where($this->primary_key, $insert_id)->delete();
+            }
+
+            if($categories)
+            {
+                $cat_table = "advertisement_category";
+                DB::table($cat_table)->where($this->primary_key, $insert_id)->delete();
+                $cat_arr = array();
+                foreach($categories as $cat)
+                {
+                    $cat_arr['advertisement_id'] = $insert_id;
+                    $cat_arr['property_category'] = $cat;
+                }
+                DB::table($cat_table)->insert($cat_arr);
+            }else{
+                $cat_table = "advertisement_category";
+                DB::table($cat_table)->where($this->primary_key, $insert_id)->delete();
+            }
+        }
+        
         return $insert_id;
 
     }
+
+    public function editRecord($data,$id)
+    {
+        $ins_data = array(
+			'page' => $data['page'] ? $data['page'] : '',
+			'position' => $data['position'] ? $data['position'] : '',
+			//'ad_size' => $data['ad_size'] ? $data['ad_size'] : '',
+            'ad_type' => $data['ad_type'] ? $data['ad_type'] : '',
+			'ad_image' => $data['ad_image'] ? $data['ad_image'] : '',
+			'ad_image_mobile' => $data['ad_image_mobile'] ? $data['ad_image_mobile'] : '',
+			'ad_code' => $data['ad_code'] ? $data['ad_code'] : '',
+			'ad_url' => $data['ad_url'] ? $data['ad_url'] : '',
+			'status' => $data['status'] ? $data['status'] : ''
+		);
+
+        $cities = !empty($data['city']) ? $data['city'] : array();
+        $categories = !empty($data['category']) ? $data['category'] : array();
+        $up = DB::table($this->table)->where($this->primary_key, $id)->update($ins_data);
+
+        if($cities)
+        {
+            $loc_table = "advertisement_locations";
+            DB::table($loc_table)->where($this->primary_key, $id)->delete();
+            $city_arr = array();
+            foreach($cities as $city)
+            {
+                $city_arr['advertisement_id'] = $id;
+                $city_arr['city_id'] = $city;
+            }
+            DB::table($loc_table)->insert($city_arr);
+        }else{
+            $loc_table = "advertisement_locations";
+            DB::table($loc_table)->where($this->primary_key, $id)->delete();
+        }
+
+        if($categories)
+        {
+            $cat_table = "advertisement_category";
+            DB::table($cat_table)->where($this->primary_key, $id)->delete();
+            $cat_arr = array();
+            foreach($categories as $cat)
+            {
+                $cat_arr['advertisement_id'] = $id;
+                $cat_arr['property_category'] = $cat;
+            }
+            DB::table($cat_table)->insert($cat_arr);
+        }else{
+            $cat_table = "advertisement_category";
+            DB::table($cat_table)->where($this->primary_key, $id)->delete();
+        }
+
+        return true;
+
+    }
+
+
+    public function getDetail($id=''){
+		$result_obj = DB::table($this->table)->where('advertisement_id',$id)->first();
+		$result = json_decode(json_encode($result_obj), true);
+		return $result;
+	}
+
+    public function getAdLocations($id){
+		$result_obj = DB::table('advertisement_locations')->select('city_id')->where('advertisement_id',$id)->get();
+		$result = json_decode(json_encode($result_obj), true);
+		$city = [];
+        if($result)
+        {
+            foreach($result as $k=>$c)
+            {
+                $city[$k] = $c['city_id'];
+            }
+        }
+		return $city;
+	}
+
+    public function getAdCategory($id){
+		$result_obj = DB::table('advertisement_category')->select('property_category')->where('advertisement_id',$id)->get();
+		$result = json_decode(json_encode($result_obj), true);
+        $cats = [];
+        if($result)
+        {
+            foreach($result as $k=>$r)
+            {
+                $cats[$k] = $r['property_category'];
+            }
+        }
+		return $cats;
+	}
 
     public function _adAttributes(){
 		$attr = array(

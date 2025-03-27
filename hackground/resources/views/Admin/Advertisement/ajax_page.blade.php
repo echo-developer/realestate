@@ -23,20 +23,20 @@
 
                     <div class="form-group">
                         <label for="category_key">Category </label>
-                        <select class="form-control" name="category">
+                        <select class="form-control" name="category[]">
                           <option value="">-Select-</option>
-                          <?php foreach($city as $c){ ?>
-                          <option value="<?php echo $c->city_id;?>"><?php echo $c->name;?></option>
+                          <?php foreach($property_category as $c){ ?>
+                          <option value="<?php echo $c->id;?>" ><?php echo $c->name;?></option>
                           <?php } ?>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="category_key">City </label>
-                        <select class="form-control" name="city">
+                        <select class="form-control" name="city[]">
                           <option value="">-Select-</option>
                           <?php foreach($city as $c){ ?>
-                          <option value="<?php echo $c->city_id;?>"><?php echo $c->name;?></option>
+                          <option value="<?php echo $c->city_id;?>" ><?php echo $c->name;?></option>
                           <?php } ?>
                         </select>
                     </div>
@@ -130,13 +130,6 @@
                         </div>
                     </div>
                   
-                  <div class="form-group">
-                    <div>
-                     <input type="checkbox" name="add_more" value="1" class="magic-checkbox" id="add_more">
-                      <label for="add_more">Add more record</label>
-                    </div>
-                  </div>
-                  
                   </div>
                   <!-- /.box-body -->
                 <button type="submit" class="btn btn-primary">Add</button>
@@ -162,7 +155,7 @@
                 {
                     Swal.fire({
                         title: "Success!",
-                        text: msg.message,
+                        text: res.message,
                         icon: "success",
                         confirmButtonText: "OK"
                         }).then((result) => {
@@ -173,7 +166,7 @@
                 }else{
                     Swal.fire({
                         title: "Failed!",
-                        text: msg.message,
+                        text: res.message,
                         icon: "error",
                         confirmButtonText: "OK"
                         }).then((result) => {
@@ -296,7 +289,6 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(data) {
-                alert(data.status);
                 if (data.status == 'OK') { 
                     $("#ad_image_mobile").val(data.file_name);
                     $("#image_preview2").show();
@@ -324,17 +316,26 @@
             <form role="form" id="add_form" action="<?php echo $form_action;?>" onsubmit="submitForm(this, event)">
                   <input type="hidden" name="ID" value="<?php echo $ID?>"/>
                   <div class="box-body">
-                    @php
-                        $langs = explode(',', admin_default_lang());
-                    @endphp
-                    @foreach ($langs as $lang)
-                        <div class="form-group">
-                            <label for="name">Name ({{ strtoupper($lang) }})</label>
-                            <input type="text" class="form-control reset_field" id="package_name_{{ $lang }}"
-                                name="lang[package_name][{{ $lang }}]" value="{{ !empty($detail['lang']['package_name'][$lang]) ? $detail['lang']['package_name'][$lang] : '' }}" autocomplete="off" />
-                            <div class="invalid-feedback" id="package_name{{ $lang }}_error"></div>
-                        </div>
-                    @endforeach
+                    
+                    <div class="form-group">
+                        <label for="category_key">Category </label>
+                        <select class="form-control" name="category[]">
+                          <option value="">-Select-</option>
+                          <?php foreach($property_category as $c){ ?>
+                          <option value="<?php echo $c->id;?>" <?php if(in_array($c->id,$detail['ad_cats'])){echo "selected";} ?> ><?php echo $c->name;?></option>
+                          <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category_key">City </label>
+                        <select class="form-control" name="city[]">
+                          <option value="">-Select-</option>
+                          <?php foreach($city as $c){ ?>
+                          <option value="<?php echo $c->city_id;?>" <?php if(in_array($c->city_id,$detail['ad_locations'])){echo "selected";} ?>><?php echo $c->name;?></option>
+                          <?php } ?>
+                        </select>
+                    </div>
                     
                     <div class="form-group">
                       <label for="category_key">Page </label>
@@ -364,55 +365,35 @@
                         <option value="">-Select-</option>
                         @if($sizes) 
                             @foreach($sizes as $s)
-                            <option <?php if($s == $detail['size']){echo "selected";} ?>>{{ $s }}</option>
+                            <option <?php if($s == $detail['ad_size']){echo "selected";} ?>>{{ $s }}</option>
                             @endforeach
                         @endif
                       </select>
                     </div>
                     
                     <div class="form-group">
-                      <label for="duration">Duration In Week(s) </label>
-                      <input type="text" class="form-control reset_field" id="duration" name="duration" autocomplete="off" value="{{ !empty($detail['duration']) ? $detail['duration'] : '' }}">
-                    </div>
-
-                    <div class="form-group" id="ad_code_wrapper">
-                        <p><b>Creative</b></p>
-                        <div class="radio-inline">
-                            <input type="radio" name="creative" value="1" class="magic-radio" id="creative_1">
-                            <label for="creative_1">Yes</label> 
-                        </div>
-                        <div class="radio-inline">
-                            <input type="radio" name="creative" value="0" class="magic-radio" id="creative_0" <?php if($detail['creative'] == '0'){echo 'checked';} ?> >
-                            <label for="creative_0">No</label> 
-                        </div>
-                    </div>
-    
-                    <div class="form-group">
-                      <label for="price">Price(With Banner) </label>
-                      <input type="text" class="form-control reset_field" id="price" name="price" autocomplete="off" value="{{ !empty($detail['price']) ? $detail['price'] : '' }}">
-                    </div>
-    
-                    <div class="row" style="display:none" id="price-without-banner">
-                        <div class="col-12 form-group">
-                          <label for="price_without_banner">Price in INR(Without Banner) </label>
-                          <input type="text" class="form-control reset_field" id="price_without_banner" name="price_without_banner" autocomplete="off" value="{{ !empty($detail['price_without_banner']) ? $detail['price_without_banner'] : '' }}">
-                        </div>
+                        <label for="category_key">Type </label>
+                        <select class="form-control" name="ad_type" onchange="checkAdType()">
+                            <option value="admin" <?php if($detail['ad_type'] == 'admin'){echo "selected";} ?> >Admin</option>
+                            <option value="script" <?php if($detail['ad_type'] == 'script'){echo "selected";} ?>>Script</option>
+                            <option value="image" <?php if($detail['ad_type'] == 'image'){echo "selected";} ?> >Image</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="ufile">Advertisement Demo Image</label>
+                        <label for="ufile">Advertisement Image</label>
                         <div class="input-group">
                             <div class="custom-file">
                                 <input type="file" name="upload_file1" id="upload_file1"
                                     class="custom-file-input" >
                                 <label class="custom-file-label" for="ufile">Choose file</label>
                             </div>
-                            <input type="hidden" name="demo_image" id="demo_image" value="{{ !empty($detail['demo_image']) ? $detail['demo_image'] : '' }}" />
+                            <input type="hidden" name="ad_image" id="ad_image" value="{{ !empty($detail['ad_image']) ? $detail['ad_image'] : '' }}" />
                         </div>
                     </div>
-                    @if($detail['demo_image'])
+                    @if($detail['ad_image'])
                     <div class="form-group">
-                        <img id="image_preview1" src="{{ asset('user_upload/advertisement/'.$detail['demo_image']) }}" style="width: 100px; height: auto;" />
+                        <img id="image_preview1" src="{{ asset('user_upload/advertisement/'.$detail['ad_image']) }}" style="width: 100px; height: auto;" />
                         <button type="button" id="delete_image_btn1" class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
                     </div>
                     @else
@@ -425,19 +406,19 @@
                     
 
                     <div class="form-group">
-                        <label for="ufile">Advertisement Demo Image Mobile</label>
+                        <label for="ufile">Advertisement Image Mobile</label>
                         <div class="input-group">
                             <div class="custom-file">
                                 <input type="file" name="upload_file2" id="upload_file2"
                                     class="custom-file-input">
                                 <label class="custom-file-label" for="ufile">Choose file</label>
                             </div>
-                            <input type="hidden" name="demo_image_mobile" id="demo_image_mobile" value="{{ !empty($detail['demo_image_mobile']) ? $detail['demo_image_mobile'] : '' }}" />
+                            <input type="hidden" name="ad_image_mobile" id="ad_image_mobile" value="{{ !empty($detail['ad_image_mobile']) ? $detail['ad_image_mobile'] : '' }}" />
                         </div>
                     </div>
-                    @if($detail['demo_image_mobile'])
+                    @if($detail['ad_image_mobile'])
                     <div class="form-group">
-                        <img id="image_preview2" src="src="{{ asset('user_upload/advertisement/'.$detail['demo_image_mobile']) }}" style="display:none; width: 100px; height: auto;" />
+                        <img id="image_preview2" src="src="{{ asset('user_upload/advertisement/'.$detail['ad_image_mobile']) }}" style="display:none; width: 100px; height: auto;" />
                         <button type="button" id="delete_image_btn2"
                             class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
                     </div>
@@ -448,6 +429,16 @@
                             class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
                     </div>
                     @endif
+
+                    <div class="form-group" id="ad_code_wrapper">
+                        <label for="ad_code">Advertisement Code </label>
+                        <textarea class="form-control" name="ad_code"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ad_url">Ad URL </label>
+                        <input type="text" class="form-control reset_field" id="ad_url" name="ad_url" autocomplete="off">
+                    </div>
 
                     <div class="form-group">
                        <p><b>Status</b></p>
@@ -482,7 +473,27 @@
             },
             dataType : 'JSON',
             success : function(res){
-                
+                if(res.status == 'OK')
+                {
+                    Swal.fire({
+                        title: "Success!",
+                        text: msg.message,
+                        icon: "success",
+                        confirmButtonText: "OK"
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location = location.href;
+                        }
+                    });
+                }else{
+                    Swal.fire({
+                        title: "Failed!",
+                        text: msg.message,
+                        icon: "error",
+                        confirmButtonText: "OK"
+                        }).then((result) => {
+                    });
+                }
             },
             error: function(xhr) {
                 var res = xhr.responseJSON;
@@ -575,7 +586,7 @@
             success: function(data) {
                 alert(data.status);
                 if (data.status == 'OK') { 
-                    $("#demo_image").val(data.file_name);
+                    $("#ad_image").val(data.file_name);
                     $("#image_preview1").show();
                     $("#delete_image_btn1").show();
                     $("#image_preview1").attr('src',data.file_path);
@@ -601,9 +612,8 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(data) {
-                alert(data.status);
                 if (data.status == 'OK') { 
-                    $("#demo_image_mobile").val(data.file_name);
+                    $("#ad_image_mobile").val(data.file_name);
                     $("#image_preview2").show();
                     $("#delete_image_btn2").show();
                     $("#image_preview2").attr('src',data.file_path);
