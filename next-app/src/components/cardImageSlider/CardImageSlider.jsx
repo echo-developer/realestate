@@ -79,7 +79,7 @@ const CardImageSlider = ({
       ) : (
         <div className="carousel slide ads-carousel">
           <div className="carousel-inner">
-            {/* {allImages && allImages.length > 0 ? (
+            {allImages && allImages.length > 0 ? (
               allImages.map((img, i) => (
                 <div
                   key={i}
@@ -124,14 +124,8 @@ const CardImageSlider = ({
                   src="/assets/images/property/default-property-1.jpg"
                 />
               </div>
-            )} */}
-            <div className="carousel-item active">
-              <img
-                alt=""
-                className="card-img-top"
-                src="/assets/images/property/default-property-1.jpg"
-              />
-            </div>
+            )}
+          
           </div>
 
           {allImages?.length > 1 && (

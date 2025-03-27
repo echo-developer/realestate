@@ -54,7 +54,7 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemo
             )}
         </>
     )
-}
+}     
 
 export default MainSlider;
 
