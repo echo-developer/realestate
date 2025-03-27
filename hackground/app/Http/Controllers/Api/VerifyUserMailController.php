@@ -46,14 +46,9 @@ class VerifyUserMailController extends Controller
 
 
             $mail_unique_title = 'email-verification';
+            dispatch(new \App\Jobs\SendEmailJob( $request->email, $mail_unique_title,  ['VERIFICATION_CODE' => $otp,]));
 
-            SendMail(
-                $request->email,
-                $mail_unique_title,
-                [
-                    'VERIFICATION_CODE' => $otp,
-                ],
-            );
+          
             return response()->json(['message' => 'OTP sent successfully.'], 200);
         } catch (\Exception $e) {
             logError($e);
