@@ -104,8 +104,8 @@ const Footer = () => {
                 </h4>
                 <ul className="foot-nav" style={{display: dropDowns?.contactUs ? "block": ""}}>
                   <a className="d-inline-block mb-3" href="index.php">
-                    <img src="/assets/images/logo.png" alt="Logo" className="d-none d-md-block" />
-                    <img src="/assets/images/logo-mobile.png" alt="Logo" className="d-md-none" />
+                    <img src="/assets/images/logo.png" alt="Logo" className="d-none d-md-block" loading="lazy" />
+                    <img src="/assets/images/logo-mobile.png" alt="Logo" className="d-md-none" loading="lazy"/>
                   </a>
                   <address>
                     <p><i className="icon-feather-map-pin"></i> 112 Salam Street, Abu Dhabi, UAE</p>
@@ -127,8 +127,8 @@ const Footer = () => {
 
               {/* Download App Section */}
               <div className="download-app">
-                <a href="" className="ms-2"><img src="/assets/images/google-play.png" alt="Google Play" height="40" width="133" /></a>
-                <a href="" className="ms-2"><img src="/assets/images/app-store.png" alt="App Store" height="40" width="133" /></a>
+                <a href="" className="ms-2"><img src="/assets/images/google-play.png" alt="Google Play" height="40" width="133" loading="lazy"/></a>
+                <a href="" className="ms-2"><img src="/assets/images/app-store.png" alt="App Store" height="40" width="133" loading="lazy"/></a>
               </div>
             </div>
           </div>

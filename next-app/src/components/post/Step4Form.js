@@ -828,7 +828,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   onChange={handleChange}
                 />
                 <label htmlFor="ceiling_height">
-                  Celling Height in ({formData?.unit_type || "Not Available"})
+                  Celling Height in ("feets")
                 </label>
               </div>
               

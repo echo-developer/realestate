@@ -118,54 +118,7 @@ const ProjectDraftComponent = ({ projectData }) => {
             <div className="card card-ads" key={project.id}>
               <div className="row g-0">
                 <div className="col-sm-4">
-                  {/* <div className="card-image">
-                    <div
-                      id={`carousel-${project.id}`}
-                      className="carousel slide ads-carousel"
-                    >
-                      <div className="carousel-inner">
-                        {project?.gallery?.some(
-                          (gallery) => gallery?.images?.length > 0
-                        ) ? (
-                          project?.gallery?.map((gallery) =>
-                            gallery?.images?.map((image, index) => (
-                              <div
-                                key={image.image_id}
-                                className={`carousel-item ${
-                                  index === 0 ? "active" : ""
-                                }`}
-                              >
-                                <img
-                                  src={image?.file}
-                                  alt={image?.caption || "Project Image"}
-                                  className="card-img-top"
-                                />
-                              </div>
-                            ))
-                          )
-                        ) : (
-                          <div className="carousel-item active">
-                            <img
-                              src="/assets/images/project/default-project-1.jpg"
-                              alt="Default project Image"
-                              className="card-img-top"
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <span
-                      className={`ads-type ${
-                        project.status === 0 ? "pending" : ""
-                      }`}
-                    >
-                      {project.status === 0 ? "Pending" : "Other"}
-                    </span>
-                    <h4 className="ads-price">
-                      {project?.currency || "AED"}{" "}
-                      {project?.expected_price || "Price"}
-                    </h4>
-                  </div> */}
+                  
                   <CardImageSlider data={project} keyword="gallery" icons={false} showSq={true} showPrice={false} />
                 </div>
                 <div className="col-sm-8 position-relative">
@@ -256,7 +209,7 @@ const ProjectDraftComponent = ({ projectData }) => {
           <>
             <div className='card border-0 text-center'>
               <div className="card-body">
-                <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
+                <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" loading="lazy"/>
                 <p className='text-muted'>{translation?.no_record_founds || "No Record Founds"}</p>
               </div>
             </div>

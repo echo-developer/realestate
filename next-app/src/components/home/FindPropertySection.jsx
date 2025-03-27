@@ -35,6 +35,7 @@ const FindPropertySection = ({translation}) => {
                     height="48"
                     width="48"
                     className="mb-2"
+                    loading="lazy"
                   />
                   <h4>{translation?.search_and_explore || "Search and Explore"}</h4>
                   <p>{translation?.discover_wide_range || "Discover a Wide Range of Properties"}</p>
@@ -47,6 +48,7 @@ const FindPropertySection = ({translation}) => {
                     alt="Arrow Direction"
                     height="34"
                     width="58"
+                    loading="lazy"
                   />
                 </div>
               </article>
@@ -59,6 +61,7 @@ const FindPropertySection = ({translation}) => {
                     height="48"
                     width="48"
                     className="mb-2"
+                    loading="lazy"
                   />
                   <h4>{translation?.evaluate_and_compare || "Evaluate and Compare"}</h4>
                   <p>{translation?.compare_properties || "Compare Properties to Find the Best Fit"}</p>
@@ -68,16 +71,7 @@ const FindPropertySection = ({translation}) => {
 
             <div className="row justify-content-center align-items-center mb-4">
               <article className="col-lg col-sm-6 col-12"></article>
-              {/* <article className="col-lg-auto text-center">
-                <div className="circle">
-                  <img
-                    src="/assets/images/icons/dream.png"
-                    alt="Dream"
-                    height="163"
-                    width="163"
-                  />
-                </div>
-              </article> */}
+             
               <article className="col-lg col-sm-6 col-12 text-center">
                 <div className="arrowDir">
                   <img
@@ -86,6 +80,7 @@ const FindPropertySection = ({translation}) => {
                     height="34"
                     width="58"
                     style={{ transform: "rotate(90deg)" }}
+                    loading="lazy"
                   />
                 </div>
               </article>
@@ -101,6 +96,7 @@ const FindPropertySection = ({translation}) => {
                     height="48"
                     width="48"
                     className="mb-2"
+                    loading="lazy"
                   />
                   <h4>{translation?.make_your_move || "Make Your Move"}</h4>
                   <p>{translation?.final_steps_dream_property || "Take the Final Steps Toward Your Dream Property"}</p>
@@ -114,6 +110,7 @@ const FindPropertySection = ({translation}) => {
                     height="34"
                     width="58"
                     style={{ transform: "rotate(180deg)" }}
+                    loading="lazy"
                   />
                 </div>
               </article>
@@ -126,6 +123,7 @@ const FindPropertySection = ({translation}) => {
                     height="48"
                     width="48"
                     className="mb-2"
+                    loading="lazy"
                   />
                   <h4>{translation?.connect_with_experts || "Connect with Experts"}</h4>
                   <p>{translation?.professional_guidance || "Get Professional Guidance Every Step of the Way"}</p>

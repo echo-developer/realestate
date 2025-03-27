@@ -15,7 +15,7 @@ const PostPropertyPath = ({translation}) => {
             </aside>
             <aside className="col-lg-auto">
             <Link href="/postproperty" className="btn btn-primary">
-                <i className="icon-line-awesome-mouse-pointer"></i>{translation?.post_property || "Post Property"}  <img src="/assets/images/icons/free-badge.png" alt="Free Badge" height="32" width="32"/>
+                <i className="icon-line-awesome-mouse-pointer"></i>{translation?.post_property || "Post Property"}  <img src="/assets/images/icons/free-badge.png" alt="Free Badge" height="32" width="32" loading="lazy"/>
                 </Link>
             </aside>
           </div>

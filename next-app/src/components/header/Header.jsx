@@ -161,9 +161,15 @@ const Header = () => {
     setMenu(type);
   };
 
-  const handleLogout = () => {
+  const handleLogout = (e) => {
+    e.preventDefault();
     logout();
-    setMobileView(false);
+
+    if (window.location.pathname === "/") {
+      window.location.reload();
+    } else {
+      router.push("/");
+    }
   };
 
   const changeLanguage = (lang) => {
@@ -199,11 +205,13 @@ const Header = () => {
                   src="/assets/images/logo.png"
                   alt="Logo"
                   className="d-none d-md-block"
+                  loading="lazy"
                 />
                 <img
                   src="/assets/images/logo-mobile.png"
                   alt="Logo"
                   className="d-md-none"
+                  loading="lazy"
                 />
               </Link>
 
@@ -929,6 +937,7 @@ const Header = () => {
                                   src="/assets/images/user.jpg"
                                   alt="Default User"
                                   height={30}
+                                  loading="lazy"
                                 />
                               )}
                             </div>
@@ -944,7 +953,7 @@ const Header = () => {
                               </Link>
                             </li>
                             <li>
-                              <Link href="/" onClick={logout}>
+                              <Link href="/" onClick={handleLogout}>
                                 {translation.logout}
                               </Link>
                             </li>
@@ -1020,6 +1029,7 @@ const Header = () => {
                         alt="Free Badge"
                         height="28"
                         width="28"
+                        loading="lazy"
                       />
                     </Link>
                   </li>
@@ -1037,6 +1047,7 @@ const Header = () => {
                         alt={currentLang.toUpperCase()}
                         height="20"
                         width="20"
+                        loading="lazy"
                       />{" "}
                       {currentLang === "ar"
                         ? "Arabic"
@@ -1052,6 +1063,7 @@ const Header = () => {
                             alt="English"
                             height="16"
                             width="16"
+                            loading="lazy"
                           />{" "}
                           English
                         </a>
@@ -1063,6 +1075,7 @@ const Header = () => {
                             alt="Arabic"
                             height="16"
                             width="16"
+                            loading="lazy"
                           />{" "}
                           Arabic
                         </a>
@@ -1074,6 +1087,7 @@ const Header = () => {
                             alt="German"
                             height="16"
                             width="16"
+                            loading="lazy"
                           />{" "}
                           German
                         </a>

@@ -176,6 +176,7 @@ const translation = useTranslation();
                              height={48}
                              width={48}
                              className="mb-2"
+                             loading="lazy"
                            />
                            <p className="text-muted">{translation?.no_record_founds || "No Record Founds"}</p>
                          </div>
@@ -194,11 +195,12 @@ const translation = useTranslation();
                                                     }
                                                     alt="Property Image"
                                                     className="card-img-top"
+                                                    loading="lazy"
                                                 />
                                                 <span
                                                     className={`ads-type ${property?.type}`}
                                                 >
-                                                    #{property?.property_id}
+                                                    {property?.property_code}
                                                 </span>
                                             </div>
                                         </div>

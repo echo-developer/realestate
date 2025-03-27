@@ -32,7 +32,7 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemo
                     <div className="container-fluid">
                         <div className="section-headline text-center">
                             <h5>
-                                <Image src={logo || "assets/images/icons/house-sm-1.png"} alt="Icon" height="20" width="20" /> {miniTitle}
+                                <Image src={logo || "assets/images/icons/house-sm-1.png"} alt="Icon" height="20" width="20" loading="lazy"/> {miniTitle}
                             </h5>
                             <h3>{title || `${translation?.not_available ||"Not available"}`}</h3>
                             <p>{subTitle || `${translation?.not_available ||"Not available"}`}</p>
@@ -143,7 +143,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                                 <div className="card card-ads card-overlay" style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}>
                                     <div className="card-image" style={{ height: "336px" }}>
                                         <a href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }} target='_blank'>
-                                            <Image alt="" height="200" width="286" className="card-img" src={firstImage}  />
+                                            <Image alt="" height="200" width="286" className="card-img" src={firstImage} loading="lazy" />
                                         </a>
                                         <span className={`ads-type ${item?.post_for}`}>for {item?.post_for}</span>
                                         <span className={`ads-fav ${item?.is_favourite ? "active" : ""}`} onClick={() => addRemoveFav(item?.[id], mainType, listKey)}>
@@ -290,7 +290,7 @@ const CardTypeComponent = ({ isMobile, data, url, addRemoveFav, mainType, listKe
                         <div className="card-footer">
                             <div className="user-details">
                                 <div className="user-avatar">
-                                    <Image alt="" height="32" width="32" className="rounded-circle" src={item?.logo || "/assets/images/user.jpg"} />
+                                    <Image alt="" height="32" width="32" className="rounded-circle" src={item?.logo || "/assets/images/user.jpg"} loading="lazy" />
                                 </div>
                                 <div className="user-name">
                                     <span>{item?.user}</span>

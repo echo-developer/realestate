@@ -36,7 +36,7 @@ const VerifiedAgent = ({translation}) => {
         <aside className="col-md">
           <div className="section-headline">
             <h5>
-              <img src="/assets/images/icons/house-sm-1.png" alt="Icon" height="20" width="20" /> 
+              <img src="/assets/images/icons/house-sm-1.png" alt="Icon" height="20" width="20" loading="lazy" /> 
               {translation?.top_most || "Top Most"}
             </h5>
             <h3>{translation?.verified_agents_kolkata || "Verified Agents in Kolkata"}</h3>
@@ -59,7 +59,7 @@ const VerifiedAgent = ({translation}) => {
             <div className="card card-v-agent">
               <div className="card-body">
                 <div className="d-flex">
-                  <img src="/assets/images/favicon.png" alt="Home" height="32" width="32" className="icon" />
+                  <img src="/assets/images/favicon.png" alt="Home" height="32" width="32" className="icon" loading="lazy"/>
                   <div className="flex-grow-1 ps-3">
                     <h4><a role="button">{agent?.company_name || "Not available"}</a></h4>
                     <p className="mb-1">{translation?.operating_since || "Operating Since"} {agent?.operating_since || "Not available"}</p>
@@ -67,7 +67,7 @@ const VerifiedAgent = ({translation}) => {
                     <p className="mb-2">{translation?.total_projects || "Total Projects:"} {agent?.total_projects || 0}</p>
                     <div className="user-details">
                       <div className="user-avatar"> 
-                        <img src={agent?.image || "/assets/images/user.jpg"} alt="" height="32" width="32" className="rounded-circle" /> 
+                        <img src={agent?.image || "/assets/images/user.jpg"} alt="" height="32" width="32" className="rounded-circle" loading="lazy"/> 
                       </div>
                       <div className="user-name">
                         <h5 className="mb-0">{agent?.name || "Not available"}</h5>

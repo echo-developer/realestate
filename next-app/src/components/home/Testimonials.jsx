@@ -54,7 +54,7 @@ const Testimonials = ({translation}) => {
       <div className="container">
         <div className="bg-box">
           <div className="quote">
-            <img src="/assets/images/icons/quote.png" alt="Quote" height="72" width="72" />
+            <img src="/assets/images/icons/quote.png" alt="Quote" height="72" width="72" loading="lazy"/>
           </div>
           <div className="row gx-lg-5 align-items-center justify-content-between">
             <aside className="col-lg-4 col-12">
@@ -85,6 +85,7 @@ const Testimonials = ({translation}) => {
                         height="200"
                         width="300"
                         className="card-img-top"
+                        loading="lazy"
                       />
                     </div>
                     <div className="card-body">

@@ -214,6 +214,7 @@ const translation = useTranslation();
                         src="/assets/images/ads/8c178a3ead69fc4c042ecb0e550c2579.png"
                         alt="ads"
                         className="img-fluid"
+                        loading="lazy"
                     />
                 </div>
             </aside>

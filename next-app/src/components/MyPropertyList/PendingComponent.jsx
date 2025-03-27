@@ -214,6 +214,7 @@ const PendingComponent = ({ propertiesData }) => {
                   height={48}
                   width={48}
                   className="mb-2"
+                  loading="lazy"
                 />
                 <p className="text-muted">{translation?.no_record_founds || "No Record Founds"}</p>
               </div>

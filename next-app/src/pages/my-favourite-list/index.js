@@ -144,65 +144,7 @@ const Index = () => {
                 <div className="card card-ads" key={property.property_id}>
                   <div className="row g-0">
                     <div className="col-sm-4">
-                      {/* <div className="card-image">
-                                                <div
-                                                    id={`carousel-${property.property_id}`}
-                                                    className="carousel slide ads-carousel"
-                                                    data-bs-ride="carousel"
-                                                >
-                                                    <div className="carousel-inner">
-                                                        {property?.galleries?.some(
-                                                            (gallery) =>
-                                                                gallery?.images
-                                                                    ?.length > 0
-                                                        ) ? (
-                                                            property?.galleries?.map(
-                                                                (gallery) =>
-                                                                    gallery?.images?.map(
-                                                                        (
-                                                                            image,
-                                                                            index
-                                                                        ) => (
-                                                                            <div
-                                                                                key={
-                                                                                    image.image_id
-                                                                                }
-                                                                                className={`carousel-item ${
-                                                                                    index ===
-                                                                                    0
-                                                                                        ? "active"
-                                                                                        : ""
-                                                                                }`}
-                                                                            >
-                                                                                <img
-                                                                                    src={
-                                                                                        image?.image_url
-                                                                                    }
-                                                                                    alt={
-                                                                                        image?.caption ||
-                                                                                        "Property Image"
-                                                                                    }
-                                                                                    className="card-img-top"
-                                                                                />
-                                                                            </div>
-                                                                        )
-                                                                    )
-                                                            )
-                                                        ) : (
-                                                            <div className="carousel-item active">
-                                                                <img
-                                                                    src="/assets/images/property/default-property-1.jpg"
-                                                                    alt="Default Property Image"
-                                                                    className="card-img-top"
-                                                                />
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                <h4 className="ads-price">
-                                                    {property.price}
-                                                </h4>
-                                            </div> */}
+                     
                       <CardImageSlider data={property} icons={false} />
                     </div>
                     <div className="col-sm-8 position-relative">
@@ -277,6 +219,7 @@ const Index = () => {
                       height={48}
                       width={48}
                       className="mb-2"
+                      loading="lazy"
                     />
                     <p className="text-muted">
                       {translation?.no_record_founds || "No Record Founds"}

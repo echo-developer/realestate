@@ -34,6 +34,7 @@ const ProperTimeLine = ({ translation }) => {
                         height="32"
                         width="32"
                         className="mb-2"
+                        loading="lazy"
                       />
                       <h4>
                         {translation?.schedule_viewings || "Schedule Viewings"}
@@ -50,6 +51,7 @@ const ProperTimeLine = ({ translation }) => {
                         height="32"
                         width="32"
                         className="mb-2"
+                        loading="lazy"
                       />
                       <h4>
                         {translation?.get_detailed_listings ||
@@ -67,6 +69,7 @@ const ProperTimeLine = ({ translation }) => {
                         height="32"
                         width="32"
                         className="mb-2"
+                        loading="lazy"
                       />
                       <h4>
                         {translation?.search_properties ||
@@ -84,6 +87,7 @@ const ProperTimeLine = ({ translation }) => {
                         height="32"
                         width="32"
                         className="mb-2"
+                        loading="lazy"
                       />
                       <h4>{translation?.close_deal || "Close the Deal"}</h4>
                     </div>
@@ -98,6 +102,7 @@ const ProperTimeLine = ({ translation }) => {
                         height="32"
                         width="32"
                         className="mb-2"
+                        loading="lazy"
                       />
                       <h4>
                         {translation?.make_offers_with_confidence ||
@@ -131,6 +136,7 @@ const ProperTimeLine = ({ translation }) => {
                 className="img-fluid"
                 height="32"
                 width="32"
+                loading="lazy"
               />
             </aside>
           </div>
@@ -145,6 +151,7 @@ const ProperTimeLine = ({ translation }) => {
                 className="img-fluid"
                 height="32"
                 width="32"
+                loading="lazy"
               />
             </aside>
             <aside className="col-lg col-12" data-aos="fade-up">
@@ -165,6 +172,7 @@ const ProperTimeLine = ({ translation }) => {
                         height="32"
                         width="32"
                         className="mb-2"
+                        loading="lazy"
                       />
                       <h4>
                         {translation?.create_listing || "Create a Listing"}
@@ -181,6 +189,7 @@ const ProperTimeLine = ({ translation }) => {
                         height="32"
                         width="32"
                         className="mb-2"
+                        loading="lazy"
                       />
                       <h4>
                         {translation?.get_maximum_exposure ||
@@ -211,6 +220,7 @@ const ProperTimeLine = ({ translation }) => {
                         height="32"
                         width="32"
                         className="mb-2"
+                        loading="lazy"
                       />
                       <h4>
                         {translation?.contact_owner_agents ||
@@ -231,6 +241,7 @@ const ProperTimeLine = ({ translation }) => {
                 className="img-fluid"
                 height="32"
                 width="32"
+                loading="lazy"
               />
             </aside>
           </div>

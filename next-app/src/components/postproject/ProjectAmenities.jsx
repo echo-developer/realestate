@@ -102,7 +102,7 @@ const ProjectAmenities = ({ show, onClose, projectId }) => {
   };
 
   return (
-    <Modal show={show} onHide={onClose} centered>
+    <Modal show={show} onHide={onClose} centered scrollable>
       <Modal.Header closeButton>
         <Modal.Title>
           {translation?.add_amenity_data || "Add Amenity Data"}
@@ -115,7 +115,7 @@ const ProjectAmenities = ({ show, onClose, projectId }) => {
           amenityData.map((feature) => (
             <div
               key={`amenity_${feature.amenity_id}`}
-              className="form-check form-check-inline d-flex align-items-center"
+              className="form-check form-check-inline w-50 me-0"
             >
               <input
                 className="form-check-input"

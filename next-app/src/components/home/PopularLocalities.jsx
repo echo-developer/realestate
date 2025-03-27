@@ -120,6 +120,7 @@ const PopularLocalities = ({translation}) => {
                                 height="64"
                                 width="64"
                                 className="rounded-circle"
+                                loading="lazy"
                               />
                               <div className="flex-grow-1 ps-3">
                                 <h4>
@@ -146,7 +147,7 @@ const PopularLocalities = ({translation}) => {
                 ):(                  
                   <>
                   <div className='text-center'>
-                  <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" />
+                  <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" loading="lazy"/>
                   <p className='text-muted'>{translation?.no_record_founds || "No Record Founds"}</p>
                   </div>
                   </>                                    
