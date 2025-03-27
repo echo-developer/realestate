@@ -158,29 +158,54 @@ class HomeController extends Controller
                     ->value('status') == config('constants.STATUS_ACTIVE');
 
 
+                // $galleries = [];
+                // $getGalleries = GetProperties_GalleryImages($property->property_id);
+                // // log::info('$getGalleries', json_decode($getGalleries, JSON_PRETTY_PRINT));
+                // foreach ($getGalleries as $image) {
+
+                //     $galleryType = $image->image_type;
+                //     if (!isset($galleries[$galleryType])) {
+                //         $galleries[$galleryType] = [
+                //             'gallery' => $galleryType,
+                //             'images' => []
+                //         ];
+                //     }
+
+                //     $imageUrl = asset('user_upload/property_images/' . $image->filename);
+
+                //     $galleries[$galleryType]['images'][] = [
+                //         'image_id' => $image->image_id,
+                //         'image_name' => $image->filename,
+                //         'image_url' => $imageUrl,
+                //         'caption' => $image->caption
+                //     ];
+                // }
+                // $transformedData = array_values($galleries);
+
+                
                 $galleries = [];
                 $getGalleries = GetProperties_GalleryImages($property->property_id);
-                // log::info('$getGalleries', json_decode($getGalleries, JSON_PRETTY_PRINT));
+
                 foreach ($getGalleries as $image) {
-
-                    $galleryType = $image->image_type;
-                    if (!isset($galleries[$galleryType])) {
-                        $galleries[$galleryType] = [
-                            'gallery' => $galleryType,
-                            'images' => []
-                        ];
-                    }
-
                     $imageUrl = asset('user_upload/property_images/' . $image->filename);
 
-                    $galleries[$galleryType]['images'][] = [
-                        'image_id' => $image->image_id,
-                        'image_name' => $image->filename,
-                        'image_url' => $imageUrl,
-                        'caption' => $image->caption
+                    $galleries[] = [
+                        'gallery' => $image->image_type,
+                        'images' => [
+                            [
+                                'image_id' => $image->image_id,
+                                'image_name' => $image->filename,
+                                'image_url' => $imageUrl,
+                                'caption' => $image->caption
+                            ]
+                        ]
                     ];
+
+                    break; // Stop after storing the first image
                 }
+
                 $transformedData = array_values($galleries);
+
 
                 return [
                     'property_id' => $property->property_id,
