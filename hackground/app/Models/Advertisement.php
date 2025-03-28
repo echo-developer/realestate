@@ -44,7 +44,7 @@ class Advertisement extends Model
         $ins_data = array(
 			'page' => $data['page'] ? $data['page'] : '',
 			'position' => $data['position'] ? $data['position'] : '',
-			//'ad_size' => $data['ad_size'] ? $data['ad_size'] : '',
+			'ad_size' => $data['ad_size'] ? $data['ad_size'] : '',
             'ad_type' => $data['ad_type'] ? $data['ad_type'] : '',
 			'ad_image' => $data['ad_image'] ? $data['ad_image'] : '',
 			'ad_image_mobile' => $data['ad_image_mobile'] ? $data['ad_image_mobile'] : '',
@@ -66,8 +66,10 @@ class Advertisement extends Model
                 $city_arr = array();
                 foreach($cities as $city)
                 {
-                    $city_arr['advertisement_id'] = $insert_id;
-                    $city_arr['city_id'] = $city;
+					$city_arr[] = array(
+						'advertisement_id' => $insert_id,
+						'city_id' => $city
+					);
                 }
                 DB::table($loc_table)->insert($city_arr);
             }else{
@@ -82,8 +84,10 @@ class Advertisement extends Model
                 $cat_arr = array();
                 foreach($categories as $cat)
                 {
-                    $cat_arr['advertisement_id'] = $insert_id;
-                    $cat_arr['property_category'] = $cat;
+					$cat_arr[] = array(
+						'advertisement_id' => $insert_id,
+						'property_category' => $cat
+					);
                 }
                 DB::table($cat_table)->insert($cat_arr);
             }else{
@@ -101,7 +105,7 @@ class Advertisement extends Model
         $ins_data = array(
 			'page' => $data['page'] ? $data['page'] : '',
 			'position' => $data['position'] ? $data['position'] : '',
-			//'ad_size' => $data['ad_size'] ? $data['ad_size'] : '',
+			'ad_size' => $data['ad_size'] ? $data['ad_size'] : '',
             'ad_type' => $data['ad_type'] ? $data['ad_type'] : '',
 			'ad_image' => $data['ad_image'] ? $data['ad_image'] : '',
 			'ad_image_mobile' => $data['ad_image_mobile'] ? $data['ad_image_mobile'] : '',
@@ -121,8 +125,10 @@ class Advertisement extends Model
             $city_arr = array();
             foreach($cities as $city)
             {
-                $city_arr['advertisement_id'] = $id;
-                $city_arr['city_id'] = $city;
+                $city_arr[] = array(
+					'advertisement_id' => $id,
+					'city_id' => $city
+				);
             }
             DB::table($loc_table)->insert($city_arr);
         }else{
@@ -137,8 +143,10 @@ class Advertisement extends Model
             $cat_arr = array();
             foreach($categories as $cat)
             {
-                $cat_arr['advertisement_id'] = $id;
-                $cat_arr['property_category'] = $cat;
+                $cat_arr[] = array(
+					'advertisement_id' => $id,
+					'property_category' => $cat
+				);
             }
             DB::table($cat_table)->insert($cat_arr);
         }else{

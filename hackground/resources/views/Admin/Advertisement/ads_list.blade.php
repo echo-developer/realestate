@@ -1,6 +1,5 @@
-@php
-    //print_r($list);exit;
-@endphp
+{{-- <link rel="stylesheet" href="{{ asset('assets/js/scripts-init/select2/dist/css/select2.min.css') }}">
+<script src="{{ asset('assets/js/scripts-init/select2/dist/js/select2.full.min.js') }}"></script> --}}
 @extends('Admin.layouts.app')
 
 @section('content')

@@ -40,3 +40,44 @@ CREATE TABLE IF NOT EXISTS `pref_advertisement_packages_names` (
 ALTER TABLE `pref_leads_assigned` ADD `lead_type` CHAR(10) NOT NULL COMMENT 'P = Project/Property G = GENERAL' AFTER `assign_id`;
 ALTER TABLE `pref_leads_assigned` CHANGE `created_at` `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE `pref_leads_assigned` CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;
+
+28/03/2025
+
+DROP TABLE IF EXISTS `pref_advertisements`;
+CREATE TABLE IF NOT EXISTS `pref_advertisements` (
+  `advertisement_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `request_id` int NOT NULL,
+  `package_id` int NOT NULL,
+  `member_id` int NOT NULL,
+  `ad_image` varchar(155) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ad_image_mobile` varchar(155) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ad_code` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ad_url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ad_size` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ad_type` varchar(90) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `page` varchar(70) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `position` varchar(70) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `start_date` datetime NOT NULL,
+  `expire_date` datetime NOT NULL,
+  `status` tinyint NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`advertisement_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP TABLE IF EXISTS `pref_advertisement_category`;
+CREATE TABLE IF NOT EXISTS `pref_advertisement_category` (
+  `advertisement_id` bigint UNSIGNED NOT NULL,
+  `property_category` int NOT NULL,
+  `property_sub_category` int NOT NULL,
+  KEY `pref_advertisement_category_advertisement_id_foreign` (`advertisement_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+DROP TABLE IF EXISTS `pref_advertisement_locations`;
+CREATE TABLE IF NOT EXISTS `pref_advertisement_locations` (
+  `advertisement_id` bigint UNSIGNED NOT NULL,
+  `location_id` int NOT NULL,
+  `city_id` int NOT NULL,
+  `country_id` int NOT NULL,
+  KEY `pref_advertisement_locations_advertisement_id_foreign` (`advertisement_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

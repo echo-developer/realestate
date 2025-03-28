@@ -28,6 +28,7 @@ use App\Http\Controllers\Api\PropertyEditController;
 use App\Http\Controllers\Api\PropertyUpdateControler;
 use App\Http\Controllers\Api\SeachController;
 use App\Http\Controllers\Api\VerifyUserMailController;
+use App\Http\Controllers\Api\AdvertisementController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -226,6 +227,8 @@ Route::post('save-project-property', [ProjectPropertyController::class, 'SavePro
 Route::post('edit-project-image', [ImageEditController::class, 'projectImage']);
 Route::post('delete-project-image', [ImageEditController::class, 'deleteImage']);
 Route::post('edit-project-caption', [ImageEditController::class, 'captionImage']);
+
+Route::post('get-advertisements', [AdvertisementController::class, 'getAdvertisements']);
 
 Route::controller(FloorPlaningController::class)->group(function () {
 

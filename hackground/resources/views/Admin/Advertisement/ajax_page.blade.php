@@ -23,7 +23,7 @@
 
                     <div class="form-group">
                         <label for="category_key">Category </label>
-                        <select class="form-control" name="category[]">
+                        <select class="form-control select2" name="category[]">
                           <option value="">-Select-</option>
                           <?php foreach($property_category as $c){ ?>
                           <option value="<?php echo $c->id;?>" ><?php echo $c->name;?></option>
@@ -53,7 +53,7 @@
                     
                     <div class="form-group">
                       <label for="category_key">Position </label>
-                      <select class="form-control" name="position" onchange="get_size()">
+                      <select class="form-control" name="position" id="position" onchange="get_size($(this))">
                         <option value="">-Select-</option>
                       </select>
                     </div>
@@ -137,7 +137,10 @@
     </div>
     
     <script>
-    
+    // $(function(){
+    //     $('.select2').select2();
+    // });
+
     function submitForm(form, event){
         event.preventDefault();
         var formId = $("#add_form");
@@ -218,7 +221,7 @@
     
     function get_size(){
         reset_select([$('[name="ad_size"]')]);
-        var position = $('[name="position"] :selected').val();
+        var position = $('#position :selected').val();
         var page = $('[name="page"] :selected').val();
         $.get('<?php echo url('advertisement/options?option=ad_size&page=')?>'+page+'&position='+position, function(res){
             $('[name="ad_size"]').html(res);
@@ -349,7 +352,7 @@
                     
                     <div class="form-group">
                       <label for="category_key">Position </label>
-                      <select class="form-control" name="position" onchange="get_size()">
+                      <select class="form-control" name="position" id="position" onchange="get_size()">
                         <option value="">-Select-</option>
                         @if($positions) 
                             @foreach($positions as $p)
@@ -418,7 +421,7 @@
                     </div>
                     @if($detail['ad_image_mobile'])
                     <div class="form-group">
-                        <img id="image_preview2" src="src="{{ asset('user_upload/advertisement/'.$detail['ad_image_mobile']) }}" style="display:none; width: 100px; height: auto;" />
+                        <img id="image_preview2" src="{{ asset('user_upload/advertisement/'.$detail['ad_image_mobile']) }}" style="width: 100px; height: auto;" />
                         <button type="button" id="delete_image_btn2"
                             class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
                     </div>
@@ -432,12 +435,12 @@
 
                     <div class="form-group" id="ad_code_wrapper">
                         <label for="ad_code">Advertisement Code </label>
-                        <textarea class="form-control" name="ad_code"></textarea>
+                        <textarea class="form-control" name="ad_code">{{ !empty($detail['ad_code']) ? $detail['ad_code'] : '' }}</textarea>
                     </div>
 
                     <div class="form-group">
                         <label for="ad_url">Ad URL </label>
-                        <input type="text" class="form-control reset_field" id="ad_url" name="ad_url" autocomplete="off">
+                        <input type="text" class="form-control reset_field" id="ad_url" name="ad_url" autocomplete="off" value="{{ !empty($detail['ad_url']) ? $detail['ad_url'] : '' }}" >
                     </div>
 
                     <div class="form-group">
@@ -477,7 +480,7 @@
                 {
                     Swal.fire({
                         title: "Success!",
-                        text: msg.message,
+                        text: res.message,
                         icon: "success",
                         confirmButtonText: "OK"
                         }).then((result) => {
@@ -488,7 +491,7 @@
                 }else{
                     Swal.fire({
                         title: "Failed!",
-                        text: msg.message,
+                        text: res.message,
                         icon: "error",
                         confirmButtonText: "OK"
                         }).then((result) => {
@@ -540,7 +543,7 @@
     
     function get_size(){
         reset_select([$('[name="ad_size"]')]);
-        var position = $('[name="position"] :selected').val();
+        var position = $('#position :selected').val();
         var page = $('[name="page"] :selected').val();
         $.get('<?php echo url('ads-packages/options?option=ad_size&page=')?>'+page+'&position='+position, function(res){
             $('[name="ad_size"]').html(res);

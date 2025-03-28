@@ -1298,5 +1298,42 @@ class ApiModel extends Model
         return $availableBHKs;
     }
 
+    public function getPageAdvertisements($data=array())
+    {
+        $query = DB::table('advertisements as a')
+            ->select('a.advertisement_id','a.ad_image','a.ad_image_mobile','a.ad_url','a.ad_type','a.ad_code')
+            ->leftJoin('advertisement_category as a_c', 'a.advertisement_id', '=', 'a_c.advertisement_id')
+            ->leftJoin('advertisement_locations as a_l', 'a.advertisement_id', '=', 'a_l.advertisement_id');
+
+        $query->where('status','1');
+        
+        if(array_key_exists('page', $data) && !empty($data['page']))
+        {
+            $query->where('a.page',$data['page']); 
+        }
+        if(array_key_exists('position', $data) && !empty($data['position']))
+        {
+            $query->where('a.position',$data['position']); 
+        }
+        if(array_key_exists('city', $data) && !empty($data['city']))
+        {
+            $query->where('a_l.city_id',$data['city']); 
+        }
+        if(array_key_exists('category', $data) && !empty($data['category']))
+        {
+            $query->where('a_c.property_category',$data['category']); 
+        }
+        $query->groupBy('a.advertisement_id');
+        if(array_key_exists('limit', $data) && !empty($data['limit']))
+        {
+            $query->inRandomOrder()->limit($data['limit']); 
+        }else{
+            $query->inRandomOrder(); 
+        }
+            
+        $result = $query->get()->toArray();
+        return $result;
+    }
+
     
 }
