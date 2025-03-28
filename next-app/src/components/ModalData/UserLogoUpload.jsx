@@ -21,6 +21,7 @@ const UserLogoUpload = ({ show, setShow, setUserLogo }) => {
     setSelectedFile(file);
     handleUpload(file);
   };
+  
 
   const handleUpload = async (file) => {
     try {

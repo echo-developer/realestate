@@ -11,6 +11,7 @@ import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import UploadPropertyBrochure from "../BrochureData/UploadPropertyBrochure";
 import AddNewPropertyData from "../addtional/AddNewPropertyData";
 import useTranslation from '../../hooks/useTranslation'
+import DocumentUploadModal from "../addtional/AddDocument";
 
 
 const PublishComponent = ({ propertiesData }) => {
@@ -18,6 +19,7 @@ const PublishComponent = ({ propertiesData }) => {
   const { callApi } = AuthUser();
   const [propId, setPropId] = useState();
   const [showBrochModal, setShowBrochModal] = useState(false);
+  const [docModal,setShowDocModal]=useState(false)
   const [properties, setProperties] = useState(
     propertiesData?.published_properties?.data || []
     
@@ -93,6 +95,11 @@ const PublishComponent = ({ propertiesData }) => {
     setShowBrochModal(true);
     setPropId(id);
   };
+
+  const handlePropertyCertificate =(id)=>{
+    setShowDocModal(true)
+    setPropId(id);
+  }
 
   return (
     <>
@@ -183,6 +190,14 @@ const PublishComponent = ({ propertiesData }) => {
                       >
                         {translation?.add_new_field || "Add New Field"}
                       </a>
+                      <a
+                        onClick={() =>
+                          handlePropertyCertificate(property?.property_id)
+                        }
+                        className="btn btn-sm btn-danger me-2"
+                      >
+                        {translation?.certificate || "Add Certificate"}
+                      </a>
                       <Link
                         href={`/property-edit/${property?.property_id}`}
                         className="btn btn-sm btn-outline-primary me-2 ms-auto"
@@ -228,6 +243,10 @@ const PublishComponent = ({ propertiesData }) => {
           handleClose={() => setShowAddProperty(false)}
           propertyId={propId}
         />
+      )}
+
+      {docModal && (
+        <DocumentUploadModal/>
       )}
 
       <UploadPropertyBrochure

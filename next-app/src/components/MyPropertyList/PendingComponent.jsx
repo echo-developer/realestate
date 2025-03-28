@@ -10,14 +10,15 @@ import useDateFormat from "@/hooks/useDateFormat";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import UploadPropertyBrochure from "../BrochureData/UploadPropertyBrochure";
 import AddNewPropertyData from "../addtional/AddNewPropertyData";
-import useTranslation from '../../hooks/useTranslation'
-
+import useTranslation from "../../hooks/useTranslation";
+import DocumentUploadModal from "../addtional/AddDocument";
 
 const PendingComponent = ({ propertiesData }) => {
   const { callApi } = AuthUser();
   const [propId, setPropId] = useState(null);
   const [showBrochModal, setShowBrochModal] = useState(false);
   const [showAddProperty, setShowAddProperty] = useState(false);
+  const [docModal,setShowDocModal]=useState(false)
   const [properties, setProperties] = useState(
     propertiesData?.pending_properties?.data || []
   );
@@ -27,12 +28,12 @@ const PendingComponent = ({ propertiesData }) => {
   const [totalPages, setTotalPages] = useState(
     Math.ceil(
       (propertiesData?.pending_properties?.total || 0) /
-      (propertiesData?.pending_properties?.per_page || 10)
+        (propertiesData?.pending_properties?.per_page || 10)
     )
   );
   useEffect(() => {
-    setProperties(propertiesData?.pending_properties?.data || [])
-  }, [propertiesData?.pending_properties])
+    setProperties(propertiesData?.pending_properties?.data || []);
+  }, [propertiesData?.pending_properties]);
   const translation = useTranslation();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -97,6 +98,15 @@ const PendingComponent = ({ propertiesData }) => {
     setShowAddProperty(true);
   };
 
+  const handlePropertyCertificate = (id) => {
+    setShowDocModal(true);
+    setPropId(id);
+  };
+
+  const handleDocClose=()=>{
+    setShowDocModal(false);
+  }
+
   return (
     <>
       <div className="list-display">
@@ -121,7 +131,8 @@ const PendingComponent = ({ propertiesData }) => {
                     </h4>
                     <p className="mb-1">
                       <i className="bi bi-geo-alt"></i>{" "}
-                      {property.address ||`${translation?.not_available ||"Not available"}`}
+                      {property.address ||
+                        `${translation?.not_available || "Not available"}`}
                     </p>
                     <React.Fragment>
                       {property.property_type === "Residential" ? (
@@ -131,28 +142,54 @@ const PendingComponent = ({ propertiesData }) => {
                             {property.property_type_for}
                           </li>
                           <li>
-                            <i className="icon-img-bed"></i> {translation?.bathrooms || "Bedrooms"}{" "}
-                            <span>{property.bedrooms || `${translation?.not_available ||"Not available"}`}</span>
+                            <i className="icon-img-bed"></i>{" "}
+                            {translation?.bathrooms || "Bedrooms"}{" "}
+                            <span>
+                              {property.bedrooms ||
+                                `${
+                                  translation?.not_available || "Not available"
+                                }`}
+                            </span>
                           </li>
                           <li>
-                            <i className="icon-img-tub"></i> {translation?.bathrooms || "Bathrooms"}:{" "}
-                            <span>{property.bathroom ||`${translation?.not_available ||"Not available"}`}</span>
+                            <i className="icon-img-tub"></i>{" "}
+                            {translation?.bathrooms || "Bathrooms"}:{" "}
+                            <span>
+                              {property.bathroom ||
+                                `${
+                                  translation?.not_available || "Not available"
+                                }`}
+                            </span>
                           </li>
                         </ul>
                       ) : (
                         <ul className="list-info mb-2">
                           <li>
                             <i className="icon-img-flat"></i>{" "}
-                            {property.property_type_for || `${translation?.not_available ||"Not available"}`}
+                            {property.property_type_for ||
+                              `${
+                                translation?.not_available || "Not available"
+                              }`}
                           </li>
                           <li>
-                            <i className="icon-img-bed"></i> {translation?.cafeteria || "Cafeteria"}:{" "}
-                            <span>{property.cafeteria || `${translation?.not_available ||"Not available"}`}</span>
-                          </li>
-                          <li>
-                            <i className="icon-img-tub"></i> {translation?.personal_washroom || "Personal Washroom:"}{" "}
+                            <i className="icon-img-bed"></i>{" "}
+                            {translation?.cafeteria || "Cafeteria"}:{" "}
                             <span>
-                              {property.personal_washroom || `${translation?.not_available ||"Not available"}`}
+                              {property.cafeteria ||
+                                `${
+                                  translation?.not_available || "Not available"
+                                }`}
+                            </span>
+                          </li>
+                          <li>
+                            <i className="icon-img-tub"></i>{" "}
+                            {translation?.personal_washroom ||
+                              "Personal Washroom:"}{" "}
+                            <span>
+                              {property.personal_washroom ||
+                                `${
+                                  translation?.not_available || "Not available"
+                                }`}
                             </span>
                           </li>
                         </ul>
@@ -184,7 +221,15 @@ const PendingComponent = ({ propertiesData }) => {
                         }
                         className="btn btn-sm btn-info me-2"
                       >
-                         {translation?.add_new_field || "Add New Field"}
+                        {translation?.add_new_field || "Add New Field"}
+                      </button>
+                      <button
+                        onClick={() =>
+                          handlePropertyCertificate(property?.property_id)
+                        }
+                        className="btn btn-sm btn-danger me-2"
+                      >
+                        {translation?.certificate || "Add Certificate"}
                       </button>
                       <Link
                         href={`/property-edit/${property.property_id}`}
@@ -216,7 +261,9 @@ const PendingComponent = ({ propertiesData }) => {
                   className="mb-2"
                   loading="lazy"
                 />
-                <p className="text-muted">{translation?.no_record_founds || "No Record Founds"}</p>
+                <p className="text-muted">
+                  {translation?.no_record_founds || "No Record Founds"}
+                </p>
               </div>
             </div>
           </>
@@ -239,6 +286,8 @@ const PendingComponent = ({ propertiesData }) => {
           propertyId={propId}
         />
       )}
+
+      {docModal && <DocumentUploadModal propId={propId} show={docModal} onClose={handleDocClose}/>}
 
       <UploadPropertyBrochure
         show={showBrochModal}
