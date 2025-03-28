@@ -50,10 +50,11 @@ class ProjectDetailsController extends Controller
                     'location:project_id,locality,city,address,longitude,latitude',
                     'gallery:id,project_id,image_type',
                     'gallery.images:gallary_id,filename,caption',
-                    'certificates:project_id,fileName,certificate_name,certificate_number,status,is_approved',
-                ])->wherehas('certificates', function ($certificate) {
-                    $certificate->where('status', config('constants.STATUS_ACTIVE'));
-                })
+                    'certificates' => function ($query) {
+                        $query->where('status', 1)
+                            ->select('project_id', 'fileName', 'certificate_name', 'certificate_number', 'status', 'is_approved');
+                    }
+                ])
                 ->first();
 
             if (!$project) {
