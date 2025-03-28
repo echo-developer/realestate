@@ -44,7 +44,7 @@ const index = () => {
   const memberId = GetMemberId();
   const [loading, setLoading] = useState(true);
   const [postFor, setPostFor] = useState("sale");
-  const [selectedPropertyType, setSelectedPropertyType] = useState("");
+  const [selectedPropertyType, setSelectedPropertyType] = useState("1");
   const [selectedProeprtyFor, setSelectedProeprtyFor] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -236,7 +236,7 @@ const index = () => {
         });
         if (res && res?.status === 1) {
           setPropertyTypeList(res?.data || []);
-          setSelectedPropertyType(res?.data?.[0]?.category_id);
+          // setSelectedPropertyType(res?.data?.[0]?.category_id);
         } else {
           toast.error(res?.message || "Error fetching property types");
         }
