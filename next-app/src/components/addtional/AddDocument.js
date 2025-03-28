@@ -6,6 +6,7 @@ import AuthUser from "../Authentication/AuthUser";
 const DocumentUploadModal = ({ propId, show, onClose }) => {
   const { callApi } = AuthUser();
   const [documents, setDocuments] = useState([]);
+  const [newDocuments, setNewDocuments] = useState([]); // Track new uploads
   const [fileUrl, setFileUrl] = useState("");
   const [currentDoc, setCurrentDoc] = useState({
     certificate_number: "",
@@ -23,9 +24,7 @@ const DocumentUploadModal = ({ propId, show, onClose }) => {
       const response = await callApi({
         api: `/certificates_details`,
         method: "GET",
-        data: {
-          property_id: propId,
-        },
+        data: { property_id: propId },
       });
 
       if (response?.status === 1) {
@@ -39,11 +38,8 @@ const DocumentUploadModal = ({ propId, show, onClose }) => {
     }
   };
 
-  // Load Documents on Modal Open
   useEffect(() => {
-    if (show) {
-      fetchDocuments();
-    }
+    if (show) fetchDocuments();
   }, [show]);
 
   // Handle Input Change
@@ -100,8 +96,12 @@ const DocumentUploadModal = ({ propId, show, onClose }) => {
       });
 
       if (response?.status === 1) {
-        toast.success(response.message || "Document uploaded successfully.");
-        setDocuments((prev) => [...prev, { ...currentDoc, file_url: fileUrl }]);
+        toast.success(response?.message || "Document uploaded successfully.");
+
+        // Add to newDocuments instead of documents
+        const newDocument = { ...currentDoc, file_url: fileUrl };
+        setNewDocuments((prev) => [...prev, newDocument]);
+
         resetForm();
       } else {
         toast.error(response?.message || "Document upload failed.");
@@ -133,7 +133,46 @@ const DocumentUploadModal = ({ propId, show, onClose }) => {
         <Modal.Title>Upload Documents</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {/* Display Previous Documents */}
+        <h6>Previous Documents</h6>
+        {documents?.length === 0 ? (
+          <p>No documents added yet.</p>
+        ) : (
+          <ul className="list-unstyled">
+            {documents?.map((doc, index) => (
+              <li key={index} className="d-flex align-items-center mb-3">
+                <span className="me-3">
+                  {doc?.certificate_name} (Reg No: {doc?.certificate_number}) -
+                </span>
+                {doc?.filename_url?.endsWith(".pdf") ? (
+                  <a
+                    href={doc?.filename_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View
+                  </a>
+                ) : (
+                  <img
+                    src={doc?.filename_url}
+                    alt={doc?.certificate_name}
+                    style={{
+                      width: "60px",
+                      height: "60px",
+                      objectFit: "cover",
+                      borderRadius: "8px",
+                    }}
+                  />
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <hr />
+
         {/* Form for New Upload */}
+        <h6>Upload New Document</h6>
         <Form.Group className="mb-3">
           <Form.Label>Registration Number</Form.Label>
           <Form.Control
@@ -180,54 +219,51 @@ const DocumentUploadModal = ({ propId, show, onClose }) => {
             </div>
           ))}
 
+        {/* Display Newly Uploaded Documents */}
+        {newDocuments.length > 0 && (
+          <>
+            <hr />
+            <h6>Newly Uploaded Documents</h6>
+            <ul className="list-unstyled">
+              {newDocuments?.map((doc, index) => (
+                <li key={index} className="d-flex align-items-center mb-3">
+                  <span className="me-3">
+                    {doc?.certificate_name} (Reg No: {doc?.certificate_number})
+                    -
+                  </span>
+                  {doc?.file_url?.endsWith(".pdf") ? (
+                    <a
+                      href={doc?.file_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View PDF
+                    </a>
+                  ) : (
+                    <img
+                      src={doc?.file_url}
+                      alt={doc?.certificate_name}
+                      style={{
+                        width: "60px",
+                        height: "60px",
+                        objectFit: "cover",
+                        borderRadius: "8px",
+                      }}
+                    />
+                  )}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </Modal.Body>
+      <Modal.Footer>
         <Button
           variant="primary"
           onClick={saveDocumentToAPI}
           disabled={loading}
         >
-          {loading ? "Saving..." : "Save and Upload"}
-        </Button>
-
-        <hr />
-        {/* Display Previous Documents */}
-        <h6>Saved Documents</h6>
-        {documents.length === 0 ? (
-          <p>No documents added yet.</p>
-        ) : (
-          <ul className="list-unstyled">
-            {documents.map((doc, index) => (
-              <li key={index} className="d-flex align-items-center mb-3">
-                <span className="me-3">
-                  {doc.certificate_name} (Reg No: {doc.certificate_number}) -
-                </span>
-                {doc.filename_url?.endsWith(".pdf") ? (
-                  <a
-                    href={doc.filename_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    View PDF
-                  </a>
-                ) : (
-                  <img
-                    src={doc.filename_url}
-                    alt={doc.certificate_name}
-                    style={{
-                      width: "60px",
-                      height: "60px",
-                      objectFit: "cover",
-                      borderRadius: "8px",
-                    }}
-                  />
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
-          Cancel
+          {loading ? "Saving..." : "Save Dcoument"}
         </Button>
       </Modal.Footer>
     </Modal>
