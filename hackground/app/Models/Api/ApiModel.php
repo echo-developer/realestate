@@ -450,6 +450,8 @@ class ApiModel extends Model
                 'property_additional.road_width',
                 'property_additional.total_open_sides',
                 'property_additional.approved_by',
+                'property_additional.launch_date',
+                'property_additional.ceiling_height',
 
                 'property_additional.pantry_cafeteria_status',
                 'property_additional.is_corner_shop',
@@ -1333,20 +1335,6 @@ class ApiModel extends Model
             
         $result = $query->get()->toArray();
         return $result;
-    }
-
-    public function addAdvertisementView($data=array())
-    {
-        $prev = DB::table('advertisements as a')->select('a.views')->where('a.advertisement_id',$data['advertisement_id'])->first();
-        if($prev)
-        {
-            $prev_views = $prev->views;
-            $curr_views = $prev_views+1;
-            DB::table('advertisements as a')->where('a.advertisement_id',$data['advertisement_id'])->update(['a.views'=>$curr_views]);
-            return true;
-        }else{
-            return false;
-        }
     }
 
     
