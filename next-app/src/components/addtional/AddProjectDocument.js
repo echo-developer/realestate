@@ -1,21 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 
-const UploadProjectDocument = ({ propId, show, onClose }) => {
+const ProjectDocumentModal = ({ propId, show, onClose }) => {
   const { callApi } = AuthUser();
   const [documents, setDocuments] = useState([]);
+  const [newDocuments, setNewDocuments] = useState([]); // Track new uploads
   const [fileUrl, setFileUrl] = useState("");
   const [currentDoc, setCurrentDoc] = useState({
     certificate_number: "",
     certificate_name: "",
     fileName: null,
     doc_id: "",
-    property_id: propId,
-    project_id: "",
+    property_id: "",
+    project_id: propId,
   });
   const [loading, setLoading] = useState(false);
+
+  // Fetch Previous Documents
+  const fetchDocuments = async () => {
+    try {
+      const response = await callApi({
+        api: `/certificates_details`,
+        method: "GET",
+        data: { project_id: propId },
+      });
+
+      if (response?.status === 1) {
+        setDocuments(response.data);
+      } else {
+        toast.error(response?.message || "Failed to fetch documents.");
+      }
+    } catch (error) {
+      console.error("Error fetching documents:", error);
+      toast.error("Error fetching documents.");
+    }
+  };
+
+  useEffect(() => {
+    if (show) fetchDocuments();
+  }, [show]);
 
   // Handle Input Change
   const handleChange = (field, value) => {
@@ -35,17 +60,12 @@ const UploadProjectDocument = ({ propId, show, onClose }) => {
       const response = await callApi({
         api: `/upload_certificates_img`,
         method: "UPLOAD",
-        data: {
-          file,
-          property_id: propId,
-        },
+        data: { file, project_id: propId },
       });
+
       if (response?.status === 1) {
         setFileUrl(response.filename_url);
-        setCurrentDoc((prev) => ({
-          ...prev,
-          fileName: response.fileName,
-        }));
+        setCurrentDoc((prev) => ({ ...prev, fileName: response.fileName }));
         toast.success(response.message || "File uploaded successfully.");
       } else {
         toast.error(response?.message || "Upload failed");
@@ -58,7 +78,11 @@ const UploadProjectDocument = ({ propId, show, onClose }) => {
 
   // Save Document to API
   const saveDocumentToAPI = async () => {
-    if (!currentDoc.certificate_number || !currentDoc.certificate_name || !fileUrl) {
+    if (
+      !currentDoc.certificate_number ||
+      !currentDoc.certificate_name ||
+      !fileUrl
+    ) {
       toast.error("Please complete all fields and upload a file.");
       return;
     }
@@ -72,8 +96,12 @@ const UploadProjectDocument = ({ propId, show, onClose }) => {
       });
 
       if (response?.status === 1) {
-        toast.success(response.message || "Document uploaded successfully.");
-        setDocuments((prev) => [...prev, { ...currentDoc, file_url: fileUrl }]);
+        toast.success(response?.message || "Document uploaded successfully.");
+
+        // Add to newDocuments instead of documents
+        const newDocument = { ...currentDoc, file_url: fileUrl };
+        setNewDocuments((prev) => [...prev, newDocument]);
+
         resetForm();
       } else {
         toast.error(response?.message || "Document upload failed.");
@@ -93,41 +121,10 @@ const UploadProjectDocument = ({ propId, show, onClose }) => {
       certificate_name: "",
       fileName: null,
       doc_id: "",
-      property_id: propId,
-      project_id: "",
+      property_id: "",
+      project_id: propId,
     });
     setFileUrl("");
-  };
-
-  // Submit All Documents
-  const handleSubmitAll = async () => {
-    if (documents.length === 0) {
-      toast.error("No documents to submit.");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      for (const doc of documents) {
-        const response = await callApi({
-          api: `/upload_certificates_details`,
-          method: "UPLOAD",
-          data: doc,
-        });
-
-        if (response?.status !== 1) {
-          toast.error(`Failed to upload: ${doc.certificate_name}`);
-          return;
-        }
-      }
-      toast.success("All documents submitted successfully.");
-      onClose();
-    } catch (error) {
-      console.error("Submit Error:", error);
-      toast.error("Error submitting documents.");
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -136,6 +133,46 @@ const UploadProjectDocument = ({ propId, show, onClose }) => {
         <Modal.Title>Upload Documents</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {/* Display Previous Documents */}
+        <h6>Previous Documents</h6>
+        {documents?.length === 0 ? (
+          <p>No documents added yet.</p>
+        ) : (
+          <ul className="list-unstyled">
+            {documents?.map((doc, index) => (
+              <li key={index} className="d-flex align-items-center mb-3">
+                <span className="me-3">
+                  {doc?.certificate_name} (Reg No: {doc?.certificate_number}) -
+                </span>
+                {doc?.filename_url?.endsWith(".pdf") ? (
+                  <a
+                    href={doc?.filename_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View
+                  </a>
+                ) : (
+                  <img
+                    src={doc?.filename_url}
+                    alt={doc?.certificate_name}
+                    style={{
+                      width: "60px",
+                      height: "60px",
+                      objectFit: "cover",
+                      borderRadius: "8px",
+                    }}
+                  />
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <hr />
+
+        {/* Form for New Upload */}
+        <h6>Upload New Document</h6>
         <Form.Group className="mb-3">
           <Form.Label>Registration Number</Form.Label>
           <Form.Control
@@ -156,12 +193,15 @@ const UploadProjectDocument = ({ propId, show, onClose }) => {
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Upload File</Form.Label>
-          <Form.Control type="file" onChange={(e) => handleFileChange(e.target.files[0])} />
+          <Form.Control
+            type="file"
+            onChange={(e) => handleFileChange(e.target.files[0])}
+          />
         </Form.Group>
 
-        {/* File Review Section */}
-        {fileUrl && (
-          fileUrl.endsWith(".pdf") ? (
+        {/* File Preview */}
+        {fileUrl &&
+          (fileUrl.endsWith(".pdf") ? (
             <p>
               <strong>Uploaded File: </strong>
               <a href={fileUrl} target="_blank" rel="noopener noreferrer">
@@ -171,33 +211,63 @@ const UploadProjectDocument = ({ propId, show, onClose }) => {
           ) : (
             <div>
               <strong>Uploaded Image Preview:</strong>
-              <img src={fileUrl} alt="Uploaded Document" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+              <img
+                src={fileUrl}
+                alt="Uploaded Document"
+                style={{ maxWidth: "100%", maxHeight: "200px" }}
+              />
             </div>
-          )
-        )}
+          ))}
 
-        {/* Save and Add New */}
-        <Button variant="primary" onClick={saveDocumentToAPI} disabled={loading}>
-          {loading ? "Saving..." : "Save and Add More"}
-        </Button>
-
-        <hr />
-        <h6>Saved Documents</h6>
-        {documents.length === 0 ? (
-          <p>No documents added yet.</p>
-        ) : (
-          <ul>
-            {documents.map((doc, index) => (
-              <li key={index}>
-                {doc.certificate_name} (Reg No: {doc.certificate_number}) - 
-                <a href={doc.file_url} target="_blank" rel="noopener noreferrer">View</a>
-              </li>
-            ))}
-          </ul>
+        {/* Display Newly Uploaded Documents */}
+        {newDocuments.length > 0 && (
+          <>
+            <hr />
+            <h6>Newly Uploaded Documents</h6>
+            <ul className="list-unstyled">
+              {newDocuments?.map((doc, index) => (
+                <li key={index} className="d-flex align-items-center mb-3">
+                  <span className="me-3">
+                    {doc?.certificate_name} (Reg No: {doc?.certificate_number})
+                    -
+                  </span>
+                  {doc?.file_url?.endsWith(".pdf") ? (
+                    <a
+                      href={doc?.file_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View PDF
+                    </a>
+                  ) : (
+                    <img
+                      src={doc?.file_url}
+                      alt={doc?.certificate_name}
+                      style={{
+                        width: "60px",
+                        height: "60px",
+                        objectFit: "cover",
+                        borderRadius: "8px",
+                      }}
+                    />
+                  )}
+                </li>
+              ))}
+            </ul>
+          </>
         )}
       </Modal.Body>
+      <Modal.Footer>
+        <Button
+          variant="primary"
+          onClick={saveDocumentToAPI}
+          disabled={loading}
+        >
+          {loading ? "Saving..." : "Save Dcoument"}
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };
 
-export default UploadProjectDocument;
+export default ProjectDocumentModal;

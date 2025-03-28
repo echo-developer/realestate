@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { ShimmerText } from "react-shimmer-effects";
 import useTranslation from "@/hooks/useTranslation";
+import { ImGlass } from "react-icons/im";
 
 const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
@@ -253,7 +254,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   htmlFor={`property_${property.category_id}`}
                 >
                   <img
-                    src="/assets/images/icons/home-2.png"
+                    src={`${property.image ||"/assets/images/icons/home-2.png"}`}
                     alt="Icon"
                     height={48}
                     width={48}
@@ -294,7 +295,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   htmlFor={`property_for_${property.sub_category_id}`}
                 >
                   <img
-                    src="/assets/images/icons/shopping.png"
+                    src={`${property.image ||"/assets/images/icons/shopping.png"}`}
                     alt="Icon"
                     height={48}
                     width={48}

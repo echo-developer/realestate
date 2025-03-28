@@ -13,6 +13,7 @@ import UploadProjectBrochure from "../BrochureData/UploadProjectBrochure";
 import AddExtraProjectData from "../addtional/AddExtraProjectData";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import useTranslation from '../../hooks/useTranslation'
+import ProjectDocumentModal from "../addtional/AddProjectDocument";
 
 
 const ProjectPendingComponent = ({ projectData }) => {
@@ -22,6 +23,7 @@ const ProjectPendingComponent = ({ projectData }) => {
   const [projectLocation, setProjectLocation] = useState();
   const [projectTower, setProjectTower] = useState();
   const [properties, setProperties] = useState(projectData || []);
+    const [docModal,setShowDocModal]=useState(false)
   const [currentPage, setCurrentPage] = useState(
     projectData?.current_page || 1
   );
@@ -110,6 +112,15 @@ const ProjectPendingComponent = ({ projectData }) => {
     setShowBrochModal(true);
     setPropId(id);
   };
+
+  const handleProjectCertificate = (id) => {
+    setShowDocModal(true);
+    setPropId(id);
+  };
+
+  const handleDocClose=()=>{
+    setShowDocModal(false);
+  }
 
   return (
     <>
@@ -258,6 +269,8 @@ const ProjectPendingComponent = ({ projectData }) => {
           propId={propId}
         />
       )}
+
+{docModal && <ProjectDocumentModal propId={propId} show={docModal} onClose={handleDocClose}/>}
 
       <UploadProjectBrochure
         show={showBrochModal}
