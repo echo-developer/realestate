@@ -5348,7 +5348,7 @@ fieldset{
 		}
 	}
 	.dropdown-menu{
-		max-height: 300px;
+		max-height: 250px;
     	overflow-y: auto;
 		width: 100%;
 		.btn-group.column-2{
@@ -5767,6 +5767,11 @@ fieldset{
 }
 
 @media (min-width: 1440px) {
+	.select-dropdown{
+		.dropdown-menu{
+			max-height: 300px;
+		}
+	}
 	.frontGallery-property{
 		height: 600px;
 	}
