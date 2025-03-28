@@ -110,8 +110,11 @@ class PropertyDetailsController extends Controller
                     }
                     $transformedData = array_values($galleries);
 
-                    $certificates = CertificatesModel::where('property_id', $property->property_id)->get()
-                    ->makeHidden(['id','project_id','property_id','updated_at'])->toArray();
+                    $certificates = CertificatesModel::where([
+                        'property_id' => $property->property_id,
+                        'status' => config('constants.STATUS_ACTIVE')])
+                        ->get()
+                        ->makeHidden(['id', 'project_id', 'property_id', 'updated_at'])->toArray();
 
 
 

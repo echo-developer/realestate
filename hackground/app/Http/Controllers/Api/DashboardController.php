@@ -1549,9 +1549,9 @@ class DashboardController extends Controller
 
             $filter = [];
             if (!empty($property_id)) {
-                $filter = ['property_id' => $property_id, 'project_id' => null];
+                $filter = ['property_id' => $property_id, 'project_id' => null, 'status' => config('constants.STATUS_ACTIVE')];
             } elseif (!empty($project_id)) {
-                $filter = ['project_id' => $project_id, 'property_id' => null];
+                $filter = ['project_id' => $project_id, 'property_id' => null, 'status' => config('constants.STATUS_ACTIVE')];
             } else {
                 return response()->json([
                     'status' => 1,
