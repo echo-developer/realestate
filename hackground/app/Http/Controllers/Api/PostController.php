@@ -314,6 +314,8 @@ class PostController extends Controller
             'boundary_wall' => $request->boundary_wall,
             'road_width' => $request->road_width,
             'total_open_sides' => $request->total_open_sides,
+            'launch_date' => $request->launch_date,
+            'ceiling_height' => $request->ceiling_height,
         ]);
     }
 

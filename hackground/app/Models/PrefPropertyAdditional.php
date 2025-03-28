@@ -47,7 +47,9 @@ class PrefPropertyAdditional extends Model
         'road_width',
         'boundary_wall',
         'is_gated_colony',
-        'construction_done'
+        'construction_done',
+        'launch_date',
+        'ceiling_height'
     ];
     public $timestamps = false;
 
