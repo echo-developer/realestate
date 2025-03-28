@@ -7,6 +7,7 @@ use App\Models\AgentAdditional;
 use App\Models\AgentSecviceLocationModel;
 use App\Models\AgentSocialPlatform;
 use App\Models\Api\ApiModel;
+use App\Models\CertificatesModel;
 use App\Models\PrefProject;
 use App\Models\PrefProperty;
 use App\Models\PrefPropertyAdditional;
@@ -1439,10 +1440,10 @@ class DashboardController extends Controller
             $fileName = '';
             $uploadPath = '';
             if (!empty($property_id) && empty($project_id)) {
-                $fileName = "property_{$property_id}_" . $file->getClientOriginalName();
+                $fileName = "prt_{$property_id}_" . $file->getClientOriginalName();
                 $uploadPath = public_path("user_upload/Certificates/property_certificate");
             } elseif (!empty($project_id) && empty($property_id)) {
-                $fileName = "project_{$project_id}_" . $file->getClientOriginalName();
+                $fileName = "prj_{$project_id}_" . $file->getClientOriginalName();
                 $uploadPath = public_path("user_upload/Certificates/project_certificate");
             }
 
@@ -1485,31 +1486,90 @@ class DashboardController extends Controller
 
     public function uploadPropProjcertificatesDetails(Request $request)
     {
-
         try {
 
+            $data = $request->only(['property_id', 'project_id', 'fileName', 'doc_id', 'certificate_name', 'certificate_number']);
 
-            $property_id = $request->input('property_id');
-            $project_id = $request->input('project_id');
-
-            if (!empty($property_id) && !empty($project_id)) {
+            if (!empty($data['property_id']) && !empty($data['project_id'])) {
                 return response()->json([
                     'status' => 1,
                     'message' => 'Both Property and Project id present. Unable to Proceed',
                 ]);
             }
 
-            $certificates = $request->input('certificates');
+            $dataToInsert = [
+                'property_id' => $data['property_id'],
+                'project_id' => $data['project_id'],
+                'certificate_name' => $data['certificate_name'],
+                'certificate_number' => $data['certificate_number'],
+                'fileName' => $data['fileName']
+            ];
 
-            foreach ($certificates as $key) {
-                log::info($key);
+            if (empty($data['doc_id'])) {
+                CertificatesModel::create($dataToInsert);
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Certificates Details Uploaded',
+                ]);
+            } else {
+                CertificatesModel::updateOrCreate(
+                    ['id' => $data['doc_id']],
+                    $dataToInsert
+                );
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Certificates Details Uploaded',
+                ]);
+            }
+        } catch (\Exception $e) {
+            logError($e);
+            return response()->json([
+                'status' => 0,
+                'message' => 'An Error has Occured',
+            ]);
+        }
+    }
+
+    public function getPropPropertycertificateDetails(Request $request)
+    {
+        try {
+            $property_id = $request->input('property_id');
+            $project_id = $request->input('project_id');
+
+            if (!empty($property_id) && !empty($project_id)) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Both Property and Project IDs are present. Unable to proceed.',
+                ], 400);
             }
 
+            $filter = [];
+            if (!empty($property_id)) {
+                $filter = ['property_id' => $property_id, 'project_id' => null];
+            } elseif (!empty($project_id)) {
+                $filter = ['project_id' => $project_id, 'property_id' => null];
+            } else {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Either Property ID or Project ID must be provided.',
+                ]);
+            }
+
+            $certificates = CertificatesModel::where($filter)->get();
+
+            if ($certificates->isEmpty()) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'No certificates found.',
+                ]);
+            }
 
             return response()->json([
                 'status' => 1,
-                'message' => 'Certificates Details Uploaded',
+                'message' => 'Data retrieved successfully.',
+                'data' => $certificates,
             ]);
+
         } catch (\Exception $e) {
             logError($e);
             return response()->json([

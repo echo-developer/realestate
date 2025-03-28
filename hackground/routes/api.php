@@ -134,6 +134,7 @@ Route::controller(DashboardController::class)->group(function () {
 
     Route::post('upload_certificates_img',  'uploadPropProjcertificatesImages');
     Route::post('upload_certificates_details',  'uploadPropProjcertificatesDetails');
+    Route::get('certificates_details',  'getPropPropertycertificateDetails');
 });
 
 // Search Routes

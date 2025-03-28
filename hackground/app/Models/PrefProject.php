@@ -37,8 +37,8 @@ class PrefProject extends Model
     {
         return $this->hasMany(ProjectGallery::class, 'project_id', 'id');
     }
-    
-    public function galleries()//this particular realation used in GetProjects in ProjectHomeController,
+
+    public function galleries() //this particular realation used in GetProjects in ProjectHomeController,
     {
         return $this->hasMany(ProjectGallery::class, 'project_id', 'id');
     }
@@ -59,6 +59,11 @@ class PrefProject extends Model
     public function reports()
     {
         return $this->hasMany(PrefProjectReport::class, 'project_id', 'id');
+    }
+
+    public function certificates()
+    {
+        return $this->hasMany(CertificatesModel::class, 'project_id')->whereNotNull('project_id');
     }
     use HasFactory;
 }

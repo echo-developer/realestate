@@ -72,4 +72,8 @@ class PrefProperty extends Model
         return $this->hasMany(PropertyView::class, 'property_id', 'id');
     }
 
+    public function certificates()
+    {
+        return $this->hasMany(CertificatesModel::class, 'property_id')->whereNotNull('property_id');
+    }
 }

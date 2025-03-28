@@ -502,7 +502,8 @@ RENAME TABLE
     property_views TO pref_property_views,
     transactions TO pref_transactions;
 
-ALTER TABLE `users` RENAME `pref_users`; ALTER TABLE `user_additional_data` RENAME `pref_user_additional_data`; ALTER TABLE `user_membership` RENAME `pref_user_membership`;
+ALTER TABLE `users` RENAME `pref_users`; 
+ALTER TABLE `user_additional_data` RENAME `pref_user_additional_data`; ALTER TABLE `user_membership` RENAME `pref_user_membership`;
 
 18/03/2025
 
@@ -515,3 +516,20 @@ ALTER TABLE `pref_properties_settings` ADD `rooms` INT NULL DEFAULT NULL AFTER `
 24/03/2025
 
 ALTER TABLE `pref_user_additional_data` CHANGE `description` `description` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+
+28/03/2025
+CREATE TABLE `pref_certificates` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `property_id` bigint(20) DEFAULT NULL,
+  `project_id` bigint(20) DEFAULT NULL,
+  `certificate_name` varchar(150) DEFAULT NULL,
+  `certificate_number` varchar(75) DEFAULT NULL,
+  `fileName` varchar(150) DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT 1,
+  `is_approved` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `pref_certificates` CHANGE `certificate_image` `fileName` VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
