@@ -416,6 +416,8 @@ class PropertyDetailsController extends Controller
                         'corner_shop' => $property->is_corner_shop,
                         'personal_washroom' => $property->is_personal_washroom,
                         'cafeteria' => $property->pantry_cafeteria_status,
+                        'launch_date' => $property->launch_date,
+                        'ceiling_height' => $property->ceiling_height,
 
                         'construction_done' => $property->construction_done,
                         'is_gated_colony' => $property->is_gated_colony,

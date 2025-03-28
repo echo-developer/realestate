@@ -413,6 +413,8 @@ class ApiModel extends Model
                 'property_additional.road_width',
                 'property_additional.total_open_sides',
                 'property_additional.approved_by',
+                'property_additional.launch_date',
+                'property_additional.ceiling_height',
 
                 'property_additional.flooring_style',
                 'property_additional.possession_status',
