@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import { Modal } from "react-bootstrap";
 import useTranslation from "@/hooks/useTranslation";
+import Advertisements from "@/components/addtional/Advertisements";
 
 const Banner = dynamic(() => import("@/components/home/Banner"), {
   ssr: false,
@@ -293,6 +294,7 @@ export default function Home() {
         <AdviceSection translation={translation}/>
         <TotolUserRecord translation={translation}/>
         <PostPropertyPath translation={translation}/>
+        <Advertisements page="home-page" position="footer" />
 
         {/* Modal for login error */}
         <Modal
