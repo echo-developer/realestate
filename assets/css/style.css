@@ -36983,7 +36983,7 @@ fieldset .btn-delete {
   transform: translateY(-50%);
 }
 .select-dropdown .dropdown-menu {
-  max-height: 300px;
+  max-height: 250px;
   overflow-y: auto;
   width: 100%;
 }
@@ -37317,6 +37317,9 @@ fieldset .btn-delete {
   }
 }
 @media (min-width: 1440px) {
+  .select-dropdown .dropdown-menu {
+    max-height: 300px;
+  }
   .frontGallery-property {
     height: 600px;
   }
