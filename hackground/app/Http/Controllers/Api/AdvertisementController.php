@@ -27,10 +27,8 @@ class AdvertisementController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
     
-        // $validatedData = $validator->validated();
         $ads = $this->apiModel->getPageAdvertisements($request->all());
-        //print_r($ads);exit;
-        // return response()->json($ads);exit;
+        
         if($ads)
         {
             foreach($ads as $k=>$ad)
@@ -55,6 +53,32 @@ class AdvertisementController extends Controller
                 'status' => 0,
                 'message' => 'No advertisement found.',
                 'data' => $ads,
+            ], 200);
+        }
+       
+    }
+
+    public function add_view(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'advertisement_id' => 'required',
+        ]);
+
+        if($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+        
+        $up = $this->apiModel->addAdvertisementView($request->all());
+        if($up)
+        {
+            return response()->json([
+                    'status' => 1,
+                    'message' => 'One view added .',
+                ], 200);  
+        }else{
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed to add view.',
             ], 200);
         }
        

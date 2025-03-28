@@ -229,6 +229,7 @@ Route::post('delete-project-image', [ImageEditController::class, 'deleteImage'])
 Route::post('edit-project-caption', [ImageEditController::class, 'captionImage']);
 
 Route::post('get-advertisements', [AdvertisementController::class, 'getAdvertisements']);
+Route::post('add-advertisement-view', [AdvertisementController::class, 'add_view']);
 
 Route::controller(FloorPlaningController::class)->group(function () {
 

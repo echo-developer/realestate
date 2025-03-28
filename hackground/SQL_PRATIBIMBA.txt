@@ -81,3 +81,5 @@ CREATE TABLE IF NOT EXISTS `pref_advertisement_locations` (
   `country_id` int NOT NULL,
   KEY `pref_advertisement_locations_advertisement_id_foreign` (`advertisement_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE `pref_advertisements` ADD `views` BIGINT NOT NULL DEFAULT '0' AFTER `expire_date`;

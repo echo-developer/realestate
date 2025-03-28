@@ -1335,5 +1335,19 @@ class ApiModel extends Model
         return $result;
     }
 
+    public function addAdvertisementView($data=array())
+    {
+        $prev = DB::table('advertisements as a')->select('a.views')->where('a.advertisement_id',$data['advertisement_id'])->first();
+        if($prev)
+        {
+            $prev_views = $prev->views;
+            $curr_views = $prev_views+1;
+            DB::table('advertisements as a')->where('a.advertisement_id',$data['advertisement_id'])->update(['a.views'=>$curr_views]);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     
 }
