@@ -6,14 +6,15 @@ use App\Http\Controllers\Api\PropertyEditController;
 use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
 use App\Models\Api\ApiModelTest;
+use App\Models\CertificatesModel;
 use App\Models\FloorPlan;
 use App\Models\PrefFloorPlanType;
 use App\Models\PrefFloorPlanValue;
 use App\Models\PrefProject;
 use App\Models\PrefProperty;
+
 use App\Models\PrefPropertyAdditional;
 use App\Models\PrefPropertyReport;
-
 use App\Models\ProjectPropertyMapping;
 use App\Models\User;
 use function Laravel\Prompts\table;
@@ -109,6 +110,8 @@ class PropertyDetailsController extends Controller
                     }
                     $transformedData = array_values($galleries);
 
+                    $certificates = CertificatesModel::where('property_id', $property->property_id)->get()
+                    ->makeHidden(['id','project_id','property_id','updated_at'])->toArray();
 
 
 
@@ -433,6 +436,7 @@ class PropertyDetailsController extends Controller
                             'bathroom' => $property->bathrooms,
                             'washroom' => $property->washroom,
                         ],
+                        'certificates' => $certificates,
                         'property_amenities' => $amenityArray,
                         'property_status' => $property->status,
                         'views' => $property->views,

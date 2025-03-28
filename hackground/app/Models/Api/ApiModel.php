@@ -1295,4 +1295,6 @@ class ApiModel extends Model
 
         return $availableBHKs;
     }
+
+    
 }
