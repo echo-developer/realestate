@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import ReviewOffcanvas from "../property/ReviewOffcanvas";
 import useDateFormat from "@/hooks/useDateFormat";

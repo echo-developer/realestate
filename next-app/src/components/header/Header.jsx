@@ -695,7 +695,7 @@ const Header = () => {
                               )
                             }
                           >
-                            {translation?.villa_for_rent || "Flat for rent in"}{" "}
+                            {translation?.flat_for_rent || "Flat for rent in"}{" "}
                             {selectedCity || ""}
                           </a>
                         </li>
@@ -708,7 +708,7 @@ const Header = () => {
                               )
                             }
                           >
-                            {translation?.flat_for_rent || "Villa for rent in"}{" "}
+                            {translation?.villa_for_rent || "Villa for rent in"}{" "}
                             {selectedCity || ""}
                           </a>
                         </li>

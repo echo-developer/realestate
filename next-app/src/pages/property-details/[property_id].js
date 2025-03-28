@@ -255,7 +255,7 @@ const index = () => {
                       {translation?.download_brochure || "Download Brochure"}
                       <Link
                         target="_blank"
-                        href={`${propertyDetails?.property_brochure_pdf}`}
+                        href={`${propertyDetails?.property_brochure_pdf}`}  
                         className="ms-3"
                       >
                         <img

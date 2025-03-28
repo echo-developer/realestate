@@ -27,6 +27,7 @@ const CardImageSlider = ({
     );
   };
 
+
   useEffect(() => {
     if (data) {
       let images = [];
@@ -43,7 +44,6 @@ const CardImageSlider = ({
     }
   }, [data]);
 
-  console.log(data?.image_count)
 
   return (
     <div className="card-image">

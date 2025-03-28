@@ -193,7 +193,7 @@ const { callApi } = AuthUser();
                           </Link>
                         </p>
 
-                        <div className="social-login-separator">
+                        {/* <div className="social-login-separator">
                           <span>
                             {" "}
                             {translation?.or_login_with || "OR LOGIN WITH"}{" "}
@@ -219,7 +219,7 @@ const { callApi } = AuthUser();
                           >
                             <span> {translation?.apple || "Apple"}</span>
                           </button>
-                        </div>
+                        </div> */}
 
                         <p className="text-center">
                           <small>

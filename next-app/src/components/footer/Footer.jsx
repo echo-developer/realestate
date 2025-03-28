@@ -47,9 +47,9 @@ const Footer = () => {
                 {translation?.property_type || "Property Type"} <a role='button' className={`icon-line-awesome-angle-${dropDowns?.propertyByCity ? "up": "down"}`} onClick={() => openCloseDropDowns("propertyByCity")}></a>
                 </h4>
                 <ul className="foot-nav" style={{display: dropDowns?.propertyByCity ? "block": ""}}>
-                  <li><Link href="/property-listing?post_for=rent&property_type=1&property_for=1">{translation?.residential || "Residential"} </Link></li>
-                  <li><Link href="/property-listing?post_for=rent&property_type=2&property_for=1">{translation?.commercial || "Residential"}</Link></li>
-                  <li><Link href="/property-listing?post_for=rent&property_type=4&property_for=1">{translation?.agricultural || "Agricultural"}</Link></li>
+                  <li><Link href="/property-listing?property_type=1">{translation?.residential || "Residential"} </Link></li>
+                  <li><Link href="/property-listing?property_type=2">{translation?.commercial || "Residential"}</Link></li>
+                  <li><Link href="/property-listing?property_type=4">{translation?.agricultural || "Agricultural"}</Link></li>
                 </ul>
               </div>
             </div>
@@ -62,13 +62,13 @@ const Footer = () => {
                 </h4>
 
                 <ul className="foot-nav" style={{display: dropDowns?.propertyTypes ? "block": ""}}>
-                  <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=1">{translation?.flats || "Flats"}</Link></li>
-                  <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=2">{translation?.house_villa || "House/Villa"}</Link></li>
-                  <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=9">{translation?.penthouse || "Penthouse"}</Link></li>
-                  <li><Link href="/property-listing?post_for=sell&property_type=1&property_for=8">{translation?.residential_plots || "Residential Plots"}</Link></li>
-                  <li><Link href="/property-listing?post_for=sell&property_type=2&property_for=3">{translation?.office_space || "Office Space"}</Link></li>
-                  <li><Link href="/property-listing?post_for=sell&property_type=2&property_for=13">{translation?.shop_showroom || "Shop/Showroom"}</Link></li>
-                  <li><Link href="/property-listing?post_for=sell&property_type=2&property_for=15">{translation?.commercial_plot || "Commercial Plot"}</Link></li>
+                  <li><Link href="/property-listing?property_type=1&property_for=1">{translation?.flats || "Flats"}</Link></li>
+                  <li><Link href="/property-listing?property_type=1&property_for=2">{translation?.house_villa || "House/Villa"}</Link></li>
+                  <li><Link href="/property-listing?property_type=1&property_for=9">{translation?.penthouse || "Penthouse"}</Link></li>
+                  <li><Link href="/property-listing?property_type=1&property_for=8">{translation?.residential_plots || "Residential Plots"}</Link></li>
+                  <li><Link href="/property-listing?property_type=2&property_for=3">{translation?.office_space || "Office Space"}</Link></li>
+                  <li><Link href="/property-listing?property_type=2&property_for=13">{translation?.shop_showroom || "Shop/Showroom"}</Link></li>
+                  <li><Link href="/property-listing?property_type=2&property_for=15">{translation?.commercial_plot || "Commercial Plot"}</Link></li>
                   {/* <li><Link href="#">Hotels</Link></li> */}
                 </ul>
               </div>
@@ -126,10 +126,10 @@ const Footer = () => {
               </div>
 
               {/* Download App Section */}
-              <div className="download-app">
+              {/* <div className="download-app">
                 <a href="" className="ms-2"><img src="/assets/images/google-play.png" alt="Google Play" height="40" width="133" loading="lazy"/></a>
                 <a href="" className="ms-2"><img src="/assets/images/app-store.png" alt="App Store" height="40" width="133" loading="lazy"/></a>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
