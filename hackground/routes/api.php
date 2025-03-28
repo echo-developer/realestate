@@ -186,6 +186,7 @@ Route::controller(Enquery_CRM_Controller::class)->group(function () {
     Route::get('my_property_enquery_list', 'PropertyEnqueryList')->name('get.enquery.list');
     Route::get('my_project_enquery_list', 'ProjectEnqueryList')->name('get.projectEnquery.list');
 
+    Route::get('user-general-leads', 'generalLeads');
     Route::get('my_property_CRMS', 'PropertyCRM')->name('get.crm.list');
     Route::post('property_CRM_logs', 'LogCRM')->name('log.crm');
     Route::post('delete_enquery', 'EnqueryDelete')->name('delete.enquery');

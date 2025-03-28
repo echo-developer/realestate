@@ -581,7 +581,36 @@ class Enquery_CRM_Controller extends Controller
         }
     }
 
+    public function generalLeads(Request $request)
+    {
+        $recentPage = $request->input('recent_page', 1);
+        $limit = $request->input('limit', 10);
+        $user_id = $request->input('user_id');
 
+        if($user_id)
+        {
+            $leads = $this->apiModel->getUserLeadsList($user_id);
+            
+            if($leads)
+            {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Enquiries fetched successfully.',
+                    'data' => $leads,
+                ], 200);
+            }else{
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No Enquiries found.',
+                ], 200);
+            }
+        }else{
+            return response()->json([
+                'status' => 0,
+                'message' => 'No user id found.',
+            ], 200);
+        }
+    }
 
     public function LogCRM(Request $request)
     {

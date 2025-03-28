@@ -805,13 +805,15 @@ class ApiModel extends Model
 
     public function GetCRMList($user_id)
     {
-        return DB::table('property_enquiry')
+        return DB::table('leads_assigned')
+            ->leftJoin('property_enquiry', 'property_enquiry.enquery_id', '=', 'leads_assigned.enquery_id')
             ->leftJoin('customer', 'property_enquiry.cid', '=', 'customer.cid')
             ->leftJoin('properties', 'property_enquiry.property_id', '=', 'properties.id')
             ->leftJoin('properties_location', 'properties.id', '=', 'properties_location.pid')
             ->leftJoin('properties_settings', 'properties.id', '=', 'properties_settings.pid')
             ->where([
-                'property_enquiry.assign_to' => $user_id,
+                'leads_assigned.user_id' => $user_id,
+                'leads_assigned.lead_type' => 'P',
                 'property_enquiry.is_deleted' => config('constants.STATUS_INACTIVE'),
             ])
             ->select(
@@ -835,11 +837,8 @@ class ApiModel extends Model
                 'properties_settings.plot_area'
             )
             ->orderBy('property_enquiry.created_at', 'desc')
-            ->get(); // Fetch all results without pagination
+            ->get();
     }
-
-
-
 
     public function my_profile_data($uid)
     {
@@ -1337,5 +1336,32 @@ class ApiModel extends Model
         return $result;
     }
 
+    public function getUserLeadsList($user_id)
+    {
+        $query = DB::table('leads_assigned as l_a')
+                ->select('e.*')
+                ->leftJoin('buyer_property_enquery as e', 'e.id', '=', 'l_a.enquery_id')
+                ->where([
+                    'l_a.user_id'=>$user_id, 
+                    'l_a.lead_type'=>'G'
+                ])
+                //->orderBy('e.id', 'desc')
+                ->get()->toArray();
+        return $query;   
+    }
+
+    public function addAdvertisementView($data=array())
+    {
+        $prev = DB::table('advertisements as a')->select('a.views')->where('a.advertisement_id',$data['advertisement_id'])->first();
+        if($prev)
+        {
+            $prev_views = $prev->views;
+            $curr_views = $prev_views+1;
+            DB::table('advertisements as a')->where('a.advertisement_id',$data['advertisement_id'])->update(['a.views'=>$curr_views]);
+            return true;
+        }else{
+            return false;
+        }
+    }
     
 }
