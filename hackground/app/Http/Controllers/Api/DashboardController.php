@@ -1439,12 +1439,15 @@ class DashboardController extends Controller
             }
             $fileName = '';
             $uploadPath = '';
+            $filename_url = '';
             if (!empty($property_id) && empty($project_id)) {
                 $fileName = "prt_{$property_id}_" . $file->getClientOriginalName();
                 $uploadPath = public_path("user_upload/Certificates/property_certificate");
+                $filename_url = asset("user_upload/Certificates/property_certificate/" . $fileName);
             } elseif (!empty($project_id) && empty($property_id)) {
                 $fileName = "prj_{$project_id}_" . $file->getClientOriginalName();
                 $uploadPath = public_path("user_upload/Certificates/project_certificate");
+                $filename_url = asset("user_upload/Certificates/project_certificate/" . $fileName);
             }
 
             if (!file_exists($uploadPath) && !empty($uploadPath)) {
@@ -1474,6 +1477,7 @@ class DashboardController extends Controller
                 'status' => 1,
                 'message' => 'File Uploaded',
                 'fileName' => $fileName,
+                'filename_url' => $filename_url,
             ]);
         } catch (\Exception $e) {
             logError($e);
@@ -1569,7 +1573,6 @@ class DashboardController extends Controller
                 'message' => 'Data retrieved successfully.',
                 'data' => $certificates,
             ]);
-
         } catch (\Exception $e) {
             logError($e);
             return response()->json([
