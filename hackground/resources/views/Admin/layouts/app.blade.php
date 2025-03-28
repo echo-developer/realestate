@@ -69,10 +69,22 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js">
     </script>
     <!--SweetAlert2-->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="{{ asset('assets/js/scripts-init/sweet-alerts.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
     @yield('modals')
+    <script>
+        function c_alert(message, type = 'success') {
+            Swal.fire({
+                icon: type,
+                title: message,
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+    </script>
+
     <script>
         const STATUS_ACTIVE = {
             !!json_encode(config('constants.STATUS_ACTIVE')) !!
@@ -106,4 +118,5 @@
         </div>
     </div>
 </div>
+
 </html>

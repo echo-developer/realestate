@@ -96,6 +96,26 @@
             </div>
             <div class="card-body">
               <ul class="list-info">
+              <li>
+                  <b>Post For:</b>
+                    <span>{{ucfirst($projectData->settings->post_for)??'N/A'}}</span>
+                </li>
+                <li>
+                  <b>Project Type:</b>
+                  <span>{{get_name_by_id('property_category_names','category_id',$projectData->settings->project_type,'en')??'N/A'}}</span>
+                </li>
+                <li>
+                  <b>Developer Name:</b>
+                  <span>{{$projectData->additional->developer_name??'N/A'}}</span>
+                </li>
+                <li>
+                  <b>Developer Experience:</b>
+                  <span>{{$projectData->additional->developer_experience??'N/A'}}</span>
+                </li>
+                <li>
+                  <b>Developer Details:</b>
+                  <span>{{ Str::limit($projectData->additional->developer_details ?? 'N/A', 10) }}</span>
+                </li>
                 <li>
                   <b>Price:</b>
                   <span>{{$projectData->additional->expected_price??'N/A'}}</span>

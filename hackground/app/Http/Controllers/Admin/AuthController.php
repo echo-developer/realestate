@@ -19,12 +19,12 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'username' => 'required',
             'password' => 'required|string',
         ]);
 
         try {
-            if (Auth::guard('admin')->attempt($request->only('email', 'password'))) {
+            if (Auth::guard('admin')->attempt($request->only('username', 'password'))) {
                 return response()->json(['success' => true, 'redirect_url' => route('admin.dashboard')]);
             } else {
                 return response()->json([

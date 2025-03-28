@@ -196,9 +196,7 @@ class ProjectController extends Controller
         switch ($step) {
             case 1:
                 $rules = [
-                    'project_type' => 'required',
-                    'developer_name' => 'required|string',
-                    'developer_details' => 'required|string',
+                   
                 ];
                 break;
 
@@ -240,15 +238,14 @@ class ProjectController extends Controller
             ], 422);
         }
 
-        // If step 6, update project details
-        if ($step == 6) {
+       
             try {
                 // Update project details
                 $this->saveProject($project, $request);
                 $this->saveProjectLocation($project->id, $request);
                 $this->saveProjectSettings($project->id, $request);
                 $this->saveProjectAdditional($project->id, $request);
-                $this->saveProjectGalleries($project->id, $request);
+                // $this->saveProjectGalleries($project->id, $request);
 
                 return response()->json([
                     'success' => true,
@@ -262,7 +259,7 @@ class ProjectController extends Controller
                     'error' => $e->getMessage()
                 ]);
             }
-        }
+        
     }
 
     private function saveProject($project, $request)
@@ -280,55 +277,83 @@ class ProjectController extends Controller
         $project->save();
     }
 
-    private function saveProjectLocation($projectId, $request)
+    private function saveProjectLocation($projectId, Request $request)
     {
-        ProjectLocation::updateOrCreate(
-            ['project_id' => $projectId],
-            [
-                'locality' => $request->locality,
-                'city' => $request->city,
-                'address' => $request->project_address,
-                'latitude' => $request->latitude,
-                'longitude' => $request->longitude
-            ]
-        );
+        $updateData = $this->filterUpdateData([
+            'locality' => 'project_locality',
+            'city' => 'city',
+            'address' => 'project_address',
+            'latitude' => 'latitude',
+            'longitude' => 'longitude'
+        ], $request);
+    
+        if (!empty($updateData)) {
+            ProjectLocation::where('project_id', $projectId)->update($updateData);
+        }
     }
-
-    private function saveProjectSettings($projectId, $request)
+    
+    private function saveProjectSettings($projectId, Request $request)
     {
-        // Log::info($request->project_furnish);
-        ProjectSetting::updateOrCreate(
-            ['project_id' => $projectId],
-            [
-                'parking_availability' => $request->parking,
-                'project_facing' => $request->project_facing,
-                'total_towers' => $request->total_tower,
-                'total_area' => $request->total_area,
-                'occupied_area' => $request->occupied_area,
-                'total_units' => $request->total_unit,
-                'project_furnish' => $request->project_furnish,
-                'project_type' => $request->project_type,
-            ]
-        );
+        $updateData = $this->filterUpdateData([
+            'parking_availability' => 'parking',
+            'post_for'=>'post_for',
+            'project_facing' => 'project_facing',
+            'total_towers' => 'total_tower',
+            'total_area' => 'total_area',
+            'occupied_area' => 'occupied_area',
+            'total_units' => 'total_unit',
+            'project_furnish' => 'project_furnish',
+            'project_type' => 'project_type',
+        ], $request);
+    
+        if (!empty($updateData)) {
+            ProjectSetting::where('project_id', $projectId)->update($updateData);
+        }
     }
-
-    private function saveProjectAdditional($projectId, $request)
+    
+    private function saveProjectAdditional($projectId, Request $request)
     {
-        ProjectAdditional::updateOrCreate(
-            ['project_id' => $projectId],
-            [
-                'main_road_facing' => strtolower($request->main_road_facing) === 'yes' ? 'Y' : 'N',
-                'project_amenity' => isset($request->amenities) ? implode(',', (array) $request->amenities) : null,
-                'possession_status' => isset($request->pstatus) ? 1 : 0,
-                'currency' => $request->currency,
-                'token_amount' => $request->token_amount,
-                'expected_price' => $request->expected_price,
-                'developer_details' => $request->developer_details,
-                'developer_name' => $request->developer_name,
-            ]
-        );
-    }
+        $updateData = $this->filterUpdateData([
+            'main_road_facing' => 'main_road_facing',
+            'project_amenity' => 'amenities',
+            'possession_status' => 'pstatus',
+            'currency' => 'currency',
+            'token_amount' => 'token_amount',
+            'expected_price' => 'project_price',
+            'developer_details' => 'developer_details',
+            'developer_name' => 'developer_name',
+            'developer_experience' => 'developer_experience',
+            'instruction' => 'instruction',
+        ], $request);
 
+        if ($request->filled('main_road_facing')) {
+            $updateData['main_road_facing'] = strtolower($request->main_road_facing) === 'yes' ? 'Y' : 'N';
+        }
+    
+        if ($request->filled('amenities')) {
+            $updateData['project_amenity'] = implode(',', (array) $request->amenities);
+        }
+    
+        if ($request->has('pstatus')) {
+            $updateData['possession_status'] = 1;
+        } else {
+            $updateData['possession_status'] = 0;
+        }
+    
+        if (!empty($updateData)) {
+            ProjectAdditional::where('project_id', $projectId)->update($updateData);
+        }
+    }
+    private function filterUpdateData(array $fields, Request $request)
+    {
+        $updateData = [];
+        foreach ($fields as $column => $requestKey) {
+            if ($request->filled($requestKey)) {
+                $updateData[$column] = $request->input($requestKey);
+            }
+        }
+        return $updateData;
+    }
     private function saveProjectGalleries($projectId, $request)
     {
         $galleries = $request->uploaded_images;
@@ -346,16 +371,21 @@ class ProjectController extends Controller
         }
 
         foreach ($galleries as $imageType => $images) {
-            $gallery = ProjectGallery::updateOrCreate(
-                ['project_id' => $projectId, 'image_type' => $imageType],
-                ['project_id' => $projectId, 'image_type' => $imageType]
-            );
+            $gallery = ProjectGallery::where('project_id', $projectId)
+                ->where('image_type', $imageType)
+                ->update([
+                    'project_id' => $projectId,
+                    'image_type' => $imageType
+                ]);
 
             foreach ((array) $images as $imageName) {
-                ProjectGalleryImages::updateOrCreate(
-                    ['gallary_id' => $gallery->id, 'filename' => $imageName],
-                    ['gallary_id' => $gallery->id, 'filename' => $imageName, 'caption' => null]
-                );
+                ProjectGalleryImages::where('gallary_id', $gallery->id)
+                    ->where('filename', $imageName)
+                    ->update([
+                        'gallary_id' => $gallery->id,
+                        'filename' => $imageName,
+                        'caption' => null
+                    ]);
             }
         }
     }
@@ -439,6 +469,8 @@ class ProjectController extends Controller
             'gallery.images'
         ])->findOrFail($request->query('project_id'));
 
-        return view('Admin.All_project.project_modal', compact('step', 'projectData'));
+        $SubCategoryModel = new SubCategoryModel;
+        $projectTypes = $SubCategoryModel->getCategories();
+        return view('Admin.All_project.project_modal', compact('step', 'projectData','projectTypes'));
     }
 }

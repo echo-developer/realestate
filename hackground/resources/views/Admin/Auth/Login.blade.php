@@ -38,9 +38,9 @@
                                         <div class="form-row">
                                             <div class="col-md-12">
                                                 <div class="position-relative form-group">
-                                                    <input name="email" id="email" placeholder="Email here..."
-                                                        type="email" class="form-control">
-                                                    <p id="emailError" style="color: red"></p>
+                                                    <input name="username" id="username" placeholder="Username here..."
+                                                        type="text" class="form-control">
+                                                    <p id="usernameError" style="color: red"></p>
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
@@ -86,7 +86,7 @@
                 event.preventDefault();
 
 
-                $('#emailError').text('');
+                $('#usernameError').text('');
                 $('#passwordError').text('');
                 $('#err').text('');
 
