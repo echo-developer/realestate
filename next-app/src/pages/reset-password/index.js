@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import AuthUser from "@/components/Authentication/AuthUser";
 import { useRouter } from 'next/router';
 import { toast } from "react-toastify";
+import LoginHeader from '@/components/addtional/LoginHeader';
 
 const ResetPassword = () => {
   const router = useRouter();
@@ -52,7 +53,9 @@ const ResetPassword = () => {
   };
 
   return (
-    <section className="section authentication-page">
+    <>
+     <LoginHeader/>
+     <section className="section authentication-page">
       <div className="container h-100">
         <div className="d-flex justify-content-center align-items-center h-100">
           <div className="authentication-container mx-auto w-100 bg-primary">
@@ -166,6 +169,8 @@ const ResetPassword = () => {
         </div>
       </div>
     </section>
+     </>
+    
   );
 };
 

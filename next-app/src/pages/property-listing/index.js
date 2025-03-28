@@ -63,6 +63,9 @@ const index = () => {
   const [totalPropertyCount, setTotalPropertyCount] = useState(0);
   const [selectedSubFilters, setSelectedSubFilters] = useState([]);
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
+  const [bedroom, setBedroom] = useState([]);
+  const [bathroom, setBathroom] = useState([]);
+  const [kitchens, setKitchens] = useState([]);
   const [SearchData, setSearchData] = useState({
     carpet_area: "",
     possession_status: [],
@@ -104,44 +107,23 @@ const index = () => {
   const isMobile = useIsMobile();
 
   const handleMinChange = (e) => {
-    let value = e.target.value;
-    if (value.length > 1 && value.startsWith("0")) {
-      value = value.replace(/^0+/, "");
+    const value = e.target.value;
+    setMinBudget(value);
+    if (maxBudget && Number(value) > Number(maxBudget)) {
+      setError("Min budget cannot be greater than max budget.");
+    } else {
+      setError("");
     }
-
-    const numericValue = value === "" ? "" : Number(value);
-
-    setSearchData((prev) => {
-      if (prev.max_budget && numericValue > prev.max_budget) {
-        setError("Min budget cannot be greater than max budget.");
-        return prev;
-      } else {
-        setError("");
-      }
-
-      return {
-        ...prev,
-        min_budget: numericValue,
-      };
-    });
   };
 
   const handleMaxBudgetChange = (e) => {
-    const value = Number(e.target.value);
-
-    setSearchData((prev) => {
-      if (prev.min_budget && value < prev.min_budget) {
-        setError("Max budget cannot be less than min budget.");
-        return prev; // Prevent updating state if invalid
-      } else {
-        setError("");
-      }
-
-      return {
-        ...prev,
-        max_budget: value,
-      };
-    });
+    const value = e.target.value;
+    setMaxBudget(value);
+    if (minBudget && Number(value) < Number(minBudget)) {
+      setError("Max budget cannot be less than min budget.");
+    } else {
+      setError("");
+    }
   };
 
   const handleBedDropDown = (e) => {
@@ -150,18 +132,30 @@ const index = () => {
     }
   };
 
+  useEffect(() => {
+    const parseArrayFromQuery = (param, setState) => {
+      try {
+        const decoded = router?.query?.[param]
+          ? JSON.parse(decodeURIComponent(router.query[param]))
+          : [];
+        setState(Array.isArray(decoded) ? decoded : []);
+      } catch (error) {
+        console.error(`Error parsing ${param}:`, error);
+        setState([]);
+      }
+    };
+  
+    parseArrayFromQuery("bedrooms", setBedroom);
+    parseArrayFromQuery("kitchens", setKitchens);
+    parseArrayFromQuery("bathroom", setBathroom);
+  }, [router.query]);
+
   const handleBedRoomChange = (value) => {
-    const state = SearchData.bedrooms || [];
-
-    // Check if value exists in the array
-    const updatedBedrooms = state.includes(value)
-      ? state.filter((item) => item !== value) // Remove it if exists
-      : [...state, value]; // Add it if not exists
-
-    setSearchData((prev) => ({
-      ...prev,
-      bedrooms: updatedBedrooms,
-    }));
+    setBedroom((prev) =>
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value]
+    );
   };
 
   const handleBathChange = (value) => {
@@ -171,6 +165,8 @@ const index = () => {
     const updatedBathrooms = state.includes(value)
       ? state.filter((item) => item !== value) // Remove if exists
       : [...state, value]; // Add if not exists
+
+    setBathroom(updatedBathrooms);
 
     setSearchData((prev) => ({
       ...prev,
@@ -182,6 +178,8 @@ const index = () => {
     const updatedkitchens = state.includes(value)
       ? state.filter((item) => item !== value)
       : [...state, value];
+
+    setKitchens(updatedkitchens);
 
     setSearchData((prev) => ({
       ...prev,
@@ -265,6 +263,15 @@ const index = () => {
       if (queryObject?.sort_key && queryObject?.sort_order) {
         setSelectedSort(queryObject.sort_key, queryObject.sort_order);
       }
+      if (queryObject?.min_budget) {
+        setMinBudget(Number(queryObject.min_budget));
+      }
+      if (queryObject?.max_budget) {
+        setMaxBudget(Number(queryObject.max_budget));
+      }
+      if (queryObject?.sort_key && queryObject?.sort_order) {
+        setSelectedSort(queryObject.sort_key, queryObject.sort_order);
+      }
 
       let data = {};
       if (router?.query?.searchData) {
@@ -326,45 +333,11 @@ const index = () => {
     return str || "Residential";
   };
 
-  const displayBedsBathKitchen = () => {
-    const beds = SearchData?.bedrooms || [];
-    const baths = SearchData?.bathroom || [];
-    const kitchens = SearchData?.kitchens || [];
-
-    // Convert arrays to a comma-separated string if they have values
-    const bedsText = beds.length > 0 ? `${beds.join(", ")} Beds` : "";
-    const bathsText = baths.length > 0 ? `${baths.join(", ")} Baths` : "";
-    const kitchensText =
-      kitchens.length > 0 ? `${kitchens.join(", ")} Kits` : "";
-
-    // Combine all values with a separator
-    const selections = [bedsText, bathsText, kitchensText]
-      .filter(Boolean)
-      .join(" / ");
-
-    return (
-      selections ||
-      `${translation?.beds_baths_kitchens || "Select Beds, Baths & Kitchens"}`
-    );
-  };
-
   const displayBudget = () => {
-    const min_budget = SearchData?.min_budget;
-    const max_budget = SearchData?.max_budget;
-
-    // If min_budget is 0 or "0", always return "Select Budget"
-    if (min_budget === 0 || min_budget === "0") {
-      return `${translation?.select_budget || "Select Budget"}`;
-    }
-
-    if (min_budget > 0 && max_budget > 0) {
-      return `$${min_budget} - $${max_budget}`;
-    }
-    if (min_budget > 0) {
-      return `$${min_budget}+`;
-    }
-
-    return `${translation?.select_budget || "Select Budget"}`; // Default case
+    if (minBudget && maxBudget) return `$${minBudget} - $${maxBudget}`;
+    if (minBudget) return `Min: $${minBudget}`;
+    if (maxBudget) return `Max: $${maxBudget}`;
+    return `${translation?.select_budget || "Select Budget"}`;
   };
 
   useEffect(() => {
@@ -454,7 +427,7 @@ const index = () => {
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
   const handleSearchClick = () => {
-    handleViewProperty();
+    // handleViewProperty();
     const queryObject = getSearchParamsData();
     if (postFor) {
       queryObject.post_for = postFor;
@@ -468,6 +441,22 @@ const index = () => {
     if (localityData) {
       queryObject.location_data = JSON.stringify(localityData);
     }
+
+    // Directly add minBudget and maxBudget
+    if (minBudget) queryObject.min_budget = minBudget;
+    if (maxBudget) queryObject.max_budget = maxBudget;
+
+    if (bedroom) {
+      queryObject.bedrooms = JSON.stringify(bedroom);
+    }
+    if (bathroom) {
+      queryObject.bathroom = JSON.stringify(bathroom);
+    }
+
+    if (kitchens) {
+      queryObject.kitchens = JSON.stringify(kitchens);
+    }
+
     const searchParams = new URLSearchParams(queryObject).toString();
     router.push(`/property-listing?${searchParams}`);
   };
@@ -488,6 +477,11 @@ const index = () => {
     if (router?.query?.sort_key) queryObject.sort_key = router.query.sort_key;
     if (router?.query?.sort_order)
       queryObject.sort_order = router.query.sort_order;
+
+    if (router?.query?.min_budget)
+      queryObject.min_budget = router.query.min_budget;
+    if (router?.query?.max_budget)
+      queryObject.max_budget = router.query.max_budget;
 
     return queryObject;
   };
@@ -622,9 +616,9 @@ const index = () => {
     }
 
     const existingParams = new URLSearchParams();
-    if (router?.query?.property_for)
-      existingParams.set("property_type", router?.query?.property_type || "1");
     if (router?.query?.property_type)
+      existingParams.set("property_type", router?.query?.property_type || "1");
+    if (router?.query?.property_for)
       existingParams.set("property_for", router?.query?.property_for || "1");
     if (router?.query?.post_for)
       existingParams.set("post_for", router?.query?.post_for || "sell");
@@ -641,6 +635,67 @@ const index = () => {
     if (router?.query?.location_data) {
       const localityObj = JSON.parse(router?.query?.location_data);
       payloadSearch.locality = localityObj?.locality;
+    }
+
+    if (router?.query?.min_budget) {
+      const min_budget = router.query.min_budget;
+      SearchData.min_budget = min_budget;
+    }
+
+    if (router?.query?.max_budget) {
+      const max_budget = router.query.max_budget;
+      SearchData.max_budget = max_budget;
+    }
+
+    if (router?.query?.bedrooms) {
+      try {
+        const decodedBedrooms = JSON.parse(
+          decodeURIComponent(router.query.bedrooms)
+        );
+
+        if (Array.isArray(decodedBedrooms)) {
+          setBedroom(decodedBedrooms);
+          SearchData.bedrooms = decodedBedrooms;
+        } else {
+          console.error("Bedrooms data is not in array format.");
+        }
+      } catch (error) {
+        console.error("Error decoding bedrooms:", error);
+      }
+    }
+
+    if (router?.query?.bathroom) {
+      try {
+        const decodedBathrooms = JSON.parse(
+          decodeURIComponent(router.query.bathroom)
+        );
+
+        if (Array.isArray(decodedBathrooms)) {
+          setBedroom(decodedBathrooms);
+          SearchData.bathroom = decodedBathrooms;
+        } else {
+          console.error("Bedrooms data is not in array format.");
+        }
+      } catch (error) {
+        console.error("Error decoding bedrooms:", error);
+      }
+    }
+
+    if (router?.query?.kitchens) {
+      try {
+        const decodedKitchens = JSON.parse(
+          decodeURIComponent(router.query.kitchens)
+        );
+
+        if (Array.isArray(decodedKitchens)) {
+          setBedroom(decodedKitchens);
+          SearchData.kitchens = decodedKitchens;
+        } else {
+          console.error("Bedrooms data is not in array format.");
+        }
+      } catch (error) {
+        console.error("Error decoding bedrooms:", error);
+      }
     }
 
     try {
@@ -753,6 +808,27 @@ const index = () => {
     selectedPropertyType == "1" ? filterOptions : CommercialFilterOptions;
 
   const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  const displayBedsBathKitchen = () => {
+    const beds = bedroom || [];
+    const baths = bathroom || [];
+    const kits = kitchens || [];
+
+    // Convert arrays to a comma-separated string if they have values
+    const bedsText = beds.length > 0 ? `${beds.join(", ")} Beds` : "";
+    const bathsText = baths.length > 0 ? `${baths.join(", ")} Baths` : "";
+    const kitchensText = kits.length > 0 ? `${kits.join(", ")} Kits` : "";
+
+    // Combine all values with a separator
+    const selections = [bedsText, bathsText, kitchensText]
+      .filter(Boolean)
+      .join(" / ");
+
+    return (
+      selections ||
+      `${translation?.beds_baths_kitchens || "Select Beds, Baths & Kitchens"}`
+    );
+  };
 
   return (
     <MainLayout>
@@ -948,25 +1024,23 @@ const index = () => {
                                   {translation?.beds || "Beds"}
                                 </label>
                                 <ButtonGroup className="btn-group-light d-flex gap-2">
-                                  {[...bedrooms].map((bedroom, index) => (
+                                  {bedrooms.map((bedroomItem, index) => (
                                     <div key={`bedroom-${index}`}>
                                       <input
                                         type="checkbox"
                                         id={`bedroom-${index}`}
                                         className="btn-check"
-                                        value={bedroom}
+                                        value={bedroomItem}
                                         onChange={() =>
-                                          handleBedRoomChange(bedroom)
+                                          handleBedRoomChange(bedroomItem)
                                         }
-                                        checked={SearchData?.bedrooms?.includes(
-                                          bedroom
-                                        )}
+                                        checked={bedroom.includes(bedroomItem)}
                                       />
                                       <label
                                         className="btn btn-outline-light btn-sm"
                                         htmlFor={`bedroom-${index}`}
                                       >
-                                        {bedroom}
+                                        {bedroomItem}
                                       </label>
                                     </div>
                                   ))}
@@ -1022,9 +1096,7 @@ const index = () => {
                                         onChange={() =>
                                           handleKitchenChange(kitchen)
                                         }
-                                        checked={SearchData?.kitchens?.includes(
-                                          kitchen
-                                        )}
+                                        checked={kitchens?.includes(kitchen)}
                                       />
                                       <label
                                         className="btn btn-outline-light btn-sm"
@@ -1089,7 +1161,7 @@ const index = () => {
                                     type="number"
                                     className="form-control"
                                     placeholder="00"
-                                    value={SearchData?.min_budget}
+                                    value={minBudget}
                                     onChange={handleMinChange}
                                     onClick={(e) => e.stopPropagation()} // Prevents parent click event
                                   />
@@ -1104,7 +1176,7 @@ const index = () => {
                                     type="number"
                                     className="form-control"
                                     placeholder="00"
-                                    value={SearchData?.max_budget}
+                                    value={maxBudget}
                                     onChange={handleMaxBudgetChange}
                                     onClick={(e) => e.stopPropagation()} // Prevents parent click event
                                   />

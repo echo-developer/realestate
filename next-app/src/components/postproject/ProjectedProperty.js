@@ -10,7 +10,7 @@ const ProjectedProperty = ({ projectProperties }) => {
   const [selectedBHK, setSelectedBHK] = useState("All");
   const [showForm, setShowForm] = useState(false);
   const [currentPropertyId, setCurrentPropertyId] = useState(null);
-const translation = useTranslation();
+  const translation = useTranslation();
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setSelectedBHK("All");
@@ -21,10 +21,9 @@ const translation = useTranslation();
   };
 
   const filteredProperties =
-  selectedBHK === "All"
-    ? Object.values(projectProperties?.[activeTab] || {}).flat()
-    : projectProperties?.[activeTab]?.[selectedBHK] || [];
-
+    selectedBHK === "All"
+      ? Object.values(projectProperties?.[activeTab] || {}).flat()
+      : projectProperties?.[activeTab]?.[selectedBHK] || [];
 
   const handleShowForm = (propertyId) => {
     setCurrentPropertyId(propertyId);
@@ -38,7 +37,9 @@ const translation = useTranslation();
 
   return (
     <section id="properties">
-      <h4 className="text-primary mb-3">{translation?.properties_in_real_estate || " Properties In Real Estate"}</h4>
+      <h4 className="text-primary mb-3">
+        {translation?.properties_in_real_estate || " Properties In Real Estate"}
+      </h4>
       <nav>
         <div className="nav nav-pills" id="nav-tab" role="tablist">
           <button
@@ -49,7 +50,7 @@ const translation = useTranslation();
             type="button"
             aria-selected={activeTab === "buy"}
           >
-           {translation?.buy || "Buy"} 
+            {translation?.buy || "Buy"}
           </button>
           <button
             className={`nav-link ps-4 pe-4 ${
@@ -59,7 +60,7 @@ const translation = useTranslation();
             type="button"
             aria-selected={activeTab === "rent"}
           >
-            {translation?.rent || "Rent"}  
+            {translation?.rent || "Rent"}
           </button>
         </div>
       </nav>
@@ -98,7 +99,8 @@ const translation = useTranslation();
         <div className="col-sm-auto">
           <h5>
             <Link target="_blank" href="/property-listing">
-            {translation?.show_all_properties || "Show All Properties"}   <i className="bi bi-arrow-right"></i>
+              {translation?.show_all_properties || "Show All Properties"}{" "}
+              <i className="bi bi-arrow-right"></i>
             </Link>
           </h5>
         </div>
@@ -111,11 +113,12 @@ const translation = useTranslation();
             filteredProperties.map((property) => (
               <article key={property.id} className="col-lg-4 col-sm-6 col-12">
                 <div className="card card-ads">
-                  {property?.gallery?.length > 0 ? (
+                  {property?.gallery?.length > 0 &&
+                  property?.gallery[0]?.images?.length > 0 ? (
                     <div className="card-image">
                       <img
-                        src={`"/assets/images/uploads/property-9.jpg"`}
-                        alt={property.name}
+                        src={property?.gallery[0]?.images[0]?.file}
+                        alt={property?.name || "Property Image"}
                         className="card-img-top"
                       />
                       <span
@@ -130,7 +133,7 @@ const translation = useTranslation();
                     <div className="card-image">
                       <img
                         src="/assets/images/property/default-property-1.jpg"
-                        alt={property.name}
+                        alt={property.name || "Default Property"}
                         className="card-img-top"
                       />
                       <span
@@ -144,21 +147,33 @@ const translation = useTranslation();
                   )}
 
                   <div className="card-body">
-                    
                     <div className="d-flex justify-content-between">
-                      <h5 className="text-primary">₹{property.expected_price}</h5>
+                      <h5 className="text-primary">
+                        ₹{property.expected_price}
+                      </h5>
                       <p>
                         <span className="text-muted">
                           {property.super_area} {translation?.sq_ft || "Sq. Ft"}
                         </span>
                       </p>
                     </div>
-                    <h4><small><Link target="_blank" href={`/property-details/${property?.slug}`}>{property.name}</Link></small></h4>
+                    <h4>
+                      <small>
+                        <Link
+                          target="_blank"
+                          href={`/property-details/${property?.slug}`}
+                        >
+                          {property.name}
+                        </Link>
+                      </small>
+                    </h4>
                     <p>
-                      {property.bhk_type} {translation?.flat_by_real_estate || "Flat by (Real estate)"}
+                      {property.bhk_type}{" "}
+                      {translation?.flat_by_real_estate ||
+                        "Flat by (Real estate)"}
                     </p>
                     <p>
-                      <a href="">
+                      <a href="#">
                         <i className="icon-feather-map-pin"></i>{" "}
                         {property.property_address}
                       </a>
@@ -169,8 +184,17 @@ const translation = useTranslation();
             ))
           ) : (
             <article className="col-12 mb-3 text-center">
-              <img alt="Icon" height="48" width="48" class="mb-2" src="/assets/images/icons/9939447.png" />
-              <p className="text-muted">{translation?.no_properties_available || "No properties available for the selected criteria.)"}</p>
+              <img
+                alt="Icon"
+                height="48"
+                width="48"
+                class="mb-2"
+                src="/assets/images/icons/9939447.png"
+              />
+              <p className="text-muted">
+                {translation?.no_properties_available ||
+                  "No properties available for the selected criteria.)"}
+              </p>
             </article>
           )}
         </div>
@@ -179,7 +203,10 @@ const translation = useTranslation();
       {/* Modal for Project Enquiry Form */}
       <Modal show={showForm} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>{translation?.contact_agent_for_property || "Contact Agent for Property)"}</Modal.Title>
+          <Modal.Title>
+            {translation?.contact_agent_for_property ||
+              "Contact Agent for Property)"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {currentPropertyId && (
