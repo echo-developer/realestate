@@ -198,6 +198,12 @@ const ProjectPendingComponent = ({ projectData }) => {
                       >
                         {translation?.add_extra_field || "Add Extra Feild"}
                       </button>
+                      <button
+                        onClick={() => handleProjectCertificate(project.id)}
+                        className="btn btn-sm btn-primary"
+                      >
+                         {translation?.add_certificate || "Add Certificate"}
+                      </button>
                       <Link
                         href={`/project-edit/${project.id}`}
                         className="btn btn-sm btn-outline-primary ms-auto"

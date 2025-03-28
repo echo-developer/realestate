@@ -787,6 +787,7 @@ const ResidentialProjectDetails = ({
               {detailsData?.landmarks && (
                 <ProjectLandmarkData detailsData={detailsData} />
               )}
+
               <section id="about-developer" className="mb-4">
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
@@ -873,10 +874,10 @@ const ResidentialProjectDetails = ({
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-        {/*   <ProjectReviewData
+          <ProjectReviewData
             projectId={detailsData?.id}
             closeButton={handleHideReviewModal}
-          /> */}
+          />
         </Offcanvas.Body>
       </Offcanvas>
 

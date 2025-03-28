@@ -96,11 +96,14 @@ const PublishComponent = ({ propertiesData }) => {
     setPropId(id);
   };
 
-  const handlePropertyCertificate =(id)=>{
-    setShowDocModal(true)
+  const handlePropertyCertificate = (id) => {
+    setShowDocModal(true);
     setPropId(id);
-  }
+  };
 
+  const handleDocClose=()=>{
+    setShowDocModal(false);
+  }
   return (
     <>
       <div className="list-display">
@@ -245,9 +248,7 @@ const PublishComponent = ({ propertiesData }) => {
         />
       )}
 
-      {docModal && (
-        <DocumentUploadModal/>
-      )}
+      {docModal && <DocumentUploadModal propId={propId} show={docModal} onClose={handleDocClose}/>}
 
       <UploadPropertyBrochure
         show={showBrochModal}

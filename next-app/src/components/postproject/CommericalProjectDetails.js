@@ -850,10 +850,10 @@ const CommercialProjectDetails = ({
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          {/* <ProjectReviewData
+          <ProjectReviewData
             projectId={detailsData?.id}
             closeButton={handleHideReviewModal}
-          /> */}
+          />
         </Offcanvas.Body>
       </Offcanvas>
 
