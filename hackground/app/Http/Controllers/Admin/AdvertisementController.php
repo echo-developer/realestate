@@ -157,4 +157,15 @@ class AdvertisementController extends Controller
         return response()->json(['error' => 'No file uploaded'], 400);
     }
 
+    public function change_status(Request $req)
+    {
+        $data = [
+            'advertisement_id' => $req->id,
+            'status' => $req->status
+        ];
+
+        $response = $this->advertisement->changeStatus($data);
+        return response()->json($response);
+    }
+
 }

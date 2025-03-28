@@ -454,6 +454,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('advertisement/options', 'get_option_value');
         Route::POST('advertisement/add', 'add');
         Route::POST('advertisement/edit', 'edit');
+        Route::post('advertisement/change-status', 'change_status');
     });
       
     Route::prefix('membership')->controller(MembershipPlanController::class)->group(function () {

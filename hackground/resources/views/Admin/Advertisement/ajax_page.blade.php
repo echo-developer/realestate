@@ -23,7 +23,7 @@
 
                     <div class="form-group">
                         <label for="category_key">Category </label>
-                        <select class="form-control select2" name="category[]">
+                        <select class="form-control select2" name="category[]" multiple>
                           <option value="">-Select-</option>
                           <?php foreach($property_category as $c){ ?>
                           <option value="<?php echo $c->id;?>" ><?php echo $c->name;?></option>
@@ -33,7 +33,7 @@
 
                     <div class="form-group">
                         <label for="category_key">City </label>
-                        <select class="form-control" name="city[]">
+                        <select class="form-control select2" name="city[]" multiple>
                           <option value="">-Select-</option>
                           <?php foreach($city as $c){ ?>
                           <option value="<?php echo $c->city_id;?>" ><?php echo $c->name;?></option>
@@ -137,9 +137,9 @@
     </div>
     
     <script>
-    // $(function(){
-    //     $('.select2').select2();
-    // });
+    $(function(){
+        $('.select2').select2();
+    });
 
     function submitForm(form, event){
         event.preventDefault();
@@ -322,7 +322,7 @@
                     
                     <div class="form-group">
                         <label for="category_key">Category </label>
-                        <select class="form-control" name="category[]">
+                        <select class="form-control select2" name="category[]" multiple>
                           <option value="">-Select-</option>
                           <?php foreach($property_category as $c){ ?>
                           <option value="<?php echo $c->id;?>" <?php if(in_array($c->id,$detail['ad_cats'])){echo "selected";} ?> ><?php echo $c->name;?></option>
@@ -332,7 +332,7 @@
 
                     <div class="form-group">
                         <label for="category_key">City </label>
-                        <select class="form-control" name="city[]">
+                        <select class="form-control select2" name="city[]" multiple>
                           <option value="">-Select-</option>
                           <?php foreach($city as $c){ ?>
                           <option value="<?php echo $c->city_id;?>" <?php if(in_array($c->city_id,$detail['ad_locations'])){echo "selected";} ?>><?php echo $c->name;?></option>
@@ -462,7 +462,10 @@
     </div>
     
     <script>
-    
+    $(function(){
+        $('.select2').select2();
+    });
+
     function submitForm(form, event){
         event.preventDefault();
         var formId = $("#add_form");

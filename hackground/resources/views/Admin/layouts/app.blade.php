@@ -15,7 +15,7 @@
     <meta name="msapplication-tap-highlight" content="no">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/base.min.css') }}">
-
+    <link rel="stylesheet" href="{{ asset('assets/js/scripts-init/select2/dist/css/select2.min.css') }}">
     @stack('custom-css')
 </head>
 
@@ -73,6 +73,7 @@
 
     <script src="{{ asset('assets/js/scripts-init/sweet-alerts.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+    <script src="{{ asset('assets/js/scripts-init/select2/dist/js/select2.full.min.js') }}"></script>
     @yield('modals')
     <script>
         function c_alert(message, type = 'success') {

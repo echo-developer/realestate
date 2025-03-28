@@ -344,4 +344,17 @@ class Advertisement extends Model
 		}
 	}
 
+	public function changeStatus($data)
+    {
+        DB::table($this->table)
+            ->where('advertisement_id', $data['id'])
+            ->update([
+                'status' => $data['status'],
+                'updated_at' => now(),
+            ]);
+        return [
+            'message' => 'Status updated successfully.',
+        ];
+    }
+
 }

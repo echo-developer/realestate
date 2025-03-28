@@ -1,5 +1,3 @@
-{{-- <link rel="stylesheet" href="{{ asset('assets/js/scripts-init/select2/dist/css/select2.min.css') }}">
-<script src="{{ asset('assets/js/scripts-init/select2/dist/js/select2.full.min.js') }}"></script> --}}
 @extends('Admin.layouts.app')
 
 @section('content')
@@ -120,7 +118,7 @@
                             <td>-</td>
                             <td>{{ $item->ad_type }}</td>
                             <td>
-                                <input type="checkbox" class="package_status d-none" data-id="{{ $item->advertisement_id }}" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ $item->status ? 'checked' : '' }} >
+                                <input type="checkbox" class="ad_status d-none" data-id="{{ $item->advertisement_id }}" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ $item->status ? 'checked' : '' }} >
                             </td>
                             <td class="text-right">
                                 <i class="fa fa-edit text-primary fa-md" onclick="edit('{{ $item->advertisement_id }}')"></i>
@@ -286,11 +284,12 @@
 
 
 
-    $('.package_status').change(function() {
+    $('.ad_status').change(function() {
 
         toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
 
         var id = $(this).data('id');
+        alert(id);
         var status = this.checked ? 1 : 0;
         $.ajaxSetup({
             headers: {
@@ -299,7 +298,7 @@
         });
         $.ajax({
             type: 'POST',
-            url: `{{ url('/ads-packages/change-status') }}`,
+            url: `{{ url('/advertisement/change-status') }}`,
             data: {
                 'status': status,
                 'id': id
