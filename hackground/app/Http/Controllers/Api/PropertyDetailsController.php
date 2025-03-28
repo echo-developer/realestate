@@ -492,6 +492,7 @@ class PropertyDetailsController extends Controller
                 'status' => 0,
                 'message' => 'An error occurred while retrieving data.',
                 'error' => 'Unexpected error occurred.',
+                'error_msg' => $e->getMessage()
             ]);
         }
     }
