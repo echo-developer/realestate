@@ -1491,25 +1491,29 @@ class DashboardController extends Controller
     public function uploadPropProjcertificatesDetails(Request $request)
     {
         try {
+            $property_id = $request->input('property_id');
+            $project_id = $request->input('project_id');
+            $fileName = $request->input('fileName');
+            $doc_id = $request->input('doc_id');
+            $certificate_name = $request->input('certificate_name');
+            $certificate_number = $request->input('certificate_number');
 
-            $data = $request->only(['property_id', 'project_id', 'fileName', 'doc_id', 'certificate_name', 'certificate_number']);
-
-            if (!empty($data['property_id']) && !empty($data['project_id'])) {
+            if (!empty($property_id) && !empty($project_id)) {
                 return response()->json([
-                    'status' => 1,
+                    'status' => 0,
                     'message' => 'Both Property and Project id present. Unable to Proceed',
                 ]);
             }
 
             $dataToInsert = [
-                'property_id' => $data['property_id'],
-                'project_id' => $data['project_id'],
-                'certificate_name' => $data['certificate_name'],
-                'certificate_number' => $data['certificate_number'],
-                'fileName' => $data['fileName']
+                'property_id' => $property_id,
+                'project_id' => $project_id,
+                'certificate_name' => $certificate_name,
+                'certificate_number' => $certificate_number,
+                'fileName' => $fileName
             ];
 
-            if (empty($data['doc_id'])) {
+            if (empty($doc_id)) {
                 CertificatesModel::create($dataToInsert);
                 return response()->json([
                     'status' => 1,
@@ -1517,7 +1521,7 @@ class DashboardController extends Controller
                 ]);
             } else {
                 CertificatesModel::updateOrCreate(
-                    ['id' => $data['doc_id']],
+                    ['id' => $doc_id],
                     $dataToInsert
                 );
                 return response()->json([
@@ -1544,7 +1548,7 @@ class DashboardController extends Controller
                 return response()->json([
                     'status' => 1,
                     'message' => 'Both Property and Project IDs are present. Unable to proceed.',
-                ], 400);
+                ]);
             }
 
             $filter = [];
@@ -1579,6 +1583,43 @@ class DashboardController extends Controller
                 'status' => 0,
                 'message' => 'An Error has Occured',
             ]);
+        }
+    }
+
+    public function getPropPropertycertificatedelete(Request $request)
+    {
+        try {
+            $property_id = $request->input('property_id');
+            $project_id = $request->input('project_id');
+            $doc_id = $request->input('doc_id');
+
+            if (!empty($property_id) && !empty($project_id)) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Both Property and Project IDs are present. Unable to proceed.',
+                ]);
+            }
+
+            $filter = [];
+            if (!empty($property_id)) {
+                $filter = ['property_id' => $property_id, 'id' => $doc_id, 'project_id' => null];
+            } elseif (!empty($project_id)) {
+                $filter = ['project_id' => $project_id, 'id' => $doc_id, 'property_id' => null];
+            } else {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Either Property ID or Project ID must be provided.',
+                ]);
+            }
+
+            CertificatesModel::where($filter)->update(['status' => config('constants.STATUS_DELETE')]);
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Certificate Details Deleted',
+            ]);
+        } catch (\Exception $e) {
+            logError($e);
         }
     }
 

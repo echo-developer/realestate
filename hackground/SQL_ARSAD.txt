@@ -530,9 +530,8 @@ CREATE TABLE `pref_certificates` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+);
 
-ALTER TABLE `pref_certificates` CHANGE `certificate_image` `fileName` VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
 
 
 ALTER TABLE `pref_property_additional` ADD `launch_date` VARCHAR(30) NULL DEFAULT NULL AFTER `construction_done`, ADD `ceiling_height` INT(11) NULL DEFAULT NULL AFTER `launch_date`;
