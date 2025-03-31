@@ -1,0 +1,125 @@
+.custom-offcanvas {
+    width: 500px !important; /* Make it wider */
+    max-width: 500px !important; /* Ensure it doesn't exceed the width */
+}
+
+
+.custom-offcanvas {
+    width: 350px;
+  }
+  
+  .hover-effect {
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .hover-effect:hover {
+    transform: scale(1.02);
+  }
+  
+  .zoom-icon {
+    font-size: 20px;
+    padding: 8px;
+  }
+  
+  .property-details img {
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+  }
+
+  
+  .sqft-option {
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #6c757d; /* Default text color */
+    background-color: #fff;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+  }
+  
+  .sqft-option:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .sqft-option.selected {
+    background-color: #f1f1f1; /* Selected background */
+    color: #000; /* Selected text color */
+    font-weight: bold;
+    border-color: #ccc;
+  }
+  
+  .sqft-option .checkmark {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .property-option {
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #6c757d; /* Default text color */
+    background-color: #fff;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+  }
+  
+  .property-option:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .property-option.selected {
+    background-color: #f1f1f1; /* Selected background */
+    color: #000; /* Selected text color */
+    font-weight: bold;
+    border-color: #ccc;
+  }
+  
+  .property-option .checkmark {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 14px;
+    color: #333;
+  }
+  .property-details {
+    border-radius: 8px;
+  }
+  
+  .property-details .table {
+    margin-bottom: 0;
+  }
+  
+  .property-details .table td {
+    padding: 10px 15px;
+    vertical-align: middle;
+  }
+  
+  .property-details .table .bg-light {
+    background-color: #f8f9fa !important;
+  }
+  
+  .property-details img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .property-details .text-primary {
+    color: #000; /* Darker text color for price */
+  }
+    
+  

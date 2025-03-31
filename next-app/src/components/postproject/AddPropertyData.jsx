@@ -500,7 +500,7 @@ const AddPropertyData = ({
               {tower.floor_data.map((flat, flatIndex) => (
                 <fieldset key={flatIndex} className="border p-3 mb-3 position-relative">
                   <legend>
-                    Floor {flatIndex + 1}
+                    Unit {flatIndex + 1}
                   </legend>
                   <Button
                     variant="danger btn-delete"
@@ -786,7 +786,7 @@ const AddPropertyData = ({
                                   className="form-control"
                                   onChange={(e) => handleBhkImgUpload(e, bhkIndex, flatIndex, towerIndex)}
                                 />
-                                <label>Upload File</label>
+                                <label>Upload Floor Image</label>
                               </>
                             )}
                           </div>
