@@ -306,12 +306,11 @@ class ProjectDetailsController extends Controller
                 $categorizedPropertiesFloor = [];
 
                 foreach ($properties as $property) {
-
                     $is_favorite = !empty($user_id) && DB::table('my_favorite_property')
                         ->where('uid', $user_id)
                         ->where('propID', $property->id)
                         ->value('status') == config('constants.STATUS_ACTIVE');
-                    $propertyData = [];
+
                     if (!empty($property->additional->floor_plan_image)) {
                         // Default property data
                         $propertyData = [
@@ -325,19 +324,34 @@ class ProjectDetailsController extends Controller
                             'carpet_area' => $property->settings->carpet_area ?? null,
                             'super_area' => $property->settings->super_area ?? null,
                             'expected_price' => $property->settings->expected_price ?? null,
-                            'floor_plan_image'=>$property->additional->floor_plan_image,
-                            'image_url'=> asset('user_upload/project_floor_plan/' . $property->additional->floor_plan_image)
+                            'floor_plan_image' => $property->additional->floor_plan_image,
+                            'image_url' => asset('user_upload/project_floor_plan/' . $property->additional->floor_plan_image)
                         ];
+
+                        $bhkType = $propertyData['bhk_type'];
+                        $super_area = $propertyData['super_area'];
+
+                        // Ensure the BHK type exists
+                        if (!isset($categorizedPropertiesFloor[$bhkType])) {
+                            $categorizedPropertiesFloor[$bhkType] = [
+                                'super_area_arr' => [],
+                                'list' => []
+                            ];
+                        }
+
+                        // Add super_area to super_area_arr if not already added
+                        if (!in_array($super_area, $categorizedPropertiesFloor[$bhkType]['super_area_arr'])) {
+                            $categorizedPropertiesFloor[$bhkType]['super_area_arr'][] = $super_area;
+                        }
+
+                        // Add property to the list
+                        $categorizedPropertiesFloor[$bhkType]['list'][] = $propertyData;
                     }
-
-                    $bhkType = $propertyData['bhk_type'];
-
-                    // Organize properties under post type and bhk type
-                    $categorizedPropertiesFloor[$bhkType][] = $propertyData;
                 }
 
                 $flattenedData['project_floor_plan'] = $categorizedPropertiesFloor;
             }
+
 
 
             // Fetch Nearby Projects (within 5 km)

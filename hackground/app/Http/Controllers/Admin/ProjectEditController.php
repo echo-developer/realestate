@@ -66,7 +66,6 @@ class ProjectEditController extends Controller
     {
         $project->fill([
             'project_type' => $request->project_type ?? $project->project_type,
-            'uid' => $request->uid,
             'project_name' => $request->project_name ?? $project->project_name,
             'project_desc' => $request->description ?? $project->project_desc,
             'status' => config('constants.STATUS_INACTIVE'),
