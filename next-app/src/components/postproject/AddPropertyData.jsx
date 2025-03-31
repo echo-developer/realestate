@@ -70,9 +70,44 @@ const AddPropertyData = ({
     }
   };
 
-  const handleBhkImgUpload = (e) => {
-    console.log("bhk image upload ran");
-    console.log("file", e.target.files);
+  const handleBhkImgUpload = async (e, bhkIndex, floorIndex, towerIndex) => {
+    const file = e.target.files?.[0];
+    console.log("file", file);
+    if(file) {
+      // const state = towers[towerIndex]?.floor_data?.[floorIndex]?.bhk_configurations?.[bhkIndex];
+      try {
+        const res = await callApi({
+          api: '/upload_floor_plan_image',
+          method: "UPLOAD",
+          data: {
+            floor_plan_image: file,
+            bhk_index: bhkIndex,
+            floor_index: floorIndex,
+            tower_index: towerIndex,
+          }
+        })
+
+        console.log("res", res);
+      } catch (error) {
+        toast.error(error.message || "Failed to upload image");
+      }
+    }
+  }
+
+  const handleBhkImgDelete = async (bhkIndex, floorIndex, towerIndex) => {
+    try {
+      const res = await callApi({
+        api: '/delete_floor_plan_image',
+        method: "POST",
+        data: {
+          bhk_index: bhkIndex,
+          floor_index: floorIndex,
+          tower_index: totalTowers,
+        }
+      })
+    } catch (error) {
+      toast.error(error.message || "Failed to delete image")
+    }
   }
 
 
@@ -667,7 +702,7 @@ const AddPropertyData = ({
 
                         <div className="col-md-4 col-sm-6 mb-3">
                           <div className="form-floating">
-                            <input type="file" className="form-control" onChange={handleBhkImgUpload} />
+                            <input type="file" className="form-control" onChange={(e) => handleBhkImgUpload(e, bhkIndex, flatIndex, towerIndex)} />
                             <label>Upload File</label>
                           </div>
                         </div>
