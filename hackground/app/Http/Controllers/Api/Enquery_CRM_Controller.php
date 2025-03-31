@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class Enquery_CRM_Controller extends Controller
 {
@@ -520,6 +521,7 @@ class Enquery_CRM_Controller extends Controller
                         'message' => $row->message,
                         'assign_to' => $row->assign_to,
                         'enquery_status' => $row->enquery_status,
+                        'lead_status'=>$row->lead_status,
                         'created_at' => $row->created_at,
                         'Phone' => $row->Phone,
                         'customer_name' => $row->Name,
@@ -534,6 +536,7 @@ class Enquery_CRM_Controller extends Controller
                         'plot_area' => $row->plot_area,
                         'size' => ($row->plot_area ?? 0) + ($row->super_area ?? 0) + ($row->carpet_area ?? 0),
                         'gallery' => $transformedData,
+                        'lead_type' => 'P'
                     ];
                 }
 
@@ -542,6 +545,13 @@ class Enquery_CRM_Controller extends Controller
                         'status' => 0,
                         'message' => 'No result found.',
                         'data' => [],
+                        'lead_status_arr'=> [
+                            '0'=>'Pending',
+                            '1'=>'Lead',
+                            '2'=>'Closed',
+                            '3'=>'Proposal',
+                            '4'=>'Qualify'
+                        ],
                         'pagination' => [
                             'current_page' => $recentPage,
                             'total_records' => $totalRecords,
@@ -554,6 +564,144 @@ class Enquery_CRM_Controller extends Controller
                     'status' => 1,
                     'message' => 'Data retrieved successfully',
                     'data' => $customArray,
+                    'lead_status_arr'=> [
+                        '0'=>'Pending',
+                        '1'=>'Lead',
+                        '2'=>'Closed',
+                        '3'=>'Proposal',
+                        '4'=>'Qualify'
+                    ],
+                    'pagination' => [
+                        'current_page' => $recentPage,
+                        'total_records' => $totalRecords,
+                        'total_pages' => ceil($totalRecords / $limit),
+                    ]
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No user ID found.',
+                    'data' => [],
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyCRM: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred. Please try again later.',
+                'data' => [],
+            ]);
+        }
+    }
+
+    public function projectLeads(Request $request)
+    {
+        try {
+            $recentPage = $request->input('recent_page', 1);
+            $limit = $request->input('limit', 10);
+            $user_id = $request->input('user_id');
+            
+            if (!empty($user_id)) {
+                $crmData = $this->apiModel->getProjectLeads($user_id);
+                $totalRecords = count($crmData);
+
+                $crmData = collect($crmData)->slice(($recentPage - 1) * $limit, $limit)->values();
+
+                $customArray = [];
+                foreach ($crmData as $row) {
+                    $row = (object) $row;
+                    $galleries = [];
+
+                    $getGalleries = getProjectImages($row->project_id);
+                    foreach ($getGalleries as $image) {
+                        $galleryType = $image->image_type;
+                        if (!isset($galleries[$galleryType])) {
+                            $galleries[$galleryType] = [
+                                'gallery' => $galleryType,
+                                'images' => []
+                            ];
+                        }
+
+                        $imageUrl = asset('user_upload/project_images/' . $image->filename);
+                        $galleries[$galleryType]['images'][] = [
+                            'image_id' => $image->image_id,
+                            'image_name' => $image->filename,
+                            'image_url' => $imageUrl,
+                            'caption' => $image->caption
+                        ];
+                    }
+                    $transformedData = array_values($galleries);
+
+                    $logData = DB::table('crm_log')
+                        ->select('schedule_date', 'remarks')
+                        ->where(['enquiry_id'=> $row->enquery_id, 'lead_type'=>'P'])
+                        ->orderBy('id', 'desc')
+                        ->first();
+
+                    if ($logData) {
+                        $logData->enquery_status = $row->enquery_status;
+                    }
+                   // print_r($row);exit;
+                    $customArray[] = [
+                        'log_data' => $logData ?? [],
+                        'customer_id' => $row->customer_id,
+                        'enquery_id' => $row->enquery_id,
+                        'project_id' => $row->project_id,
+                        'message' => $row->message,
+                        'assign_to' => $row->assign_to,
+                        'enquery_status' => $row->enquery_status,
+                        'lead_status'=>$row->lead_status,
+                        'created_at' => $row->created_at,
+                        'phone' => $row->customer_phone,
+                        'name' => $row->customer_name,
+                        'email' => $row->customer_email,
+                        'project_name' => $row->project_name,
+                        'project_address' => $row->address,
+                        'locality' => $row->locality,
+                        'unit_type' => $row->unit_type,
+                        'occupied_area' => $row->occupied_area,
+                        'area_in_sqft' => $row->area_in_sqft,
+                        //'size' => ($row->plot_area ?? 0) + ($row->super_area ?? 0) + ($row->carpet_area ?? 0),
+                        'gallery' => $transformedData,
+                        'lead_type' => 'P'
+                    ];
+                }
+
+                if (empty($customArray)) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'No result found.',
+                        'data' => [],
+                        'lead_status_arr'=> [
+                            '0'=>'Pending',
+                            '1'=>'Lead',
+                            '2'=>'Closed',
+                            '3'=>'Proposal',
+                            '4'=>'Qualify'
+                        ],
+                        'pagination' => [
+                            'current_page' => $recentPage,
+                            'total_records' => $totalRecords,
+                            'total_pages' => ceil($totalRecords / $limit),
+                        ]
+                    ]);
+                }
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Data retrieved successfully',
+                    'data' => $customArray,
+                    'lead_status_arr'=> [
+                        '0'=>'Pending',
+                        '1'=>'Lead',
+                        '2'=>'Closed',
+                        '3'=>'Proposal',
+                        '4'=>'Qualify'
+                    ],
                     'pagination' => [
                         'current_page' => $recentPage,
                         'total_records' => $totalRecords,
@@ -589,21 +737,46 @@ class Enquery_CRM_Controller extends Controller
 
         if($user_id)
         {
-            $leads = $this->apiModel->getUserLeadsList($user_id);
-            
-            if($leads)
-            {
-                return response()->json([
-                    'status' => 1,
-                    'message' => 'Enquiries fetched successfully.',
-                    'data' => $leads,
-                ], 200);
-            }else{
+            $leads = $this->apiModel->getGeneralLeadsList($user_id);
+            $totalRecords = count($leads);
+            $leads['lead_type'] = 'G';
+            if (empty($leads)) {
                 return response()->json([
                     'status' => 0,
-                    'message' => 'No Enquiries found.',
-                ], 200);
+                    'message' => 'No result found.',
+                    'data' => [],
+                    'lead_status_arr'=> [
+                        '0'=>'Pending',
+                        '1'=>'Lead',
+                        '2'=>'Closed',
+                        '3'=>'Proposal',
+                        '4'=>'Qualify'
+                    ],
+                    'pagination' => [
+                        'current_page' => $recentPage,
+                        'total_records' => $totalRecords,
+                        'total_pages' => ceil($totalRecords / $limit),
+                    ]
+                ]);
             }
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Data retrieved successfully',
+                'data' => $leads,
+                'lead_status_arr'=> [
+                    '0'=>'Pending',
+                    '1'=>'Lead',
+                    '2'=>'Closed',
+                    '3'=>'Proposal',
+                    '4'=>'Qualify'
+                ],
+                'pagination' => [
+                    'current_page' => $recentPage,
+                    'total_records' => $totalRecords,
+                    'total_pages' => ceil($totalRecords / $limit),
+                ]
+            ]);
         }else{
             return response()->json([
                 'status' => 0,
@@ -627,6 +800,7 @@ class Enquery_CRM_Controller extends Controller
             $enq_status = (int) $request->enq_status;
             $data = [
                 'enquiry_id' => $request->enquiry_id,
+                'lead_type' => $request->lead_type,
                 'status' => $enq_status,
                 'schedule_date' => $formattedDateTime ?? null,
                 'remarks' => $request->remarks ?? null,
@@ -640,6 +814,162 @@ class Enquery_CRM_Controller extends Controller
                 'status' => 1,
                 'message' => 'crm logged successfully',
             ]);
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+
+    public function saveLeadContactStatus(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'user_id' => 'required',
+                'assign_id' => 'required',
+                'enquiry_id' => 'required',
+                'remark_type' => 'required',
+                'lead_type' => 'required',
+            ]);
+    
+            if($validator->fails()) {
+                return response()->json(['error' => $validator->errors()], 422);
+            }
+            
+            $user_id = $request->user_id;
+            $assign_id = $request->assign_id;
+            $checkAssignedLead = DB::table('leads_assigned')->where(['assign_id'=>$assign_id,'user_id'=>$user_id])->first();
+            if($checkAssignedLead)
+            {
+                if($request->is_schedule)
+                {
+                    $formattedDateTime = Carbon::parse($request->schedule_date)->format('Y-m-d H:i:s');
+                }else{
+                    $formattedDateTime = '';
+                }
+                
+                $data = [
+                    'enquiry_id' => $request->enquiry_id,
+                    'assign_id' => $request->assign_id,
+                    'user_id' => $request->user_id,
+                    'lead_type' => $request->lead_type,
+                    'schedule_date' => $formattedDateTime ?? null,
+                    'remark_type' => $request->remark_type,
+                    'remarks' => $request->remarks,
+                    'created_at' => now(),
+
+                ];
+
+                DB::table('crm_log')->insert($data);
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Data saved successfully !',
+                ]);
+            }
+            
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed to save !',
+            ]);
+        }
+    }
+
+    public function updateLeadStatus(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'assign_id' => 'required',
+            'lead_status' => 'required'
+        ]);
+
+        if($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+        $user_id = $request->user_id;
+        $assign_id = $request->assign_id;
+        $checkAssignedLead = DB::table('leads_assigned')->where(['assign_id'=>$assign_id,'user_id'=>$user_id])->first();
+        if($checkAssignedLead)
+        {
+            $up = $this->apiModel->updateUserLeadStatus($request->all());
+            if($up)
+            {
+                return response()->json([
+                        'status' => 1,
+                        'message' => 'Status updated .',
+                    ], 200);  
+            }else{
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Failed to update.',
+                ], 200);
+            }
+        }else{
+            return response()->json([
+                'status' => 0,
+                'message' => 'No assigned lead found.',
+            ], 200);
+        }
+       
+    }
+
+    public function leadContactHistory(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'user_id' => 'required',
+                'assign_id' => 'required',
+            ]);
+            $assign_id = $request->input('assign_id');
+            $user_id = $request->input('user_id');
+            $checkAssignedLead = DB::table('leads_assigned')->where(['assign_id'=>$assign_id,'user_id'=>$user_id])->first();
+            if ($checkAssignedLead) {
+                $eq_timeline = DB::table('crm_log')
+                    ->leftJoin('property_enquiry', 'crm_log.enquiry_id', '=', 'property_enquiry.enquery_id')
+                    ->where(['crm_log.assign_id'=> $assign_id,'crm_log.user_id'=>$user_id])
+                    ->select(
+                        'crm_log.enquiry_id',
+                        'crm_log.status as enquery_status',
+                        'crm_log.id as action_id',
+                        'crm_log.created_at as action_taken_on',
+                        'crm_log.schedule_date',
+                        'crm_log.remark_type',
+                        'crm_log.remarks',
+                    )->get()->toArray();
+
+                // $timelines = [];
+                // $formatedData = array_map(function ($items) {
+
+                // }, $eq_timeline);
+                //print_r();
+                if (empty($eq_timeline)) {
+                    return response()->json([
+                        'status' => 1,
+                        'message' => 'No result found.',
+                        'data' => [],
+                    ]);
+                }
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'data retrived successfully',
+                    'data' => $eq_timeline,
+                ]);
+
+                // Log::info('eq_timeline :\n' . json_encode($eq_timeline, JSON_PRETTY_PRINT));
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No Enquery id found.',
+                    'data' => [],
+                ]);
+            }
         } catch (\Exception $e) {
             Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
@@ -671,7 +1001,7 @@ class Enquery_CRM_Controller extends Controller
                 // $formatedData = array_map(function ($items) {
 
                 // }, $eq_timeline);
-
+                //print_r();
                 if (empty($eq_timeline)) {
                     return response()->json([
                         'status' => 1,
