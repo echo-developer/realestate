@@ -287,7 +287,7 @@ class ProjectDetailsController extends Controller
                     ];
 
                     // Add gallery with 'file' key for each image
-                    $propertyData['gallery'] = processProjectGallery($property->gallery);
+                    $propertyData['gallery'] = processProjectGallery($project->gallery);
 
 
                     // Categorize by post type (buy/rent) and BHK type

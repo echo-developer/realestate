@@ -13,10 +13,50 @@
 
   }
 
+  #ed-nav {
+    white-space: nowrap;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+
   .upload-gallery {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
+  }
+
+  .dropdown-container {
+    display: flex;
+    gap: 10px;
+  }
+
+  .dropdown {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dropdown label {
+    font-size: 12px;
+    color: gray;
+    margin-bottom: 4px;
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    background: white;
+    padding: 0 5px;
+  }
+
+  .dropdown select {
+    width: 160px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: white;
+    appearance: none;
+    cursor: pointer;
   }
 
   .image-box {
@@ -96,9 +136,9 @@
             </div>
             <div class="card-body">
               <ul class="list-info">
-              <li>
+                <li>
                   <b>Post For:</b>
-                    <span>{{ucfirst($projectData->settings->post_for)??'N/A'}}</span>
+                  <span>{{ucfirst($projectData->settings->post_for)??'N/A'}}</span>
                 </li>
                 <li>
                   <b>Project Type:</b>
@@ -148,31 +188,37 @@
             <div class="card-body">
               <ul class="list-info">
                 <li>
-                  <b>Configuration:</b>
-                  <span>N/A</span>
-                </li>
-                <li>
                   <b>Occupied Area:</b>
-                  <span>{{$projectData->settings->occupied_area??'N/A'}}</span>
+                  <span>{{$projectData->settings->occupied_area??'N/A'}} Sqft</span>
                 </li>
                 <li>
                   <b>Total Area:</b>
-                  <span>{{$projectData->settings->total_area??'N/A'}}</span>
+                  <span>{{$projectData->settings->total_area??'N/A'}} Sqft</span>
                 </li>
                 <li>
                   <b>Possession Status:</b>
                   <span> {{get_name_by_id('property_status_names','status_id',$projectData->additional->possession_status,'en')??'N/A'}}</span>
                 </li>
                 @if($projectData->additional->possession_status==1)
+                @php
+                $ageOptions = [
+                'new' => 'New Construction',
+                'less_than_5_years' => 'Less than 5 years',
+                '5_10_years' => '5 to 10 years',
+                '10_15_years' => '10 to 15 years',
+                '15_20_years' => '15 to 20 years',
+                'above_20_years' => 'Above 20 years'
+                ];
+                @endphp
                 <li>
                   <b>Age Of Constraction:</b>
-                  <span> {{$projectData->additional->construct_year??'N/A'}}</span>
+                  <span>{{ $ageOptions[$projectData->additional->construct_year] ?? 'N/A' }}</span>
                 </li>
                 @endif
                 @if($projectData->additional->possession_status==2)
                 <li>
                   <b>Expected Possesion Month Year:</b>
-                  <span> {{ date('F Y', strtotime($projectData->additional->expected_possesion_month_year)) ??'N/A'}}</span>
+                  <span>{{ $projectData->additional->possesion_month_possesion_year ? date('F Y', strtotime('01-' . $projectData->additional->possesion_month_possesion_year)) : 'N/A' }}</span>
                 </li>
                 @endif
                 <li>
@@ -194,7 +240,23 @@
                 </li>
                 <li>
                   <b>Facing:</b>
-                  <span>{{$projectData->settings->project_facing??'N/A'}}</span>
+                  <span>
+
+                    @php
+                    $project_facing = [
+                    'east' => 'East',
+                    'north' => 'North',
+                    'north_east' => 'North - East',
+                    'north_west' => 'North - West',
+                    'south' => 'South',
+                    'south_east' => 'South - East',
+                    'south_west' => 'South - West',
+                    'west' => 'West',
+                    ];
+                    @endphp
+                    {{$project_facing[$projectData->settings->project_facing] ??'N/A'}}
+
+                  </span>
                 </li>
                 <li>
                   <b>OverLooking:</b>
@@ -253,15 +315,46 @@
               <ul class="list-info">
                 <li>
                   <b>Water Availability:</b>
-                  <span>{{$projectData->additional->water_availability ?? 'N/A'}}</span>
+                  <span>
+                    @php
+                    $waterAvailability = [
+                    '24_hours' => '24 Hours Available',
+                    'partially_available' => 'Partially Available',
+                    'not_available' => 'Not Available',
+                    ];
+                    @endphp
+                    {{ $waterAvailability[$projectData->additional->water_availability] ?? 'N/A'}}
+
+                  </span>
                 </li>
                 <li>
                   <b>Status of Electricity:</b>
-                  <span>{{$projectData->additional->electric_availability ?? 'N/A'}}</span>
+                  <span>
+                    @php
+                    $electricityStatus = [
+                    'full_power_backup' => 'Full Power Backup',
+                    'partial_power_backup' => 'Partial Power Backup',
+                    'no_power_backup' => 'No Power Backup',
+                    ];
+                    @endphp
+
+                    {{$electricityStatus[$projectData->additional->electric_availability ]?? 'N/A'}}
+
+
+                  </span>
                 </li>
                 <li>
                   <b>Type of Ownership:</b>
-                  <span>{{$projectData->additional->type_of_ownership ?? 'N/A'}}</span>
+                  <span>
+                    @php
+                    $ownershipType = [
+                    'freehold' => 'Freehold',
+                    'leasehold' => 'Leasehold',
+                    'cooperative_society' => 'Co-operative Society',
+                    'power_of_attorney' => 'Power of Attorney'
+                    ];
+                    @endphp
+                    {{$ownershipType[$projectData->additional->type_of_ownership] ?? 'N/A'}}</span>
                 </li>
 
 

@@ -25,6 +25,8 @@ use Illuminate\Support\Facades\Log;
 class PropertyDetailsController extends Controller
 {
     protected $apiModel;
+    protected $project;
+    protected $project_id;
     protected $propertyEditController;
 
     // public function __construct()
@@ -49,7 +51,18 @@ class PropertyDetailsController extends Controller
 
 
         $property = PrefProperty::find($property_id);
-
+        log::info("property_id: " . $property_id);
+        $this->project_id = ProjectPropertyMapping::where('property_id', $property_id)
+            ->value('project_id');
+        log::info("project_id: " . $this->project_id);
+        $this->project = PrefProject::where('id', $this->project_id)
+            ->with(
+                'settings',
+                'galleries:id,project_id,image_type',
+                'galleries.images:id,gallary_id,filename,caption',
+            )
+            ->first();
+        log::info("project: " .  $this->project);
         if ($property) {
             $property->increment('views');
             if ($property->views >= 10) {
@@ -72,6 +85,8 @@ class PropertyDetailsController extends Controller
             recordView('property', $property_id, (int) $user_id);
         }
         try {
+
+
 
             if (!empty($property_id)) {
 
@@ -112,7 +127,8 @@ class PropertyDetailsController extends Controller
 
                     $certificates = CertificatesModel::where([
                         'property_id' => $property->property_id,
-                        'status' => config('constants.STATUS_ACTIVE')])
+                        'status' => config('constants.STATUS_ACTIVE')
+                    ])
                         ->get()
                         ->makeHidden(['id', 'project_id', 'property_id', 'updated_at'])->toArray();
 
@@ -152,19 +168,15 @@ class PropertyDetailsController extends Controller
 
                     /* ------------------------------------------------------ Get properties Project Start ---------------------------------------------------------*/
 
-                    $projectId = ProjectPropertyMapping::where('property_id', $property->property_id)
-                        ->value('project_id');
-                    $project = PrefProject::where('id', $projectId)
-                        ->with('settings')
-                        ->first();
-
-
-                    if ($project && $project->settings) {
 
 
 
-                        $projectData = $project->toArray();
-                        $projectData = array_merge($projectData, $project->settings->toArray());
+                    if ($this->project &&   $this->project->settings) {
+
+
+
+                        $projectData = $this->project->toArray();
+                        $projectData = array_merge($projectData, $this->project->settings->toArray());
 
 
                         unset($projectData['settings']);
@@ -192,7 +204,7 @@ class PropertyDetailsController extends Controller
 
                     foreach ($allFloorPlanTypes as $type) {
                         $typeName = $type->names->first()->type ?? null;
-
+                        $projectId = $this->project_id;
                         $filteredPlans = $floorPlans->filter(function ($plan) use ($type, $projectId) {
                             return $plan->fp_type == $type->id;
                         })->map(function ($plan) use ($projectId) {
@@ -397,7 +409,22 @@ class PropertyDetailsController extends Controller
                     $possesionYear = !empty($possesionTime[1]) ? $possesionTime[1] : null;
 
 
+                    $baseImageUrl = asset('user_upload/project_images');
 
+                    $formattedPropertyGalleries = collect($this->project->galleries)->map(function ($gallery) use ($baseImageUrl) {
+                        return [
+                            'gallery' => $gallery['image_type'], // Renaming `image_type` to `gallery`
+                            'images' => collect($gallery['images'])->map(function ($image) use ($baseImageUrl) {
+                                return [
+                                    'image_id' => $image['id'], // Generating `image_id`
+                                    'image_name' => $image['filename'],
+                                    'image_url' => $baseImageUrl.'/' . $image['filename'],
+                                    'caption' => $image['caption'] ?? null,
+                                ];
+                            })->toArray(),
+                        ];
+                    })->toArray();
+                    unset($this->project->galleries);
                     return [
                         'property_id' => $property->property_id,
                         'property_code' => UniquePropertyCode($property->property_id),
@@ -427,7 +454,7 @@ class PropertyDetailsController extends Controller
                         'approved_by' => $property->approved_by,
 
                         'main_road_facing' => $property->faces_main_road,
-                        'galleries' => $transformedData,
+                        'galleries' => $transformedData!=null?$transformedData: $formattedPropertyGalleries,
                         'address' => $property->property_address,
                         'locality' => $property->locality,
                         'latitude' => $property->latitude,

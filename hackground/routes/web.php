@@ -22,11 +22,13 @@ use App\Http\Controllers\Admin\AllProjectController;
 use App\Http\Controllers\Admin\AllSettingController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\AllPropertyController;
+use App\Http\Controllers\Admin\ProjectEditController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\GroupSettingController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\PostPropertyController;
+use App\Http\Controllers\Admin\AdvertisementController;
 use App\Http\Controllers\Admin\ResetPasswordController;
 use App\Http\Controllers\Admin\MembershipPlanController;
 use App\Http\Controllers\Admin\ProjectAmenityController;
@@ -40,7 +42,6 @@ use App\Http\Controllers\Admin\PropertyTransactionController;
 use App\Http\Controllers\Admin\NotificationTemplateController;
 use App\Http\Controllers\Admin\Property_SubCategoryController;
 use App\Http\Controllers\Admin\AdvertisementPackagesController;
-use App\Http\Controllers\Admin\AdvertisementController;
 
 
 /*
@@ -395,7 +396,9 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('savedata', 'saveProjectData')->name('project.saveProjectData');
         Route::post('edit-project', 'editProjectData')->name('project.editproject');
         Route::get('load-modal', 'loadModalPage')->name('project.modal');
-
+    });
+    Route::prefix('project')->controller(ProjectEditController::class)->group(function () {
+        Route::post('update-project', 'editProjectData')->name('project.updateProjectData');
     });
     Route::get('floor_plan', [FloorPlanController::class, 'view']);
     Route::post('add_floor_plan', [FloorPlanController::class, 'addFloorPlan']);
@@ -456,7 +459,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::POST('advertisement/edit', 'edit');
         Route::post('advertisement/change-status', 'change_status');
     });
-      
+
     Route::prefix('membership')->controller(MembershipPlanController::class)->group(function () {
         Route::get('plan', 'index')->name('plan.index');
         Route::post('plan/add', 'store')->name('plan.store');
@@ -475,9 +478,7 @@ Route::middleware('admin_auth')->group(function () {
     });
     Route::prefix('transaction')->controller(TransactionController::class)->group(function () {
         Route::get('transaction_list', 'index')->name('transaction.index');
-       
     });
-    
 });
 
 Route::get('/artisan-run', function () {
