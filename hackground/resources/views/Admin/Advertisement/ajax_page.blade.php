@@ -185,7 +185,6 @@
                 {
                     $.each(res.errors, function(index, error) {
                         $("."+index+"Error").html(error);
-                        //alert(index+'/'+error);
                     });
                 }
             }
@@ -206,7 +205,6 @@
     
     $("input[name=creative]").on('change',function(){
         var creative = $(this).val();
-        alert(creative);
         if(creative == '1'){
             $("#price-without-banner").css('display','block');
         }else{
@@ -512,7 +510,6 @@
                 {
                     $.each(res.errors, function(index, error) {
                         $("."+index+"Error").html(error);
-                        //alert(index+'/'+error);
                     });
                 }
             }
@@ -533,7 +530,6 @@
     
     $("input[name=creative]").on('change',function(){
         var creative = $(this).val();
-        alert(creative);
         if(creative == '1'){
             $("#price-without-banner").css('display','block');
         }else{
@@ -568,7 +564,6 @@
     
     function checkAdType(){
         var selected_val = $('[name="ad_type"] :selected').val();
-        alert(selected_val);
         if(selected_val == 'image'){
             $('#ad_code_wrapper').hide();
             $('#ad_image_wrapper').show();
@@ -596,7 +591,6 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(data) {
-                alert(data.status);
                 if (data.status == 'OK') { 
                     $("#ad_image").val(data.file_name);
                     $("#image_preview1").show();
