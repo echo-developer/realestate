@@ -83,6 +83,7 @@ const AddPropertyData = ({
         })
 
         if (res && res?.status === 1) {
+          toast.success(res.message || "File uploaded successfully");
           const newBhkState = towers[towerIndex]?.floor_data?.[floorIndex]?.bhk_configurations?.[bhkIndex];
           newBhkState.floor_plan_image = res?.files || "",
             newBhkState.image_url = res?.image_url || "";
@@ -131,7 +132,39 @@ const AddPropertyData = ({
         }
       })
 
-      console.log("res, res", res)
+      if (res && res?.status === 1) {
+        toast.success(res?.message || "File deleted successfully");
+        const newBhkState = towers[towerIndex]?.floor_data?.[floorIndex]?.bhk_configurations?.[bhkIndex];
+        newBhkState.floor_plan_image = "",
+          newBhkState.image_url = "";
+
+        const newState = towers.map((tower, i) => {
+          if (towerIndex !== i) {
+            return tower;
+          } else {
+            return {
+              ...tower,
+              floor_data: (tower.floor_data.map((floor, f_index) => {
+                if (f_index !== floorIndex) {
+                  return floor;
+                } else {
+                  return {
+                    ...floor,
+                    bhk_configurations: (floor.bhk_configurations.map((bhk, b_index) => {
+                      if (b_index !== bhkIndex) {
+                        return bhk;
+                      } else {
+                        return newBhkState;
+                      }
+                    }))
+                  }
+                }
+              }))
+            }
+          }
+        })
+        setTowers(newState);
+      }
     } catch (error) {
       toast.error(error.message || "Failed to delete image")
     }
