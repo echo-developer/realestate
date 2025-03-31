@@ -31,7 +31,7 @@ const AddPropertyData = ({
       setTowers(Array.from({ length: totalTowers }, () => createNewTower()));
     }
   }, [totalTowers]);
-  
+
   const FetchProjectPropertyData = async (projectId) => {
     setLoading(true);
     try {
@@ -40,7 +40,7 @@ const AddPropertyData = ({
         method: "GET",
         data: { user_id: memberId, project_id: projectId },
       });
-  
+
       if (response?.status === 1 && response.data.length > 0) {
         // Initialize towers based on fetched data
         const initializedTowers = response.data.map((tower) => ({
@@ -57,7 +57,7 @@ const AddPropertyData = ({
           initializedTowers.length < totalTowers
             ? [...initializedTowers, ...Array.from({ length: totalTowers - initializedTowers.length }, createNewTower)]
             : initializedTowers;
-  
+
         setTowers(filledTowers);
       } else {
         // Initialize towers based on totalTowers if no data from API
@@ -69,7 +69,12 @@ const AddPropertyData = ({
       setLoading(false);
     }
   };
-  
+
+  const handleBhkImgUpload = (e) => {
+    console.log("bhk image upload ran");
+    console.log("file", e.target.files);
+  }
+
 
   const createNewTower = () => ({
     tower_name: "",
@@ -261,8 +266,9 @@ const AddPropertyData = ({
   };
 
   const handleSave = async () => {
-    const payload = towers.map((tower) => ({
+    const payload = towers.map((tower, i) => ({
       ...tower,
+      slug: `tower${i+1}`,
       projectName,
       projectLocation,
       floor_data: tower.floor_data.map((flat) => ({
@@ -276,8 +282,9 @@ const AddPropertyData = ({
       })),
     }));
 
+
     try {
-    const res=  await callApi({
+      const res = await callApi({
         api: "/save-project-property",
         method: "POST",
         data: {
@@ -286,10 +293,10 @@ const AddPropertyData = ({
           tower_data: JSON.stringify(payload),
         },
       });
-      if(res&& res.status===1){
+      if (res && res.status === 1) {
         toast.success(res.message || "Data Update Successfully")
         onClose();
-      }else{
+      } else {
         toast.error(res.message || "Data Update failed")
       }
     } catch (error) {
@@ -315,17 +322,17 @@ const AddPropertyData = ({
             {/* Tower Configuration */}
             <div className="row gx-2">
               <div className="col-md-3 col-sm-6 col-12 mb-3">
-                <div className="form-floating">                
-                <input
-                  type="text"
-                  className="form-control"
-                  value={tower.tower_name}
-                  onChange={(e) =>
-                    handleTowerChange(towerIndex, "tower_name", e.target.value)
-                  }
-                  placeholder=""
-                />
-                <label>Tower Name</label>
+                <div className="form-floating">
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={tower.tower_name}
+                    onChange={(e) =>
+                      handleTowerChange(towerIndex, "tower_name", e.target.value)
+                    }
+                    placeholder=""
+                  />
+                  <label>Tower Name</label>
                 </div>
                 {validationErrors[`tower_name_${towerIndex}`] && (
                   <div className="text-danger small">
@@ -334,17 +341,17 @@ const AddPropertyData = ({
                 )}
               </div>
               <div className="col-md-3 col-6 mb-3">
-              <div className="form-floating">                
-                <input
-                  type="number"
-                  className="form-control"
-                  value={tower.lift_no}
-                  onChange={(e) =>
-                    handleTowerChange(towerIndex, "lift_no", e.target.value)
-                  }
-                  placeholder=""
-                />
-                <label>Lift Number</label>
+                <div className="form-floating">
+                  <input
+                    type="number"
+                    className="form-control"
+                    value={tower.lift_no}
+                    onChange={(e) =>
+                      handleTowerChange(towerIndex, "lift_no", e.target.value)
+                    }
+                    placeholder=""
+                  />
+                  <label>Lift Number</label>
                 </div>
                 {validationErrors[`lift_no_${towerIndex}`] && (
                   <div className="text-danger small">
@@ -353,17 +360,17 @@ const AddPropertyData = ({
                 )}
               </div>
               <div className="col-md-3 col-6 mb-3">
-              <div className="form-floating">                
-                <input
-                  type="number"
-                  className="form-control"
-                  value={tower.stair_no}
-                  onChange={(e) =>
-                    handleTowerChange(towerIndex, "stair_no", e.target.value)
-                  }
-                  placeholder=""
-                />
-                <label>Stair Number</label>
+                <div className="form-floating">
+                  <input
+                    type="number"
+                    className="form-control"
+                    value={tower.stair_no}
+                    onChange={(e) =>
+                      handleTowerChange(towerIndex, "stair_no", e.target.value)
+                    }
+                    placeholder=""
+                  />
+                  <label>Stair Number</label>
                 </div>
                 {validationErrors[`stair_no_${towerIndex}`] && (
                   <div className="text-danger small">
@@ -371,18 +378,18 @@ const AddPropertyData = ({
                   </div>
                 )}
               </div>
-              <div className="col-md-3 col-sm-6 col-12 mb-3">                
-              <div className="form-floating">
-                <input
-                  type="number"
-                  className="form-control"
-                  value={tower.fire_safety}
-                  onChange={(e) =>
-                    handleTowerChange(towerIndex, "fire_safety", e.target.value)
-                  }
-                  placeholder=""
-                />
-                <label>Fire Safety</label>
+              <div className="col-md-3 col-sm-6 col-12 mb-3">
+                <div className="form-floating">
+                  <input
+                    type="number"
+                    className="form-control"
+                    value={tower.fire_safety}
+                    onChange={(e) =>
+                      handleTowerChange(towerIndex, "fire_safety", e.target.value)
+                    }
+                    placeholder=""
+                  />
+                  <label>Fire Safety</label>
                 </div>
                 {validationErrors[`fire_safety_${towerIndex}`] && (
                   <div className="text-danger small">
@@ -398,15 +405,15 @@ const AddPropertyData = ({
               {tower.floor_data.map((flat, flatIndex) => (
                 <fieldset key={flatIndex} className="border p-3 mb-3 position-relative">
                   <legend>
-                    Floor {flatIndex + 1}                                        
+                    Floor {flatIndex + 1}
                   </legend>
                   <Button
-                      variant="danger btn-delete"
-                      size="sm"
-                      onClick={() => removeFlat(towerIndex, flatIndex)}
-                      title="Remove Floor"                           
-                    >
-                      <i className="bi bi-x-lg"></i>
+                    variant="danger btn-delete"
+                    size="sm"
+                    onClick={() => removeFlat(towerIndex, flatIndex)}
+                    title="Remove Floor"
+                  >
+                    <i className="bi bi-x-lg"></i>
                   </Button>
                   <div className="row gx-2">
                     <div className="col-md-4 col-sm-6 mb-3">
@@ -430,50 +437,50 @@ const AddPropertyData = ({
                       {validationErrors[
                         `floor_no_${towerIndex}_${flatIndex}`
                       ] && (
-                        <div className="text-danger small">
-                          {
-                            validationErrors[
+                          <div className="text-danger small">
+                            {
+                              validationErrors[
                               `floor_no_${towerIndex}_${flatIndex}`
-                            ]
-                          }
-                        </div>
-                      )}
+                              ]
+                            }
+                          </div>
+                        )}
                     </div>
                     <div className="col-md-4 col-sm-6 mb-3">
-                    <div className="form-floating">
-                      <input
-                        type="number"
-                        className="form-control"
-                        value={flat.flat_no}
-                        onChange={(e) =>
-                          handleFlatChange(
-                            towerIndex,
-                            flatIndex,
-                            "flat_no",
-                            e.target.value
-                          )
-                        }
-                        placeholder=""
-                      />
-                      <label>Flat Number</label>
-                    </div>
+                      <div className="form-floating">
+                        <input
+                          type="number"
+                          className="form-control"
+                          value={flat.flat_no}
+                          onChange={(e) =>
+                            handleFlatChange(
+                              towerIndex,
+                              flatIndex,
+                              "flat_no",
+                              e.target.value
+                            )
+                          }
+                          placeholder=""
+                        />
+                        <label>Flat Number</label>
+                      </div>
                       {validationErrors[
                         `flat_no_${towerIndex}_${flatIndex}`
                       ] && (
-                        <div className="text-danger small">
-                          {
-                            validationErrors[
+                          <div className="text-danger small">
+                            {
+                              validationErrors[
                               `flat_no_${towerIndex}_${flatIndex}`
-                            ]
-                          }
-                        </div>
-                      )}
+                              ]
+                            }
+                          </div>
+                        )}
                     </div>
                   </div>
 
                   {/* BHK Configurations */}
                   {flat.bhk_configurations.map((bhk, bhkIndex) => (
-                    <fieldset key={bhkIndex} className="border p-3 mb-3 position-relative">                      
+                    <fieldset key={bhkIndex} className="border p-3 mb-3 position-relative">
                       <legend>Flats {bhkIndex + 1}</legend>
                       <Button
                         variant="danger btn-delete"
@@ -488,7 +495,7 @@ const AddPropertyData = ({
                         title="Remove Flats"
                       >
                         <i className="bi bi-x-lg"></i>
-                      </Button>                      
+                      </Button>
                       <div className="row gx-2">
                         <div className="col-md-4 col-sm-6 mb-3">
                           <div className="form-floating">
@@ -516,14 +523,14 @@ const AddPropertyData = ({
                           {validationErrors[
                             `bhk_type_${towerIndex}_${flatIndex}_${bhkIndex}`
                           ] && (
-                            <div className="text-danger small">
-                              {
-                                validationErrors[
+                              <div className="text-danger small">
+                                {
+                                  validationErrors[
                                   `bhk_type_${towerIndex}_${flatIndex}_${bhkIndex}`
-                                ]
-                              }
-                            </div>
-                          )}
+                                  ]
+                                }
+                              </div>
+                            )}
                         </div>
 
                         <div className="col-md-4 col-sm-6 mb-3">
@@ -548,14 +555,14 @@ const AddPropertyData = ({
                           {validationErrors[
                             `carpet_${towerIndex}_${flatIndex}_${bhkIndex}`
                           ] && (
-                            <div className="text-danger small">
-                              {
-                                validationErrors[
+                              <div className="text-danger small">
+                                {
+                                  validationErrors[
                                   `carpet_${towerIndex}_${flatIndex}_${bhkIndex}`
-                                ]
-                              }
-                            </div>
-                          )}
+                                  ]
+                                }
+                              </div>
+                            )}
                         </div>
 
                         <div className="col-md-4 col-sm-6 mb-3">
@@ -580,14 +587,14 @@ const AddPropertyData = ({
                           {validationErrors[
                             `super_${towerIndex}_${flatIndex}_${bhkIndex}`
                           ] && (
-                            <div className="text-danger small">
-                              {
-                                validationErrors[
+                              <div className="text-danger small">
+                                {
+                                  validationErrors[
                                   `super_${towerIndex}_${flatIndex}_${bhkIndex}`
-                                ]
-                              }
-                            </div>
-                          )}
+                                  ]
+                                }
+                              </div>
+                            )}
                         </div>
 
                         <div className="col-md-4 col-sm-6 mb-3">
@@ -612,14 +619,14 @@ const AddPropertyData = ({
                           {validationErrors[
                             `price_${towerIndex}_${flatIndex}_${bhkIndex}`
                           ] && (
-                            <div className="text-danger small">
-                              {
-                                validationErrors[
+                              <div className="text-danger small">
+                                {
+                                  validationErrors[
                                   `price_${towerIndex}_${flatIndex}_${bhkIndex}`
-                                ]
-                              }
-                            </div>
-                          )}
+                                  ]
+                                }
+                              </div>
+                            )}
                         </div>
 
                         <div className="col-md-4 col-sm-6 mb-3">
@@ -648,15 +655,24 @@ const AddPropertyData = ({
                           {validationErrors[
                             `facing_${towerIndex}_${flatIndex}_${bhkIndex}`
                           ] && (
-                            <div className="text-danger small">
-                              {
-                                validationErrors[
+                              <div className="text-danger small">
+                                {
+                                  validationErrors[
                                   `facing_${towerIndex}_${flatIndex}_${bhkIndex}`
-                                ]
-                              }
-                            </div>
-                          )}
+                                  ]
+                                }
+                              </div>
+                            )}
                         </div>
+
+                        <div className="col-md-4 col-sm-6 mb-3">
+                          <div className="form-floating">
+                            <input type="file" className="form-control" onChange={handleBhkImgUpload} />
+                            <label>Upload File</label>
+                          </div>
+                        </div>
+
+
                       </div>
                     </fieldset>
                   ))}
