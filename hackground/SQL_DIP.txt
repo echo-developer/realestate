@@ -86,3 +86,6 @@ ALTER TABLE `pref_floor_plan`
  remove slug add plain type_id
 
  ALTER TABLE `pref_membership_plans` ADD `plan_type_id` INT NOT NULL AFTER `validity_days`;
+----3-31--25----
+ALTER TABLE `pref_project_properties` CHANGE `bhk_id` `slug` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+ALTER TABLE `pref_property_additional` ADD `slug` VARCHAR(255) NOT NULL AFTER `bhk_type`;

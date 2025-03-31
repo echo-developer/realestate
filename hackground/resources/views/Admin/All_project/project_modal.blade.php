@@ -18,6 +18,12 @@
         </div>
 
         <div class="form-group">
+            <label>Enter Token Amount:</label>
+            <input placeholder="Enter Token Amount" class="form-control" name="project_token" type="number"
+                value="{{ $projectData->additional->token_amount }}">
+        </div>
+
+        <div class="form-group">
             <label>Post For:</label>
             <div>
                 <label>
@@ -494,14 +500,20 @@
 
         <div class="image-tab-content" id="image-upload-page">
             <ul class="nav nav-underline nav-custom mb-3" id="image-tab-nav-upload">
-                @foreach($groupedGallery as $type => $images)
                 <li class="nav-item">
-                    <a class="image-tab-link-upload {{ $loop->first ? 'active' : '' }}" id="tab-upload-{{ $type }}" data-tab="{{ $type }}" href="javascript:void(0)">
-                        {{ ucfirst($type) }}
-                    </a>
+                    <a class="image-tab-link-upload active" id="tab-upload-interior" data-tab="interior" href="javascript:void(0)">Interior View</a>
                 </li>
-                @endforeach
+                <li class="nav-item">
+                    <a class="image-tab-link-upload" id="tab-upload-exterior" data-tab="exterior" href="javascript:void(0)">Exterior View</a>
+                </li>
+                <li class="nav-item">
+                    <a class="image-tab-link-upload" id="tab-upload-location" data-tab="location" href="javascript:void(0)">Location View</a>
+                </li>
+                <li class="nav-item">
+                    <a class="image-tab-link-upload" id="tab-upload-other" data-tab="other" href="javascript:void(0)">Other View</a>
+                </li>
             </ul>
+
         </div>
 
         <div class="form-field">
@@ -515,8 +527,14 @@
         @foreach($groupedGallery as $type => $images)
         <div class="img-content-upload" id="tab-content-upload-{{ $type }}" style="{{ $loop->first ? '' : 'display: none;' }}">
             <div class="upload-gallery" id="preview-upload-{{ $type }}">
+                @php
+                $imageFiles = [];
+                @endphp
                 @foreach($images as $galleryItem)
                 @foreach($galleryItem->images as $image)
+                @php
+                $imageFiles[] = $image->filename;
+                @endphp
                 <div class="image-box" data-filename="{{ $image->filename }}">
                     <img src="{{ asset('user_upload/project_images/' . $image->filename) }}" alt="Image">
                     <p class="image-caption">{{ $image->caption }}</p>
@@ -526,9 +544,10 @@
                 @endforeach
             </div>
             <!-- Hidden field for tab-wise image tracking -->
-            <input type="hidden" class="uploaded-files-input" id="uploadedFiles-{{ $type }}" name="uploadedFiles[{{ $type }}]">
+            <input type="hidden" class="uploaded-files-input" id="uploadedFiles-{{ $type }}" name="uploadedFiles[{{ $type }}]" value="{{ json_encode($imageFiles) }}">
         </div>
         @endforeach
+
 
 
 
@@ -592,6 +611,8 @@
         }
     };
 </script>
+<!-- FOR DISTANCE AND LANDMARK -->
+
 <script>
     $(document).ready(function() {
         // Tab switching - Updated to be more specific
@@ -643,12 +664,14 @@
         });
     });
 </script>
+<!-- FOR IMAGE -->
 <script>
     $(document).ready(function() {
         let activeTab = $(".image-tab-link-upload.active").data("tab");
         $("#activeTabName").val(activeTab);
         let uploadedFilesByTab = {};
 
+        // Initialize uploadedFilesByTab for each tab
         $(".upload-gallery").each(function() {
             let tabId = $(this).attr("id").replace("preview-upload-", "");
             uploadedFilesByTab[tabId] = [];
@@ -657,58 +680,107 @@
                 let filename = $(this).data("filename");
                 uploadedFilesByTab[tabId].push(filename);
             });
+
             $("#uploadedFiles-" + tabId).val(JSON.stringify(uploadedFilesByTab[tabId]));
         });
 
+        document.querySelectorAll('.uploaded-files-input').forEach(input => {
+            let fileType = input.id.replace('uploadedFiles-', '');
+            let uploadedFiles = JSON.parse(input.value || '[]');
+            uploadedFilesByTab[fileType] = uploadedFiles;
+        });
 
+        // Tab switching logic
         $("#image-tab-nav-upload .image-tab-link-upload").click(function() {
             activeTab = $(this).data("tab");
             $("#activeTabName").val(activeTab);
 
             $(".img-content-upload").hide();
             $("#tab-content-upload-" + activeTab).show();
-            $("#uploadedFiles-" + activeTab).val(JSON.stringify(uploadedFilesByTab[activeTab]));
+
+            // Load previous images for the selected tab
+            updateGalleryPreview(activeTab);
         });
 
+        // File upload handling
         $("#fileinput").on("change", function(event) {
             let files = event.target.files;
-            let previewContainer = $("#preview-upload-" + activeTab);
-            if (!uploadedFilesByTab[activeTab]) {
-                uploadedFilesByTab[activeTab] = [];
+            if (files.length === 0) {
+                alert("Please select at least one file.");
+                return;
             }
 
-            $.each(files, function(index, file) {
-                let reader = new FileReader();
+            let formData = new FormData();
+            for (let i = 0; i < files.length; i++) {
+                formData.append("images[]", files[i]);
+            }
+            formData.append("type", activeTab);
 
-                reader.onload = function(e) {
-                    let imageHtml = `
-                        <div class="image-box" data-filename="${file.name}">
-                            <img src="${e.target.result}" alt="Preview">
-                            <p class="image-caption">${file.caption}</p>
-                            <button class="remove-image" data-filename="${file.name}">×</button>
-                        </div>
-                    `;
-                    previewContainer.append(imageHtml);
-                };
-
-                reader.readAsDataURL(file);
-                uploadedFilesByTab[activeTab].push(file.name);
-            });
-
-            $("#uploadedFiles-" + activeTab).val(JSON.stringify(uploadedFilesByTab[activeTab]));
+            fetch(`{{url('project/store_project_image')}}`, {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    },
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        data.images.forEach((image) => {
+                            uploadedFilesByTab[activeTab].push(image.filename);
+                            previewImage(image.imageUrl, image.filename, activeTab);
+                        });
+                        updateHiddenField(activeTab);
+                    } else {
+                        alert("Upload failed.");
+                    }
+                })
+                .catch((error) => console.error(error));
         });
 
+        // Function to preview images from the server response
+        function previewImage(imageUrl, filename, tab) {
+            let previewContainer = $("#preview-upload-" + tab);
+            let imageHtml = `
+            <div class="image-box" data-filename="${filename}">
+                <img src="${imageUrl}" alt="Preview">
+                <button class="remove-image" data-filename="${filename}">×</button>
+            </div>
+        `;
+            previewContainer.append(imageHtml);
+        }
 
+        // Remove image functionality
         $(document).on("click", ".remove-image", function() {
             let fileName = $(this).data("filename");
             $(this).closest(".image-box").remove();
+
             if (uploadedFilesByTab[activeTab]) {
-                uploadedFilesByTab[activeTab] = uploadedFilesByTab[activeTab].filter(name => name !== fileName);
+                uploadedFilesByTab[activeTab] = uploadedFilesByTab[activeTab].filter(
+                    (name) => name !== fileName
+                );
             }
 
-            $("#uploadedFiles-" + activeTab).val(JSON.stringify(uploadedFilesByTab[activeTab]));
+            updateHiddenField(activeTab);
         });
 
+        // Update hidden input field with uploaded files for the given tab
+        function updateHiddenField(tab) {
+            $("#uploadedFiles-" + tab).val(JSON.stringify(uploadedFilesByTab[tab]));
+        }
+
+        // Function to update gallery preview on tab switch
+        function updateGalleryPreview(tab) {
+            let previewContainer = $("#preview-upload-" + tab);
+            previewContainer.empty();
+
+            uploadedFilesByTab[tab].forEach((filename) => {
+                let imageUrl = `{{ asset('user_upload/project_images/') }}/${filename}`;
+                previewImage(imageUrl, filename, tab);
+            });
+        }
+
+        // Show first tab by default
         $(".img-content-upload").first().show();
     });
 </script>

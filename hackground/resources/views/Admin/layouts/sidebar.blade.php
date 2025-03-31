@@ -44,7 +44,6 @@ $allmenus = AllmenusForSideBar();
                     <a href="{{ isset($allmenus[$main_menu->id]) ? '#' : url($main_menu->url) }}">
                         <i class="{{ $main_menu->icon_class }}"></i>
                         {{ $main_menu->name }}
-                       <?php log_anything($main_menu->url);  ?>
                         <i
                             class="{{ isset($allmenus[$main_menu->id]) ? 'metismenu-state-icon pe-7s-angle-down caret-left' : '' }}"></i>
                     </a>

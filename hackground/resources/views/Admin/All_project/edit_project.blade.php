@@ -161,6 +161,11 @@
                   <span>{{$projectData->additional->expected_price??'N/A'}}</span>
                 </li>
                 <li>
+                  <b>Token Amount:</b>
+                  <span>{{$projectData->additional->token_amount??'N/A'}}</span>
+                </li>
+               
+                <li>
                   <b>Instruction:</b>
                   <span>{{$projectData->additional->instruction??'N/A'}}</span>
                 </li>

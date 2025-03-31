@@ -194,7 +194,7 @@ class ProjectEditController extends Controller
             'project_amenity' => 'amenities',
             'possession_status' => 'possession_status',
             'currency' => 'currency',
-            'token_amount' => 'token_amount',
+            'token_amount' => 'project_token',
             'expected_price' => 'project_price',
             'developer_details' => 'developer_details',
             'developer_name' => 'developer_name',
@@ -253,24 +253,39 @@ class ProjectEditController extends Controller
             return;
         }
 
-        foreach ($galleries as $imageType => $images) {
-            $gallery = ProjectGallery::where('project_id', $projectId)
-                ->where('image_type', $imageType)
-                ->update([
-                    'project_id' => $projectId,
-                    'image_type' => $imageType
-                ]);
+        foreach ($galleries as $imageType => $imagesJson) {
+            // Decode JSON-encoded image names
+            $images = json_decode($imagesJson, true);
+            if (!is_array($images)) {
+                continue;
+            }
 
-            foreach ((array) $images as $imageName) {
+            // Create or update gallery entry
+            $gallery = ProjectGallery::updateOrCreate(
+                ['project_id' => $projectId, 'image_type' => $imageType],
+                ['project_id' => $projectId, 'image_type' => $imageType]
+            );
+
+            // Get existing images in the database
+            $existingImages = ProjectGalleryImages::where('gallary_id', $gallery->id)
+                ->pluck('filename')
+                ->toArray();
+
+            // Find images to delete
+            $imagesToDelete = array_diff($existingImages, $images);
+            if (!empty($imagesToDelete)) {
                 ProjectGalleryImages::where('gallary_id', $gallery->id)
-                    ->where('filename', $imageName)
-                    ->update([
-                        'gallary_id' => $gallery->id,
-                        'filename' => $imageName,
-                        'caption' => null
-                    ]);
+                    ->whereIn('filename', $imagesToDelete)
+                    ->delete();
+            }
+
+            // Add or update new images
+            foreach ($images as $imageName) {
+                ProjectGalleryImages::updateOrCreate(
+                    ['gallary_id' => $gallery->id, 'filename' => $imageName],
+                    ['gallary_id' => $gallery->id, 'filename' => $imageName, 'caption' => null]
+                );
             }
         }
     }
-    
 }

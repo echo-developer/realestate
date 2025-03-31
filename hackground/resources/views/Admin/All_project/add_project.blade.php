@@ -89,7 +89,7 @@
           <div class="card-body">
             <form method="post">
 
-            <input type="hidden" id="user_id" name="uid"  value="{{$uid}}">
+              <input type="hidden" id="user_id" name="uid" value="{{$uid}}">
 
               <div id="step-2" style="display:none1;">
                 <label class="form-label">You are here to</label>
@@ -171,15 +171,15 @@
                           type="text"><span class="input-group-text">sqft</span></div>
                     </div>
                   </div>
-                    <div class="col-lg-6 col-12">
-                      <div class="form-field">
-                        <label class="form-label">Total Area</label>
-                        <div class="input-group">
-                          <input class="form-control" placeholder="Type Total Area" name="total_area" type="number"  oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-                          <span class="input-group-text">sqft</span>
-                        </div>
+                  <div class="col-lg-6 col-12">
+                    <div class="form-field">
+                      <label class="form-label">Total Area</label>
+                      <div class="input-group">
+                        <input class="form-control" placeholder="Type Total Area" name="total_area" type="number" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                        <span class="input-group-text">sqft</span>
                       </div>
                     </div>
+                  </div>
                 </div>
                 <div class="form-group row align-items-center">
                   <div class="col-md-6">
@@ -336,7 +336,7 @@
                   <button type="button" class="btn btn-secondary btn-back">Back</button>
                   <button type="button" class="btn btn-primary btn-next" data-step="5">Next <i class="bi bi-arrow-right"></i></button>
                 </div>
-              </div> 
+              </div>
 
               <div id="step-6" style="display:none;">
                 <ul class="nav nav-tabs" id="imageTypeTabs">
@@ -368,13 +368,37 @@
                 <!-- Hidden Field to Store Image Names -->
                 <input type="hidden" id="uploadedImages" name="uploaded_images">
 
-
-                <div class="form-field">
-                  <label class="form-label">Description</label>
-                  <textarea rows="3" class="form-control" placeholder="Write something..."></textarea>
+                <div class="img-content" id="tab-content-interior">
+                  <div class="upload-gallery" id="preview-interior"></div>
+                  <div class="form-field">
+                    <label class="form-label">Description</label>
+                    <textarea rows="3" class="form-control" name="image_desc[interior]" placeholder="Write something..."></textarea>
+                  </div>
                 </div>
-                <!-- Preview Container -->
-                <div class="upload-gallery" id="previewGallery"></div>
+
+                <div class="img-content" id="tab-content-exterior" style="display:none">
+                  <div class="upload-gallery" id="preview-exterior"></div>
+                  <div class="form-field">
+                    <label class="form-label">Description</label>
+                    <textarea rows="3" class="form-control" name="image_desc[exterior]" placeholder="Write something..."></textarea>
+                  </div>
+                </div>
+
+                <div class="img-content" id="tab-content-location" style="display:none">
+                  <div class="upload-gallery" id="preview-location"></div>
+                  <div class="form-field">
+                    <label class="form-label">Description</label>
+                    <textarea rows="3" class="form-control" name="image_desc[location]" placeholder="Write something..."></textarea>
+                  </div>
+                </div>
+
+                <div class="img-content" id="tab-content-other" style="display:none">
+                  <div class="upload-gallery" id="preview-other"></div>
+                  <div class="form-field">
+                    <label class="form-label">Description</label>
+                    <textarea rows="3" class="form-control" name="image_desc[other]" placeholder="Write something..."></textarea>
+                  </div>
+                </div>
 
 
                 <div id="step-6" style="display: none;" class="d-grid columns-2">
@@ -502,9 +526,8 @@
         activeTab = this.getAttribute('data-tab'); // Update active tab
       });
     });
-
-    // Handle file uploads
-    document.getElementById('fileinput').addEventListener('change', function() {
+    $('#fileinput').on('change', function() {
+      var activeTab = $(".image-tab-content .nav-link.active").attr("data-tab");
       let files = this.files;
       if (files.length === 0) {
         alert('Please select at least one file.');
@@ -515,63 +538,55 @@
       for (let i = 0; i < files.length; i++) {
         formData.append('images[]', files[i]);
       }
-      formData.append('type', activeTab); // Send tab info
+      //formData.append('type', activeType);
 
-      fetch(`{{url('project/store_project_image')}}`, {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-          }
-        })
-        .then(response => response.json())
-        .then(data => {
+      $.ajax({
+        url: "{{ url('/project/store_project_image') }}",
+        method: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(data) {
           if (data.success) {
-            data.images.forEach(image => {
-              uploadedImages[activeTab].push(image.filename);
-              previewImage(image.imageUrl, image.filename, activeTab);
+            $.each(data.images, function(index, image) {
+              previewImage(image.imageUrl, image.filename,
+                activeTab);
             });
-            updateHiddenField();
-          } else {
-            alert('Upload failed.');
+
+            //updateHiddenField();
           }
-        })
-        .catch(error => console.error(error));
-    });
-
-    // Function to preview uploaded images
-    function previewImage(imageUrl, filename, tab) {
-      let gallery = document.getElementById('previewGallery');
-      let imgWrapper = document.createElement('div');
-      imgWrapper.classList.add('preview-item');
-      imgWrapper.innerHTML = `
-            <img src="${imageUrl}" alt="Uploaded Image">
-            <button type="button" class="remove-btn" data-filename="${filename}" data-tab="${tab}">X</button>
-        `;
-      gallery.appendChild(imgWrapper);
-    }
-
-    // Function to update hidden field with tab-wise uploaded images
-    function updateHiddenField() {
-      let filteredImages = {};
-      Object.keys(uploadedImages).forEach(tab => {
-        if (uploadedImages[tab].length > 0) {
-          filteredImages[tab] = uploadedImages[tab];
+        },
+        error: function(xhr, status, error) {
+          console.error('AJAX Error:', error);
         }
       });
-      document.getElementById('uploadedImages').value = JSON.stringify(filteredImages);
+    });
+
+    function previewImage(imageUrl, filename, type) {
+      let gallery = $('#previewGallery');
+      let imgWrapper = $('<div class="preview-item"></div>');
+      imgWrapper.html(`
+        <img src="${imageUrl}" alt="Uploaded Image">
+        <button class="remove-btn" data-type="${type}" data-filename="${filename}">X</button><input type="hidden" name="image[${type}][]" value="${filename}" />`);
+      imgWrapper.find('.remove-btn').click(function() {
+        let fileType = $(this).data('type'); // Get the type
+        removeImage(imgWrapper, filename, fileType);
+      });
+      $("#preview-" + type).append(imgWrapper);
     }
 
-    // Event delegation for removing images
-    document.getElementById('previewGallery').addEventListener('click', function(event) {
-      if (event.target.classList.contains('remove-btn')) {
-        let filename = event.target.getAttribute('data-filename');
-        let tab = event.target.getAttribute('data-tab');
-        uploadedImages[tab] = uploadedImages[tab].filter(file => file !== filename);
-        event.target.parentElement.remove();
-        updateHiddenField();
+    function removeImage(previewItem, filename, type) {
+      previewItem.remove();
+      if (uploadedFiles[type]) {
+        uploadedFiles[type] = uploadedFiles[type].filter(file => file !== filename);
+        if (uploadedFiles[type].length === 0) {
+          delete uploadedFiles[type]; // Remove empty categories
+        }
       }
-    });
+    }
 
   });
 </script>
