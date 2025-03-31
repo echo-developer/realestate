@@ -72,39 +72,66 @@ const AddPropertyData = ({
 
   const handleBhkImgUpload = async (e, bhkIndex, floorIndex, towerIndex) => {
     const file = e.target.files?.[0];
-    console.log("file", file);
-    if(file) {
-      // const state = towers[towerIndex]?.floor_data?.[floorIndex]?.bhk_configurations?.[bhkIndex];
+    if (file) {
       try {
         const res = await callApi({
-          api: '/upload_floor_plan_image',
+          api: '/upload/floor-plan',
           method: "UPLOAD",
           data: {
             floor_plan_image: file,
-            bhk_index: bhkIndex,
-            floor_index: floorIndex,
-            tower_index: towerIndex,
           }
         })
 
-        console.log("res", res);
+        if (res && res?.status === 1) {
+          const newBhkState = towers[towerIndex]?.floor_data?.[floorIndex]?.bhk_configurations?.[bhkIndex];
+          newBhkState.floor_plan_image = res?.files || "",
+            newBhkState.image_url = res?.image_url || "";
+
+          const newState = towers.map((tower, i) => {
+            if (towerIndex !== i) {
+              return tower;
+            } else {
+              return {
+                ...tower,
+                floor_data: (tower.floor_data.map((floor, f_index) => {
+                  if (f_index !== floorIndex) {
+                    return floor;
+                  } else {
+                    return {
+                      ...floor,
+                      bhk_configurations: (floor.bhk_configurations.map((bhk, b_index) => {
+                        if (b_index !== bhkIndex) {
+                          return bhk;
+                        } else {
+                          return newBhkState;
+                        }
+                      }))
+                    }
+                  }
+                }))
+              }
+            }
+          })
+          setTowers(newState);
+
+        }
       } catch (error) {
         toast.error(error.message || "Failed to upload image");
       }
     }
   }
 
-  const handleBhkImgDelete = async (bhkIndex, floorIndex, towerIndex) => {
+  const handleBhkImgDelete = async (imageName, bhkIndex, floorIndex, towerIndex) => {
     try {
       const res = await callApi({
-        api: '/delete_floor_plan_image',
-        method: "POST",
+        api: '/delete/floor-plan-image',
+        method: "UPLOAD",
         data: {
-          bhk_index: bhkIndex,
-          floor_index: floorIndex,
-          tower_index: totalTowers,
+          floor_plan_image: imageName
         }
       })
+
+      console.log("res, res", res)
     } catch (error) {
       toast.error(error.message || "Failed to delete image")
     }
@@ -303,7 +330,7 @@ const AddPropertyData = ({
   const handleSave = async () => {
     const payload = towers.map((tower, i) => ({
       ...tower,
-      slug: `tower${i+1}`,
+      slug: `tower${i + 1}`,
       projectName,
       projectLocation,
       floor_data: tower.floor_data.map((flat) => ({
@@ -702,10 +729,36 @@ const AddPropertyData = ({
 
                         <div className="col-md-4 col-sm-6 mb-3">
                           <div className="form-floating">
-                            <input type="file" className="form-control" onChange={(e) => handleBhkImgUpload(e, bhkIndex, flatIndex, towerIndex)} />
-                            <label>Upload File</label>
+                            {bhk.floor_plan_image ? (
+                              <>
+                                <div className="position-relative">
+                                  <img
+                                    src={bhk.image_url}
+                                    alt="Floor Plan"
+                                    className="img-fluid rounded border"
+                                    style={{ maxWidth: "100%", height: "auto" }}
+                                  />
+                                  <button
+                                    className="delete-btn btn btn-light btn-sm position-absolute top-0 end-0 m-1 p-1 border rounded-circle shadow"
+                                    onClick={() => handleBhkImgDelete(bhk.floor_plan_image, bhkIndex, flatIndex, towerIndex)}
+                                  >
+                                    ❌
+                                  </button>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <input
+                                  type="file"
+                                  className="form-control"
+                                  onChange={(e) => handleBhkImgUpload(e, bhkIndex, flatIndex, towerIndex)}
+                                />
+                                <label>Upload File</label>
+                              </>
+                            )}
                           </div>
                         </div>
+
 
 
                       </div>
