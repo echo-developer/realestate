@@ -24,8 +24,8 @@ class AllProjectController extends Controller
             'location:project_id,address',
             'gallery:id,project_id,image_type',
             'gallery.images:gallary_id,filename,caption'
-            ]);
-
+            ])
+            ->orderBy('id', 'desc');
         if ($term) {
             $query->where(function ($q) use ($term) {
             $q->where('project_name', 'like', "%{$term}%")

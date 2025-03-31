@@ -240,7 +240,7 @@ class ProjectEditController extends Controller
     }
     private function saveProjectGalleries($projectId, $request)
     {
-        $galleries = $request->uploaded_images;
+        $galleries = $request->uploadedFiles;
 
         if (!$galleries) {
             return;

@@ -301,6 +301,44 @@ class ProjectDetailsController extends Controller
                 // Assign categorized properties
                 $flattenedData['project_properties'] = $categorizedProperties;
             }
+            $flattenedData['project_floor_plan'] = [];
+            if ($properties->isNotEmpty()) {
+                $categorizedPropertiesFloor = [];
+
+                foreach ($properties as $property) {
+
+                    $is_favorite = !empty($user_id) && DB::table('my_favorite_property')
+                        ->where('uid', $user_id)
+                        ->where('propID', $property->id)
+                        ->value('status') == config('constants.STATUS_ACTIVE');
+                    $propertyData = [];
+                    if (!empty($property->additional->floor_plan_image)) {
+                        // Default property data
+                        $propertyData = [
+                            'id' => $property->id,
+                            'uid' => $property->uid,
+                            'slug' => $property->slug,
+                            'post_for' => $property->settings->post_for ?? 'buy',
+                            'created_at' => $property->created_at,
+                            'bhk_type' => $property->additional->bhk_type ?? 'other',
+                            'facing_direction' => $property->additional->facing_direction ?? null,
+                            'carpet_area' => $property->settings->carpet_area ?? null,
+                            'super_area' => $property->settings->super_area ?? null,
+                            'expected_price' => $property->settings->expected_price ?? null,
+                            'floor_plan_image'=>$property->additional->floor_plan_image,
+                            'image_url'=> asset('user_upload/project_floor_plan/' . $property->additional->floor_plan_image)
+                        ];
+                    }
+
+                    $bhkType = $propertyData['bhk_type'];
+
+                    // Organize properties under post type and bhk type
+                    $categorizedPropertiesFloor[$bhkType][] = $propertyData;
+                }
+
+                $flattenedData['project_floor_plan'] = $categorizedPropertiesFloor;
+            }
+
 
             // Fetch Nearby Projects (within 5 km)
             $nearbyProjects = \App\Models\PrefProject::with('settings', 'additional', 'gallery', 'gallery.images')

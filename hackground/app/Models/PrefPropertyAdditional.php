@@ -24,6 +24,7 @@ class PrefPropertyAdditional extends Model
         'allowed_construction',
         'is_personal_washroom',
         'pantry_cafeteria_status',
+        'floor_plan_image',
         'is_corner_shop',
         'faces_main_road',
         'washroom',

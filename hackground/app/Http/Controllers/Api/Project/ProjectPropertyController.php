@@ -127,7 +127,8 @@ class ProjectPropertyController extends Controller
                                 ['pid' => $prop_ID],
                                 [
                                     'bhk_type' => $bhkdata['bhk_type'],
-                                    'facing_direction' => $bhkdata['property_facing']
+                                    'facing_direction' => $bhkdata['property_facing'],
+                                    'floor_plan_image'=>$bhkdata['floor_plan_image']
                                 ]
                             );
 
@@ -228,6 +229,8 @@ class ProjectPropertyController extends Controller
                                 'super_area' => $property->settings->super_area ?? null,
                                 'property_price' => $property->settings->expected_price ?? null,
                                 'property_facing' => $property->additional->facing_direction ?? null,
+                                'floor_plan_image' => $property->additional->floor_plan_image ?? null,
+                                'image_url'=> asset('user_upload/project_floor_plan/' . $property->additional->floor_plan_image)
                             ];
                         }
                     }

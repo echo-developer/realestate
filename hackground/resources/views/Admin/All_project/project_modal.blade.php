@@ -519,7 +519,7 @@
                 @foreach($galleryItem->images as $image)
                 <div class="image-box" data-filename="{{ $image->filename }}">
                     <img src="{{ asset('user_upload/project_images/' . $image->filename) }}" alt="Image">
-                    <p class="image-caption">{{ $image->filename }}</p>
+                    <p class="image-caption">{{ $image->caption }}</p>
                     <button class="remove-image" data-filename="{{ $image->filename }}">×</button>
                 </div>
                 @endforeach
@@ -684,7 +684,7 @@
                     let imageHtml = `
                         <div class="image-box" data-filename="${file.name}">
                             <img src="${e.target.result}" alt="Preview">
-                            <p class="image-caption">${file.name}</p>
+                            <p class="image-caption">${file.caption}</p>
                             <button class="remove-image" data-filename="${file.name}">×</button>
                         </div>
                     `;
