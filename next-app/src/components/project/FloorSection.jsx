@@ -18,6 +18,9 @@ const FloorSection = ({ detailsData }) => {
 
     const handleBhkChange = (e) => {
         setSelectedBhk(e.target.value)
+        setSelectedSqft("");
+        setOffCanvasList([])
+        setSelectedProperty(null);
     }
 
     useEffect(() => {
@@ -47,7 +50,7 @@ const FloorSection = ({ detailsData }) => {
     return (
         <>
             <div className="tab-content bg-white p-3 mb-4 shadow-sm rounded" id="nav-tabContent">
-                <h4 className="mb-3 text-primary">Property Flooring</h4>
+                <h4 className="mb-3 text-primary">Flooring Plan</h4>
                 <div className="row g-3">
                     {cards?.map((card, i) => (
                         <div className="col-md-6" key={i}>

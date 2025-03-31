@@ -30,6 +30,7 @@ import {
   flooringOptions,
 } from "../post/PropertyData";
 import ProjectReviewDetails from "../project/ProjectReviewDetails";
+import FloorSection from "../project/FloorSection";
 
 const CommercialProjectDetails = ({
   detailsData,
@@ -758,6 +759,7 @@ const CommercialProjectDetails = ({
               {/* <AdvertiserSection /> */}
 
               <FloorPlanSection detailsData={detailsData} />
+              {/* <FloorSection  */}
               
               <ProjectReviewDetails
                 project_reviews={detailsData?.project_reviews}
