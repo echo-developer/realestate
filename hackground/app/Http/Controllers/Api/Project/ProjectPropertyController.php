@@ -63,10 +63,12 @@ class ProjectPropertyController extends Controller
                     $tower = ProjectProperties::updateOrCreate(
                         [
                             'project_id' => $project_id,
-                            'tower_name' => $items['tower_name'],
+                            'slug' => $items['slug'],
+                            
                         ],
                         [
                             'tower_name' => $items['tower_name'],
+                            'slug' => $items['slug'],
                             'lift_no' => $items['lift_no'],
                             'stair_no' => $items['stair_no'],
                             'fire_safety' => $items['fire_safety']

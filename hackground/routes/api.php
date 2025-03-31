@@ -221,6 +221,9 @@ Route::get('projects-list', [ProjectHomeController::class, 'GetProjectsData']);
 
 Route::get('edit-project', [ProjectEditController::class, 'editProject']);
 Route::post('update_project', [ProjectEditController::class, 'Updateproject']);
+Route::post('upload/floor-plan', [ProjectImageUploade::class, 'uploadFloorPlan']);
+Route::post('delete/floor-plan-image', [ProjectImageUploade::class, 'destroyFloorPlanImage']);
+
 
 Route::get('get-project-properties', [ProjectPropertyController::class, 'GetProjectProperties']);
 Route::post('save-project-property', [ProjectPropertyController::class, 'SaveProjectProperty']);

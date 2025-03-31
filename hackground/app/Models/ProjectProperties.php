@@ -11,6 +11,7 @@ class ProjectProperties extends Model
     protected $fillable = [
         'project_id',
         'tower_name',
+        'slug',
         'lift_no',
         'stair_no',
         'fire_safety',

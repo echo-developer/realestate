@@ -42,6 +42,51 @@ class ProjectImageUploade extends Controller
         return response()->json(['error' => 'No files uploaded'], 400);
     }
 
+    public function uploadFloorPlan(Request $req)
+    {
+
+        $req->validate([
+            'floor_plan_image' => 'required',
+        ]);
+
+        $uploadedFiles = [];
+
+
+        if ($req->hasFile('floor_plan_image')) {
+            $file = $req->file('floor_plan_image');
+
+                $fileName = time() . '-' . $file->getClientOriginalName();
+                $file->move(public_path('user_upload/project_floor_plan/'), $fileName);
+                $uploadedFiles = $fileName;
+                $fileUrls = asset('user_upload/project_floor_plan/' . $fileName);
+            
+            return response()->json([
+                'status' => 1,
+                'message' => 'Files successfully uploaded',
+                'files' => $uploadedFiles,
+                'image_url' => $fileUrls
+            ]);
+        }
+
+        return response()->json(['error' => 'No files uploaded'], 400);
+    }
+    public function destroyFloorPlanImage(Request $req)
+    {
+
+        $filePath = public_path('user_upload/project_floor_plan/' . $req->floor_plan_image);
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+            
+            return response()->json([
+                'status' => 1,
+                'message' => 'Files successfully deleted',
+            ]);
+        
+
+        return response()->json(['error' => 'No files uploaded'], 400);
+    }
+    
     public function getAllProjectImages($id)
     {
 
