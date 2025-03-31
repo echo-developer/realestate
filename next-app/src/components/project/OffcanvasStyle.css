@@ -122,4 +122,17 @@
     color: #000; /* Darker text color for price */
   }
     
+  .sqft-option .checkmark,
+.property-option .checkmark {
+    display: none; /* Hides the checkmark */
+}
+
+.sqft-option.selected,
+.property-option.selected {
+    background-color: #1365cf; /* New background color */
+    color: #fff; /* White text for better contrast */
+    font-weight: bold;
+    border-color: #1365cf;
+}
+
   
