@@ -35,6 +35,12 @@ class Advertisement extends Model
     public function get_list($srch=array(),$paginate)
     {
         $query = DB::table('advertisements as a')->select('a.*');
+		if(!empty($srch['page'])) {
+            $query->where('a.page',$srch['page']);
+        }
+		if(!empty($srch['position'])) {
+            $query->where('a.position',$srch['position']);
+        }
         $query->orderBy('a.advertisement_id', 'desc');
         return $query->paginate($paginate);
     }

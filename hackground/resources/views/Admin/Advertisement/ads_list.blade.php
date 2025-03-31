@@ -50,12 +50,11 @@
                 <div class="col-md-3 col-sm-4">
                     <label for="lead_for">Page</label>
                     <div class="form-group">
-                        <select class="form-control" name="lead_for" id="lead_for">
+                        <select class="form-control" name="page" id="page" onchange="get_position()">
                             <option value="" >All</option>
-                            {{-- <option value="property" {{ request('lead_for') == 'property' ? 'selected' : ''; }}>Property</option> --}}
                             @if($pages)
                                 @foreach($pages as $k=>$p)
-                                <option value="{{ $p['slug'] }}">{{ $p['name'] }}</option>
+                                <option value="{{ $p['slug'] }}" {{ request('page') == $p['slug'] ? 'selected' : '' }}>{{ $p['name'] }}</option>
                                 @endforeach
                             @endif
                         </select>
@@ -63,16 +62,10 @@
                 </div>
                 <div class="col-md-3 col-sm-4">
                     <label for="category_key">Position </label>
-                    <div class="form-group">
-                        <select class="form-control" name="position">
+                    <div class="input-group">
+                        <select class="form-control" name="position" id="position" >
                             <option value="">-Select-</option>
                         </select>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-4">
-                    <label for="lead_type">Member Name</label>
-                    <div class="input-group">
-                        <input class="form-control" id="member_name" placeholder="Search by member" name="member_name" value="{{ request('member_name') }}" />
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-search"></i>
@@ -216,6 +209,7 @@
     function get_position(){
         reset_select([$('[name="position"]'), $('[name="ad_size"]')]);
         var page = $('[name="page"] :selected').val();
+
         $.get('<?php echo url('ads-packages/options?option=page_position&page=')?>'+page, function(res){
             $('[name="position"]').html(res);
         });

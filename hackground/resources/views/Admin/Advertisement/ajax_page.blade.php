@@ -68,47 +68,50 @@
                     <div class="form-group">
                         <label for="category_key">Type </label>
                         <select class="form-control" name="ad_type" onchange="checkAdType()">
-                            <option value="admin">Admin</option>
-                            <option value="script">Script</option>
                             <option value="image">Image</option>
+                            <option value="script">Script</option>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="ufile">Advertisement Image</label>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" name="upload_file1" id="upload_file1"
-                                    class="custom-file-input" >
-                                <label class="custom-file-label" for="ufile">Choose file</label>
+                    <div id="ad_image_wrapper">
+                        <div class="form-group">
+                            <label for="ufile">Advertisement Image</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" name="upload_file1" id="upload_file1"
+                                        class="custom-file-input" >
+                                    <label class="custom-file-label" for="ufile">Choose file</label>
+                                </div>
+                                <input type="hidden" name="ad_image" id="ad_image" />
                             </div>
-                            <input type="hidden" name="ad_image" id="ad_image" />
+                        </div>
+                        <div class="form-group">
+                            <img id="image_preview1" style="display:none; width: 100px; height: auto;" />
+                            <button type="button" id="delete_image_btn1" style="display:none;"
+                                class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <img id="image_preview1" style="display:none; width: 100px; height: auto;" />
-                        <button type="button" id="delete_image_btn1" style="display:none;"
-                            class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="ufile">Advertisement Image Mobile</label>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" name="upload_file2" id="upload_file2"
-                                    class="custom-file-input">
-                                <label class="custom-file-label" for="ufile">Choose file</label>
+                    <div id="ad_image_mobile_wrapper">
+                        <div class="form-group">
+                            <label for="ufile">Advertisement Image Mobile</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" name="upload_file2" id="upload_file2"
+                                        class="custom-file-input">
+                                    <label class="custom-file-label" for="ufile">Choose file</label>
+                                </div>
+                                <input type="hidden" name="ad_image_mobile" id="ad_image_mobile" />
                             </div>
-                            <input type="hidden" name="ad_image_mobile" id="ad_image_mobile" />
+                        </div>
+                        <div class="form-group">
+                            <img id="image_preview2" src=" " style="display:none; width: 100px; height: auto;" />
+                            <button type="button" id="delete_image_btn2" style="display:none;"
+                                class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <img id="image_preview2" src=" " style="display:none; width: 100px; height: auto;" />
-                        <button type="button" id="delete_image_btn2" style="display:none;"
-                            class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
-                    </div>
 
-                    <div class="form-group" id="ad_code_wrapper">
+                    <div class="form-group" id="ad_code_wrapper" style="display:none">
                         <label for="ad_code">Advertisement Code </label>
                         <textarea class="form-control" name="ad_code"></textarea>
                     </div>
@@ -377,61 +380,63 @@
                     <div class="form-group">
                         <label for="category_key">Type </label>
                         <select class="form-control" name="ad_type" onchange="checkAdType()">
-                            <option value="admin" <?php if($detail['ad_type'] == 'admin'){echo "selected";} ?> >Admin</option>
-                            <option value="script" <?php if($detail['ad_type'] == 'script'){echo "selected";} ?>>Script</option>
                             <option value="image" <?php if($detail['ad_type'] == 'image'){echo "selected";} ?> >Image</option>
+                            <option value="script" <?php if($detail['ad_type'] == 'script'){echo "selected";} ?>>Script</option>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="ufile">Advertisement Image</label>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" name="upload_file1" id="upload_file1"
-                                    class="custom-file-input" >
-                                <label class="custom-file-label" for="ufile">Choose file</label>
+                    <div id="ad_image_wrapper">
+                        <div class="form-group">
+                            <label for="ufile">Advertisement Image</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" name="upload_file1" id="upload_file1"
+                                        class="custom-file-input" >
+                                    <label class="custom-file-label" for="ufile">Choose file</label>
+                                </div>
+                                <input type="hidden" name="ad_image" id="ad_image" value="{{ !empty($detail['ad_image']) ? $detail['ad_image'] : '' }}" />
                             </div>
-                            <input type="hidden" name="ad_image" id="ad_image" value="{{ !empty($detail['ad_image']) ? $detail['ad_image'] : '' }}" />
                         </div>
+                        @if($detail['ad_image'])
+                        <div class="form-group">
+                            <img id="image_preview1" src="{{ asset('user_upload/advertisement/'.$detail['ad_image']) }}" style="width: 100px; height: auto;" />
+                            <button type="button" id="delete_image_btn1" class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
+                        </div>
+                        @else
+                        <div class="form-group">
+                            <img id="image_preview1" style="display:none; width: 100px; height: auto;" />
+                            <button type="button" id="delete_image_btn1" style="display:none;"
+                                class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
+                        </div>
+                        @endif
                     </div>
-                    @if($detail['ad_image'])
-                    <div class="form-group">
-                        <img id="image_preview1" src="{{ asset('user_upload/advertisement/'.$detail['ad_image']) }}" style="width: 100px; height: auto;" />
-                        <button type="button" id="delete_image_btn1" class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
-                    </div>
-                    @else
-                    <div class="form-group">
-                        <img id="image_preview1" style="display:none; width: 100px; height: auto;" />
-                        <button type="button" id="delete_image_btn1" style="display:none;"
-                            class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
-                    </div>
-                    @endif
                     
-
-                    <div class="form-group">
-                        <label for="ufile">Advertisement Image Mobile</label>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" name="upload_file2" id="upload_file2"
-                                    class="custom-file-input">
-                                <label class="custom-file-label" for="ufile">Choose file</label>
+                    <div id="ad_image_mobile_wrapper">
+                        <div class="form-group">
+                            <label for="ufile">Advertisement Image Mobile</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" name="upload_file2" id="upload_file2"
+                                        class="custom-file-input">
+                                    <label class="custom-file-label" for="ufile">Choose file</label>
+                                </div>
+                                <input type="hidden" name="ad_image_mobile" id="ad_image_mobile" value="{{ !empty($detail['ad_image_mobile']) ? $detail['ad_image_mobile'] : '' }}" />
                             </div>
-                            <input type="hidden" name="ad_image_mobile" id="ad_image_mobile" value="{{ !empty($detail['ad_image_mobile']) ? $detail['ad_image_mobile'] : '' }}" />
                         </div>
+                        @if($detail['ad_image_mobile'])
+                        <div class="form-group">
+                            <img id="image_preview2" src="{{ asset('user_upload/advertisement/'.$detail['ad_image_mobile']) }}" style="width: 100px; height: auto;" />
+                            <button type="button" id="delete_image_btn2"
+                                class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
+                        </div>
+                        @else
+                        <div class="form-group">
+                            <img id="image_preview2" src="" style="display:none; width: 100px; height: auto;" />
+                            <button type="button" id="delete_image_btn2" style="display:none;"
+                                class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
+                        </div>
+                        @endif
                     </div>
-                    @if($detail['ad_image_mobile'])
-                    <div class="form-group">
-                        <img id="image_preview2" src="{{ asset('user_upload/advertisement/'.$detail['ad_image_mobile']) }}" style="width: 100px; height: auto;" />
-                        <button type="button" id="delete_image_btn2"
-                            class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
-                    </div>
-                    @else
-                    <div class="form-group">
-                        <img id="image_preview2" src="" style="display:none; width: 100px; height: auto;" />
-                        <button type="button" id="delete_image_btn2" style="display:none;"
-                            class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
-                    </div>
-                    @endif
 
                     <div class="form-group" id="ad_code_wrapper">
                         <label for="ad_code">Advertisement Code </label>
@@ -444,12 +449,12 @@
                     </div>
 
                     <div class="form-group">
-                       <p><b>Status</b></p>
+                        <p><b>Status</b></p>
                         <div class="radio-inline">
                             <input type="radio" name="status" value="1" class="magic-radio" id="status_1" checked>
                             <label for="status_1">Active</label> 
                         </div>
-                         <div class="radio-inline">
+                        <div class="radio-inline">
                           <input type="radio" name="status" value="0" class="magic-radio" id="status_0">
                           <label for="status_0">Inactive</label> 
                         </div>
@@ -563,6 +568,7 @@
     
     function checkAdType(){
         var selected_val = $('[name="ad_type"] :selected').val();
+        alert(selected_val);
         if(selected_val == 'image'){
             $('#ad_code_wrapper').hide();
             $('#ad_image_wrapper').show();
