@@ -189,7 +189,7 @@ Route::controller(Enquery_CRM_Controller::class)->group(function () {
     // pratibimba
     Route::get('user-project-leads', 'projectLeads');
     Route::get('my_property_CRMS', 'PropertyCRM')->name('get.crm.list');
-
+    Route::get('user-general-leads', 'generalLeads');
     Route::post('property_CRM_logs', 'LogCRM')->name('log.crm'); 
     Route::post('save-lead-contact-status', 'saveLeadContactStatus');
 
@@ -200,7 +200,7 @@ Route::controller(Enquery_CRM_Controller::class)->group(function () {
     Route::post('delete_enquery', 'EnqueryDelete')->name('delete.enquery');
     Route::get('enquery_timeline', 'EnqueryTimelineList')->name('enq.timeline');
     Route::get('crm_schedule_details', 'CRM_ScheduleDetails')->name('crm_schedule.details');
-    Route::get('crm_calender', 'CRM_Calender')->name('crm.calender');
+    Route::get('lead_schedule_calendar', 'scheduleCalendar')->name('lead.calendar');
 });
 
 // Project Routes
