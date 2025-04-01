@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Carbon;
 
 class ApiModel extends Model
 {
@@ -1430,9 +1431,13 @@ class ApiModel extends Model
 
     public function getScheduleMeetingList($user_id,$schedule_date)
     {
+        $schedule_date = Carbon::parse($schedule_date)->format('Y-m-d');
         $query = DB::table('crm_log as log')
-                ->select('log.*')
+                ->select('log.*','p_e.property_id','p_e.project_id','p.name as property_name','pj.project_name','c.Name as customer_name','c.Phone as customer_phone','c.Email as customer_email','g_e.name as g_customer_name','g_e.phone as g_customer_phone','g_e.email as g_customer_email')
                 ->leftJoin('property_enquiry as p_e', 'log.enquiry_id', '=', 'p_e.enquery_id')
+                ->leftJoin('properties as p', 'p.id', '=', 'p_e.property_id')
+                ->leftJoin('project as pj', 'pj.id', '=', 'p_e.project_id')
+                ->leftJoin('customer as c', 'p_e.cid', '=', 'c.cid')
                 ->leftJoin('buyer_property_enquery as g_e', 'log.enquiry_id', '=', 'g_e.id')
                 ->where([
                     'log.user_id'=>$user_id, 
@@ -1442,6 +1447,17 @@ class ApiModel extends Model
                 ->get();
         
         return $query;   
+    }
+
+    public function updateMeetingStatus($data=array())
+    {
+
+        DB::table('crm_log as log')
+            ->where([
+                'log.id' => $data['id'],
+            ])
+            ->update(['log.status' => $data['status']]);
+        return true;
     }
     
 }

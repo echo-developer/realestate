@@ -850,7 +850,7 @@ class Enquery_CRM_Controller extends Controller
             $validator = Validator::make($request->all(), [
                 'user_id' => 'required',
                 'assign_id' => 'required',
-                'enquiry_id' => 'required',
+                'enquery_id' => 'required',
                 'remark_type' => 'required',
                 'lead_type' => 'required',
             ]);
@@ -1054,28 +1054,33 @@ class Enquery_CRM_Controller extends Controller
         }
     }
 
-    public function CRM_ScheduleDetails(Request $request)
+    public function leadDetails(Request $request)
     {
 
-        $enquery_id = $request->input('enquery_id');
-
+        $assign_id = $request->input('assign_id');
         try {
-            if ($enquery_id) {
+            if ($assign_id) {
+                $enquiry = DB::table('leads_assigned')->where('assign_id',$assign_id)->first();
+                if($enquiry)
+                {
+                    $enquiry_id = 
 
-                $data = $this->apiModel->queryForScheduleDetails($enquery_id);
-                if (empty($data)) {
-                    return response()->json([
-                        'status' => 1,
-                        'message' => 'No data found.',
-                        'data' => [],
-                    ]);
+                    $data = $this->apiModel->queryForScheduleDetails($enquery_id);
+                    if (empty($data)) {
+                        return response()->json([
+                            'status' => 1,
+                            'message' => 'No data found.',
+                            'data' => [],
+                        ]);
+                    }
+
+                    $logData = DB::table('crm_log')
+                        ->select('schedule_date', 'remarks')
+                        ->where('enquiry_id', $data->enquery_id)
+                        ->orderBy('id', 'desc')
+                        ->first();
                 }
-
-                $logData = DB::table('crm_log')
-                    ->select('schedule_date', 'remarks')
-                    ->where('enquiry_id', $data->enquery_id)
-                    ->orderBy('id', 'desc')
-                    ->first();
+                
 
                 if ($logData) {
                     $logData->enquery_status = $data->enquery_status;
@@ -1173,7 +1178,7 @@ class Enquery_CRM_Controller extends Controller
         try {
             if ($user_id) {
                 $data = $this->apiModel->getScheduleMeetingList($user_id,$schedule_date);
-                print_r($data);exit;
+                
                 if ($data->isEmpty()) {
                     return response()->json([
                         'status' => 0,
@@ -1182,21 +1187,49 @@ class Enquery_CRM_Controller extends Controller
                     ]);
                 }
 
-                $requiredData = $data->groupBy(fn($item) => Carbon::parse($item->schedule_date)->format('Y-m-d'))
-                    ->map(fn($items, $date) => [
-                        'date' => $date,
-                        'count' => count($items),
-                        'list' => $items->map(fn($item) => [
-                            'enquery_status' => $item->enquery_status ?? null,
-                            'schedule_time' => Carbon::parse($item->schedule_date)->format('H:i:s'),
-                            'remarks' => $item->remarks ?? null,
-                        ])->values()
-                    ])->values();
-
+                $customArr = [];
+                foreach($data as $k=>$item)
+                {
+                    if($item->status == '0'){$status = "Pending";}elseif($item->status == '1'){$status = "Completed";}
+                    if($item->lead_type == 'P')
+                    {
+                        $customArr[] = array(
+                            'id' => $item->id,
+                            'assign_id' => $item->assign_id,
+                            'enquiry_id' => $item->enquiry_id,
+                            'lead_type' => $item->lead_type,
+                            'property_id' => $item->property_id,
+                            'property_name' => $item->property_name,
+                            'project_id' => $item->project_id,
+                            'project_name' => $item->project_name,
+                            'customer_name' => $item->customer_name,
+                            'customer_phone' => $item->customer_phone,
+                            'customer_email' => $item->customer_email,
+                            'status' => $status,
+                            'schedule_date' => $item->schedule_date,
+                            'created_at' => $item->created_at
+                        );
+                    }else{
+                        $customArr[] = array(
+                            'id' => $item->id,
+                            'assign_id' => $item->assign_id,
+                            'enquiry_id' => $item->enquiry_id,
+                            'lead_type' => $item->lead_type,
+                            'customer_name' => $item->g_customer_name,
+                            'customer_phone' => $item->g_customer_phone,
+                            'customer_email' => $item->g_customer_email,
+                            'status' => $status,
+                            'schedule_date' => $item->schedule_date,
+                            'created_at' => $item->created_at
+                        );
+                    }
+                    
+                }
+        
                 return response()->json([
                     'status' => 1,
                     'message' => 'Data retrieved successfully.',
-                    'data' => $requiredData,
+                    'data' => $customArr,
                 ]);
             } else {
                 return response()->json([
@@ -1217,6 +1250,44 @@ class Enquery_CRM_Controller extends Controller
                 'data' => [],
             ]);
         }
+    }
+
+    public function updateMeetingStatus(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
+            'status' => 'required'
+        ]);
+
+        if($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+        
+        $id = $request->id;
+        $checkMeetingLog = DB::table('crm_log')->where(['id'=>$id])->first();
+        if($checkMeetingLog)
+        {
+            //print_r($request->all());exit;
+            $up = $this->apiModel->updateMeetingStatus($request->all());
+            if($up)
+            {
+                return response()->json([
+                        'status' => 1,
+                        'message' => 'Status updated .',
+                    ], 200);  
+            }else{
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Failed to update.',
+                ], 200);
+            }
+        }else{
+            return response()->json([
+                'status' => 0,
+                'message' => 'No assigned lead found.',
+            ], 200);
+        }
+       
     }
 
 }

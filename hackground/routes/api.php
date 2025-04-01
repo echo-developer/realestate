@@ -193,15 +193,17 @@ Route::controller(Enquery_CRM_Controller::class)->group(function () {
     Route::post('property_CRM_logs', 'LogCRM')->name('log.crm'); 
     Route::post('save-lead-contact-status', 'saveLeadContactStatus');
 
+    Route::get('lead-details', 'leadDetails');
     Route::post('update-lead-status', 'updateLeadStatus');
     Route::get('lead-contact-history', 'leadContactHistory');
+    Route::get('lead-schedule-calendar', 'scheduleCalendar')->name('lead.calendar');
+    Route::get('schedule-meeting-list', 'scheduleMeetingList');
+    Route::post('update-meeting-status', 'updateMeetingStatus');
     // End pratibimba
 
     Route::post('delete_enquery', 'EnqueryDelete')->name('delete.enquery');
     Route::get('enquery_timeline', 'EnqueryTimelineList')->name('enq.timeline');
     Route::get('crm_schedule_details', 'CRM_ScheduleDetails')->name('crm_schedule.details');
-    Route::get('lead-schedule-calendar', 'scheduleCalendar')->name('lead.calendar');
-    Route::get('schedule-meeting-list', 'scheduleMeetingList');
 });
 
 // Project Routes
