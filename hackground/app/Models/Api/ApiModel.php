@@ -816,7 +816,10 @@ class ApiModel extends Model
                 'leads_assigned.lead_type' => 'P',
                 'property_enquiry.is_deleted' => config('constants.STATUS_INACTIVE'),
             ])
+            ->where('property_enquiry.property_id','!=','')
             ->select(
+                'leads_assigned.assign_id',
+                'leads_assigned.lead_status',
                 'property_enquiry.cid as customer_id',
                 'property_enquiry.enquery_id',
                 'property_enquiry.property_id',
@@ -838,6 +841,55 @@ class ApiModel extends Model
             )
             ->orderBy('property_enquiry.created_at', 'desc')
             ->get();
+    }
+
+    public function getProjectLeads($user_id)
+    {
+        return DB::table('leads_assigned')
+            ->leftJoin('property_enquiry', 'property_enquiry.enquery_id', '=', 'leads_assigned.enquery_id')
+            ->leftJoin('customer', 'property_enquiry.cid', '=', 'customer.cid')
+            ->leftJoin('project', 'property_enquiry.project_id', '=', 'project.id')
+            ->leftJoin('project_location', 'project.id', '=', 'project_location.project_id')
+            ->leftJoin('project_settings', 'project.id', '=', 'project_settings.project_id')
+            ->where([
+                'leads_assigned.user_id' => $user_id,
+                'leads_assigned.lead_type' => 'P',
+                'property_enquiry.is_deleted' => config('constants.STATUS_INACTIVE'),
+            ])
+            //->where('property_enquiry.project_id','!=','')
+            ->select(
+                'leads_assigned.assign_id',
+                'leads_assigned.lead_status',
+                'property_enquiry.cid as customer_id',
+                'property_enquiry.enquery_id',
+                'property_enquiry.project_id',
+                'property_enquiry.message',
+                'property_enquiry.assign_to',
+                'property_enquiry.status as enquery_status',
+                'property_enquiry.created_at',
+                'customer.Phone as customer_phone',
+                'customer.Name as customer_name',
+                'customer.Email as customer_email',
+                'project.project_name',
+                'project_location.address',
+                'project_location.locality',
+                'project_settings.total_area',
+                'project_settings.unit_type',
+                'project_settings.occupied_area',
+                'project_settings.area_in_sqft',
+            )
+            ->orderBy('property_enquiry.created_at', 'desc')
+            ->get();
+    }
+
+    public function updateUserLeadStatus($data=array())
+    {
+        $assign_id = $data['assign_id'];
+        $user_id = $data['user_id'];
+        $status = $data['lead_status'];
+        $query = DB::table('leads_assigned')->where(['assign_id'=>$assign_id,'user_id'=>$user_id])->update(['lead_status'=>$status]);
+
+        return true;
     }
 
     public function my_profile_data($uid)
@@ -1336,10 +1388,10 @@ class ApiModel extends Model
         return $result;
     }
 
-    public function getUserLeadsList($user_id)
+    public function getGeneralLeadsList($user_id)
     {
         $query = DB::table('leads_assigned as l_a')
-                ->select('e.*')
+                ->select('e.*','leads_assigned.assign_id','leads_assigned.lead_status')
                 ->leftJoin('buyer_property_enquery as e', 'e.id', '=', 'l_a.enquery_id')
                 ->where([
                     'l_a.user_id'=>$user_id, 

@@ -83,3 +83,13 @@ CREATE TABLE IF NOT EXISTS `pref_advertisement_locations` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 ALTER TABLE `pref_advertisements` ADD `views` BIGINT NOT NULL DEFAULT '0' AFTER `expire_date`;
+
+ALTER TABLE `pref_crm_log` ADD `lead_type` CHAR(10) NULL AFTER `enquiry_id`;
+
+ALTER TABLE `pref_crm_log` ADD `remark_type` VARCHAR(70) NULL AFTER `schedule_date`;
+
+ALTER TABLE `pref_leads_assigned` ADD `lead_status` TINYINT NOT NULL DEFAULT '0' COMMENT '0=Pending,1=Lead,2=Closed,3=Proposal,4=Qualify' AFTER `enquery_id`;
+
+ALTER TABLE `pref_crm_log` ADD `assign_id` BIGINT NOT NULL AFTER `enquiry_id`;
+
+ALTER TABLE `pref_crm_log` ADD `user_id` INT NOT NULL AFTER `assign_id`;

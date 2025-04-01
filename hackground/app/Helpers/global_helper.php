@@ -595,6 +595,29 @@ if (!function_exists('GetProperties_GalleryImages')) {
         return $galleryImages;
     }
 }
+
+if (!function_exists('getProjectImages')) {
+    function getProjectImages($project_id)
+    {
+
+        $galleryImages = DB::table('project_gallery')
+            ->join('project_gallery_images', 'project_gallery.id', '=', 'project_gallery_images.gallary_id')
+            ->where('project_gallery.project_id', $project_id)
+            ->select(
+                'project_gallery.image_type',
+                'project_gallery.description',
+                'project_gallery_images.id as image_id',
+                'project_gallery_images.gallary_id',
+                'project_gallery_images.filename',
+                'project_gallery_images.caption',
+            )
+            ->get();
+
+
+        return $galleryImages;
+    }
+}
+
 if (!function_exists('sanitize_slug_part')) {
     function sanitize_slug_part($string)
     {

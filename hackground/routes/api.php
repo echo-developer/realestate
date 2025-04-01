@@ -186,9 +186,17 @@ Route::controller(Enquery_CRM_Controller::class)->group(function () {
     Route::get('my_property_enquery_list', 'PropertyEnqueryList')->name('get.enquery.list');
     Route::get('my_project_enquery_list', 'ProjectEnqueryList')->name('get.projectEnquery.list');
 
-    Route::get('user-general-leads', 'generalLeads');
+    // pratibimba
+    Route::get('user-project-leads', 'projectLeads');
     Route::get('my_property_CRMS', 'PropertyCRM')->name('get.crm.list');
-    Route::post('property_CRM_logs', 'LogCRM')->name('log.crm');
+
+    Route::post('property_CRM_logs', 'LogCRM')->name('log.crm'); 
+    Route::post('save-lead-contact-status', 'saveLeadContactStatus');
+
+    Route::post('update-lead-status', 'updateLeadStatus');
+    Route::get('lead-contact-history', 'leadContactHistory');
+    // End pratibimba
+
     Route::post('delete_enquery', 'EnqueryDelete')->name('delete.enquery');
     Route::get('enquery_timeline', 'EnqueryTimelineList')->name('enq.timeline');
     Route::get('crm_schedule_details', 'CRM_ScheduleDetails')->name('crm_schedule.details');
