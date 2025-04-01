@@ -759,7 +759,7 @@ const CommercialProjectDetails = ({
               {/* <AdvertiserSection /> */}
 
               <FloorPlanSection detailsData={detailsData} />
-              {/* <FloorSection  */}
+              <FloorSection detailsData={detailsData} />
               
               <ProjectReviewDetails
                 project_reviews={detailsData?.project_reviews}
