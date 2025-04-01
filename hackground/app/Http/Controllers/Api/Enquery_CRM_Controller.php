@@ -514,6 +514,7 @@ class Enquery_CRM_Controller extends Controller
                     }
 
                     $customArray[] = [
+                        'assign_id' => $row->assign_id,
                         'log_data' => $logData ?? [],
                         'customer_id' => $row->customer_id,
                         'enquery_id' => $row->enquery_id,
@@ -647,6 +648,7 @@ class Enquery_CRM_Controller extends Controller
                     }
                    // print_r($row);exit;
                     $customArray[] = [
+                        'assign_id' => $row->assign_id,
                         'log_data' => $logData ?? [],
                         'customer_id' => $row->customer_id,
                         'enquery_id' => $row->enquery_id,
@@ -762,6 +764,7 @@ class Enquery_CRM_Controller extends Controller
                 foreach ($leads as $row) {
                     $row = (object) $row;
                     $customArray[] = [
+                        'assign_id' => $row->assign_id,
                         'name' => $row->name,
                         'phone'=> $row->phone,
                         'email'=> $row->email,
@@ -1116,7 +1119,6 @@ class Enquery_CRM_Controller extends Controller
         $end_date = $request->input('end_date');
         try {
             if ($user_id) {
-                //$data = $this->apiModel->queryForCRMcalender($user_id);
                 $data = $this->apiModel->getLeadsScheduleList($user_id,$start_date,$end_date);
                 //print_r($data);exit;
                 if ($data->isEmpty()) {
@@ -1130,6 +1132,7 @@ class Enquery_CRM_Controller extends Controller
                 $requiredData = $data->groupBy(fn($item) => Carbon::parse($item->schedule_date)->format('Y-m-d'))
                     ->map(fn($items, $date) => [
                         'date' => $date,
+                        'count' => count($items),
                         'list' => $items->map(fn($item) => [
                             'enquery_status' => $item->enquery_status ?? null,
                             'schedule_time' => Carbon::parse($item->schedule_date)->format('H:i:s'),
@@ -1162,4 +1165,58 @@ class Enquery_CRM_Controller extends Controller
             ]);
         }
     }
+
+    public function scheduleMeetingList(Request $request)
+    {
+        $user_id = $request->input('user_id');
+        $schedule_date = $request->input('schedule_date');
+        try {
+            if ($user_id) {
+                $data = $this->apiModel->getScheduleMeetingList($user_id,$schedule_date);
+                print_r($data);exit;
+                if ($data->isEmpty()) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'No data found.',
+                        'data' => [],
+                    ]);
+                }
+
+                $requiredData = $data->groupBy(fn($item) => Carbon::parse($item->schedule_date)->format('Y-m-d'))
+                    ->map(fn($items, $date) => [
+                        'date' => $date,
+                        'count' => count($items),
+                        'list' => $items->map(fn($item) => [
+                            'enquery_status' => $item->enquery_status ?? null,
+                            'schedule_time' => Carbon::parse($item->schedule_date)->format('H:i:s'),
+                            'remarks' => $item->remarks ?? null,
+                        ])->values()
+                    ])->values();
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Data retrieved successfully.',
+                    'data' => $requiredData,
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No enquery id found.',
+                    'data' => [],
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred while processing the request.',
+                'data' => [],
+            ]);
+        }
+    }
+
 }

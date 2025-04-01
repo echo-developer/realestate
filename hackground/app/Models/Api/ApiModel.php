@@ -1427,5 +1427,21 @@ class ApiModel extends Model
             return false;
         }
     }
+
+    public function getScheduleMeetingList($user_id,$schedule_date)
+    {
+        $query = DB::table('crm_log as log')
+                ->select('log.*')
+                ->leftJoin('property_enquiry as p_e', 'log.enquiry_id', '=', 'p_e.enquery_id')
+                ->leftJoin('buyer_property_enquery as g_e', 'log.enquiry_id', '=', 'g_e.id')
+                ->where([
+                    'log.user_id'=>$user_id, 
+                ])
+                ->whereDate('log.schedule_date',$schedule_date)
+                ->orderBy('log.schedule_date', 'asc')
+                ->get();
+        
+        return $query;   
+    }
     
 }

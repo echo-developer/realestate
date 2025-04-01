@@ -200,7 +200,8 @@ Route::controller(Enquery_CRM_Controller::class)->group(function () {
     Route::post('delete_enquery', 'EnqueryDelete')->name('delete.enquery');
     Route::get('enquery_timeline', 'EnqueryTimelineList')->name('enq.timeline');
     Route::get('crm_schedule_details', 'CRM_ScheduleDetails')->name('crm_schedule.details');
-    Route::get('lead_schedule_calendar', 'scheduleCalendar')->name('lead.calendar');
+    Route::get('lead-schedule-calendar', 'scheduleCalendar')->name('lead.calendar');
+    Route::get('schedule-meeting-list', 'scheduleMeetingList');
 });
 
 // Project Routes
