@@ -247,7 +247,7 @@ if (!function_exists('AllmenusForSideBar')) {
             $allmenus->where('pt.role_id', '=', $role);
         }
 
-        $allmenus = $allmenus->get()->groupBy('parent_id');
+        $allmenus = $allmenus->orderBy('id','asc')->get()->groupBy('parent_id');
 
         if ($allmenus->isNotEmpty()) {
             return $allmenus;

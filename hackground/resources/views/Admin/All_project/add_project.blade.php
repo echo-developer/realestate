@@ -341,7 +341,7 @@
               <div id="step-6" style="display:none;">
                 <ul class="nav nav-tabs" id="imageTypeTabs">
                   <li class="nav-item">
-                    <a class="nav-link" data-tab="interior" href="#">Interior View</a>
+                    <a class="nav-link active" data-tab="interior" href="#">Interior View</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" data-tab="exterior" href="#">Exterior View</a>
@@ -508,86 +508,93 @@
   });
 </script>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    let activeTab = 'interior'; // Default tab
-    let uploadedImages = {}; // Store images by tab type
+  $(document).ready(function() {
+    let activeTab = "interior"; // Default active tab
+    let uploadedFilesByTab = {
+      interior: [],
+      exterior: [],
+      location: [],
+      other: []
+    };
 
-    // Initialize object with tab categories
-    ['interior', 'exterior', 'location', 'other'].forEach(tab => {
-      uploadedImages[tab] = [];
+    // Tab switching
+    $("#imageTypeTabs .nav-link").click(function(e) {
+      e.preventDefault();
+
+      $("#imageTypeTabs .nav-link").removeClass("active");
+      $(this).addClass("active");
+
+      activeTab = $(this).data("tab");
+
+      $(".img-content").hide();
+      $("#tab-content-" + activeTab).show();
     });
 
-    // Handle tab switching
-    document.querySelectorAll('.nav-link').forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.querySelector('.nav-link.active')?.classList.remove('active');
-        this.classList.add('active');
-        activeTab = this.getAttribute('data-tab'); // Update active tab
-      });
-    });
-    $('#fileinput').on('change', function() {
-      var activeTab = $(".image-tab-content .nav-link.active").attr("data-tab");
-      let files = this.files;
+    // File upload
+    $("#fileinput").on("change", function(event) {
+      let files = event.target.files;
       if (files.length === 0) {
-        alert('Please select at least one file.');
+        alert("Please select at least one file.");
         return;
       }
 
       let formData = new FormData();
       for (let i = 0; i < files.length; i++) {
-        formData.append('images[]', files[i]);
+        formData.append("images[]", files[i]);
+        previewImage(URL.createObjectURL(files[i]), files[i].name, activeTab); // Show preview
       }
-      //formData.append('type', activeType);
+      formData.append("type", activeTab);
 
-      $.ajax({
-        url: "{{ url('/project/store_project_image') }}",
-        method: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function(data) {
+      fetch(`{{url('project/store_project_image')}}`, {
+          method: "POST",
+          body: formData,
+          headers: {
+            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+          },
+        })
+        .then((response) => response.json())
+        .then((data) => {
           if (data.success) {
-            $.each(data.images, function(index, image) {
-              previewImage(image.imageUrl, image.filename,
-                activeTab);
+            data.images.forEach((image) => {
+              uploadedFilesByTab[activeTab].push(image.filename);
             });
-
-            //updateHiddenField();
+            updateHiddenField();
+            $("#fileinput").val(""); // Clear file input
+          } else {
+            alert("Upload failed.");
           }
-        },
-        error: function(xhr, status, error) {
-          console.error('AJAX Error:', error);
-        }
-      });
+        })
+        .catch((error) => console.error(error));
     });
 
-    function previewImage(imageUrl, filename, type) {
-      let gallery = $('#previewGallery');
-      let imgWrapper = $('<div class="preview-item"></div>');
-      imgWrapper.html(`
-        <img src="${imageUrl}" alt="Uploaded Image">
-        <button class="remove-btn" data-type="${type}" data-filename="${filename}">X</button><input type="hidden" name="image[${type}][]" value="${filename}" />`);
-      imgWrapper.find('.remove-btn').click(function() {
-        let fileType = $(this).data('type'); // Get the type
-        removeImage(imgWrapper, filename, fileType);
-      });
-      $("#preview-" + type).append(imgWrapper);
+    // Function to preview image
+    function previewImage(imageUrl, filename, tab) {
+      let previewContainer = $("#preview-" + tab);
+      let imageHtml = `
+            <div class="image-box" data-filename="${filename}">
+                <img src="${imageUrl}" alt="Preview">
+                <button class="remove-image" data-filename="${filename}">×</button>
+            </div>
+        `;
+      previewContainer.append(imageHtml);
     }
 
-    function removeImage(previewItem, filename, type) {
-      previewItem.remove();
-      if (uploadedFiles[type]) {
-        uploadedFiles[type] = uploadedFiles[type].filter(file => file !== filename);
-        if (uploadedFiles[type].length === 0) {
-          delete uploadedFiles[type]; // Remove empty categories
-        }
+    // Remove image functionality
+    $(document).on("click", ".remove-image", function() {
+      let filename = $(this).data("filename");
+      $(this).closest(".image-box").remove();
+
+      if (uploadedFilesByTab[activeTab]) {
+        uploadedFilesByTab[activeTab] = uploadedFilesByTab[activeTab].filter(name => name !== filename);
       }
-    }
 
+      updateHiddenField();
+    });
+
+    // Save uploaded file names in a hidden input
+    function updateHiddenField() {
+      $("#uploadedImages").val(JSON.stringify(uploadedFilesByTab));
+    }
   });
 </script>
 

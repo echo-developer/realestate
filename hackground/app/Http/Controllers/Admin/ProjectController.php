@@ -239,33 +239,30 @@ class ProjectController extends Controller
 
     private function saveProjectGalleries($projectId, $request)
     {
-        $galleries = $request->galleries;
-
-        if ($galleries) {
-            if (is_string($galleries)) {
-                $galleries = json_decode($galleries, true);
-            }
-
-            if (is_array($galleries)) {
-                foreach ($galleries as $galleryData) {
-                    $gallery = ProjectGallery::create([
-                        'project_id' => $projectId,
-                        'image_type' => is_string($galleryData['gallery']) ? $galleryData['gallery'] : null,
-                    ]);
-
-                    if (isset($galleryData['images']) && is_array($galleryData['images'])) {
-                        foreach ($galleryData['images'] as $image) {
-                            ProjectGalleryImages::create([
-                                'gallary_id' => $gallery->id,
-                                'filename' => is_string($image['image_name']) ? $image['image_name'] : null,
-                                'caption' => is_string($image['caption']) ? $image['caption'] : null,
-                            ]);
-                        }
-                    }
-                }
+        $uploadedImages = json_decode($request->uploaded_images, true);
+        $imageDescriptions = $request->image_desc ?? [];
+    
+        if (!is_array($uploadedImages) || empty($uploadedImages)) {
+            return;
+        }
+    
+        foreach ($uploadedImages as $imageType => $images) {
+            // Create gallery for each image type
+            $gallery = ProjectGallery::create([
+                'project_id' => $projectId,
+                'image_type' => $imageType,
+            ]);
+    
+            foreach ($images as $filename) {
+                ProjectGalleryImages::create([
+                    'gallary_id' => $gallery->id,
+                    'filename' => $filename,
+                    'caption' => $imageDescriptions[$imageType] ?? null, // Store description per type
+                ]);
             }
         }
     }
+    
     public function ProjectEdit(Request $request)
     {
         $SubCategoryModel = new SubCategoryModel;

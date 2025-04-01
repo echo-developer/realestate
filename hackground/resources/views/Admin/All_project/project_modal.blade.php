@@ -501,16 +501,16 @@
         <div class="image-tab-content" id="image-upload-page">
             <ul class="nav nav-underline nav-custom mb-3" id="image-tab-nav-upload">
                 <li class="nav-item">
-                    <a class="image-tab-link-upload active" id="tab-upload-interior" data-tab="interior" href="javascript:void(0)">Interior View</a>
+                    <a class="nav-link  active" id="tab-upload-interior" data-tab="interior" href="javascript:void(0)">Interior View</a>
                 </li>
                 <li class="nav-item">
-                    <a class="image-tab-link-upload" id="tab-upload-exterior" data-tab="exterior" href="javascript:void(0)">Exterior View</a>
+                    <a class="nav-link" id="tab-upload-exterior" data-tab="exterior" href="javascript:void(0)">Exterior View</a>
                 </li>
                 <li class="nav-item">
-                    <a class="image-tab-link-upload" id="tab-upload-location" data-tab="location" href="javascript:void(0)">Location View</a>
+                    <a class="nav-link" id="tab-upload-location" data-tab="location" href="javascript:void(0)">Location View</a>
                 </li>
                 <li class="nav-item">
-                    <a class="image-tab-link-upload" id="tab-upload-other" data-tab="other" href="javascript:void(0)">Other View</a>
+                    <a class="nav-link" id="tab-upload-other" data-tab="other" href="javascript:void(0)">Other View</a>
                 </li>
             </ul>
 
@@ -667,7 +667,7 @@
 <!-- FOR IMAGE -->
 <script>
     $(document).ready(function() {
-        let activeTab = $(".image-tab-link-upload.active").data("tab");
+        let activeTab = $(".nav-link.active").data("tab");
         $("#activeTabName").val(activeTab);
         let uploadedFilesByTab = {};
 
@@ -690,13 +690,16 @@
             uploadedFilesByTab[fileType] = uploadedFiles;
         });
 
-        // Tab switching logic
-        $("#image-tab-nav-upload .image-tab-link-upload").click(function() {
+        // **Fix: Use proper class for tab switching**
+        $("#image-tab-nav-upload .nav-link").click(function() {
+            $("#image-tab-nav-upload .nav-link").removeClass("active"); // Remove active class from all tabs
+            $(this).addClass("active"); // Add active class to the clicked tab
+
             activeTab = $(this).data("tab");
             $("#activeTabName").val(activeTab);
 
-            $(".img-content-upload").hide();
-            $("#tab-content-upload-" + activeTab).show();
+            $(".img-content-upload").hide(); // Hide all content sections
+            $("#tab-content-upload-" + activeTab).show(); // Show the selected tab content
 
             // Load previous images for the selected tab
             updateGalleryPreview(activeTab);
@@ -742,11 +745,11 @@
         function previewImage(imageUrl, filename, tab) {
             let previewContainer = $("#preview-upload-" + tab);
             let imageHtml = `
-            <div class="image-box" data-filename="${filename}">
-                <img src="${imageUrl}" alt="Preview">
-                <button class="remove-image" data-filename="${filename}">×</button>
-            </div>
-        `;
+        <div class="image-box" data-filename="${filename}">
+            <img src="${imageUrl}" alt="Preview">
+            <button class="remove-image" data-filename="${filename}">×</button>
+        </div>
+    `;
             previewContainer.append(imageHtml);
         }
 

@@ -411,20 +411,25 @@ class PropertyDetailsController extends Controller
 
                     $baseImageUrl = asset('user_upload/project_images');
 
-                    $formattedPropertyGalleries = collect($this->project->galleries)->map(function ($gallery) use ($baseImageUrl) {
+                    $formattedPropertyGalleries = collect(optional($this->project)->galleries)->map(function ($gallery) use ($baseImageUrl) {
                         return [
-                            'gallery' => $gallery['image_type'], // Renaming `image_type` to `gallery`
-                            'images' => collect($gallery['images'])->map(function ($image) use ($baseImageUrl) {
+                            'gallery' => $gallery['image_type'] ?? '', // Ensure 'image_type' exists
+                            'images' => collect($gallery['images'] ?? [])->map(function ($image) use ($baseImageUrl) {
                                 return [
-                                    'image_id' => $image['id'], // Generating `image_id`
-                                    'image_name' => $image['filename'],
-                                    'image_url' => $baseImageUrl.'/' . $image['filename'],
+                                    'image_id' => $image['id'] ?? null, // Avoid errors if 'id' is missing
+                                    'image_name' => $image['filename'] ?? '', // Default empty if filename is missing
+                                    'image_url' => isset($image['filename']) ? $baseImageUrl . '/' . $image['filename'] : null,
                                     'caption' => $image['caption'] ?? null,
                                 ];
                             })->toArray(),
                         ];
                     })->toArray();
-                    unset($this->project->galleries);
+
+                    // Unset only if project exists
+                    if (!empty($this->project)) {
+                        unset($this->project->galleries);
+                    }
+
                     return [
                         'property_id' => $property->property_id,
                         'property_code' => UniquePropertyCode($property->property_id),
@@ -454,7 +459,7 @@ class PropertyDetailsController extends Controller
                         'approved_by' => $property->approved_by,
 
                         'main_road_facing' => $property->faces_main_road,
-                        'galleries' => $transformedData!=null?$transformedData: $formattedPropertyGalleries,
+                        'galleries' => $transformedData != null ? $transformedData : $formattedPropertyGalleries,
                         'address' => $property->property_address,
                         'locality' => $property->locality,
                         'latitude' => $property->latitude,
