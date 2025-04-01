@@ -387,6 +387,8 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/top_status', 'TopStatus')->name('TopStatus');
         Route::post('/delete', 'Propertydelete')->name('project.delete');
         Route::post('/statusupdate', 'PropStatusupdate')->name('project.status.update');
+        Route::post('/save/amenities', 'addAmenities')->name('save.amenities');
+        Route::get('/get/amenities', 'getAmenities')->name('get.amenities');
     });
 
     Route::prefix('project')->controller(ProjectController::class)->group(function () {
@@ -479,6 +481,7 @@ Route::middleware('admin_auth')->group(function () {
     Route::prefix('transaction')->controller(TransactionController::class)->group(function () {
         Route::get('transaction_list', 'index')->name('transaction.index');
     });
+
 });
 
 Route::get('/artisan-run', function () {

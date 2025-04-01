@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use App\Models\ProjectAmenityModel;
 use App\Models\PrefProject;
+use App\Models\ProjectAdditional;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\PostController;
 
 class AllProjectController extends Controller
 {
@@ -20,7 +22,7 @@ class AllProjectController extends Controller
         $query = PrefProject::where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
             ->with([
             'settings:project_id,project_budget,parking_availability',
-            'additional:project_id,expected_price',
+            'additional:project_id,expected_price,project_amenity',
             'location:project_id,address',
             'gallery:id,project_id,image_type',
             'gallery.images:gallary_id,filename,caption'
@@ -39,7 +41,11 @@ class AllProjectController extends Controller
             $query->where('uid', $user_id);
         }
         $project = $query->paginate($paginate);
-        return view('Admin.All_project.all-project', compact('project', 'statusMapping','user_id'));
+
+        $amenities = new ProjectAmenityModel();
+        $projectAmenities =$amenities->getProjectAmenities();
+            // dd( $projectAmenities);
+        return view('Admin.All_project.all-project', compact('project', 'statusMapping','user_id','projectAmenities'));
     }
 
     public function FeaturedStatus(Request $req)
@@ -117,4 +123,27 @@ class AllProjectController extends Controller
             'message' => 'Property Status changed.',
         ];
     }
+
+    public function addAmenities(Request $req)
+    {
+        log_anything($req->all());
+    
+        // Convert selectedAmenities array to comma-separated string
+        $project_amenity = implode(",", $req->selectedAmenities);
+    
+        // Update the existing record in `project_additionals` table
+        ProjectAdditional::where('project_id', $req->projId)
+            ->update(['project_amenity' => $project_amenity]);
+    
+        return response()->json(['message' => 'Amenities updated successfully!']);
+    }
+
+    public function  getAmenities(Request $req){
+    
+           $project_amenity= ProjectAdditional::select('project_amenity')->where('project_id', $req->projId)
+            ->first();
+    
+        return response()->json(['message' => 'Amenities updated successfully!','project_amenity'=>$project_amenity]);
+    }
+    
 }
