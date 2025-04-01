@@ -739,7 +739,6 @@ class Enquery_CRM_Controller extends Controller
         {
             $leads = $this->apiModel->getGeneralLeadsList($user_id);
             $totalRecords = count($leads);
-            $leads['lead_type'] = 'G';
             if (empty($leads)) {
                 return response()->json([
                     'status' => 0,
@@ -758,25 +757,45 @@ class Enquery_CRM_Controller extends Controller
                         'total_pages' => ceil($totalRecords / $limit),
                     ]
                 ]);
+            }else{
+                $customArray = [];
+                foreach ($leads as $row) {
+                    $row = (object) $row;
+                    $customArray[] = [
+                        'name' => $row->name,
+                        'phone'=> $row->phone,
+                        'email'=> $row->email,
+                        'locality' => $row->locality,
+                        'purchase_timeline' => $row->purchase_timeline,
+                        'property_type' => $row->property_type,
+                        'min_size' => $row->min_size,
+                        'max_size' => $row->max_size,
+                        'min_budget' => $row->min_budget,
+                        'max_budget' => $row->max_budget,
+                        'property_for' => $row->property_for,
+                        'created_at' => $row->created_at,
+                        'updated_at' => $row->updated_at,
+                        'lead_type' => 'G'
+                    ];
+                }
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Data retrieved successfully',
+                    'data' => $customArray,
+                    'lead_status_arr'=> [
+                        '0'=>'Pending',
+                        '1'=>'Lead',
+                        '2'=>'Closed',
+                        '3'=>'Proposal',
+                        '4'=>'Qualify'
+                    ],
+                    'pagination' => [
+                        'current_page' => $recentPage,
+                        'total_records' => $totalRecords,
+                        'total_pages' => ceil($totalRecords / $limit),
+                    ]
+                ]);
             }
-
-            return response()->json([
-                'status' => 1,
-                'message' => 'Data retrieved successfully',
-                'data' => $leads,
-                'lead_status_arr'=> [
-                    '0'=>'Pending',
-                    '1'=>'Lead',
-                    '2'=>'Closed',
-                    '3'=>'Proposal',
-                    '4'=>'Qualify'
-                ],
-                'pagination' => [
-                    'current_page' => $recentPage,
-                    'total_records' => $totalRecords,
-                    'total_pages' => ceil($totalRecords / $limit),
-                ]
-            ]);
         }else{
             return response()->json([
                 'status' => 0,

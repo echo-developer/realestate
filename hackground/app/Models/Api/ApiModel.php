@@ -1408,8 +1408,9 @@ class ApiModel extends Model
                     'l_a.user_id'=>$user_id, 
                     'l_a.lead_type'=>'G'
                 ])
-                //->orderBy('e.id', 'desc')
+                ->orderBy('e.id', 'desc')
                 ->get();
+        
         return $query;   
     }
 
