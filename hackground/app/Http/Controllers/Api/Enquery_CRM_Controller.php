@@ -488,7 +488,7 @@ class Enquery_CRM_Controller extends Controller
                         $galleryType = $image->image_type;
                         if (!isset($galleries[$galleryType])) {
                             $galleries[$galleryType] = [
-                                'gallery' => $galleryType,
+                                'galleries' => $galleryType,
                                 'images' => []
                             ];
                         }
@@ -621,7 +621,7 @@ class Enquery_CRM_Controller extends Controller
                         $galleryType = $image->image_type;
                         if (!isset($galleries[$galleryType])) {
                             $galleries[$galleryType] = [
-                                'gallery' => $galleryType,
+                                'galleries' => $galleryType,
                                 'images' => []
                             ];
                         }
@@ -1090,14 +1090,16 @@ class Enquery_CRM_Controller extends Controller
     }
 
 
-    public function CRM_Calender(Request $request)
+    public function scheduleCalendar(Request $request)
     {
         $user_id = $request->input('user_id');
-
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
         try {
             if ($user_id) {
-                $data = $this->apiModel->queryForCRMcalender($user_id);
-
+                //$data = $this->apiModel->queryForCRMcalender($user_id);
+                $data = $this->apiModel->getLeadsScheduleList($user_id,$start_date,$end_date);
+                //print_r($data);exit;
                 if ($data->isEmpty()) {
                     return response()->json([
                         'status' => 0,
