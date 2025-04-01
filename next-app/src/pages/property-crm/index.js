@@ -137,7 +137,7 @@ const Index = () => {
             phone: phone,
             email: email,
             assign_id: assign_id,
-            enquiry_id: enquery_id,
+            enquery_id: enquery_id,
             lead_type: lead_type
         })
         setShow(true);
@@ -371,14 +371,14 @@ const Index = () => {
                                                             {/* <button className="btn btn-secondary btn-sm mt-1">Actions</button> */}
                                                         </div>
                                                     </div>
-                                                    <p className="d-flex gap-2">
-                                                        <span>
-                                                            <i className="bi bi-telephone"></i> {lead?.Phone}
+                                                    <p>
+                                                        <span className="d-block">
+                                                            <i className="bi bi-telephone"></i> {lead?.phone}
                                                         </span>
-                                                        <span>
-                                                            <i className="bi bi-envelope"></i> {lead?.Email}
+                                                        <span className="d-block">
+                                                            <i className="bi bi-envelope"></i> {lead?.email}
                                                         </span>
-                                                        <span>
+                                                        <span className="d-block">
                                                             <i className="bi bi-clock"></i> {lead?.created_at}
                                                         </span>
                                                     </p>
