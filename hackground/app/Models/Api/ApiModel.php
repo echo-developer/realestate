@@ -1068,6 +1068,17 @@ class ApiModel extends Model
         return $data;
     }
 
+    public function getLeadsScheduleList($user_id,$start_date,$end_date)
+    {
+        $data = DB::table('crm_log as log')
+                    ->where([
+                        'log.user_id'=>$user_id,
+                    ])
+                    ->whereBetween('log.schedule_date', [$start_date . ' 00:00:00', $end_date . ' 23:59:59'])
+                    ->get();
+        return $data;
+    }
+
     public function queryForCRMcalender($user_id)
     {
         $data = DB::table('property_enquiry')
@@ -1391,14 +1402,14 @@ class ApiModel extends Model
     public function getGeneralLeadsList($user_id)
     {
         $query = DB::table('leads_assigned as l_a')
-                ->select('e.*','leads_assigned.assign_id','leads_assigned.lead_status')
+                ->select('e.*','l_a.assign_id','l_a.lead_status')
                 ->leftJoin('buyer_property_enquery as e', 'e.id', '=', 'l_a.enquery_id')
                 ->where([
                     'l_a.user_id'=>$user_id, 
                     'l_a.lead_type'=>'G'
                 ])
                 //->orderBy('e.id', 'desc')
-                ->get()->toArray();
+                ->get();
         return $query;   
     }
 
