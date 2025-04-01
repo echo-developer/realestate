@@ -1451,13 +1451,30 @@ class ApiModel extends Model
 
     public function updateMeetingStatus($data=array())
     {
-
         DB::table('crm_log as log')
             ->where([
                 'log.id' => $data['id'],
             ])
             ->update(['log.status' => $data['status']]);
         return true;
+    }
+
+    public function getLeadDetails($enquiry_id,$lead_type)
+    {
+        if($lead_type == 'P')
+        {
+            $query = DB::table('property_enquiry as p_e')
+            ->select('p_e.*')
+            ->leftJoin('properties as p', 'p.id', '=', 'p_e.property_id')
+            ->leftJoin('project as pj', 'pj.id', '=', 'p_e.project_id')
+            ->leftJoin('customer as c', 'p_e.cid', '=', 'c.cid')
+            ->leftJoin('buyer_property_enquery as g_e', 'log.enquiry_id', '=', 'g_e.id')
+            ->where('p_e.enquery_id',$enquiry_id)->get();
+        }elseif($lead_type == 'G'){
+            $query = DB::table('buyer_property_enquery as p_e')->select('p_e.*')->where('p_e.id',$enquiry_id)->get();
+        }
+        
+        return $query;   
     }
     
 }
