@@ -184,7 +184,7 @@ const SideBar = () => {
                 aria-expanded={showDropDown}
               >
                 <i className="bi bi-building"></i>{" "}
-                <span>{translation?.property_crm || "Property CRM"}</span>{" "}
+                <span>{translation?.leads_mennagement || "Leads Management"}</span>{" "}
                 <i className="icon-line-awesome-angle-down ms-auto"></i>
               </a>
               <ul

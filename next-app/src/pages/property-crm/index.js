@@ -11,6 +11,8 @@ import withAuth from "@/utils/withAuth";
 import { RiMapPinTimeLine } from "react-icons/ri";
 import useTranslation from "@/hooks/useTranslation";
 import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
+import { Modal, Button } from "react-bootstrap";
+import ContactModal from "@/components/property-crm/ContactModal";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -18,11 +20,14 @@ const Index = () => {
     const { callApi, GetMemberId } = AuthUser();
     const memberId = GetMemberId();
     const translation = useTranslation();
+    const [show, setShow] = useState(false);
     const [activeTab, setActiveTab] = useState("property");
     const [list, setList] = useState([]);
+    const [leadStatusList, setLeadStatusList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPage, setTotalPage] = useState();
+    const [activeModalData, setActiveModalData] = useState(null);
 
 
 
@@ -37,6 +42,14 @@ const Index = () => {
         setActiveTab(tab);
         fetchLeadsData(tab);
     }
+
+    const statusClasses = {
+        "0": "bg-warning",  // Yellow
+        "1": "bg-success",    // Green
+        "2": "bg-danger",   // Red
+        "3": "bg-success", // Green
+        "4": "bg-success"  // Green
+    };
 
     const fetchLeadsData = async (leadType, page, loadMore) => {
         if (!loadMore) {
@@ -53,6 +66,7 @@ const Index = () => {
                 }
             })
             if (res && res.status === 1) {
+                setLeadStatusList(res?.lead_status_arr || [])
                 if (!loadMore) {
                     setList(res.data || []);
                 } else {
@@ -77,9 +91,85 @@ const Index = () => {
         }
     }
 
+
+    const handleLeadStatusChange = async (e, index, assign_id) => {
+        const { value } = e.target || {};
+        try {
+            const res = await callApi({
+                api: `/update-lead-status`,
+                method: "UPLOAD",
+                data: {
+                    user_id: memberId,
+                    assign_id: assign_id,
+                    lead_status: value,
+
+                }
+            })
+
+            if (res && res?.status === 1) {
+                const newState = list?.map((lead, i) => {
+                    if (i !== index) {
+                        return lead;
+                    } else {
+                        return {
+                            ...lead,
+                            lead_status: value,
+                        }
+                    }
+                })
+                setList(newState);
+                toast.success("lead status updated successfully")
+            } else {
+                toast.error("Failed to update lead status")
+            }
+        } catch (error) {
+            console.error(error?.message);
+        }
+    }
+
     const handleLoadMoreClick = (nextPage) => {
         setCurrentPage(nextPage);
         fetchLeadsData(activeTab, nextPage, true);
+    }
+
+    const handleModalOpen = (phone="", email="", assign_id, enquery_id, lead_type) => {
+        setActiveModalData({
+            phone: phone,
+            email: email,
+            assign_id: assign_id,
+            enquiry_id: enquery_id,
+            lead_type: lead_type
+        })
+        setShow(true);
+    }
+
+    const handleClose = () => {
+        setShow(false);
+        setActiveModalData(null)
+    }
+
+    const contactSave = async (data) => {
+        const newData = {
+            ...data,
+            user_id: memberId,
+            assign_id: activeModalData.assign_id,
+            enquery_id: activeModalData.enquery_id,
+            lead_type: activeModalData.lead_type,
+        };
+        try {
+            const res = await callApi({
+                api: '/save-lead-contact-status',
+                method: "UPLOAD",
+                data: newData
+            })
+
+            if(res && res?.status === 1) {
+                toast.success("Contact form submitted successfully");
+                handleClose();
+            }
+        } catch (error) {
+                console.log(error.message || "Something went wrong")
+        }
     }
 
     // 
@@ -276,9 +366,9 @@ const Index = () => {
                                                         <h4>{lead?.property_name || "Not available"}</h4>
                                                         <h6>enquired by {lead?.customer_name || "Not available"}</h6>
                                                         <div className="text-end">
-                                                            <span className="badge bg-primary">{lead?.enquery_status}</span>
+                                                            <span className={`badge ${statusClasses[lead?.lead_status]}`}>{leadStatusList[lead?.lead_status || 0]}</span>
                                                             <br />
-                                                            <button className="btn btn-secondary btn-sm mt-1">Actions</button>
+                                                            {/* <button className="btn btn-secondary btn-sm mt-1">Actions</button> */}
                                                         </div>
                                                     </div>
                                                     <p className="d-flex gap-2">
@@ -293,13 +383,20 @@ const Index = () => {
                                                         </span>
                                                     </p>
                                                     <p className="text-wrap mb-2">{lead?.message}</p>
-                                                    <div class="d-sm-flex">
-                                                        <button class="btn btn-sm btn-primary me-2">Read more</button>
-                                                        <button class="btn btn-sm btn-outline-primary me-2 ms-auto" onclick="window.location.href='/contact-url';">Contact</button>
-                                                        <button class="btn btn-sm btn-outline-primary me-2" onclick="window.location.href='/contact-history-url';">Contact History</button>
+                                                    <div class="d-flex justify-content-end">
+                                                        <button class="btn btn-sm btn-outline-primary me-2" onClick={() => handleModalOpen(lead?.Phone, lead?.Email, lead.assign_id, lead.enquery_id, lead.lead_type)}>Contact</button>
+                                                        <Link class="btn btn-sm btn-outline-primary me-2" href={`/property-crm-timeline?enquery_id=${lead?.enquery_id}`}>Contact History</Link>
+                                                        <select class="form-select form-select-sm ms-2" aria-label="Select action" value={lead?.lead_status} onChange={(e) => handleLeadStatusChange(e, i, lead.assign_id)}>
+                                                            <option value="">select an option</option>
+                                                            {leadStatusList?.length > 0 && leadStatusList?.map((status, i) => {
+                                                                return (
+                                                                    <option key={i} value={i}>{status}</option>
+                                                                )
+                                                            })}
+                                                        </select>
                                                     </div>
-
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -413,13 +510,13 @@ const Index = () => {
                         </button>
                     )} */}
                     {currentPage < totalPage && (
-                            <button
-                                className="btn btn-primary btn-lg d-block mx-auto mt-4"
-                                onClick={() => handleLoadMoreClick(Number(currentPage) + 1)}
-                            >
-                                {translation?.load_more || "Load More"}
-                            </button>
-                        )
+                        <button
+                            className="btn btn-primary btn-lg d-block mx-auto mt-4"
+                            onClick={() => handleLoadMoreClick(Number(currentPage) + 1)}
+                        >
+                            {translation?.load_more || "Load More"}
+                        </button>
+                    )
                     }
                 </div>
             </aside>
@@ -427,13 +524,66 @@ const Index = () => {
 
 
             {/* <CRMEnquiry
-                showModal={showModal}
+                showModal={show}
                 modalContent={modalContent}
                 handleCloseModal={handleCloseModal}
                 logData={modalContent?.log_data}
                 fecthPropertyCRMData={fecthPropertyCRMData}
                 enquiryId={modalContent?.enquery_id}
                 actionUpdateFunction={actionUpdateFunction} /> */}
+            {/* {console.log("show", show)} */}
+            {/* <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Modal Title</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+
+                    <form>
+                        <div className="form-floating mb-4">
+                            <select className="form-select" id="floatingSelect" aria-label="Select Status">
+                                <option value="">select an option</option>
+                                {leadStatusList?.length > 0 &&
+                                    leadStatusList.map((status, i) => (
+                                        <option key={i} value={i}>{status}</option>
+                                    ))
+                                }
+                            </select>
+
+                            <label htmlFor="floatingSelect">Status</label>
+                        </div>
+
+                        <div className="form-floating mb-4">
+                            <input
+                                type="datetime-local"
+                                className="form-control"
+                                id="scheduleDate"
+                                aria-label="Schedule Date"
+                            />
+                            <label htmlFor="scheduleDate">Schedule Date</label>
+                        </div>
+
+                        <div className="form-floating mb-4">
+                            <textarea
+                                rows="4"
+                                className="form-control"
+                                id="remarks"
+                                placeholder="Remarks"
+                                style={{ minHeight: "80px" }}
+                            ></textarea>
+                            <label htmlFor="remarks">Remarks</label>
+                        </div>
+                    </form>
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <button className="btn btn-secondary" onClick={handleClose}>
+                        Close
+                    </button>
+                    <Button variant="primary">Submit</Button>
+                </Modal.Footer>
+            </Modal> */}
+            <ContactModal show={show} handleClose={handleClose} phone={activeModalData?.phone} email={activeModalData?.email} submitHandler={contactSave} />
         </DashboardLayout>
     );
 };
@@ -451,4 +601,5 @@ const generateUrl = (leadType) => {
         default:
             return '/my_property_CRMS';
     }
-}
+};
+
