@@ -67,7 +67,27 @@ class ProjectAmenityModel extends Model
 
         return $query->paginate($peginate);
     }
+    public function getProjectAmenities($lang = 'en')
+    {
+        $query = DB::table('project_amenity_names')
+            ->join('project_amenity', 'project_amenity_names.amenity_id', '=', 'project_amenity.id')
+            ->where([
+                ['project_amenity_names.lang', '=', $lang],
+                ['project_amenity.status', '!=', config('constants.STATUS_DELETE')],
+            ])
+            ->select(
+                'project_amenity.id',
+                'project_amenity_names.name',
+                'project_amenity.order',
+                'project_amenity.status',
+                'project_amenity.image'
+            )
+            ->get();
 
+ 
+
+        return $query;
+    }
     public function getAmenitiesDetails($id)
     {
         $Amenities = DB::table('project_amenity_names')

@@ -35,11 +35,11 @@ class ProjectController extends Controller
         $postController = new PostController();
         $propertyStatus = json_decode($postController->status($request)->getContent(), true)['data'] ?? [];
         //load proepertyAmenities
-        $proepertyAmenities = json_decode($postController->get_property_amnity($request)->getContent(), true)['data'] ?? [];
+        $projectAmenities = json_decode($postController->get_property_amnity($request)->getContent(), true)['data'] ?? [];
 
         //load Furnishes
         $propertyFurnishes = json_decode($postController->furnish($request)->getContent(), true)['data'] ?? [];
-        return view('Admin.All_project.add_project', compact('project_type', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus', 'uid'));
+        return view('Admin.All_project.add_project', compact('project_type', 'cities', 'projectAmenities', 'propertyFurnishes', 'propertyStatus', 'uid'));
     }
 
     public function ProjectImageStore(Request $request)

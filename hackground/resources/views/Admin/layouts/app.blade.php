@@ -56,7 +56,7 @@
     <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
     <!--Toastr-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" crossorigin="anonymous"></script>
-    <script src="{{ asset('assets/js/scripts-init/toastr.js') }}"></script>
+
 
     {{-- WUSIWYG (CkEditor) --}}
     <script src="https://cdn.ckeditor.com/4.20.2/standard/ckeditor.js" integrity="sha384-<hash>" crossorigin="anonymous">
@@ -74,6 +74,7 @@
     <script src="{{ asset('assets/js/scripts-init/sweet-alerts.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
     <script src="{{ asset('assets/js/scripts-init/select2/dist/js/select2.full.min.js') }}"></script>
+
     @yield('modals')
     <script>
         function c_alert(message, type = 'success') {
@@ -96,20 +97,15 @@
         const STATUS_DELETED = {
             !!json_encode(config('constants.STATUS_DELETED')) !!
         };
+    </script>
+    <script>
         var toastrOptions = {
+            "closeButton": true,
             "progressBar": true,
             "positionClass": "toast-top-right",
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut",
+            "timeOut": "3000",
         };
     </script>
-
     @stack('custom-js')
 </body>
 <div class="modal fade" id="ajax_modal" tabindex="-1" role="dialog" aria-labelledby="ajax_modal" aria-hidden="true">
@@ -119,5 +115,7 @@
         </div>
     </div>
 </div>
+
+
 
 </html>

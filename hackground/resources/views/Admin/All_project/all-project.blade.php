@@ -40,6 +40,21 @@
             padding: 1rem;
             margin-top: 1rem;
         }
+
+        .amenity-container {
+            display: flex;
+            flex-wrap: wrap;
+            /* Allows items to move to the next row */
+            gap: 10px;
+            /* Adds spacing between items */
+        }
+
+        .amenity-item {
+            display: flex;
+            align-items: center;
+            width: 45%;
+            /* Adjust for two items per row */
+        }
     </style>
     @if (session('success_msg'))
     <div class="alert alert-{{ session('message_type') }}">
@@ -87,10 +102,10 @@
                         <tr>
                             <th style="width:10%">Photo</th>
                             <th style="width:20%">Project</th>
-                            <th style="width:8%">Carpet Area</th>
                             <th style="width:20%">Address</th>
                             <th style="width:15%">Post Date</th>
                             <th style="width:10%">Leads</th>
+                            <th style="width:10%">Action</th>
                             <th style="min-width:5px;" class="text-center">Status</th>
                         </tr>
                     </thead>
@@ -109,11 +124,8 @@
                             <!-- Displaying Project Name (Assuming `name` exists) -->
                             <td><a href="{{url('project/project_details')}}/{{$proj->id}}">{{ $proj->project_name }}</a></td>
 
-                            <!-- Displaying Carpet Area -->
-                            <td>{{ $proj->settings->carpet_area ?? 'N/A' }}</td>
-
                             <!-- Displaying Address -->
-                            <td>{{ $proj->location->address ?? 'N/A' }}</td>
+                            <td>{{$proj->additional->project_amenity}}</td>
 
                             <!-- Displaying Post Date (Assuming `created_at` exists) -->
                             <td>{{ $proj->created_at->format('d-M-Y') }}</td>
@@ -122,7 +134,9 @@
                                 {{ projectLeadsCount($proj->id) }}
                                 <a href="{{ url('/enquiry/project-leads/'.$proj->id) }}" title="View Leads"><i class="fa fa-eye"></i></a>
                             </td>
-
+                            <td>
+                                <button class="btn btn-sm btn-warning" onclick="addAmenity(`{{$proj->id}}`)">Add Amenity</button>
+                            </td>
                             <!-- Displaying Status -->
                             <td>
                                 <div class="col-auto  mb-2">
@@ -147,7 +161,7 @@
                                         data-prop-id="{{ $proj->id }}" {{ $proj->is_featured ? 'checked' : '' }}>Make Featured
                                     <input type="checkbox" class="prop_top_status"
                                         data-prop-id="{{ $proj->id }}" {{ $proj->is_top ? 'checked' : '' }}>Make Top
-                                
+
 
                                 </div>
 
@@ -208,119 +222,233 @@
         </div>
     </div>
 </div>
-
-
 @endsection
 
 
+@section('modals')
+<div class="modal fade" id="amenityModal" tabindex="-1" aria-labelledby="amenityModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="amenityModalLabel">Add Amenity Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body amenity-container">
+                <input type="hidden" name="project_id" id="project_id">
 
 
+                @foreach($projectAmenities as $projectAmenitie)
+                <div class="form-check amenity-item">
+                    <input class="form-check-input" type="checkbox"
+                        value="{{ $projectAmenitie->id }}">
+                    <label class="form-check-label d-flex align-items-center ms-2">
+                        <img alt="Parking" height="24" width="24" class="me-2" src="{{ $projectAmenitie->image }}">
+                        {{ $projectAmenitie->name }}
+                    </label>
+                </div>
+                @endforeach
 
+            </div>
 
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveAmenityBtn">Save</button>
+            </div>
+        </div>
+    </div>
+    @endsection
+    @push('custom-js')
 
-@push('custom-js')
-
-<script>
-    $(document).ready(function() {
-
-        $('.prop_top_status').change(function() {
-
-
-
-            var id = $(this).data('prop-id');
-            var status = this.checked ? 1 : 0;
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
+    <script>
+        function getAmenities(project_id) {
             $.ajax({
-                type: 'POST',
-                url: `{{ url('allproject/top_status') }}`,
+                url: "{{ route('get.amenities') }}", // Make sure this matches the route defined in web.php
+                type: "GET",
                 data: {
-                    'status': status,
-                    'id': id
-                },
-                success: function(data) {
-                    toastr.success('Request processed successfully.', data.message,
-                        toastrOptions);
-                },
-                error: function(msg) {
-                    console.log(msg);
-                    var errors = msg.responseJSON;
-                }
-            });
-        });
-
-        $('.prop_feature_status').change(function() {
-
-
-
-            var id = $(this).data('prop-id');
-            var status = this.checked ? 1 : 0;
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                type: 'POST',
-                url: `{{ url('allproject/feature_status') }}`,
-                data: {
-                    'status': status,
-                    'id': id
-                },
-                success: function(data) {
-                    toastr.success('Request processed successfully.', data.message,
-                        toastrOptions);
-                },
-                error: function(msg) {
-                    console.log(msg);
-                    var errors = msg.responseJSON;
-                }
-            });
-        });
-        $('.prop_status').on('change', function() {
-            var propertyId = $(this).data('property-id');
-            var status = $(this).val();
-            switch (status) {
-                case 'delete':
-                    var url = `{{ url('allproject/delete') }}`
-                    break;
-                case 'edit_view':
-                    window.location.href = `{{ url('project/edit') }}/${propertyId}`;
-                    break;
-                default:
-                    var url = `{{ url('allproject/statusupdate') }}`
-                    break;
-            }
-
-
-            $.ajax({
-                url: url,
-                method: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    status: status,
-                    propertyId: propertyId
+                    projId: project_id,
+                    _token: "{{ csrf_token() }}" // Include CSRF token
                 },
                 success: function(response) {
+                    let selectedAmenities;
+                    if (response.project_amenity.project_amenity.startsWith('[')) {
+                        selectedAmenities = JSON.parse(response.project_amenity.project_amenity).map(String);
+                    } else {
+                        selectedAmenities = response.project_amenity.project_amenity.split(',').map(String);
+                    }
 
-                    console.log(response);
-                    window.location.reload(true);
+                    $(".amenity-item .form-check-input").each(function() {
+                        let amenityId = $(this).val();
+                        if (selectedAmenities.includes(amenityId)) {
+                            $(this).prop('checked', true);
+                        } else {
+                            $(this).prop('checked', false);
+                        }
+                    });
                 },
                 error: function(xhr, status, error) {
-
-                    console.log(error);
+                    console.error("Error:", error);
                 }
             });
+        }
+
+        addAmenity = (projecId) => {
+            $('#project_id').val(projecId);
+            getAmenities(projecId);
+            $('#amenityModal').modal('show');
+        };
+
+        $(document).ready(function() {
+
+            $('.prop_top_status').change(function() {
+
+
+
+                var id = $(this).data('prop-id');
+                var status = this.checked ? 1 : 0;
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: `{{ url('allproject/top_status') }}`,
+                    data: {
+                        'status': status,
+                        'id': id
+                    },
+                    success: function(data) {
+                        toastr.success('Request processed successfully.', data.message,
+                            toastrOptions);
+                    },
+                    error: function(msg) {
+                        console.log(msg);
+                        var errors = msg.responseJSON;
+                    }
+                });
+            });
+
+            $('.prop_feature_status').change(function() {
+
+
+
+                var id = $(this).data('prop-id');
+                var status = this.checked ? 1 : 0;
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: `{{ url('allproject/feature_status') }}`,
+                    data: {
+                        'status': status,
+                        'id': id
+                    },
+                    success: function(data) {
+                        toastr.success('Request processed successfully.', data.message,
+                            toastrOptions);
+                    },
+                    error: function(msg) {
+                        console.log(msg);
+                        var errors = msg.responseJSON;
+                    }
+                });
+            });
+            $('.prop_status').on('change', function() {
+                var propertyId = $(this).data('property-id');
+                var status = $(this).val();
+                switch (status) {
+                    case 'delete':
+                        var url = `{{ url('allproject/delete') }}`
+                        break;
+                    case 'edit_view':
+                        window.location.href = `{{ url('project/edit') }}/${propertyId}`;
+                        break;
+                    default:
+                        var url = `{{ url('allproject/statusupdate') }}`
+                        break;
+                }
+
+
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        status: status,
+                        propertyId: propertyId
+                    },
+                    success: function(response) {
+
+                        console.log(response);
+                        window.location.reload(true);
+                    },
+                    error: function(xhr, status, error) {
+
+                        console.log(error);
+                    }
+                });
+            });
+
+
+
         });
+    </script>
+    <script>
+        $(document).ready(function() {
 
-    });
-</script>
+            $("#saveAmenityBtn").click(function() {
+                let project_id = $('#project_id').val();
 
-@endpush
+                let checkedAmenities = [];
+                $(".amenity-item .form-check-input:checked").each(function() {
+                    checkedAmenities.push($(this).val());
+                });
+
+                console.log("Selected Amenities:", checkedAmenities);
+
+                saveAmenities(checkedAmenities, project_id);
+            });
+
+            function saveAmenities(amenities, project_id) {
+                $.ajax({
+                    url: "{{ route('save.amenities') }}",
+                    type: "POST",
+                    data: {
+                        projId: project_id,
+                        selectedAmenities: amenities,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        $('#amenityModal').modal('hide');
+
+                        // Store success message in localStorage (or use sessionStorage)
+                        localStorage.setItem('successMessage', 'Amenities updated successfully!');
+
+                        // Reload the page
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error:", error);
+                    }
+                });
+            }
+
+        });
+        $(document).ready(function() {
+            const successMessage = localStorage.getItem('successMessage');
+
+            if (successMessage) {
+                toastr.success(successMessage, '', toastrOptions);
+                localStorage.removeItem('successMessage');
+            }
+        });
+    </script>
+
+    @endpush
