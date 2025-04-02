@@ -44,6 +44,7 @@ const index = () => {
         <DashboardLayout>
             <aside className="col-lg col-12">
                 <div className="p-4">
+                <h1 className="h4 text-primary mb-3">Schedule Meetings</h1>
                     {list?.length > 0 && list?.map((item, i) => {
                         return (
                             <div className="card card-ads">
