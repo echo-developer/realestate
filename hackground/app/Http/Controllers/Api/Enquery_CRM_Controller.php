@@ -953,8 +953,10 @@ class Enquery_CRM_Controller extends Controller
             $checkAssignedLead = DB::table('leads_assigned')->where(['assign_id'=>$assign_id,'user_id'=>$user_id])->first();
             $assign_data = [];
             $enquiry_id = "";
+            $lead_type = "";
             if ($checkAssignedLead) {
                 $enquiry_id = $checkAssignedLead->enquery_id;
+                $lead_type = $checkAssignedLead->lead_type;
                 $eq_timeline = DB::table('crm_log')
                     ->leftJoin('property_enquiry', 'crm_log.enquiry_id', '=', 'property_enquiry.enquery_id')
                     ->where(['crm_log.assign_id'=> $assign_id,'crm_log.user_id'=>$user_id])
@@ -975,6 +977,7 @@ class Enquery_CRM_Controller extends Controller
                         'data' => [],
                         'assign_id'=>$assign_id,
                         'enquiry_id'=>$enquiry_id,
+                        'lead_type'=> $lead_type
                     ]);
                 }
 
@@ -984,6 +987,7 @@ class Enquery_CRM_Controller extends Controller
                     'data' => $eq_timeline,
                     'assign_id'=>$assign_id,
                     'enquiry_id'=>$enquiry_id,
+                    'lead_type'=> $lead_type
                 ]);
 
                 // Log::info('eq_timeline :\n' . json_encode($eq_timeline, JSON_PRETTY_PRINT));
@@ -994,6 +998,7 @@ class Enquery_CRM_Controller extends Controller
                     'data' => [],
                     'assign_id'=>$assign_id,
                     'enquiry_id'=>$enquiry_id,
+                    'lead_type'=> $lead_type
                 ]);
             }
         } catch (\Exception $e) {
