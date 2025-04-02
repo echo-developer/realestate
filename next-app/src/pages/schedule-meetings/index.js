@@ -4,12 +4,17 @@ import DashboardLayout from '@/components/layout/DashboardLayout'
 import AuthUser from '@/components/Authentication/AuthUser';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
+import Link from 'next/link';
+import useTranslation from '@/hooks/useTranslation';
+import { Button } from 'react-bootstrap';
 
 const index = () => {
     const { callApi, GetMemberId } = AuthUser()
     const mermber_id = GetMemberId();
     const router = useRouter();
     const [list, setList] = useState([])
+    const [loading, setLoading] = useState(true);
+    const translation = useTranslation();
 
 
     useEffect(() => {
@@ -25,6 +30,7 @@ const index = () => {
     };
 
     const fetchScheduleMeetings = async (date) => {
+        setLoading(true);
         try {
             const res = await callApi({
                 api: `/schedule-meeting-list`,
@@ -43,6 +49,8 @@ const index = () => {
             }
         } catch (error) {
             console.error(error.message || "Something went wrong")
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -84,7 +92,29 @@ const index = () => {
             <aside className="col-lg col-12">
                 <div className="p-4">
                 <h1 className="h4 text-primary mb-3">Schedule Meetings</h1>
-                    {list?.length > 0 && list?.map((item, i) => {
+                {loading && (
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                height: "200px",
+                                width: "100%", // Ensure full width
+                            }}
+                            className="d-flex justify-content-center align-items-center w-100"
+                        >
+                            <div
+                                className="spinner-border text-primary"
+                                role="status"
+                            >
+                                <span className="visually-hidden">
+                                    {translation?.loading ||
+                                        "Loading...."}{" "}
+                                </span>
+                            </div>
+                        </div>
+                    )}
+                    {!loading && list?.length > 0 && list?.map((item, i) => {
                         return (
                             <div className="card card-ads" key={i}>
                                 <div className="row g-0">
@@ -111,6 +141,9 @@ const index = () => {
                                             </p>
                                             <p className="text-wrap mb-2">No message</p>
                                             <div className="d-flex justify-content-end">
+                                                <Button>
+                                                    <Link href={`/lead-details/${item?.assign_id}`}>Lead Details</Link>
+                                                </Button>
                                                 <select className="form-select form-select-sm ms-2" aria-label="Select action" value={item?.status} onChange={(e) => handleStatusChange(e, i, item.id)}>
                                                     <option value="">Select an option</option>
                                                     <option value={0}>Pending</option>

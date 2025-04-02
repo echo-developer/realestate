@@ -30,6 +30,7 @@ const Timeline = () => {
   const { assign_id } = router?.query || {};
   const member_id = GetMemberId();
   const enquery_id = 2;
+  const [loading, setLoading] = useState(true);
   const [CRMEnquiryForm, setCRMEnquiryForm] = useState({
     enq_status: "",
     date: "",
@@ -47,6 +48,7 @@ const Timeline = () => {
   }, [router?.isReady, member_id]);
 
   const FetchTimeLineData = async (assign_id) => {
+    setLoading(true);
     try {
       const response = await callApi({
         api: "/lead-contact-history",
@@ -79,6 +81,8 @@ const Timeline = () => {
       }
     } catch (error) {
       toast.error("Error fetching timeline data.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -150,10 +154,10 @@ const Timeline = () => {
         toast.success("Contact form submitted successfully");
         handleClose();
         setTimelineData(prev => {
-          return [...prev,{
-              "schedule_date": data?.schedule_date,
-              "remark_type": data.remark_type,
-              "remarks": data.remarks
+          return [...prev, {
+            "schedule_date": data?.schedule_date,
+            "remark_type": data.remark_type,
+            "remarks": data.remarks
           }]
         })
       }
@@ -173,7 +177,7 @@ const Timeline = () => {
 
               <ul className="nav mb-3 gap-4">
                 <li className="nav-item">
-                  <a className="nav-link" href={`/property-crm-schedule/${enquery_id}`}>
+                  <a className="nav-link" href={`/lead-details/${assign_id}`}>
                     Lead Details
                   </a>
                 </li>
@@ -197,9 +201,30 @@ const Timeline = () => {
                   {translation?.add_new_data || "Add New Data"} <BsPlusLg />
                 </Button>
               </div>
-
+              {loading && (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "200px",
+                      width: "100%", // Ensure full width
+                    }}
+                    className="d-flex justify-content-center align-items-center w-100"
+                  >
+                    <div
+                      className="spinner-border text-primary"
+                      role="status"
+                    >
+                      <span className="visually-hidden">
+                        {translation?.loading ||
+                          "Loading...."}{" "}
+                      </span>
+                    </div>
+                  </div>
+                )}
               <div className="timeline-container">
-                {timelineData?.length > 0 && timelineData?.slice()?.reverse()?.map((item, i) => {
+                {!loading && timelineData?.length > 0 && timelineData?.slice()?.reverse()?.map((item, i) => {
                   const isEven = i % 2;
 
                   return (
