@@ -9,91 +9,99 @@ import { Modal, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import withAuth from "@/utils/withAuth";
 import useTranslation from "@/hooks/useTranslation";
+import { useRouter } from "next/router";
 
 const Index = () => {
+  const router = useRouter();
   const { callApi, GetMemberId } = AuthUser();
   const localizer = momentLocalizer(moment);
   const [calenderData, setCalenderData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const memberId = GetMemberId();
-const translation = useTranslation();
+  const translation = useTranslation();
+  const [start_end_data, setStartEndDate] = useState({
+    start_date: "",
+    end_date: ""
+  })
 
   useEffect(() => {
-    FetchCalenderData();
+    const startDate = moment().startOf("month").format("YYYY-MM-DD");
+    const endDate = moment().endOf("month").format("YYYY-MM-DD");
+    setStartEndDate({
+      start_date: startDate,
+      end_date: endDate
+    })
+    FetchCalenderData(startDate, endDate);
   }, [memberId]);
 
 
-  const FetchCalenderData = async () => {
+  const FetchCalenderData = async (start_date, end_date) => {
     try {
-      const response = await callApi({
-        api: "/crm_calender",
+      const res = await callApi({
+        api: "/lead-schedule-calendar",
         method: "GET",
         data: {
           user_id: memberId,
+          start_date,
+          end_date
         },
       });
-      if (response && response.status === 1) {
-        const data = convertToCalendarEvents(response?.data);
+      if (res && res.status === 1) {
+        const data = convertToCalendarEvents(res?.data);
         setCalenderData(data);
-      } 
+      }
     } catch (error) {
       toast.error("Error fetching calendar data.");
     }
   };
 
 
-  const handleSelecteSlot = (data) => {
-    if(data) {
-      const {start} = data || {};
-      const selectedStartDate = moment(start).format("YYYY-MM-DD");
-      const filteredArray = calenderData?.filter(item => {
-        const startDate = moment(item?.start)?.format("YYYY-MM-DD");
-        return selectedStartDate === startDate;
-      })
-
-      setSelectedEvent(filteredArray || []);
-      setShowModal(true)
-    }
-  }
-
-
   const convertToCalendarEvents = (apiData) => {
-    return apiData.flatMap((entry) =>
-      entry.list.map((item) => {
-        const [year, month, day] = entry.date.split("-").map(Number);
-        const [hours, minutes, seconds] = item.schedule_time
-          .split(":")
-          .map(Number);
+    if (!Array.isArray(apiData)) return [];
   
-        return {
-          title: item.remarks || "No Title",
-          start: new Date(year, month - 1, day, hours, minutes, seconds),
-          end: new Date(year, month - 1, day, hours + 1, minutes, seconds), 
-          allDay: false,
-        };
-      })
-    );
+    return apiData.map((item) => ({
+      title: `${item?.count || 0} meetings`,
+      start: new Date(`${item?.date || "1970-01-01"}T00:00:00`),
+      end: new Date(`${item?.date || "1970-01-01"}T23:59:59`),
+      allDay: true
+    }));
   };
+  
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setSelectedEvent([])
-  }
+  const handleRangeChange = (range) => {
+    let startDate, endDate;
+  
+    if (Array.isArray(range)) {
+      // Week or Day view
+      startDate = moment.utc(range[0]).startOf("day").format("YYYY-MM-DD");
+      endDate = moment.utc(range[range.length - 1]).endOf("day").format("YYYY-MM-DD");
+    } else {
+      // Month view
+      startDate = moment.utc(range.start).startOf("month").format("YYYY-MM-DD");
+      endDate = moment.utc(range.end).endOf("month").format("YYYY-MM-DD");
+    }
+  
+    console.log("Start Date:", startDate);
+    console.log("End Date:", endDate);
+  
+    setStartEndDate({
+      start_date: startDate,
+      end_date: endDate,
+    });
+  
+    FetchCalenderData(startDate, endDate);
+  };
+  
+
 
   const handleSelectEvent = (event) => {
-    if (event) {
-      const selectedStartDate = moment(event.start).format("YYYY-MM-DD");
-      const filteredArray = calenderData?.filter(item => {
-        const startDate = moment(item?.start)?.format("YYYY-MM-DD");
-        return selectedStartDate === startDate;
-      });
-  
-      setSelectedEvent(filteredArray || []);
-      setShowModal(true);
+    const schedule_date = moment(event.start).format('YYYY-MM-DD')
+    if(schedule_date) {
+      router.push(`/schedule-meetings?date=${schedule_date}`);
     }
   };
-  
+
 
 
   return (
@@ -109,35 +117,9 @@ const translation = useTranslation();
           // onSelectEvent={handleSelectEvent}
           onSelectEvent={handleSelectEvent}
           selectable
-          onSelectSlot={handleSelecteSlot}
+          onRangeChange={handleRangeChange}
         />
       </div>
-      <Modal show={showModal} onHide={handleCloseModal}>
-  <Modal.Header closeButton>
-    <Modal.Title>{translation?.event_details || "Event Details"}</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    {selectedEvent?.length > 0 &&
-      selectedEvent?.map((item, i) => {
-        return (
-          <React.Fragment key={i}>
-            <div style={{ padding: "10px 0", borderBottom: "1px solid #ddd" }}>
-              <p><strong>{translation?.title || "Title:"}</strong> {item?.title}</p>
-              <p><strong>{translation?.scheduled_date || "Scheduled Date:"}</strong> {moment(item?.start).format("YYYY-MM-DD HH:mm")}</p>
-              <p><strong>{translation?.scheduled_date || "Remarks:"}</strong> {item?.title}</p>
-            </div>
-            {/* Add spacing below except for the last item */}
-            {i !== selectedEvent.length - 1 && <div style={{ marginBottom: "10px" }} />}
-          </React.Fragment>
-        );
-      })}
-  </Modal.Body>
-  <Modal.Footer>
-    <Button variant="secondary" onClick={handleCloseModal}>
-      Close
-    </Button>
-  </Modal.Footer>
-      </Modal>
 
     </DashboardLayout>
   );
