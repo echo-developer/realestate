@@ -144,14 +144,12 @@ class PostPropertyController extends Controller
         $detail = "";
         $city = get_all_city();
         $property_category = get_all_property_category();
-        if($page == 'add'){
-			$pages = $this->advertisement->get_pages();
-			$title = 'Add Advertisement';
-			$form_action = url('advertisement/add');
-		}elseif($page == 'basic')
+        $title = '';
+        if($page == 'basic')
         {
-            $id = $srch['id'];
-			$ID = $id;
+            $title = 'Edit Basic Details';
+            $property_id = $srch['id'];
+			$ID = $property_id;
 			$form_action = url('property/save-edit-property');
             $propertyData = PrefProperty::where('id',  $property_id)->with([
                 'settings',
@@ -162,24 +160,9 @@ class PostPropertyController extends Controller
                 'gallery',
                 'gallery.images'
             ])->first();
-            print_r();
-			// $detail = $this->advertisement->getDetail($id);
-            // if($detail)
-            // {
-            //     $detail['ad_locations'] = $this->advertisement->getAdLocations($detail['advertisement_id']);
-            //     $detail['ad_cats'] = $this->advertisement->getAdCategory($detail['advertisement_id']);
-            // }
-			// $title = 'Edit Advertisement';
-			// $pages = $this->advertisement->get_pages();
-			// if(!empty($detail['page'])){
-			// 	$positions = $this->advertisement->get_position($detail['page']);
-			// 	if(!empty($detail['position'])){
-			// 		$sizes = $this->advertisement->get_size($detail['page'], $detail['position']);
-			// 	}
-			// }
         }
 
-        return view('Admin.Advertisement.ajax_page', compact('page', 'title', 'form_action','pages','positions', 'sizes', 'ID', 'detail', 'city','property_category'));
+        return view('Admin.Post_property_view.ajax_page', compact('page', 'title', 'form_action', 'ID', 'propertyData'));
     }
 
     public function saveProperty(Request $request)
