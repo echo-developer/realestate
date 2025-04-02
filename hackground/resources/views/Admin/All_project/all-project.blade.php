@@ -139,7 +139,7 @@
                                 <button type="button" onclick="addProperty(`{{$proj->id}}`)" class="btn btn-primary">Add Property</button>
 
                                 <button onclick="addFloorConfig(`{{$proj->id}}`)" class="btn btn-sm btn-success">Add Floor Data</button>
-                                <button class="btn btn-sm btn-primary">Add Certificate</button>
+                                <button class="btn btn-sm btn-primary" onclick="AddCertificate()">Add Certificate</button>
                                 <button class="btn btn-sm btn-danger">Upload Brochure</button>
                             </td>
                             <!-- Displaying Status -->
@@ -285,7 +285,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal for Floor Configuration-->
 <div class="modal fade" id="floorModal" tabindex="-1" aria-labelledby="propertyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -313,203 +313,153 @@
 
 @endsection
 @push('custom-js')
-<!-- Amenities Start -->
 
 <script>
-    function getAmenities(project_id) {
-        $.ajax({
-            url: "{{ route('get.amenities') }}", // Make sure this matches the route defined in web.php
-            type: "GET",
-            data: {
-                projId: project_id,
-                _token: "{{ csrf_token() }}" // Include CSRF token
-            },
-            success: function(response) {
-                let selectedAmenities;
-                if (response.project_amenity.project_amenity.startsWith('[')) {
-                    selectedAmenities = JSON.parse(response.project_amenity.project_amenity).map(String);
-                } else {
-                    selectedAmenities = response.project_amenity.project_amenity.split(',').map(String);
-                }
-
-                $(".amenity-item .form-check-input").each(function() {
-                    let amenityId = $(this).val();
-                    if (selectedAmenities.includes(amenityId)) {
-                        $(this).prop('checked', true);
-                    } else {
-                        $(this).prop('checked', false);
-                    }
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error("Error:", error);
-            }
-        });
-    }
-
-    addAmenity = (projecId) => {
-        $('#project_id').val(projecId);
-        getAmenities(projecId);
-        $('#amenityModal').modal('show');
-    };
-
-    $(document).ready(function() {
-
-        $('.prop_top_status').change(function() {
-
-
-
-            var id = $(this).data('prop-id');
-            var status = this.checked ? 1 : 0;
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                type: 'POST',
-                url: `{{ url('allproject/top_status') }}`,
-                data: {
-                    'status': status,
-                    'id': id
-                },
-                success: function(data) {
-                    toastr.success('Request processed successfully.', data.message,
-                        toastrOptions);
-                },
-                error: function(msg) {
-                    console.log(msg);
-                    var errors = msg.responseJSON;
-                }
-            });
-        });
-
-        $('.prop_feature_status').change(function() {
-
-
-
-            var id = $(this).data('prop-id');
-            var status = this.checked ? 1 : 0;
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                type: 'POST',
-                url: `{{ url('allproject/feature_status') }}`,
-                data: {
-                    'status': status,
-                    'id': id
-                },
-                success: function(data) {
-                    toastr.success('Request processed successfully.', data.message,
-                        toastrOptions);
-                },
-                error: function(msg) {
-                    console.log(msg);
-                    var errors = msg.responseJSON;
-                }
-            });
-        });
-        $('.prop_status').on('change', function() {
-            var propertyId = $(this).data('property-id');
-            var status = $(this).val();
-            switch (status) {
-                case 'delete':
-                    var url = `{{ url('allproject/delete') }}`
-                    break;
-                case 'edit_view':
-                    window.location.href = `{{ url('project/edit') }}/${propertyId}`;
-                    break;
-                default:
-                    var url = `{{ url('allproject/statusupdate') }}`
-                    break;
-            }
-
-
-            $.ajax({
-                url: url,
-                method: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    status: status,
-                    propertyId: propertyId
-                },
-                success: function(response) {
-
-                    console.log(response);
-                    window.location.reload(true);
-                },
-                error: function(xhr, status, error) {
-
-                    console.log(error);
-                }
-            });
-        });
-
-
-
-    });
-</script>
-
-<script>
-    $(document).ready(function() {
-
-        $("#saveAmenityBtn").click(function() {
-            let project_id = $('#project_id').val();
-
-            let checkedAmenities = [];
-            $(".amenity-item .form-check-input:checked").each(function() {
-                checkedAmenities.push($(this).val());
-            });
-
-            console.log("Selected Amenities:", checkedAmenities);
-
-            saveAmenities(checkedAmenities, project_id);
-        });
-
-        function saveAmenities(amenities, project_id) {
-            $.ajax({
-                url: "{{ route('save.amenities') }}",
-                type: "POST",
-                data: {
-                    projId: project_id,
-                    selectedAmenities: amenities,
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function(response) {
-                    $('#amenityModal').modal('hide');
-                    localStorage.setItem('successMessage', 'Amenities updated successfully!');
-                    location.reload();
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error:", error);
-                }
-            });
-        }
-
-    });
-    $(document).ready(function() {
+    document.addEventListener('DOMContentLoaded', function() {
         const successMessage = localStorage.getItem('successMessage');
-
         if (successMessage) {
             toastr.success(successMessage, '', toastrOptions);
             localStorage.removeItem('successMessage');
         }
     });
 </script>
+<!-- Amenities Start -->
+<script>
+    // Initialize AJAX setup with CSRF token
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    /**
+     * Fetch and check amenities for a given project
+     * @param {int} project_id
+     */
+    function getAmenities(project_id) {
+        $.ajax({
+            url: "{{ route('get.amenities') }}",
+            type: "GET",
+            data: {
+                projId: project_id
+            },
+            success: function(response) {
+                let selectedAmenities = [];
+
+                if (response.project_amenity?.project_amenity) {
+                    let amenities = response.project_amenity.project_amenity;
+                    selectedAmenities = amenities.startsWith('[') ? JSON.parse(amenities).map(String) : amenities.split(',').map(String);
+                }
+
+                $(".amenity-item .form-check-input").each(function() {
+                    $(this).prop('checked', selectedAmenities.includes($(this).val()));
+                });
+            },
+            error: function(xhr) {
+                console.error("Error fetching amenities:", xhr.responseText);
+            }
+        });
+    }
+
+    /**
+     * Open the amenity modal for a specific project
+     * @param {int} projectId
+     */
+    function addAmenity(projectId) {
+        $('#project_id').val(projectId);
+        getAmenities(projectId);
+        $('#amenityModal').modal('show');
+    }
+
+    /**
+     * Save selected amenities for a project
+     */
+    function saveAmenities() {
+        let project_id = $('#project_id').val();
+        let checkedAmenities = $(".amenity-item .form-check-input:checked").map(function() {
+            return $(this).val();
+        }).get();
+
+        $.ajax({
+            url: "{{ route('save.amenities') }}",
+            type: "POST",
+            data: {
+                projId: project_id,
+                selectedAmenities: checkedAmenities
+            },
+            success: function() {
+                $('#amenityModal').modal('hide');
+                localStorage.setItem('successMessage', 'Amenities updated successfully!');
+                location.reload();
+            },
+            error: function(xhr) {
+                console.error("Error saving amenities:", xhr.responseText);
+            }
+        });
+    }
+
+    // Click event for saving amenities
+    $("#saveAmenityBtn").click(saveAmenities);
+
+    /**
+     * Update the status of a property (Top, Feature, General)
+     * @param {string} url
+     * @param {int} id
+     * @param {int} status
+     */
+    function updateStatus(url, id, status) {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                id: id,
+                status: status
+            },
+            success: function(data) {
+                toastr.success('Request processed successfully.', data.message, toastrOptions);
+            },
+            error: function(xhr) {
+                console.error("Error updating status:", xhr.responseText);
+            }
+        });
+    }
+
+    // Handle Top Status Toggle
+    $('.prop_top_status').change(function() {
+        updateStatus(`{{ url('allproject/top_status') }}`, $(this).data('prop-id'), this.checked ? 1 : 0);
+    });
+
+    // Handle Feature Status Toggle
+    $('.prop_feature_status').change(function() {
+        updateStatus(`{{ url('allproject/feature_status') }}`, $(this).data('prop-id'), this.checked ? 1 : 0);
+    });
+
+    // Handle Property Status Change (Delete, Edit, Update)
+    $('.prop_status').change(function() {
+        let propertyId = $(this).data('property-id');
+        let status = $(this).val();
+        let url = '';
+
+        switch (status) {
+            case 'delete':
+                url = `{{ url('allproject/delete') }}`;
+                break;
+            case 'edit_view':
+                window.location.href = `{{ url('project/edit') }}/${propertyId}`;
+                return;
+            default:
+                url = `{{ url('allproject/statusupdate') }}`;
+                break;
+        }
+
+        updateStatus(url, propertyId, status);
+        location.reload();
+    });
+</script>
 <!-- Amenities End -->
 
 <!-- Project Property Start -->
 <script>
-    document.getElementById('addPropertyBtn').addEventListener('click', addProperty);
-
-    const towerContainerModal = document.getElementById("tower-container-modal");
 
     function addProperty(project_id) {
         $.ajax({
@@ -522,281 +472,163 @@
             success: function(response) {
                 console.log(response);
 
-                let towersData = response.towers_data || []; // Ensure towersData is an array
-                const totalTowers = response.total_towers || towersData.length; // Use total_towers if available
                 const modalContainer = document.getElementById("tower-container-modal");
                 modalContainer.innerHTML = "";
 
-                // Loop through the total towers and create UI
+                let towersData = response.towers_data || [];
+                let totalTowers = response.total_towers || towersData.length;
+
                 for (let i = 0; i < totalTowers; i++) {
-                    let towerData = towersData[i] || {}; // Use existing data if available, else empty object
-                    createTower(towerData, i + 1, modalContainer, project_id);
+                    createTower(towersData[i] || {}, i + 1, modalContainer, project_id);
                 }
 
-                // Show modal after data is populated
-                $('#propertyModal').modal('show');
+                // Show the modal
+                $("#propertyModal").modal("show");
             },
-            error: function(xhr, status, error) {
-                console.error("Error:", error);
-            }
+            error: function(xhr) {
+                console.error("Error:", xhr.responseText);
+            },
         });
     }
-
 
     function createTower(towerData, towerIndex, container, project_id) {
         const tower = document.createElement("div");
         tower.classList.add("mb-4", "border", "p-3");
+
         $('#saveButton').val(project_id);
-        let slug = 'tower' + towerIndex;
+        let slug = "tower" + towerIndex;
+
         tower.innerHTML = `
-        <input class="form-control" name="project_id" type="hidden" value="${project_id}">
-        <h5>${'tower'+towerIndex}</h5>
-        <div class="row gx-2">
-            <div class="col-md-3">
-                <input class="form-control" name="tower_name" type="text" value="${towerData.tower_name??''}">
+            <input type="hidden" name="project_id" value="${project_id}">
+            <h5>${slug}</h5>
+            <div class="row gx-2">
+                <div class="col-md-3">
                 <label>Tower Name</label>
-            </div>
-            <input class="form-control" name="slug" type="hidden" value="${slug}">
-            <div class="col-md-3">
-                <input class="form-control" name="lift_no" type="number" value="${towerData.lift_no}">
+                    <input class="form-control" name="tower_name" type="text" value="${towerData.tower_name || ''}">
+                </div>
+                <input type="hidden" name="slug" value="${slug}">
+                <div class="col-md-3">
                 <label>Lift Number</label>
-            </div>
-            <div class="col-md-3">
-                <input class="form-control" name="stair_no" type="number" value="${towerData.stair_no}">
+                    <input class="form-control" name="lift_no" type="number" value="${towerData.lift_no || ''}">
+                </div>
+                <div class="col-md-3">
                 <label>Stair Number</label>
-            </div>
-            <div class="col-md-3">
-                <input class="form-control" name="fire_safety" type="number" value="${towerData.fire_safety}">
+                    <input class="form-control" name="stair_no" type="number" value="${towerData.stair_no || ''}">
+                </div>
+                <div class="col-md-3">
                 <label>Fire Safety</label>
+                    <input class="form-control" name="fire_safety" type="number" value="${towerData.fire_safety || ''}">
+                </div>
             </div>
-        </div>
-        <div class="floor-container"></div>
-        <button type="button" class="btn btn-primary btn-sm add-floor">Add Floor</button>
-    `;
+            <div class="floor-container"></div>
+            <button type="button" class="btn btn-primary btn-sm add-floor">Add Floor</button>
+        `;
 
         container.appendChild(tower);
 
         const floorContainer = tower.querySelector(".floor-container");
 
-
         if (towerData.floor_data) {
-            towerData.floor_data.forEach((floor, floorIndex) => {
-                createFloor(floorContainer, floorIndex + 1, floor);
+            towerData.floor_data.forEach((floor, index) => {
+                createFloor(floorContainer, index + 1, floor);
             });
         }
 
-
-        tower.querySelector(".add-floor").addEventListener("click", function() {
+        tower.querySelector(".add-floor").addEventListener("click", () => {
             createFloor(floorContainer, floorContainer.children.length + 1);
         });
     }
 
-
-    function createFloor(floorContainer, floorIndex, floorData = null) {
+    function createFloor(floorContainer, floorIndex, floorData = {}) {
         const floor = document.createElement("fieldset");
         floor.classList.add("border", "p-3", "mb-3", "position-relative");
 
         floor.innerHTML = `
-        <legend>Floor ${floorIndex}</legend>
-        <button type="button" class="btn btn-danger btn-sm remove-floor">Remove Floor</button>
-        <div class="row gx-2">
-            <div class="col-md-4">
-                <input class="form-control" name="floor_no" type="number" value="${floorData ? floorData.floor_no : ''}">
+            <legend>Floor ${floorIndex}</legend>
+            <button type="button" class="btn btn-danger btn-sm remove-floor">Remove Floor</button>
+            <div class="row gx-2">
+                <div class="col-md-4">
                 <label>Floor Number</label>
-            </div>
-            <div class="col-md-4">
-                <input class="form-control" name="flat_no" type="number" value="${floorData ? floorData.flat_no : ''}">
+                    <input class="form-control" name="floor_no" type="number" value="${floorData.floor_no || ''}">
+                </div>
+                <div class="col-md-4">
                 <label>Flat Number</label>
+                    <input class="form-control" name="flat_no" type="number" value="${floorData.flat_no || ''}">
+                </div>
             </div>
-        </div>
-        <div class="bhk-container"></div>
-        <button type="button" class="btn btn-primary btn-sm add-bhk">Add BHK</button>
-    `;
+            <div class="bhk-container"></div>
+            <button type="button" class="btn btn-primary btn-sm add-bhk">Add BHK</button>
+        `;
 
         floorContainer.appendChild(floor);
-
         const bhkContainer = floor.querySelector(".bhk-container");
 
-        // Load existing BHK data
-        if (floorData && floorData.bhk_configurations) {
-            floorData.bhk_configurations.forEach((bhk, bhkIndex) => {
-                createBHK(bhkContainer, bhkIndex + 1, bhk);
+        if (floorData.bhk_configurations) {
+            floorData.bhk_configurations.forEach((bhk, index) => {
+                createBHK(bhkContainer, index + 1, bhk);
             });
         }
-        floor.querySelector(".remove-floor").addEventListener("click", function() {
+
+        floor.querySelector(".remove-floor").addEventListener("click", () => {
             floor.remove();
         });
 
-        // Add BHK event listener
-        floor.querySelector(".add-bhk").addEventListener("click", function() {
+        floor.querySelector(".add-bhk").addEventListener("click", () => {
             createBHK(bhkContainer, bhkContainer.children.length + 1);
         });
     }
 
-    function createBHK(bhkContainer, bhkIndex, bhkData = null) {
+    function createBHK(bhkContainer, bhkIndex, bhkData = {}) {
         const bhk = document.createElement("div");
         bhk.classList.add("mb-3");
-        bhk.innerHTML =
-            `<legend>Flats ${bhkIndex}</legend>
-            <button type="button" class="btn btn-danger btn-delete btn-sm remove-bhk"><i class="bi bi-x-lg"></i></button>
-            <div class="row gx-2">
-                <div class="col-md-4 col-sm-6 mb-3">
-                    <div class="form-floating">
-                        <select class="form-select">
-                            <option value="1BHK" ${bhkData && bhkData.bhk_type === '1BHK' ? 'selected' : ''}>1BHK</option>
-                            <option value="2BHK" ${bhkData && bhkData.bhk_type === '2BHK' ? 'selected' : ''}>2BHK</option>
-                            <option value="3BHK" ${bhkData && bhkData.bhk_type === '3BHK' ? 'selected' : ''}>3BHK</option>
-                            <option value="4BHK" ${bhkData && bhkData.bhk_type === '4BHK' ? 'selected' : ''}>4BHK</option>
-                            <option value="5BHK" ${bhkData && bhkData.bhk_type === '5BHK' ? 'selected' : ''}>5BHK</option>
-                        </select>
-                        <label>BHK Type</label>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 mb-3">
-                    <div class="form-floating">
-                        <input class="form-control" type="number" placeholder="" value="${bhkData ? bhkData.carpet_area : ''}">
-                        <label>Carpet Area</label>
-                    </div>
-                </div>
-                  <input class="form-control" id="floor_plan_image_name" name="floor_plan_image_name" type="hidden">
-                <div class="col-md-4 col-sm-6 mb-3">
-                    <div class="form-floating">
-                        <input class="form-control" type="number" placeholder="" value="${bhkData ? bhkData.super_area : ''}">
-                        <label>Super Area</label>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 mb-3">
-                    <div class="form-floating">
-                        <input class="form-control" type="number" placeholder="" value="${bhkData ? bhkData.property_price : ''}">
-                        <label>Price</label>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 mb-3">
-                    <div class="form-floating">
-                        <select class="form-select">
-                            <option value="east" ${bhkData && bhkData.property_facing === 'east' ? 'selected' : ''}>East</option>
-                            <option value="north" ${bhkData && bhkData.property_facing === 'north' ? 'selected' : ''}>North</option>
-                            <option value="north_east" ${bhkData && bhkData.property_facing === 'north_east' ? 'selected' : ''}>North - East</option>
-                            <option value="north_west" ${bhkData && bhkData.property_facing === 'north_west' ? 'selected' : ''}>North - West</option>
-                            <option value="south" ${bhkData && bhkData.property_facing === 'south' ? 'selected' : ''}>South</option>
-                            <option value="south_east" ${bhkData && bhkData.property_facing === 'south_east' ? 'selected' : ''}>South - East</option>
-                            <option value="south_west" ${bhkData && bhkData.property_facing === 'south_west' ? 'selected' : ''}>South - West</option>
-                            <option value="west" ${bhkData && bhkData.property_facing === 'west' ? 'selected' : ''}>West</option>
-                        </select>
-                        <label>Facing</label>
-                    </div>
-                </div>
-            <div class="col-md-4 col-sm-6 mb-3">
-                <div class="form-floating">
-                    <input class="form-control floor-plan-input" type="file" accept="image/*">
-                    <label>Upload Floor Image</label>
-                </div>
-                <img class="preview-image" src="${bhkData && bhkData.image_url ? bhkData.image_url : ''}" 
-                    style="max-width: 100px; display: ${bhkData && bhkData.image_url ? 'block' : 'none'}; margin-top: 5px;">
-                <button type="button" class="btn btn-danger btn-sm delete-floor-plan" 
-                        style="display: ${bhkData && bhkData.image_url ? 'block' : 'none'}; margin-top: 5px;">
-                    Delete
-                </button>
-            </div>
 
+        bhk.innerHTML = `
+            <legend>Flats ${bhkIndex}</legend>
+            <button type="button" class="btn btn-danger btn-sm remove-bhk">Remove</button>
+            <div class="row gx-2">
+                <div class="col-md-4">
+                <label>BHK Type</label>
+                    <select class="form-select">
+                        <option value="1BHK" ${bhkData.bhk_type === '1BHK' ? 'selected' : ''}>1BHK</option>
+                        <option value="2BHK" ${bhkData.bhk_type === '2BHK' ? 'selected' : ''}>2BHK</option>
+                        <option value="3BHK" ${bhkData.bhk_type === '3BHK' ? 'selected' : ''}>3BHK</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                <label>Carpet Area</label>
+                    <input class="form-control" type="number" value="${bhkData.carpet_area || ''}">
+                </div>
+                <div class="col-md-4">
+                <label>Super Area</label>
+                    <input class="form-control" type="number" value="${bhkData.super_area || ''}">
+                </div>
             </div>
-           `;
+        `;
 
         bhkContainer.appendChild(bhk);
-        const fileInput = bhk.querySelector(".floor-plan-input");
-        const previewImg = bhk.querySelector(".preview-image");
-        const deleteImg = bhk.querySelector(".delete-floor-plan");
 
-        fileInput.addEventListener("change", function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const objectURL = URL.createObjectURL(file);
-                previewImg.src = objectURL;
-                previewImg.style.display = "block";
-                deleteImg.style.display = "block";
-            }
-
-            let formData = new FormData();
-            formData.append("floor_plan_image", file);
-            formData.append("_token", $('meta[name="csrf-token"]').attr("content"));
-
-            $.ajax({
-                url: "{{ route('upload.floor.plan') }}",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    if (response.status) {
-                        $("<input>").attr({
-                            type: "hidden",
-                            name: "floor_plan_image_name",
-                            value: response.files
-                        }).appendTo(bhk);
-                    } else {
-                        alert("File upload failed");
-                    }
-                },
-                error: function(xhr) {
-                    console.error("Upload error:", xhr.responseText);
-                }
-            });
-        });
-
-        deleteImg.addEventListener("click", function() {
-            previewImg.src = "";
-            previewImg.style.display = "none";
-            fileInput.value = "";
-            deleteImg.style.display = "none";
-
-            const hiddenInput = bhk.querySelector('input[name="floor_plan_image_name"]');
-            if (hiddenInput) {
-                hiddenInput.remove();
-            }
-        });
-
-        bhk.querySelector(".remove-bhk").addEventListener("click", function() {
+        bhk.querySelector(".remove-bhk").addEventListener("click", () => {
             bhk.remove();
         });
     }
-</script>
 
-<script>
     function collectData() {
-
         const towers = [];
-
-
-
-        document.querySelectorAll('.mb-4.border.p-3').forEach((towerElement) => {
+        document.querySelectorAll(".mb-4.border.p-3").forEach((towerElement) => {
             const towerData = {
-                tower_name: towerElement.querySelector('input[name="tower_name"]').value,
-                slug: towerElement.querySelector('input[name="slug"]').value,
-                lift_no: towerElement.querySelector('input[name="lift_no"]').value,
-                stair_no: towerElement.querySelector('input[name="stair_no"]').value,
-                fire_safety: towerElement.querySelector('input[name="fire_safety"]').value,
+                tower_name: towerElement.querySelector('[name="tower_name"]').value,
+                slug: towerElement.querySelector('[name="slug"]').value,
+                lift_no: towerElement.querySelector('[name="lift_no"]').value,
+                stair_no: towerElement.querySelector('[name="stair_no"]').value,
+                fire_safety: towerElement.querySelector('[name="fire_safety"]').value,
                 floor_data: []
             };
 
-            towerElement.querySelectorAll('.floor-container fieldset').forEach((floorElement) => {
+            towerElement.querySelectorAll(".floor-container fieldset").forEach((floorElement) => {
                 const floorData = {
-                    floor_no: floorElement.querySelector('input[name="floor_no"]').value,
-                    flat_no: floorElement.querySelector('input[name="flat_no"]').value,
-                    bhk_configurations: []
+                    floor_no: floorElement.querySelector('[name="floor_no"]').value,
+                    flat_no: floorElement.querySelector('[name="flat_no"]').value,
                 };
-
-                floorElement.querySelectorAll('.bhk-container > div').forEach((bhkElement) => {
-                    const bhkData = {
-                        bhk_type: bhkElement.querySelector('select').value,
-                        carpet_area: bhkElement.querySelector('input[type="number"]').value,
-                        super_area: bhkElement.querySelectorAll('input[type="number"]')[1].value,
-                        property_price: bhkElement.querySelectorAll('input[type="number"]')[2].value,
-                        property_facing: bhkElement.querySelectorAll('select')[1].value,
-                        floor_plan_image: bhkElement.querySelector('input[name="floor_plan_image_name"]').value
-                    };
-                    floorData.bhk_configurations.push(bhkData);
-                });
-
                 towerData.floor_data.push(floorData);
             });
 
@@ -806,7 +638,7 @@
         return towers;
     }
 
-    document.getElementById('saveButton').addEventListener('click', function() {
+    document.getElementById("saveButton").addEventListener("click", function() {
         const project_id = this.value;
         const towersData = collectData();
         $.ajax({
@@ -814,23 +646,23 @@
             type: "POST",
             data: {
                 towers: towersData,
-                project_id: project_id,
+                project_id,
                 _token: "{{ csrf_token() }}"
             },
-            success: function(response) {
-                $('#propertyModal').modal('hide');
-                localStorage.setItem('successMessage', 'Towers updated successfully!');
+            success: function() {
+                $("#propertyModal").modal("hide");
+                localStorage.setItem("successMessage", "Towers updated successfully!");
                 location.reload();
             },
-            error: function(xhr, status, error) {
-                console.error("Error:", error);
-            }
+            error: function(xhr) {
+                console.error("Error:", xhr.responseText);
+            },
         });
-
     });
 </script>
 <!-- Project Property End -->
 
+<!-- Project Floor Start -->
 <script>
     function addFloorConfig(project_id) {
         floorData(project_id);
@@ -911,11 +743,11 @@
             tab.querySelectorAll(".item-input").forEach(input => {
                 let item_id = input.getAttribute("data-item-id");
                 let type_id = input.getAttribute("data-type-id");
-                let label = input.closest(".form-floating")?.querySelector("label"); 
+                let label = input.closest(".form-floating")?.querySelector("label");
                 let item_name = label ? label.innerText.replace(":", "").trim() : "Unknown";
                 let description = input.value.trim();
 
-                if (item_id && type_id) { 
+                if (item_id && type_id) {
                     floorData.push({
                         id: item_id,
                         item: item_name,
@@ -925,7 +757,7 @@
                 }
             });
 
-         
+
             let newItem = tab.querySelector(".new-item")?.value?.trim();
             let newDescription = tab.querySelector(".new-description")?.value?.trim();
             let type_id = tab.querySelector(".new-item")?.getAttribute("data-type-id");
@@ -945,7 +777,7 @@
             return;
         }
 
-        console.log("Sending floor data:", floorData); 
+        console.log("Sending floor data:", floorData);
         $.ajax({
             url: "{{ route('floor.addFloorPlan') }}",
             type: "POST",
@@ -966,7 +798,5 @@
         });
     }
 </script>
-
-
-
+<!-- Project Floor End -->
 @endpush
