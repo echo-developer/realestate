@@ -706,6 +706,7 @@ ul {
 			margin-inline-end: 0.5rem;
 
 			&>a {
+				background-color: $white;
 				border: 1px solid $primary;
 				color: $primary;
 				font-size: 1rem;
@@ -717,7 +718,6 @@ ul {
 				align-items: center;
 				justify-content: center;
 				transition: 0.3s;
-
 				&:hover {
 					color: $white;
 					background-color: $primary;
@@ -729,8 +729,7 @@ ul {
 
 	&.footer-social-links {
 		li {
-			&>a {
-				background-color: $white;
+			&>a {				
 				border-color: $white;
 			}
 		}
@@ -2894,18 +2893,16 @@ ul.dashboard-box-list {
 .sort-by {
 	display: flex;
 	align-items: center;
-
 	a.btn {
 		padding: 5px;
 	}
-
 	.btn {
 		background-color: $white;
 		border: 1px solid $primary;
 		color: $primary;
 		height: 32px;
 		line-height: 1;
-
+		min-width: 32px;
 		&.active {
 			background-color: $primary;
 			color: $white;
@@ -2916,11 +2913,9 @@ ul.dashboard-box-list {
 			vertical-align: text-bottom;
 		}
 	}
-
 	.write-review {
 		padding: 0.375rem 0.75rem;
 	}
-
 	.ads-fav {
 		border-radius: 0.2rem;
 		position: inherit;
@@ -2937,7 +2932,6 @@ ul.dashboard-box-list {
 		}
 	}
 }
-
 .flex-1 {
 	.btn {
 		flex: 1;
@@ -3815,7 +3809,22 @@ input::-webkit-inner-spin-button {
 		}
 	}
 }
-
+.floating-social-media{
+	position: relative;
+	.social-links{
+		position: absolute;
+		top: 0;
+		left: 1.5rem;
+		padding-inline-start: 1rem;
+		white-space: nowrap;
+		display: none;
+	}
+	&:hover{
+		.social-links{
+			display: block;
+		}
+	}
+}
 .social-share-wrap {
 	position: relative;
 

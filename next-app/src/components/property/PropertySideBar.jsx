@@ -458,7 +458,7 @@ const PropertySidebar = ({
                 title="Report this Ad"
                 onClick={handleReportClick}
               >
-                <i className="icon-feather-flag"></i>
+                <i className="bi bi-flag"></i>
               </a>
             )}
 
@@ -468,17 +468,25 @@ const PropertySidebar = ({
             title="Print"
             onClick={() => window.print()}
           >
-            <i className="icon-feather-printer"></i>
+            <i className="bi bi-printer"></i>
           </a>
 
-          <Link
-            target="_blank"
-            href={"https://originatesoft.com/"}
-            className="btn btn-sm btn-outline-primary w-auto"
-          >
-            <i className="icon-feather-share-2"></i>
-            {translation?.share || "Share"}
-          </Link>
+          <div className="floating-social-media">
+            <Link
+              target="_blank"
+              href={"https://originatesoft.com/"}
+              className="btn btn-sm btn-outline-primary w-auto"
+              title={translation?.share || "Share"}
+            >
+              <i className="bi bi-share"></i>
+            </Link>
+            <ul className="social-links">
+              <li><a href="" role="button"><i class="icon-brand-facebook-f"></i></a></li>
+              <li><a href="" role="button"><i class="icon-brand-linkedin-in"></i></a></li>
+              <li><a href="" role="button"><i class="icon-brand-instagram"></i></a></li>
+              <li><a href="" role="button"><i class="icon-brand-youtube"></i></a></li>
+            </ul>
+          </div>
         </div>
         {propertyDetails?.top_agents?.length > 0 && (
           <div className="card border-0 shadow-1 mb-4">

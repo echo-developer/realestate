@@ -221,7 +221,7 @@ const MobileMenu = ({
         {
           name: "For Owner",
           links: [
-            { text: "Post Property Free", url: "/postproperty" },
+            { text: "Post Property", url: "/postproperty" },
             { text: "My Dashboard", url: "/dashboard" },
             { text: "Sell / Rent Ad Packages", url: "/membership" },
           ],

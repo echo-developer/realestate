@@ -279,7 +279,7 @@ const Header = () => {
                 `}</style>
               </Link>
 
-              <div className="dropdown ms-4">
+              <div className="dropdown ms-3 ms-xxl-4">
                 <button
                   className="btn btn-link dropdown-toggle text-decoration-none"
                   data-bs-toggle="dropdown"
@@ -900,7 +900,7 @@ const Header = () => {
                         <li>
                           <Link href="/postproperty">
                             {translation?.post_property_free ||
-                              "Post Property Free"}
+                              "Post Property"}
                           </Link>
                         </li>
                         <li>
@@ -1087,7 +1087,7 @@ const Header = () => {
                       className="btn btn-primary btn-post"
                     >
                       <i className="icon-line-awesome-mouse-pointer"></i>{" "}
-                      {translation?.post_property_free || "Post Property"}{" "}
+                      {translation?.post_property_ || "Post Property"}{" "}
                       <img
                         src="/assets/images/icons/free-badge.png"
                         alt="Free Badge"
@@ -1114,10 +1114,10 @@ const Header = () => {
                         loading="lazy"
                       />{" "}
                       {currentLang === "ar"
-                        ? "Arabic"
+                        ? "Ar"
                         : currentLang === "de"
-                        ? "German"
-                        : "English"}
+                        ? "De"
+                        : "En"}
                     </a>
                     <ul className="dropdown-single dropdown-nav dropdown-menu-end">
                       <li className={currentLang === "en" ? "active" : ""}>
@@ -1129,7 +1129,7 @@ const Header = () => {
                             width="16"
                             loading="lazy"
                           />{" "}
-                          English
+                          En
                         </a>
                       </li>
                       <li className={currentLang === "ar" ? "active" : ""}>
@@ -1141,7 +1141,7 @@ const Header = () => {
                             width="16"
                             loading="lazy"
                           />{" "}
-                          Arabic
+                          Ar
                         </a>
                       </li>
                       <li className={currentLang === "de" ? "active" : ""}>
@@ -1153,7 +1153,7 @@ const Header = () => {
                             width="16"
                             loading="lazy"
                           />{" "}
-                          German
+                          De
                         </a>
                       </li>
                     </ul>
@@ -1415,7 +1415,7 @@ const Menu = () => {
         {
           name: "For Owner",
           links: [
-            { text: "Post Property Free", url: "/postproperty" },
+            { text: "Post Property", url: "/postproperty" },
             { text: "My Dashboard", url: "/dashboard" },
             { text: "sale / Rent Ad Packages", url: "/membership" },
           ],
