@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import AuthUser from '@/components/Authentication/AuthUser';
 import { useRouter } from 'next/router';
-import { constructNow } from 'date-fns';
+import { toast } from 'react-toastify';
 
 const index = () => {
     const { callApi, GetMemberId } = AuthUser()
@@ -18,6 +18,11 @@ const index = () => {
             fetchScheduleMeetings(date);
         }
     }, [router])
+
+    const statusClasses = {
+        "0": "bg-warning",  // Yellow
+        "1": "bg-success",    // Green
+    };
 
     const fetchScheduleMeetings = async (date) => {
         try {
@@ -40,6 +45,40 @@ const index = () => {
             console.error(error.message || "Something went wrong")
         }
     }
+
+    const handleStatusChange = async (e, i, id) => {
+        const { value } = e.target || {};
+
+        try {
+            const res = await callApi({
+                api: '/update-meeting-status',
+                method: "UPLOAD",
+                data: {
+                    id: id,
+                    status: value
+                }
+            })
+        if(res && res?.status === 1) {
+            toast.success("Meeting status updated successfully")
+            setList(prev => {
+                return prev.map((item, index) => {
+                    if(index !== i) {
+                        return item;
+                    } else {
+                        return {
+                            ...item,
+                            status: value,
+                        }
+                    }
+                })
+            })
+        } else {
+            toast.error("Failed to update status")
+        }
+        } catch (error) {
+           toast.error(error.message || "Something went wrong") 
+        }
+    }
     return (
         <DashboardLayout>
             <aside className="col-lg col-12">
@@ -47,40 +86,35 @@ const index = () => {
                 <h1 className="h4 text-primary mb-3">Schedule Meetings</h1>
                     {list?.length > 0 && list?.map((item, i) => {
                         return (
-                            <div className="card card-ads">
+                            <div className="card card-ads" key={i}>
                                 <div className="row g-0">
-                                    <div className="col-lg-3 col-sm-4">
-                                        {/* <CardImageSlider data={null} icons={false} showFavIcon={false} /> */}
-                                    </div>
                                     <div className="col-lg-9 col-sm-8 position-relative">
                                         <div className="card-body">
                                             <div className="d-flex align-items-center justify-content-between">
-                                                <h4>Not available</h4>
-                                                <h6>Customer Name: Not available</h6>
+                                                <h4>{item?.project_name || item?.property_name || "Not available"}</h4>
+                                                <h6>Customer Name: {item?.customer_name || "Not available"}</h6>
                                                 <div className="text-end">
-                                                    <span className="badge">Status</span>
+                                                    <span className={`badge ${statusClasses[item?.status]}`}>{item?.status == 0 ? "Pending" : "Completed"}</span>
                                                     <br />
                                                 </div>
                                             </div>
                                             <p>
                                                 <span className="d-block">
-                                                    <i className="bi bi-telephone"></i> Not available
+                                                    <i className="bi bi-telephone"></i> {item?.customer_phone || "Not available"}
                                                 </span>
                                                 <span className="d-block">
-                                                    <i className="bi bi-envelope"></i> Not available
+                                                    <i className="bi bi-envelope"></i> {item?.customer_email || "Not available"}
                                                 </span>
                                                 <span className="d-block">
-                                                    <i className="bi bi-clock"></i> Not available
+                                                    <i className="bi bi-clock"></i> Schedule Time: {item?.schedule_date || "Not available"}
                                                 </span>
                                             </p>
                                             <p className="text-wrap mb-2">No message</p>
                                             <div className="d-flex justify-content-end">
-                                                <button className="btn btn-sm btn-outline-primary me-2">Contact</button>
-                                                <button className="btn btn-sm btn-outline-primary me-2">Contact History</button>
-                                                <select className="form-select form-select-sm ms-2" aria-label="Select action">
+                                                <select className="form-select form-select-sm ms-2" aria-label="Select action" value={item?.status} onChange={(e) => handleStatusChange(e, i, item.id)}>
                                                     <option value="">Select an option</option>
-                                                    <option value="1">Option 1</option>
-                                                    <option value="2">Option 2</option>
+                                                    <option value={0}>Pending</option>
+                                                    <option value={1}>Completed</option>
                                                 </select>
                                             </div>
                                         </div>
