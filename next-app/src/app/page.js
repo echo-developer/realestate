@@ -10,9 +10,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import { Modal } from "react-bootstrap";
 import useTranslation from "@/hooks/useTranslation";
-import Link from "next/link";
-// import Advertisements from "@/components/addtional/Advertisements";
 import useAdvertisement from "@/hooks/useAdvertisement";
+import { useAuth } from "@/context/AuthProvider";
 
 const Banner = dynamic(() => import("@/components/home/Banner"), {
   ssr: false,
@@ -59,13 +58,14 @@ export default function Home() {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const [propertyData, setPropertyData] = useState(null);
   const [projectData, setProjectData] = useState(null);
+  const {defaultCity}= useAuth();
   const router = useRouter();
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const { adsData,logAdClick } = useAdvertisement(
     "home-page",
-    "footer"
+    "footer",
+    defaultCity?.city_id
   );
-
   const memberId = GetMemberId();
 
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
@@ -110,7 +110,7 @@ export default function Home() {
   useEffect(() => {
     getPropertyData();
     getProjectData();
-  }, [memberId]);
+  }, [memberId ,defaultCity]);
 
   const addRemoveFav = async (id, type, listKey) => {
     if (isLogin()) {
@@ -193,8 +193,6 @@ export default function Home() {
     }
   };
 
-  // if (loading) return <p>Loading home page ads...</p>;
-  // if (error) return <p>Error loading home page ads</p>;
 
   return (
     <div>

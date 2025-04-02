@@ -21,6 +21,7 @@ import { Modal, Row, Col, Button } from "react-bootstrap";
 import useTranslation from "@/hooks/useTranslation";
 import DOMPurify from "dompurify";
 import useAdvertisement from "@/hooks/useAdvertisement";
+import { useAuth } from "@/context/AuthProvider";
 import {
   facingOptions,
   ownershipTypeOptions,
@@ -34,6 +35,7 @@ import { CheckCircleFill, XCircleFill } from "react-bootstrap-icons";
 const index = () => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const router = useRouter();
+  const { defaultCity } = useAuth();
   const translation = useTranslation();
   const [showAll, setShowAll] = useState(false);
   const { property_id } = router.query;
@@ -46,7 +48,7 @@ const index = () => {
   const memberId = GetMemberId();
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const [userDetails, setUserDetails] = useState();
-  const { adsData, logAdClick } = useAdvertisement("detail-page", "footer");
+  const { adsData, logAdClick } = useAdvertisement("detail-page", "footer",defaultCity?.city_id);
 
   useEffect(() => {
     if (property_id) {

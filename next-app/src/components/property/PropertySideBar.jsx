@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import {
   Modal,
@@ -17,6 +17,7 @@ import Link from "next/link";
 import useTranslation from "@/hooks/useTranslation";
 import { property_features } from "@/components/post/PropertyData";
 import useAdvertisement from "@/hooks/useAdvertisement";
+import { useAuth } from "@/context/AuthProvider";
 
 const PropertySidebar = ({
   propertyId,
@@ -26,12 +27,17 @@ const PropertySidebar = ({
 }) => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);
+  const { defaultCity } = useAuth();
   const [showCommunicationModal, setShowCommunicationModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [showAgentModal, setShowAgentModal] = useState(false);
   const translation = useTranslation();
   const memberId = GetMemberId();
-  const { adsData, logAdClick } = useAdvertisement("detail-page", "right");
+  const { adsData, logAdClick } = useAdvertisement(
+    "detail-page",
+    "right",
+    defaultCity?.city_id
+  );
   const [formData, setFormData] = useState({
     name: "",
     email: "",
