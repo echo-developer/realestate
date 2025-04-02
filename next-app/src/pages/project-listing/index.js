@@ -10,6 +10,8 @@ import { ShimmerContentBlock } from "react-shimmer-effects";
 import { Helmet } from "react-helmet-async";
 import useTranslation from "@/hooks/useTranslation";
 import useIsMobile from "@/hooks/useIsMobile";
+import { useAuth } from "@/context/AuthProvider";
+import useAdvertisement from "@/hooks/useAdvertisement";
 import {
   Form,
   Row,
@@ -19,7 +21,7 @@ import {
   ProgressBar,
   FloatingLabel,
   Dropdown,
-  DropdownButton
+  DropdownButton,
 } from "react-bootstrap";
 import { GeoAlt, Search } from "react-bootstrap-icons";
 import ProjectMobileFilters from "@/components/addtional/ProjectMobileFilter";
@@ -27,6 +29,7 @@ import ProjectMobileFilters from "@/components/addtional/ProjectMobileFilter";
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
   const router = useRouter();
+  const { defaultCity } = useAuth();
   const translation = useTranslation();
   const [selectedOption, setSelectedOption] = useState("Sort By");
   const [projectListData, setProjectListData] = useState([]);
@@ -38,7 +41,11 @@ const Index = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPages, setCurrentPages] = useState(0);
   const isMobile = useIsMobile();
-
+  const { adsData, logAdClick } = useAdvertisement(
+    "project-listing-page",
+    "right",
+    defaultCity?.city_id
+  );
   const PostFor = searchParams.get("post_for");
   const projectType = searchParams.get("project_type");
   const projectFor = searchParams.get("project_for");
@@ -160,6 +167,7 @@ const Index = () => {
     router?.isReady,
     router?.query,
     memberId,
+    defaultCity
   ]);
 
   useEffect(() => {
@@ -198,28 +206,31 @@ const Index = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
 
-            
-      
       {isMobile ? (
         <>
-        <React.Fragment>
-        <div className="d-md-none bg-primary p-3">
-          <div className="position-relative">
-            <input
-              type="text"
-              placeholder="Search Locality"
-              className="form-control ps-5"
-            />
-            <Search
-              size={18}
-              className="position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"
-            />
-          </div>
-        </div>
-      </React.Fragment>
+          <React.Fragment>
+            <div className="d-md-none bg-primary p-3">
+              <div className="position-relative">
+                <input
+                  type="text"
+                  placeholder="Search Locality"
+                  className="form-control ps-5"
+                />
+                <Search
+                  size={18}
+                  className="position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"
+                />
+              </div>
+            </div>
+          </React.Fragment>
 
-        <ProjectMobileFilters showDrop={showDrop} setShowDrop={setShowDrop} selectedOption={selectedOption} handleSortSelection={handleSortSelection} />
-      </>
+          <ProjectMobileFilters
+            showDrop={showDrop}
+            setShowDrop={setShowDrop}
+            selectedOption={selectedOption}
+            handleSortSelection={handleSortSelection}
+          />
+        </>
       ) : (
         <div className="short-banner pt-4">
           <div className="container-fluid">
@@ -296,11 +307,26 @@ const Index = () => {
               )}
             </aside>
             <aside className="col-xl-3 col-lg-3 col-12">
-              <img
-                alt="Advertisement"
-                src="/assets/images/ads/real-estate-poster.jpg"
-                className="img-fluid"
-              />
+              {adsData.length > 0 ? (
+                adsData.map((ad) => (
+                  <a
+                    key={ad.advertisement_id}
+                    role="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      logAdClick(ad.advertisement_id, ad.ad_url);
+                    }}
+                  >
+                    <img src={ad.ad_image} alt="Ad" />
+                  </a>
+                ))
+              ) : (
+                <img
+                  alt="Advertisement"
+                  src="/assets/images/ads/real-estate-poster.jpg"
+                  className="img-fluid"
+                />
+              )}
             </aside>
           </div>
         </div>

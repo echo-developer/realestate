@@ -19,10 +19,13 @@ import {
 import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
 import { Row, Col, Button, Modal } from "react-bootstrap";
 import AgentEnquiryForm from "@/components/addtional/AgentEnquiryForm";
+import { useAuth } from "@/context/AuthProvider";
+import useAdvertisement from "@/hooks/useAdvertisement";
 
 const Index = () => {
   const router = useRouter();
   const translation = useTranslation();
+  const { defaultCity } = useAuth();
   const { callApi, GetMemberId, isLogin } = AuthUser();
   const { agent_id } = router.query;
   const formRef = useRef(null);
@@ -43,7 +46,11 @@ const Index = () => {
     contact: "",
     message: "",
   });
-
+  const { adsData, logAdClick } = useAdvertisement(
+    "agent-detail-page",
+    "right",
+    defaultCity?.city_id
+  );
   const handleClick = (property_id) => {
     setPropertyId(property_id);
     setShowContactModal(true);
@@ -51,15 +58,15 @@ const Index = () => {
 
   useEffect(() => {
     if (agent_id) {
-      fetchAgentDetails(agent_id,page);
+      fetchAgentDetails(agent_id, page);
     }
     setContactDetails((prevDetails) => ({
       ...prevDetails,
       user_id: memberId,
     }));
-  }, [agent_id, memberId, page]);
+  }, [agent_id, memberId, page, defaultCity]);
 
-  const fetchAgentDetails = async (agent_id ,page) => {
+  const fetchAgentDetails = async (agent_id, page) => {
     setIsLoading(true);
     try {
       const response = await callApi({
@@ -223,7 +230,7 @@ const Index = () => {
 
   const handleLoadMoreClick = (newPage) => {
     setpage(newPage);
-    fetchAgentDetails(agent_id,newPage)
+    fetchAgentDetails(agent_id, newPage);
   };
 
   return (
@@ -596,7 +603,7 @@ const Index = () => {
               </div>
 
               {/* LOAD MORE  */}
-              {!isLoading && currentPage < totalPage &&  (
+              {!isLoading && currentPage < totalPage && (
                 <button
                   className="btn btn-primary d-block mx-auto mt-4"
                   onClick={() => handleLoadMoreClick(page + 1)}
@@ -680,11 +687,28 @@ const Index = () => {
                   {agentDetailsData?.experience_yr && "Years"}
                 </p>
               </div>
-              <img
-                src="/assets/images/ads/houseSaleFlyerGREEN.jpg"
-                alt="Advertisement"
-                className="img-fluid"
-              />
+              <>
+                {adsData.length > 0 ? (
+                  adsData.map((ad) => (
+                    <a
+                      key={ad.advertisement_id}
+                      role="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        logAdClick(ad.advertisement_id, ad.ad_url);
+                      }}
+                    >
+                      <img src={ad.ad_image} alt="Ad" />
+                    </a>
+                  ))
+                ) : (
+                  <img
+                    src="/assets/images/ads/houseSaleFlyerGREEN.jpg"
+                    alt="Advertisement"
+                    className="img-fluid"
+                  />
+                )}
+              </>
             </Col>
           </Row>
         </div>
