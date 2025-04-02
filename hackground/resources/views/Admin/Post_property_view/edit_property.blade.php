@@ -38,10 +38,23 @@
             <div class="card">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Basic Details </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_profile_modal(9, 125)"><i class="fa fa-edit"></i></a>
+                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(9, 125)"><i class="fa fa-edit"></i></a>
                 </div>
                 <div class="card-body">
                     <ul class="list-info">
+                        <li>
+                            <b>Post For:</b>
+                            <span>{{ucfirst($propertyData->settings->post_for)??'N/A'}}</span>
+                        </li>
+                        <li>
+                            <b>Property Type:</b>
+                            <span>{{get_name_by_id('property_category_names','category_id',$propertyData->settings->property_type,'en')??'N/A'}}</span>
+                        </li>
+                        <li>
+                            <b>Property For:</b>
+                            <span>{{get_name_by_id('property_sub_category_names','sub_category_id',$propertyData->settings->property_type_for,'en')??'N/A'}}</span>
+                        </li>
+
                         <li>
                             <b>Price:</b>
                             <span>{{$propertyData->settings->expected_price??'N/A'}}</span>
@@ -50,14 +63,7 @@
                             <b>Message to Buyer:</b>
                             <span>{{$propertyData->additional->buyer_message??'N/A'}}</span>
                         </li>
-                        <li>
-                            <b>Address:</b>
-                            <span>{{$propertyData->location->property_address??'N/A'}}</span>
-                        </li>
-                        <li>
-                            <b>Locality:</b>
-                            <span>{{$propertyData->location->locality}}</span>
-                        </li>
+                       
                         <li>
                             <b>Project/Society Name:</b>
                             <span>{{$propertyData->additional->project_name??'N/A'}}</span>
@@ -68,11 +74,24 @@
 
             <div class="card">
                 <div class="card-header d-flex">
-                    <h4 class="card-title">Project Features </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_profile_modal(9, 125)"><i class="fa fa-edit"></i></a>
+                    <h4 class="card-title">Location </h4>
+                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(9, 125)"><i class="fa fa-edit"></i></a>
                 </div>
                 <div class="card-body">
                     <ul class="list-info">
+                        <li>
+                            <b>City:</b>
+                            <span>{{$propertyData->location->locality}}</span>
+                        </li>
+                        <li>
+                            <b>Address:</b>
+                            <span>{{$propertyData->location->property_address??'N/A'}}</span>
+                        </li>
+                        <li>
+                            <b>Locality:</b>
+                            <span>{{$propertyData->location->locality}}</span>
+                        </li>
+
                         <li>
                             <b>Configuration:</b>
                             <span>N/A</span>
@@ -139,7 +158,7 @@
             <div class="card">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Floor Details </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_profile_modal(9, 125)"><i class="fa fa-edit"></i></a>
+                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(9, 125)"><i class="fa fa-edit"></i></a>
                 </div>
                 <div class="card-body">
                     <ul class="list-info">
@@ -192,7 +211,7 @@
             <div class="card">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Additional Information </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_profile_modal(9, 125)"><i class="fa fa-edit"></i></a>
+                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(9, 125)"><i class="fa fa-edit"></i></a>
                 </div>
                 <div class="card-body">
                     <ul class="list-info">
@@ -217,7 +236,7 @@
             <div class="card">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Property Landmark </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_profile_modal(9, 125)"><i class="fa fa-edit"></i></a>
+                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(9, 125)"><i class="fa fa-edit"></i></a>
                 </div>
                 <div class="card-body">
 

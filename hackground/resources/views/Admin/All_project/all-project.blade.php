@@ -125,7 +125,7 @@
                             <td><a href="{{url('project/project_details')}}/{{$proj->id}}">{{ $proj->project_name }}</a></td>
 
                             <!-- Displaying Address -->
-                            <td>{{$proj->additional->project_amenity}}</td>
+                            <td>{{$proj->location->address}}</td>
 
                             <!-- Displaying Post Date (Assuming `created_at` exists) -->
                             <td>{{ $proj->created_at->format('d-M-Y') }}</td>
@@ -136,6 +136,11 @@
                             </td>
                             <td>
                                 <button class="btn btn-sm btn-warning" onclick="addAmenity(`{{$proj->id}}`)">Add Amenity</button>
+                                <button type="button" onclick="addProperty(`{{$proj->id}}`)" class="btn btn-primary">Add Property</button>
+
+                                <button onclick="addFloorConfig(`{{$proj->id}}`)" class="btn btn-sm btn-success">Add Floor Data</button>
+                                <button class="btn btn-sm btn-primary">Add Certificate</button>
+                                <button class="btn btn-sm btn-danger">Upload Brochure</button>
                             </td>
                             <!-- Displaying Status -->
                             <td>
@@ -226,6 +231,7 @@
 
 
 @section('modals')
+<!-- Modal for Property Amenity Configuration -->
 <div class="modal fade" id="amenityModal" tabindex="-1" aria-labelledby="amenityModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -242,7 +248,7 @@
                     <input class="form-check-input" type="checkbox"
                         value="{{ $projectAmenitie->id }}">
                     <label class="form-check-label d-flex align-items-center ms-2">
-                        <img alt="Parking" height="24" width="24" class="me-2" src="{{ $projectAmenitie->image }}">
+                        <img alt="Parking" height="24" width="24" class="me-2" src="{{ asset('user_upload/amenity_image/' . $projectAmenitie->image) }}">
                         {{ $projectAmenitie->name }}
                     </label>
                 </div>
@@ -256,34 +262,230 @@
             </div>
         </div>
     </div>
-    @endsection
-    @push('custom-js')
+</div>
 
-    <script>
-        function getAmenities(project_id) {
+
+<!-- Modal for Property Configuration -->
+<div class="modal fade" id="propertyModal" tabindex="-1" aria-labelledby="propertyModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Property Configuration</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <!-- Tower Container (dynamic content) -->
+                <div id="tower-container-modal"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveButton">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="floorModal" tabindex="-1" aria-labelledby="propertyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Insert New Value for Kitchen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Nav Tabs -->
+                <ul class="nav nav-tabs" id="propertyTabs" role="tablist"></ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content mt-3" id="propertyTabsContent"></div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save All</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@endsection
+@push('custom-js')
+<!-- Amenities Start -->
+
+<script>
+    function getAmenities(project_id) {
+        $.ajax({
+            url: "{{ route('get.amenities') }}", // Make sure this matches the route defined in web.php
+            type: "GET",
+            data: {
+                projId: project_id,
+                _token: "{{ csrf_token() }}" // Include CSRF token
+            },
+            success: function(response) {
+                let selectedAmenities;
+                if (response.project_amenity.project_amenity.startsWith('[')) {
+                    selectedAmenities = JSON.parse(response.project_amenity.project_amenity).map(String);
+                } else {
+                    selectedAmenities = response.project_amenity.project_amenity.split(',').map(String);
+                }
+
+                $(".amenity-item .form-check-input").each(function() {
+                    let amenityId = $(this).val();
+                    if (selectedAmenities.includes(amenityId)) {
+                        $(this).prop('checked', true);
+                    } else {
+                        $(this).prop('checked', false);
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Error:", error);
+            }
+        });
+    }
+
+    addAmenity = (projecId) => {
+        $('#project_id').val(projecId);
+        getAmenities(projecId);
+        $('#amenityModal').modal('show');
+    };
+
+    $(document).ready(function() {
+
+        $('.prop_top_status').change(function() {
+
+
+
+            var id = $(this).data('prop-id');
+            var status = this.checked ? 1 : 0;
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
             $.ajax({
-                url: "{{ route('get.amenities') }}", // Make sure this matches the route defined in web.php
-                type: "GET",
+                type: 'POST',
+                url: `{{ url('allproject/top_status') }}`,
                 data: {
-                    projId: project_id,
-                    _token: "{{ csrf_token() }}" // Include CSRF token
+                    'status': status,
+                    'id': id
+                },
+                success: function(data) {
+                    toastr.success('Request processed successfully.', data.message,
+                        toastrOptions);
+                },
+                error: function(msg) {
+                    console.log(msg);
+                    var errors = msg.responseJSON;
+                }
+            });
+        });
+
+        $('.prop_feature_status').change(function() {
+
+
+
+            var id = $(this).data('prop-id');
+            var status = this.checked ? 1 : 0;
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: `{{ url('allproject/feature_status') }}`,
+                data: {
+                    'status': status,
+                    'id': id
+                },
+                success: function(data) {
+                    toastr.success('Request processed successfully.', data.message,
+                        toastrOptions);
+                },
+                error: function(msg) {
+                    console.log(msg);
+                    var errors = msg.responseJSON;
+                }
+            });
+        });
+        $('.prop_status').on('change', function() {
+            var propertyId = $(this).data('property-id');
+            var status = $(this).val();
+            switch (status) {
+                case 'delete':
+                    var url = `{{ url('allproject/delete') }}`
+                    break;
+                case 'edit_view':
+                    window.location.href = `{{ url('project/edit') }}/${propertyId}`;
+                    break;
+                default:
+                    var url = `{{ url('allproject/statusupdate') }}`
+                    break;
+            }
+
+
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    status: status,
+                    propertyId: propertyId
                 },
                 success: function(response) {
-                    let selectedAmenities;
-                    if (response.project_amenity.project_amenity.startsWith('[')) {
-                        selectedAmenities = JSON.parse(response.project_amenity.project_amenity).map(String);
-                    } else {
-                        selectedAmenities = response.project_amenity.project_amenity.split(',').map(String);
-                    }
 
-                    $(".amenity-item .form-check-input").each(function() {
-                        let amenityId = $(this).val();
-                        if (selectedAmenities.includes(amenityId)) {
-                            $(this).prop('checked', true);
-                        } else {
-                            $(this).prop('checked', false);
-                        }
-                    });
+                    console.log(response);
+                    window.location.reload(true);
+                },
+                error: function(xhr, status, error) {
+
+                    console.log(error);
+                }
+            });
+        });
+
+
+
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+
+        $("#saveAmenityBtn").click(function() {
+            let project_id = $('#project_id').val();
+
+            let checkedAmenities = [];
+            $(".amenity-item .form-check-input:checked").each(function() {
+                checkedAmenities.push($(this).val());
+            });
+
+            console.log("Selected Amenities:", checkedAmenities);
+
+            saveAmenities(checkedAmenities, project_id);
+        });
+
+        function saveAmenities(amenities, project_id) {
+            $.ajax({
+                url: "{{ route('save.amenities') }}",
+                type: "POST",
+                data: {
+                    projId: project_id,
+                    selectedAmenities: amenities,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    $('#amenityModal').modal('hide');
+                    localStorage.setItem('successMessage', 'Amenities updated successfully!');
+                    location.reload();
                 },
                 error: function(xhr, status, error) {
                     console.error("Error:", error);
@@ -291,164 +493,426 @@
             });
         }
 
-        addAmenity = (projecId) => {
-            $('#project_id').val(projecId);
-            getAmenities(projecId);
-            $('#amenityModal').modal('show');
-        };
+    });
+    $(document).ready(function() {
+        const successMessage = localStorage.getItem('successMessage');
 
-        $(document).ready(function() {
+        if (successMessage) {
+            toastr.success(successMessage, '', toastrOptions);
+            localStorage.removeItem('successMessage');
+        }
+    });
+</script>
+<!-- Amenities End -->
 
-            $('.prop_top_status').change(function() {
+<!-- Project Property Start -->
+<script>
+    document.getElementById('addPropertyBtn').addEventListener('click', addProperty);
 
+    const towerContainerModal = document.getElementById("tower-container-modal");
 
+    function addProperty(project_id) {
+        $.ajax({
+            url: "{{ route('get.towers') }}",
+            type: "GET",
+            data: {
+                projId: project_id,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function(response) {
+                console.log(response);
 
-                var id = $(this).data('prop-id');
-                var status = this.checked ? 1 : 0;
+                let towersData = response.towers_data || []; // Ensure towersData is an array
+                const totalTowers = response.total_towers || towersData.length; // Use total_towers if available
+                const modalContainer = document.getElementById("tower-container-modal");
+                modalContainer.innerHTML = "";
 
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-
-                $.ajax({
-                    type: 'POST',
-                    url: `{{ url('allproject/top_status') }}`,
-                    data: {
-                        'status': status,
-                        'id': id
-                    },
-                    success: function(data) {
-                        toastr.success('Request processed successfully.', data.message,
-                            toastrOptions);
-                    },
-                    error: function(msg) {
-                        console.log(msg);
-                        var errors = msg.responseJSON;
-                    }
-                });
-            });
-
-            $('.prop_feature_status').change(function() {
-
-
-
-                var id = $(this).data('prop-id');
-                var status = this.checked ? 1 : 0;
-
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-
-                $.ajax({
-                    type: 'POST',
-                    url: `{{ url('allproject/feature_status') }}`,
-                    data: {
-                        'status': status,
-                        'id': id
-                    },
-                    success: function(data) {
-                        toastr.success('Request processed successfully.', data.message,
-                            toastrOptions);
-                    },
-                    error: function(msg) {
-                        console.log(msg);
-                        var errors = msg.responseJSON;
-                    }
-                });
-            });
-            $('.prop_status').on('change', function() {
-                var propertyId = $(this).data('property-id');
-                var status = $(this).val();
-                switch (status) {
-                    case 'delete':
-                        var url = `{{ url('allproject/delete') }}`
-                        break;
-                    case 'edit_view':
-                        window.location.href = `{{ url('project/edit') }}/${propertyId}`;
-                        break;
-                    default:
-                        var url = `{{ url('allproject/statusupdate') }}`
-                        break;
+                // Loop through the total towers and create UI
+                for (let i = 0; i < totalTowers; i++) {
+                    let towerData = towersData[i] || {}; // Use existing data if available, else empty object
+                    createTower(towerData, i + 1, modalContainer, project_id);
                 }
 
-
-                $.ajax({
-                    url: url,
-                    method: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        status: status,
-                        propertyId: propertyId
-                    },
-                    success: function(response) {
-
-                        console.log(response);
-                        window.location.reload(true);
-                    },
-                    error: function(xhr, status, error) {
-
-                        console.log(error);
-                    }
-                });
-            });
-
-
-
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-
-            $("#saveAmenityBtn").click(function() {
-                let project_id = $('#project_id').val();
-
-                let checkedAmenities = [];
-                $(".amenity-item .form-check-input:checked").each(function() {
-                    checkedAmenities.push($(this).val());
-                });
-
-                console.log("Selected Amenities:", checkedAmenities);
-
-                saveAmenities(checkedAmenities, project_id);
-            });
-
-            function saveAmenities(amenities, project_id) {
-                $.ajax({
-                    url: "{{ route('save.amenities') }}",
-                    type: "POST",
-                    data: {
-                        projId: project_id,
-                        selectedAmenities: amenities,
-                        _token: "{{ csrf_token() }}"
-                    },
-                    success: function(response) {
-                        $('#amenityModal').modal('hide');
-
-                        // Store success message in localStorage (or use sessionStorage)
-                        localStorage.setItem('successMessage', 'Amenities updated successfully!');
-
-                        // Reload the page
-                        location.reload();
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error:", error);
-                    }
-                });
-            }
-
-        });
-        $(document).ready(function() {
-            const successMessage = localStorage.getItem('successMessage');
-
-            if (successMessage) {
-                toastr.success(successMessage, '', toastrOptions);
-                localStorage.removeItem('successMessage');
+                // Show modal after data is populated
+                $('#propertyModal').modal('show');
+            },
+            error: function(xhr, status, error) {
+                console.error("Error:", error);
             }
         });
-    </script>
+    }
 
-    @endpush
+
+    function createTower(towerData, towerIndex, container, project_id) {
+        const tower = document.createElement("div");
+        tower.classList.add("mb-4", "border", "p-3");
+        $('#saveButton').val(project_id);
+        let slug = 'tower' + towerIndex;
+        tower.innerHTML = `
+        <input class="form-control" name="project_id" type="hidden" value="${project_id}">
+        <h5>${'tower'+towerIndex}</h5>
+        <div class="row gx-2">
+            <div class="col-md-3">
+                <input class="form-control" name="tower_name" type="text" value="${towerData.tower_name??''}">
+                <label>Tower Name</label>
+            </div>
+            <input class="form-control" name="slug" type="hidden" value="${slug}">
+            <div class="col-md-3">
+                <input class="form-control" name="lift_no" type="number" value="${towerData.lift_no}">
+                <label>Lift Number</label>
+            </div>
+            <div class="col-md-3">
+                <input class="form-control" name="stair_no" type="number" value="${towerData.stair_no}">
+                <label>Stair Number</label>
+            </div>
+            <div class="col-md-3">
+                <input class="form-control" name="fire_safety" type="number" value="${towerData.fire_safety}">
+                <label>Fire Safety</label>
+            </div>
+        </div>
+        <div class="floor-container"></div>
+        <button type="button" class="btn btn-primary btn-sm add-floor">Add Floor</button>
+    `;
+
+        container.appendChild(tower);
+
+        const floorContainer = tower.querySelector(".floor-container");
+
+
+        if (towerData.floor_data) {
+            towerData.floor_data.forEach((floor, floorIndex) => {
+                createFloor(floorContainer, floorIndex + 1, floor);
+            });
+        }
+
+
+        tower.querySelector(".add-floor").addEventListener("click", function() {
+            createFloor(floorContainer, floorContainer.children.length + 1);
+        });
+    }
+
+
+    function createFloor(floorContainer, floorIndex, floorData = null) {
+        const floor = document.createElement("fieldset");
+        floor.classList.add("border", "p-3", "mb-3", "position-relative");
+
+        floor.innerHTML = `
+        <legend>Floor ${floorIndex}</legend>
+        <button type="button" class="btn btn-danger btn-sm remove-floor">Remove Floor</button>
+        <div class="row gx-2">
+            <div class="col-md-4">
+                <input class="form-control" name="floor_no" type="number" value="${floorData ? floorData.floor_no : ''}">
+                <label>Floor Number</label>
+            </div>
+            <div class="col-md-4">
+                <input class="form-control" name="flat_no" type="number" value="${floorData ? floorData.flat_no : ''}">
+                <label>Flat Number</label>
+            </div>
+        </div>
+        <div class="bhk-container"></div>
+        <button type="button" class="btn btn-primary btn-sm add-bhk">Add BHK</button>
+    `;
+
+        floorContainer.appendChild(floor);
+
+        const bhkContainer = floor.querySelector(".bhk-container");
+
+        // Load existing BHK data
+        if (floorData && floorData.bhk_configurations) {
+            floorData.bhk_configurations.forEach((bhk, bhkIndex) => {
+                createBHK(bhkContainer, bhkIndex + 1, bhk);
+            });
+        }
+        floor.querySelector(".remove-floor").addEventListener("click", function() {
+            floor.remove();
+        });
+
+        // Add BHK event listener
+        floor.querySelector(".add-bhk").addEventListener("click", function() {
+            createBHK(bhkContainer, bhkContainer.children.length + 1);
+        });
+    }
+
+    function createBHK(bhkContainer, bhkIndex, bhkData = null) {
+        const bhk = document.createElement("div");
+        bhk.classList.add("mb-3");
+        bhk.innerHTML =
+            `<legend>Flats ${bhkIndex}</legend>
+            <button type="button" class="btn btn-danger btn-delete btn-sm remove-bhk"><i class="bi bi-x-lg"></i></button>
+            <div class="row gx-2">
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="form-floating">
+                        <select class="form-select">
+                            <option value="1BHK" ${bhkData && bhkData.bhk_type === '1BHK' ? 'selected' : ''}>1BHK</option>
+                            <option value="2BHK" ${bhkData && bhkData.bhk_type === '2BHK' ? 'selected' : ''}>2BHK</option>
+                            <option value="3BHK" ${bhkData && bhkData.bhk_type === '3BHK' ? 'selected' : ''}>3BHK</option>
+                            <option value="4BHK" ${bhkData && bhkData.bhk_type === '4BHK' ? 'selected' : ''}>4BHK</option>
+                            <option value="5BHK" ${bhkData && bhkData.bhk_type === '5BHK' ? 'selected' : ''}>5BHK</option>
+                        </select>
+                        <label>BHK Type</label>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="form-floating">
+                        <input class="form-control" type="number" placeholder="" value="${bhkData ? bhkData.carpet_area : ''}">
+                        <label>Carpet Area</label>
+                    </div>
+                </div>
+                  <input class="form-control" id="floor_plan_image_name" name="floor_plan_image_name" type="hidden">
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="form-floating">
+                        <input class="form-control" type="number" placeholder="" value="${bhkData ? bhkData.super_area : ''}">
+                        <label>Super Area</label>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="form-floating">
+                        <input class="form-control" type="number" placeholder="" value="${bhkData ? bhkData.property_price : ''}">
+                        <label>Price</label>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="form-floating">
+                        <select class="form-select">
+                            <option value="east" ${bhkData && bhkData.property_facing === 'east' ? 'selected' : ''}>East</option>
+                            <option value="north" ${bhkData && bhkData.property_facing === 'north' ? 'selected' : ''}>North</option>
+                            <option value="north_east" ${bhkData && bhkData.property_facing === 'north_east' ? 'selected' : ''}>North - East</option>
+                            <option value="north_west" ${bhkData && bhkData.property_facing === 'north_west' ? 'selected' : ''}>North - West</option>
+                            <option value="south" ${bhkData && bhkData.property_facing === 'south' ? 'selected' : ''}>South</option>
+                            <option value="south_east" ${bhkData && bhkData.property_facing === 'south_east' ? 'selected' : ''}>South - East</option>
+                            <option value="south_west" ${bhkData && bhkData.property_facing === 'south_west' ? 'selected' : ''}>South - West</option>
+                            <option value="west" ${bhkData && bhkData.property_facing === 'west' ? 'selected' : ''}>West</option>
+                        </select>
+                        <label>Facing</label>
+                    </div>
+                </div>
+            <div class="col-md-4 col-sm-6 mb-3">
+                <div class="form-floating">
+                    <input class="form-control floor-plan-input" type="file" accept="image/*">
+                    <label>Upload Floor Image</label>
+                </div>
+                <img class="preview-image" src="${bhkData && bhkData.image_url ? bhkData.image_url : ''}" 
+                    style="max-width: 100px; display: ${bhkData && bhkData.image_url ? 'block' : 'none'}; margin-top: 5px;">
+                <button type="button" class="btn btn-danger btn-sm delete-floor-plan" 
+                        style="display: ${bhkData && bhkData.image_url ? 'block' : 'none'}; margin-top: 5px;">
+                    Delete
+                </button>
+            </div>
+
+            </div>
+           `;
+
+        bhkContainer.appendChild(bhk);
+        const fileInput = bhk.querySelector(".floor-plan-input");
+        const previewImg = bhk.querySelector(".preview-image");
+        const deleteImg = bhk.querySelector(".delete-floor-plan");
+
+        fileInput.addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const objectURL = URL.createObjectURL(file);
+                previewImg.src = objectURL;
+                previewImg.style.display = "block";
+                deleteImg.style.display = "block";
+            }
+
+            let formData = new FormData();
+            formData.append("floor_plan_image", file);
+            formData.append("_token", $('meta[name="csrf-token"]').attr("content"));
+
+            $.ajax({
+                url: "{{ route('upload.floor.plan') }}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.status) {
+                        $("<input>").attr({
+                            type: "hidden",
+                            name: "floor_plan_image_name",
+                            value: response.files
+                        }).appendTo(bhk);
+                    } else {
+                        alert("File upload failed");
+                    }
+                },
+                error: function(xhr) {
+                    console.error("Upload error:", xhr.responseText);
+                }
+            });
+        });
+
+        deleteImg.addEventListener("click", function() {
+            previewImg.src = "";
+            previewImg.style.display = "none";
+            fileInput.value = "";
+            deleteImg.style.display = "none";
+
+            const hiddenInput = bhk.querySelector('input[name="floor_plan_image_name"]');
+            if (hiddenInput) {
+                hiddenInput.remove();
+            }
+        });
+
+        bhk.querySelector(".remove-bhk").addEventListener("click", function() {
+            bhk.remove();
+        });
+    }
+</script>
+
+<script>
+    function collectData() {
+
+        const towers = [];
+
+
+
+        document.querySelectorAll('.mb-4.border.p-3').forEach((towerElement) => {
+            const towerData = {
+                tower_name: towerElement.querySelector('input[name="tower_name"]').value,
+                slug: towerElement.querySelector('input[name="slug"]').value,
+                lift_no: towerElement.querySelector('input[name="lift_no"]').value,
+                stair_no: towerElement.querySelector('input[name="stair_no"]').value,
+                fire_safety: towerElement.querySelector('input[name="fire_safety"]').value,
+                floor_data: []
+            };
+
+            towerElement.querySelectorAll('.floor-container fieldset').forEach((floorElement) => {
+                const floorData = {
+                    floor_no: floorElement.querySelector('input[name="floor_no"]').value,
+                    flat_no: floorElement.querySelector('input[name="flat_no"]').value,
+                    bhk_configurations: []
+                };
+
+                floorElement.querySelectorAll('.bhk-container > div').forEach((bhkElement) => {
+                    const bhkData = {
+                        bhk_type: bhkElement.querySelector('select').value,
+                        carpet_area: bhkElement.querySelector('input[type="number"]').value,
+                        super_area: bhkElement.querySelectorAll('input[type="number"]')[1].value,
+                        property_price: bhkElement.querySelectorAll('input[type="number"]')[2].value,
+                        property_facing: bhkElement.querySelectorAll('select')[1].value,
+                        floor_plan_image: bhkElement.querySelector('input[name="floor_plan_image_name"]').value
+                    };
+                    floorData.bhk_configurations.push(bhkData);
+                });
+
+                towerData.floor_data.push(floorData);
+            });
+
+            towers.push(towerData);
+        });
+
+        return towers;
+    }
+
+    document.getElementById('saveButton').addEventListener('click', function() {
+        const project_id = this.value;
+        const towersData = collectData();
+        $.ajax({
+            url: "{{ route('save.towers') }}",
+            type: "POST",
+            data: {
+                towers: towersData,
+                project_id: project_id,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function(response) {
+                $('#propertyModal').modal('hide');
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error("Error:", error);
+            }
+        });
+
+    });
+</script>
+<!-- Project Property End -->
+
+<script>
+    addFloorConfig = (project_id) => {
+        getFloor();
+        let modal = new bootstrap.Modal(document.getElementById('floorModal'));
+        modal.show();
+    }
+</script>
+
+<script>
+    function getFloor() {
+        $.ajax({
+            url: "{{ route('get.towers') }}",
+            type: "GET",
+            data: {
+                projId: project_id,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function(response) {
+                console.log(response);
+
+                
+                floorPlanTypes.forEach((type, index) => {
+                    let isActive = index === 0 ? "active" : "";
+
+                    // Create tab button
+                    let tabButton = `
+            <li class="nav-item" role="presentation">
+                <button class="nav-link ${isActive}" id="${type.slug}-tab" data-bs-toggle="tab" 
+                    data-bs-target="#${type.slug}" type="button" role="tab">
+                    ${type.name}
+                </button>
+            </li>
+        `;
+                    tabsContainer.innerHTML += tabButton;
+
+                    // Filter items for this category
+                    let items = allFloorPlanItems.filter(item => item.type_id === type.id);
+                    let itemsHtml = items.map(item => `
+            <li>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" placeholder="Enter description for ${item.item}" value="${item.description}">
+                    <label>${item.item}:</label>
+                </div>
+            </li>
+        `).join("");
+
+                    // Create tab content
+                    let tabContent = `
+            <div class="tab-pane fade ${isActive ? "show active" : ""}" id="${type.slug}" role="tabpanel">
+                <ul class="list-unstyled">${itemsHtml}</ul>
+                <form>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="${type.slug}Item" placeholder="Enter item for ${type.name}" name="item">
+                                <label for="${type.slug}Item">Title</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="${type.slug}Description" placeholder="Enter description for ${type.name}" name="description">
+                                <label for="${type.slug}Description">Description</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        `;
+                    contentContainer.innerHTML += tabContent;
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Error:", error);
+            }
+        });
+        let tabsContainer = document.getElementById("propertyTabs");
+        let contentContainer = document.getElementById("propertyTabsContent");
+
+        // Loop through floorPlanTypes to create tabs
+
+    };
+</script>
+
+
+@endpush

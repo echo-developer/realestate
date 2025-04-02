@@ -36,6 +36,7 @@ use App\Http\Controllers\Admin\PropertyBudgetController;
 use App\Http\Controllers\Admin\PropertyLengthController;
 use App\Http\Controllers\Admin\PropertyStatusController;
 use App\Http\Controllers\Admin\PropertyFurnishController;
+use App\Http\Controllers\Api\Project\ProjectImageUploade;
 use App\Http\Controllers\Admin\PropertyRecommendController;
 use App\Http\Controllers\Admin\MembershipFeaturesController;
 use App\Http\Controllers\Admin\PropertyTransactionController;
@@ -389,6 +390,8 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/statusupdate', 'PropStatusupdate')->name('project.status.update');
         Route::post('/save/amenities', 'addAmenities')->name('save.amenities');
         Route::get('/get/amenities', 'getAmenities')->name('get.amenities');
+        Route::post('/save/towers', 'addTowers')->name('save.towers');
+        Route::get('/get/towers', 'getTowers')->name('get.towers');
     });
 
     Route::prefix('project')->controller(ProjectController::class)->group(function () {
@@ -481,7 +484,8 @@ Route::middleware('admin_auth')->group(function () {
     Route::prefix('transaction')->controller(TransactionController::class)->group(function () {
         Route::get('transaction_list', 'index')->name('transaction.index');
     });
-
+    Route::post('upload/floor-plan', [ProjectImageUploade::class, 'uploadFloorPlan'])->name('upload.floor.plan');
+    Route::post('delete/floor-plan-image', [ProjectImageUploade::class, 'destroyFloorPlanImage']);
 });
 
 Route::get('/artisan-run', function () {

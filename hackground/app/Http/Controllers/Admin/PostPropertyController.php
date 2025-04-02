@@ -97,11 +97,7 @@ class PostPropertyController extends Controller
             'gallery',
             'gallery.images'
         ])->first();
-
-        // echo '<pre>';
-        // print_r($propertyData->landmarks);
-        // echo '</pre>';
-        // die;
+        // dd($propertyData);
 
         // Define categories
         $landmark_categories = [
@@ -137,7 +133,7 @@ class PostPropertyController extends Controller
                 $groupedImages[$gallery->image_type] = $gallery->images;
             }
         }
-        return view('Admin.Post_property_view.edit_property', compact('propertyTypes', 'property_id', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus', 'propertyData', 'groupedImages','landmark_categories'));
+        return view('Admin.Post_property_view.edit_property', compact('propertyTypes', 'property_id', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus', 'propertyData', 'groupedImages', 'landmark_categories'));
     }
 
     public function saveProperty(Request $request)

@@ -237,7 +237,7 @@ class ProjectPropertyController extends Controller
 
                     $floorData[] = [
                         'floor_id' => $floor->id,
-                        'flat_no' => $floor->flat_no, 
+                        'flat_no' => $floor->flat_no, // Assuming `flat_no` is stored as `id` or another field
                         'floor_no' => $floor->floor_no,
                         'bhk_configurations' => $bhkConfigurations
                     ];
