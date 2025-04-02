@@ -2292,12 +2292,12 @@ h4 {
 .shadow-1{
 	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
 }
-.authentication-form {
-	background-color: $white;
+.authentication-form{
 	border-radius: 0.5rem;
-	padding: 1.25rem;
-	position: relative;
 	z-index: 9;
+	.card-body{
+		padding: 1.25rem;
+	}
 }
 .social-login-separator {
 	display: block;
@@ -3826,36 +3826,38 @@ input::-webkit-inner-spin-button {
 	}
 }
 .social-share-wrap {
-	position: relative;
-
-	&:hover {
-		&>.share-items {
-			display: block;
-		}
-	}
-
+	position: relative;	
 	.share-items {
 		position: absolute;
 		z-index: 10;
 		display: none;
-		min-width: 150px;
-
-		a {
-			float: left;
-			width: 26px;
-			background-color: $white;
-			border: 1px solid $primary;
-			color: $primary;
-			padding: 3px 0;
-			height: 26px;
-			line-height: 1;
-			margin: 5px 3px;
-			text-align: center;
-
-			&:hover {
-				background-color: $primary;
-				color: $white;
+		top: -5px;
+		left: 65px;
+		padding-inline-start: 1rem;
+		li{
+			margin-inline-end: 0;
+			a {
+				
+				background-color: $white;
+				border: 1px solid $primary;
+				color: $primary;
+				padding: 3px 0;
+				height: 30px;
+				width: 30px;
+				line-height: 1;
+				margin: 5px 3px;
+				text-align: center;
+	
+				&:hover {
+					background-color: $primary;
+					color: $white;
+				}
 			}
+		}
+	}
+	&:hover {
+		&>.share-items {
+			display: flex;
 		}
 	}
 }

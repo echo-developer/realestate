@@ -34302,11 +34302,11 @@ h4 .icon-img-check, .h4 .icon-img-check {
 }
 
 .authentication-form {
-  background-color: #fff;
   border-radius: 0.5rem;
-  padding: 1.25rem;
-  position: relative;
   z-index: 9;
+}
+.authentication-form .card-body {
+  padding: 1.25rem;
 }
 
 .social-login-separator {
@@ -35644,30 +35644,34 @@ input::-webkit-inner-spin-button {
 .social-share-wrap {
   position: relative;
 }
-.social-share-wrap:hover > .share-items {
-  display: block;
-}
 .social-share-wrap .share-items {
   position: absolute;
   z-index: 10;
   display: none;
-  min-width: 150px;
+  top: -5px;
+  left: 65px;
+  padding-inline-start: 1rem;
 }
-.social-share-wrap .share-items a {
-  float: left;
-  width: 26px;
+.social-share-wrap .share-items li {
+  margin-inline-end: 0;
+}
+.social-share-wrap .share-items li a {
   background-color: #fff;
   border: 1px solid #1365CF;
   color: #1365CF;
   padding: 3px 0;
-  height: 26px;
+  height: 30px;
+  width: 30px;
   line-height: 1;
   margin: 5px 3px;
   text-align: center;
 }
-.social-share-wrap .share-items a:hover {
+.social-share-wrap .share-items li a:hover {
   background-color: #1365CF;
   color: #fff;
+}
+.social-share-wrap:hover > .share-items {
+  display: flex;
 }
 
 .sort-by .bootstrap-select button {

@@ -129,8 +129,15 @@ const Index = () => {
                     <div className="d-sm-flex justify-content-between">
                       <div className="social-share-wrap">
                         <a className="btn btn-sm btn-outline-primary w-auto">
-                        <i className="bi bi-share me-1"></i> Share
+                          <i className="bi bi-share me-1"></i> Share
                         </a>
+                        <ul className="share-items social-links">
+                          <li><a href="" role="button"><i class="icon-brand-facebook-f"></i></a></li>
+                          <li><a href="" role="button"><i class="icon-brand-linkedin-in"></i></a></li>
+                          <li><a href="" role="button"><i class="icon-brand-instagram"></i></a></li>
+                          <li><a href="" role="button"><i class="icon-brand-youtube"></i></a></li>
+                        </ul>
+
                       </div>
                       <span className="edit-wrap">
                         <Link
