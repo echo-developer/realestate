@@ -457,8 +457,9 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('advertisement/ads_list', 'ads_list');
         Route::get('advertisement/ajax_page', 'load_ajax_page');
         Route::get('advertisement/options', 'get_option_value');
-        Route::POST('advertisement/add', 'add');
-        Route::POST('advertisement/edit', 'edit');
+        Route::post('advertisement/add', 'add');
+        Route::post('advertisement/edit', 'edit');
+        Route::post('advertisement/delete', 'delete');
         Route::post('advertisement/change-status', 'change_status');
     });
 

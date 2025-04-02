@@ -35,6 +35,7 @@ class Advertisement extends Model
     public function get_list($srch=array(),$paginate)
     {
         $query = DB::table('advertisements as a')->select('a.*');
+		$query->where('a.status', '!=', '-1');
 		if(!empty($srch['page'])) {
             $query->where('a.page',$srch['page']);
         }
@@ -317,6 +318,162 @@ class Advertisement extends Model
 						
 					)
 				),
+
+				array(
+					'name' => 'project List Page',
+					'slug' => 'project-listing-page',
+					'position' => array(
+						array(
+							'name' => 'header',
+							'size' => array(
+								'720x35',
+								'820x35',	
+							)
+						),
+						
+						array(
+							'name' => 'footer',
+							'size' => array(
+								'720x35',
+								'620x35',
+							)
+						),
+						
+						array(
+							'name' => 'left',
+							'size' => array(
+								'300x252',
+								'300x600',
+								'250x250',
+								'100x50',
+							)
+						),
+						
+						array(
+							'name' => 'right',
+							'size' => array(
+								'300x252',
+								'300x600',
+								'250x250',
+								'100x50',
+							)
+						)
+						
+					)
+				),
+
+				array(
+					'name' => 'Project Detail Page',
+					'slug' => 'project-detail-page',
+					'position' => array(
+						array(
+							'name' => 'header',
+							'size' => array(
+								'720x35',
+								'820x35',
+								'920x35',
+								'620x35',
+							)
+						),
+						
+						array(
+							'name' => 'footer',
+							'size' => array(
+								'720x35',
+								'820x35',
+								'920x35',
+								'620x35',
+							)
+						),
+						
+						array(
+							'name' => 'right',
+							'size' => array(
+								'250x250',
+								'100x50',
+							)
+						)
+						
+					)
+				),
+
+				array(
+					'name' => 'Agent List Page',
+					'slug' => 'agent-listing-page',
+					'position' => array(
+						array(
+							'name' => 'header',
+							'size' => array(
+								'720x35',
+								'820x35',	
+							)
+						),
+						
+						array(
+							'name' => 'footer',
+							'size' => array(
+								'720x35',
+								'620x35',
+							)
+						),
+						
+						array(
+							'name' => 'left',
+							'size' => array(
+								'300x252',
+								'300x600',
+								'250x250',
+								'100x50',
+							)
+						),
+						
+						array(
+							'name' => 'right',
+							'size' => array(
+								'300x252',
+								'300x600',
+								'250x250',
+								'100x50',
+							)
+						)
+						
+					)
+				),
+
+				array(
+					'name' => 'Agent Detail Page',
+					'slug' => 'agent-detail-page',
+					'position' => array(
+						array(
+							'name' => 'header',
+							'size' => array(
+								'720x35',
+								'820x35',
+								'920x35',
+								'620x35',
+							)
+						),
+						
+						array(
+							'name' => 'footer',
+							'size' => array(
+								'720x35',
+								'820x35',
+								'920x35',
+								'620x35',
+							)
+						),
+						
+						array(
+							'name' => 'right',
+							'size' => array(
+								'250x250',
+								'100x50',
+							)
+						)
+						
+					)
+				),
 				
 			)
 		);
@@ -360,16 +517,29 @@ class Advertisement extends Model
 		}
 	}
 
-	public function changeStatus($data)
+	public function changeStatus($data=array())
     {
         DB::table($this->table)
-            ->where('advertisement_id', $data['id'])
+            ->where('advertisement_id', $data['advertisement_id'])
             ->update([
                 'status' => $data['status'],
                 'updated_at' => now(),
             ]);
         return [
             'message' => 'Status updated successfully.',
+        ];
+    }
+
+	public function delete($id = '')
+    {
+        DB::table($this->table)
+            ->where('advertisement_id', $id)
+            ->update([
+                'status' => config('constants.STATUS_DELETE'),
+                'updated_at' => now(),
+            ]);
+        return [
+            'message' => 'Ad deleted successfully.',
         ];
     }
 

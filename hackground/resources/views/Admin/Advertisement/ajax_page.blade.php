@@ -540,7 +540,7 @@
     function get_position(){
         reset_select([$('[name="position"]'), $('[name="ad_size"]')]);
         var page = $('#add_form [name="page"] :selected').val();
-        $.get('<?php echo url('ads-packages/options?option=page_position&page=')?>'+page, function(res){
+        $.get('<?php echo url('advertisement/options?option=page_position&page=')?>'+page, function(res){
             $('[name="position"]').html(res);
         });
     }
@@ -549,7 +549,7 @@
         reset_select([$('[name="ad_size"]')]);
         var position = $('#add_form [name="position"] :selected').val();
         var page = $('#add_form [name="page"] :selected').val();
-        $.get('<?php echo url('ads-packages/options?option=ad_size&page=')?>'+page+'&position='+position, function(res){
+        $.get('<?php echo url('advertisement/options?option=ad_size&page=')?>'+page+'&position='+position, function(res){
             $('[name="ad_size"]').html(res);
         });
     }

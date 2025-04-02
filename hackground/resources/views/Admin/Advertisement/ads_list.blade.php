@@ -210,7 +210,7 @@
         reset_select([$('[name="position"]'), $('[name="ad_size"]')]);
         var page = $('[name="page"] :selected').val();
 
-        $.get('<?php echo url('ads-packages/options?option=page_position&page=')?>'+page, function(res){
+        $.get('<?php echo url('advertisement/options?option=page_position&page=')?>'+page, function(res){
             $('[name="position"]').html(res);
         });
     }
@@ -219,7 +219,7 @@
         reset_select([$('[name="ad_size"]')]);
         var position = $('[name="position"] :selected').val();
         var page = $('[name="page"] :selected').val();
-        $.get('<?php echo url('ads-packages/options?option=ad_size&page=')?>'+page+'&position='+position, function(res){
+        $.get('<?php echo url('advertisement/options?option=ad_size&page=')?>'+page+'&position='+position, function(res){
             $('[name="ad_size"]').html(res);
         });
     }
@@ -279,11 +279,8 @@
 
 
     $('.ad_status').change(function() {
-
         toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
-
         var id = $(this).data('id');
-        alert(id);
         var status = this.checked ? 1 : 0;
         $.ajaxSetup({
             headers: {
@@ -309,7 +306,6 @@
 
     function Delete(id) {
         var result = confirm('Are you sure you want to delete this?');
-        console.log(id);
         if (result) {
             $.ajaxSetup({
                 headers: {
@@ -318,7 +314,7 @@
             });
             $.ajax({
                 type: 'POST',
-                url: `{{ url('/country/delete') }}`,
+                url: `{{ url('/advertisement/delete') }}`,
                 data: {
                     'id': id
                 },
