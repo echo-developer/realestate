@@ -1474,7 +1474,7 @@ class ApiModel extends Model
                             ->select('p_e.*')
                             ->where('p_e.id',$enquiry_id);
         }
-        $result = $query->get();
+        $result = $query->get()->toArray();
         return $result;
     }
     
