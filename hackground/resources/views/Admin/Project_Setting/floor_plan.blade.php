@@ -110,7 +110,7 @@
                                 <i class="fa fa-edit text-success fa-md" data-id="{{ $item->id }}"
                                     id="edit"></i>
                                 <i class="fa fa-trash text-danger fa-md" data-id="{{ $item->id }}"
-                                onclick="Delete_floor_plan_data(`{{ $item->id }}`)"></i>
+                                    onclick="Delete_floor_plan_data(`{{ $item->id }}`)"></i>
                             </td>
                         </tr>
                         @endforeach
@@ -235,7 +235,11 @@
                         "X-CSRF-TOKEN": "{{ csrf_token() }}"
                     }
                 })
-                .then(response => response.json())
+                .then(response => response.text()) // <-- Convert response to text first
+                .then(text => {
+                    console.log("Raw response:", text); // Debugging
+                    return JSON.parse(text); // Then parse JSON
+                })
                 .then(data => {
                     if (data.success) {
                         alert(data.message);
@@ -245,7 +249,11 @@
                         alert("Error: " + data.message);
                     }
                 })
-                .catch(error => console.error("Error:", error));
+                .catch(error => {
+                    console.error("Parsing Error:", error);
+                    alert("Invalid response from server.");
+                });
+
         });
 
         editButton.forEach(function(btn) {
@@ -310,45 +318,45 @@
                 }
             });
         });
-       
+
 
 
         document.querySelectorAll('.fa-trash').forEach(function(button) {
-        button.addEventListener('click', function() {
-            const floorPlanId = this.getAttribute('data-id'); // Get the ID from the data-id attribute
-            
-            // Ask for confirmation before deleting
-            var result = confirm('Are you sure you want to delete this floor plan?');
-            if (result) {
-                console.log('Deleting floor plan with ID:', floorPlanId); // For debugging
-                
-                // Perform the deletion by setting status to -1 (soft delete)
-                fetch("{{ url('delete_floor_plan') }}", {
-                    method: "POST",
-                    body: JSON.stringify({
-                        id: floorPlanId, // Send the ID in the request body
-                    }),
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Floor plan deleted successfully!");
-                        location.reload(); // Reload the page to reflect the changes
-                    } else {
-                        alert("Error: " + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error); // Log error if request fails
-                    alert("Failed to delete floor plan.");
-                });
-            }
+            button.addEventListener('click', function() {
+                const floorPlanId = this.getAttribute('data-id'); // Get the ID from the data-id attribute
+
+                // Ask for confirmation before deleting
+                var result = confirm('Are you sure you want to delete this floor plan?');
+                if (result) {
+                    console.log('Deleting floor plan with ID:', floorPlanId); // For debugging
+
+                    // Perform the deletion by setting status to -1 (soft delete)
+                    fetch("{{ url('delete_floor_plan') }}", {
+                            method: "POST",
+                            body: JSON.stringify({
+                                id: floorPlanId, // Send the ID in the request body
+                            }),
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert("Floor plan deleted successfully!");
+                                location.reload(); // Reload the page to reflect the changes
+                            } else {
+                                alert("Error: " + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error); // Log error if request fails
+                            alert("Failed to delete floor plan.");
+                        });
+                }
+            });
         });
-    });
     });
 </script>
 

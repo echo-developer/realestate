@@ -58,46 +58,7 @@ class AllProjectController extends Controller
 
         $amenities = new ProjectAmenityModel();
         $projectAmenities = $amenities->getProjectAmenities();
-
-        $lang = $request->input('lang', 'en');
-        $projectId = 14;
-
-        // Retrieve all floor plans with associated names
-        $floorPlans = FloorPlan::where('status', true)->with(['names' => function ($query) use ($lang) {
-            $query->where('lang', $lang);
-        }])->get();
-
-        // Retrieve all floor plan types with associated names
-        $allFloorPlanTypes = PrefFloorPlanType::where('status', true)->with(['names' => function ($query) use ($lang) {
-            $query->where('lang', $lang);
-        }])->get();
-
-        // Transform floor plan types for response
-        $transformedFloorPlanTypes = $allFloorPlanTypes->map(function ($type) {
-            $name = $type->names->first()->type ?? null;
-            return [
-                'id' => $type->id,
-                'slug' => $type->slug,
-                'name' => $name,
-            ];
-        });
-        $allFloorPlanItems = [];
-        foreach ($floorPlans as $plan) {
-            foreach ($plan->names as $name) {
-                $additionalValues = PrefFloorPlanValue::where('fp_id', $name->fp_id)
-                    ->where('project_id', $projectId)  
-                    ->first();
-
-               
-                $allFloorPlanItems[] = [
-                    'item_id' => $name->fp_id,
-                    'item' => $name->item,
-                    'type_id' => $plan->fp_type,
-                    'description' => $additionalValues ? $additionalValues->desc : null,  
-                ];
-            }
-        }
-        return view('Admin.All_project.all-project', compact('project', 'statusMapping', 'user_id', 'projectAmenities','transformedFloorPlanTypes','allFloorPlanItems'));
+        return view('Admin.All_project.all-project', compact('project', 'statusMapping', 'user_id', 'projectAmenities'));
     }
 
     public function getTowers(Request $req)

@@ -30,26 +30,24 @@ class FloorPlanController extends Controller
 
     public function addFloorPlan(Request $req)
     {
-        Log::info($req->all()); // This will log the entire request data.
-
-        // Validate the request
-        $validated = $req->validate([
-            'type' => 'required|integer',
-            'title' => 'required|array',
-            'order' => 'required|integer',
-            'status' => 'required|boolean',
-        ]);
-
-        // Log the validated data to ensure everything is correct
-        Log::info($validated);
-
-        DB::beginTransaction();
         try {
+            Log::info($req->all());
+    
+            // Validate input
+            $validated = $req->validate([
+                'type' => 'required|integer',
+                'title' => 'required|array',
+                'status' => 'required|boolean',
+            ]);
+    
+            Log::info($validated);
+    
+            DB::beginTransaction();
             $floorPlan = FloorPlan::create([
                 'status' => $req->status,
                 'fp_type' => $req->type,
             ]);
-
+    
             foreach ($req->title as $lang => $title) {
                 FloorPlanName::create([
                     'fp_id' => $floorPlan->id,
@@ -57,7 +55,7 @@ class FloorPlanController extends Controller
                     'lang' => $lang
                 ]);
             }
-
+    
             DB::commit();
             return response()->json([
                 'success' => true,
@@ -65,12 +63,14 @@ class FloorPlanController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
+    
             return response()->json([
                 'success' => false,
                 'message' => 'Error: ' . $e->getMessage(),
-            ]);
+            ], 500);
         }
     }
+    
 
     public function getFloorPlan($id)
     {

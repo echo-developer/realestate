@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\FloorPlanController;
 use App\Http\Controllers\Admin\AllProjectController;
 use App\Http\Controllers\Admin\AllSettingController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Api\FloorPlaningController;
 use App\Http\Controllers\Admin\AllPropertyController;
 use App\Http\Controllers\Admin\ProjectEditController;
 use App\Http\Controllers\Admin\TestimonialController;
@@ -487,6 +488,13 @@ Route::middleware('admin_auth')->group(function () {
     });
     Route::post('upload/floor-plan', [ProjectImageUploade::class, 'uploadFloorPlan'])->name('upload.floor.plan');
     Route::post('delete/floor-plan-image', [ProjectImageUploade::class, 'destroyFloorPlanImage']);
+
+    Route::controller(FloorPlaningController::class)->group(function () {
+
+        Route::get('get_floor_plan_type', 'floorPlan')->name('floor.plan.type');
+        Route::post('save_floor_data', 'addFloorPlan')->name('floor.addFloorPlan');
+    });
+    
 });
 
 Route::get('/artisan-run', function () {

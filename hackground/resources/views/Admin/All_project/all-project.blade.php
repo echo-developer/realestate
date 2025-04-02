@@ -290,7 +290,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Insert New Value for Kitchen</h5>
+                <h5 class="modal-title">Floor Data</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -304,7 +304,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save All</button>
+                <button type="button" id="saveAllButton" class="btn btn-primary">Save All</button>
             </div>
         </div>
     </div>
@@ -819,6 +819,7 @@
             },
             success: function(response) {
                 $('#propertyModal').modal('hide');
+                localStorage.setItem('successMessage', 'Towers updated successfully!');
                 location.reload();
             },
             error: function(xhr, status, error) {
@@ -831,88 +832,141 @@
 <!-- Project Property End -->
 
 <script>
-    addFloorConfig = (project_id) => {
-        getFloor();
+    function addFloorConfig(project_id) {
+        floorData(project_id);
         let modal = new bootstrap.Modal(document.getElementById('floorModal'));
         modal.show();
     }
-</script>
 
-<script>
-    function getFloor() {
+    function floorData(project_id) {
         $.ajax({
-            url: "{{ route('get.towers') }}",
+            url: "{{ route('floor.plan.type') }}",
             type: "GET",
             data: {
-                projId: project_id,
+                project_id: project_id,
                 _token: "{{ csrf_token() }}"
             },
             success: function(response) {
-                console.log(response);
+                let tabsContainer = document.getElementById("propertyTabs");
+                let contentContainer = document.getElementById("propertyTabsContent");
 
-                
-                floorPlanTypes.forEach((type, index) => {
+                // Clear previous content
+                tabsContainer.innerHTML = "";
+                contentContainer.innerHTML = "";
+
+                // Loop through floorPlanTypes to create tabs and content
+                response.data.floor_plan_types.forEach((type, index) => {
                     let isActive = index === 0 ? "active" : "";
 
                     // Create tab button
                     let tabButton = `
-            <li class="nav-item" role="presentation">
-                <button class="nav-link ${isActive}" id="${type.slug}-tab" data-bs-toggle="tab" 
-                    data-bs-target="#${type.slug}" type="button" role="tab">
-                    ${type.name}
-                </button>
-            </li>
-        `;
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link ${isActive}" id="${type.slug}-tab" 
+                                data-bs-toggle="tab" data-bs-target="#${type.slug}" type="button" role="tab">
+                                ${type.name}
+                            </button>
+                        </li>
+                    `;
                     tabsContainer.innerHTML += tabButton;
 
                     // Filter items for this category
-                    let items = allFloorPlanItems.filter(item => item.type_id === type.id);
+                    let items = response.data.floor_plans.filter(item => item.type_id === type.id);
                     let itemsHtml = items.map(item => `
-            <li>
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" placeholder="Enter description for ${item.item}" value="${item.description}">
-                    <label>${item.item}:</label>
-                </div>
-            </li>
-        `).join("");
+                                                    <li>
+                                                        <div class="form-floating mb-3">
+                                                        <label>${item.item}:</label>
+                                                           <input type="text" class="form-control item-input" 
+                                                                placeholder="Enter description for ${item.item}" 
+                                                                value="${item.description ? item.description : ''}" 
+                                                                data-item-id="${item.item_id}" 
+                                                                data-type-id="${type.id}">
+
+                                                        </div>
+                                                    </li>
+                                                `).join("");
+
 
                     // Create tab content
                     let tabContent = `
-            <div class="tab-pane fade ${isActive ? "show active" : ""}" id="${type.slug}" role="tabpanel">
-                <ul class="list-unstyled">${itemsHtml}</ul>
-                <form>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="${type.slug}Item" placeholder="Enter item for ${type.name}" name="item">
-                                <label for="${type.slug}Item">Title</label>
-                            </div>
+                        <div class="tab-pane fade ${isActive ? "show active" : ""}" id="${type.slug}" role="tabpanel">
+                            <ul class="list-unstyled">${itemsHtml}</ul>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="${type.slug}Description" placeholder="Enter description for ${type.name}" name="description">
-                                <label for="${type.slug}Description">Description</label>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </form>
-            </div>
-        `;
+                    `;
                     contentContainer.innerHTML += tabContent;
                 });
+                document.getElementById("saveAllButton").onclick = function() {
+                    saveAllFloorPlans(project_id);
+                };
             },
             error: function(xhr, status, error) {
                 console.error("Error:", error);
             }
         });
-        let tabsContainer = document.getElementById("propertyTabs");
-        let contentContainer = document.getElementById("propertyTabsContent");
+    }
 
-        // Loop through floorPlanTypes to create tabs
+    function saveAllFloorPlans(project_id) {
+        let floorData = [];
 
-    };
+        document.querySelectorAll(".tab-pane").forEach(tab => {
+            tab.querySelectorAll(".item-input").forEach(input => {
+                let item_id = input.getAttribute("data-item-id");
+                let type_id = input.getAttribute("data-type-id");
+                let label = input.closest(".form-floating")?.querySelector("label"); 
+                let item_name = label ? label.innerText.replace(":", "").trim() : "Unknown";
+                let description = input.value.trim();
+
+                if (item_id && type_id) { 
+                    floorData.push({
+                        id: item_id,
+                        item: item_name,
+                        description: description,
+                        type_id: type_id
+                    });
+                }
+            });
+
+         
+            let newItem = tab.querySelector(".new-item")?.value?.trim();
+            let newDescription = tab.querySelector(".new-description")?.value?.trim();
+            let type_id = tab.querySelector(".new-item")?.getAttribute("data-type-id");
+
+            if (newItem && newDescription && type_id) {
+                floorData.push({
+                    id: null,
+                    item: newItem,
+                    description: newDescription,
+                    type_id: type_id
+                });
+            }
+        });
+
+        if (floorData.length === 0) {
+            alert("No data to save.");
+            return;
+        }
+
+        console.log("Sending floor data:", floorData); 
+        $.ajax({
+            url: "{{ route('floor.addFloorPlan') }}",
+            type: "POST",
+            data: {
+                project_id: project_id,
+                floor_data: JSON.stringify(floorData),
+                _token: "{{ csrf_token() }}"
+            },
+            success: function(response) {
+                $("#floorModal").modal("hide");
+                localStorage.setItem('successMessage', 'Floor updated successfully!');
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error("Error:", error);
+                alert("Error saving data.");
+            }
+        });
+    }
 </script>
+
 
 
 @endpush
