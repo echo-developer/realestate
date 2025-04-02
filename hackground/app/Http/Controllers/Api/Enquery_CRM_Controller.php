@@ -951,7 +951,10 @@ class Enquery_CRM_Controller extends Controller
             $assign_id = $request->input('assign_id');
             $user_id = $request->input('user_id');
             $checkAssignedLead = DB::table('leads_assigned')->where(['assign_id'=>$assign_id,'user_id'=>$user_id])->first();
+            $assign_data = [];
+            $enquiry_id = "";
             if ($checkAssignedLead) {
+                $enquiry_id = $checkAssignedLead->enquery_id;
                 $eq_timeline = DB::table('crm_log')
                     ->leftJoin('property_enquiry', 'crm_log.enquiry_id', '=', 'property_enquiry.enquery_id')
                     ->where(['crm_log.assign_id'=> $assign_id,'crm_log.user_id'=>$user_id])
@@ -970,6 +973,8 @@ class Enquery_CRM_Controller extends Controller
                         'status' => 1,
                         'message' => 'No result found.',
                         'data' => [],
+                        'assign_id'=>$assign_id,
+                        'enquiry_id'=>$enquiry_id,
                     ]);
                 }
 
@@ -977,6 +982,8 @@ class Enquery_CRM_Controller extends Controller
                     'status' => 1,
                     'message' => 'data retrived successfully',
                     'data' => $eq_timeline,
+                    'assign_id'=>$assign_id,
+                    'enquiry_id'=>$enquiry_id,
                 ]);
 
                 // Log::info('eq_timeline :\n' . json_encode($eq_timeline, JSON_PRETTY_PRINT));
@@ -985,6 +992,8 @@ class Enquery_CRM_Controller extends Controller
                     'status' => 0,
                     'message' => 'No Enquery id found.',
                     'data' => [],
+                    'assign_id'=>$assign_id,
+                    'enquiry_id'=>$enquiry_id,
                 ]);
             }
         } catch (\Exception $e) {

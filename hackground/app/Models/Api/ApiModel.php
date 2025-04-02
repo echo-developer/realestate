@@ -1468,18 +1468,14 @@ class ApiModel extends Model
                         ->leftJoin('properties as p', 'p.id', '=', 'p_e.property_id')
                         ->leftJoin('project as pj', 'pj.id', '=', 'p_e.project_id')
                         ->leftJoin('customer as c', 'p_e.cid', '=', 'c.cid')
-                        ->where('p_e.enquery_id',$enquiry_id)
-                        ->get();
-            return $query;
+                        ->where('p_e.enquery_id',$enquiry_id);
         }elseif($lead_type == 'G'){
             $query = DB::table('buyer_property_enquery as p_e')
                             ->select('p_e.*')
-                            ->where('p_e.id',$enquiry_id)
-                            ->get();
-
+                            ->where('p_e.id',$enquiry_id);
         }
-        
-           
+        $result = $query->get();
+        return $result;
     }
     
 }
