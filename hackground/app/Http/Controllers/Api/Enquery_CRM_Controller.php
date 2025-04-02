@@ -536,7 +536,7 @@ class Enquery_CRM_Controller extends Controller
                         'super_area' => $row->super_area,
                         'plot_area' => $row->plot_area,
                         'size' => ($row->plot_area ?? 0) + ($row->super_area ?? 0) + ($row->carpet_area ?? 0),
-                        'gallery' => $transformedData,
+                        'galleries' => $transformedData,
                         'lead_type' => 'P'
                     ];
                 }
@@ -668,7 +668,7 @@ class Enquery_CRM_Controller extends Controller
                         'occupied_area' => $row->occupied_area,
                         'area_in_sqft' => $row->area_in_sqft,
                         //'size' => ($row->plot_area ?? 0) + ($row->super_area ?? 0) + ($row->carpet_area ?? 0),
-                        'gallery' => $transformedData,
+                        'galleries' => $transformedData,
                         'lead_type' => 'P'
                     ];
                 }
@@ -951,7 +951,20 @@ class Enquery_CRM_Controller extends Controller
             $assign_id = $request->input('assign_id');
             $user_id = $request->input('user_id');
             $checkAssignedLead = DB::table('leads_assigned')->where(['assign_id'=>$assign_id,'user_id'=>$user_id])->first();
+            $assign_data = [];
+            $enquiry_id = "";
+            $lead_type = "";
+            $phone = "";
+            $email = "";
             if ($checkAssignedLead) {
+                $enquiry_id = $checkAssignedLead->enquery_id;
+                $lead_type = $checkAssignedLead->lead_type;
+                $enquiry = $this->apiModel->getLeadDetails($enquiry_id,$lead_type);
+                if($enquiry)
+                {
+                    $phone = $enquiry[0]->phone;
+                    $email = $enquiry[0]->email;
+                }
                 $eq_timeline = DB::table('crm_log')
                     ->leftJoin('property_enquiry', 'crm_log.enquiry_id', '=', 'property_enquiry.enquery_id')
                     ->where(['crm_log.assign_id'=> $assign_id,'crm_log.user_id'=>$user_id])
@@ -965,16 +978,16 @@ class Enquery_CRM_Controller extends Controller
                         'crm_log.remarks',
                     )->get()->toArray();
 
-                // $timelines = [];
-                // $formatedData = array_map(function ($items) {
-
-                // }, $eq_timeline);
-                //print_r();
                 if (empty($eq_timeline)) {
                     return response()->json([
                         'status' => 1,
                         'message' => 'No result found.',
                         'data' => [],
+                        'assign_id'=>$assign_id,
+                        'enquiry_id'=>$enquiry_id,
+                        'lead_type'=> $lead_type,
+                        'phone'=>$phone,
+                        'email'=>$email
                     ]);
                 }
 
@@ -982,6 +995,11 @@ class Enquery_CRM_Controller extends Controller
                     'status' => 1,
                     'message' => 'data retrived successfully',
                     'data' => $eq_timeline,
+                    'assign_id'=>$assign_id,
+                    'enquiry_id'=>$enquiry_id,
+                    'lead_type'=> $lead_type,
+                    'phone'=>$phone,
+                    'email'=>$email
                 ]);
 
                 // Log::info('eq_timeline :\n' . json_encode($eq_timeline, JSON_PRETTY_PRINT));
@@ -990,6 +1008,11 @@ class Enquery_CRM_Controller extends Controller
                     'status' => 0,
                     'message' => 'No Enquery id found.',
                     'data' => [],
+                    'assign_id'=>$assign_id,
+                    'enquiry_id'=>$enquiry_id,
+                    'lead_type'=> $lead_type,
+                    'phone'=>$phone,
+                    'email'=>$email
                 ]);
             }
         } catch (\Exception $e) {
@@ -1056,51 +1079,38 @@ class Enquery_CRM_Controller extends Controller
 
     public function leadDetails(Request $request)
     {
-
         $assign_id = $request->input('assign_id');
         try {
             if ($assign_id) {
-                $enquiry = DB::table('leads_assigned')->where('assign_id',$assign_id)->first();
-                if($enquiry)
+                $lead = DB::table('leads_assigned')->where('assign_id',$assign_id)->first();
+                if($lead)
                 {
-                    $enquiry_id = 
-
-                    $data = $this->apiModel->queryForScheduleDetails($enquery_id);
+                    $enquiry_id = $lead->enquery_id;
+                    $lead_type = $lead->lead_type;
+                    $data = $this->apiModel->getLeadDetails($enquiry_id,$lead_type);
                     if (empty($data)) {
                         return response()->json([
-                            'status' => 1,
+                            'status' => 0,
                             'message' => 'No data found.',
                             'data' => [],
                         ]);
+                    }else{
+                        return response()->json([
+                            'status' => 1,
+                            'message' => 'Lead details fetched successfully.',
+                            'lead_type' => $lead_type,
+                            'data' => $data
+                        ]);
                     }
 
-                    $logData = DB::table('crm_log')
-                        ->select('schedule_date', 'remarks')
-                        ->where('enquiry_id', $data->enquery_id)
-                        ->orderBy('id', 'desc')
-                        ->first();
+                }else{
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'No data found.',
+                        'data' => [],
+                    ]);
                 }
                 
-
-                if ($logData) {
-                    $logData->enquery_status = $data->enquery_status;
-                }
-
-
-                $data->property_size = ($data->carpet_area ?? 0) + ($data->super_area ?? 0) + ($data->plot_area ?? 0);
-                $data->log_data = $logData;
-
-
-                unset($data->carpet_area, $data->super_area, $data->plot_area);
-
-                // Log::info("Formatted Data:\n" . json_encode($data, JSON_PRETTY_PRINT));
-
-
-                return response()->json([
-                    'status' => 1,
-                    'message' => 'data retrived successfully.',
-                    'data' => $data,
-                ]);
             } else {
                 return response()->json([
                     'status' => 0,

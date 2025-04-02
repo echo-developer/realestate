@@ -200,6 +200,12 @@ const SideBar = () => {
                     {translation?.leads || "Leads"}
                   </a>
                 </li>
+                <li>
+                  <a href="/property-crm-calender">
+                    <i className="icon-line-awesome-arrow-right"></i>{" "}
+                    Schedule Calendar
+                  </a>
+                </li>
                 {/* <li>
                   <a href="/property-crm-timeline">
                     <i className="icon-line-awesome-arrow-right"></i> TimeLine

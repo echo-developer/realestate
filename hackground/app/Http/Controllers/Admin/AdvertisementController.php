@@ -163,8 +163,14 @@ class AdvertisementController extends Controller
             'advertisement_id' => $req->id,
             'status' => $req->status
         ];
-
         $response = $this->advertisement->changeStatus($data);
+        return response()->json($response);
+    }
+
+    public function delete(Request $req)
+    {
+        $response = $this->advertisement->delete($req->id);
+        set_flash_message('delete');
         return response()->json($response);
     }
 

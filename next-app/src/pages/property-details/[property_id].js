@@ -20,6 +20,8 @@ import { toast } from "react-toastify";
 import { Modal, Row, Col, Button } from "react-bootstrap";
 import useTranslation from "@/hooks/useTranslation";
 import DOMPurify from "dompurify";
+import useAdvertisement from "@/hooks/useAdvertisement";
+import { useAuth } from "@/context/AuthProvider";
 import {
   facingOptions,
   ownershipTypeOptions,
@@ -33,6 +35,7 @@ import { CheckCircleFill, XCircleFill } from "react-bootstrap-icons";
 const index = () => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const router = useRouter();
+  const { defaultCity } = useAuth();
   const translation = useTranslation();
   const [showAll, setShowAll] = useState(false);
   const { property_id } = router.query;
@@ -44,7 +47,8 @@ const index = () => {
   const [viewMore, setViewMore] = useState(false);
   const memberId = GetMemberId();
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
-  const [userDetails,setUserDetails]=useState()
+  const [userDetails, setUserDetails] = useState();
+  const { adsData, logAdClick } = useAdvertisement("detail-page", "footer",defaultCity?.city_id);
 
   useEffect(() => {
     if (property_id) {
@@ -72,7 +76,7 @@ const index = () => {
       });
       if (response && response.status === 1) {
         setPropertyDetails(response?.data[0]);
-        setUserDetails(response?.data[0]?.user_details)
+        setUserDetails(response?.data[0]?.user_details);
       }
     } catch (error) {
     } finally {
@@ -234,7 +238,11 @@ const index = () => {
               />
 
               {visible && (
-                <GalleryList setVisible={setVisible} propertyId={property_id} userDetails={userDetails}/>
+                <GalleryList
+                  setVisible={setVisible}
+                  propertyId={property_id}
+                  userDetails={userDetails}
+                />
               )}
 
               <div className="row mb-3">
@@ -255,7 +263,7 @@ const index = () => {
                       {translation?.download_brochure || "Download Brochure"}
                       <Link
                         target="_blank"
-                        href={`${propertyDetails?.property_brochure_pdf}`}  
+                        href={`${propertyDetails?.property_brochure_pdf}`}
                         className="ms-3"
                       >
                         <img
@@ -807,12 +815,26 @@ const index = () => {
                 />
               )}
               <div className="text-center mb-4">
-                {" "}
-                <img
-                  src="/assets/images/ads/ads-blank.jpg"
-                  alt="Ads"
-                  className="img-fluid"
-                />{" "}
+                {adsData.length > 0 ? (
+                  adsData.map((ad) => (
+                    <a
+                      key={ad.advertisement_id}
+                      role="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        logAdClick(ad.advertisement_id, ad.ad_url);
+                      }}
+                    >
+                      <img src={ad.ad_image} alt="Ad" />
+                    </a>
+                  ))
+                ) : (
+                  <img
+                    alt="Advertisement"
+                    src="/assets/images/ads/ads-blank.jpg"
+                    className="img-fluid"
+                  />
+                )}
               </div>
               <NearbyProperties
                 propertydata={propertyDetails?.nearby_properties}

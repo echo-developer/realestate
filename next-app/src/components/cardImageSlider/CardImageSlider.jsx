@@ -10,6 +10,7 @@ const CardImageSlider = ({
   addRemoveFav,
   mainType,
   listKey,
+  showFavIcon=true
 }) => {
   const translation = useTranslation();
   const [allImages, setAllImages] = useState([]);
@@ -100,7 +101,9 @@ const CardImageSlider = ({
         </span>
       )}
 
-      <span
+      {
+        showFavIcon && (
+          <span
         className={`ads-fav ${
           data?.is_favorite || data?.is_fav || data?.is_favourite ? "active" : ""
         }`}
@@ -108,6 +111,8 @@ const CardImageSlider = ({
       >
         <i className="icon-line-awesome-heart-o"></i>
       </span>
+        )
+      }
       <span className="total-ad-pic">
         <i className="bi bi-camera"></i>{data.image_count}
       </span>

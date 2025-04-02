@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import withAuth from "@/utils/withAuth";
 import useTranslation from "@/hooks/useTranslation";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import { Envelope, Phone, Share, Whatsapp } from 'react-bootstrap-icons';
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -101,12 +102,12 @@ const Index = () => {
                     </div>
 
                     <p className="mb-1">
-                      <i className="icon-feather-mail"></i>{" "}
+                      <Envelope color="current" size={14} className="me-1" />
                       <b>{userData?.user?.email || "Not available"}</b>
                     </p>
                     <p className="mb-2">
                       <span>
-                        <i className="icon-feather-phone"></i>{" "}
+                        <Phone color="current" size={14} className="me-1" />
                         <b>
                           {userData?.user?.phone && userData?.user?.phone !== 0
                             ? `${userData?.user?.phone_code || "+91"}-${
@@ -117,18 +118,18 @@ const Index = () => {
                       </span>
                     </p>
                     <p className="mb-1">
-                      <i className="icon-brand-whatsapp"></i>{" "}
+                      <Whatsapp color="current" size={14} className="me-1" />
                       <b>{userData?.user?.whatsapp_no || "Not available"}</b>
                     </p>
-                    <p className="mb-1">
+                    <p className="mb-2">
                       <i className="icon-feather-pin"></i>{" "}
                       <b>{userData?.user?.address || "Not available"}</b>
                     </p>
 
                     <div className="d-sm-flex justify-content-between">
                       <div className="social-share-wrap">
-                        <a className="btn btn-sm btn-outline-site w-auto">
-                          <i className="icon-feather-share-2"></i> Share
+                        <a className="btn btn-sm btn-outline-primary w-auto">
+                        <i className="bi bi-share me-1"></i> Share
                         </a>
                       </div>
                       <span className="edit-wrap">
@@ -136,7 +137,7 @@ const Index = () => {
                           href={`/profile-edit/${memberId}`}
                           className="btn btn-sm btn-primary"
                         >
-                          <i className="icon-feather-edit-3"></i>{" "}
+                          <i class="bi bi-pencil-square me-1"></i>
                           {translation?.edit || "Edit"}
                         </Link>
                       </span>
