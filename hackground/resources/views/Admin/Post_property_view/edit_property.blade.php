@@ -38,7 +38,7 @@
             <div class="card">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Basic Details </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(9, 125)"><i class="fa fa-edit"></i></a>
+                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('basic')"><i class="fa fa-edit"></i></a>
                 </div>
                 <div class="card-body">
                     <ul class="list-info">
@@ -75,7 +75,7 @@
             <div class="card">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Location </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(9, 125)"><i class="fa fa-edit"></i></a>
+                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('location')"><i class="fa fa-edit"></i></a>
                 </div>
                 <div class="card-body">
                     <ul class="list-info">
@@ -158,7 +158,7 @@
             <div class="card">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Floor Details </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(9, 125)"><i class="fa fa-edit"></i></a>
+                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('floor')"><i class="fa fa-edit"></i></a>
                 </div>
                 <div class="card-body">
                     <ul class="list-info">
@@ -211,7 +211,7 @@
             <div class="card">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Additional Information </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(9, 125)"><i class="fa fa-edit"></i></a>
+                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('additional')"><i class="fa fa-edit"></i></a>
                 </div>
                 <div class="card-body">
                     <ul class="list-info">
@@ -236,7 +236,7 @@
             <div class="card">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Property Landmark </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(9, 125)"><i class="fa fa-edit"></i></a>
+                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('landmark')"><i class="fa fa-edit"></i></a>
                 </div>
                 <div class="card-body">
 
@@ -270,6 +270,15 @@
 @endsection
 @push('custom-js')
 <script>
+    function edit(type){
+        let property_id = "{{ $property_id }}";
+        let url = `{{ url('advertisement/ajax_page') }}?type=${type}&property_id=${property_id}`;
+        $.get(url, function(data) {
+            $('#ajaxModal').modal('show');
+            $('#ajaxModal .modal-content').html(data);
+        });
+    }
+
     $('#fileinput').on('change', function() {
         var activeTab = $(".image-tab-content .nav-link.active").attr("data-tab");
         let files = this.files;

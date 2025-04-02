@@ -1464,7 +1464,7 @@ class ApiModel extends Model
         if($lead_type == 'P')
         {
             $query = DB::table('property_enquiry as p_e')
-                        ->select('p_e.*','c.Phone as phone','c.Name as name','c.Email as email')
+                        ->select('p_e.*','p.name as property_name','pj.project_name','c.Phone as phone','c.Name as name','c.Email as email')
                         ->leftJoin('properties as p', 'p.id', '=', 'p_e.property_id')
                         ->leftJoin('project as pj', 'pj.id', '=', 'p_e.project_id')
                         ->leftJoin('customer as c', 'p_e.cid', '=', 'c.cid')
@@ -1474,7 +1474,7 @@ class ApiModel extends Model
                             ->select('p_e.*')
                             ->where('p_e.id',$enquiry_id);
         }
-        $result = $query->get()->toArray();
+        $result = $query->first();
         return $result;
     }
     

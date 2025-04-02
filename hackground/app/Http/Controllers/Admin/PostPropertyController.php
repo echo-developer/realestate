@@ -136,6 +136,52 @@ class PostPropertyController extends Controller
         return view('Admin.Post_property_view.edit_property', compact('propertyTypes', 'property_id', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus', 'propertyData', 'groupedImages', 'landmark_categories'));
     }
 
+    public function load_ajax_page(Request $request)
+    {
+        $srch = $request->query();
+        $page = $srch['page'];
+        $ID = "";
+        $detail = "";
+        $city = get_all_city();
+        $property_category = get_all_property_category();
+        if($page == 'add'){
+			$pages = $this->advertisement->get_pages();
+			$title = 'Add Advertisement';
+			$form_action = url('advertisement/add');
+		}elseif($page == 'basic')
+        {
+            $id = $srch['id'];
+			$ID = $id;
+			$form_action = url('property/save-edit-property');
+            $propertyData = PrefProperty::where('id',  $property_id)->with([
+                'settings',
+                'additional',
+                'location',
+                'dimensions',
+                'landmarks',
+                'gallery',
+                'gallery.images'
+            ])->first();
+            print_r();
+			// $detail = $this->advertisement->getDetail($id);
+            // if($detail)
+            // {
+            //     $detail['ad_locations'] = $this->advertisement->getAdLocations($detail['advertisement_id']);
+            //     $detail['ad_cats'] = $this->advertisement->getAdCategory($detail['advertisement_id']);
+            // }
+			// $title = 'Edit Advertisement';
+			// $pages = $this->advertisement->get_pages();
+			// if(!empty($detail['page'])){
+			// 	$positions = $this->advertisement->get_position($detail['page']);
+			// 	if(!empty($detail['position'])){
+			// 		$sizes = $this->advertisement->get_size($detail['page'], $detail['position']);
+			// 	}
+			// }
+        }
+
+        return view('Admin.Advertisement.ajax_page', compact('page', 'title', 'form_action','pages','positions', 'sizes', 'ID', 'detail', 'city','property_category'));
+    }
+
     public function saveProperty(Request $request)
     {
         if ($request) {

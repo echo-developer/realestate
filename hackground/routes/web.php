@@ -428,6 +428,8 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('property/post-property', 'PropertyPost');
         Route::post('property/save-property', 'saveProperty');
         Route::get('property/edit/{propId}', 'EditProperty');
+        Route::get('property/load_ajax_page', 'load_ajax_page');
+        Route::post('property/save-edit-property', 'saveEditProperty');
     });
 
     Route::controller(EnquiryController::class)->group(function () {

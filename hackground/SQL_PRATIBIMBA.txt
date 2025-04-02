@@ -93,3 +93,16 @@ ALTER TABLE `pref_leads_assigned` ADD `lead_status` TINYINT NOT NULL DEFAULT '0'
 ALTER TABLE `pref_crm_log` ADD `assign_id` BIGINT NOT NULL AFTER `enquiry_id`;
 
 ALTER TABLE `pref_crm_log` ADD `user_id` INT NOT NULL AFTER `assign_id`;
+
+02/04/205
+ALTER TABLE `pref_advertisements` CHANGE `request_id` `request_id` INT NULL;
+ALTER TABLE `pref_advertisements` CHANGE `package_id` `package_id` INT NULL;
+ALTER TABLE `pref_advertisements` CHANGE `member_id` `member_id` INT NULL;
+ALTER TABLE `pref_advertisements` CHANGE `ad_image` `ad_image` VARCHAR(155) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL;
+ALTER TABLE `pref_advertisements` CHANGE `ad_image_mobile` `ad_image_mobile` VARCHAR(155) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL;
+ALTER TABLE `pref_advertisements` CHANGE `ad_code` `ad_code` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL;
+ALTER TABLE `pref_advertisements` CHANGE `ad_url` `ad_url` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL, CHANGE `ad_size` `ad_size` VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL, CHANGE `ad_type` `ad_type` VARCHAR(90) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL, CHANGE `start_date` `start_date` DATETIME NULL, CHANGE `expire_date` `expire_date` DATETIME NULL;
+
+ALTER TABLE `pref_advertisement_locations` CHANGE `location_id` `location_id` INT NULL, CHANGE `city_id` `city_id` INT NULL, CHANGE `country_id` `country_id` INT NULL;
+
+ALTER TABLE `pref_advertisement_category` CHANGE `property_category` `property_category` INT NULL, CHANGE `property_sub_category` `property_sub_category` INT NULL;

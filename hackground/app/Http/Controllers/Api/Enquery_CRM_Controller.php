@@ -962,8 +962,8 @@ class Enquery_CRM_Controller extends Controller
                 $enquiry = $this->apiModel->getLeadDetails($enquiry_id,$lead_type);
                 if($enquiry)
                 {
-                    $phone = $enquiry[0]->phone;
-                    $email = $enquiry[0]->email;
+                    $phone = $enquiry->phone;
+                    $email = $enquiry->email;
                 }
                 $eq_timeline = DB::table('crm_log')
                     ->leftJoin('property_enquiry', 'crm_log.enquiry_id', '=', 'property_enquiry.enquery_id')
