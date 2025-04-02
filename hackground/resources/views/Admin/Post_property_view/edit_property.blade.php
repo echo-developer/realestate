@@ -259,20 +259,13 @@
         </div>
     </section>
 </div>
-<div class="modal fade" id="ajaxModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-        </div>
-    </div>
-</div>
 
 @endsection
 @push('custom-js')
 <script>
     function edit(type){
         let property_id = "{{ $property_id }}";
-        let url = `{{ url('advertisement/ajax_page') }}?type=${type}&property_id=${property_id}`;
+        let url = `{{ url('property/load_ajax_page') }}?page=${type}&id=${property_id}`;
         $.get(url, function(data) {
             $('#ajaxModal').modal('show');
             $('#ajaxModal .modal-content').html(data);
@@ -617,3 +610,11 @@
     }
 </script>
 @endpush
+
+<div class="modal fade" id="ajaxModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+</div>
