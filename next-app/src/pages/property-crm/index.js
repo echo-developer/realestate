@@ -132,7 +132,7 @@ const Index = () => {
         fetchLeadsData(activeTab, nextPage, true);
     }
 
-    const handleModalOpen = (phone="", email="", assign_id, enquery_id, lead_type) => {
+    const handleModalOpen = (phone = "", email = "", assign_id, enquery_id, lead_type) => {
         setActiveModalData({
             phone: phone,
             email: email,
@@ -163,159 +163,16 @@ const Index = () => {
                 data: newData
             })
 
-            if(res && res?.status === 1) {
+            if (res && res?.status === 1) {
                 toast.success("Contact form submitted successfully");
                 handleClose();
             }
         } catch (error) {
-                console.log(error.message || "Something went wrong")
+            console.log(error.message || "Something went wrong")
         }
     }
 
-    // 
-    // const [propertyCRM, setPropertyCRM] = useState([]);
-    // const [visibleProperties, setVisibleProperties] = useState(ITEMS_PER_PAGE);
-    // const [showModal, setShowModal] = useState({ type: null, visible: false });
-    // const [modalContent, setModalContent] = useState({});
-    // const [loading, setLoading] = useState(true);
-    // const [perPage, setPerPage] = useState(1);
-    // const [totalPages, setTotalPages] = useState(0);
-    // const [currentPages, setCurrentPages] = useState(0);
-    // const [noResultFound, setNoResultFound] = useState(false);
 
-
-    // const handleLoadMore = () => {
-    //     setVisibleProperties((prev) => prev + ITEMS_PER_PAGE);
-    // };
-    // const memberId = GetMemberId();
-
-    // useEffect(() => {
-    //     if (memberId) {
-    //         fecthPropertyCRMData(memberId);
-    //     }
-    // }, [memberId]);
-
-    // const fecthPropertyCRMData = async (memberId, loadMore, nextpage) => {
-    //     if (!loadMore) {
-    //         setLoading(true);
-    //     }
-    //     try {
-    //         const response = await callApi({
-    //             api: "/my_property_CRMS",
-    //             method: "GET",
-    //             data: {
-    //                 user_id: memberId,
-    //                 recent_page: nextpage || 1
-    //             },
-    //         });
-
-    //         if (response && response.status === 1) {
-    //             if (!loadMore) {
-    //                 setPropertyCRM(response.data);
-    //             } else {
-    //                 setPropertyCRM(prev => {
-    //                     return [
-    //                         ...prev,
-    //                         ...response?.data
-    //                     ]
-    //                 })
-    //             }
-
-
-    //             setTotalPages(response?.pagination?.total_pages || 0);
-    //             setCurrentPages(response?.pagination?.current_page || 0)
-    //         } else {
-    //             setTotalPages(response?.pagination?.total_pages || 0);
-    //             setCurrentPages(response?.pagination?.current_page || 0)
-    //         }
-    //     } catch (error) {
-    //         console.error("Error fetching property CRM data: ", error);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-    // const handleShowModal = (property, type) => {
-    //     setModalContent(property);
-    //     setShowModal({ type, visible: true });
-    // };
-
-    // const handleCloseModal = () => {
-    //     setShowModal({ type: null, visible: false });
-    // };
-
-    // const handleDeleteProperty = async (enquiryId) => {
-    //     try {
-    //         const response = await callApi({
-    //             api: `/delete_enquery?enquiry_id=${enquiryId}`,
-    //             method: "POST",
-    //         });
-
-    //         if (response && response.status === 1) {
-    //             toast.success(response.message || "Property deleted successfully");
-    //             setPropertyCRM((prevProperties) =>
-    //                 prevProperties.filter(
-    //                     (property) => property.enquery_id !== enquiryId
-    //                 )
-    //             );
-    //         } else {
-    //             toast.error("Failed to delete property");
-    //         }
-    //     } catch (error) {
-    //         console.error("Error deleting property: ", error);
-    //         toast.error("An error occurred while deleting the property");
-    //     }
-    // };
-
-    // const handleDeleteClick = (enquiryId) => {
-    //     Swal.fire({
-    //         title: "Confirm Deletion",
-    //         text: "Are you sure you want to delete this property?",
-    //         icon: "warning",
-    //         showCancelButton: true,
-    //         confirmButtonText: "Yes, Delete",
-    //         cancelButtonText: "Cancel",
-    //         confirmButtonColor: "#d33",
-    //         cancelButtonColor: "#aaa",
-    //     }).then((result) => {
-    //         if (result.isConfirmed) {
-    //             handleDeleteProperty(enquiryId);
-    //         }
-    //     });
-    // };
-
-    // const getStatusLabel = (statusId) => {
-    //     const status = enquiryStatuses.find(
-    //         (item) => item.id === statusId.toString()
-    //     );
-    //     return status ? status.label : "Unknown Status";
-    // };
-
-    // const actionUpdateFunction = (id, data) => {
-    //     const newArr = propertyCRM?.map((item) => {
-    //         if (id === item?.enquery_id) {
-    //             return {
-    //                 ...item,
-    //                 enquery_status: Number(data?.enq_status),
-    //                 log_data: {
-    //                     ...item?.log_data,
-    //                     enquery_status: Number(data?.enq_status),
-    //                     remarks: data?.remarks,
-    //                     schedule_date: data?.date
-    //                 }
-    //             };
-    //         } else {
-    //             return item;
-    //         }
-    //     });
-
-    //     setPropertyCRM(newArr);
-    // };
-
-    // const handleLoadMoreClick = (nextPage) => {
-    //     setPerPage(nextPage);
-    //     fecthPropertyCRMData(memberId, true, nextPage)
-    // }
     return (
         <DashboardLayout>
             <aside className="col-lg col-12">
@@ -330,6 +187,28 @@ const Index = () => {
                             <button className={`btn btn-${activeTab == 'general' ? 'primary' : 'secondary'} mx-2`} onClick={() => handleActiveTabChange("general")}>General Leads</button>
                         </div>
                     </div>
+                    {loading && (
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                height: "200px",
+                                width: "100%", // Ensure full width
+                            }}
+                            className="d-flex justify-content-center align-items-center w-100"
+                        >
+                            <div
+                                className="spinner-border text-primary"
+                                role="status"
+                            >
+                                <span className="visually-hidden">
+                                    {translation?.loading ||
+                                        "Loading...."}{" "}
+                                </span>
+                            </div>
+                        </div>
+                    )}
 
                     {(!loading && list?.length === 0) && (
                         <>
