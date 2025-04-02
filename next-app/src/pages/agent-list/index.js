@@ -221,8 +221,8 @@ const Index = () => {
     if (brokerType) {
       url = `${url}&broker_type=${brokerType}`;
     }
-    if (postFor) {
-      url = `${url}&post_for=${postFor}`;
+    if (selectedTab) {
+      url = `${url}&post_for=${selectedTab}`;
     }
     if (propertyType) {
       url = `${url}&property_type=${propertyType}`;

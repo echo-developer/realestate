@@ -9,8 +9,9 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import TopAgentList from "../userReview/TopAgent";
 import Link from "next/link";
 import useTranslation from "@/hooks/useTranslation";
-
+import { useAuth } from "@/context/AuthProvider";
 import { featureList } from "../post/PropertyData";
+import useAdvertisement from "@/hooks/useAdvertisement";
 
 const ProjectSidebar = ({
   userDetails,
@@ -20,6 +21,7 @@ const ProjectSidebar = ({
   setShowLoginErrorModal,
 }) => {
   const [showAll, setShowAll] = useState(false);
+  const { defaultCity } = useAuth();
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const [showCommunicationModal, setShowCommunicationModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -36,6 +38,12 @@ const ProjectSidebar = ({
   const [showReportModal, setShowReportModal] = useState(false);
   const [showAgentModal, setShowAgentModal] = useState(false);
   const translation = useTranslation();
+  const { adsData, logAdClick } = useAdvertisement(
+    "project-detail-page",
+    "right",
+    defaultCity?.city_id
+  );
+
   const handleReportClick = () => {
     if (isLogin()) {
       setShowReportModal(true);
@@ -212,8 +220,7 @@ const ProjectSidebar = ({
                   </li> */}
                       <li className="d-flex justify-content-between mb-1">
                         <span className="text-muted">
-                          {translation?.project_for_sale ||
-                            "Projects For Sale"}
+                          {translation?.project_for_sale || "Projects For Sale"}
                         </span>
                         <span>
                           {projectDetails?.user_details?.ProjectInSell ||
@@ -222,8 +229,7 @@ const ProjectSidebar = ({
                       </li>
                       <li className="d-flex justify-content-between">
                         <span className="text-muted">
-                          {translation?.project_for_rent ||
-                            "Projects For Rent"}
+                          {translation?.project_for_rent || "Projects For Rent"}
                         </span>
                         <span>
                           {projectDetails?.user_details?.ProjectInRent ||
@@ -237,7 +243,7 @@ const ProjectSidebar = ({
                           className="btn btn-primary mb-1"
                           onClick={() => setShowCommunicationModal(true)}
                         >
-                         {translation?.get_phone_number || "Get Phone Number"}
+                          {translation?.get_phone_number || "Get Phone Number"}
                         </button>
                       )}
 
@@ -245,7 +251,7 @@ const ProjectSidebar = ({
                         className="btn btn-primary"
                         onClick={() => setShowCommunicationModal(true)}
                       >
-                       {translation?.contact_now || "Contact Now"}
+                        {translation?.contact_now || "Contact Now"}
                       </button>
                     </div>
                   </div>
@@ -529,11 +535,26 @@ const ProjectSidebar = ({
         </div>
 
         <div className="text-center mb-4">
-          <img
-            src="/assets/images/ads/8c178a3ead69fc4c042ecb0e550c2579.png"
-            alt="ads"
-            className="img-fluid"
-          />
+          {adsData.length > 0 ? (
+            adsData.map((ad) => (
+              <a
+                key={ad.advertisement_id}
+                role="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  logAdClick(ad.advertisement_id, ad.ad_url);
+                }}
+              >
+                <img src={ad.ad_image} alt="Ad" />
+              </a>
+            ))
+          ) : (
+            <img
+              src="/assets/images/ads/8c178a3ead69fc4c042ecb0e550c2579.png"
+              alt="ads"
+              className="img-fluid"
+            />
+          )}
         </div>
       </div>
 
