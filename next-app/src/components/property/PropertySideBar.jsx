@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import {
   Modal,
@@ -6,19 +7,17 @@ import {
   FloatingLabel,
   Form as BootstrapForm,
 } from "react-bootstrap";
-import { Formik, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import EnquiryForm from "../charts/EnquiryForm";
-import { useRouter } from "next/navigation";
 import PropertyReportModal from "../ReportData/PropertyReportModal";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import TopAgentList from "../userReview/TopAgent";
 import Link from "next/link";
 import useTranslation from "@/hooks/useTranslation";
 import { property_features } from "@/components/post/PropertyData";
-import PropertyDetailsForm from "../addtional/PropertyDetailsForm";
+import useAdvertisement from "@/hooks/useAdvertisement";
+import { useAuth } from "@/context/AuthProvider";
 
 const PropertySidebar = ({
   propertyId,
@@ -28,11 +27,17 @@ const PropertySidebar = ({
 }) => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);
+  const { defaultCity } = useAuth();
   const [showCommunicationModal, setShowCommunicationModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [showAgentModal, setShowAgentModal] = useState(false);
   const translation = useTranslation();
   const memberId = GetMemberId();
+  const { adsData, logAdClick } = useAdvertisement(
+    "detail-page",
+    "right",
+    defaultCity?.city_id
+  );
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -140,7 +145,6 @@ const PropertySidebar = ({
     }
   };
   const [showAll, setShowAll] = useState(false);
-
 
   return (
     <aside className="col-xl-3 col-12">
@@ -551,11 +555,26 @@ const PropertySidebar = ({
         </div>
 
         <div className="text-center mb-4">
-          <img
-            src="/assets/images/ads/8c178a3ead69fc4c042ecb0e550c2579.png"
-            alt="ads"
-            className="img-fluid"
-          />
+          {adsData.length > 0 ? (
+            adsData.map((ad) => (
+              <a
+                key={ad.advertisement_id}
+                role="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  logAdClick(ad.advertisement_id, ad.ad_url);
+                }}
+              >
+                <img src={ad.ad_image} alt="Ad" />
+              </a>
+            ))
+          ) : (
+            <img
+              alt="Advertisement"
+              src="/assets/images/ads/8c178a3ead69fc4c042ecb0e550c2579.png"
+              className="img-fluid"
+            />
+          )}
         </div>
       </div>
 

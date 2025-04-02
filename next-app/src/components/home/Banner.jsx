@@ -19,7 +19,7 @@ import {
 
 const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-const Banner = ({translation}) => {
+const Banner = ({ translation }) => {
   const { callApi } = AuthUser();
   const router = useRouter();
   const [locationData, setLocationData] = useState(null);
@@ -45,6 +45,9 @@ const Banner = ({translation}) => {
   const [maxSize, setMaxSize] = useState("");
   const [subBudget1Dropdown, setSubBudget1Dropdown] = useState(false);
   const [subBudget2Dropdown, setSubBudget2Dropdown] = useState(false);
+  const [bedroom, setBedroom] = useState([]);
+  const [bathroom, setBathroom] = useState([]);
+  const [kitchens, setKitchens] = useState([]);
 
   const handleBud1InputClick = (amount) => {
     setMinBudget(amount);
@@ -94,6 +97,9 @@ const Banner = ({translation}) => {
     setSelectedBathrooms([]);
     setSelectedKitchens([]);
     setBedDropdown(false);
+    setBedroom([]);
+    setBathroom([]);
+    setKitchens([]);
   };
 
   const applySelection = () => {
@@ -141,6 +147,29 @@ const Banner = ({translation}) => {
       setError("");
     }
     setSubBudget2Dropdown(false);
+  };
+
+  const handleBedRoomChange = (value) => {
+    setBedroom((prev) =>
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value]
+    );
+  };
+
+  const handleBathChange = (value) => {
+    setBathroom((prev) =>
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value]
+    );
+  };
+  const handleKitchenChange = (value) => {
+    setKitchens((prev) =>
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value]
+    );
   };
 
   const resetBudget = () => {
@@ -267,6 +296,14 @@ const Banner = ({translation}) => {
     }
     if (selectedPropertyType) params.property_type = selectedPropertyType;
     if (selectedPropertyFor) params.property_for = selectedPropertyFor;
+    if (minBudget) params.min_budget = minBudget;
+    if (maxBudget) params.max_budget = maxBudget;
+    if (bedroom && bedroom.length > 0)
+      params.bedrooms = JSON.stringify(bedroom);
+    if (bathroom && bathroom.length > 0)
+      params.bathroom = JSON.stringify(bathroom);
+    if (kitchens && kitchens.length > 0)
+      params.kitchens = JSON.stringify(kitchens);
 
     const filteredParams = Object.fromEntries(
       Object.entries(params).filter(([_, value]) => value)
@@ -277,40 +314,11 @@ const Banner = ({translation}) => {
     // Initialize searchData as an empty object
     let searchData = {};
 
-    if (minBudget && maxBudget) {
-      searchData = {
-        ...searchData,
-        min_budget: minBudget,
-        max_budget: maxBudget,
-      };
-    }
-
     if (minSize && maxSize) {
       searchData = {
         ...searchData,
         min_carpet: minSize,
         max_carpet: maxSize,
-      };
-    }
-
-    if (selectedBedrooms.length > 0) {
-      searchData = {
-        ...searchData,
-        bedrooms: selectedBedrooms,
-      };
-    }
-
-    if (selectedBathrooms.length > 0) {
-      searchData = {
-        ...searchData,
-        bathroom: selectedBathrooms,
-      };
-    }
-
-    if (selectedKitchens.length > 0) {
-      searchData = {
-        ...searchData,
-        kitchens: selectedKitchens,
       };
     }
 
@@ -336,6 +344,29 @@ const Banner = ({translation}) => {
     if (e.currentTarget.getAttribute("data-id") === "parent") {
       setBudgetDropdown(!BudgetDropdown);
     }
+  };
+
+  const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  const displayBedsBathKitchen = () => {
+    const beds = bedroom || [];
+    const baths = bathroom || [];
+    const kits = kitchens || [];
+
+    // Convert arrays to a comma-separated string if they have values
+    const bedsText = beds.length > 0 ? `${beds.join(", ")} Beds` : "";
+    const bathsText = baths.length > 0 ? `${baths.join(", ")} Baths` : "";
+    const kitchensText = kits.length > 0 ? `${kits.join(", ")} Kits` : "";
+
+    // Combine all values with a separator
+    const selections = [bedsText, bathsText, kitchensText]
+      .filter(Boolean)
+      .join(" / ");
+
+    return (
+      selections ||
+      `${translation?.beds_baths_kitchens || "Select Beds, Baths & Kitchens"}`
+    );
   };
 
   return (
@@ -721,34 +752,7 @@ const Banner = ({translation}) => {
                                   onToggle={() => setBedDropdown(!BedDropdown)}
                                 >
                                   <Dropdown.Toggle className="btn-form-control">
-                                    {selectedBedrooms.length === 0 &&
-                                    selectedBathrooms.length === 0 &&
-                                    selectedKitchens.length === 0
-                                      ? `${
-                                          translation?.select_beds_baths_kits ||
-                                          "Select Beds, Baths & Kits"
-                                        }`
-                                      : `${
-                                          selectedBedrooms.length > 0
-                                            ? selectedBedrooms.join(", ") +
-                                              " Beds"
-                                            : ""
-                                        }
-    ${selectedBedrooms.length > 0 && selectedBathrooms.length > 0 ? " & " : ""}
-    ${
-      selectedBathrooms.length > 0
-        ? selectedBathrooms.join(", ") + " Baths"
-        : ""
-    }
-    ${
-      (selectedBedrooms.length > 0 || selectedBathrooms.length > 0) &&
-      selectedKitchens.length > 0
-        ? " & "
-        : ""
-    }
-    ${
-      selectedKitchens.length > 0 ? selectedKitchens.join(", ") + " Kits" : ""
-    }`}
+                                    {displayBedsBathKitchen()}
                                   </Dropdown.Toggle>
 
                                   <Dropdown.Menu className="p-3 shadow bg-white rounded">
@@ -758,7 +762,7 @@ const Banner = ({translation}) => {
                                         {translation?.beds || "Beds"}
                                       </label>
                                       <ButtonGroup className="btn-group-light d-flex gap-2">
-                                        {[...bedrooms].map((bedroom, index) => (
+                                        {bedrooms.map((bedroomItem, index) => (
                                           <React.Fragment
                                             key={`bedroom-${index}`}
                                           >
@@ -766,21 +770,19 @@ const Banner = ({translation}) => {
                                               type="checkbox"
                                               id={`bedroom-${index}`}
                                               className="btn-check"
-                                              checked={selectedBedrooms.includes(
-                                                bedroom
-                                              )}
+                                              value={bedroomItem}
                                               onChange={() =>
-                                                toggleSelection(
-                                                  bedroom,
-                                                  "bedroom"
-                                                )
+                                                handleBedRoomChange(bedroomItem)
                                               }
+                                              checked={bedroom.includes(
+                                                bedroomItem
+                                              )}
                                             />
                                             <label
                                               className="btn btn-outline-light btn-sm"
                                               htmlFor={`bedroom-${index}`}
                                             >
-                                              {bedroom}
+                                              {bedroomItem}
                                             </label>
                                           </React.Fragment>
                                         ))}
@@ -795,22 +797,18 @@ const Banner = ({translation}) => {
                                       <ButtonGroup className="btn-group-light d-flex gap-2">
                                         {[1, 2, 3, 4, 5, 6, 7, "8+"].map(
                                           (bath, index) => (
-                                            <React.Fragment
-                                              key={`bathroom-${index}`}
-                                            >
+                                            <div key={`bathroom-${index}`}>
                                               <input
                                                 type="checkbox"
                                                 id={`bathroom-${index}`}
                                                 className="btn-check"
-                                                checked={selectedBathrooms.includes(
+                                                value={bath}
+                                                onChange={() =>
+                                                  handleBathChange(bath)
+                                                }
+                                                checked={bathroom?.includes(
                                                   bath
                                                 )}
-                                                onChange={() =>
-                                                  toggleSelection(
-                                                    bath,
-                                                    "bathroom"
-                                                  )
-                                                }
                                               />
                                               <label
                                                 className="btn btn-outline-light btn-sm"
@@ -818,7 +816,7 @@ const Banner = ({translation}) => {
                                               >
                                                 {bath}
                                               </label>
-                                            </React.Fragment>
+                                            </div>
                                           )
                                         )}
                                       </ButtonGroup>
@@ -830,24 +828,20 @@ const Banner = ({translation}) => {
                                         {translation?.kitchens || "Kitchens"}
                                       </label>
                                       <ButtonGroup className="btn-group-light d-flex gap-2">
-                                        {[1, 2, 3, 4, "5+"].map(
+                                        {[1, 2, 3, 4, 5].map(
                                           (kitchen, index) => (
-                                            <React.Fragment
-                                              key={`kitchen-${index}`}
-                                            >
+                                            <div key={`kitchen-${index}`}>
                                               <input
                                                 type="checkbox"
                                                 id={`kitchen-${index}`}
                                                 className="btn-check"
-                                                checked={selectedKitchens.includes(
+                                                value={kitchen}
+                                                onChange={() =>
+                                                  handleKitchenChange(kitchen)
+                                                }
+                                                checked={kitchens?.includes(
                                                   kitchen
                                                 )}
-                                                onChange={() =>
-                                                  toggleSelection(
-                                                    kitchen,
-                                                    "kitchen"
-                                                  )
-                                                }
                                               />
                                               <label
                                                 className="btn btn-outline-light btn-sm"
@@ -855,7 +849,7 @@ const Banner = ({translation}) => {
                                               >
                                                 {kitchen}
                                               </label>
-                                            </React.Fragment>
+                                            </div>
                                           )
                                         )}
                                       </ButtonGroup>
@@ -1212,20 +1206,7 @@ const Banner = ({translation}) => {
                                   onToggle={() => setBedDropdown(!BedDropdown)}
                                 >
                                   <Dropdown.Toggle className="btn-form-control">
-                                    {selectedBedrooms.length > 0
-                                      ? selectedBedrooms.join(", ")
-                                      : translation?.select_bedrooms ||
-                                        `${
-                                          translation?.select_beds ||
-                                          "Select Beds"
-                                        }`}
-                                    {selectedBedrooms.length > 0 && " Beds"}/
-                                    {selectedBathrooms.length > 0
-                                      ? selectedBathrooms.join(", ")
-                                      : translation?.selectedBathrooms ||
-                                        translation?.select_baths ||
-                                        "Select Baths"}
-                                    {selectedBathrooms.length > 0 && " Baths"}
+                                    {displayBedsBathKitchen()}
                                   </Dropdown.Toggle>
 
                                   <Dropdown.Menu className="p-3 shadow bg-white rounded">
@@ -1235,34 +1216,32 @@ const Banner = ({translation}) => {
                                         {translation?.beds || "Beds"}
                                       </label>
                                       <ButtonGroup className="btn-group-light d-flex gap-2">
-                                        {[...bedrooms].map((bedroom, index) => (
-                                          <>
+                                        {bedrooms.map((bedroomItem, index) => (
+                                          <React.Fragment
+                                            key={`bedroom-${index}`}
+                                          >
                                             <input
                                               type="checkbox"
                                               id={`bedroom-${index}`}
                                               className="btn-check"
-                                              checked={selectedBedrooms.includes(
-                                                bedroom
-                                              )}
+                                              value={bedroomItem}
                                               onChange={() =>
-                                                toggleSelection(
-                                                  bedroom,
-                                                  "bedroom"
-                                                )
+                                                handleBedRoomChange(bedroomItem)
                                               }
-                                              readOnly={false}
+                                              checked={bedroom.includes(
+                                                bedroomItem
+                                              )}
                                             />
                                             <label
                                               className="btn btn-outline-light btn-sm"
                                               htmlFor={`bedroom-${index}`}
                                             >
-                                              {bedroom}
+                                              {bedroomItem}
                                             </label>
-                                          </>
+                                          </React.Fragment>
                                         ))}
                                       </ButtonGroup>
                                     </div>
-
                                     {/* Bathrooms Selection */}
                                     <div className="mt-3">
                                       <label className="fw-bold mb-2">
@@ -1271,21 +1250,18 @@ const Banner = ({translation}) => {
                                       <ButtonGroup className="btn-group-light d-flex gap-2">
                                         {[1, 2, 3, 4, 5, 6, 7, "8+"].map(
                                           (bath, index) => (
-                                            <>
+                                            <div key={`bathroom-${index}`}>
                                               <input
                                                 type="checkbox"
                                                 id={`bathroom-${index}`}
                                                 className="btn-check"
-                                                checked={selectedBathrooms.includes(
+                                                value={bath}
+                                                onChange={() =>
+                                                  handleBathChange(bath)
+                                                }
+                                                checked={bathroom?.includes(
                                                   bath
                                                 )}
-                                                onChange={() =>
-                                                  toggleSelection(
-                                                    bath,
-                                                    "bathroom"
-                                                  )
-                                                }
-                                                readOnly={false}
                                               />
                                               <label
                                                 className="btn btn-outline-light btn-sm"
@@ -1293,42 +1269,39 @@ const Banner = ({translation}) => {
                                               >
                                                 {bath}
                                               </label>
-                                            </>
+                                            </div>
                                           )
                                         )}
                                       </ButtonGroup>
                                     </div>
-
+                                    {/* Kitchen Selection */}
                                     <div className="mt-3">
                                       <label className="fw-bold mb-2">
-                                        {translation?.baths || "Baths"}
+                                        {translation?.kitchens || "Kitchens"}
                                       </label>
                                       <ButtonGroup className="btn-group-light d-flex gap-2">
-                                        {[1, 2, 3, 4, 5, 6, 7, "8+"].map(
-                                          (bath, index) => (
-                                            <>
+                                        {[1, 2, 3, 4, 5].map(
+                                          (kitchen, index) => (
+                                            <div key={`kitchen-${index}`}>
                                               <input
                                                 type="checkbox"
-                                                id={`bathroom-${index}`}
+                                                id={`kitchen-${index}`}
                                                 className="btn-check"
-                                                checked={selectedBathrooms.includes(
-                                                  bath
-                                                )}
+                                                value={kitchen}
                                                 onChange={() =>
-                                                  toggleSelection(
-                                                    bath,
-                                                    "bathroom"
-                                                  )
+                                                  handleKitchenChange(kitchen)
                                                 }
-                                                readOnly={false}
+                                                checked={kitchens?.includes(
+                                                  kitchen
+                                                )}
                                               />
                                               <label
                                                 className="btn btn-outline-light btn-sm"
-                                                htmlFor={`bathroom-${index}`}
+                                                htmlFor={`kitchen-${index}`}
                                               >
-                                                {bath}
+                                                {kitchen}
                                               </label>
-                                            </>
+                                            </div>
                                           )
                                         )}
                                       </ButtonGroup>
