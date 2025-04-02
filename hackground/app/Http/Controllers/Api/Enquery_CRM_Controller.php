@@ -954,9 +954,17 @@ class Enquery_CRM_Controller extends Controller
             $assign_data = [];
             $enquiry_id = "";
             $lead_type = "";
+            $phone = "";
+            $email = "";
             if ($checkAssignedLead) {
                 $enquiry_id = $checkAssignedLead->enquery_id;
                 $lead_type = $checkAssignedLead->lead_type;
+                $enquiry = $this->apiModel->getLeadDetails($enquiry_id,$lead_type);
+                if($enquiry)
+                {
+                    $phone = $enquiry->phone;
+                    $email = $enquiry->email;
+                }
                 $eq_timeline = DB::table('crm_log')
                     ->leftJoin('property_enquiry', 'crm_log.enquiry_id', '=', 'property_enquiry.enquery_id')
                     ->where(['crm_log.assign_id'=> $assign_id,'crm_log.user_id'=>$user_id])
@@ -977,7 +985,9 @@ class Enquery_CRM_Controller extends Controller
                         'data' => [],
                         'assign_id'=>$assign_id,
                         'enquiry_id'=>$enquiry_id,
-                        'lead_type'=> $lead_type
+                        'lead_type'=> $lead_type,
+                        'phone'=>$phone,
+                        'email'=>$email
                     ]);
                 }
 
@@ -987,7 +997,9 @@ class Enquery_CRM_Controller extends Controller
                     'data' => $eq_timeline,
                     'assign_id'=>$assign_id,
                     'enquiry_id'=>$enquiry_id,
-                    'lead_type'=> $lead_type
+                    'lead_type'=> $lead_type,
+                    'phone'=>$phone,
+                    'email'=>$email
                 ]);
 
                 // Log::info('eq_timeline :\n' . json_encode($eq_timeline, JSON_PRETTY_PRINT));
@@ -998,7 +1010,9 @@ class Enquery_CRM_Controller extends Controller
                     'data' => [],
                     'assign_id'=>$assign_id,
                     'enquiry_id'=>$enquiry_id,
-                    'lead_type'=> $lead_type
+                    'lead_type'=> $lead_type,
+                    'phone'=>$phone,
+                    'email'=>$email
                 ]);
             }
         } catch (\Exception $e) {
