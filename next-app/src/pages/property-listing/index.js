@@ -14,6 +14,7 @@ import { useAuth } from "@/context/AuthProvider";
 import useTranslation from "@/hooks/useTranslation";
 import LocalityOption from "@/components/MapData/LocalitySelector";
 import { ShimmerContentBlock } from "react-shimmer-effects";
+import useAdvertisement from "@/hooks/useAdvertisement";
 import {
   filterOptions,
   CommercialFilterOptions,
@@ -52,6 +53,7 @@ const index = () => {
   const [selectedOption, setSelectedOption] = useState(
     translation?.sort_by || "Sort By"
   );
+  const { adsData, logAdClick } = useAdvertisement("listing-page", "right");
   const [localityData, setLocalityData] = useState(null);
   const [advanceFilter, setAdvanceFilter] = useState(false);
   const [selectedAdvanceFilter, setSelectedAdvanceFilter] = useState("");
@@ -144,7 +146,7 @@ const index = () => {
         setState([]);
       }
     };
-  
+
     parseArrayFromQuery("bedrooms", setBedroom);
     parseArrayFromQuery("kitchens", setKitchens);
     parseArrayFromQuery("bathroom", setBathroom);
@@ -194,19 +196,6 @@ const index = () => {
       setError("Max budget cannot be less than min budget.");
     } else {
       setError("");
-    }
-  };
-
-  const resetBudget = () => {
-    setMinBudget("");
-    setMaxBudget("");
-    setError("");
-    setShowDropdown(false); // Close dropdown
-  };
-
-  const applyBudget = () => {
-    if (!error) {
-      setShowDropdown(false); // Close dropdown
     }
   };
 
@@ -830,7 +819,26 @@ const index = () => {
     );
   };
 
+  const resetSelection = () => {
+    setBedroom([]);
+    setBathroom([]);
+    setKitchens([]);
+  };
 
+  const applySelection = () => {};
+
+  const resetBudget = () => {
+    setMinBudget("");
+    setMaxBudget("");
+    setError("");
+    setBudgetDropdown(false);
+  };
+
+  const applyBudget = () => {
+    if (!error) {
+      setBudgetDropdown(false);
+    }
+  };
 
   return (
     <MainLayout>
@@ -1066,9 +1074,7 @@ const index = () => {
                                           onChange={() =>
                                             handleBathChange(bath)
                                           }
-                                          checked={SearchData?.bathroom?.includes(
-                                            bath
-                                          )}
+                                          checked={bathroom?.includes(bath)}
                                         />
                                         <label
                                           className="btn btn-outline-light btn-sm"
@@ -1114,20 +1120,13 @@ const index = () => {
                               <div className="d-flex justify-content-between mt-3">
                                 <Button
                                   variant="outline-secondary"
-                                  onClick={() =>
-                                    setSearchData((prev) => ({
-                                      ...prev,
-                                      bedrooms: [],
-                                      bathroom: [],
-                                      kitchens: [],
-                                    }))
-                                  }
+                                  onClick={resetSelection}
                                 >
                                   {translation?.reset || "Reset"}
                                 </Button>
                                 <Button
                                   variant="primary"
-                                  onClick={() => setBedBathDropDown(false)}
+                                  onClick={applySelection}
                                 >
                                   {translation?.done || "Done"}
                                 </Button>
@@ -1193,22 +1192,17 @@ const index = () => {
                             <div className="d-flex justify-content-between mt-3">
                               <Button
                                 variant="outline-secondary"
-                                onClick={() =>
-                                  setSearchData((prev) => {
-                                    return {
-                                      ...prev,
-                                      min_budget: 0,
-                                      max_budget: 10000000,
-                                    };
-                                  })
-                                }
+                                onClick={resetBudget}
                               >
                                 {translation?.reset || "Reset"}
                               </Button>
                               <Button
                                 variant="primary"
-                                onClick={() => setBudgetDropdown(false)}
-                                // disabled={!!error}
+                                onClick={() => {
+                                  applyBudget();
+                                  setBudgetDropdown(false);
+                                }}
+                                disabled={!!error}
                               >
                                 {translation?.done || "Done"}
                               </Button>
@@ -1722,11 +1716,26 @@ const index = () => {
               )}
             </aside>
             <aside className="col-xl-3 col-lg-3 col-12 mt-3 mt-lg-0">
-              <img
-                alt="Advertisement"
-                src="/assets/images/ads/real-estate-poster.jpg"
-                className="img-fluid"
-              />
+              {adsData.length > 0 ? (
+                adsData.map((ad) => (
+                  <a
+                    key={ad.advertisement_id}
+                    role="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      logAdClick(ad.advertisement_id, ad.ad_url);
+                    }}
+                  >
+                    <img src={ad.ad_image} alt="Ad" />
+                  </a>
+                ))
+              ) : (
+                <img
+                  alt="Advertisement"
+                  src="/assets/images/ads/real-estate-poster.jpg"
+                  className="img-fluid"
+                />
+              )}
             </aside>
           </div>
         </div>

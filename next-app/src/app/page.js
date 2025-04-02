@@ -10,7 +10,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import { Modal } from "react-bootstrap";
 import useTranslation from "@/hooks/useTranslation";
-import Advertisements from "@/components/addtional/Advertisements";
+import Link from "next/link";
+// import Advertisements from "@/components/addtional/Advertisements";
+import useAdvertisement from "@/hooks/useAdvertisement";
 
 const Banner = dynamic(() => import("@/components/home/Banner"), {
   ssr: false,
@@ -59,13 +61,16 @@ export default function Home() {
   const [projectData, setProjectData] = useState(null);
   const router = useRouter();
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
+  const { adsData,logAdClick } = useAdvertisement(
+    "home-page",
+    "footer"
+  );
 
   const memberId = GetMemberId();
 
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
   const translation = useTranslation();
 
- 
   const getPropertyData = async () => {
     try {
       const args = {
@@ -188,10 +193,13 @@ export default function Home() {
     }
   };
 
+  // if (loading) return <p>Loading home page ads...</p>;
+  // if (error) return <p>Error loading home page ads</p>;
+
   return (
     <div>
       <MainLayout>
-        <Banner translation={translation}/>
+        <Banner translation={translation} />
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -203,12 +211,18 @@ export default function Home() {
           draggable
           pauseOnHover
         />
-        <QuickSection translation={translation}/>
+        <QuickSection translation={translation} />
         <MainSlider
           data={propertyData?.featured_properties}
-          title={translation?.discover_featured_listings || "Discover Our Featured Listings"}
+          title={
+            translation?.discover_featured_listings ||
+            "Discover Our Featured Listings"
+          }
           miniTitle={translation?.featured_homes || "Featured Homes"}
-          subTitle={translation?.explore_featured_properties || "Discover our exclusive property collection, showcasing the best homes and prime real estate investment opportunities."}
+          subTitle={
+            translation?.explore_featured_properties ||
+            "Discover our exclusive property collection, showcasing the best homes and prime real estate investment opportunities."
+          }
           logo="assets/images/icons/house-sm-1.png"
           type="normal"
           mainType="property"
@@ -217,11 +231,14 @@ export default function Home() {
           addRemoveFav={addRemoveFav}
           translation={translation}
         />
-         <MainSlider
+        <MainSlider
           data={propertyData?.top_properties}
-          title={translation?.top_property || "Top Property"} 
-          miniTitle={translation?.top_most || "Top Most"} 
-          subTitle={translation?.top_properties_description || "Prime locations, modern amenities, and premium architecture ensure high investment value."}
+          title={translation?.top_property || "Top Property"}
+          miniTitle={translation?.top_most || "Top Most"}
+          subTitle={
+            translation?.top_properties_description ||
+            "Prime locations, modern amenities, and premium architecture ensure high investment value."
+          }
           logo="assets/images/icons/house-sm-1.png"
           type="card"
           mainType="property"
@@ -230,12 +247,15 @@ export default function Home() {
           addRemoveFav={addRemoveFav}
           translation={translation}
         />
-        
+
         <MainSlider
           data={propertyData?.recent_properties}
           title={translation?.recent_property || "Recent Property"}
-          miniTitle={translation?.most_recent || "Most Recent"} 
-          subTitle={translation?.recent_properties_description || "Check out our newly listed properties, offering the most current homes and promising investment options for you."} 
+          miniTitle={translation?.most_recent || "Most Recent"}
+          subTitle={
+            translation?.recent_properties_description ||
+            "Check out our newly listed properties, offering the most current homes and promising investment options for you."
+          }
           logo="assets/images/icons/house-sm-1.png"
           type="card"
           mainType="property"
@@ -244,12 +264,15 @@ export default function Home() {
           addRemoveFav={addRemoveFav}
           translation={translation}
         />
-        <FindPropertySection translation={translation}/>
+        <FindPropertySection translation={translation} />
         <MainSlider
           data={propertyData?.popular_properties}
           title={translation?.popular_property || "Popular Property"}
           miniTitle={translation?.popular_property || "Popular Property"}
-          subTitle={translation?.popular_properties_description || "Browse our popular properties, showcasing top-rated homes and investments offering exceptional value in prime, sought-after locations." }
+          subTitle={
+            translation?.popular_properties_description ||
+            "Browse our popular properties, showcasing top-rated homes and investments offering exceptional value in prime, sought-after locations."
+          }
           logo="assets/images/icons/house-sm-1.png"
           type="normal"
           mainType="property"
@@ -258,14 +281,17 @@ export default function Home() {
           addRemoveFav={addRemoveFav}
           translation={translation}
         />
-        
-        <VerifiedAgent translation={translation}/>
-        <PopularLocalities translation={translation}/>
+
+        <VerifiedAgent translation={translation} />
+        <PopularLocalities translation={translation} />
         <MainSlider
           data={projectData?.featured_project}
-          title={translation?.featured_projects || "Featured Projects"} 
-          miniTitle={translation?.featured_projects || "Featured Projects"} 
-          subTitle={translation?.featured_projects_description || "Discover our featured projects, offering exceptional properties that combine luxury, comfort, and outstanding value for your investment.."} 
+          title={translation?.featured_projects || "Featured Projects"}
+          miniTitle={translation?.featured_projects || "Featured Projects"}
+          subTitle={
+            translation?.featured_projects_description ||
+            "Discover our featured projects, offering exceptional properties that combine luxury, comfort, and outstanding value for your investment.."
+          }
           logo="assets/images/icons/house-sm-1.png"
           type="project card"
           mainType="project"
@@ -274,12 +300,15 @@ export default function Home() {
           addRemoveFav={addRemoveFav}
           translation={translation}
         />
-        <ProperTimeLine translation={translation}/>
+        <ProperTimeLine translation={translation} />
         <MainSlider
           data={projectData?.new_project}
-          title={translation?.new_project_gallery || "New Project Gallery"} 
-          miniTitle={translation?.new_projects || "New Projects"} 
-          subTitle={translation?.new_projects || "Explore our latest new projects, offering innovative designs and modern amenities for a perfect blend of style and functionality"}
+          title={translation?.new_project_gallery || "New Project Gallery"}
+          miniTitle={translation?.new_projects || "New Projects"}
+          subTitle={
+            translation?.new_projects ||
+            "Explore our latest new projects, offering innovative designs and modern amenities for a perfect blend of style and functionality"
+          }
           logo="assets/images/icons/house-sm-1.png"
           type="project gallery"
           mainType="project"
@@ -288,15 +317,35 @@ export default function Home() {
           addRemoveFav={addRemoveFav}
           translation={translation}
         />
-        
-        <Testimonials  translation={translation}/>
-        
-        <AdviceSection translation={translation}/>
-        <TotolUserRecord translation={translation}/>
-        <PostPropertyPath translation={translation}/>
-        <Advertisements page="home-page" position="footer" />
 
-        {/* Modal for login error */}
+        <Testimonials translation={translation} />
+
+        <AdviceSection translation={translation} />
+        <TotolUserRecord translation={translation} />
+        <div className="text-center mt-1">
+          {adsData.length > 0 ? (
+            adsData.map((ad) => (
+              <a
+                key={ad.advertisement_id}
+                role="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  logAdClick(ad.advertisement_id, ad.ad_url);
+                }}
+              >
+                <img src={ad.ad_image} alt="Ad" />
+              </a>
+            ))
+          ) : (
+            <img
+              alt="Advertisement"
+              src="/assets/images/ads/ads-blank.jpg"
+              className="img-fluid"
+            />
+          )}
+        </div>
+        <PostPropertyPath translation={translation} />
+
         <Modal
           show={showLoginErrorModal}
           onHide={handleLoginErrorClose}
@@ -309,9 +358,12 @@ export default function Home() {
               onClick={handleLoginErrorClose}
               style={{ position: "absolute", left: "15px" }}
             >
-               {translation?.cancel || "Cancel"}
+              {translation?.cancel || "Cancel"}
             </button>
-            <Modal.Title className="mx-auto"> {translation?.login_required || "Login Required"}</Modal.Title>
+            <Modal.Title className="mx-auto">
+              {" "}
+              {translation?.login_required || "Login Required"}
+            </Modal.Title>
             <button
               className="btn btn-danger"
               onClick={() => {
@@ -324,10 +376,13 @@ export default function Home() {
             </button>
           </Modal.Header>
           <Modal.Body>
-            <p className="text-center">  {translation?.please_log_in_to_perform_this_action || "Please log in to perform this action."}</p>
+            <p className="text-center">
+              {" "}
+              {translation?.please_log_in_to_perform_this_action ||
+                "Please log in to perform this action."}
+            </p>
           </Modal.Body>
         </Modal>
-       
       </MainLayout>
     </div>
   );
