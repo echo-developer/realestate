@@ -212,8 +212,8 @@ const Index = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let url = `/agent-list?page=${perPage}`;
-    if (searchQuery) {
-      url = `${url}&name=${searchQuery}`;
+    if (name) {
+      url = `${url}&name=${name}`;
     }
     if (locality) {
       url = `${url}&locality=${JSON.stringify(locality)}`;

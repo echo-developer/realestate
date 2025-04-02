@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import ProjectEnquiryForm from "./ProjectEnquiryForm";
 import { Modal } from "react-bootstrap";
 import useTranslation from "@/hooks/useTranslation";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css"; // Import default styles
 
 const ProjectedProperty = ({ projectProperties }) => {
   const [activeTab, setActiveTab] = useState("buy");
@@ -11,6 +13,7 @@ const ProjectedProperty = ({ projectProperties }) => {
   const [showForm, setShowForm] = useState(false);
   const [currentPropertyId, setCurrentPropertyId] = useState(null);
   const translation = useTranslation();
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setSelectedBHK("All");
@@ -35,30 +38,29 @@ const ProjectedProperty = ({ projectProperties }) => {
     setCurrentPropertyId(null);
   };
 
+  // Multi-Carousel Responsive Settings
+  const responsive = {
+    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
+    tablet: { breakpoint: { max: 1024, min: 464 }, items: 2 },
+    mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
+  };
+
   return (
     <section id="properties">
       <h4 className="text-primary mb-3">
-        {translation?.properties_in_real_estate || " Properties In Real Estate"}
+        {translation?.properties_in_real_estate || "Properties In Real Estate"}
       </h4>
       <nav>
-        <div className="nav nav-pills" id="nav-tab" role="tablist">
+        <div className="nav nav-pills">
           <button
-            className={`nav-link ps-4 pe-4 ${
-              activeTab === "buy" ? "active" : ""
-            }`}
+            className={`nav-link ps-4 pe-4 ${activeTab === "buy" ? "active" : ""}`}
             onClick={() => handleTabChange("buy")}
-            type="button"
-            aria-selected={activeTab === "buy"}
           >
             {translation?.buy || "Buy"}
           </button>
           <button
-            className={`nav-link ps-4 pe-4 ${
-              activeTab === "rent" ? "active" : ""
-            }`}
+            className={`nav-link ps-4 pe-4 ${activeTab === "rent" ? "active" : ""}`}
             onClick={() => handleTabChange("rent")}
-            type="button"
-            aria-selected={activeTab === "rent"}
           >
             {translation?.rent || "Rent"}
           </button>
@@ -68,32 +70,22 @@ const ProjectedProperty = ({ projectProperties }) => {
       {/* BHK Filter Section */}
       <div className="row align-items-center mb-3 mt-2">
         <div className="col-sm">
-          <div
-            className="btn-group btn-group-light mb-2"
-            role="group"
-            aria-label="Basic radio toggle button group"
-          >
-            {["All", "1BHK", "2BHK", "3BHK", "4BHK", "5BHK"].map(
-              (bhk, index) => (
-                <React.Fragment key={index}>
-                  <input
-                    type="radio"
-                    className="btn-check"
-                    name="flat_type"
-                    id={`flat_${index}`}
-                    autoComplete="off"
-                    checked={selectedBHK === bhk}
-                    onChange={() => handleBHKChange(bhk)}
-                  />
-                  <label
-                    className="btn btn-outline-light"
-                    htmlFor={`flat_${index}`}
-                  >
-                    {bhk}
-                  </label>
-                </React.Fragment>
-              )
-            )}
+          <div className="btn-group btn-group-light mb-2">
+            {["All", "1BHK", "2BHK", "3BHK", "4BHK", "5BHK"].map((bhk, index) => (
+              <React.Fragment key={index}>
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="flat_type"
+                  id={`flat_${index}`}
+                  checked={selectedBHK === bhk}
+                  onChange={() => handleBHKChange(bhk)}
+                />
+                <label className="btn btn-outline-light" htmlFor={`flat_${index}`}>
+                  {bhk}
+                </label>
+              </React.Fragment>
+            ))}
           </div>
         </div>
         <div className="col-sm-auto">
@@ -106,51 +98,30 @@ const ProjectedProperty = ({ projectProperties }) => {
         </div>
       </div>
 
-      {/* Property Listing */}
-      <div className="tab-content bg-white p-3 mb-4" id="nav-tabContent">
-        <div className="row -mb-3">
-          {filteredProperties.length > 0 ? (
-            filteredProperties.map((property) => (
-              <article key={property.id} className="col-lg-4 col-sm-6 col-12">
+      {/* Property Carousel */}
+      <div className="tab-content bg-white p-3 mb-4">
+        {filteredProperties.length > 0 ? (
+          <Carousel responsive={responsive} autoPlay={false} infinite={true}>
+            {filteredProperties.map((property) => (
+              <article key={property.id} className="p-2">
                 <div className="card card-ads">
-                  {property?.gallery?.length > 0 &&
-                  property?.gallery[0]?.images?.length > 0 ? (
-                    <div className="card-image">
-                      <img
-                        src={property?.gallery[0]?.images[0]?.file}
-                        alt={property?.name || "Property Image"}
-                        className="card-img-top"
-                      />
-                      <span
-                        className={`ads-type ${
-                          activeTab === "buy" ? "sale" : "rent"
-                        }`}
-                      >
-                        {activeTab === "buy" ? "For Sale" : "For Rent"}
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="card-image">
-                      <img
-                        src="/assets/images/property/default-property-1.jpg"
-                        alt={property.name || "Default Property"}
-                        className="card-img-top"
-                      />
-                      <span
-                        className={`ads-type ${
-                          activeTab === "buy" ? "sale" : "rent"
-                        }`}
-                      >
-                        {activeTab === "buy" ? "For Sale" : "For Rent"}
-                      </span>
-                    </div>
-                  )}
-
+                  <div className="card-image">
+                    <img
+                      src={
+                        property?.gallery?.length > 0 && property?.gallery[0]?.images?.length > 0
+                          ? property?.gallery[0]?.images[0]?.file
+                          : "/assets/images/property/default-property-1.jpg"
+                      }
+                      alt={property?.name || "Property Image"}
+                      className="card-img-top"
+                    />
+                    <span className={`ads-type ${activeTab === "buy" ? "sale" : "rent"}`}>
+                      {activeTab === "buy" ? "For Sale" : "For Rent"}
+                    </span>
+                  </div>
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
-                      <h5 className="text-primary">
-                        ₹{property.expected_price}
-                      </h5>
+                      <h5 className="text-primary">₹{property.expected_price}</h5>
                       <p>
                         <span className="text-muted">
                           {property.super_area} {translation?.sq_ft || "Sq. Ft"}
@@ -159,59 +130,41 @@ const ProjectedProperty = ({ projectProperties }) => {
                     </div>
                     <h4>
                       <small>
-                        <Link
-                          target="_blank"
-                          href={`/property-details/${property?.slug}`}
-                        >
+                        <Link target="_blank" href={`/property-details/${property?.slug}`}>
                           {property.name}
                         </Link>
                       </small>
                     </h4>
-                    <p>
-                      {property.bhk_type}{" "}
-                      {translation?.flat_by_real_estate ||
-                        "Flat by (Real estate)"}
-                    </p>
+                    <p>{property.bhk_type} {translation?.flat_by_real_estate || "Flat by (Real estate)"}</p>
                     <p>
                       <a href="#">
-                        <i className="icon-feather-map-pin"></i>{" "}
-                        {property.property_address}
+                        <i className="icon-feather-map-pin"></i> {property.property_address}
                       </a>
                     </p>
                   </div>
                 </div>
               </article>
-            ))
-          ) : (
-            <article className="col-12 mb-3 text-center">
-              <img
-                alt="Icon"
-                height="48"
-                width="48"
-                class="mb-2"
-                src="/assets/images/icons/9939447.png"
-              />
-              <p className="text-muted">
-                {translation?.no_properties_available ||
-                  "No properties available for the selected criteria.)"}
-              </p>
-            </article>
-          )}
-        </div>
+            ))}
+          </Carousel>
+        ) : (
+          <article className="col-12 mb-3 text-center">
+            <img alt="Icon" height="48" width="48" src="/assets/images/icons/9939447.png" />
+            <p className="text-muted">
+              {translation?.no_properties_available || "No properties available for the selected criteria."}
+            </p>
+          </article>
+        )}
       </div>
 
       {/* Modal for Project Enquiry Form */}
       <Modal show={showForm} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {translation?.contact_agent_for_property ||
-              "Contact Agent for Property)"}
+            {translation?.contact_agent_for_property || "Contact Agent for Property"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {currentPropertyId && (
-            <ProjectEnquiryForm propertyId={currentPropertyId} />
-          )}
+          {currentPropertyId && <ProjectEnquiryForm propertyId={currentPropertyId} />}
         </Modal.Body>
       </Modal>
     </section>
