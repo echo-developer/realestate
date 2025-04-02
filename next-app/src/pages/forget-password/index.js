@@ -70,7 +70,9 @@ const index = () => {
                     }}
                   >
                     {({ isValid, dirty }) => (
-                      <Form className="authentication-form" autoComplete="off">
+                      <div className="card border-0 authentication-form">
+                      <div className="card-body">
+                      <Form autoComplete="off">
                         <h3 className="mb-4">
                           {translation?.forgot_password || "Forgot Password"}
                         </h3>
@@ -110,6 +112,8 @@ const index = () => {
                           </small>
                         </p>
                       </Form>
+                      </div>
+                      </div>
                     )}
                   </Formik>
                 </aside>

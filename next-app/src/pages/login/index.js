@@ -123,115 +123,119 @@ const { callApi } = AuthUser();
                     }}
                   >
                     {({ isValid, dirty }) => (
-                      <Form className="authentication-form" autoComplete="off">
-                        <h3 className="mb-4">
-                          {translation?.sign_in || "Sign In"}
-                        </h3>
+                      <div className="card border-0 authentication-form">
+                        <div className="card-body">
+                          <Form autoComplete="off">
+                            <h3 className="mb-4">
+                              {translation?.sign_in || "Sign In"}
+                            </h3>
 
-                        <div className="form-floating mb-4">
-                          <Field
-                            type="text"
-                            id="email"
-                            name="email"
-                            className="form-control"
-                            placeholder=" "
-                          />
-                          <label htmlFor="email" className="floating-label">
-                            {translation?.email || "Email"}
-                          </label>
-                          <ErrorMessage
-                            name="email"
-                            component="div"
-                            className="text-danger"
-                          />
+                            <div className="form-floating mb-4">
+                              <Field
+                                type="text"
+                                id="email"
+                                name="email"
+                                className="form-control"
+                                placeholder=" "
+                              />
+                              <label htmlFor="email" className="floating-label">
+                                {translation?.email || "Email"}
+                              </label>
+                              <ErrorMessage
+                                name="email"
+                                component="div"
+                                className="text-danger"
+                              />
+                            </div>
+
+                            <div className="form-floating mb-4 with-icon-end">
+                              <Field
+                                type={passwordType}
+                                id="password"
+                                name="password"
+                                className="form-control"
+                                placeholder=" "
+                                maxLength="8"
+                                autoComplete="off"
+                              />
+                              <label htmlFor="password" className="floating-label">
+                                {translation?.password || "Password"}
+                              </label>
+                              <a
+                                role="button"
+                                id="show-hide-pass"
+                                title="Show Password"
+                                onClick={togglePassword}
+                              >
+                                <i
+                                  className={`icon-feather-${passwordType === "password" ? "eye-off" : "eye"
+                                    }`}
+                                ></i>
+                              </a>
+                              <ErrorMessage
+                                name="password"
+                                component="div"
+                                className="text-danger"
+                              />
+                            </div>
+
+                            <div className="d-grid">
+                              <button
+                                type="submit"
+                                className="btn btn-primary mb-2"
+                                disabled={!isValid || !dirty}
+                              >
+                                {translation?.log_in || "Log In"}
+                              </button>
+                            </div>
+
+                            <p className="text-end">
+                              <Link href="/forget-password">
+                                {translation?.forgot_password || "Forgot Password?"}{" "}
+                              </Link>
+                            </p>
+
+                            {/* <div className="social-login-separator">
+                              <span>
+                                {" "}
+                                {translation?.or_login_with || "OR LOGIN WITH"}{" "}
+                              </span>
+                            </div>
+
+                            <div className="social-login-buttons">
+                              <button
+                                type="button"
+                                className="btn btn-outline-primary btn-fb"
+                              >
+                                <span> {translation?.facebook || "Facebook"} </span>
+                              </button>
+                              <button
+                                type="button"
+                                className="btn btn-outline-success btn-google"
+                              >
+                                <span> {translation?.google || "Google"} </span>
+                              </button>
+                              <button
+                                type="button"
+                                className="btn btn-outline-secondary btn-apple"
+                              >
+                                <span> {translation?.apple || "Apple"}</span>
+                              </button>
+                            </div> */}
+
+                            <p className="text-center">
+                              <small>
+                                {translation?.dont_have_account ||
+                                  "Don’t have an account?"}
+                                <Link href="/register">
+                                  {" "}
+                                  {translation?.register_now || "Register Now"}{" "}
+                                </Link>
+                              </small>
+                            </p>
+                          </Form>
                         </div>
-
-                        <div className="form-floating mb-4 with-icon-end">
-                          <Field
-                            type={passwordType}
-                            id="password"
-                            name="password"
-                            className="form-control"
-                            placeholder=" "
-                            maxLength="8"
-                            autoComplete="off"
-                          />
-                          <label htmlFor="password" className="floating-label">
-                            {translation?.password || "Password"}
-                          </label>
-                          <a
-                            role="button"
-                            id="show-hide-pass"
-                            title="Show Password"
-                            onClick={togglePassword}
-                          >
-                            <i
-                              className={`icon-feather-${passwordType === "password" ? "eye-off" : "eye"
-                                }`}
-                            ></i>
-                          </a>
-                          <ErrorMessage
-                            name="password"
-                            component="div"
-                            className="text-danger"
-                          />
-                        </div>
-
-                        <div className="d-grid">
-                          <button
-                            type="submit"
-                            className="btn btn-primary mb-2"
-                            disabled={!isValid || !dirty}
-                          >
-                            {translation?.log_in || "Log In"}
-                          </button>
-                        </div>
-
-                        <p className="text-end">
-                          <Link href="/forget-password">
-                            {translation?.forgot_password || "Forgot Password?"}{" "}
-                          </Link>
-                        </p>
-
-                        {/* <div className="social-login-separator">
-                          <span>
-                            {" "}
-                            {translation?.or_login_with || "OR LOGIN WITH"}{" "}
-                          </span>
-                        </div>
-
-                        <div className="social-login-buttons">
-                          <button
-                            type="button"
-                            className="btn btn-outline-primary btn-fb"
-                          >
-                            <span> {translation?.facebook || "Facebook"} </span>
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-outline-success btn-google"
-                          >
-                            <span> {translation?.google || "Google"} </span>
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-outline-secondary btn-apple"
-                          >
-                            <span> {translation?.apple || "Apple"}</span>
-                          </button>
-                        </div> */}
-
-                        <p className="text-center">
-                          <small>
-                            {translation?.dont_have_account ||
-                              "Don’t have an account?"}
-                            <Link href="/register">
-                              {" "}
-                              {translation?.register_now || "Register Now"}{" "}
-                            </Link>
-                          </small>
-                        </p>
-                      </Form>
+                      </div>
                     )}
                   </Formik>
                 </aside>

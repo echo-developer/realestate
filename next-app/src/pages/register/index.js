@@ -225,7 +225,9 @@ const Index = () => {
                     onSubmit={handleSubmit}
                   >
                     {({ isValid, dirty, handleChange, handleBlur, values }) => (
-                      <Form className="authentication-form" autoComplete="off">
+                      <div className="card border-0 authentication-form">
+                      <div className="card-body">
+                      <Form autoComplete="off">
                         <h3 className="mb-3">
                           {translation?.sign_up || "Sign Up"}
                         </h3>
@@ -498,6 +500,8 @@ const Index = () => {
                           </small>
                         </p>
                       </Form>
+                      </div>
+                      </div>
                     )}
                   </Formik>
                 </aside>
