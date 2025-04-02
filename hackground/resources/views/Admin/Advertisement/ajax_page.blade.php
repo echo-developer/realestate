@@ -43,7 +43,7 @@
                     
                     <div class="form-group">
                       <label for="category_key">Page </label>
-                      <select class="form-control" name="page" onchange="get_position()">
+                      <select class="form-control" name="page" id="page" onchange="get_position()">
                         <option value="">-Select-</option>
                         <?php foreach($pages as $page){ ?>
                         <option value="<?php echo $page['slug'];?>"><?php echo $page['name'];?></option>
@@ -214,7 +214,7 @@
     
     function get_position(){
         reset_select([$('[name="position"]'), $('[name="ad_size"]')]);
-        var page = $('[name="page"] :selected').val();
+        var page = $('#add_form [name="page"] :selected').val();
         $.get('<?php echo url('advertisement/options?option=page_position&page=')?>'+page, function(res){
             $('[name="position"]').html(res);
         });
@@ -222,8 +222,8 @@
     
     function get_size(){
         reset_select([$('[name="ad_size"]')]);
-        var position = $('#position :selected').val();
-        var page = $('[name="page"] :selected').val();
+        var position = $('#add_form [name="position"] :selected').val();
+        var page = $('#add_form [name="page"] :selected').val();
         $.get('<?php echo url('advertisement/options?option=ad_size&page=')?>'+page+'&position='+position, function(res){
             $('[name="ad_size"]').html(res);
         });
@@ -539,7 +539,7 @@
     
     function get_position(){
         reset_select([$('[name="position"]'), $('[name="ad_size"]')]);
-        var page = $('[name="page"] :selected').val();
+        var page = $('#add_form [name="page"] :selected').val();
         $.get('<?php echo url('ads-packages/options?option=page_position&page=')?>'+page, function(res){
             $('[name="position"]').html(res);
         });
@@ -547,8 +547,8 @@
     
     function get_size(){
         reset_select([$('[name="ad_size"]')]);
-        var position = $('#position :selected').val();
-        var page = $('[name="page"] :selected').val();
+        var position = $('#add_form [name="position"] :selected').val();
+        var page = $('#add_form [name="page"] :selected').val();
         $.get('<?php echo url('ads-packages/options?option=ad_size&page=')?>'+page+'&position='+position, function(res){
             $('[name="ad_size"]').html(res);
         });

@@ -225,7 +225,17 @@ class Advertisement extends Model
 								'920x35',
 								'620x35',
 							)
-						)
+						),
+
+						array(
+							'name' => 'center',
+							'size' => array(
+								'720x35',
+								'820x35',
+								'920x35',
+								'620x35',
+							)
+						),
 						
 					)
 				),
