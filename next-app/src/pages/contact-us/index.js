@@ -26,15 +26,13 @@ const ContactUs = () => {
   return (
     <MainLayout>
       {/* ✅ Top Header Section */}
-      <section className="section pb-0">
-      <div className="container">
-        <div className="text-center mb-4">
-          <h1 className="fw-bold">{translation?.contact_us || "Contact Us"}</h1>
-          <p className="text-muted">
-            {translation?.contact_description ||
-              "Have questions? Get in touch with us by filling out the form below."}
-          </p>
+      <div className="short-banner">
+        <div className="container">          
+          <h1 className="mb-0 fw-bold">{translation?.contact_us || "Contact Us"}</h1>                      
         </div>
+      </div>
+      <section className="section pb-0">
+      <div className="container">        
         <div className="row">
           {/* Left Section: Contact Information */}
           <div className="col-md-6 d-flex align-items-center">
@@ -100,6 +98,10 @@ const ContactUs = () => {
               }) => (
                 <div className="card authentication-form">
                   <div className="card-body">
+                    <p className="text-muted">
+                      {translation?.contact_description ||
+                        "Have questions? Get in touch with us by filling out the form below."}
+                    </p>
                     <Form autoComplete="off">
                       {/* Name Field */}
                       <div className="form-floating mb-3">

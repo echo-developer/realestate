@@ -347,7 +347,6 @@ const ResidentialProjectDetails = ({
                       onClick={() => setActiveTabMenu("about_developer")}
                     >
                       <a href="#about-developer">
-                        {translation?.more_details || "More Details"}
                         {translation?.about_developer || "About Developer"}
                       </a>
                     </li>

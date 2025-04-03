@@ -8,9 +8,13 @@ const FAQ = () => {
   const translation = useTranslation();
   return (
     <MainLayout>
-      <div className="container my-5">
-        <h2 className="text-center fw-bold mb-4">{translation?.faq || 'Frequently Asked Questions'}</h2>
-
+      <div className="short-banner">
+        <div className="container">
+          <h1 className="mb-0 fw-bold">{translation?.faq || 'Frequently Asked Questions'}</h1>                      
+        </div>
+      </div>
+      <section className="section">
+      <div className="container">
         <Accordion defaultActiveKey="0">
           {/* Question 1 */}
           <Accordion.Item eventKey="0">
@@ -77,6 +81,7 @@ const FAQ = () => {
           </Accordion.Item>
         </Accordion>
       </div>
+      </section>
     </MainLayout>
   );
 };

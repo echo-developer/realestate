@@ -1347,7 +1347,7 @@ const index = () => {
                                       return (
                                         <>
                                           <Form.Check
-                                            key={item?.amenity_id || i}
+                                            key={item?.amenity_id}
                                             inline
                                             type="checkbox"
                                             label={item?.amenity_name}

@@ -87,7 +87,7 @@
                     <tbody id="membershipPlan">
                         @foreach ($MembershipPlans as $membershipPlan)
                         <tr>
-                        <td>{{ optional($membershipPlan->planTypeNames)->plan_name ?? 'N/A' }}</td>
+                        <td>{{ optional($membershipPlan->plan_type_names)->plan_name ?? 'N/A' }}</td>
                             <td>{{ $membershipPlan->price }}</td>
                             <td>{{ $membershipPlan->validity_days }} Days</td>
                             <td>
@@ -139,7 +139,7 @@
                                     <option value="">Select Plan Type</option>
                                     @if (isset($plan_type))
                                     @foreach ($plan_type as $items)
-                                    <option value="{{ $items->id }}">{{ $items->english_name }}</option>
+                                    <option value="{{ $items->id }}">{{ $items->plan_name }}</option>
                                     @endforeach
                                     @endif
                                 </select>

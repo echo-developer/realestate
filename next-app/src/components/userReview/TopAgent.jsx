@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const TopAgentList = ({ agents }) => {
@@ -14,7 +15,7 @@ const TopAgentList = ({ agents }) => {
           />
           <div className="flex-grow-1 ps-3">
             <h5 className="mb-0">
-              <a href="#">{agent?.name}</a>{" "}
+              <Link href={`/agent-details/${agent?.id}`}>{agent?.name}</Link>{" "}
               <i
                 className="icon-img-check ms-2"
                 data-bs-toggle="tooltip"

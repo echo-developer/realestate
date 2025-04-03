@@ -16,7 +16,7 @@ const ProjectLandmarkData = ({ detailsData }) => {
   };
 
   return (
-    <section id="landmark-near">
+    <section id="landmark">
       <div className="card border-0 shadow-1 mb-4">
         <div className="card-body">
           <div className="d-flex justify-content-between">

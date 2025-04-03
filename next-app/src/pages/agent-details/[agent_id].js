@@ -46,6 +46,8 @@ const Index = () => {
     contact: "",
     message: "",
   });
+  const [property_loading, setPropertyLoading] = useState(true);
+  const [propertyList, setPropertyList] = useState([])
   const { adsData, logAdClick } = useAdvertisement(
     "agent-detail-page",
     "right",
@@ -64,10 +66,18 @@ const Index = () => {
       ...prevDetails,
       user_id: memberId,
     }));
-  }, [agent_id, memberId, page, defaultCity]);
+  }, [agent_id, memberId, defaultCity]);
 
-  const fetchAgentDetails = async (agent_id, page) => {
-    setIsLoading(true);
+  useEffect(() => {
+    if (agent_id) {
+      fetchAgentPropertyList(agent_id, 1, false);
+    }
+  }, [agent_id])
+
+  const fetchAgentDetails = async (agent_id, page, ) => {
+
+      setIsLoading(true);
+
     try {
       const response = await callApi({
         api: `/agent_details_page`,
@@ -79,12 +89,6 @@ const Index = () => {
       });
       if (response && response.status === 1) {
         setAgentDetailsData(response.data);
-        setContactDetails({
-          name: "",
-          email: "",
-          contact: "",
-          message: "",
-        });
       }
     } catch (error) {
       console.error(error?.message || "Something went wrong");
@@ -92,6 +96,44 @@ const Index = () => {
       setIsLoading(false);
     }
   };
+
+  const fetchAgentPropertyList = async (agent_id, page, loadMore) => {
+    if (!loadMore) {
+      setPropertyLoading(true);
+    }
+
+    try {
+      const res = await callApi({
+        api: '/agent_property_list',
+        method: "GET",
+        data: {
+          agent_id: agent_id,
+          currentPage: page
+        }
+      })
+      if (res && res?.status === 1) {
+        if (!loadMore) {
+          setPropertyList(res?.data);
+          setCurrentPage(res?.pagination?.current_page || 0);
+          setTotalPage(res?.pagination?.total_pages || 0)
+        } else {
+          setPropertyList(prev => {
+            return [
+              ...prev,
+              res?.data
+            ]
+          })
+          setCurrentPage(0);
+          setTotalPage(0)
+        }
+      }
+
+    } catch (error) {
+      console.error(error.message || "Something went wrong")
+    } finally {
+      setPropertyLoading(false);
+    }
+  }
 
   const handleContactDetailsChange = (e) => {
     const { name, value } = e?.target;
@@ -229,8 +271,8 @@ const Index = () => {
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
   const handleLoadMoreClick = (newPage) => {
-    setpage(newPage);
-    fetchAgentDetails(agent_id, newPage);
+    setCurrentPage(newPage);
+    fetchAgentPropertyList(agent_id, newPage, true);
   };
 
   return (
@@ -361,10 +403,10 @@ const Index = () => {
                     {agentDetailsData?.broker_type === "I"
                       ? "Indepedent"
                       : agentDetailsData?.broker_type === "F"
-                      ? "Franchise"
-                      : agentDetailsData?.broker_type === "A"
-                      ? "Agent"
-                      : "Not Available"}
+                        ? "Franchise"
+                        : agentDetailsData?.broker_type === "A"
+                          ? "Agent"
+                          : "Not Available"}
                   </p>
                   <p>
                     <span className="text-muted">Expertise:</span>{" "}
@@ -431,7 +473,7 @@ const Index = () => {
               </div>
 
               <div className="list-display">
-                {isLoading ? (
+                {property_loading ? (
                   <div className="loading-spinner">
                     <div
                       className="spinner-border"
@@ -443,8 +485,8 @@ const Index = () => {
                       </span>
                     </div>
                   </div>
-                ) : agentDetailsData?.properties?.length > 0 ? (
-                  agentDetailsData?.properties?.map((property, i) => {
+                ) : propertyList?.length > 0 ? (
+                  propertyList?.map((property, i) => {
                     return (
                       <div key={property.property_id} className="card card-ads">
                         <div className="row g-0">
@@ -470,11 +512,10 @@ const Index = () => {
                               </h4>
                               <h5 className="mb-0">
                                 {property?.price_currency && property?.exp_price
-                                  ? `${
-                                      property.price_currency
-                                    } ${new Intl.NumberFormat("en-US").format(
-                                      property.exp_price
-                                    )}`
+                                  ? `${property.price_currency
+                                  } ${new Intl.NumberFormat("en-US").format(
+                                    property.exp_price
+                                  )}`
                                   : "Price not available"}
                               </h5>
 
@@ -545,10 +586,9 @@ const Index = () => {
                               <div className="d-flex">
                                 <img
                                   className="rounded-circle"
-                                  src={`${
-                                    property?.user_image ||
+                                  src={`${property?.user_image ||
                                     "/assets/images/user.jpg"
-                                  }`}
+                                    }`}
                                   alt="Company"
                                   height={36}
                                   width={36}
@@ -561,10 +601,10 @@ const Index = () => {
                                     {property?.user_type === "A"
                                       ? "Agent"
                                       : property?.user_type === "/"
-                                      ? "Builder"
-                                      : property?.user_type === "O"
-                                      ? "Owner"
-                                      : "Not Available"}
+                                        ? "Builder"
+                                        : property?.user_type === "O"
+                                          ? "Owner"
+                                          : "Not Available"}
                                   </p>
                                 </div>
                               </div>
@@ -603,14 +643,15 @@ const Index = () => {
               </div>
 
               {/* LOAD MORE  */}
-              {!isLoading && currentPage < totalPage && (
+              {!property_loading && currentPage < totalPage && (
                 <button
                   className="btn btn-primary d-block mx-auto mt-4"
-                  onClick={() => handleLoadMoreClick(page + 1)}
+                  onClick={() => handleLoadMoreClick(currentPage + 1)}
                 >
                   {translation?.load_more || "Load More"}
                 </button>
               )}
+              {/* )} */}
             </Col>
             <Col className="col-lg-4 col-12">
               <div className="d-none d-lg-block mb-2">
@@ -620,10 +661,10 @@ const Index = () => {
                   {agentDetailsData?.broker_type === "I"
                     ? "Indepedent"
                     : agentDetailsData?.broker_type === "F"
-                    ? "Franchise"
-                    : agentDetailsData?.broker_type === "A"
-                    ? "Agent"
-                    : "Not Available"}
+                      ? "Franchise"
+                      : agentDetailsData?.broker_type === "A"
+                        ? "Agent"
+                        : "Not Available"}
                 </p>
                 <p>
                   <span className="text-muted">Expertise:</span>{" "}

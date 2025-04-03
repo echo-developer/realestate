@@ -7,6 +7,7 @@ use App\Models\MembershipPlans;
 use App\Models\MembershipPlanType;
 use Illuminate\Support\Facades\DB;
 use App\Models\MembershipPlansNames;
+use App\Models\MembershipPlanTypeNames;
 
 class MembershipPlanService
 {
@@ -17,12 +18,14 @@ class MembershipPlanService
      */
     public function getAllMembershipPlans()
     {
-        return MembershipPlans::select('id', 'price' ,'validity_days','plan_type_id', 'status')->with('planTypeNames:id,plan_name')->where('status', '!=', config('constants.STATUS_DELETE'))->paginate(10);
+        return MembershipPlans::select('id', 'price', 'validity_days', 'plan_type_id', 'status')->with('plan_type_names:id,plan_name')->where('status', '!=', config('constants.STATUS_DELETE'))->paginate(10);
     }
-    public function getPlainType() {
-        return MembershipPlanType::select('id')->where('status', '!=', config('constants.STATUS_DELETE'))->get();
+    public function getPlainType()
+    {
+        return MembershipPlanTypeNames::where('lang', 'en')
+            ->get(['id', 'plan_name']);
+    }
 
-    }
     public function saveMembershipPlans($data)
     {
         return DB::transaction(function () use ($data) {
@@ -51,10 +54,10 @@ class MembershipPlanService
 
     public function editMembershipPlans($id)
     {
-        return MembershipPlans::select('id', 'price', 'validity_days', 'discounted_price', 'status','plan_type_id')
+        return MembershipPlans::select('id', 'price', 'validity_days', 'discounted_price', 'status', 'plan_type_id')
             ->with(['names:id,plan_id,about_plan,lang'])
             ->where('id', $id)
-            ->first();;
+            ->first();
     }
 
     public function updateMembershipPlans($data, $id)
