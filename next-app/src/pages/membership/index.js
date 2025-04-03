@@ -178,7 +178,7 @@ const Membership = () => {
                   <div className="card card-info">
                     <div className="card-body">
                       <img
-                        src={`assets/images/icons/${step.icon}`}
+                        src={`/assets/images/icons/${step.icon}`}
                         alt="Icon"
                         height="46"
                         width="46"
