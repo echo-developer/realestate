@@ -126,37 +126,18 @@ class PaymentController extends Controller
         try {
             $lang = $request->input('lang', 'en');
 
-            $membershipList = MembershipPlans::where('status', config('constants.STATUS_ACTIVE'))
+            $membershipList = MembershipPlans::select('price', 'discounted_price', 'validity_days', 'discount', 'plan_type_id')
+                ->where('status', config('constants.STATUS_ACTIVE'))
                 ->with([
                     'plan_type_names' => function ($query) use ($lang) {
                         $query->select('id', 'plan_name')->where('lang', $lang);
                     },
                     'plan_features:id,no_of_owners_contactable,unlock_owner_properties,assistance_relationship_manager,early_access_days,validity_days,prime_tag,home_guarantee_refund',
                 ])
-                ->get(['id', 'price', 'discounted_price', 'validity_days', 'discount', 'plan_type_id']);
-
-            if ($membershipList->isEmpty()) {
-                return response()->json([
-                    'status' => 1,
-                    'message' => 'No data available',
-                    'data' => []
-                ]);
-            }
-
-            $planDetails = [];
-            $plnList = [];
-
-            foreach ($membershipList as $membership) {
-                $planName = strtolower($membership->plan_type_names->plan_name ?? 'unknown');
-
-                if (!isset($planDetails[$planName])) {
-                    $plnList[] = [
-                        'key' => $planName,
-                        'name' => $membership->plan_type_names->plan_name ?? 'Unknown'
-                    ];
-
-                    // Assign plan details only once per plan type
-                    $planDetails[$planName] = [
+                ->get();
+             
+                $membershipData = $membershipList->map(function ($membership) {
+                    return [
                         'price' => $membership->price,
                         'discounted_price' => $membership->discounted_price,
                         'validity_days' => $membership->validity_days,
@@ -164,22 +145,19 @@ class PaymentController extends Controller
                         'plan_name' => $membership->plan_type_names->plan_name ?? null,
                         'features' => $membership->plan_features,
                     ];
-                }
-            }
+                });
+                
 
             return response()->json([
                 'status' => 1,
-                'message' => 'Data Retrieved Successfully',
-                'data' => [
-                    'pln_list' => array_values($plnList), // Ensuring indexed array
-                    'plan_details' => $planDetails
-                ]
+                'message' => 'Data Retrived Successfully',
+                'data' => $membershipData
             ]);
         } catch (\Exception $e) {
             logError($e);
             return response()->json([
                 'status' => 0,
-                'message' => 'An error occurred while retrieving the data',
+                'message' => 'An error occurred while removing the file',
             ]);
         }
     }
