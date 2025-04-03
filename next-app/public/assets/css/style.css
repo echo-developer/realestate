@@ -37182,6 +37182,10 @@ fieldset .btn-delete {
   object-fit: contain;
 }
 
+.help-center .accordion-button {
+  font-size: 1rem;
+}
+
 /* Media Start */
 @media (min-width: 576px) {
   .card-ads .row .card-img-top {
