@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import withAuth from "@/utils/withAuth";
 import useTranslation from "@/hooks/useTranslation";
 import AuthUser from "@/components/Authentication/AuthUser";
+import MembershipBox from "@/components/membership/MembershipBox";
 
 const steps = [
   {
@@ -80,8 +81,9 @@ const Membership = () => {
           method: "GET",
         })
         if (res && res?.status === 1) {
-          const convertedData = convertPlans(res?.data);
-          setPlans(convertedData);
+          // const convertedData = convertPlans(res?.data);
+          // setPlans(convertedData);
+          setPlans(res?.data);
         }
       } catch (error) {
         console.error(error?.message || "Something went wrong")
@@ -96,8 +98,8 @@ const Membership = () => {
 
   const handleSelectPlan = (plan) => {
     setSelectedPlan(plan);
-    localStorage.setItem('planId', plan?.plan_id);
-    localStorage.setItem('plan_price', plan?.price?.discounted);
+    localStorage.setItem('planId', plan?.features?.id);
+    localStorage.setItem('plan_price', plan?.discounted_price || plan?.price);
     router.push('/membership/credit')
 
   };
@@ -164,90 +166,33 @@ const Membership = () => {
       <div className="col-lg col-12">
         <div className="p-4">
           <h3 className="text-primary mb-3">{transaction?.membership || "Membership"}</h3>
-          <div className="ul-table-responsive membership d-none d-lg-block">
-            {loading && <PlansLoadingSkeleton />}
-            {!loading && plans?.length > 0 && (
-              <div className="ul-table">
-              <ul className="head">
-                <li>&nbsp;</li>
-                {plans.map((plan) => (
-                  <li
-                    key={plan.name}
-                    className={
-                      plan?.name?.toLowerCase() === "gold"
-                        ? "bg-warning"
-                        : plan?.name?.toLowerCase() === "platinum"
-                          ? "bg-primary text-white"
-                          : "bg-purple text-white"
-                    }
-                  >
-                    {plan?.name}
-                    {plan?.name === "GOLD" && (
-                      <span
-                        className="material-icons-outlined"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        style={{ verticalAlign: "sub", cursor: "default" }}
-                        data-bs-original-title="Recommended"
-                      >
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-              {["PRICE", ...(plans[0]?.features?.map((f) => f.label) || [])]?.map((header, index) => (
-                <ul key={index}>
-                  <li>{header}</li>
-                  {plans.map((plan) => (
-                    <li key={plan?.name}>
-                      {header === "PRICE" ? (
-                        <>
-                          <strike>
-                            {transaction?.aed || "AED"}{plan?.price?.original}
-                          </strike>
-                          <span className="badge bg-green ms-1">
-                            {transaction?.off || "50% OFF"}
-                          </span>
-                          <br />
-                          <span className="text-price">
-                            {transaction?.aed || "AED"}{plan?.price?.discounted}
-                          </span>
-                        </>
-                      ) : (
-                        <>
-                          {plan?.features?.find((f) => f.label === header)?.[plan?.name?.toLowerCase()] === true ? (
-                            <i className="material-icons-outlined text-green">check</i>
-                          ) : plan?.features?.find((f) => f.label === header)?.[plan?.name?.toLowerCase()] === false ? (
-                            <i className="material-icons-outlined text-danger">close</i>
-                          ) : (
-                            plan?.features?.find((f) => f.label === header)?.[plan?.name?.toLowerCase()] || "-"
-                          )}
-                        </>
-                      )}
-                    </li>
-                  ))}
-                </ul>
+          {loading && (<PlansLoadingSkeleton />)}
+          {plans?.length > 0 && <MembershipBox data={plans} handleSelectPlan={handleSelectPlan} />}
+
+
+          <section className="section banner-box-4 mt-0 pb-0">
+            <h3 className="text-primary mb-3"> {transaction?.how_it_works || "How it works"}</h3>
+            <div className="row gx-3 -mb-3">
+              {steps?.map((step, index) => (
+                <article key={index} className="col-lg-3 col-sm-6 col-12">
+                  <div className="card card-info">
+                    <div className="card-body">
+                      <img
+                        src={`assets/images/icons/${step.icon}`}
+                        alt="Icon"
+                        height="46"
+                        width="46"
+                      />
+                      <h4>{step.title}</h4>
+                      <p>{step.description}</p>
+                    </div>
+                  </div>
+                </article>
               ))}
-
-              <ul>
-                <li>&nbsp;</li>
-                {plans.map((plan) => (
-                  <li key={plan.name}>
-                    <a
-                      onClick={() => handleSelectPlan(plan)}
-                      className={`btn btn-sm btn-success btn-outline-${plan.name?.toLowerCase()} w-75`}
-                    >
-                      {transaction?.select || "SELECT"}
-                    </a>
-                  </li>
-                ))}
-              </ul>
             </div>
-            )}
-          </div>
+          </section>
 
-
-          <div className="row d-lg-none">
+          {/* <div className="row d-lg-none">
             <article className="col-12 col-sm-6 col-md-4">
               {plans?.map((plan) => {
                 return (
@@ -256,15 +201,14 @@ const Membership = () => {
                       <ul className="list-group">
                         <li
                           className={`card-header ${plan?.name?.toLowerCase() === "gold"
-                              ? "bg-warning"
-                              : plan?.name?.toLowerCase() === "platinum"
-                                ? "bg-primary text-white"
-                                : "bg-purple text-white"
+                            ? "bg-warning"
+                            : plan?.name?.toLowerCase() === "platinum"
+                              ? "bg-primary text-white"
+                              : "bg-purple text-white"
                             }`}
                         >
                           <h4 className="text-center">{plan.name}
 
-                            {/* Only display "Recommended" for Gold plan */}
                             {plan?.name === "GOLD" && (
                               <span
                                 className="material-icons-outlined ms-2"
@@ -278,16 +222,14 @@ const Membership = () => {
                             )}</h4>
                         </li>
 
-                        {/* Feature List */}
 
-                        {/* Price */}
                         <li className="list-group-item d-flex justify-content-between align-items-center" key="price">
                           <strike>{transaction?.aed || "AED"}{plan?.price?.original}</strike>
                           <span className="badge bg-green ms-1">{transaction?.off || "50% OFF"}</span>
                           <span className="text-price">{transaction?.aed || "AED"}{plan?.price?.discounted}</span>
                         </li>
 
-                        {/* Features */}
+       
                         {plan.features.map((feature, index) => (
                           <li className="list-group-item d-flex justify-content-between align-items-center" key={index}>
                             <span>{feature.label}:</span>
@@ -300,7 +242,7 @@ const Membership = () => {
                             )}
                           </li>
                         ))}
-                        {/* Select button for each plan */}
+            
                         <li className="list-group-item p-3">
                           <a
                             onClick={() => handleSelectPlan(plan)}
@@ -338,7 +280,7 @@ const Membership = () => {
                 </article>
               ))}
             </div>
-          </section>
+          </section> */}
 
           <section className="section">
             <h3 className="text-primary mb-3">{transaction?.frequently_asked_questions || "Frequently Asked Questions"}</h3>
@@ -363,43 +305,72 @@ const Membership = () => {
 
 const PlansLoadingSkeleton = () => {
   return (
-    <div className="ul-table">
-      <ul className="head">
-        <li>&nbsp;</li>
-        {Array(3).fill(null).map((_, index) => (
-          <li
-            key={index}
-            className={`bg-${["purple", "warning", "primary"][index]} text-white`}
-          >
-            <div className="shimmer" style={{ height: "20px", width: "40px" }}></div>
-          </li>
-        ))}
-      </ul>
+    <div className="pricing-table-shimmer">
+      {/* Header row shimmer */}
+      <div className="shimmer-row header">
+        <div className="shimmer-cell"></div>
+        <div className="shimmer-cell"></div>
+        <div className="shimmer-cell"></div>
+        <div className="shimmer-cell"></div>
+        <div className="shimmer-cell"></div>
+      </div>
 
-      {Array(7).fill(null).map((_, rowIndex) => (
-        <ul key={rowIndex}>
-          <li>
-            <div className="shimmer" style={{ height: "24px", width: "200px" }}></div>
-          </li>
-          {Array(3).fill(null).map((_, colIndex) => (
-            <li key={colIndex}>
-              <div className="shimmer" style={{ height: "20px", width: "40px" }}></div>
-            </li>
-          ))}
-        </ul>
+      {/* Price row shimmer */}
+      <div className="shimmer-row">
+        <div className="shimmer-cell"></div>
+        <div className="shimmer-cell"></div>
+        <div className="shimmer-cell"></div>
+        <div className="shimmer-cell"></div>
+        <div className="shimmer-cell"></div>
+      </div>
+
+      {/* Feature rows shimmer */}
+      {[...Array(6)].map((_, i) => (
+        <div key={i} className="shimmer-row">
+          <div className="shimmer-cell"></div>
+          <div className="shimmer-cell"></div>
+          <div className="shimmer-cell"></div>
+          <div className="shimmer-cell"></div>
+          <div className="shimmer-cell"></div>
+        </div>
       ))}
 
-      <ul>
-        <li>&nbsp;</li>
-        {Array(3).fill(null).map((_, index) => (
-          <li key={index}>
-            <div className="shimmer" style={{ height: "40px", width: "40px" }}></div>
-          </li>
-        ))}
-      </ul>
+      {/* Button row shimmer */}
+      <div className="shimmer-row buttons">
+        <div className="shimmer-button"></div>
+        <div className="shimmer-button"></div>
+        <div className="shimmer-button"></div>
+        <div className="shimmer-button"></div>
+      </div>
 
       <style jsx>{`
-        .shimmer {
+        .pricing-table-shimmer {
+          width: 100%;
+          max-width: 800px;
+          margin: 0 auto;
+          overflow: hidden;
+        }
+        
+        .shimmer-row {
+          display: flex;
+          padding: 12px 0;
+          border-bottom: 1px solid #eee;
+        }
+        
+        .shimmer-row.header {
+          padding-bottom: 20px;
+        }
+        
+        .shimmer-row.buttons {
+          justify-content: space-around;
+          padding: 20px 0;
+          border: none;
+        }
+        
+        .shimmer-cell {
+          flex: 1;
+          height: 20px;
+          margin: 0 8px;
           background: #f6f7f8;
           background-image: linear-gradient(
             to right,
@@ -408,19 +379,38 @@ const PlansLoadingSkeleton = () => {
             #f6f7f8 40%,
             #f6f7f8 100%
           );
-          background-repeat: no-repeat;
-          background-size: 200% 100%;
-          display: inline-block;
+          background-size: 800px 104px;
           animation: shimmer 1.5s infinite linear;
           border-radius: 4px;
         }
-
+        
+        .shimmer-cell:first-child {
+          flex: 2;
+          max-width: 200px;
+        }
+        
+        .shimmer-button {
+          width: 100px;
+          height: 40px;
+          background: #f6f7f8;
+          background-image: linear-gradient(
+            to right,
+            #f6f7f8 0%,
+            #edeef1 20%,
+            #f6f7f8 40%,
+            #f6f7f8 100%
+          );
+          background-size: 800px 104px;
+          animation: shimmer 1.5s infinite linear;
+          border-radius: 20px;
+        }
+        
         @keyframes shimmer {
           0% {
-            background-position: -200% 0;
+            background-position: -400px 0;
           }
           100% {
-            background-position: 200% 0;
+            background-position: 400px 0;
           }
         }
       `}</style>
