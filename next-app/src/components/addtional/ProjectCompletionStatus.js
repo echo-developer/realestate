@@ -13,34 +13,34 @@ const ProjectCompletionStatus = ({ projectData }) => {
         { key: "project_name", label: "Project or Society Name", weight: 8 },
       ],
       "Project Features": [
-        { key: "area", label: "Area", weight: 10 },
+        { key: "area", label: "Area", weight: 10 ,value: (projectData.occupied_area || projectData.total_area) ? 1 : 0  },
         { key: "possession_status", label: "Possession Status", weight: 5 },
         { key: "project_furnish", label: "Furnished", weight: 20 },
         { key: "parking_availability", label: "Parking", weight: 8 },
         { key: "facing_direction", label: "Facing", weight: 15 },
         { key: "overlooking", label: "OverLooking", weight: 7 },
         { key: "flooring_style", label: "Flooring", weight: 10 },
-        { key: "tower_details", label: "Tower & Unit Details", weight: 18 },
+        { key: "tower_details", label: "Unit Details", weight: 18 ,value :projectData.total_units},
       ],
       "Additional Features": [
-        { key: "water_available", label: "Water Availability", weight: 5 },
+        { key: "water_available", label: "Water Availability", weight: 5 , value: parseInt(projectData.water_available) || 0 },
         { key: "electric_availability", label: "Status of Electricity", weight: 5 },
         { key: "type_of_ownership", label: "Type of Ownership", weight: 3 },
         { key: "landmarks", label: "Landmark", weight: 6 },
-        { key: "galleries", label: "Gallery", weight: 7 },
+        { key: "galleries", label: "Gallery", weight: 7 ,value: projectData.gallery?.some(g => g.images?.length > 0) ? 1 : 0},
       ],
     }),
     []
   );
 
   const completionData = Object.entries(groupedFields).reduce((acc, [group, fields]) => {
-    acc[group] = fields.map(({ key, label, weight }) => ({
-      label,
-      isCompleted: Boolean(projectData[key]),
-      weight: projectData[key] ? weight : 0,
+    acc[group] = fields.map(({ key, label, weight, value }) => ({
+        label,
+        isCompleted: Boolean(projectData[key]) || (value !== undefined && value > 0),
+        weight: (projectData[key] || (value !== undefined && value > 0)) ? weight : 0
     }));
     return acc;
-  }, {});
+}, {});
 
   const completionPercentage = Object.values(completionData).flat().reduce((acc, field) => acc + field.weight, 0);
 

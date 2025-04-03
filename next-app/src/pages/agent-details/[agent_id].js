@@ -47,7 +47,7 @@ const Index = () => {
     message: "",
   });
   const [property_loading, setPropertyLoading] = useState(true);
-  const [propertyList, setPropertyList] = useState([])
+  const [propertyList, setPropertyList] = useState([]);
   const { adsData, logAdClick } = useAdvertisement(
     "agent-detail-page",
     "right",
@@ -72,11 +72,10 @@ const Index = () => {
     if (agent_id) {
       fetchAgentPropertyList(agent_id, 1, false);
     }
-  }, [agent_id])
+  }, [agent_id]);
 
-  const fetchAgentDetails = async (agent_id, page, ) => {
-
-      setIsLoading(true);
+  const fetchAgentDetails = async (agent_id, page) => {
+    setIsLoading(true);
 
     try {
       const response = await callApi({
@@ -104,36 +103,32 @@ const Index = () => {
 
     try {
       const res = await callApi({
-        api: '/agent_property_list',
+        api: "/agent_property_list",
         method: "GET",
         data: {
           agent_id: agent_id,
-          currentPage: page
-        }
-      })
+          currentPage: page,
+        },
+      });
       if (res && res?.status === 1) {
         if (!loadMore) {
           setPropertyList(res?.data);
           setCurrentPage(res?.pagination?.current_page || 0);
-          setTotalPage(res?.pagination?.total_pages || 0)
+          setTotalPage(res?.pagination?.total_pages || 0);
         } else {
-          setPropertyList(prev => {
-            return [
-              ...prev,
-              res?.data
-            ]
-          })
+          setPropertyList((prev) => {
+            return [...prev, res?.data];
+          });
           setCurrentPage(0);
-          setTotalPage(0)
+          setTotalPage(0);
         }
       }
-
     } catch (error) {
-      console.error(error.message || "Something went wrong")
+      console.error(error.message || "Something went wrong");
     } finally {
       setPropertyLoading(false);
     }
-  }
+  };
 
   const handleContactDetailsChange = (e) => {
     const { name, value } = e?.target;
@@ -403,10 +398,10 @@ const Index = () => {
                     {agentDetailsData?.broker_type === "I"
                       ? "Indepedent"
                       : agentDetailsData?.broker_type === "F"
-                        ? "Franchise"
-                        : agentDetailsData?.broker_type === "A"
-                          ? "Agent"
-                          : "Not Available"}
+                      ? "Franchise"
+                      : agentDetailsData?.broker_type === "A"
+                      ? "Agent"
+                      : "Not Available"}
                   </p>
                   <p>
                     <span className="text-muted">Expertise:</span>{" "}
@@ -511,24 +506,33 @@ const Index = () => {
                                 </Link>
                               </h4>
                               <h5 className="mb-0">
-                                {property?.price_currency && property?.exp_price
-                                  ? `${property.price_currency
-                                  } ${new Intl.NumberFormat("en-US").format(
-                                    property.exp_price
-                                  )}`
-                                  : "Price not available"}
+                                Price:{" "}
+                                {property?.price_currency &&
+                                property?.expected_price
+                                  ? `${
+                                      property.price_currency
+                                    } ${new Intl.NumberFormat("en-US").format(
+                                      property.expected_price
+                                    )}`
+                                  : "Not Available"}
                               </h5>
 
                               <p className="mb-1">
                                 <small>
                                   Average Price:{" "}
-                                  {property?.price_currency ||
-                                    property?.currency ||
-                                    ""}{" "}
-                                  {property?.area_in_sqft || ""}
-                                  {" sq/ft"}
-                                </small>{" "}
+                                  {property?.price_per_sqft ? (
+                                    <>
+                                      {property?.price_currency ||
+                                        property?.currency ||
+                                        ""}{" "}
+                                      {property?.price_per_sqft} sq/ft
+                                    </>
+                                  ) : (
+                                    "Not Available"
+                                  )}
+                                </small>
                               </p>
+
                               <ul className="list-info mb-2">
                                 <li>
                                   <i
@@ -586,9 +590,10 @@ const Index = () => {
                               <div className="d-flex">
                                 <img
                                   className="rounded-circle"
-                                  src={`${property?.user_image ||
+                                  src={`${
+                                    property?.user_image ||
                                     "/assets/images/user.jpg"
-                                    }`}
+                                  }`}
                                   alt="Company"
                                   height={36}
                                   width={36}
@@ -601,10 +606,10 @@ const Index = () => {
                                     {property?.user_type === "A"
                                       ? "Agent"
                                       : property?.user_type === "/"
-                                        ? "Builder"
-                                        : property?.user_type === "O"
-                                          ? "Owner"
-                                          : "Not Available"}
+                                      ? "Builder"
+                                      : property?.user_type === "O"
+                                      ? "Owner"
+                                      : "Not Available"}
                                   </p>
                                 </div>
                               </div>
@@ -661,10 +666,10 @@ const Index = () => {
                   {agentDetailsData?.broker_type === "I"
                     ? "Indepedent"
                     : agentDetailsData?.broker_type === "F"
-                      ? "Franchise"
-                      : agentDetailsData?.broker_type === "A"
-                        ? "Agent"
-                        : "Not Available"}
+                    ? "Franchise"
+                    : agentDetailsData?.broker_type === "A"
+                    ? "Agent"
+                    : "Not Available"}
                 </p>
                 <p>
                   <span className="text-muted">Expertise:</span>{" "}

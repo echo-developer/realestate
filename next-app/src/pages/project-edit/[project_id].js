@@ -789,7 +789,7 @@ const Index = () => {
       case "tower_details":
         return (
           <>
-            <FloatingLabel
+            {/* <FloatingLabel
               controlId="floatingSelect"
               label="Total Towers:"
               className="mb-3"
@@ -812,7 +812,7 @@ const Index = () => {
                   </option>
                 ))}
               </Form.Select>
-            </FloatingLabel>
+            </FloatingLabel> */}
 
             <FloatingLabel controlId="floatingInput" label="Total Units:">
               <Form.Control

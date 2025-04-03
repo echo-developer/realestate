@@ -12,8 +12,8 @@ const PropertyCompletionStatus = ({ propertyData }) => {
             { key: "project_name", label: "Project or Society Name", weight: 8 },
         ],
         "Property Details": [
-            { key: "configuration", label: "Configuration", weight: 12 },
-            { key: "area", label: "Area", weight: 10 },
+            { key: "configuration", label: "Configuration", weight: 12, value: propertyData.rooms ? Object.keys(propertyData.rooms).length : 0 },
+            { key: "area", label: "Area", weight: 10, value: (propertyData.carpet_area || propertyData.super_area) ? 1 : 0 },
             { key: "possession_status", label: "Possession Status", weight: 5 },
             { key: "property_furnish", label: "Furnished", weight: 20 },
             { key: "parking_availability", label: "Parking", weight: 8 },
@@ -26,17 +26,17 @@ const PropertyCompletionStatus = ({ propertyData }) => {
             { key: "water_available", label: "Water Availability", weight: 5 },
             { key: "electric_available", label: "Status of Electricity", weight: 5 },
             { key: "ownership_type", label: "Type of Ownership", weight: 3 },
-            { key: "landmarks", label: "Landmark", weight: 6 },
-            { key: "galleries", label: "Gallery", weight: 7 },
+            { key: "landmarks", label: "Landmark", weight: 6, value: Array.isArray(propertyData.landmarks) ? propertyData.landmarks.length : Object.keys(propertyData.landmarks || {}).length },
+            { key: "galleries", label: "Gallery", weight: 7, value: propertyData.galleries?.some(g => g.images?.length > 0) ? 1 : 0 },
             { key: "total_floor", label: "Tower & Unit Details", weight: 18 },
         ]
-    }), []);
+    }), [propertyData]);
 
     const completionData = Object.entries(groupedFields).reduce((acc, [group, fields]) => {
-        acc[group] = fields.map(({ key, label, weight }) => ({
+        acc[group] = fields.map(({ key, label, weight, value }) => ({
             label,
-            isCompleted: Boolean(propertyData[key]),
-            weight: propertyData[key] ? weight : 0
+            isCompleted: Boolean(propertyData[key]) || (value !== undefined && value > 0),
+            weight: (propertyData[key] || (value !== undefined && value > 0)) ? weight : 0
         }));
         return acc;
     }, {});
