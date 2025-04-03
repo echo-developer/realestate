@@ -10,6 +10,7 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
         return acc;
     }, {});
 
+
     // Get all unique plan groups
     const planGroupNames = Object.keys(planGroups);
     
