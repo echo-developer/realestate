@@ -77,10 +77,10 @@ class PaymentController extends Controller
             ]);
 
             $transactionId = $transaction->id;
-            $plandetails = MembershipPlans::with(['features'])->where('id', $plan_id)->get();
+            $plandetails = MembershipPlans::with(['plan_features'])->where('id', $plan_id)->get();
             log::info($plandetails);
 
-            $planDetails = MembershipPlans::with('features')->find($plan_id);
+            $planDetails = MembershipPlans::with('plan_features')->find($plan_id);
 
             if (!$planDetails) {
                 return response()->json(['status' => 'fail', 'message' => 'Plan not found'], 404);
@@ -90,28 +90,28 @@ class PaymentController extends Controller
             $subscriptionDate = now();
             $expireDate = now()->addDays($planDetails->validity_days);
 
-            // Map features to relevant columns
-            $features = collect($planDetails->features)->keyBy('feature_id');
+            DB::transaction(function () use ($user_id, $transactionId, $plan_id, $subscriptionDate, $expireDate, $planDetails) {
+                $features = $planDetails->plan_features;
 
-            $insertData = [
-                'user_id' => $user_id,
-                'transaction_id' => $transactionId,
-                'plan_id' => $plan_id,
-                'subcription_date' => $subscriptionDate,
-                'expire_date' => $expireDate,
-                'owners_contact_limit' => $features->get(1)['value'] ?? null,
-                'unlock_prime_properties' => $features->get(2)['value'] ?? 'N',
-                'relationship_manager' => $features->get(3)['value'] ?? 'N',
-                'early_access' => $features->get(4)['value'] ?? 'N',
-                'prime_tag' => $features->get(5)['value'] ?? 'N',
-                'home_guarantee' => $features->get(6)['value'] ?? 'N',
-                'owner_contacted' => 0, // Default value
-                'created_at' => now(),
-                'updated_at' => now()
-            ];
+                DB::table('user_membership')->where('user_id', $user_id)->delete();
 
-            // Insert into user_membership table
-            DB::table('user_membership')->insert($insertData);
+                DB::table('user_membership')->insert([
+                    'user_id' => $user_id,
+                    'transaction_id' => $transactionId,
+                    'plan_id' => $plan_id,
+                    'subcription_date' => $subscriptionDate,
+                    'expire_date' => $expireDate,
+                    'owners_contact_limit' => $features->no_of_owners_contactable ?? null,
+                    'unlock_prime_properties' => $features->unlock_owner_properties ?? 'N',
+                    'relationship_manager' => $features->assistance_relationship_manager ?? 'N',
+                    'early_access' => $features->early_access_days ?? 'N',
+                    'prime_tag' => $features->prime_tag ?? 'N',
+                    'home_guarantee' => $features->home_guarantee_refund ?? 'N',
+                    'owner_contacted' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            });
         } catch (\Exception $e) {
             logError($e);
             return response()->json([
@@ -135,18 +135,18 @@ class PaymentController extends Controller
                     'plan_features:id,no_of_owners_contactable,unlock_owner_properties,assistance_relationship_manager,early_access_days,validity_days,prime_tag,home_guarantee_refund',
                 ])
                 ->get();
-             
-                $membershipData = $membershipList->map(function ($membership) {
-                    return [
-                        'price' => $membership->price,
-                        'discounted_price' => $membership->discounted_price,
-                        'validity_days' => $membership->validity_days,
-                        'discount' => $membership->discount,
-                        'plan_name' => $membership->plan_type_names->plan_name ?? null,
-                        'features' => $membership->plan_features,
-                    ];
-                });
-                
+
+            $membershipData = $membershipList->map(function ($membership) {
+                return [
+                    'price' => $membership->price,
+                    'discounted_price' => $membership->discounted_price,
+                    'validity_days' => $membership->validity_days,
+                    'discount' => $membership->discount,
+                    'plan_name' => $membership->plan_type_names->plan_name ?? null,
+                    'features' => $membership->plan_features,
+                ];
+            });
+
 
             return response()->json([
                 'status' => 1,
