@@ -5563,6 +5563,10 @@ fieldset{
 		font-size: 1rem;
 	}
 }
+.h-100-mb-3{
+	height: calc(100% - 1rem);
+	margin-bottom: 1rem;
+}
 
 /* Media Start */
 @media (min-width: 576px) {

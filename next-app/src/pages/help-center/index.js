@@ -4,22 +4,24 @@ import { Accordion, Form, InputGroup, Button, Row, Col } from "react-bootstrap";
 import MainLayout from "@/components/layout/MainLayout";
 import useTranslation from "@/hooks/useTranslation";
 import { House, Person } from "react-bootstrap-icons";
+import Link from "next/link";
 
 const HelpCenter = () => {
   const translation = useTranslation();
   return (
     <MainLayout>
       {/* Header Section */}
-      <div className="container-fluid bg-light text-center py-4">
+      <div className="short-banner" style={{minHeight: '150px'}}>
+      <div className="container">
         <h2 className="fw-bold">{translation?.have_questions || "Have Questions? We've Got All the Answers"}</h2>
-        <InputGroup className="mt-3 mx-auto" style={{ maxWidth: "600px" }}>
+        <InputGroup className="mt-3 mx-auto p-1  bg-white rounded-3" style={{ maxWidth: "600px" }}>
           <Form.Control placeholder={translation?.type_your_question || "Type your question here..."}
           />
           <Button variant="primary">
-            {translation?.search || "Search"}            
+            {translation?.search || "Search"}
           </Button>
         </InputGroup>
-      </div>
+      </div></div>
 
       {/* Help Topics & FAQs */}
       <div className="py-5">
@@ -30,55 +32,65 @@ const HelpCenter = () => {
               <h3 className="fw-bold">{translation?.explore_help_topics || "Explore Help Topics"}</h3>
 
               <Row className="row gx-3">
-                {/* User Profile Section */}   
-                <Col className="col-lg-6 col-12">           
-                  <div className="card h-100 mb-3">
-                  <div className="card-body">
-                    <h4 className="mb-3">
-                      <span className="text-primary">
-                        <Person color="currentColor" size={24} className="me-2" />
-                      </span>
-                      {translation?.user_profile || "User Profile"}
-                    </h4>
-                    <ul className="list-unstyled ps-4">
-                      <li>{translation?.new_registration_login || "New Registration & Login"}
-                      </li>
-                      <li>{translation?.my_activity || "My Activity"}
-                      </li>
-                      <li>{translation?.my_profile || "My Profile"}
-                      </li>
-                      <li>{translation?.my_requirement || "My Requirement"}
-                      </li>
-                      <li>{translation?.my_recommendations || "My Recommendations"}
-                      </li>
-                      <li><a role="button" className="text-primary ">{translation?.explore_more || "Explore More"}</a></li>
-                    </ul>
-                    
+                {/* User Profile Section */}
+                <Col className="col-lg-6 col-12">
+                  <div className="card h-100-mb-3">
+                    <div className="card-body">
+                      <h4 className="mb-3">
+                        <span className="text-primary">
+                          <Person color="currentColor" size={24} className="me-2" />
+                        </span>
+                        {translation?.user_profile || "User Profile"}
+                      </h4>
+                      <ul className="list list-3 ps-2">
+                        <li>
+                          <Link href="/new-registration">
+                            {translation?.new_registration_login || "New Registration & Login"}
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/">
+                            {translation?.my_activity || "My Activity"}
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/">{translation?.my_profile || "My Profile"}</Link>
+                        </li>
+                        <li>
+                          <Link href="/">{translation?.my_requirement || "My Requirement"}</Link>
+                        </li>
+                        <li>
+                          <Link href="/">{translation?.my_recommendations || "My Recommendations"}</Link>
+                        </li>
+                      </ul>
+                      <Link href="/" className="btn btn-outline-primary btn-sm">{translation?.explore_more || "Explore More"}</Link>
+
                     </div>
                   </div>
                 </Col>
 
                 {/* MB Features Section */}
-                <Col className="col-lg-6 col-12">    
-                  <div className="card h-100">
-                  <div className="card-body">
-                    <h4 className="mb-3">
-                      <span className="text-primary">
-                        <House color="currentColor" size={24} className="me-2" />
-                      </span>
-                      {translation?.mb_features || "RE Features"}
-                    </h4>
-                    <ul className="list-unstyled ps-4">
-                      <li>{translation?.what_is_propworth || "What is Propworth?"}
-                      </li>
-                      <li>{translation?.all_about_property_auctions || "All About Property Auctions"}
-                      </li>
-                      <li>{translation?.certified_agents_info || "Want to Know About Certified Agents?"}
-                      </li>
-                      <li><a role="button" className="text-primary">{translation?.explore_more || "Explore More"}</a></li>
-                    </ul>
-                    
-                  </div>
+                <Col className="col-lg-6 col-12">
+                  <div className="card h-100-mb-3">
+                    <div className="card-body">
+                      <h4 className="mb-3">
+                        <span className="text-primary">
+                          <House color="currentColor" size={24} className="me-2" />
+                        </span>
+                        {translation?.mb_features || "RE Features"}
+                      </h4>
+                      <ul className="list list-3 ps-2">
+                        <li>
+                          <Link href="/">{translation?.what_is_propworth || "What is Propworth?"}</Link>
+                        </li>
+                        <li>
+                          <Link href="/">{translation?.all_about_property_auctions || "All About Property Auctions"}</Link>
+                        </li>
+                        <li><Link href="/">{translation?.certified_agents_info || "Want to Know About Certified Agents?"}</Link>
+                        </li>
+                      </ul>
+                      <Link href="/" className="btn btn-outline-primary btn-sm">{translation?.explore_more || "Explore More"}</Link>
+                    </div>
                   </div>
                 </Col>
               </Row>
@@ -86,7 +98,7 @@ const HelpCenter = () => {
 
             {/* Frequently Asked Questions */}
             <adide className="col-lg-4">
-              <h3 className="fw-bold">{translation?.frequently_asked_questions || "Frequently Asked Questions"}
+              <h3 className="fw-bold">{translation?.faq || "FAQs"}
               </h3>
               <Accordion className="help-center mb-3">
                 <Accordion.Item eventKey="0">
@@ -100,7 +112,7 @@ const HelpCenter = () => {
                   <Accordion.Header><i class="bi bi-question-diamond me-2"></i> {translation?.unsubscribe_emails || "I am getting too many emails, how can I unsubscribe?"}
                   </Accordion.Header>
                   <Accordion.Body>
-                  <p className="ps-4">{translation?.unsubscribe_info || "You can adjust your email preferences in your account settings to reduce the number of promotional emails."}</p>
+                    <p className="ps-4">{translation?.unsubscribe_info || "You can adjust your email preferences in your account settings to reduce the number of promotional emails."}</p>
 
                   </Accordion.Body>
                 </Accordion.Item>
@@ -108,14 +120,14 @@ const HelpCenter = () => {
                   <Accordion.Header><i class="bi bi-question-diamond me-2"></i> {translation?.complaint_status || "I had raised a complaint. How to know the status?"}
                   </Accordion.Header>
                   <Accordion.Body>
-                   <p className="ps-4">{translation?.complaint_status_answer || "You can check your complaint status in the Support section of your profile."}</p> 
+                    <p className="ps-4">{translation?.complaint_status_answer || "You can check your complaint status in the Support section of your profile."}</p>
                   </Accordion.Body>
                 </Accordion.Item>
                 <Accordion.Item eventKey="3">
                   <Accordion.Header><i class="bi bi-question-diamond me-2"></i> {translation?.complaint_status || "I had raised a complaint. How to know the status?"}
                   </Accordion.Header>
                   <Accordion.Body>
-                  <p className="ps-4">{translation?.change_user_type || "I wish to change my User Type. How can I do that?"}</p>
+                    <p className="ps-4">{translation?.change_user_type || "I wish to change my User Type. How can I do that?"}</p>
 
                   </Accordion.Body>
                 </Accordion.Item>
@@ -123,7 +135,7 @@ const HelpCenter = () => {
                   <Accordion.Header><i class="bi bi-question-diamond me-2"></i> {translation?.brokerage_info || "How much brokerage is charged by RealEstate?"}
                   </Accordion.Header>
                   <Accordion.Body>
-                  <p className="ps-4">{translation?.realestate_brokerage_details || "RealEstate does not charge a brokerage fee but connects users with agents who may have their own fee structure."}</p>
+                    <p className="ps-4">{translation?.realestate_brokerage_details || "RealEstate does not charge a brokerage fee but connects users with agents who may have their own fee structure."}</p>
 
                   </Accordion.Body>
                 </Accordion.Item>
