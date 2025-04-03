@@ -64,6 +64,19 @@ const ChartsRow = ({ dashboardList }) => {
       },
     ],
   });
+  const [viewbarData, setViewBarData] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "Views",
+        data: [],
+        backgroundColor: "rgba(19, 101, 207, 0.5)",
+        borderColor: "rgb(19, 101, 207)",
+        borderWidth: 1,
+      },
+    ],
+  });
+
   const translation = useTranslation();
   useEffect(() => {
     if (dashboardList?.enqueryBargraph) {
@@ -83,6 +96,25 @@ const ChartsRow = ({ dashboardList }) => {
       }));
     }
   }, [dashboardList?.enqueryBargraph]);
+
+  useEffect(() => {
+    if (dashboardList?.viewBargraph) {
+      const sortedData = dashboardList?.viewBargraph.sort((a, b) =>
+        moment(a.month).diff(moment(b.month))
+      );
+
+      const labels = sortedData.map((item) =>
+        moment(item.month).format("MMMM YYYY")
+      );
+      const data = sortedData.map((item) => item.total_views);
+
+      setViewBarData((prev) => ({
+        ...prev,
+        labels,
+        datasets: [{ ...prev.datasets[0], data }],
+      }));
+    }
+  }, [dashboardList?.viewBargraph]);
 
   const chartOptions = {
     responsive: true,
@@ -171,7 +203,7 @@ const ChartsRow = ({ dashboardList }) => {
                   height: "250px",
                 }}
               >
-                <Bar data={barData} options={chartOptions} />
+                <Bar data={viewbarData} options={chartOptions} />
               </div>
             </div>
           </div>
