@@ -405,11 +405,15 @@ class DashboardController extends Controller
     {
         try {
             if (!empty($request->property_id)) {
-                $id_string = json_encode($request->amenity_id, true);
+                $amenityIds = $request->amenity_id;
+
+                if (!is_array($amenityIds)) {
+                    $amenityIds = json_decode($amenityIds, true); // Convert string to array if necessary
+                }
                 $prop_id = $request->property_id;
 
                 $data = [
-                    'id_string' => $id_string,
+                    'id_string' => $amenityIds,
                     'prop_id' => $prop_id,
                 ];
 
@@ -421,11 +425,14 @@ class DashboardController extends Controller
                     'message' => 'Amenity updated successfully.',
                 ]);
             } elseif (!empty($request->project_id)) {
-                $id_string = json_encode($request->amenity_id, true);
+                $amenityIds = $request->amenity_id;
+                if (!is_array($amenityIds)) {
+                    $amenityIds = json_decode($amenityIds, true); // Convert string to array if necessary
+                }
                 $proj_id = $request->project_id;
 
                 $data = [
-                    'id_string' => $id_string,
+                    'id_string' => $amenityIds,
                     'proj_id' => $proj_id,
                 ];
 
