@@ -49,7 +49,9 @@ const FloorSection = ({ detailsData }) => {
 
     return (
         <>
-            <div className="tab-content bg-white p-3 mb-4 shadow-sm rounded" id="nav-tabContent">
+            {cards?.length > 0 && (
+                <>
+                <div className="tab-content bg-white p-3 mb-4 shadow-sm rounded" id="nav-tabContent">
                 <h4 className="mb-3 text-primary">Flooring Plan</h4>
                 <div className="row g-3">
                     {cards?.map((card, i) => (
@@ -192,6 +194,9 @@ const FloorSection = ({ detailsData }) => {
 
                 </Offcanvas.Body>
             </Offcanvas>
+                </>
+            )}
+            
         </>
     );
 };
