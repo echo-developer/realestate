@@ -30,14 +30,10 @@ class AgentDetailsController extends Controller
             if (!empty($request->agent_id)) {
 
                 $data = $this->BasicInfo($request, $lang);
-                // $ProeprtyInfo = $this->ProeprtyInfo($request);
-
-                // $data['properties'] = $ProeprtyInfo['data'] ?? [];
-                // $data['pagination'] =  $ProeprtyInfo['pagination'] ?? [];
 
                 return response()->json([
                     'status' => 1,
-                    'message' => 'Properties fetched successfully',
+                    'message' => 'Details retrived successfully',
                     'data' => $data
                 ]);
             } else {
@@ -162,13 +158,15 @@ class AgentDetailsController extends Controller
             $paginatedResults = $formattedPropertiesDetails->slice($offSet, $perPage)->values();
 
             return [
+                'status' => 1,
+                'message' => 'Properties fetched successfully',
                 'pagination' => [
                     'current_page' => $currentPage,
                     'per_page' => $perPage,
                     'total' => $totalRecords,
                     'total_pages' => (int) ceil($totalRecords / $perPage),
                 ],
-                'properties' => $paginatedResults->toArray(),
+                'data' => $paginatedResults->toArray(),
             ];
         } catch (\Exception $e) {
             Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
