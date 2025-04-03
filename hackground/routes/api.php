@@ -174,6 +174,7 @@ Route::post('property_image_caption', [PropertyController::class, 'captionImage'
 
 // Agent Routes
 Route::get('agent_details_page', [AgentDetailsController::class, 'AgentDetailsPage']);
+Route::get('agent_property_list', [AgentDetailsController::class, 'ProeprtyInfo']);
 Route::get('agent_list', [AgentDetailsController::class, 'AgentList']);
 Route::post('save_agent_review', [AgentDetailsController::class, 'agentsRating']);
 Route::post('save_contact_agent', [AgentDetailsController::class, 'agentsContact']);
@@ -190,7 +191,7 @@ Route::controller(Enquery_CRM_Controller::class)->group(function () {
     Route::get('user-project-leads', 'projectLeads');
     Route::get('my_property_CRMS', 'PropertyCRM')->name('get.crm.list');
     Route::get('user-general-leads', 'generalLeads');
-    Route::post('property_CRM_logs', 'LogCRM')->name('log.crm'); 
+    Route::post('property_CRM_logs', 'LogCRM')->name('log.crm');
     Route::post('save-lead-contact-status', 'saveLeadContactStatus');
 
     Route::get('lead-details', 'leadDetails');
@@ -266,4 +267,3 @@ Route::controller(VerifyUserMailController::class)->group(function () {
     Route::post('send_otp_to_verify_email', 'SendOtpToVerifyEmail')->name('send.email.verification.otp');
     Route::post('verify_email', 'verifyOtpforEmail')->name('verify.email');
 });
-
