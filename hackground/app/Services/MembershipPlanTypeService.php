@@ -14,10 +14,19 @@ class MembershipPlanTypeService
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getAllMembershipPlansType()
-    {
-        return MembershipPlanType::select('id', 'no_of_owners_contactable', 'unlock_owner_properties', 'assistance_relationship_manager','early_access_days','validity_days', 'prime_tag','home_guarantee_refund','status')->where('status', '!=', config('constants.STATUS_DELETE'))->paginate(10);
-    }
+    public function getAllMembershipPlansType(){
+    $lang = 'en'; // Assuming this comes from request or settings
+
+    return MembershipPlanType::where('status', '!=', config('constants.STATUS_DELETE'))
+        ->select(['id', 'no_of_owners_contactable', 'unlock_owner_properties', 
+                  'assistance_relationship_manager', 'early_access_days', 
+                  'validity_days', 'prime_tag', 'home_guarantee_refund', 'status'])
+        ->with(['names' => function ($query) use ($lang) {
+            $query->select(['id', 'plan_name'])->where('lang', $lang);
+        }])
+        ->paginate(10);
+}
+
 
     public function editMembershipPlansType($id)
     {
