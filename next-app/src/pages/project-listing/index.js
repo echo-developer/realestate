@@ -10,7 +10,7 @@ import { ShimmerContentBlock } from "react-shimmer-effects";
 import { Helmet } from "react-helmet-async";
 import useTranslation from "@/hooks/useTranslation";
 import useIsMobile from "@/hooks/useIsMobile";
-import { useAuth } from "@/context/AuthProvider";
+import { AuthProvider, useAuth } from "@/context/AuthProvider";
 import useAdvertisement from "@/hooks/useAdvertisement";
 import {
   Form,
@@ -67,6 +67,7 @@ const Index = () => {
     );
   };
 
+
   const FetchProjectListData = async (loadMore, page) => {
     if (!loadMore) {
       setLoading(true);
@@ -81,7 +82,7 @@ const Index = () => {
     }
     try {
       const response = await callApi({
-        api: `/get-searchedprojects?currentpage=${page || 1}`,
+        api: `/get-searchedprojects?currentpage=${page || 1}&city_id=${defaultCity?.city_id}`,
         method: "GET",
         data: cleanJsonData(params),
       });
