@@ -459,7 +459,13 @@
 <!-- Amenities End -->
 
 <!-- Project Property Start -->
+
+
+
 <script>
+    document.getElementById('addPropertyBtn').addEventListener('click', addProperty);
+
+    const towerContainerModal = document.getElementById("tower-container-modal");
 
     function addProperty(project_id) {
         $.ajax({
@@ -472,163 +478,282 @@
             success: function(response) {
                 console.log(response);
 
+                let towersData = response.towers_data || []; // Ensure towersData is an array
+                const totalTowers = response.total_towers || towersData.length; // Use total_towers if available
                 const modalContainer = document.getElementById("tower-container-modal");
                 modalContainer.innerHTML = "";
 
-                let towersData = response.towers_data || [];
-                let totalTowers = response.total_towers || towersData.length;
-
+                // Loop through the total towers and create UI
                 for (let i = 0; i < totalTowers; i++) {
-                    createTower(towersData[i] || {}, i + 1, modalContainer, project_id);
+                    let towerData = towersData[i] || {}; // Use existing data if available, else empty object
+                    createTower(towerData, i + 1, modalContainer, project_id);
                 }
 
-                // Show the modal
-                $("#propertyModal").modal("show");
+                // Show modal after data is populated
+                $('#propertyModal').modal('show');
             },
-            error: function(xhr) {
-                console.error("Error:", xhr.responseText);
-            },
+            error: function(xhr, status, error) {
+                console.error("Error:", error);
+            }
         });
     }
+
 
     function createTower(towerData, towerIndex, container, project_id) {
         const tower = document.createElement("div");
         tower.classList.add("mb-4", "border", "p-3");
-
         $('#saveButton').val(project_id);
-        let slug = "tower" + towerIndex;
-
+        let slug = 'tower' + towerIndex;
         tower.innerHTML = `
-            <input type="hidden" name="project_id" value="${project_id}">
-            <h5>${slug}</h5>
-            <div class="row gx-2">
-                <div class="col-md-3">
+        <input class="form-control" name="project_id" type="hidden" value="${project_id}">
+        <h5>${'tower'+towerIndex}</h5>
+        <div class="row gx-2">
+            <div class="col-md-3">
+                <input class="form-control" name="tower_name" type="text" value="${towerData.tower_name??''}">
                 <label>Tower Name</label>
-                    <input class="form-control" name="tower_name" type="text" value="${towerData.tower_name || ''}">
-                </div>
-                <input type="hidden" name="slug" value="${slug}">
-                <div class="col-md-3">
-                <label>Lift Number</label>
-                    <input class="form-control" name="lift_no" type="number" value="${towerData.lift_no || ''}">
-                </div>
-                <div class="col-md-3">
-                <label>Stair Number</label>
-                    <input class="form-control" name="stair_no" type="number" value="${towerData.stair_no || ''}">
-                </div>
-                <div class="col-md-3">
-                <label>Fire Safety</label>
-                    <input class="form-control" name="fire_safety" type="number" value="${towerData.fire_safety || ''}">
-                </div>
             </div>
-            <div class="floor-container"></div>
-            <button type="button" class="btn btn-primary btn-sm add-floor">Add Floor</button>
-        `;
+            <input class="form-control" name="slug" type="hidden" value="${slug}">
+            <div class="col-md-3">
+                <input class="form-control" name="lift_no" type="number" value="${towerData.lift_no}">
+                <label>Lift Number</label>
+            </div>
+            <div class="col-md-3">
+                <input class="form-control" name="stair_no" type="number" value="${towerData.stair_no}">
+                <label>Stair Number</label>
+            </div>
+            <div class="col-md-3">
+                <input class="form-control" name="fire_safety" type="number" value="${towerData.fire_safety}">
+                <label>Fire Safety</label>
+            </div>
+        </div>
+        <div class="floor-container"></div>
+        <button type="button" class="btn btn-primary btn-sm add-floor">Add Floor</button>`;
 
         container.appendChild(tower);
 
         const floorContainer = tower.querySelector(".floor-container");
 
+
         if (towerData.floor_data) {
-            towerData.floor_data.forEach((floor, index) => {
-                createFloor(floorContainer, index + 1, floor);
+            towerData.floor_data.forEach((floor, floorIndex) => {
+                createFloor(floorContainer, floorIndex + 1, floor);
             });
         }
 
-        tower.querySelector(".add-floor").addEventListener("click", () => {
+
+        tower.querySelector(".add-floor").addEventListener("click", function() {
             createFloor(floorContainer, floorContainer.children.length + 1);
         });
     }
 
-    function createFloor(floorContainer, floorIndex, floorData = {}) {
+
+    function createFloor(floorContainer, floorIndex, floorData = null) {
         const floor = document.createElement("fieldset");
         floor.classList.add("border", "p-3", "mb-3", "position-relative");
 
-        floor.innerHTML = `
-            <legend>Floor ${floorIndex}</legend>
-            <button type="button" class="btn btn-danger btn-sm remove-floor">Remove Floor</button>
-            <div class="row gx-2">
-                <div class="col-md-4">
+        floor.innerHTML =
+            `<legend>Floor ${floorIndex}</legend>
+        <button type="button" class="btn btn-danger btn-sm remove-floor">Remove Floor</button>
+        <div class="row gx-2">
+            <div class="col-md-4">
+                <input class="form-control" name="floor_no" type="number" value="${floorData ? floorData.floor_no : ''}">
                 <label>Floor Number</label>
-                    <input class="form-control" name="floor_no" type="number" value="${floorData.floor_no || ''}">
-                </div>
-                <div class="col-md-4">
-                <label>Flat Number</label>
-                    <input class="form-control" name="flat_no" type="number" value="${floorData.flat_no || ''}">
-                </div>
             </div>
-            <div class="bhk-container"></div>
-            <button type="button" class="btn btn-primary btn-sm add-bhk">Add BHK</button>
-        `;
+            <div class="col-md-4">
+                <input class="form-control" name="flat_no" type="number" value="${floorData ? floorData.flat_no : ''}">
+                <label>Flat Number</label>
+            </div>
+        </div>
+        <div class="bhk-container"></div>
+        <button type="button" class="btn btn-primary btn-sm add-bhk">Add BHK</button>
+    `;
 
         floorContainer.appendChild(floor);
+
         const bhkContainer = floor.querySelector(".bhk-container");
 
-        if (floorData.bhk_configurations) {
-            floorData.bhk_configurations.forEach((bhk, index) => {
-                createBHK(bhkContainer, index + 1, bhk);
+        // Load existing BHK data
+        if (floorData && floorData.bhk_configurations) {
+            floorData.bhk_configurations.forEach((bhk, bhkIndex) => {
+                createBHK(bhkContainer, bhkIndex + 1, bhk);
             });
         }
-
-        floor.querySelector(".remove-floor").addEventListener("click", () => {
+        floor.querySelector(".remove-floor").addEventListener("click", function() {
             floor.remove();
         });
 
-        floor.querySelector(".add-bhk").addEventListener("click", () => {
+        // Add BHK event listener
+        floor.querySelector(".add-bhk").addEventListener("click", function() {
             createBHK(bhkContainer, bhkContainer.children.length + 1);
         });
     }
 
-    function createBHK(bhkContainer, bhkIndex, bhkData = {}) {
+    function createBHK(bhkContainer, bhkIndex, bhkData = null) {
         const bhk = document.createElement("div");
         bhk.classList.add("mb-3");
-
-        bhk.innerHTML = `
-            <legend>Flats ${bhkIndex}</legend>
-            <button type="button" class="btn btn-danger btn-sm remove-bhk">Remove</button>
+        bhk.innerHTML =
+            `<legend>Flats ${bhkIndex}</legend>
+            <button type="button" class="btn btn-danger btn-delete btn-sm remove-bhk"><i class="bi bi-x-lg"></i></button>
             <div class="row gx-2">
-                <div class="col-md-4">
-                <label>BHK Type</label>
-                    <select class="form-select">
-                        <option value="1BHK" ${bhkData.bhk_type === '1BHK' ? 'selected' : ''}>1BHK</option>
-                        <option value="2BHK" ${bhkData.bhk_type === '2BHK' ? 'selected' : ''}>2BHK</option>
-                        <option value="3BHK" ${bhkData.bhk_type === '3BHK' ? 'selected' : ''}>3BHK</option>
-                    </select>
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="form-floating">
+                        <select class="form-select">
+                            <option value="1BHK" ${bhkData && bhkData.bhk_type === '1BHK' ? 'selected' : ''}>1BHK</option>
+                            <option value="2BHK" ${bhkData && bhkData.bhk_type === '2BHK' ? 'selected' : ''}>2BHK</option>
+                            <option value="3BHK" ${bhkData && bhkData.bhk_type === '3BHK' ? 'selected' : ''}>3BHK</option>
+                            <option value="4BHK" ${bhkData && bhkData.bhk_type === '4BHK' ? 'selected' : ''}>4BHK</option>
+                            <option value="5BHK" ${bhkData && bhkData.bhk_type === '5BHK' ? 'selected' : ''}>5BHK</option>
+                        </select>
+                        <label>BHK Type</label>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                <label>Carpet Area</label>
-                    <input class="form-control" type="number" value="${bhkData.carpet_area || ''}">
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="form-floating">
+                        <input class="form-control" type="number" placeholder="" value="${bhkData ? bhkData.carpet_area : ''}">
+                        <label>Carpet Area</label>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                <label>Super Area</label>
-                    <input class="form-control" type="number" value="${bhkData.super_area || ''}">
+                 <input class="form-control floor_plan_image_name" type="hidden" value="${bhkData ? bhkData.floor_plan_image : ''}" name="floor_plan_image_name">
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="form-floating">
+                        <input class="form-control" type="number" placeholder="" value="${bhkData ? bhkData.super_area : ''}">
+                        <label>Super Area</label>
+                    </div>
                 </div>
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="form-floating">
+                        <input class="form-control" type="number" placeholder="" value="${bhkData ? bhkData.property_price : ''}">
+                        <label>Price</label>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="form-floating">
+                        <select class="form-select">
+                            <option value="east" ${bhkData && bhkData.property_facing === 'east' ? 'selected' : ''}>East</option>
+                            <option value="north" ${bhkData && bhkData.property_facing === 'north' ? 'selected' : ''}>North</option>
+                            <option value="north_east" ${bhkData && bhkData.property_facing === 'north_east' ? 'selected' : ''}>North - East</option>
+                            <option value="north_west" ${bhkData && bhkData.property_facing === 'north_west' ? 'selected' : ''}>North - West</option>
+                            <option value="south" ${bhkData && bhkData.property_facing === 'south' ? 'selected' : ''}>South</option>
+                            <option value="south_east" ${bhkData && bhkData.property_facing === 'south_east' ? 'selected' : ''}>South - East</option>
+                            <option value="south_west" ${bhkData && bhkData.property_facing === 'south_west' ? 'selected' : ''}>South - West</option>
+                            <option value="west" ${bhkData && bhkData.property_facing === 'west' ? 'selected' : ''}>West</option>
+                        </select>
+                        <label>Facing</label>
+                    </div>
+                </div>
+            <div class="col-md-4 col-sm-6 mb-3">
+                <div class="form-floating">
+                    <input class="form-control floor-plan-input" type="file" accept="image/*">
+                    <label>Upload Floor Image</label>
+                </div>
+                <img class="preview-image" src="${bhkData && bhkData.image_url ? bhkData.image_url : ''}" 
+                    style="max-width: 100px; display: ${bhkData && bhkData.image_url ? 'block' : 'none'}; margin-top: 5px;">
+                <button type="button" class="btn btn-danger btn-sm delete-floor-plan" 
+                        style="display: ${bhkData && bhkData.image_url ? 'block' : 'none'}; margin-top: 5px;">
+                    Delete
+                </button>
             </div>
-        `;
+
+            </div>
+           `;
 
         bhkContainer.appendChild(bhk);
+        const fileInput = bhk.querySelector(".floor-plan-input");
+        const previewImg = bhk.querySelector(".preview-image");
+        const deleteImg = bhk.querySelector(".delete-floor-plan");
 
-        bhk.querySelector(".remove-bhk").addEventListener("click", () => {
+        fileInput.addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const objectURL = URL.createObjectURL(file);
+                previewImg.src = objectURL;
+                previewImg.style.display = "block";
+                deleteImg.style.display = "block";
+            }
+
+            let formData = new FormData();
+            formData.append("floor_plan_image", file);
+            formData.append("_token", $('meta[name="csrf-token"]').attr("content"));
+
+            $.ajax({
+                url: "{{ route('upload.floor.plan') }}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.status) {
+                        fileInput.closest('.bhk-container > div').querySelector('.floor_plan_image_name').value = response.files;
+                    } else {
+                        alert("File upload failed");
+                    }
+                },
+                error: function(xhr) {
+                    console.error("Upload error:", xhr.responseText);
+                }
+            });
+        });
+
+        deleteImg.addEventListener("click", function() {
+            previewImg.src = "";
+            previewImg.style.display = "none";
+            fileInput.value = "";
+            deleteImg.style.display = "none";
+
+            const hiddenInput = bhk.querySelector('input[name="floor_plan_image_name"]');
+            if (hiddenInput) {
+                hiddenInput.remove();
+            }
+        });
+
+        bhk.querySelector(".remove-bhk").addEventListener("click", function() {
             bhk.remove();
         });
     }
+</script>
 
+
+
+
+
+<script>
     function collectData() {
+
         const towers = [];
-        document.querySelectorAll(".mb-4.border.p-3").forEach((towerElement) => {
+
+
+
+        document.querySelectorAll('.mb-4.border.p-3').forEach((towerElement) => {
             const towerData = {
-                tower_name: towerElement.querySelector('[name="tower_name"]').value,
-                slug: towerElement.querySelector('[name="slug"]').value,
-                lift_no: towerElement.querySelector('[name="lift_no"]').value,
-                stair_no: towerElement.querySelector('[name="stair_no"]').value,
-                fire_safety: towerElement.querySelector('[name="fire_safety"]').value,
+                tower_name: towerElement.querySelector('input[name="tower_name"]').value,
+                slug: towerElement.querySelector('input[name="slug"]').value,
+                lift_no: towerElement.querySelector('input[name="lift_no"]').value,
+                stair_no: towerElement.querySelector('input[name="stair_no"]').value,
+                fire_safety: towerElement.querySelector('input[name="fire_safety"]').value,
                 floor_data: []
             };
 
-            towerElement.querySelectorAll(".floor-container fieldset").forEach((floorElement) => {
+            towerElement.querySelectorAll('.floor-container fieldset').forEach((floorElement) => {
                 const floorData = {
-                    floor_no: floorElement.querySelector('[name="floor_no"]').value,
-                    flat_no: floorElement.querySelector('[name="flat_no"]').value,
+                    floor_no: floorElement.querySelector('input[name="floor_no"]').value,
+                    flat_no: floorElement.querySelector('input[name="flat_no"]').value,
+                    bhk_configurations: []
                 };
+
+                floorElement.querySelectorAll('.bhk-container > div').forEach((bhkElement) => {
+                    const floorPlanInput = bhkElement.querySelector('.floor_plan_image_name');
+                    const bhkData = {
+                        bhk_type: bhkElement.querySelector('select').value,
+                        carpet_area: bhkElement.querySelector('input[type="number"]').value,
+                        super_area: bhkElement.querySelectorAll('input[type="number"]')[1].value,
+                        property_price: bhkElement.querySelectorAll('input[type="number"]')[2].value,
+                        property_facing: bhkElement.querySelectorAll('select')[1].value,
+                        floor_plan_image: floorPlanInput ? floorPlanInput.value : ''
+
+                    };
+                    floorData.bhk_configurations.push(bhkData);
+                });
+
                 towerData.floor_data.push(floorData);
             });
 
@@ -638,7 +763,7 @@
         return towers;
     }
 
-    document.getElementById("saveButton").addEventListener("click", function() {
+    document.getElementById('saveButton').addEventListener('click', function() {
         const project_id = this.value;
         const towersData = collectData();
         $.ajax({
@@ -646,18 +771,19 @@
             type: "POST",
             data: {
                 towers: towersData,
-                project_id,
+                project_id: project_id,
                 _token: "{{ csrf_token() }}"
             },
-            success: function() {
-                $("#propertyModal").modal("hide");
-                localStorage.setItem("successMessage", "Towers updated successfully!");
+            success: function(response) {
+                $('#propertyModal').modal('hide');
+                localStorage.setItem('successMessage', 'Towers updated successfully!');
                 location.reload();
             },
-            error: function(xhr) {
-                console.error("Error:", xhr.responseText);
-            },
+            error: function(xhr, status, error) {
+                console.error("Error:", error);
+            }
         });
+
     });
 </script>
 <!-- Project Property End -->
