@@ -40,10 +40,11 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
         return index % 2 === 0 ? 'bg-purple text-white' : 'bg-secondary text-white';
     };
 
-    // Check if discount should be shown
     const shouldShowDiscount = (plan) => {
-        return plan.discount && plan.discounted_price && plan.discounted_price !== "0.00";
+        const value=Number(plan.discount) > 0 && Number(plan.discounted_price) > 0;
+        return  value
     };
+    
 
     return (
         <div className="ul-table-responsive membership d-none d-lg-block">
@@ -83,7 +84,8 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
                                 {shouldShowDiscount(plan) ? (
                                     <>
                                         <strike>{formatPrice(plan.price)}</strike>
-                                        <span className="badge bg-green ms-1">{plan.discount}% OFF</span>
+                                        <span className="badge bg-green ms-1">{parseFloat(plan.discount).toFixed(0)}% OFF</span>
+
                                         <br />
                                         <span className="text-price">{formatPrice(plan.discounted_price)}</span>
                                     </>
