@@ -1,21 +1,22 @@
 <?php
 
-use App\Models\User;
 use App\Models\PrefProject;
-use App\Models\ProjectView;
 use App\Models\PrefProperty;
-use App\Models\PropertyView;
 use App\Models\ProjectSetting;
+use App\Models\ProjectView;
+use App\Models\PropertyView;
+use App\Models\User;
 use function PHPSTORM_META\type;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
-use PHPMailer\PHPMailer\PHPMailer;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Eloquent\Model;
+use PHPMailer\PHPMailer\PHPMailer;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 if (!function_exists('auth_user_id')) {
     function auth_user_id(): ?int
