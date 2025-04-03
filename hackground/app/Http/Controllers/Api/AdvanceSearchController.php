@@ -152,12 +152,14 @@ class AdvanceSearchController extends Controller
                 }
 
                 if (is_array($data[$key])) {
-                    if ($key === 'amenities' || $key === 'floor') {
-                        $qry->where(function ($query) use ($data, $column, $key) {
-                            foreach ($data[$key] as $value) {
-                                $query->orWhereJsonContains($column, $value);
-                            }
-                        });
+                    if (is_array($data[$key])) {
+                        if ($key === 'amenities' || $key === 'floor') {
+                            $qry->where(function ($query) use ($data, $column, $key) {
+                                foreach ($data[$key] as $value) {
+                                    $query->orWhereJsonContains($column, $value);
+                                }
+                            });
+                        }
                     } else {
                         $qry->whereIn($column, $data[$key]);
                     }

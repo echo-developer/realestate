@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AdvanceSearchController;
+use App\Http\Controllers\Api\AdvertisementController;
 use App\Http\Controllers\Api\AgentDetailsController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ChatController;
@@ -11,9 +12,9 @@ use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\OtpController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PostController;
+
 use App\Http\Controllers\Api\Project\ImageEditController;
 use App\Http\Controllers\Api\Project\PostProjectController;
-
 use App\Http\Controllers\Api\Project\ProjectDashboardController;
 use App\Http\Controllers\Api\Project\ProjectDeleteController;
 use App\Http\Controllers\Api\Project\ProjectDetailsController;
@@ -28,9 +29,9 @@ use App\Http\Controllers\Api\PropertyEditController;
 use App\Http\Controllers\Api\PropertyUpdateControler;
 use App\Http\Controllers\Api\SeachController;
 use App\Http\Controllers\Api\VerifyUserMailController;
-use App\Http\Controllers\Api\AdvertisementController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -134,9 +135,9 @@ Route::controller(DashboardController::class)->group(function () {
 
     Route::get('property-statistic',  'PropertyStatistic');
 
-    Route::post('upload_certificates_img',  'uploadPropProjcertificatesImages');
-    Route::post('upload_certificates_details',  'uploadPropProjcertificatesDetails');
-    Route::get('certificates_details',  'getPropPropertycertificateDetails');
+    Route::post('upload_certificates_img',  'uploadPropProjcertificatesImages')->name('upload.certificates.images');
+    Route::post('upload_certificates_details',  'uploadPropProjcertificatesDetails')->name('upload.certificates.details');
+    Route::get('certificates_details',  'getPropPropertycertificateDetails')->name('certificates.details');
 });
 
 // Search Routes
