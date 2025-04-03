@@ -148,6 +148,8 @@ class AgentDetailsController extends Controller
                     'property_type_for' => $property->property_type_for ? get_name_by_id('property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en') : null,
                     'bedrooms' => $property->bedrooms,
                     'expected_price' => $property->expected_price,
+                    'area_in_sqft' => $property->area_in_sqft,
+                    'price_per_sqft' => ($property->area_in_sqft > 0) ? round($property->expected_price / $property->area_in_sqft,2) : 0,
                     'price_currency' => $property->price_currency,
                     'created_at' => $property->created_at,
                     'property_address' => $property->property_address,
