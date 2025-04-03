@@ -30,7 +30,7 @@ import {
   propertyFeatures,
   flooringOptions,
 } from "@/components/post/PropertyData";
-import { CheckCircleFill, XCircleFill } from "react-bootstrap-icons";
+import { CheckCircleFill, XCircleFill , Calendar2Check } from "react-bootstrap-icons";
 
 const index = () => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
@@ -48,7 +48,11 @@ const index = () => {
   const memberId = GetMemberId();
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const [userDetails, setUserDetails] = useState();
-  const { adsData, logAdClick } = useAdvertisement("detail-page", "footer",defaultCity?.city_id);
+  const { adsData, logAdClick } = useAdvertisement(
+    "detail-page",
+    "footer",
+    defaultCity?.city_id
+  );
 
   useEffect(() => {
     if (property_id) {
@@ -211,19 +215,12 @@ const index = () => {
                 </div>
                 <div className="text-md-end" style={{ minWidth: "150px" }}>
                   <p className="mb-0 text-muted">
-                    {translation?.launched_in || "Launched In"}
+                  {translation?.launched_in || "Launched In"}
                   </p>
                   <h5 className="mb-0">
-                    {useDateFormat(propertyDetails?.created_at) || "Date "}
+                  {/* <Calendar2Check size={18}/> */}
+                  {useDateFormat(propertyDetails?.created_at) || "Date "}
                   </h5>
-                  {/* {propertyDetails?.possession_year && (
-                    <p>
-                      Possession In:{" "}
-                      <span className="text-muted">
-                        {propertyDetails?.possession_year}
-                      </span>
-                    </p>
-                  )} */}
                 </div>
               </div>
               <div className="position-relative">
@@ -257,8 +254,10 @@ const index = () => {
                       {translation?.bhk_flats || "BHK Flats"}
                     </p>
                   )}
+                </div>
 
-                  {propertyDetails?.property_brochure_pdf && (
+                <div class="col-md-auto text-md-end">
+                  <div class="d-grid flex-column gap-3 h-100">
                     <p>
                       {translation?.download_brochure || "Download Brochure"}
                       <Link
@@ -273,7 +272,7 @@ const index = () => {
                         />
                       </Link>
                     </p>
-                  )}
+                  </div>
                 </div>
 
                 <div className="col-md-auto text-md-end"></div>
@@ -302,7 +301,7 @@ const index = () => {
                       </a>
                     </li>
                     <li>
-                      <a href="#locality">
+                      <a href="#landmark-near">
                         {translation?.about_landmark || "About Landmark"}
                       </a>
                     </li>
@@ -360,28 +359,6 @@ const index = () => {
                         </li>
                       )}
 
-                      {/* <li>
-                        <div className="d-flex">
-                          <img
-                            src="/assets/images/icons/size.png"
-                            alt="Property Size"
-                            height="48"
-                            width="48"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span className="text-muted">
-                              {translation?.property_size || "Property Size"}
-                            </span>
-                            <h5>
-                              {propertyDetails?.property_features?.property_size
-                                ? `${propertyDetails.property_features.property_size} sqft`
-                                : `${translation?.not_available ||
-                                "Not available"
-                                }`}
-                            </h5>
-                          </div>
-                        </div>
-                      </li> */}
                       <li>
                         <div className="d-flex">
                           <img
@@ -396,7 +373,7 @@ const index = () => {
                             </span>
                             <h5>
                               {propertyDetails?.carpet_area
-                                ? `${propertyDetails?.carpet_area} sq ft`
+                                ? `${propertyDetails?.carpet_area} ${propertyDetails?.unit_type}`
                                 : `${
                                     translation?.not_available ||
                                     "Not available"

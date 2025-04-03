@@ -309,13 +309,11 @@ const CommercialProjectDetails = ({
                       </a>
                     </li>
                     <li
-                      className={
-                        activeTabMenu === "top_advertiser" ? "active" : ""
-                      }
-                      onClick={() => setActiveTabMenu("top_advertiser")}
+                      className={activeTabMenu === "review" ? "active" : ""}
+                      onClick={() => setActiveTabMenu("review")}
                     >
-                      <a href="#advertiser">
-                        {translation?.top_advertiser || "Top Advertiser"}
+                      <a href="#review">
+                        {translation?.project_reviews || "Project Reviews"}
                       </a>
                     </li>
                     <li
