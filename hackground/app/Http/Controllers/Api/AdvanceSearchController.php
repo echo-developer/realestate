@@ -152,8 +152,12 @@ class AdvanceSearchController extends Controller
                 }
 
                 if (is_array($data[$key])) {
-                    if (in_array($key, $jsonArrayKeys)) {
-                        $qry->whereJsonContains($column, $data[$key]);
+                    if ($key === 'amenities' || $key === 'floor') {
+                        $qry->where(function ($query) use ($data, $column, $key) {
+                            foreach ($data[$key] as $value) {
+                                $query->orWhereJsonContains($column, $value);
+                            }
+                        });
                     } else {
                         $qry->whereIn($column, $data[$key]);
                     }
@@ -238,7 +242,7 @@ class AdvanceSearchController extends Controller
                 return [
                     'post_for' => $property->post_for,
                     'property_id' => $property->property_id,
-                    'image_count' => getGalleriesCount($property->property_id,'property'),
+                    'image_count' => getGalleriesCount($property->property_id, 'property'),
                     'is_favorite' => $is_fav,
                     'user_name' => $get_User->name ?? null,
                     'user_type' => $get_User->user_type ?? null,
@@ -270,7 +274,7 @@ class AdvanceSearchController extends Controller
 
 
             $sortKey = $rq->input('sort_key', 'created_at');
-            $sortKey = $sortKey === 'property_size' ? 'area_in_sqft' : $sortKey; 
+            $sortKey = $sortKey === 'property_size' ? 'area_in_sqft' : $sortKey;
             $sortOrder = strtolower($rq->input('sort_order', 'desc'));
 
             $sortedProperties = collect($formattedProperties);
