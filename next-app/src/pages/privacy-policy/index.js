@@ -25,32 +25,32 @@ const PrivacyPolicy = () => {
           {/* Information We Collect */}
           <section className="mb-4">
             <h4 className="fw-bold">{translation?.information_we_collect || "2. Information We Collect"}</h4>
-            <ul className="list-group list-group-flush">
-              <li className="list-group-item">{translation?.personal_information || "Personal Information: Name, email, phone number, etc."}</li>
-              <li className="list-group-item">{translation?.property_preferences || "Property Preferences: Searches, saved listings, inquiries."}</li>
-              <li className="list-group-item">{translation?.usage_data || "Usage Data: IP address, browser type, device info."}</li>
+            <ul className="list list-3">
+              <li>{translation?.personal_information || "Personal Information: Name, email, phone number, etc."}</li>
+              <li>{translation?.property_preferences || "Property Preferences: Searches, saved listings, inquiries."}</li>
+              <li>{translation?.usage_data || "Usage Data: IP address, browser type, device info."}</li>
             </ul>
           </section>
 
           {/* How We Use Your Information */}
           <section className="mb-4">
             <h4 className="fw-bold">{translation?.how_we_use_your_information || "3. How We Use Your Information"}</h4>
-            <ul className="list-group list-group-flush">
-              <li className="list-group-item">{translation?.provide_services || "Provide real estate services and recommendations."}</li>
-              <li className="list-group-item">{translation?.respond_inquiries || "Respond to inquiries and customer support requests."}</li>
-              <li className="list-group-item">{translation?.improve_experience || "Improve our website and user experience."}</li>
-              <li className="list-group-item">{translation?.send_promotional_emails || "Send promotional emails (you can opt out anytime)."}</li>
+            <ul className="list list-3">
+              <li>{translation?.provide_services || "Provide real estate services and recommendations."}</li>
+              <li>{translation?.respond_inquiries || "Respond to inquiries and customer support requests."}</li>
+              <li>{translation?.improve_experience || "Improve our website and user experience."}</li>
+              <li>{translation?.send_promotional_emails || "Send promotional emails (you can opt out anytime)."}</li>
             </ul>
           </section>
 
           {/* Data Sharing & Third Parties */}
-          <section className="mb-4">
-            <h4 className="fw-bold">{translation?.data_sharing_third_parties || "4. Data Sharing & Third Parties"}</h4>
-            <p>{translation?.data_not_sold || "We do not sell your data. However, we may share your information with:"}</p>
-            <ul className="list-group list-group-flush">
-              <li className="list-group-item">{translation?.trusted_agents || "Trusted real estate agents and brokers."}</li>
-              <li className="list-group-item">{translation?.service_providers || "Service providers (hosting, analytics, marketing)."}</li>
-              <li className="list-group-item">{translation?.legal_authorities || "Legal authorities if required by law."}</li>
+          <section className="mb-4">    
+          <h4 className="fw-bold">{translation?.data_sharing_third_parties || "4. Data Sharing & Third Parties"}</h4>        
+            <ul className="list list-3">
+              <li>{translation?.data_not_sold || "We do not sell your data. However, we may share your information with:"}</li>
+              <li>{translation?.trusted_agents || "Trusted real estate agents and brokers."}</li>
+              <li>{translation?.service_providers || "Service providers (hosting, analytics, marketing)."}</li>
+              <li>{translation?.legal_authorities || "Legal authorities if required by law."}</li>
             </ul>
           </section>
 
@@ -65,10 +65,10 @@ const PrivacyPolicy = () => {
           {/* Your Rights & Choices */}
           <section className="mb-4">
             <h4 className="fw-bold">{translation?.your_rights_choices || "6. Your Rights & Choices"}</h4>
-            <ul className="list-group list-group-flush">
-              <li className="list-group-item">{translation?.access_update_delete || "Access, update, or delete your personal information"}</li>
-              <li className="list-group-item">{translation?.opt_out_marketing || "Opt out of marketing emails."}</li>
-              <li className="list-group-item">{translation?.request_data_copy || "Request a copy of your data."}</li>
+            <ul className="list list-3">
+              <li>{translation?.access_update_delete || "Access, update, or delete your personal information"}</li>
+              <li>{translation?.opt_out_marketing || "Opt out of marketing emails."}</li>
+              <li>{translation?.request_data_copy || "Request a copy of your data."}</li>
             </ul>
           </section>
 
