@@ -93,7 +93,8 @@ const AboutProject = ({ projectData }) => {
             {translation?.configuration || "Configuration"}
           </p>
           <p style={{ fontWeight: "bold" }}>
-            {translation?.bhk_flats || "2, 4 BHK Flats"}
+            {/* {translation?.bhk_flats || "2, 4 BHK Flats"} */}
+            {projectData?.available_bhk} BHK Flats
           </p>
         </div>
         <div style={{ flex: 1 }}>
