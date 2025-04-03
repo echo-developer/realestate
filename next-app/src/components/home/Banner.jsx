@@ -108,19 +108,24 @@ const Banner = ({ translation }) => {
 
   const displayPropertyTyep = () => {
     let str = "";
-    if (selectedPropertyType) {
-      const category = PropertyTypeData?.find(
-        (item) => item?.category_id === selectedPropertyType
-      );
-      str = category?.category_name;
+  if (selectedPropertyType) {
+    const category = PropertyTypeData.find(
+      (item) => item.category_id === Number(selectedPropertyType)
+    );
+    if (category) {
+      str = category.category_name;
     }
-    if (selectedPropertyFor) {
-      const subCategory = PropertyForData?.find(
-        (item) => item?.sub_category_id === selectedPropertyFor
-      );
-      str = subCategory?.sub_category_name;
+  }
+  if (selectedPropertyFor) {
+    const subCategory = PropertyForData?.find(
+      (item) => item?.sub_category_id === Number(selectedPropertyFor)
+    );
+    console.log("subCategory", subCategory);
+    if (subCategory) {
+      str += str ? ` - ${subCategory.sub_category_name}` : subCategory.sub_category_name;
     }
-    return str || "Residential";
+  }
+  return str || "Residential";
   };
 
   const budgetOptions = [50000, 100000, 200000, 300000, 500000];

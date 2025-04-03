@@ -200,12 +200,6 @@ const index = () => {
     }
   };
 
-  const getDisplayText = () => {
-    if (minBudget && maxBudget) return `$${minBudget} - $${maxBudget}`;
-    if (minBudget) return `Min: $${minBudget}`;
-    if (maxBudget) return `Max: $${maxBudget}`;
-    return `${translation?.select_budget || "Select Budget"}`;
-  };
 
   const handleCarpetSizeChange = (e) => {
     const { name, value } = e.target;
@@ -309,19 +303,25 @@ const index = () => {
   const displayPropertyTyep = () => {
     let str = "";
     if (selectedPropertyType) {
-      const category = propertyTypeList?.find(
-        (item) => item?.category_id == selectedPropertyType
+      const category = propertyTypeList.find(
+        (item) => item.category_id === Number(selectedPropertyType)
       );
-      str = category?.category_name;
+      if (category) {
+        str = category.category_name;
+      }
     }
     if (selectedProeprtyFor) {
       const subCategory = subPropertyList?.find(
-        (item) => item?.sub_category_id == selectedProeprtyFor
+        (item) => item?.sub_category_id === Number(selectedProeprtyFor)
       );
-      str = subCategory?.sub_category_name;
+      if (subCategory) {
+        str += str ? ` - ${subCategory.sub_category_name}` : subCategory.sub_category_name;
+      }
     }
     return str || "Residential";
   };
+
+ 
 
   const displayBudget = () => {
     if (minBudget && maxBudget) return `$${minBudget} - $${maxBudget}`;
