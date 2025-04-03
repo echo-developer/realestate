@@ -122,7 +122,7 @@
   --bs-border-width: 1px;
   --bs-border-style: solid;
   --bs-border-color: #dee2e6;
-  --bs-border-color-translucent: rgba(0, 0, 0, 0.175);
+  --bs-border-color-translucent: rgba(0, 0, 0, 0.15);
   --bs-border-radius: 0.25rem;
   --bs-border-radius-sm: 0.125rem;
   --bs-border-radius-lg: 0.375rem;
@@ -32931,6 +32931,7 @@ ul.social-links li {
   margin-inline-end: 0.5rem;
 }
 ul.social-links li > a {
+  background-color: #fff;
   border: 1px solid #1365CF;
   color: #1365CF;
   font-size: 1rem;
@@ -32949,7 +32950,6 @@ ul.social-links li > a:hover {
   border-color: #1365CF;
 }
 ul.footer-social-links li > a {
-  background-color: #fff;
   border-color: #fff;
 }
 ul.list-info {
@@ -34302,11 +34302,11 @@ h4 .icon-img-check, .h4 .icon-img-check {
 }
 
 .authentication-form {
-  background-color: #fff;
   border-radius: 0.5rem;
-  padding: 1.25rem;
-  position: relative;
   z-index: 9;
+}
+.authentication-form .card-body {
+  padding: 1.25rem;
 }
 
 .social-login-separator {
@@ -34830,6 +34830,7 @@ ul.dashboard-box-list {
   color: #1365CF;
   height: 32px;
   line-height: 1;
+  min-width: 32px;
 }
 .sort-by .btn.active {
   background-color: #1365CF;
@@ -35625,33 +35626,52 @@ input::-webkit-inner-spin-button {
   transform: translateX(0);
 }
 
-.social-share-wrap {
+.floating-social-media {
   position: relative;
 }
-.social-share-wrap:hover > .share-items {
+.floating-social-media .social-links {
+  position: absolute;
+  top: 0;
+  left: 1.5rem;
+  padding-inline-start: 1rem;
+  white-space: nowrap;
+  display: none;
+}
+.floating-social-media:hover .social-links {
   display: block;
+}
+
+.social-share-wrap {
+  position: relative;
 }
 .social-share-wrap .share-items {
   position: absolute;
   z-index: 10;
   display: none;
-  min-width: 150px;
+  top: -5px;
+  left: 65px;
+  padding-inline-start: 1rem;
 }
-.social-share-wrap .share-items a {
-  float: left;
-  width: 26px;
+.social-share-wrap .share-items li {
+  margin-inline-end: 0;
+}
+.social-share-wrap .share-items li a {
   background-color: #fff;
   border: 1px solid #1365CF;
   color: #1365CF;
   padding: 3px 0;
-  height: 26px;
+  height: 30px;
+  width: 30px;
   line-height: 1;
   margin: 5px 3px;
   text-align: center;
 }
-.social-share-wrap .share-items a:hover {
+.social-share-wrap .share-items li a:hover {
   background-color: #1365CF;
   color: #fff;
+}
+.social-share-wrap:hover > .share-items {
+  display: flex;
 }
 
 .sort-by .bootstrap-select button {

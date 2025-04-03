@@ -667,7 +667,7 @@ ul#desk-nav > li .dropdown-nav {
     list-style: none;
     box-sizing: border-box;
     margin-bottom: 0;
-    min-width: 12rem;
+    min-width: 5.25rem;
 }
 ul#desk-nav > li ul.dropdown-nav > li > span {
     display: block;
