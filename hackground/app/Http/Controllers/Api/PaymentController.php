@@ -124,64 +124,34 @@ class PaymentController extends Controller
     public function membership_pakage_lists(Request $request)
     {
         try {
-
             $lang = $request->input('lang', 'en');
 
-            $plandetails = MembershipPlans::with([
-                'names' => function ($query) use ($lang) {
-                    $query->where('lang', $lang);
-                },
-                'features.feature.names' => function ($query) use ($lang) {
-                    $query->where('lang', $lang);
-                }
-            ])->get();
-
-            // log::info('plandetails' . json_encode($plandetails, JSON_PRETTY_PRINT));
-            if (empty($plandetails)) {
-                return response()->json([
-                    'status' => 1,
-                    'message' => 'No Plan Details Found',
-                    'data' => [],
-                ]);
-            }
-
-            $filteredList = $plandetails->map(function ($plan) {
-
-                $features = [];
-                foreach ($plan->features as $feature) {
-                    $features[] = [
-
-                        'feature_id' => $feature->feature_id,
-                        'feature_slug' => $feature->feature->slug,
-                        'feature_name' => $feature->feature->names->first()->name,
-                        'value' => $feature->value ?? null,
+            $membershipList = MembershipPlans::select('price', 'discounted_price', 'validity_days', 'discount', 'plan_type_id')
+                ->where('status', config('constants.STATUS_ACTIVE'))
+                ->with([
+                    'plan_type_names' => function ($query) use ($lang) {
+                        $query->select('id', 'plan_name')->where('lang', $lang);
+                    },
+                    'plan_features:id,no_of_owners_contactable,unlock_owner_properties,assistance_relationship_manager,early_access_days,validity_days,prime_tag,home_guarantee_refund',
+                ])
+                ->get();
+             
+                $membershipData = $membershipList->map(function ($membership) {
+                    return [
+                        'price' => $membership->price,
+                        'discounted_price' => $membership->discounted_price,
+                        'validity_days' => $membership->validity_days,
+                        'discount' => $membership->discount,
+                        'plan_name' => $membership->plan_type_names->plan_name ?? null,
+                        'features' => $membership->plan_features,
                     ];
-                }
-                $features[] = [
-                    'feature_slug' => 'validity_days',
-                    'feature_name' => 'Validity (Days)',
-                    'value' => $plan->validity_days,
-                ];
-                return [
-                    "id" => $plan->id,
-                    "name" => $plan->names->first()->name ?? null,
-                    "slug" => $plan->slug,
-                    "price" => $plan->price ?? 0,
-                    "discount" => $plan->discount,
-                    "discounted_price" => $plan->discounted_price ?? 0,
-                    "price_reduced" => round($plan->price - $plan->discounted_price, 2),
-                    "validity_days" => $plan->validity_days,
-                    "status" => $plan->status,
-                    "created_at" => $plan->created_at,
-                    "updated_at" => $plan->updated_at,
-                    'features' => $features
-                ];
-            });
+                });
+                
 
             return response()->json([
                 'status' => 1,
                 'message' => 'Data Retrived Successfully',
-                'data' => $filteredList,
+                'data' => $membershipData
             ]);
         } catch (\Exception $e) {
             logError($e);

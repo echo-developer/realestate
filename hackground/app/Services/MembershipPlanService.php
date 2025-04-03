@@ -17,7 +17,7 @@ class MembershipPlanService
      */
     public function getAllMembershipPlans()
     {
-        return MembershipPlans::select('id', 'price' ,'validity_days','plan_type_id', 'status')->with('planTypeNames:id,plan_name')->where('status', '!=', config('constants.STATUS_DELETE'))->paginate(10);
+        return MembershipPlans::select('id', 'price' ,'validity_days','plan_type_id', 'status')->with('plan_type_names:id,plan_name')->where('status', '!=', config('constants.STATUS_DELETE'))->paginate(10);
     }
     public function getPlainType() {
         return MembershipPlanType::select('id')->where('status', '!=', config('constants.STATUS_DELETE'))->get();

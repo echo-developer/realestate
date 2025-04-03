@@ -59,8 +59,12 @@ class MembershipPlans extends Model
         return optional($this->names->first())->about_plan ?? 'N/A';
     }
 
-    public function planTypeNames()
+    public function plan_type_names()
     {
         return $this->belongsTo(MembershipPlanTypeNames::class, 'plan_type_id','id');
+    }
+    public function plan_features()
+    {
+        return $this->belongsTo(MembershipPlanType::class, 'plan_type_id','id');
     }
 }
