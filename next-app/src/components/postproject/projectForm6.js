@@ -24,6 +24,8 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
   };
   const Login = isLogin();
 
+  console.log(formData)
+
     useEffect(() => {
       if (imageTabData.length > 0) {
         setActiveTab(imageTabData[0].key);

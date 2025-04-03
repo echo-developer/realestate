@@ -13,7 +13,295 @@ import withAuth from "@/utils/withAuth";
 import ProgressBar from "@/components/addtional/ProgressBar";
 import { toast } from "react-toastify";
 import useTranslation from "@/hooks/useTranslation";
+import {
+  PersonFill,
+  EnvelopeFill,
+  TelephoneFill,
+  LockFill,
+  ShieldLockFill,
+  ExclamationTriangleFill,
+  BellFill,
+  CheckCircleFill,
+  BriefcaseFill,
+  HouseDoorFill,
+  BuildingFill,
+  GeoAltFill,
+  PatchCheckFill,
+  FileEarmarkCheckFill,
+  BookmarkFill,
+  GraphUpArrow,
+  HouseFill,
+  MapFill,
+  ClipboardCheckFill,
+  CompassFill,
+  PinMapFill,
+  FileEarmarkTextFill,
+  BookmarkCheckFill,
+  BuildingsFill,
+  PersonBadgeFill,
+  HourglassSplit,
+  FileTextFill,
+} from "react-bootstrap-icons";
+import {
+  Home,
+  Bed,
+  Ruler,
+  Building2,
+  Compass,
+  Layers,
+  Landmark,
+  Hammer,
+  Sofa,
+  CalendarCheck,
+  CalendarDays,
+  CalendarRange,
+  DollarSign,
+  Wallet,
+  BadgeDollarSign,
+  Globe,
+  ImagePlus,
+  Bath,
+  Tv,
+  FileText,
+  BedDouble,
+  Utensils,
+  Car,
+  Building,
+  Hash,
+  CheckCircle,
+  MapPin
+} from "lucide-react";
 
+const stepKeyPoints = {
+  1: [
+    {
+      icon: <PersonFill className="text-primary" />,
+      text: "Provide your full name as per official documents.",
+    },
+    {
+      icon: <EnvelopeFill className="text-primary" />,
+      text: "Use a valid and accessible email address for communication.",
+    },
+    {
+      icon: <TelephoneFill className="text-primary" />,
+      text: "Ensure your phone number is correct for verification.",
+    },
+    {
+      icon: <LockFill className="text-primary" />,
+      text: "Create a strong password using a combination of characters.",
+    },
+    {
+      icon: <ShieldLockFill className="text-primary" />,
+      text: "Enable two-factor authentication (2FA) if available for added security.",
+    },
+    {
+      icon: <ExclamationTriangleFill className="text-primary" />,
+      text: "Avoid using common passwords that are easy to guess.",
+    },
+    {
+      icon: <BellFill className="text-primary" />,
+      text: "Keep your contact information updated for receiving notifications.",
+    },
+    {
+      icon: <CheckCircleFill className="text-primary" />,
+      text: "Double-check your name, email, and phone number for typos.",
+    },
+    {
+      icon: <ClipboardCheckFill className="text-primary" />,
+      text: "Use a professional email address instead of a temporary one.",
+    },
+    {
+      icon: <ShieldLockFill className="text-primary" />,
+      text: "Secure your password using a password manager if necessary.",
+    },
+  ],
+  2: [
+    {
+      icon: <HouseFill className="text-primary" />,
+      text: "Select whether you are posting for Rent or Sale.",
+    },
+    {
+      icon: <BuildingsFill className="text-primary" />,
+      text: "Choose the correct project type: Residential, Commercial, or Agricultural.",
+    },
+    {
+      icon: <PersonBadgeFill className="text-primary" />,
+      text: "Enter the developer's name for authenticity.",
+    },
+    {
+      icon: <HourglassSplit className="text-primary" />,
+      text: "Specify the developer's years of experience.",
+    },
+    {
+      icon: <FileTextFill className="text-primary" />,
+      text: "Write a detailed property description highlighting key features.",
+    },
+    {
+      icon: <GeoAltFill className="text-primary" />,
+      text: "Ensure the location and address details are accurate.",
+    },
+    {
+      icon: <PatchCheckFill className="text-primary" />,
+      text: "Mention if the property is an individual unit or part of a project.",
+    },
+    {
+      icon: <BookmarkFill className="text-primary" />,
+      text: "Choose a project name from suggestions for added credibility.",
+    },
+    {
+      icon: <FileEarmarkCheckFill className="text-primary" />,
+      text: "Indicate the ownership type: Freehold or Leasehold.",
+    },
+    {
+      icon: <ClipboardCheckFill className="text-primary" />,
+      text: "Review all provided details to ensure completeness and accuracy.",
+    },
+  ],
+  3: [
+    {
+      icon: <GeoAltFill className="text-primary" />,
+      text: "Ensure the city name is accurate to help buyers find your property easily.",
+    },
+    {
+      icon: <MapFill className="text-primary" />,
+      text: "Provide the correct locality name for improved search visibility.",
+    },
+    {
+      icon: <HouseFill className="text-primary" />,
+      text: "Mention the complete address with street name, number, and any landmarks.",
+    },
+    {
+      icon: <BuildingFill className="text-primary" />,
+      text: "Add the project name to offer clear identification for buyers.",
+    },
+    {
+      icon: <FileEarmarkTextFill className="text-primary" />,
+      text: "Write a detailed project description highlighting key features and nearby amenities.",
+    },
+    {
+      icon: <CompassFill className="text-primary" />,
+      text: "Verify the pinned map location to ensure accuracy and convenience for visitors.",
+    },
+    {
+      icon: <PinMapFill className="text-primary" />,
+      text: "Include nearby landmarks like schools, hospitals, and transport hubs.",
+    },
+    {
+      icon: <ClipboardCheckFill className="text-primary" />,
+      text: "Avoid abbreviations or incomplete addresses to prevent confusion.",
+    },
+    {
+      icon: <BookmarkCheckFill className="text-primary" />,
+      text: "Specify floor number, block name, or wing if applicable.",
+    },
+    {
+      icon: <PatchCheckFill className="text-primary" />,
+      text: "Double-check spelling and ensure correct city, locality, and address details.",
+    },
+  ],
+  4: [
+    {
+      icon: <Ruler className="text-primary" />,
+      text: "Specify the occupied area in square feet for precise information.",
+    },
+    {
+      icon: <Building2 className="text-primary" />,
+      text: "Provide the total area, including common and exclusive spaces.",
+    },
+    {
+      icon: <Building className="text-primary" />,
+      text: "Mention the tower number for easy identification in multi-tower projects.",
+    },
+    {
+      icon: <Hash className="text-primary" />,
+      text: "Specify the unit number to precisely identify the property.",
+    },
+    {
+      icon: <Car className="text-primary" />,
+      text: "Mention available parking spaces for cars or bikes.",
+    },
+    {
+      icon: <Compass className="text-primary" />,
+      text: "Specify the property’s facing direction (e.g., East, West) for Vastu preferences.",
+    },
+    {
+      icon: <CheckCircle className="text-primary" />,
+      text: "List the amenities available (e.g., Gym, Pool, Clubhouse) to attract buyers.",
+    },
+    {
+      icon: <Landmark className="text-primary" />,
+      text: "State if the property faces the main road for better visibility and accessibility.",
+    },
+    {
+      icon: <Layers className="text-primary" />,
+      text: "Provide the floor number and total floors to clarify the building structure.",
+    },
+    {
+      icon: <MapPin className="text-primary" />,
+      text: "Specify the exact property location for better understanding.",
+    },
+  ],
+  5: [
+    {
+      icon: <CalendarCheck size={24} className="text-primary" />,
+      text: "Specify the possession type (e.g., Ready to Move, Under Construction).",
+    },
+    {
+      icon: <CalendarDays size={24} className="text-primary" />,
+      text: "Provide the expected possession month to give buyers clarity.",
+    },
+    {
+      icon: <CalendarRange size={24} className="text-primary" />,
+      text: "Mention the possession year for accurate timelines.",
+    },
+    {
+      icon: <DollarSign size={24} className="text-primary" />,
+      text: "State the expected price of the property clearly.",
+    },
+    {
+      icon: <Wallet size={24} className="text-primary" />,
+      text: "Provide the token amount required for booking.",
+    },
+    {
+      icon: <BadgeDollarSign size={24} className="text-primary" />,
+      text: "Mention any additional payment details or negotiation flexibility.",
+    },
+    {
+      icon: <Globe size={24} className="text-primary" />,
+      text: "Specify the preferred currency for payment (e.g., INR, USD, EUR).",
+    },
+  ],
+  6: [
+    {
+      icon: <Landmark size={24} className="text-primary" />,
+      text: "Upload high-quality images of the property’s exterior view.",
+    },
+    {
+      icon: <Home size={24} className="text-primary" />,
+      text: "Showcase the interiors to highlight the living space and design.",
+    },
+    {
+      icon: <Tv size={24} className="text-primary" />,
+      text: "Add images of the living room to provide a view of the common area.",
+    },
+    {
+      icon: <Bath size={24} className="text-primary" />,
+      text: "Include images of bathrooms to reflect the amenities and condition.",
+    },
+    {
+      icon: <Bed size={24} className="text-primary" />,
+      text: "Provide bedroom images showing size, lighting, and furniture.",
+    },
+    {
+      icon: <ImagePlus size={24} className="text-primary" />,
+      text: "Add a variety of angles and perspectives for better presentation.",
+    },
+    {
+      icon: <FileText size={24} className="text-primary" />,
+      text: "Provide relevant image descriptions to describe what is displayed.",
+    },
+  ],
+};
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -30,7 +318,7 @@ const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const translation = useTranslation();
-
+  const points = stepKeyPoints[currentStep]?.slice(0, 10) || [];
 
   useEffect(() => {
     if (memberId) {
@@ -81,7 +369,7 @@ const Index = () => {
     <MainLayout>
       <Helmet>
         <title>
-        Post Your Real Estate Project | Share Your Development with Buyers
+          Post Your Real Estate Project | Share Your Development with Buyers
         </title>
         <meta
           name="description"
@@ -95,9 +383,14 @@ const Index = () => {
           <div className="row justify-content-center">
             <aside className="col-lg-8 col-12">
               <div className="d-sm-flex justify-content-between mb-3">
-                <h1 className="h3"> {translation?.sell_or_rent_project || "Sell Or Rent Your Project"} </h1>
+                <h1 className="h3">
+                  {" "}
+                  {translation?.sell_or_rent_project ||
+                    "Sell Or Rent Your Project"}{" "}
+                </h1>
                 <p>
-                {translation?.posting_for || "You are posting this project for"} {" "}
+                  {translation?.posting_for ||
+                    "You are posting this project for"}{" "}
                   <b className="text-green h4">{translation?.free || "FREE"}</b>
                 </p>
               </div>
@@ -122,7 +415,7 @@ const Index = () => {
                         }`}
                         href="#"
                       >
-                       {translation?.location || "Location"} 
+                        {translation?.location || "Location"}
                       </a>
                     </li>
                     <li className="nav-item">
@@ -152,7 +445,7 @@ const Index = () => {
                         }`}
                         href="#"
                       >
-                       {translation?.photos || "Photos"} 
+                        {translation?.photos || "Photos"}
                       </a>
                     </li>
                   </ul>
@@ -235,72 +528,16 @@ const Index = () => {
             <aside className="col-lg-4 col-12 d-none d-lg-block">
               <div className="card border-0 shadow-1 mt-3 mt-lg-0">
                 <div className="card-body">
-                  <h3 className="mb-3">{translation?.find_buyer || "How To Find The Right Buyer?"} </h3>
+                  <h3 className="mb-3">Key Points to Remember</h3>
                   <div className="ad-post-points">
-                    <div className="d-flex mb-3">
-                      <div className="flex-shrink-0">
-                        <img
-                          src="/assets/images/icons/17678554.png"
-                          alt="Icon"
-                          height="48"
-                          width="48"
-                        />
+                    {points.map((item, index) => (
+                      <div className="d-flex mb-3" key={index}>
+                        <div className="">{item.icon}</div>
+                        <div className="flex-grow-1 ps-3">
+                          <p>{item.text}</p>
+                        </div>
                       </div>
-                      <div className="flex-grow-1 ps-3">
-                        <h4>{translation?.post_project_ad || "Post your Project Ad"} </h4>
-                        <p>
-                        {translation?.media_content_4 || " Advertise your project effectively by highlighting key details like location, features, pricing, and amenities. Use compelling descriptions, high-quality visuals, and accurate specifications to attract buyers or investors. Ensure transparency, mention completion timelines, and emphasize unique selling points to maximize engagement and generate strong interest in your project."}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="d-flex mb-3">
-                      <div className="flex-shrink-0">
-                        <img
-                          src="/assets/images/icons/13434917.png"
-                          alt="Icon"
-                          height="48"
-                          width="48"
-                        />
-                      </div>
-                      <div className="flex-grow-1 ps-3">
-                        <h4>{translation?.add_quality_photos || "Add Quality Photos"}</h4>
-                        <p>
-                        {translation?.media_conten_5 || "TEnhance your project ad with high-quality photos showcasing design, amenities, interiors, and surroundings. Clear, well-lit images attract buyers and investors, highlighting key features and unique aspects. Use multiple angles, professional staging, and high resolution for a polished presentation, increasing interest and credibility for better engagement and faster deals."}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="d-flex mb-3">
-                      <div className="flex-shrink-0">
-                        <img
-                          src="/assets/images/icons/9094158.png"
-                          alt="Icon"
-                          height="48"
-                          width="48"
-                        />
-                      </div>
-                      <div className="flex-grow-1 ps-3">
-                        <h4>{translation?.add_correct_address || "Add Correct Locality/Address"}</h4>
-                        <p>
-                        {translation?.media_content_6 || "Ensure your project ad includes the correct locality and address for easy identification. Accurate location details enhance credibility, attract serious buyers, and improve search visibility. Mention nearby landmarks, roads, and essential facilities like schools, hospitals, and markets to highlight convenience and accessibility, making your project more appealing to potential investors"}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="d-flex">
-                      <div className="flex-shrink-0">
-                        <img
-                          src="/assets/images/icons/10209854.png"
-                          alt="Icon"
-                          height="48"
-                          width="48"
-                        />
-                      </div>
-                      <div className="flex-grow-1 ps-3">
-                        <h4>{translation?.write_great_description || "Write a Great Description"}</h4>
-                        <p>
-                        {translation?.media_content_7 || "Create a compelling project description by highlighting key features, location advantages, modern amenities, and unique selling points. Use engaging language to showcase design, quality, and lifestyle benefits. Mention connectivity, nearby landmarks, green spaces, and future growth potential to attract buyers and investors, ensuring maximum interest and a successful project launch"}
-                        </p>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -308,7 +545,6 @@ const Index = () => {
           </div>
         </div>
       </div>
-
     </MainLayout>
   );
 };
