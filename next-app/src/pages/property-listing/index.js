@@ -600,7 +600,6 @@ const index = () => {
   };
 
   const getAdvanceSearch = async (loadMore, recent_page, SearchData) => {
-    setLoading(true);
     if (!loadMore) {
       setLoading(true);
     }
