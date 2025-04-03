@@ -168,16 +168,18 @@ class PropertyDetailsController extends Controller
 
                     /* ------------------------------------------------------ Get properties Project Start ---------------------------------------------------------*/
 
+                    $projectId = ProjectPropertyMapping::where('property_id', $property->property_id)
+                        ->value('project_id');
+                    $project = PrefProject::where('id', $projectId)
+                        ->with('settings')
+                        ->first();
 
+                    $bhkData = $this->apiModel->getBHKdata($projectId) ?? null;
+                    if ($project && $project->settings) {
 
-
-                    if ($this->project &&   $this->project->settings) {
-
-
-
-                        $projectData = $this->project->toArray();
-                        $projectData = array_merge($projectData, $this->project->settings->toArray());
-
+                        $projectData = $project->toArray();
+                        $projectData = array_merge($projectData, $project->settings->toArray());
+                        $projectData['available_bhk'] = $bhkData;
 
                         unset($projectData['settings']);
                         $property_project = $projectData;
