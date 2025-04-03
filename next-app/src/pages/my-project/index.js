@@ -12,7 +12,7 @@ import useTranslation from '../../hooks/useTranslation'
 
 const TabComponent = () => {
     const { callApi, GetMemberId } = AuthUser();
-    const [activeTab, setActiveTab] = useState("pending");
+    const [activeTab, setActiveTab] = useState("published");
     const [loading, setLoading] = useState(false);
     const [projectData, setProjectData] = useState([]);
     const [page, setpage] = useState(1);
