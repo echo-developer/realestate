@@ -235,7 +235,7 @@
                                                     <button type="button" class="btn btn-success plus qtybutton" amenity="bedroom" >+</button>
                                                 </div>
                                                 <span class="error bedroom_countError text-danger"></span>
-                                                <div class="size-forms"></div> <!-- ✅ Container for dynamic forms -->
+                                                <div class="size-forms"></div> 
                                             </div>
                                         </div>
                                     

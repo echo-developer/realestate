@@ -133,6 +133,8 @@ class PostPropertyController extends Controller
                 $groupedImages[$gallery->image_type] = $gallery->images;
             }
         }
+        // echo "<pre>";
+        // print_r($propertyData);exit;
         return view('Admin.Post_property_view.edit_property', compact('propertyTypes', 'property_id', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus', 'propertyData', 'groupedImages', 'landmark_categories'));
     }
 
@@ -144,25 +146,62 @@ class PostPropertyController extends Controller
         $detail = "";
         $city = get_all_city();
         $property_category = get_all_property_category();
+        $homeontroller = new HomeController();
+        $postController = new PostController();
+        $propertyTypes = json_decode($homeontroller->getPropertyType($request)->getContent(), true)['data'] ?? [];
+        $cities = json_decode($homeontroller->city($request)->getContent(), true)['data'] ?? [];
+        $proepertyAmenities = json_decode($postController->get_property_amnity($request)->getContent(), true)['data'] ?? [];
+        $propertyFurnishes = json_decode($postController->furnish($request)->getContent(), true)['data'] ?? [];
+        $propertyStatus = json_decode($postController->status($request)->getContent(), true)['data'] ?? [];
         $title = '';
         if($page == 'basic')
         {
             $title = 'Edit Basic Details';
             $property_id = $srch['id'];
-			$ID = $property_id;
-			$form_action = url('property/save-edit-property');
-            $propertyData = PrefProperty::where('id',  $property_id)->with([
-                'settings',
-                'additional',
-                'location',
-                'dimensions',
-                'landmarks',
-                'gallery',
-                'gallery.images'
-            ])->first();
+			$form_action = url('property/save-edit-property/basic');
         }
-
-        return view('Admin.Post_property_view.ajax_page', compact('page', 'title', 'form_action', 'ID', 'propertyData'));
+        if($page == 'location')
+        {
+            $title = 'Edit Location Details';
+            $property_id = $srch['id'];
+			$form_action = url('property/save-edit-property/location');
+        }
+        if($page == 'floor')
+        {
+            $title = 'Edit Location Details';
+            $property_id = $srch['id'];
+			$form_action = url('property/save-edit-property/floor');
+        }
+        if($page == 'additional')
+        {
+            $title = 'Edit Additional Details';
+            $property_id = $srch['id'];
+			$form_action = url('property/save-edit-property/additional');
+        }
+        $propertyData = PrefProperty::where('id',  $property_id)->with([
+            'settings',
+            'additional',
+            'location',
+            'dimensions',
+            'landmarks',
+            'gallery',
+            'gallery.images'
+        ])->first();
+        // echo "<pre>";
+        // print_r($propertyData);exit;
+        return view('Admin.Post_property_view.ajax_page', compact(
+                                                            'page', 
+                                                            'title', 
+                                                            'form_action', 
+                                                            'ID', 
+                                                            'propertyData', 
+                                                            'propertyTypes', 
+                                                            'property_id',
+                                                            'cities',
+                                                            'proepertyAmenities',
+                                                            'propertyFurnishes',
+                                                            'propertyStatus'
+                                                        ));
     }
 
     public function saveProperty(Request $request)
@@ -292,6 +331,122 @@ class PostPropertyController extends Controller
             'message' => 'Invalid request'
         ], 400);
     }
+
+    public function saveEditProperty(Request $request)
+    {
+        if ($request) {
+
+            $type = $request->route('type');
+            $prop_id = $request->property_id;
+            
+            if ($type == 'basic') {
+                $request->validate([
+                    'postFor' => 'required',
+                    'property_type' => 'required',
+                    'property_for' => 'required',
+                    'expected_price' => 'required',
+                    //'property_category' => 'required',
+                ]);
+                $this->savePropertySettings($prop_id, $request);
+                $this->savePropertyAdditional($prop_id, $request);
+              
+                return json_encode(array(
+                    'status' => 'OK',
+                ));
+            }
+            if ($type == 'location') {
+                $request->validate([
+                    'city' => 'required',
+                    'landmark' => 'required',
+                    'address' => 'required',
+                    //'description' => 'required'
+                ]);
+                $this->savePropertyLocation($prop_id, $request);
+                return json_encode(array(
+                    'status' => 'OK',
+                ));
+            }
+            if ($type == 'floor') {
+                $request->validate([
+                    'carpet_area' => 'required',
+                    'super_area' => 'required',
+                    'total_floors' => 'required',
+                ]);
+                $this->savePropertySettings($prop_id, $request);
+                $this->savePropertyAdditional($prop_id, $request);
+                return json_encode(array(
+                    'status' => 'OK',
+                ));
+            }
+            if ($type == 'additional') {
+                $request->validate([
+                    'possession_status' => 'required',
+                ]);
+
+                if ($request->possession_status == '1') {
+                    $request->validate([
+                        'age' => 'required',
+                    ]);
+                }
+
+                if ($request->possession_status == '2') {
+                    $request->validate([
+                        'construction_month' => 'required',
+                        'construction_year' => 'required'
+                    ]);
+                }
+                $this->savePropertyAdditional($prop_id, $request);
+                return json_encode(array(
+                    'status' => 'OK',
+                    'nextStep' => '6'
+                ));
+            }
+            if ($type == 'landmark') {
+                try {
+                    DB::beginTransaction();
+                    log::info(json_encode($request->all()));
+
+                    // Check if prop_id exists to determine update or create
+                    if ($prop_id) {
+                        $property = PrefProperty::findOrFail($prop_id);
+                        // Update existing property
+                        $this->updatePropertyDetails($property, $request);
+                    } else {
+                        // Create new property
+                        $property = $this->createProperty($user_id);
+                        $this->updatePropertyDetails($property, $request);
+                    }
+
+                    // Save related data (update if exists, create if not)
+                    $this->savePropertyLocation($property->id, $request);
+                    $this->savePropertySettings($property->id, $request);
+                    $this->savePropertyDimensions($property->id, $request);
+                    $this->savePropertyAdditional($property->id, $request);
+                    $this->savePropertyGalleries($property->id, $request);
+
+                    DB::commit();
+
+                    return response()->json([
+                        'status' => 'SUCCESS',
+                        'message' => $prop_id ? 'Property successfully updated' : 'Property successfully posted',
+                        'property_id' => $property->id,
+                        'redirect' => url('allproperties/all-property-view/' . $user_id)
+                    ], 201);
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    return response()->json([
+                        'status' => 'ERROR',
+                        'message' => 'Failed to save property: ' . $e->getMessage()
+                    ], 500);
+                }
+            }
+        }
+        return response()->json([
+            'status' => 'ERROR',
+            'message' => 'Invalid request'
+        ], 400);
+    }
+
     private function createProperty($userId)
     {
         return PrefProperty::create([
@@ -397,7 +552,7 @@ class PostPropertyController extends Controller
             'faces_main_road' => $request->main_road_facing,
             'property_desc' => $request->description,
             'balcony' => $request->balcony_count ?? null,
-
+            'buyer_message' => $request->buyer_message ?? null,
             'expected_possesion_month_year' => $expected_possesion_month_year
         ];
 

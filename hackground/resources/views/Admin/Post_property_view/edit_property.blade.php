@@ -26,7 +26,7 @@
         </div>
     </div>
 
-
+    {{-- {{ $propertyData->settings }} --}}
     <section class="content">
         <div class="container-fluid">
             <ul id="myTab" class="nav nav-underline mb-3" role="tablist">
@@ -44,29 +44,29 @@
                     <ul class="list-info">
                         <li>
                             <b>Post For:</b>
-                            <span>{{ucfirst($propertyData->settings->post_for)??'N/A'}}</span>
+                            <span>{{ ucfirst(optional($propertyData->settings)->post_for ?? 'N/A') }}</span>
                         </li>
                         <li>
                             <b>Property Type:</b>
-                            <span>{{get_name_by_id('property_category_names','category_id',$propertyData->settings->property_type,'en')??'N/A'}}</span>
+                            <span>{{get_name_by_id('property_category_names','category_id',$propertyData->settings->property_type,'en') ?? 'N/A'}}</span>
                         </li>
                         <li>
                             <b>Property For:</b>
-                            <span>{{get_name_by_id('property_sub_category_names','sub_category_id',$propertyData->settings->property_type_for,'en')??'N/A'}}</span>
+                            <span>{{get_name_by_id('property_sub_category_names','sub_category_id',$propertyData->settings->property_type_for,'en') ?? 'N/A'}}</span>
                         </li>
 
                         <li>
                             <b>Price:</b>
-                            <span>{{$propertyData->settings->expected_price??'N/A'}}</span>
+                            <span>{{ $propertyData->settings->expected_price ?? 'N/A'}}</span>
                         </li>
                         <li>
                             <b>Message to Buyer:</b>
-                            <span>{{$propertyData->additional->buyer_message??'N/A'}}</span>
+                            <span>{{ $propertyData->additional->buyer_message ?? 'N/A'}}</span>
                         </li>
                        
                         <li>
                             <b>Project/Society Name:</b>
-                            <span>{{$propertyData->additional->project_name??'N/A'}}</span>
+                            <span>{{$propertyData->additional->project_name ?? 'N/A'}}</span>
                         </li>
                     </ul>
                 </div>
