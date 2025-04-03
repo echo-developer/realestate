@@ -18,9 +18,9 @@ class MembershipPlanTypeService
     $lang = 'en'; // Assuming this comes from request or settings
 
     return MembershipPlanType::where('status', '!=', config('constants.STATUS_DELETE'))
-        ->select(['id', 'no_of_owners_contactable', 'unlock_owner_properties', 
-                  'assistance_relationship_manager', 'early_access_days', 
-                  'validity_days', 'prime_tag', 'home_guarantee_refund', 'status'])
+        ->select(['id', 'relationship_manager', 'owner_contacted', 
+                  'listings_allowed', 'verified_badge', 
+                  'listing_visibility', 'social_media_promotion', 'status'])
         ->with(['names' => function ($query) use ($lang) {
             $query->select(['id', 'plan_name'])->where('lang', $lang);
         }])
@@ -30,7 +30,7 @@ class MembershipPlanTypeService
 
     public function editMembershipPlansType($id)
     {
-        return MembershipPlanType::select('id', 'no_of_owners_contactable', 'unlock_owner_properties','assistance_relationship_manager','early_access_days','validity_days', 'prime_tag','home_guarantee_refund','status')
+        return MembershipPlanType::select('id', 'relationship_manager', 'owner_contacted','listings_allowed','verified_badge','listing_visibility', 'social_media_promotion','status')
             ->with(['names:id,plan_name,lang'])
             ->where('id', $id)
             ->first();
@@ -43,13 +43,12 @@ class MembershipPlanTypeService
             $plan = MembershipPlanType::findOrFail($id);
 
             $plan->update([
-                'no_of_owners_contactable' => $data['no_of_owners_contactable'],
-                'unlock_owner_properties' => $data['unlock_owner_properties'],
-                'assistance_relationship_manager' => $data['assistance_relationship_manager'],
-                'early_access_days' => $data['early_access_days'],
-                'validity_days' => $data['validity_days'],
-                'prime_tag' => $data['prime_tag'],
-                'home_guarantee_refund' => $data['home_guarantee_refund'],
+                'relationship_manager' => $data['relationship_manager'],
+                'owner_contacted' => $data['owner_contacted'],
+                'listings_allowed' => $data['listings_allowed'],
+                'verified_badge' => $data['verified_badge'],
+                'listing_visibility' => $data['listing_visibility'],
+                'social_media_promotion' => $data['social_media_promotion'],
                 'status' => $data['status'],
             ]);
 

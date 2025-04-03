@@ -84,19 +84,18 @@
                         <tr>
                             <td>{{$planType->english_name}}</td>
                             <td>
-                                No. of Contactable Owners: {{$planType->no_of_owners_contactable}}<br>   
-                                Unlock Owner Properties reserved for Prime Members : {{$planType->unlock_owner_properties}}
+                                Listings Allowed: {{$planType->listings_allowed}}
                                 <br>
-                                Assistance from Relationship Manager : {{$planType->assistance_relationship_manager}}
+                                Contact Owners : {{$planType->owner_contacted}}
                                 <br>
-                                3-Day Early access to New Owner Properties : {{$planType->early_access_days}}
+                                Listing Visibility : {{$planType->listing_visibility}}
                                 <br>
-                                Validity Days: {{$planType->validity_days}}
+                                Social Media Promotion : {{$planType->social_media_promotion}}
                                 <br>
-                                Prime Tag to get more attention from owner : {{$planType->prime_tag}}
+                                Verified Badge: {{$planType->verified_badge}}
                                 <br>
+                                Relationship Manager : {{$planType->relationship_manager}}
 
-                                Get home guaranteed or 100% refund: {{$planType->home_guarantee_refund}}
                             </td>
                             <td>
                                 <input data-planTypeId="{{ $planType->id }}" id="status" class="status d-none" type="checkbox"
@@ -147,66 +146,54 @@
                     @endforeach
 
                     <div class="form-group">
-                        <label for="no_of_owners_contactable">No. of Contactable Owners:</label>
-                        <input type="number" class="form-control" id="no_of_owners_contactable" name="no_of_owners_contactable" min="1">
-                        <div class="invalid-feedback" id="no_of_owners_contactable_error"></div>
+                        <label for="contact_owners">Contact Owners:</label>
+                        <input type="text" class="form-control" id="owner_contacted" name="owner_contacted">
+                        <div class="invalid-feedback" id="contact_owners_error"></div>
                     </div>
 
                     <div class="form-group">
-                        <label>Unlock Owner Properties</label>
+                        <label for="listing_visibility">Listing Visibility</label>
+                        <input type="text" class="form-control" id="listing_visibility" name="listing_visibility">
+                        <div class="invalid-feedback" id="listing_visibility_error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="listings_allowed">Listings Allowed</label>
+                        <input type="text" class="form-control" id="listings_allowed" name="listings_allowed">
+                        <div class="invalid-feedback" id="listings_allowed_error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Social Media Promotion</label>
                         <div class="radio-inline">
-                            <input type="radio" name="unlock_owner_properties" value="Y" class="magic-radio" id="unlock_owner_properties_y">
-                            <label for="unlock_owner_properties_y">Yes</label>
-                            <input type="radio" name="unlock_owner_properties" value="N" class="magic-radio" id="unlock_owner_properties_n" checked>
-                            <label for="unlock_owner_properties_n">No</label>
+                            <input type="radio" name="social_media_promotion" value="Y" class="magic-radio" id="social_media_promotion_y">
+                            <label for="social_media_promotion_y">Yes</label>
+                            <input type="radio" name="social_media_promotion" value="N" class="magic-radio" id="social_media_promotion_n" checked>
+                            <label for="social_media_promotion_n">No</label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label>Assistance from Relationship Manager</label>
+                        <label>Verified Badge</label>
                         <div class="radio-inline">
-                            <input type="radio" name="assistance_relationship_manager" value="Y" class="magic-radio" id="assistance_relationship_manager_y">
-                            <label for="assistance_relationship_manager_y">Yes</label>
-                            <input type="radio" name="assistance_relationship_manager" value="N" class="magic-radio" id="assistance_relationship_manager_n" checked>
-                            <label for="assistance_relationship_manager_n">No</label>
+                            <input type="radio" name="verified_badge" value="Y" class="magic-radio" id="verified_badge_y">
+                            <label for="verified_badge_y">Yes</label>
+                            <input type="radio" name="verified_badge" value="N" class="magic-radio" id="verified_badge_n" checked>
+                            <label for="verified_badge_n">No</label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label>3-Day Early access to New Owner Properties</label>
+                        <label>Relationship Manager</label>
                         <div class="radio-inline">
-                            <input type="radio" name="early_access_days" value="Y" class="magic-radio" id="prime_tag_y">
-                            <label for="prime_tag_y">Yes</label>
-                            <input type="radio" name="early_access_days" value="N" class="magic-radio" id="prime_tag_n" checked>
-                            <label for="prime_tag_n">No</label>
+                            <input type="radio" name="relationship_manager" value="Y" class="magic-radio" id="relationship_manager_y">
+                            <label for="relationship_manager_y">Yes</label>
+                            <input type="radio" name="relationship_manager" value="N" class="magic-radio" id="relationship_manager_n" checked>
+                            <label for="relationship_manager_n">No</label>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>Prime Tag</label>
-                        <div class="radio-inline">
-                            <input type="radio" name="prime_tag" value="Y" class="magic-radio" id="prime_tag_y">
-                            <label for="prime_tag_y">Yes</label>
-                            <input type="radio" name="prime_tag" value="N" class="magic-radio" id="prime_tag_n" checked>
-                            <label for="prime_tag_n">No</label>
-                        </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label>Home Guarantee Refund</label>
-                        <div class="radio-inline">
-                            <input type="radio" name="home_guarantee_refund" value="Y" class="magic-radio" id="home_guarantee_refund_y">
-                            <label for="home_guarantee_refund_y">Yes</label>
-                            <input type="radio" name="home_guarantee_refund" value="N" class="magic-radio" id="home_guarantee_refund_n" checked>
-                            <label for="home_guarantee_refund_n">No</label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="validity_days">Validity Days</label>
-                        <input type="number" class="form-control" id="validity_days" name="validity_days" min="1">
-                        <div class="invalid-feedback" id="validity_days_error"></div>
-                    </div>
 
                     <div class="form-group">
                         <label class="form-label">Status</label>
@@ -336,14 +323,13 @@
 
         function populateForm(data) {
             $('#planTypeId').val(data.id);
-            $('#no_of_owners_contactable').val(data.no_of_owners_contactable);
-            $('#validity_days').val(data.validity_days);
+            $('#owner_contacted').val(data.owner_contacted);
+            $('#listing_visibility').val(data.listing_visibility);
+            $('#listings_allowed').val(data.listings_allowed);
             $(`input[name="status"][value="${data.status}"]`).prop('checked', true);
-            $(`input[name="unlock_owner_properties"][value="${data.unlock_owner_properties}"]`).prop('checked', true);
-            $(`input[name="assistance_relationship_manager"][value="${data.assistance_relationship_manager}"]`).prop('checked', true);
-            $(`input[name="early_access_days"][value="${data.early_access_days}"]`).prop('checked', true);
-            $(`input[name="prime_tag"][value="${data.prime_tag}"]`).prop('checked', true);
-            $(`input[name="home_guarantee_refund"][value="${data.home_guarantee_refund}"]`).prop('checked', true);
+            $(`input[name="social_media_promotion"][value="${data.social_media_promotion}"]`).prop('checked', true);
+            $(`input[name="verified_badge"][value="${data.verified_badge}"]`).prop('checked', true);
+            $(`input[name="relationship_manager"][value="${data.relationship_manager}"]`).prop('checked', true);
             console.log(data)
             if (data.names) {
                 data.names.forEach(function(nameObj) {

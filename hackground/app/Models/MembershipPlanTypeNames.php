@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class MembershipPlanTypeNames extends Model
 {
     protected $table = 'membership_plan_type_names';
+    public $timestamps = false;
     protected $fillable = [
         'id',
         'plan_name',

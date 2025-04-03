@@ -132,7 +132,7 @@ class PaymentController extends Controller
                     'plan_type_names' => function ($query) use ($lang) {
                         $query->select('id', 'plan_name')->where('lang', $lang);
                     },
-                    'plan_features:id,no_of_owners_contactable,unlock_owner_properties,assistance_relationship_manager,early_access_days,validity_days,prime_tag,home_guarantee_refund',
+                    'plan_features:id,relationship_manager,owner_contacted,listings_allowed,verified_badge,listing_visibility,social_media_promotion',
                 ])
                 ->get();
 

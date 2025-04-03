@@ -1166,3 +1166,24 @@ if (!function_exists('get_all_property_category')) {
         return $result;
     }
 }
+
+if(!function_exists('get_user_plan')){
+	
+    function get_user_plan($user_id=''){
+        
+        $today = date('Y-m-d');
+        $login_user = $user_id;
+        
+        
+        $row = $ci->db->select('um.membership_id')
+                ->from('user_membership um')
+                ->join('users u', 'u.user_id=um.user_id', 'INNER')
+                ->where(array('u.user_id' => $login_user, 'um.expire_date >=' => $today, "um.status" => "'Y'"), null, FALSE)
+                ->get()->row_array();
+        
+        return $row;
+        
+    }
+
+
+}
