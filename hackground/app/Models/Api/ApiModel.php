@@ -1025,6 +1025,8 @@ class ApiModel extends Model
 
         return $this->basePropertyQuery()
             ->where('properties.uid', '=', $user_id)
+            ->addSelect('properties_settings.area_in_sqft')
+            ->groupBy('properties_settings.area_in_sqft')
             ->get();
     }
 
