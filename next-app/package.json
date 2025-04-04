@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-     "clean": "rmdir /s /q .next node_modules && npm cache clean --force"
+    "clean": "rmdir /s /q .next node_modules && npm cache clean --force"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -76,7 +76,7 @@
     "react-stripe-js": "^1.1.5",
     "react-toastify": "^10.0.6",
     "react-vertical-timeline-component": "^3.5.3",
-    "recharts": "^2.15.1",
+    "recharts": "^2.15.2",
     "remixicon": "^4.6.0",
     "rsuite": "^5.78.0",
     "slick-carousel": "^1.8.1",
