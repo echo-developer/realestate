@@ -37186,6 +37186,11 @@ fieldset .btn-delete {
   font-size: 1rem;
 }
 
+.h-100-mb-3 {
+  height: calc(100% - 1rem);
+  margin-bottom: 1rem;
+}
+
 /* Media Start */
 @media (min-width: 576px) {
   .card-ads .row .card-img-top {
@@ -37581,6 +37586,8 @@ fieldset .btn-delete {
   .photoGallery .sliderImages {
     max-height: 62vh;
   }
-}
-/* Media End */
-/* END *//*# sourceMappingURL=style.css.map */
+  ul.list-property-details > li .d-flex img {
+    height: 32px;
+    width: 32px;
+  }
+}/*# sourceMappingURL=style.css.map */

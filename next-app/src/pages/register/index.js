@@ -10,7 +10,6 @@ import Link from "next/link";
 import useTranslation from "../../hooks/useTranslation";
 import LoginHeader from "@/components/addtional/LoginHeader";
 
-
 const Index = () => {
   const router = useRouter();
   const translation = useTranslation();
@@ -20,7 +19,10 @@ const Index = () => {
   const [currentLang, setCurrentLang] = useState("en");
   const [passwordStrength, setPasswordStrength] = useState("");
   const [passwordColor, setPasswordColor] = useState("text-danger");
-  // const { setFieldValue } = useFormikContext();
+  const [emailTimer, setEmailTimer] = useState(0);
+  const [emailValue,setEmailValue] =useState()
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [showOTPField, setShowOTPField] = useState(false);
   const { callApi } = AuthUser();
   const validationSchema = Yup.object({
     name: Yup.string().required(
@@ -49,6 +51,20 @@ const Index = () => {
   });
 
   useEffect(() => {
+    let interval = null;
+
+    if (emailTimer > 0) {
+      interval = setInterval(() => {
+        setEmailTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (interval) {
+      clearInterval(interval);
+    }
+
+    return () => clearInterval(interval);
+  }, [emailTimer]);
+
+  useEffect(() => {
     const storedLang = localStorage.getItem("lang") || "en";
     setCurrentLang(storedLang);
   }, []);
@@ -61,6 +77,9 @@ const Index = () => {
 
   const handleSendOTP = async (email) => {
     let response;
+    if (!email) return;
+    setEmailTimer(60);
+    setEmailValue(email)
     try {
       response = await callApi({
         api: `/send_otp_to_verify_email`,
@@ -71,12 +90,32 @@ const Index = () => {
       });
       if (response) {
         setEmailValidate(true);
+        setShowOTPField(true);
         toast.success(response?.message || "OTP Send Successfully");
       } else {
         toast.error(response?.message || "OTP Send Failed");
       }
     } catch (error) {
       toast.error(response?.message || "Data Not Found");
+    }
+  };
+  const handleOtpChange = (e, index) => {
+    const value = e.target.value.replace(/\D/, "");
+    if (!value) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    // Move to next input
+    if (value && index < 5) {
+      const next = document.querySelector(`input[name='otp-${index + 1}']`);
+      if (next) next.focus();
+    }
+
+    // Auto verify if 6 digits filled
+    if (newOtp.every((digit) => digit !== "")) {
+      handleVerifyOTP(newOtp.join(""));
     }
   };
 
@@ -87,8 +126,8 @@ const Index = () => {
         api: `/verify_email`,
         method: "UPLOAD",
         data: {
-          email: values.email,
-          otp: values.otp,
+          email:emailValue,
+          otp: values,
         },
       });
       if (response && response?.status === 1) {
@@ -226,281 +265,248 @@ const Index = () => {
                   >
                     {({ isValid, dirty, handleChange, handleBlur, values }) => (
                       <div className="card border-0 authentication-form">
-                      <div className="card-body">
-                      <Form autoComplete="off">
-                        <h3 className="mb-3">
-                          {translation?.sign_up || "Sign Up"}
-                        </h3>
-                        <label className="form-label d-block">
-                          {translation?.register_an || "Register as a/an"}
-                        </label>
-                        <div
-                          className="btn-group btn-group-light d-flex mb-3"
-                          role="group"
-                        >
-                          <Field
-                            type="radio"
-                            name="user_type"
-                            value="O"
-                            id="owner"
-                            className="btn-check"
-                          />
-                          <label
-                            className="btn btn-outline-light"
-                            htmlFor="owner"
-                          >
-                            <img
-                              src="/assets/images/icons/owner.png"
-                              alt=""
-                              height="32"
-                              width="32"
-                            />{" "}
-                            {translation?.owner || "Owner"}
-                          </label>
-
-                          <Field
-                            type="radio"
-                            name="user_type"
-                            value="A"
-                            id="agent"
-                            className="btn-check"
-                          />
-                          <label
-                            className="btn btn-outline-light"
-                            htmlFor="agent"
-                          >
-                            <img
-                              src="/assets/images/icons/agent.png"
-                              alt=""
-                              height="32"
-                              width="32"
-                            />{" "}
-                            {translation?.agent || "Agent"}
-                          </label>
-
-                          <Field
-                            type="radio"
-                            name="user_type"
-                            value="Builder"
-                            id="builder"
-                            className="btn-check"
-                          />
-                          <label
-                            className="btn btn-outline-light"
-                            htmlFor="builder"
-                          >
-                            <img
-                              src="/assets/images/icons/builder.png"
-                              alt=""
-                              height="32"
-                              width="32"
-                            />{" "}
-                            {translation?.builder || "Builder"}
-                          </label>
-                        </div>
-
-                        <div className="form-floating mb-3">
-                          <Field
-                            type="text"
-                            id="name"
-                            className="form-control"
-                            placeholder=""
-                            name="name"
-                          />
-                          <label htmlFor="name" className="floating-label">
-                            {translation?.name || "Name"}
-                          </label>
-                          <ErrorMessage
-                            name="name"
-                            component="div"
-                            className="text-danger"
-                          />
-                        </div>
-
-                        <div className="form-floating mb-3 position-relative">
-                          <Field
-                            type="email"
-                            id="email"
-                            className="form-control"
-                            placeholder=""
-                            name="email"
-                          />
-                          <label htmlFor="email" className="floating-label">
-                            {translation?.email || "Email"}
-                          </label>
-                          <ErrorMessage
-                            name="email"
-                            component="div"
-                            className="text-danger"
-                          />
-                          {values?.email && (
-                            <button
-                              type="button"
-                              className="btn btn-primary position-absolute end-0 top-50 translate-middle-y me-2"
-                              onClick={() => handleSendOTP(values?.email)}
-                              disabled={emailvalidate}
+                        <div className="card-body">
+                          <Form autoComplete="off">
+                            <h3 className="mb-3">
+                              {translation?.sign_up || "Sign Up"}
+                            </h3>
+                            <label className="form-label d-block">
+                              {translation?.register_an || "Register as a/an"}
+                            </label>
+                            <div
+                              className="btn-group btn-group-light d-flex mb-3"
+                              role="group"
                             >
-                              {translation?.send_otp || "Send OTP"}
-                            </button>
-                          )}
-                        </div>
+                              <Field
+                                type="radio"
+                                name="user_type"
+                                value="O"
+                                id="owner"
+                                className="btn-check"
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor="owner"
+                              >
+                                <img
+                                  src="/assets/images/icons/owner.png"
+                                  alt=""
+                                  height="32"
+                                  width="32"
+                                />{" "}
+                                {translation?.owner || "Owner"}
+                              </label>
 
-                        <div className="form-floating mb-3 position-relative">
-                          <Field
-                            type="text"
-                            id="otp"
-                            className="form-control"
-                            placeholder="Enter 6 Digit Otp"
-                            name="otp"
-                          />
-                          <label htmlFor="otp" className="floating-label">
-                            {translation?.otp || "Enter OTP"}{" "}
-                          </label>
+                              <Field
+                                type="radio"
+                                name="user_type"
+                                value="A"
+                                id="agent"
+                                className="btn-check"
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor="agent"
+                              >
+                                <img
+                                  src="/assets/images/icons/agent.png"
+                                  alt=""
+                                  height="32"
+                                  width="32"
+                                />{" "}
+                                {translation?.agent || "Agent"}
+                              </label>
 
-                          <ErrorMessage
-                            name="otp"
-                            component="div"
-                            className="text-danger"
-                          />
-                          {values?.otp && (
-                            <button
-                              type="button"
-                              className="btn btn-primary position-absolute end-0 top-50 translate-middle-y me-2"
-                              onClick={() => handleVerifyOTP(values)}
-                              disabled={otpvalidate}
-                            >
-                              {translation?.verify_otp || "Verify OTP"}
-                            </button>
-                          )}
-                        </div>
-
-                        <div className="form-floating mb-3 with-icon-end">
-                          <Field
-                            type="password"
-                            id="current-password"
-                            className="form-control"
-                            placeholder=""
-                            name="password"
-                            onChange={(e) =>
-                              checkPasswordStrength(e.target.value)
-                            }
-                          />
-                          <label
-                            htmlFor="current-password"
-                            className="floating-label"
-                          >
-                            {translation?.password || "Password"}
-                          </label>
-                          <ErrorMessage
-                            name="password"
-                            component="div"
-                            className="text-danger"
-                          />
-
-                          {passwordStrength && (
-                            <div className={`mt-1 ${passwordColor}`}>
-                              <strong>{passwordStrength}</strong>
+                              <Field
+                                type="radio"
+                                name="user_type"
+                                value="Builder"
+                                id="builder"
+                                className="btn-check"
+                              />
+                              <label
+                                className="btn btn-outline-light"
+                                htmlFor="builder"
+                              >
+                                <img
+                                  src="/assets/images/icons/builder.png"
+                                  alt=""
+                                  height="32"
+                                  width="32"
+                                />{" "}
+                                {translation?.builder || "Builder"}
+                              </label>
                             </div>
-                          )}
-                        </div>
 
-                        <div className="form-field">
-                          <div className="input-group">
-                            <div className="input-group mb-3">
-                              <div className="" style={{ width: "80px" }}>
-                                <select
-                                  className="form-control"
-                                  style={{ maxWidth: "80px" }}
-                                  name="phone_code"
-                                  value={values.phone_code}
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                >
-                                  <option value="+91">+91</option>
-                                  <option value="+71">+71</option>
-                                  <option value="+81">+81</option>
-                                  <option value="+30">+30</option>
-                                </select>
-                              </div>
+                            <div className="form-floating mb-3">
                               <Field
                                 type="text"
+                                id="name"
                                 className="form-control"
-                                placeholder="Mobile Number"
-                                name="phone"
+                                placeholder=""
+                                name="name"
+                              />
+                              <label htmlFor="name" className="floating-label">
+                                {translation?.name || "Name"}
+                              </label>
+                              <ErrorMessage
+                                name="name"
+                                component="div"
+                                className="text-danger"
                               />
                             </div>
-                          </div>
-                          <ErrorMessage
-                            name="phone"
-                            component="div"
-                            className="text-danger"
-                          />
+
+                            <div className="form-floating mb-3 position-relative">
+                              <Field
+                                type="email"
+                                id="email"
+                                className="form-control"
+                                placeholder=""
+                                name="email"
+                              />
+                              <label htmlFor="email" className="floating-label">
+                                {translation?.email || "Email"}
+                              </label>
+                              <ErrorMessage
+                                name="email"
+                                component="div"
+                                className="text-danger"
+                              />
+                              {values?.email && (
+                                <button
+                                  type="button"
+                                  className="btn btn-primary position-absolute end-0 top-50 translate-middle-y me-2"
+                                  onClick={() => handleSendOTP(values?.email)}
+                                  disabled={emailTimer > 0}
+                                >
+                                  {emailTimer > 0
+                                    ? `Resend in ${emailTimer}s`
+                                    : translation?.send_otp || "Send OTP"}
+                                </button>
+                              )}
+                            </div>
+                            {showOTPField && (
+                              <div className="d-flex gap-2 justify-content-between mb-3">
+                                {otp.map((digit, index) => (
+                                  <input
+                                    key={index}
+                                    type="text"
+                                    inputMode="numeric"
+                                    maxLength={1}
+                                    name={`otp-${index}`}
+                                    value={digit}
+                                    onChange={(e) => handleOtpChange(e, index)}
+                                    className="form-control text-center"
+                                    style={{
+                                      height: "50px",
+                                      fontSize: "20px",
+                                    }}
+                                  />
+                                ))}
+                              </div>
+                            )}
+
+                            <div className="form-floating mb-3 with-icon-end">
+                              <Field
+                                type="password"
+                                id="current-password"
+                                className="form-control"
+                                placeholder=""
+                                name="password"
+                                onChange={(e) =>
+                                  checkPasswordStrength(e.target.value)
+                                }
+                              />
+                              <label
+                                htmlFor="current-password"
+                                className="floating-label"
+                              >
+                                {translation?.password || "Password"}
+                              </label>
+                              <ErrorMessage
+                                name="password"
+                                component="div"
+                                className="text-danger"
+                              />
+
+                              {passwordStrength && (
+                                <div className={`mt-1 ${passwordColor}`}>
+                                  <strong>{passwordStrength}</strong>
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="form-field">
+                              <div className="input-group">
+                                <div className="input-group mb-3">
+                                  <div className="" style={{ width: "80px" }}>
+                                    <select
+                                      className="form-control"
+                                      style={{ maxWidth: "80px" }}
+                                      name="phone_code"
+                                      value={values.phone_code}
+                                      onChange={handleChange}
+                                      onBlur={handleBlur}
+                                    >
+                                      <option value="+91">+91</option>
+                                      <option value="+71">+71</option>
+                                      <option value="+81">+81</option>
+                                      <option value="+30">+30</option>
+                                    </select>
+                                  </div>
+                                  <Field
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Mobile Number"
+                                    name="phone"
+                                  />
+                                </div>
+                              </div>
+                              <ErrorMessage
+                                name="phone"
+                                component="div"
+                                className="text-danger"
+                              />
+                            </div>
+
+                            <div className="d-grid">
+                              <button
+                                type="submit"
+                                className="btn btn-primary mb-2"
+                                disabled={!isValid || !dirty}
+                              >
+                                {translation?.sign_in || "Sign Up"}
+                              </button>
+                            </div>
+
+                            <p>
+                              <small>
+                                {translation?.by_signing_up ||
+                                  "By signing up you agree to our"}{" "}
+                                <Link href="/term-conditions/">
+                                  {translation?.terms_condition ||
+                                    "Terms & Conditions"}
+                                </Link>
+                                {translation?.and || "and"}{" "}
+                                <Link href="/privacy-policy">
+                                  {translation?.privacy_policy ||
+                                    "Privacy Policy"}
+                                </Link>
+                                .
+                              </small>
+                            </p>
+
+                            <p className="text-center">
+                              <small>
+                                {translation?.already_have_an ||
+                                  "Already have an account?"}{" "}
+                                <a href="/login">
+                                  {translation?.login_now || "Login Now"}
+                                </a>
+                              </small>
+                            </p>
+                          </Form>
                         </div>
-
-                        <div className="d-grid">
-                          <button
-                            type="submit"
-                            className="btn btn-primary mb-2"
-                            disabled={!isValid || !dirty}
-                          >
-                            {translation?.sign_in || "Sign Up"}
-                          </button>
-                        </div>
-
-                        <p>
-                          <small>
-                            {translation?.by_signing_up ||
-                              "By signing up you agree to our"}{" "}
-                            <Link href="/term-conditions/">
-                              {translation?.terms_condition ||
-                                "Terms & Conditions"}
-                            </Link>
-                            {translation?.and || "and"}{" "}
-                            <Link href="/privacy-policy">
-                              {translation?.privacy_policy || "Privacy Policy"}
-                            </Link>
-                            .
-                          </small>
-                        </p>
-
-                        {/* <div className="social-login-separator">
-                          <span>
-                            {translation?.or_login_with || "OR LOGIN WITH"}
-                          </span>
-                        </div>
-
-                        <div className="social-login-buttons">
-                          <button
-                            type="button"
-                            className="btn btn-outline-primary btn-fb"
-                          >
-                            <span>{translation?.facebook || "Facebook"}</span>
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-outline-success btn-google"
-                          >
-                            <span>{translation?.google || "Google"}</span>
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-outline-secondary btn-apple"
-                          >
-                            <span>{translation?.apple || "Apple"}</span>
-                          </button>
-                        </div> */}
-
-                        <p className="text-center">
-                          <small>
-                            {translation?.already_have_an ||
-                              "Already have an account?"}{" "}
-                            <a href="/login">
-                              {translation?.login_now || "Login Now"}
-                            </a>
-                          </small>
-                        </p>
-                      </Form>
-                      </div>
                       </div>
                     )}
                   </Formik>
