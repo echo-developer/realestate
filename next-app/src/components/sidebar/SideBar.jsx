@@ -53,6 +53,7 @@ const SideBar = () => {
   //   }
   // }, []);
 
+
   const handleShow = () => setShow(true);
 
   // const FetchUserData = async () => {
@@ -288,7 +289,7 @@ const SideBar = () => {
         <UserLogoUpload
           show={show}
           setShow={setShow}
-          setUserLogo={uploadUserImage}
+          uploadUserImage={uploadUserImage}
         />
       )}
     </React.Fragment>

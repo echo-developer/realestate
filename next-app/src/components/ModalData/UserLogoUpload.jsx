@@ -7,7 +7,7 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import useTranslation from "@/hooks/useTranslation";
 import { toast } from "react-toastify";
 
-const UserLogoUpload = ({ show, setShow, setUserLogo }) => {
+const UserLogoUpload = ({ show, setShow, uploadUserImage }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const { callApi, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
@@ -23,6 +23,7 @@ const UserLogoUpload = ({ show, setShow, setUserLogo }) => {
   };
   
 
+
   const handleUpload = async (file) => {
     try {
       const response = await callApi({
@@ -34,7 +35,7 @@ const UserLogoUpload = ({ show, setShow, setUserLogo }) => {
         },
       });
       if (response && response.status === 1) {
-        setUserLogo(response?.data?.image_url);
+        uploadUserImage(response?.data?.image_url);
         if (typeof window !== "undefined") {
           localStorage.setItem("user_logo", response?.data?.image_url);
         }
