@@ -92,6 +92,7 @@ const Banner = ({ translation }) => {
     }
   };
 
+
   const resetSelection = () => {
     setSelectedBedrooms([]);
     setSelectedBathrooms([]);
@@ -120,7 +121,6 @@ const Banner = ({ translation }) => {
     const subCategory = PropertyForData?.find(
       (item) => item?.sub_category_id === Number(selectedPropertyFor)
     );
-    console.log("subCategory", subCategory);
     if (subCategory) {
       str += str ? ` - ${subCategory.sub_category_name}` : subCategory.sub_category_name;
     }
@@ -604,8 +604,11 @@ const Banner = ({ translation }) => {
                                           {budgetOptions.map((amount) => (
                                             <Dropdown.Item
                                               key={amount}
-                                              onClick={() =>
+                                              onClick={(e) =>{
+                                                e.preventDefault();
+                                                e.stopPropagation()
                                                 handleBud1InputClick(amount)
+                                              }
                                               }
                                             >
                                               ${amount}
@@ -629,6 +632,7 @@ const Banner = ({ translation }) => {
                                           onChange={handleMaxChange}
                                           onClick={(e) => {
                                             e.stopPropagation();
+                                            e.preventDefault()
                                             setSubBudget2Dropdown(true);
                                           }}
                                         />
@@ -643,8 +647,11 @@ const Banner = ({ translation }) => {
                                           {budgetOptions.map((amount) => (
                                             <Dropdown.Item
                                               key={amount}
-                                              onClick={() =>
+                                              onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation()
                                                 handleBud2InputClick(amount)
+                                              }
                                               }
                                             >
                                               ${amount}
