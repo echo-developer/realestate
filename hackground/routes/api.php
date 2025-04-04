@@ -139,6 +139,7 @@ Route::controller(DashboardController::class)->group(function () {
     Route::post('upload_certificates_img',  'uploadPropProjcertificatesImages')->name('upload.certificates.images');
     Route::post('upload_certificates_details',  'uploadPropProjcertificatesDetails')->name('upload.certificates.details');
     Route::get('certificates_details',  'getPropPropertycertificateDetails')->name('certificates.details');
+    Route::POST('delete_certificate',  'getPropPropertycertificatedelete')->name('certificates.delete');
 });
 
 // Search Routes
@@ -223,7 +224,7 @@ Route::get('get-myproject', [ProjectDashboardController::class, 'GetProject']);
 Route::get('additional_project_details', [ProjectDashboardController::class, 'ExtraFileddetails']);
 Route::post('add_extra_project_details', [ProjectDashboardController::class, 'AddExtraProjectDetails']);
 
-Route::post('upload_prj_brochure', [ProjectDashboardController::class, 'uploaodPrjBrochure']);
+Route::post('upload_prj_brochure', [ProjectDashboardController::class, 'uploaodPrjBrochure'])->name('uplaod.project.brochure');
 Route::get('download_prj_brochure', [ProjectDashboardController::class, 'downloadprjBrochure']);
 
 Route::get('get-searchedprojects', [ProjectListandSearchController::class, 'getSearchedProjects']);
