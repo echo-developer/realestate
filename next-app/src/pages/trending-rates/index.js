@@ -6,7 +6,6 @@ const index = () => {
   return (
     <MainLayout>
       <RealEstateTrends/>
-      <RentalYieldTrends/>
     </MainLayout>
   )
 }

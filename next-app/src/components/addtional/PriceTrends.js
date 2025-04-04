@@ -3,9 +3,9 @@
 import { useState, useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 import { ChevronDown } from "lucide-react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import LocalityOption from "../MapData/LocalitySelector";
 import useTranslation from "@/hooks/useTranslation";
+import { Accordion } from "react-bootstrap";
 
 function RealEstateTrends() {
   const [selectedCity, setSelectedCity] = useState("Kolkata");
@@ -20,18 +20,27 @@ function RealEstateTrends() {
   ]);
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
-const translation = useTranslation();
+  const translation = useTranslation();
   const data = {
     months: [
-      "May'24", "Jun'24", "Jul'24", "Aug'24", "Sep'24",
-      "Oct'24", "Nov'24", "Dec'24", "Jan'25",
+      "May'24",
+      "Jun'24",
+      "Jul'24",
+      "Aug'24",
+      "Sep'24",
+      "Oct'24",
+      "Nov'24",
+      "Dec'24",
+      "Jan'25",
     ],
     priceData: {
-      "Burdwan Road": [12500, 12300, 12500, 12700, 14000, 12500, 13200, 12700, 15000],
-      "Alipore": [12800, 12500, 13000, 12700, 14200, 12600, 13300, 12800, 15100],
+      "Burdwan Road": [
+        12500, 12300, 12500, 12700, 14000, 12500, 13200, 12700, 15000,
+      ],
+      Alipore: [12800, 12500, 13000, 12700, 14200, 12600, 13300, 12800, 15100],
       "New Alipore": [7600, 7700, 7600, 7500, 7800, 8500, 8300, 8400, 9300],
       "Kona Expressway": [4500, 5500, 6000, 5500, 6000, 5800, 6200, 6700, 6900],
-      "Shippur": [3000, 4000, 4200, 4500, 5500, 4000, 5200, 5300, 5400],
+      Shippur: [3000, 4000, 4200, 4500, 5500, 4000, 5200, 5300, 5400],
     },
     localities: [
       { name: "Burdwan Road", properties: 233 },
@@ -42,7 +51,6 @@ const translation = useTranslation();
     ],
   };
 
-  // Function to update chart based on selected localities
   const updateChart = () => {
     if (!chartRef.current) return;
     if (chartInstance.current) {
@@ -59,7 +67,9 @@ const translation = useTranslation();
         datasets: selectedLocalities.map((locality, index) => ({
           label: locality,
           data: data.priceData[locality],
-          borderColor: ["#E6B325", "#D9534F", "#93C54B", "#A991D4", "#2ECCC3"][index % 5],
+          borderColor: ["#E6B325", "#D9534F", "#93C54B", "#A991D4", "#2ECCC3"][
+            index % 5
+          ],
           tension: 0.3,
         })),
       },
@@ -75,9 +85,8 @@ const translation = useTranslation();
 
   useEffect(() => {
     updateChart();
-  }, [selectedLocalities]); // Re-run when selectedLocalities change
+  }, [selectedLocalities]);
 
-  // Handle checkbox toggle
   const handleCheckboxChange = (locality) => {
     setSelectedLocalities((prev) =>
       prev.includes(locality)
@@ -87,23 +96,29 @@ const translation = useTranslation();
   };
 
   return (
-    <div className="container mt-4 mb-4">
-      <h1 className="mb-4 border-bottom pb-2">{translation?.rates_and_trends|| "Rates and Trends"}</h1>
+    <div className="container mt-4 mb-4 ">
+      <h1 className="mb-4 border-bottom pb-2">
+        {translation?.rates_and_trends || "Rates and Trends"}
+      </h1>
 
-      <div className="input-group mb-3">
+      <div className="input-group mb-3 text-center">
         <LocalityOption />
-        <a className="btn btn-primary btn-post">{translation?.show_trends|| "SHOW TRENDS"}</a>
+        <a className="btn btn-primary btn-post" style={{ height: "38px" }}>
+          {translation?.show_trends || "SHOW TRENDS"}
+        </a>
       </div>
 
       <div className="card p-3">
         <div className="d-flex align-items-center mb-3">
-          <h2 className="h5 mb-0">{translation?.trends_for|| "Trends for"} {selectedCity}</h2>
+          <h2 className="h5 mb-0">
+            {translation?.trends_for || "Trends for"} {selectedCity}
+          </h2>
           <ChevronDown className="ms-2" />
         </div>
 
         <div className="d-flex justify-content-between mb-3">
           <div>
-            <span className="me-2">{translation?.for|| "For"} </span>
+            <span className="me-2">{translation?.for || "For"} </span>
             <div className="form-check form-check-inline">
               <input
                 className="form-check-input"
@@ -112,7 +127,9 @@ const translation = useTranslation();
                 checked={viewType === "Localities"}
                 onChange={() => setViewType("Localities")}
               />
-              <label className="form-check-label">{translation?.localities|| "Localities"}</label>
+              <label className="form-check-label">
+                {translation?.localities || "Localities"}
+              </label>
             </div>
             <div className="form-check form-check-inline">
               <input
@@ -122,20 +139,22 @@ const translation = useTranslation();
                 checked={viewType === "Projects"}
                 onChange={() => setViewType("Projects")}
               />
-              <label className="form-check-label">{translation?.projects|| "Projects"}</label>
+              <label className="form-check-label">
+                {translation?.projects || "Projects"}
+              </label>
             </div>
           </div>
 
           <div>
-            <span className="me-2">{translation?.for|| "For"}</span>
+            <span className="me-2">{translation?.for || "For"}</span>
             <select
               className="form-select d-inline w-auto"
               value={propertyType}
               onChange={(e) => setPropertyType(e.target.value)}
             >
-              <option>{translation?.flats|| "Flats"}</option>
-              <option>{translation?.houses|| "Houses"}</option>
-              <option>{translation?.plots|| "Plots"}</option>
+              <option>{translation?.flats || "Flats"}</option>
+              <option>{translation?.houses || "Houses"}</option>
+              <option>{translation?.plots || "Plots"}</option>
             </select>
           </div>
         </div>
@@ -143,17 +162,25 @@ const translation = useTranslation();
         <div className="row">
           {/* Graph Section */}
           <div className="col-md-8">
-            <div className="bg-white p-3 border rounded" style={{ height: "400px" }}>
+            <div
+              className="bg-white p-3 border rounded"
+              style={{ height: "400px" }}
+            >
               <canvas ref={chartRef}></canvas>
             </div>
           </div>
 
           {/* Locality List Section */}
           <div className="col-md-4">
-            <h3 className="h6">{translation?.top_5_localities|| "Top 5 Localities"}</h3>
+            <h3 className="h6">
+              {translation?.top_5_localities || "Top 5 Localities"}
+            </h3>
             <ul className="list-group">
               {data.localities.map((locality, index) => (
-                <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+                <li
+                  key={index}
+                  className="list-group-item d-flex justify-content-between align-items-center"
+                >
                   <div>
                     <input
                       type="checkbox"
@@ -163,7 +190,10 @@ const translation = useTranslation();
                     />
                     {locality.name}
                   </div>
-                  <span className="badge bg-secondary">{locality.properties} {translation?.properties|| "Properties"}</span>
+                  <span className="badge bg-secondary">
+                    {locality.properties}{" "}
+                    {translation?.properties || "Properties"}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -172,10 +202,76 @@ const translation = useTranslation();
 
         <p className="mt-3 text-muted">
           {selectedLocalities.length > 0
-            ? `Currently displaying trends for: ${selectedLocalities.join(", ")}`
+            ? `Currently displaying trends for: ${selectedLocalities.join(
+                ", "
+              )}`
             : "No localities selected. Please select at least one locality."}
         </p>
       </div>
+
+      <Accordion defaultActiveKey="0" className="mt-5">
+        <h2 className="h5 mb-3">
+          {translation?.faq || "Frequently Asked Questions"}
+        </h2>
+
+        {[
+          {
+            question: "What affects real estate price trends?",
+            answer:
+              "Property prices are influenced by location, demand and supply, infrastructure developments, government policies, and interest rates.",
+          },
+          {
+            question: "How often are the price trends updated?",
+            answer:
+              "Price trends are updated monthly based on market data, builder inputs, and verified property listings.",
+          },
+          {
+            question: "Can I compare price trends of different localities?",
+            answer:
+              "Yes, select multiple localities from the list to compare their price trends over time in the chart above.",
+          },
+          {
+            question: "Why do some areas show sudden price spikes?",
+            answer:
+              "Sudden spikes can be due to infrastructure development, new project launches, or increased buyer interest.",
+          },
+          {
+            question: "What is the average price appreciation rate?",
+            answer:
+              "On average, real estate in prime localities appreciates 5–10% annually, but it varies by region.",
+          },
+          {
+            question: "Can price trends predict future property value?",
+            answer:
+              "They provide insight, but future values depend on multiple factors like economy, development, and policies.",
+          },
+          {
+            question: "Do commercial properties follow similar trends?",
+            answer:
+              "Commercial properties have their own trends, often tied to business activity and infrastructure.",
+          },
+          {
+            question: "Is it a good time to buy property based on trends?",
+            answer:
+              "It depends on your financial readiness, interest rates, and the locality’s performance. Trends help inform the decision.",
+          },
+          {
+            question: "Are trend values based on actual transactions?",
+            answer:
+              "Yes, trend data is aggregated from actual sales, listings, and verified market sources.",
+          },
+          {
+            question: "How accurate are these trend values?",
+            answer:
+              "We strive for high accuracy by using multiple data sources, but they should be used as guidance, not exact figures.",
+          },
+        ].map((faq, idx) => (
+          <Accordion.Item eventKey={idx.toString()} key={idx}>
+            <Accordion.Header>{faq.question}</Accordion.Header>
+            <Accordion.Body>{faq.answer}</Accordion.Body>
+          </Accordion.Item>
+        ))}
+      </Accordion>
     </div>
   );
 }
