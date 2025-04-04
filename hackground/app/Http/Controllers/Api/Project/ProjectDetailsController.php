@@ -108,7 +108,7 @@ class ProjectDetailsController extends Controller
 
             // fetch landmarks data
             $landmarks = $project->landmarks;
-            log::info('sssss' . json_encode($landmarks, JSON_PRETTY_PRINT));
+            // log::info('sssss' . json_encode($landmarks, JSON_PRETTY_PRINT));
             $formattedLandmarks = [];
 
             foreach ($landmarks as $landmark) {
