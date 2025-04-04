@@ -430,7 +430,7 @@ const CommercialProjectDetails = ({
                                 `${
                                   translation?.not_available || "Not available"
                                 }`}{" "}
-                              {"sqft"}
+                               {detailsData?.unit_type}
                             </h5>
                           </div>
                         </div>
@@ -474,7 +474,7 @@ const CommercialProjectDetails = ({
                                 `${
                                   translation?.not_available || "Not available"
                                 }`}{" "}
-                              {" sqft"}
+                               {detailsData?.unit_type}
                             </h5>
                           </div>
                         </div>

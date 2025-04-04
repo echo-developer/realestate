@@ -445,7 +445,7 @@ const ResidentialProjectDetails = ({
                                 `${
                                   translation?.not_available || "Not Available"
                                 }`}{" "}
-                              {"sqft"}
+                              {detailsData?.unit_type}
                             </h5>
                           </div>
                         </div>
@@ -490,7 +490,7 @@ const ResidentialProjectDetails = ({
                                 `${
                                   translation?.not_available || "Not Available"
                                 }`}{" "}
-                              {" sqft"}
+                              {detailsData?.unit_type}
                             </h5>
                           </div>
                         </div>

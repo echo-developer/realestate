@@ -59,143 +59,255 @@ import {
   Tv,
   FileText,
   BedDouble,
-  Utensils,Car
+  Utensils,
+  Car,
 } from "lucide-react";
+import NoCreditModal from "@/components/addtional/NoCreditModal";
 
 const stepKeyPoints = {
   1: [
     {
-      icon: <PersonFill  className="text-primary"/>,
+      icon: <PersonFill className="text-primary" />,
       text: "Provide your full name as per official documents.",
     },
     {
-      icon: <EnvelopeFill  className="text-primary"/>,
+      icon: <EnvelopeFill className="text-primary" />,
       text: "Use a valid and accessible email address for communication.",
     },
     {
-      icon: <TelephoneFill  className="text-primary"/>,
+      icon: <TelephoneFill className="text-primary" />,
       text: "Ensure your phone number is correct for verification.",
     },
     {
-      icon: <LockFill  className="text-primary"/>,
+      icon: <LockFill className="text-primary" />,
       text: "Create a strong password using a combination of characters.",
     },
     {
-      icon: <ShieldLockFill  className="text-primary"/>,
+      icon: <ShieldLockFill className="text-primary" />,
       text: "Enable two-factor authentication (2FA) if available for added security.",
     },
     {
-      icon: <ExclamationTriangleFill  className="text-primary"/>,
+      icon: <ExclamationTriangleFill className="text-primary" />,
       text: "Avoid using common passwords that are easy to guess.",
     },
     {
-      icon: <BellFill  className="text-primary"/>,
+      icon: <BellFill className="text-primary" />,
       text: "Keep your contact information updated for receiving notifications.",
     },
     {
-      icon: <CheckCircleFill  className="text-primary"/>,
+      icon: <CheckCircleFill className="text-primary" />,
       text: "Double-check your name, email, and phone number for typos.",
     },
     {
-      icon: <ClipboardCheckFill  className="text-primary"/>,
+      icon: <ClipboardCheckFill className="text-primary" />,
       text: "Use a professional email address instead of a temporary one.",
     },
     {
-      icon: <ShieldLockFill  className="text-primary"/>,
+      icon: <ShieldLockFill className="text-primary" />,
       text: "Secure your password using a password manager if necessary.",
     },
   ],
   2: [
     {
-      icon: <HouseDoorFill className="text-primary"/>,
+      icon: <HouseDoorFill className="text-primary" />,
       text: "Choose whether you are posting your property for Rent or Sale.",
     },
     {
-      icon: <BuildingFill className="text-primary"/>,
+      icon: <BuildingFill className="text-primary" />,
       text: "Select the correct property type (Residential, Commercial, Agricultural).",
     },
     {
-      icon: <GeoAltFill className="text-primary"/>,
+      icon: <GeoAltFill className="text-primary" />,
       text: "Provide accurate property subtype details (e.g., Apartment, Villa, Office Space).",
     },
     {
-      icon: <PatchCheckFill className="text-primary"/>,
+      icon: <PatchCheckFill className="text-primary" />,
       text: "Mention if your property is an Individual Property or part of a Project.",
     },
     {
-      icon: <BookmarkFill className="text-primary"/>,
+      icon: <BookmarkFill className="text-primary" />,
       text: "Select the project name from suggestions if available for added credibility.",
     },
     {
-      icon: <FileEarmarkCheckFill className="text-primary"/>,
+      icon: <FileEarmarkCheckFill className="text-primary" />,
       text: "Indicate the ownership type (Freehold or Leasehold).",
     },
     {
-      icon: <GraphUpArrow className="text-primary"/>,
+      icon: <GraphUpArrow className="text-primary" />,
       text: "Ensure the property usage is correctly classified (Residential, Commercial, Industrial).",
     },
     {
-      icon: <HouseDoorFill className="text-primary"/>,
+      icon: <HouseDoorFill className="text-primary" />,
       text: "Highlight any unique selling points such as scenic views or premium location.",
     },
     {
-      icon: <FileEarmarkCheckFill className="text-primary"/>,
+      icon: <FileEarmarkCheckFill className="text-primary" />,
       text: "Provide accurate legal status details, including any RERA registration.",
     },
     {
-      icon: <ClipboardCheckFill className="text-primary"/>,
+      icon: <ClipboardCheckFill className="text-primary" />,
       text: "Review all information to ensure accuracy and avoid listing issues.",
     },
   ],
   3: [
-    { icon: <GeoAltFill className="text-primary" />, text: "Ensure the city name is accurate to help buyers find your property easily." },
-    { icon: <MapFill className="text-primary" />, text: "Provide the correct locality name for improved search visibility." },
-    { icon: <HouseFill className="text-primary" />, text: "Mention the complete address with street name, number, and any landmarks." },
-    { icon: <BuildingFill className="text-primary" />, text: "Add the building name to offer clear identification for buyers." },
-    { icon: <FileEarmarkTextFill className="text-primary" />, text: "Write a detailed property description highlighting key features and nearby amenities." },
-    { icon: <CompassFill className="text-primary" />, text: "Verify the pinned map location to ensure accuracy and convenience for visitors." },
-    { icon: <PinMapFill className="text-primary" />, text: "Include nearby landmarks like schools, hospitals, and transport hubs." },
-    { icon: <ClipboardCheckFill className="text-primary" />, text: "Avoid abbreviations or incomplete addresses to prevent confusion." },
-    { icon: <BookmarkCheckFill className="text-primary" />, text: "Specify floor number, block name, or wing if applicable." },
-    { icon: <PatchCheckFill className="text-primary" />, text: "Double-check spelling and ensure correct city, locality, and address details." },
+    {
+      icon: <GeoAltFill className="text-primary" />,
+      text: "Ensure the city name is accurate to help buyers find your property easily.",
+    },
+    {
+      icon: <MapFill className="text-primary" />,
+      text: "Provide the correct locality name for improved search visibility.",
+    },
+    {
+      icon: <HouseFill className="text-primary" />,
+      text: "Mention the complete address with street name, number, and any landmarks.",
+    },
+    {
+      icon: <BuildingFill className="text-primary" />,
+      text: "Add the building name to offer clear identification for buyers.",
+    },
+    {
+      icon: <FileEarmarkTextFill className="text-primary" />,
+      text: "Write a detailed property description highlighting key features and nearby amenities.",
+    },
+    {
+      icon: <CompassFill className="text-primary" />,
+      text: "Verify the pinned map location to ensure accuracy and convenience for visitors.",
+    },
+    {
+      icon: <PinMapFill className="text-primary" />,
+      text: "Include nearby landmarks like schools, hospitals, and transport hubs.",
+    },
+    {
+      icon: <ClipboardCheckFill className="text-primary" />,
+      text: "Avoid abbreviations or incomplete addresses to prevent confusion.",
+    },
+    {
+      icon: <BookmarkCheckFill className="text-primary" />,
+      text: "Specify floor number, block name, or wing if applicable.",
+    },
+    {
+      icon: <PatchCheckFill className="text-primary" />,
+      text: "Double-check spelling and ensure correct city, locality, and address details.",
+    },
   ],
   4: [
-    { icon: <Home className="text-primary" />, text: "Specify the unit type (e.g., Apartment, Villa, Independent House)." },
-    { icon: <BedDouble className="text-primary"  />, text: "Provide the number of bedrooms to accurately describe your property." },
-    { icon: <Bath className="text-primary"  />, text: "Mention the number of bathrooms for better buyer insight." },
-    { icon: <Utensils className="text-primary"  />, text: "Ensure to include kitchen availability and type (e.g., Modular, Traditional)." },
-    { icon: <Ruler className="text-primary"  />, text: "Provide the exact carpet area in sq. ft. for transparency." },
-    { icon: <Building2 className="text-primary"  />, text: "Include the super area if applicable, which covers common spaces." },
-    { icon: <Compass className="text-primary"  />, text: "Specify the property’s facing direction (e.g., East, West) for Vastu preferences." },
-    { icon: <Car className="text-primary"  />, text: "Mention available parking spaces for cars or bikes." },
-    { icon: <Layers className="text-primary"  />, text: "Provide the floor number and total floors to clarify the building structure." },
-    { icon: <Landmark className="text-primary"  />, text: "State if it's a corner plot or has additional visibility advantages." },
-    { icon: <Hammer className="text-primary"  />, text: "Indicate whether construction is allowed and applicable regulations." },
-    { icon: <Sofa className="text-primary"  />, text: "Clearly define the furnishing status (e.g., Fully Furnished, Semi-Furnished, Unfurnished)." },
+    {
+      icon: <Home className="text-primary" />,
+      text: "Specify the unit type (e.g., Apartment, Villa, Independent House).",
+    },
+    {
+      icon: <BedDouble className="text-primary" />,
+      text: "Provide the number of bedrooms to accurately describe your property.",
+    },
+    {
+      icon: <Bath className="text-primary" />,
+      text: "Mention the number of bathrooms for better buyer insight.",
+    },
+    {
+      icon: <Utensils className="text-primary" />,
+      text: "Ensure to include kitchen availability and type (e.g., Modular, Traditional).",
+    },
+    {
+      icon: <Ruler className="text-primary" />,
+      text: "Provide the exact carpet area in sq. ft. for transparency.",
+    },
+    {
+      icon: <Building2 className="text-primary" />,
+      text: "Include the super area if applicable, which covers common spaces.",
+    },
+    {
+      icon: <Compass className="text-primary" />,
+      text: "Specify the property’s facing direction (e.g., East, West) for Vastu preferences.",
+    },
+    {
+      icon: <Car className="text-primary" />,
+      text: "Mention available parking spaces for cars or bikes.",
+    },
+    {
+      icon: <Layers className="text-primary" />,
+      text: "Provide the floor number and total floors to clarify the building structure.",
+    },
+    {
+      icon: <Landmark className="text-primary" />,
+      text: "State if it's a corner plot or has additional visibility advantages.",
+    },
+    {
+      icon: <Hammer className="text-primary" />,
+      text: "Indicate whether construction is allowed and applicable regulations.",
+    },
+    {
+      icon: <Sofa className="text-primary" />,
+      text: "Clearly define the furnishing status (e.g., Fully Furnished, Semi-Furnished, Unfurnished).",
+    },
   ],
   5: [
-    { icon: <CalendarCheck size={24} className="text-primary" />, text: "Specify the possession type (e.g., Ready to Move, Under Construction)." },
-    { icon: <CalendarDays size={24} className="text-primary" />, text: "Provide the expected possession month to give buyers clarity." },
-    { icon: <CalendarRange size={24} className="text-primary" />, text: "Mention the possession year for accurate timelines." },
-    { icon: <DollarSign size={24} className="text-primary" />, text: "State the expected price of the property clearly." },
-    { icon: <Wallet size={24} className="text-primary" />, text: "Provide the token amount required for booking." },
-    { icon: <BadgeDollarSign size={24} className="text-primary" />, text: "Mention any additional payment details or negotiation flexibility." },
-    { icon: <Globe size={24} className="text-primary" />, text: "Specify the preferred currency for payment (e.g., INR, USD, EUR)." },
+    {
+      icon: <CalendarCheck size={24} className="text-primary" />,
+      text: "Specify the possession type (e.g., Ready to Move, Under Construction).",
+    },
+    {
+      icon: <CalendarDays size={24} className="text-primary" />,
+      text: "Provide the expected possession month to give buyers clarity.",
+    },
+    {
+      icon: <CalendarRange size={24} className="text-primary" />,
+      text: "Mention the possession year for accurate timelines.",
+    },
+    {
+      icon: <DollarSign size={24} className="text-primary" />,
+      text: "State the expected price of the property clearly.",
+    },
+    {
+      icon: <Wallet size={24} className="text-primary" />,
+      text: "Provide the token amount required for booking.",
+    },
+    {
+      icon: <BadgeDollarSign size={24} className="text-primary" />,
+      text: "Mention any additional payment details or negotiation flexibility.",
+    },
+    {
+      icon: <Globe size={24} className="text-primary" />,
+      text: "Specify the preferred currency for payment (e.g., INR, USD, EUR).",
+    },
   ],
-  6:[
-    { icon: <Landmark size={24} className="text-primary" />, text: "Upload high-quality images of the property’s exterior view." },
-    { icon: <Home size={24} className="text-primary" />, text: "Showcase the interiors to highlight the living space and design." },
-    { icon: <Tv size={24} className="text-primary" />, text: "Add images of the living room to provide a view of the common area." },
-    { icon: <Bath size={24} className="text-primary" />, text: "Include images of bathrooms to reflect the amenities and condition." },
-    { icon: <Bed size={24} className="text-primary" />, text: "Provide bedroom images showing size, lighting, and furniture." },
-    { icon: <ImagePlus size={24} className="text-primary" />, text: "Add a variety of angles and perspectives for better presentation." },
-    { icon: <FileText size={24} className="text-primary" />, text: "Provide relevant image descriptions to describe what is displayed." },
-  ]
+  6: [
+    {
+      icon: <Landmark size={24} className="text-primary" />,
+      text: "Upload high-quality images of the property’s exterior view.",
+    },
+    {
+      icon: <Home size={24} className="text-primary" />,
+      text: "Showcase the interiors to highlight the living space and design.",
+    },
+    {
+      icon: <Tv size={24} className="text-primary" />,
+      text: "Add images of the living room to provide a view of the common area.",
+    },
+    {
+      icon: <Bath size={24} className="text-primary" />,
+      text: "Include images of bathrooms to reflect the amenities and condition.",
+    },
+    {
+      icon: <Bed size={24} className="text-primary" />,
+      text: "Provide bedroom images showing size, lighting, and furniture.",
+    },
+    {
+      icon: <ImagePlus size={24} className="text-primary" />,
+      text: "Add a variety of angles and perspectives for better presentation.",
+    },
+    {
+      icon: <FileText size={24} className="text-primary" />,
+      text: "Provide relevant image descriptions to describe what is displayed.",
+    },
+  ],
 };
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
+  const [remainingData, setRemainingData] = useState();
+  const [showCreditModal, setShowCreditModal] = useState(false);
   const [formData, setFormData] = useState({
     propertyDetails: "",
     location: "",
@@ -214,7 +326,7 @@ const Index = () => {
     unit_type: "sqft",
     uid: memberId,
     project_property_type: "individual",
-    launch_date:"",
+    launch_date: "",
   });
   const translation = useTranslation();
 
@@ -223,19 +335,33 @@ const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const points = stepKeyPoints[currentStep]?.slice(0, 10) || [];
 
-  const fetchRemainPosting=async()=>{
+  const fetchRemainPosting = async () => {
     try {
       const response = await callApi({
-        api:`/get_remaining_value`,
-        method:'GET',
-      })
-      if(response && response.status){
-        setRemainingData(response.remaining_listings_allowed)
+        api: `/get_remaining_value`,
+        method: "GET",
+        data: {
+          user_id: memberId,
+        },
+      });
+      if (response && response.status === 1) {
+        setRemainingData(response.remaining_listings_allowed);
+        toast.success(response.message || "available credit for post ");
+        setShowCreditModal(false);
+      } else {
+        toast.error(response.message || " credit not available for post ");
+        setShowCreditModal(true);
       }
-    } catch (error) {
-      
-    }
-  }
+    } catch (error) {}
+  };
+
+  const handleCloseCreditModal = () => {
+    setShowCreditModal(false);
+  };
+
+  const handleShowCreditModal = () => {
+    setShowCreditModal(true);
+  };
 
   useEffect(() => {
     if (memberId) {
@@ -243,7 +369,7 @@ const Index = () => {
         ...prevFormData,
         uid: memberId,
       }));
-
+      fetchRemainPosting();
       fetchUserData();
       setCurrentStep(2);
     }
@@ -453,9 +579,7 @@ const Index = () => {
             <aside className="col-lg-4 col-12 d-none d-lg-block">
               <div className="card border-0 shadow-1 mt-3 mt-lg-0">
                 <div className="card-body">
-                  <h3 className="mb-3">
-                    Key Points to Remember
-                  </h3>
+                  <h3 className="mb-3">Key Points to Remember</h3>
                   <div className="ad-post-points">
                     {points.map((item, index) => (
                       <div className="d-flex mb-3" key={index}>
@@ -472,6 +596,9 @@ const Index = () => {
           </div>
         </div>
       </div>
+      {showCreditModal && (
+        <NoCreditModal show={showCreditModal} onHide={handleCloseCreditModal} />
+      )}
     </MainLayout>
   );
 };
