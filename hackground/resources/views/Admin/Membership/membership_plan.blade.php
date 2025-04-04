@@ -369,7 +369,18 @@
     });
 </script>
 
+<script>
+$(document).ready(function () {
+    // Ensure modal closes when clicking close button or outside the modal
+    $('#MembershipPlanModal').on('hidden.bs.modal', function () {
+        $(this).find("form").trigger("reset"); // Reset form fields after closing
+    });
 
+    // Close modal on close button click
+    $('.close, .btn-secondary').on('click', function () {
+        $('#MembershipPlanModal').modal('hide');
+    });
+});
 
-
+</script>
 @endpush

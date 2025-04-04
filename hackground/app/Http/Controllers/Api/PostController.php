@@ -75,6 +75,7 @@ class PostController extends Controller
                 $this->UserId = $request->uid;
             }
 
+
             $property = $this->createProperty($this->UserId, $request);
 
             $this->updatePropertyDetails($property, $request);
@@ -84,8 +85,8 @@ class PostController extends Controller
             $this->savePropertyAdditional($property->id, $request);
             $this->savePropertyGalleries($property->id, $request);
 
+            $debit = debit_membership_feature_value('listings_allowed', 'remaining_listings_allowed', $this->UserId);
             DB::commit();
-
             return response()->json([
                 'status' => 1,
                 'message' => 'Property successfully posted',

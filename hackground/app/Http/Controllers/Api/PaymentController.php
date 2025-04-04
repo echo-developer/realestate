@@ -77,10 +77,8 @@ class PaymentController extends Controller
             ]);
 
             $transactionId = $transaction->id;
-            $plandetails = MembershipPlans::with(['plan_features'])->where('id', $plan_id)->get();
-            log::info($plandetails);
-
             $planDetails = MembershipPlans::with('plan_features')->find($plan_id);
+            log::info($planDetails);
 
             if (!$planDetails) {
                 return response()->json(['status' => 'fail', 'message' => 'Plan not found'], 404);
@@ -101,13 +99,14 @@ class PaymentController extends Controller
                     'plan_id' => $plan_id,
                     'subcription_date' => $subscriptionDate,
                     'expire_date' => $expireDate,
-                    'owners_contact_limit' => $features->no_of_owners_contactable ?? null,
-                    'unlock_prime_properties' => $features->unlock_owner_properties ?? 'N',
-                    'relationship_manager' => $features->assistance_relationship_manager ?? 'N',
-                    'early_access' => $features->early_access_days ?? 'N',
-                    'prime_tag' => $features->prime_tag ?? 'N',
-                    'home_guarantee' => $features->home_guarantee_refund ?? 'N',
-                    'owner_contacted' => 0,
+                    'owner_contacted' => $features->owner_contacted ?? null,
+                    'listings_allowed' => $features->listings_allowed ?? 'null',
+                    'relationship_manager' => $features->relationship_manager ?? 'N',
+                    'verified_badge' => $features->verified_badge ?? 'N',
+                    'listing_visibility' => $features->listing_visibility ?? 'null',
+                    'social_media_promotion' => $features->social_media_promotion ?? 'N',
+                    'remaining_owner_contacted' => $features->owner_contacted?? 'null',
+                    'remaining_listings_allowed' => $features->listings_allowed ?? 'null',
                     'created_at' => now(),
                     'updated_at' => now()
                 ]);
@@ -121,44 +120,5 @@ class PaymentController extends Controller
         }
     }
 
-    public function membership_pakage_lists(Request $request)
-    {
-        try {
-            $lang = $request->input('lang', 'en');
-
-            $membershipList = MembershipPlans::select('price', 'discounted_price', 'validity_days', 'discount', 'plan_type_id')
-                ->where('status', config('constants.STATUS_ACTIVE'))
-                ->with([
-                    'plan_type_names' => function ($query) use ($lang) {
-                        $query->select('id', 'plan_name')->where('lang', $lang);
-                    },
-                    'plan_features:id,relationship_manager,owner_contacted,listings_allowed,verified_badge,listing_visibility,social_media_promotion',
-                ])
-                ->get();
-
-            $membershipData = $membershipList->map(function ($membership) {
-                return [
-                    'price' => $membership->price,
-                    'discounted_price' => $membership->discounted_price,
-                    'validity_days' => $membership->validity_days,
-                    'discount' => $membership->discount,
-                    'plan_name' => $membership->plan_type_names->plan_name ?? null,
-                    'features' => $membership->plan_features,
-                ];
-            });
-
-
-            return response()->json([
-                'status' => 1,
-                'message' => 'Data Retrived Successfully',
-                'data' => $membershipData
-            ]);
-        } catch (\Exception $e) {
-            logError($e);
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while removing the file',
-            ]);
-        }
-    }
+  
 }

@@ -140,6 +140,7 @@ class AuthController extends Controller
 
     protected function respondWithToken($token)
     {
+        assign_free_plan(auth()->user()->id);
         return response()->json([
             'status' => 1,
             'message' => 'Successfully registered',

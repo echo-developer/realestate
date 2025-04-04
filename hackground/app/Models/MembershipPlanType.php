@@ -16,6 +16,7 @@ class MembershipPlanType extends Model
         'verified_badge', 
         'listing_visibility',
         'social_media_promotion',
+        'remaining_listings_allowed',
         'status'
     ];
 

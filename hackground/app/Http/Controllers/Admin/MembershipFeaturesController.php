@@ -35,8 +35,6 @@ class MembershipFeaturesController extends Controller
   
         $validatedData = $request->validate([
             'listing_visibility' => 'required',
-            'owner_contacted' => 'required',
-            'listings_allowed' => 'required',
             'status' => 'required|boolean',
             'type_name' => 'required|array',
             'type_name.*' => 'required|string|max:255',
@@ -44,6 +42,8 @@ class MembershipFeaturesController extends Controller
         $validatedData['social_media_promotion'] =$request->social_media_promotion;
         $validatedData['verified_badge'] =$request->verified_badge;
         $validatedData['relationship_manager'] =$request->relationship_manager;
+        $validatedData['owner_contacted'] =$request->owner_contacted;
+        $validatedData['listings_allowed'] =$request->listings_allowed;
 
         $updatedPlan = $this->membershipPlanService->updateMembershipPlansType($validatedData, $request->id);
         set_flash_message('update');

@@ -1,21 +1,23 @@
 <?php
 
-use App\Models\PrefProject;
-use App\Models\PrefProperty;
-use App\Models\ProjectSetting;
-use App\Models\ProjectView;
-use App\Models\PropertyView;
 use App\Models\User;
+use App\Models\PrefProject;
+use App\Models\ProjectView;
+use App\Models\PrefProperty;
+use App\Models\PropertyView;
+use App\Models\ProjectSetting;
+use App\Models\MembershipPlans;
 use function PHPSTORM_META\type;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
+use App\Models\MembershipPlanType;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
-use Illuminate\Support\Facades\Schema;
 use PHPMailer\PHPMailer\PHPMailer;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Eloquent\Model;
 
 
 if (!function_exists('auth_user_id')) {
@@ -44,7 +46,7 @@ if (!function_exists('SendMail')) {
     function SendMail($to,  $mail_unique_title, $data_parse = [])
     {
         $mail = new PHPMailer(true);
-        $send='';
+        $send = '';
         try {
             $mail->isSMTP();
             $mail->Host = get_setting('smtp-host');
@@ -61,7 +63,7 @@ if (!function_exists('SendMail')) {
                 ],
             ];
 
-          
+
             $mail->setFrom(get_setting('smtp-user'), 'Realestate');
             $mail->addAddress($to);
             $mail->addReplyTo(get_setting('smtp-user'));
@@ -248,7 +250,7 @@ if (!function_exists('AllmenusForSideBar')) {
             $allmenus->where('pt.role_id', '=', $role);
         }
 
-        $allmenus = $allmenus->orderBy('id','asc')->get()->groupBy('parent_id');
+        $allmenus = $allmenus->orderBy('id', 'asc')->get()->groupBy('parent_id');
 
         if ($allmenus->isNotEmpty()) {
             return $allmenus;
@@ -1122,7 +1124,7 @@ if (!function_exists('get_property_category_name')) {
     {
         $result = DB::table('property_category as p_c')
             ->join('property_category_names as p_c_n', 'p_c.id', '=', 'p_c_n.category_id')
-            ->where('p_c.id',$id)
+            ->where('p_c.id', $id)
             ->first();
 
         return $result->name;
@@ -1134,7 +1136,7 @@ if (!function_exists('get_property_sub_category_name')) {
     {
         $result = DB::table('property_sub_category as p_s')
             ->join('property_sub_category_names as p_s_n', 'p_s.id', '=', 'p_s_n.sub_category_id')
-            ->where('p_s.id',$id)
+            ->where('p_s.id', $id)
             ->first();
 
         return $result->name;
@@ -1145,10 +1147,10 @@ if (!function_exists('get_all_country')) {
     function get_all_city()
     {
         $result = DB::table('city as c')
-                    ->select('c.city_id','c_n.name')
-                   ->leftJoin('city_names as c_n', 'c.city_id', '=', 'c_n.city_id')
-                   ->where(['c.status'=>'1','c_n.lang'=>'en']) 
-                   ->get();
+            ->select('c.city_id', 'c_n.name')
+            ->leftJoin('city_names as c_n', 'c.city_id', '=', 'c_n.city_id')
+            ->where(['c.status' => '1', 'c_n.lang' => 'en'])
+            ->get();
 
         return $result;
     }
@@ -1158,32 +1160,136 @@ if (!function_exists('get_all_property_category')) {
     function get_all_property_category()
     {
         $result = DB::table('property_category as p_c')
-            ->select('p_c.*','p_c_n.name')
+            ->select('p_c.*', 'p_c_n.name')
             ->join('property_category_names as p_c_n', 'p_c.id', '=', 'p_c_n.category_id')
-            ->where(['p_c.status'=>'1','p_c_n.lang'=>'en'])
+            ->where(['p_c.status' => '1', 'p_c_n.lang' => 'en'])
             ->get();
 
         return $result;
     }
 }
 
-if(!function_exists('get_user_plan')){
-	
-    function get_user_plan($user_id=''){
-        
-        $today = date('Y-m-d');
-        $login_user = $user_id;
-        
-        
-        $row = $ci->db->select('um.membership_id')
-                ->from('user_membership um')
-                ->join('users u', 'u.user_id=um.user_id', 'INNER')
-                ->where(array('u.user_id' => $login_user, 'um.expire_date >=' => $today, "um.status" => "'Y'"), null, FALSE)
-                ->get()->row_array();
-        
-        return $row;
-        
+if (!function_exists('get_user_plan')) {
+    function get_user_plan($user_id = '')
+    {
+        if (empty($user_id)) {
+            return null;
+        }
+
+        $today = now()->toDateString();
+
+        return DB::table('user_membership')
+            ->where('user_id', $user_id)
+            ->where('expire_date', '>=', $today)
+            ->pluck('plan_id');
+    }
+}
+if (!function_exists('get_user_membership')) {
+    function get_user_membership($user_id = '')
+    {
+
+        $membership_id = get_user_plan($user_id);
+       return DB::table('user_membership')->select(
+            'id',
+            'relationship_manager',
+            'owner_contacted',
+            'remaining_listings_allowed',
+            'verified_badge',
+            'listing_visibility',
+            'social_media_promotion'
+        )
+            ->where([
+                ['plan_id', $membership_id],
+            ])
+            ->get();
+    }
+}
+if (!function_exists('get_remaining_values')) {
+    function get_remaining_values($field, $login_user)
+    {
+        if (empty($field) || empty($login_user)) {
+            return null; // Prevent empty queries
+        }
+
+        $today = now()->toDateString(); // Get the current date
+        $membership_id = get_user_plan($login_user);
+
+        if (!$membership_id) {
+            return null;
+        }
+        $count_det = DB::table('user_membership')
+            ->where('user_id', $login_user)
+            ->where('expire_date', '>=', $today)
+            ->value($field);
+
+        return $count_det ?? 0;
+    }
+}
+
+if (!function_exists('debit_membership_feature_value')) {
+    function debit_membership_feature_value($field, $remaining_field,$user_id)
+    {
+        if (empty($field) || empty($remaining_field)) {
+            return false;
+        }
+
+        $login_user = auth_user_id()?auth_user_id():$user_id;
+
+        if (!$login_user) {
+            return false;
+        }
+
+        $count_det = DB::table('user_membership')
+            ->where('user_id', $login_user)
+            ->select('plan_id', $field, $remaining_field)
+            ->first();
+
+        if (!$count_det || $count_det->$remaining_field <= 0) {
+            return false;
+        }
+
+        DB::table('user_membership')
+            ->where('plan_id', $count_det->plan_id)
+            ->update([$remaining_field => DB::raw("$remaining_field - 1")]);
+
+        return true;
     }
 
 
+    if (!function_exists('assign_free_plan')) {
+        function assign_free_plan($user_id, $transactionId = null)
+        {
+
+            $planDetails = MembershipPlans::with('plan_features')->find(1);
+
+            $subscriptionDate = now();
+            $expireDate = now()->addDays($planDetails->validity_days);
+
+            DB::transaction(function () use ($user_id, $transactionId, $subscriptionDate, $expireDate, $planDetails) {
+                $features = $planDetails->plan_features;
+
+                DB::table('user_membership')->where('user_id', $user_id)->delete();
+
+                DB::table('user_membership')->insert([
+                    'user_id'               => $user_id,
+                    'transaction_id'        => $transactionId ?? null,
+                    'plan_id'               => 1,
+                    'subcription_date'      => $subscriptionDate,
+                    'expire_date'           => $expireDate,
+                    'owner_contacted'       => $features->owner_contacted ?? null,
+                    'listings_allowed'      => $features->listings_allowed ?? null,
+                    'relationship_manager'  => $features->relationship_manager ?? 'N',
+                    'verified_badge'        => $features->verified_badge ?? 'N',
+                    'listing_visibility'    => $features->listing_visibility ?? null,
+                    'social_media_promotion' => $features->social_media_promotion ?? 'N',
+                    'remaining_owner_contacted' => $features->owner_contacted,
+                    'remaining_listings_allowed' => $features->listings_allowed,
+                    'created_at'            => now(),
+                    'updated_at'            => now(),
+                ]);
+            });
+
+            return true;
+        }
+    }
 }

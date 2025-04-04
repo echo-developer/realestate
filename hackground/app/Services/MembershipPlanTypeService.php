@@ -44,8 +44,8 @@ class MembershipPlanTypeService
 
             $plan->update([
                 'relationship_manager' => $data['relationship_manager'],
-                'owner_contacted' => $data['owner_contacted'],
-                'listings_allowed' => $data['listings_allowed'],
+                'owner_contacted' => $data['owner_contacted']??null,
+                'listings_allowed' => $data['listings_allowed']?? null,
                 'verified_badge' => $data['verified_badge'],
                 'listing_visibility' => $data['listing_visibility'],
                 'social_media_promotion' => $data['social_media_promotion'],
