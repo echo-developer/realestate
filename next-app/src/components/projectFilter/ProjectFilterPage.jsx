@@ -256,8 +256,13 @@ const ProjectFilterPage = ({ setPerPage }) => {
         }, {});
       };
       const stateObject = queryStringToObject(router?.query);
-      const maxPrice = JSON.parse(router.query?.max_price)
-      const minPrice = JSON.parse(router.query?.min_price)
+      let maxPrice, minPrice;
+      if(router.query?.max_price) {
+        maxPrice = JSON.parse(router.query?.max_price)
+      }
+      if(router.query?.min_price) {
+        minPrice = JSON.parse(router.query?.min_price)
+      }
 
       if(maxPrice) {
         setMaxBudget(maxPrice);

@@ -126,24 +126,34 @@ export function ProjectMobileFilters({
   
     params.forEach((value, key) => {
       try {
-        // Check if the value is a stringified array or object
+        // Check if the value is a stringified array
         if (value.startsWith("[") && value.endsWith("]")) {
+          queryObject[key] = JSON.parse(value).map((item) => {
+            if (typeof item === "string" && item.startsWith('"') && item.endsWith('"')) {
+              item = item.slice(1, -1); // Remove extra quotes
+            }
+            return isNaN(item) ? item : Number(item); // Convert to number if possible
+          });
+        } else if (value.startsWith("{") && value.endsWith("}")) {
           queryObject[key] = JSON.parse(value);
+        } else if (value.startsWith('"') && value.endsWith('"')) {
+          const cleanedValue = value.slice(1, -1); // Remove extra quotes
+          queryObject[key] = isNaN(cleanedValue) ? cleanedValue : Number(cleanedValue);
         } else {
-          queryObject[key] = value;
+          queryObject[key] = isNaN(value) ? value : Number(value);
         }
       } catch (error) {
         queryObject[key] = value; // Fallback in case JSON parsing fails
       }
     });
+  
     return queryObject;
   };
+  
+  
 
   useEffect(() => {
     const queryObject =parseQueryParams(searchParams);
-    if(queryObject.occupied_area) {
-      queryObject.occupied_area = JSON.parse(queryObject.occupied_area);
-    }
     setSelectedFilters(prev => {
       return {
         ...prev,
@@ -211,9 +221,20 @@ export function ProjectMobileFilters({
     }
   };
 
+
+  const handlePropertyTypeChange = (filterKey, value) => {
+    setSelectedFilters(prev => {
+      return {
+        ...prev,
+        [filterKey]: value
+      }
+    })
+  }
+
   const amenitiesToShow = showAll
     ? dynamicData?.amenities
     : dynamicData?.amenities?.slice(0, 10);
+
 
     const handleViewProject = () => {
       const objectToQueryString = (obj) => {
@@ -222,23 +243,28 @@ export function ProjectMobileFilters({
             value !== "" && value !== null && value !== undefined && !(Array.isArray(value) && value.length === 0)
           )
           .map(([key, value]) => {
-            if (key === "occupied_area") {
-              // If the key is "occupied_area", stringify it without encoding
+            if (typeof value === "object" && !Array.isArray(value)) {
+              // If value is an object (like occupied_area), stringify without encoding
               return `${key}=${JSON.stringify(value)}`;
             }
       
-            // Default behavior for other keys
-            const formattedValue = typeof value === "object" ? JSON.stringify(value) : value;
-            return `${key}=${encodeURIComponent(formattedValue)}`;
+            if (Array.isArray(value)) {
+              // Convert arrays to proper format with double-quoted values
+              const arr = JSON.stringify(value.map(String)); 
+              return `${key}=${arr}`;
+            }
+      
+            // Wrap string values with double quotes
+            return `${key}=%22${value}%22`;
           })
           .join("&");
       };
-      
-      
 
       const searchData = {
-        project_type: selectedFilters.property_type || "",
+        project_type: selectedFilters.project_type || "",
         possession_status: selectedFilters.possession_status || "",
+        min_price: selectedFilters.min_price || "",
+        max_price: selectedFilters.max_price || "",
         occupied_area: {
           min: areaRange.min,
           max: areaRange.max,
@@ -249,35 +275,15 @@ export function ProjectMobileFilters({
         project_amenity: selectedFilters.project_amenity || [],
         project_furnish: selectedFilters.project_furnish || [],
       };
-
-      
-      const urlString = objectToQueryString(selectedFilters);
     
-      const queryParams = new URLSearchParams();
+      const urlString = objectToQueryString(searchData);
     
-      queryParams.append("property_type", searchData.project_type);
-      queryParams.append("post_for", activeTab.toLowerCase());
-      queryParams.append("property_for", selectedFilters.property_for);
-    
-      // **Loop through searchData and append each key-value pair**
-      Object.entries(searchData).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-          // Append array values individually
-          value.forEach((val) => queryParams.append(key, val));
-        } else if (typeof value === "object") {
-          // Append object values as separate query params
-          Object.entries(value).forEach(([subKey, subValue]) => {
-            queryParams.append(`${key}[${subKey}]`, subValue);
-          });
-        } else if (value) {
-          // Append single values
-          queryParams.append(key, value);
-        }
-      });
     
       router.push(`/project-listing?${urlString}`);
       setShow(false);
     };
+    
+
     
     const handleResetClick = () => {
       setSelectedFilters({
@@ -384,13 +390,14 @@ export function ProjectMobileFilters({
                   type="checkbox"
                   className="btn-check"
                   id={`property_${type.category_id}`}
-                  checked={selectedPropertyTypes.includes(type.category_id)}
+                  // checked={selectedPropertyTypes.includes(type.category_id)}
+                  checked={selectedFilters?.project_type == type.category_id}
                   onChange={() =>
-                    handleFilterChange("property_type", type.category_id)
+                    handlePropertyTypeChange("project_type", type.category_id)
                   }
                 />
                 <label
-                  className={`btn btn-sm ${selectedPropertyTypes.includes(type.category_id)
+                  className={`btn btn-sm ${selectedFilters?.project_type == type.category_id
                       ? "btn-outline-light"
                       : "btn-success"
                     }`}
