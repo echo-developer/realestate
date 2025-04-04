@@ -7,18 +7,18 @@ import { toast } from "react-toastify";
 const LoanDetailsModal = ({ show, handleClose }) => {
   const { callApi } = AuthUser();
   const [formData, setFormData] = useState({
-    loanAmount: "30,00,000",
+    loan_amount: "30,00,000",
     tenure: "20",
     age: "35",
-    propertyCost: "37,50,000",
-    propertyIdentified: "",
-    propertyCity: "",
-    employmentType: "Salaried",
+    property_cost: "37,50,000",
+    property_identified: "",
+    property_city: "",
+    employment_type: "Salaried",
     income: "1,00,000",
-    currentEMI: "10,000",
-    fullName: "",
+    current_emi: "10,000",
+    name: "",
     email: "",
-    mobile: "",
+    phone: "",
     consent: false,
   });
 
@@ -70,8 +70,8 @@ const LoanDetailsModal = ({ show, handleClose }) => {
                 <Form.Label>Loan Amount</Form.Label>
                 <Form.Control
                   type="text"
-                  name="loanAmount"
-                  value={formData.loanAmount}
+                  name="loan_amount"
+                  value={formData.loan_amount}
                   onChange={handleChange}
                 />
               </Form.Group>
@@ -101,8 +101,8 @@ const LoanDetailsModal = ({ show, handleClose }) => {
                 <Form.Label>Property Cost</Form.Label>
                 <Form.Control
                   type="text"
-                  name="propertyCost"
-                  value={formData.propertyCost}
+                  name="property_cost"
+                  value={formData.property_cost}
                   onChange={handleChange}
                 />
               </Form.Group>
@@ -114,8 +114,8 @@ const LoanDetailsModal = ({ show, handleClose }) => {
               <Form.Group>
                 <Form.Label>Is your property identified?</Form.Label>
                 <Form.Select
-                  name="propertyIdentified"
-                  value={formData.propertyIdentified}
+                  name="property_identified"
+                  value={formData.property_identified}
                   onChange={handleChange}
                 >
                   <option value="">Select</option>
@@ -128,8 +128,8 @@ const LoanDetailsModal = ({ show, handleClose }) => {
               <Form.Group>
                 <Form.Label>Property City</Form.Label>
                 <Form.Select
-                  name="propertyCity"
-                  value={formData.propertyCity}
+                  name="property_city"
+                  value={formData.property_city}
                   onChange={handleChange}
                 >
                   <option value="">Select</option>
@@ -146,8 +146,8 @@ const LoanDetailsModal = ({ show, handleClose }) => {
               <Form.Group>
                 <Form.Label>Employment Type</Form.Label>
                 <Form.Select
-                  name="employmentType"
-                  value={formData.employmentType}
+                  name="employment_type"
+                  value={formData.employment_type}
                   onChange={handleChange}
                 >
                   <option value="Salaried">Salaried</option>
@@ -174,8 +174,8 @@ const LoanDetailsModal = ({ show, handleClose }) => {
                 <Form.Label>Current Total EMI (Monthly) </Form.Label>
                 <Form.Control
                   type="text"
-                  name="currentEMI"
-                  value={formData.currentEMI}
+                  name="current_emi"
+                  value={formData.current_emi}
                   onChange={handleChange}
                 />
               </Form.Group>
@@ -185,8 +185,8 @@ const LoanDetailsModal = ({ show, handleClose }) => {
                 <Form.Label>Full Name (as per PAN)</Form.Label>
                 <Form.Control
                   type="text"
-                  name="fullName"
-                  value={formData.fullName}
+                  name="name"
+                  value={formData.name}
                   onChange={handleChange}
                   placeholder="Enter full name"
                 />
@@ -198,14 +198,14 @@ const LoanDetailsModal = ({ show, handleClose }) => {
             <Col md={6}>
               <Form.Group>
                 <Form.Label>
-                  Mobile Number (OTP verification required)
+                  phone Number (OTP verification required)
                 </Form.Label>
                 <Form.Control
                   type="text"
-                  name="mobile"
-                  value={formData.mobile}
+                  name="phone"
+                  value={formData.phone}
                   onChange={handleChange}
-                  placeholder="Enter mobile number"
+                  placeholder="Enter phone number"
                 />
               </Form.Group>
             </Col>
