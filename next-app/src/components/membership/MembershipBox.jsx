@@ -10,7 +10,7 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
         return acc;
     }, {});
     const planGroupNames = Object.keys(planGroups);
-    
+
     const allFeatures = [];
     data.forEach(item => {
         Object.keys(item.features).forEach(feature => {
@@ -34,19 +34,19 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
     };
 
     const shouldShowDiscount = (plan) => {
-        const value=Number(plan.discount) > 0 && Number(plan.discounted_price) > 0;
-        return  value
+        const value = Number(plan.discount) > 0 && Number(plan.discounted_price) > 0;
+        return value
     };
-    
+
 
     return (
         <div className="ul-table-responsive membership d-none d-lg-block">
             <div className="ul-table">
                 <ul className="head">
                     <li>&nbsp;</li>
-                    {planGroupNames.flatMap(planName => 
+                    {planGroupNames.flatMap(planName =>
                         planGroups[planName].map((plan, index) => (
-                            <li 
+                            <li
                                 key={`${planName}-${plan.validity_days}`}
                                 className={getPlanColumnClass(planName, index)}
                             >
@@ -70,7 +70,7 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
                 {/* Price Row */}
                 <ul>
                     <li>PRICE</li>
-                    {planGroupNames.flatMap(planName => 
+                    {planGroupNames.flatMap(planName =>
                         planGroups[planName].map(plan => (
                             <li key={`price-${planName}-${plan.validity_days}`}>
                                 {shouldShowDiscount(plan) ? (
@@ -93,7 +93,7 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
                 {allFeatures.map(feature => (
                     <ul key={feature}>
                         <li>{formatFeatureName(feature)}</li>
-                        {planGroupNames.flatMap(planName => 
+                        {planGroupNames.flatMap(planName =>
                             planGroups[planName].map(plan => {
                                 const featureValue = plan.features[feature];
                                 return (
@@ -106,10 +106,14 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
                                                     <i className="material-icons-outlined text-danger">close</i>
                                                 )
                                             ) : (
-                                                featureValue === '' ? '-' : featureValue
+                                                featureValue.trim() === '' ? '-' : featureValue
                                             )
+                                        ) : featureValue === null || featureValue === undefined ? (
+                                            'Unlimited'
+                                        ) : featureValue === 0 ? (
+                                            '-'
                                         ) : (
-                                            featureValue ? featureValue : '-'
+                                            featureValue
                                         )}
                                     </li>
                                 );
@@ -118,17 +122,17 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
                     </ul>
                 ))}
 
+
                 {/* Select Buttons */}
                 <ul>
                     <li>&nbsp;</li>
-                    {planGroupNames.flatMap(planName => 
+                    {planGroupNames.flatMap(planName =>
                         planGroups[planName].map((plan, index) => (
                             <li key={`select-${planName}-${plan.validity_days}`}>
-                                <a 
-                                    className={`btn btn-sm btn-success ${
-                                        planName === 'Gold' ? 'btn-outline-gold' : 
-                                        planName === 'Platinum' ? 'btn-outline-platinum' : 'btn-outline-plan-name'
-                                    } w-75`}
+                                <a
+                                    className={`btn btn-sm btn-success ${planName === 'Gold' ? 'btn-outline-gold' :
+                                            planName === 'Platinum' ? 'btn-outline-platinum' : 'btn-outline-plan-name'
+                                        } w-75`}
                                     role="button"
                                     onClick={() => handleSelectPlan(plan)}
                                 >
