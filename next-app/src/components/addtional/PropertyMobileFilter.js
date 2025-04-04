@@ -47,6 +47,7 @@ export function PropertyMobileFilters({
   const bhkOptions = subfilterOptions.bedrooms || [];
   const bathOptions = subfilterOptions.bathroom || [];
   const kitchenOptions = subfilterOptions.kitchen || [];
+  
 
   const tabs = [
     { key: "sale", value: "Buy" },
@@ -58,11 +59,17 @@ export function PropertyMobileFilters({
     const propertyType = searchParams.get("property_type") || "";
     const propertyFor = searchParams.get("property_for") || "";
     const postFor = searchParams.get("post_for") || "sale";
+    const bedrooms = searchParams.get('bedrooms');
+    const bathroom = searchParams.get('bathroom');
+    const kitchens = searchParams.get('kitchens');
+    const minBudget = searchParams.get('min_budget');
+    const maxBudget = searchParams.get('max_budget');
     const searchData = searchParams.get("searchData")
       ? JSON.parse(decodeURIComponent(searchParams.get("searchData")))
       : {};
       setActiveTab(postFor);
       setSelectedPropertyTypes(propertyType);
+
     let filterObject = {
       ...propertyFor,
     };
@@ -72,6 +79,22 @@ export function PropertyMobileFilters({
     if(propertyFor) {
       filterObject.property_for = propertyFor;
     };
+    if(bedrooms) {
+      filterObject.bedrooms = JSON.parse(bedrooms)
+    } 
+    if(bathroom) {
+      filterObject.bathroom = JSON.parse(bathroom);
+    }
+    if(kitchens) {
+      filterObject.kitchens = JSON.parse(kitchens);
+    }
+    if(minBudget || maxBudget) {
+      setBudgetRange({
+        min_budget: minBudget || null,
+        max_budget: maxBudget || null,
+      })
+    }
+
     setSelectedPropertyFor(propertyFor);
 
     filterObject = {
@@ -83,15 +106,16 @@ export function PropertyMobileFilters({
       delete filterObject[0];
     }
     setSelectedFilters(filterObject);
-    setBudgetRange({
-      min_budget: searchData?.min_budget,
-      max_budget: searchData?.max_budget,
-    });
+    // setBudgetRange({
+    //   min_budget: searchData?.min_budget,
+    //   max_budget: searchData?.max_budget,
+    // });
     setAreaRange({
       min_carpet: searchData?.min_carpet,
       max_carpet: searchData?.max_carpet,
     });
   }, [searchParams]);
+
 
   
 
@@ -166,17 +190,17 @@ export function PropertyMobileFilters({
       verify_properties: selectedFilters.verify_properties || [],
       facing: selectedFilters.facing || [],
       floor: selectedFilters.floor || [],
-      bathroom: selectedFilters.bathroom || [],
-      bedrooms: selectedFilters.bedrooms || [],
-      kitchens: selectedFilters.kitchens || [],
+      // bathroom: selectedFilters.bathroom || [],
+      // bedrooms: selectedFilters.bedrooms || [],
+      // kitchens: selectedFilters.kitchens || [],
       mb_exclusive_properties: selectedFilters.mb_exclusive_properties || [],
       posted_by_certified_agents:
         selectedFilters.posted_by_certified_agents || [],
       rera_registered_properties:
         selectedFilters.rera_registered_properties || [],
       rera_registered_agents: selectedFilters.rera_registered_agents || [],
-      min_budget: budgetRange.min_budget,
-      max_budget: budgetRange.max_budget,
+      // min_budget: budgetRange.min_budget,
+      // max_budget: budgetRange.max_budget,
       min_carpet: areaRange.min_carpet,
       max_carpet: areaRange.max_carpet,
       posted_since: selectedFilters.posted_since || [],
@@ -187,7 +211,24 @@ export function PropertyMobileFilters({
     queryParams.append("property_type", selectedFilters.property_type || "");
     queryParams.append("post_for", activeTab.toLowerCase());
     queryParams.append("property_for", selectedFilters.property_for || "");
+    if(selectedFilters?.bedrooms) {
+      queryParams.append("bedrooms", JSON.stringify(selectedFilters?.bedrooms));
+    }
+    if(selectedFilters?.bathroom) {
+      queryParams.append("bathroom", JSON.stringify(selectedFilters?.bathroom));
+    } 
+    if(selectedFilters?.kitchens) {
+      queryParams.append("kitchens", JSON.stringify(selectedFilters?.kitchens))
+    }
+    if(budgetRange.min_budget) {
+      queryParams.append("min_budget", budgetRange?.min_budget)
+    }
+    if(budgetRange.max_budget) {
+      queryParams.append("max_budget", budgetRange?.max_budget);
+    }
     queryParams.append("searchData", JSON.stringify(searchData));
+    // console.log("params url", queryParams.toString())
+    // return;
 
     // Navigate to the property listing page
     router.push(`/property-listing?${queryParams.toString()}`);
@@ -223,6 +264,7 @@ export function PropertyMobileFilters({
   const amenitiesToShow = showAll
     ? dynamicData?.amenities
     : dynamicData?.amenities?.slice(0, 10);
+
 
   return (
     <>
