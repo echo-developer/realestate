@@ -1222,7 +1222,7 @@ if (!function_exists('get_remaining_values')) {
             ->where('expire_date', '>=', $today)
             ->value($field);
 
-        return $count_det ?? 0;
+        return $count_det;
     }
 }
 
@@ -1233,7 +1233,7 @@ if (!function_exists('debit_membership_feature_value')) {
             return false;
         }
 
-        $login_user = auth_user_id()?auth_user_id():$user_id;
+        $login_user = auth_user_id() ?? $user_id;
 
         if (!$login_user) {
             return false;

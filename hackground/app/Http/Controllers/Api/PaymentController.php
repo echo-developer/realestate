@@ -100,13 +100,13 @@ class PaymentController extends Controller
                     'subcription_date' => $subscriptionDate,
                     'expire_date' => $expireDate,
                     'owner_contacted' => $features->owner_contacted ?? null,
-                    'listings_allowed' => $features->listings_allowed ?? 'null',
+                    'listings_allowed' => $features->listings_allowed ?? null,
                     'relationship_manager' => $features->relationship_manager ?? 'N',
                     'verified_badge' => $features->verified_badge ?? 'N',
                     'listing_visibility' => $features->listing_visibility ?? 'null',
                     'social_media_promotion' => $features->social_media_promotion ?? 'N',
                     'remaining_owner_contacted' => $features->owner_contacted?? 'null',
-                    'remaining_listings_allowed' => $features->listings_allowed ?? 'null',
+                    'remaining_listings_allowed' => $features->listings_allowed ?? null,
                     'created_at' => now(),
                     'updated_at' => now()
                 ]);

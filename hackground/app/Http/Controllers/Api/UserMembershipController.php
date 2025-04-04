@@ -35,7 +35,7 @@ class UserMembershipController extends Controller
             ]);
         }
     }
-    
+
     public function getUserMembership(Request $request)
     {
         try {
@@ -67,18 +67,19 @@ class UserMembershipController extends Controller
     public function getRemainingValue(Request $request)
     {
         try {
-            $userId = auth_user_id()?auth_user_id(): 38;
-            $can_post = get_remaining_values('remaining_listings_allowed', $userId );
-            if ($can_post <= 0 || $can_post == null) {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'You have reached your limit of posting properties.',
-                ]);
-            }else {
+            $userId = auth_user_id();
+            $can_post = get_remaining_values('remaining_listings_allowed', $userId);
+
+            if ($can_post === null || $can_post > 0) {
                 return response()->json([
                     'status' => 1,
                     'message' => 'You can post properties.',
-                    'remaining_listings_allowed' => $can_post
+                    'remaining_listings_allowed' => $can_post === null ? 'Unlimited' : $can_post
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'You have reached your limit of posting properties.',
                 ]);
             }
         } catch (\Exception $e) {
@@ -88,5 +89,4 @@ class UserMembershipController extends Controller
             ]);
         }
     }
-    
 }

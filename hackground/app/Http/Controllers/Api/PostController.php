@@ -84,8 +84,11 @@ class PostController extends Controller
             $this->savePropertyDimensions($property->id, $request);
             $this->savePropertyAdditional($property->id, $request);
             $this->savePropertyGalleries($property->id, $request);
+            $can_post = get_remaining_values('remaining_listings_allowed', $this->UserId);
+            if ($can_post != null) {
 
-            $debit = debit_membership_feature_value('listings_allowed', 'remaining_listings_allowed', $this->UserId);
+                debit_membership_feature_value('listings_allowed', 'remaining_listings_allowed', $this->UserId);
+            }
             DB::commit();
             return response()->json([
                 'status' => 1,
