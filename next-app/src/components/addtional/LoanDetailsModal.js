@@ -115,7 +115,7 @@ const LoanDetailsModal = ({ show, handleClose }) => {
       setLoading(false);
     }
   };
-  
+
   const verifyOtp = async (otp) => {
     setLoading(true);
     try {
@@ -124,7 +124,7 @@ const LoanDetailsModal = ({ show, handleClose }) => {
         method: "UPLOAD",
         data: {
           otp: otp,
-          Phone: formData.phone,
+          phone: formData.phone,
         },
       });
 

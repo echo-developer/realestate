@@ -80,6 +80,7 @@ class UserMembershipController extends Controller
                 return response()->json([
                     'status' => 0,
                     'message' => 'You have reached your limit of posting properties.',
+                    'remaining_listings_allowed' =>  $can_post
                 ]);
             }
         } catch (\Exception $e) {

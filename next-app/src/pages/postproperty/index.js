@@ -223,6 +223,20 @@ const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const points = stepKeyPoints[currentStep]?.slice(0, 10) || [];
 
+  const fetchRemainPosting=async()=>{
+    try {
+      const response = await callApi({
+        api:`/get_remaining_value`,
+        method:'GET',
+      })
+      if(response && response.status){
+        setRemainingData(response.remaining_listings_allowed)
+      }
+    } catch (error) {
+      
+    }
+  }
+
   useEffect(() => {
     if (memberId) {
       setFormData((prevFormData) => ({
