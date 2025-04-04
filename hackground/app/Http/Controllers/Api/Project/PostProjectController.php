@@ -32,8 +32,13 @@ class PostProjectController extends Controller
 
         try {
 
-
+           
             $this->UserId = $this->handleUser($request);
+            $can_post = get_remaining_values('remaining_listings_allowed', $this->UserId);
+            if ($can_post != null) {
+
+                debit_membership_feature_value('listings_allowed', 'remaining_listings_allowed', $this->UserId);
+            }
             $project = $this->createProject($this->UserId, $request);
             $this->saveProjectLocation($project->id, $request);
             $this->saveProjectSettings($project->id, $request);
