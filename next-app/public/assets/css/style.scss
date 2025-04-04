@@ -845,7 +845,7 @@ ul {
 		gap: 1rem;
 		margin: 0;
 		padding: 0;
-		&>li {		
+		&>li{
 			margin: 0;	
 			padding: 0;
 			.d-flex{
@@ -949,6 +949,7 @@ ul {
 		}
 	}
 }
+
 .offcanvas{
 	ul{
 		&.user-nav {
@@ -1279,9 +1280,7 @@ ul {
 		z-index: 10;
 	}
 }
-
 .badge {
-
 	&.bg-warning,
 	&.bg-info {
 		color: #000;
@@ -1326,7 +1325,6 @@ ul {
 	padding: 0 0.5rem;
 	width: auto;
 }
-
 .ads-type {
 	&.rent {
 		background-color: #00b900;
@@ -1340,7 +1338,6 @@ ul {
 		background-color: #ff8f00;
 	}
 }
-
 .ads-fav {
 	top: 0.75rem;
 	font-size: 1.25rem;
@@ -1358,7 +1355,6 @@ ul {
 		background-color: #f44639;
 	}
 }
-
 .total-ad-pic {
 	display: flex;
 	align-items: center;
@@ -1375,7 +1371,6 @@ ul {
 		margin-inline-end: 0.25rem;
 	}
 }
-
 .ads-price {
 	bottom: 1rem;
 	color: $white;
@@ -1425,7 +1420,6 @@ ul {
 		}
 	}
 }
-
 .card-agent {
 	h4{
 		a{
@@ -1441,7 +1435,6 @@ ul {
 		}
 	}
 }
-
 .card-title {
 	display: flex;
 	align-items: center;
@@ -6105,8 +6098,14 @@ fieldset{
 			max-height: 62vh;
 		}
 	}
+	ul.list-property-details{
+		&>li{
+			.d-flex{
+				img{
+					height: 32px;
+					width: 32px;
+				}
+			}
+		}
+	}
 }
-/* Media End */
-
-
-/* END */

@@ -37586,6 +37586,8 @@ fieldset .btn-delete {
   .photoGallery .sliderImages {
     max-height: 62vh;
   }
-}
-/* Media End */
-/* END *//*# sourceMappingURL=style.css.map */
+  ul.list-property-details > li .d-flex img {
+    height: 32px;
+    width: 32px;
+  }
+}/*# sourceMappingURL=style.css.map */

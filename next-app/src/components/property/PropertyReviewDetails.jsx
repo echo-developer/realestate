@@ -32,9 +32,9 @@ const PropertyReviewDetails = ({ property_reviews, handleShowCanvas, isMyPropert
             <div className="row">
               <article className="col-lg-4 col-sm-6">
                 <div className="d-flex align-items-center mb-3">
-                  <div className="star-rating">
+                  <div className="star-rating align-items-end">
                     <StarFill color="#ffc107" size={24} className="me-2" />
-                    <span className="h4">{rating}</span>
+                    <span className="h4 mb-0">{rating}</span>
                   </div>
                   <div className="ps-4">
                     <p className="text-muted">
