@@ -13,7 +13,7 @@ import MobileMenu from "../addtional/Mmenu";
 
 const Header = () => {
   const { callApi, isLogin, logout, GetMemberId } = AuthUser();
-  const { defaultCity, handleDefaultCityChange } = useAuth();
+  const { defaultCity, handleDefaultCityChange ,setGetAllCity } = useAuth();
   const [isDesktopLogoLoaded, setIsDesktopLogoLoaded] = useState(false);
   const [isMobileLogoLoaded, setIsMobileLogoLoaded] = useState(false);
   const [showLocationDrop, setShowLocationDrop] = useState(false);

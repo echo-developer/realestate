@@ -3,8 +3,10 @@ import { useState } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
+import { useAuth } from "@/context/AuthProvider";
 
 const LoanDetailsModal = ({ show, handleClose }) => {
+  const {setGetAllCity}= useAuth();
   const { callApi } = AuthUser();
   const [formData, setFormData] = useState({
     loan_amount: "30,00,000",
@@ -150,7 +152,7 @@ const LoanDetailsModal = ({ show, handleClose }) => {
                   value={formData.employment_type}
                   onChange={handleChange}
                 >
-                  <option value="Salaried">Salaried</option>
+                  <option value="salaried">Salaried</option>
                   <option value="Self-Employed">Self-Employed</option>
                 </Form.Select>
               </Form.Group>
