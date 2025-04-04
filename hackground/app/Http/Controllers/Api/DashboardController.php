@@ -1576,6 +1576,7 @@ class DashboardController extends Controller
                 return response()->json([
                     'status' => 1,
                     'message' => 'No certificates found.',
+                    'data' => []
                 ]);
             }
 

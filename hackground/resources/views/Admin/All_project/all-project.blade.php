@@ -163,7 +163,10 @@
                                         <button class="btn btn-sm btn-primary"
                                             onclick="AddCertificate(`{{ $proj->id }}`)">Add
                                             Certificate</button>
-                                        <button class="btn btn-sm btn-danger">Upload Brochure</button>
+                                        <button class="btn btn-sm btn-danger"
+                                            onclick="openBrochureModal(`{{ $proj->id }}`)">
+                                            Upload Brochure
+                                        </button>
                                     </td>
                                     <!-- Displaying Status -->
                                     <td>
@@ -335,7 +338,7 @@
         </div>
     </div>
 
-    <!-- Modal for Certificate-->
+    <!-- Modal for Certificate start-->
     <div class="modal fade" id="certificateModal" tabindex="-1" aria-labelledby="certificateModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -346,12 +349,7 @@
                 </div>
                 <div class="modal-body">
                     <h6>Previous Documents</h6>
-                    <ul class="list-unstyled">
-                        <li class="d-flex align-items-center mb-3">
-                            <span class="me-3">RERA (Reg No: aaaa1233) -</span>
-                            <a href="#" target="_blank" rel="noopener noreferrer">View</a>
-                        </li>
-                    </ul>
+                    <ul class="list-unstyled certificate-list" id="certificate-list"></ul>
                     <hr>
                     <h6>Upload New Document</h6>
                     <form action="" id='saveCertificate'>
@@ -383,6 +381,35 @@
             </div>
         </div>
     </div>
+    <!-- Modal for certificate end -->
+
+    <!-- Modal for Brochure start-->
+    <div class="modal fade" id="brochureModal" tabindex="-1" aria-labelledby="certificateModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title h4">Upload Project Brochure</div>
+                    <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal">X</button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="upload-area" id="uploadfile">
+                        <input id="fileinput" accept="application/pdf" type="file">
+                        <i class="bi bi-upload"></i>
+                        <p>Drag &amp; Drop files here or <span class="text-site">Click</span> to select files</p>
+                    </div>
+                    <p class="text-help">Accepted formats are .jpg, .gif, .bmp &amp; .png.</p>
+                    <div id="previewContainer" class="mt-3"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveBrochureModal">Upload</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal for Brochure end-->
 @endsection
 @push('custom-js')
     <script>
@@ -995,29 +1022,63 @@
     </script>
     <!-- Project Floor End -->
 
-
     <!-- Save certificate details -->
     <script>
-        function AddCertificate(projectId) {
-            let modal = new bootstrap.Modal(document.getElementById('certificateModal'));
-            modal.show();
+        let certificateModalInstance;
 
-            document.getElementById("file").value = ""; //clears the file input field
+        document.addEventListener("DOMContentLoaded", function() {
             document.getElementById("file").addEventListener("change", function() {
+                let projectId = document.getElementById("saveDocumentBtn").dataset.projectId;
                 uploadFile(projectId);
             });
 
-            let saveButton = document.getElementById("saveDocumentBtn");
-            if (!saveButton.dataset.listenerAdded) {
-                saveButton.addEventListener("click", function() {
-                    saveDocument(projectId);
-                });
-                saveButton.dataset.listenerAdded = "true";
-            }
+            // document.getElementById("certificateModal").addEventListener("hidden.bs.modal", function() {
+            //     document.body.classList.remove("modal-open");
+            //     let backdrop = document.querySelector(".modal-backdrop");
+            //     if (backdrop) {
+            //         backdrop.remove();
+            //     }
+            // });
+        });
 
-            
+        function resetFileUpload() {
+            ["fileUploadContainer", "uploadedFileLink", "fileName", "certificate-list"].forEach(id => {
+                let element = document.getElementById(id);
+                if (element) {
+                    if (id === "fileUploadContainer") {
+                        element.style.display = "none";
+                    } else if (id === "uploadedFileLink") {
+                        element.href = "#";
+                        element.textContent = "";
+                    } else if (id === "certificate-list") {
+                        element.innerHTML = "";
+                    } else {
+                        element.value = "";
+                    }
+                }
+            });
         }
 
+        function AddCertificate(projectId) {
+            const modalEl = document.getElementById("certificateModal");
+            if (!certificateModalInstance) {
+                certificateModalInstance = new bootstrap.Modal(modalEl);
+            }
+            document.getElementById("saveCertificate").reset();
+            document.getElementById("file").value = "";
+            resetFileUpload()
+            getProjectCertificates(projectId);
+            certificateModalInstance.show();
+
+            let saveButton = document.getElementById("saveDocumentBtn");
+            saveButton.dataset.projectId = projectId;
+
+            saveButton.addEventListener("click", function() {
+                saveDocument(projectId);
+            });
+            saveButton.dataset.listenerAdded = "true";
+
+        }
 
         function uploadFile(projectId) {
             let fileInput = document.getElementById("file");
@@ -1027,7 +1088,6 @@
                 alert("Please select a file.");
                 return;
             }
-
             let formData = new FormData();
             formData.append("file", file);
             formData.append("project_id", projectId);
@@ -1082,11 +1142,17 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    alert("Document details saved successfully!");
+                    if (data.status === 1) {
+                        toastr.success(data.message, '', toastrOptions);
+                        certificateModalInstance.hide();
+
+                    } else {
+                        toastr.error(data.message || 'Something went wrong.', '', toastrOptions);
+                    }
                 })
                 .catch(error => {
                     console.error("Error:", error);
-                    alert("Failed to save document details. Please try again.");
+                    toastr.error('Something went wrong.', '', toastrOptions);
                 })
                 .finally(() => {
                     saveButton.disabled = false;
@@ -1095,14 +1161,122 @@
         }
 
 
+        function getProjectCertificates(projectId) {
+            fetch(`{{ route('certificates.details') }}?project_id=${projectId}`, {
+                    method: "GET"
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 1 && Array.isArray(data.data) && data?.data?.length > 0) {
+                        renderProjectCertificates(data.data);
+                    } else {
+                        renderProjectCertificates(data.data);
+                        toastr.error(data?.data?.message || "No data Found", "", toastrOptions);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    toastr.error("Something went wrong. Please try again.", "", toastrOptions);
+                });
+        }
 
-        document.addEventListener('hidden.bs.modal', function() {
-            document.body.classList.remove('modal-open');
-            let backdrop = document.querySelector('.modal-backdrop');
-            if (backdrop) {
-                backdrop.remove();
+
+        function renderProjectCertificates(certificates) {
+            let container = document.querySelector(".certificate-list");
+            if (!container) return;
+
+            container.innerHTML = "";
+
+            if (certificates.length === 0) {
+                container.innerHTML = "<li>No documents found.</li>";
+                return;
             }
-        });
+
+            certificates.forEach(cert => {
+                let certItem = document.createElement("li");
+                certItem.classList.add("d-flex", "align-items-center", "mb-3");
+
+                certItem.innerHTML = `<span class="me-3">${cert.certificate_name} (Reg No: ${cert.certificate_number}) -</span>
+                <a href="${cert.filename_url}" target="_blank" rel="noopener noreferrer">View</a>`;
+
+                container.appendChild(certItem);
+            });
+        }
     </script>
     <!-- Save certificate details end-->
+
+    <!-- Save Brochure details -->
+    <script>
+        let brochuremodalInstance;
+
+        function openBrochureModal(projectId) {
+            const brochureModal = document.getElementById('brochureModal');
+            brochuremodalInstance = new bootstrap.Modal(brochureModal);
+
+            document.getElementById("fileinput").value = "";
+            document.getElementById("previewContainer").innerHTML = "";
+            brochuremodalInstance.show();
+
+            document.getElementById("saveBrochureModal").dataset.projectId = projectId;
+        }
+
+        document.getElementById("fileinput").addEventListener("change", function(event) {
+            let file = event.target.files[0];
+            if (!file) return;
+
+            let previewContainer = document.getElementById("previewContainer");
+            previewContainer.innerHTML = ""; // Clear previous content
+
+            let fileURL = URL.createObjectURL(file);
+            let fileType = file.type;
+
+            if (fileType.includes("pdf")) {
+                previewContainer.innerHTML = `<iframe src="${fileURL}" width="100%" height="300px"></iframe>`;
+            } else if (fileType.includes("image")) {
+                previewContainer.innerHTML = `<img src="${fileURL}" width="100%" class="img-thumbnail">`;
+            } else {
+                alert("Invalid file type. Please select a PDF or image.");
+                event.target.value = ""; // Reset input
+            }
+        });
+
+        // Upload file function
+        document.getElementById("saveBrochureModal").addEventListener("click", function() {
+            let fileInput = document.getElementById("fileinput");
+            let file = fileInput.files[0];
+            let projectId = this.dataset.projectId;
+
+            if (!file) {
+                alert("Please select a file before uploading.");
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append("brochure_data", file);
+            formData.append("project_id", projectId);
+
+            fetch("{{ route('uplaod.project.brochure') }}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            "content")
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success === 1) {
+                        toastr.success(data.message, '', toastrOptions);
+                        brochuremodalInstance.hide();
+                    } else {
+                        toastr.error("File upload failed. Please try again.", '', toastrOptions);
+                    }
+                })
+                .catch(error => {
+                    console.error("Upload Error:", error);
+                    toastr.error("An error occurred while uploading the file.", '', toastrOptions);
+                });
+        });
+    </script>
+    <!-- Save Brochure details end-->
 @endpush
