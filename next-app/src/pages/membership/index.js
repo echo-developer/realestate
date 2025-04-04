@@ -101,8 +101,11 @@ const Membership = () => {
     localStorage.setItem('planId', plan?.id);
     localStorage.setItem('plan_price', plan?.discounted_price || plan?.price);
     localStorage.setItem('plan_validate', plan?.validity_days );
+    localStorage.setItem('plan_name', plan?.plan_name );
+
     router.push('/membership/credit')
-   console.log(plan)
+
+    console.log(plan)
   };
 
   const convertPlans = (data) => {
@@ -192,96 +195,6 @@ const Membership = () => {
               ))}
             </div>
           </section>
-
-          {/* <div className="row d-lg-none">
-            <article className="col-12 col-sm-6 col-md-4">
-              {plans?.map((plan) => {
-                return (
-                  <div className="card border-0 mb-3" key={plan?.name}>
-                    <div className="card-body p-0">
-                      <ul className="list-group">
-                        <li
-                          className={`card-header ${plan?.name?.toLowerCase() === "gold"
-                            ? "bg-warning"
-                            : plan?.name?.toLowerCase() === "platinum"
-                              ? "bg-primary text-white"
-                              : "bg-purple text-white"
-                            }`}
-                        >
-                          <h4 className="text-center">{plan.name}
-
-                            {plan?.name === "GOLD" && (
-                              <span
-                                className="material-icons-outlined ms-2"
-                                data-bs-toggle="tooltip"
-                                data-bs-placement="top"
-                                style={{ cursor: "default" }}
-                                data-bs-original-title="Recommended"
-                              >
-                                {transaction?.recommend || "recommend"}
-                              </span>
-                            )}</h4>
-                        </li>
-
-
-                        <li className="list-group-item d-flex justify-content-between align-items-center" key="price">
-                          <strike>{transaction?.aed || "AED"}{plan?.price?.original}</strike>
-                          <span className="badge bg-green ms-1">{transaction?.off || "50% OFF"}</span>
-                          <span className="text-price">{transaction?.aed || "AED"}{plan?.price?.discounted}</span>
-                        </li>
-
-       
-                        {plan.features.map((feature, index) => (
-                          <li className="list-group-item d-flex justify-content-between align-items-center" key={index}>
-                            <span>{feature.label}:</span>
-                            {feature[plan?.name?.toLowerCase()] === true ? (
-                              <i className="material-icons-outlined text-green">{transaction?.check || "check"}</i>
-                            ) : feature[plan?.name?.toLowerCase()] === false ? (
-                              <i className="material-icons-outlined text-danger"> {transaction?.close || "close"}</i>
-                            ) : (
-                              feature[plan?.name?.toLowerCase()]
-                            )}
-                          </li>
-                        ))}
-            
-                        <li className="list-group-item p-3">
-                          <a
-                            onClick={() => handleSelectPlan(plan)}
-                            className={`btn btn-sm btn-outline-primary btn-outline-${plan?.name?.toLowerCase()} w-100`}
-                          >
-                            {transaction?.select || "SELECT"}
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                );
-              })}
-
-            </article>
-          </div>
-
-          <section className="section banner-box-4 mt-0 pb-0">
-            <h3 className="text-primary mb-3"> {transaction?.how_it_works || "How it works"}</h3>
-            <div className="row gx-3 -mb-3">
-              {steps?.map((step, index) => (
-                <article key={index} className="col-lg-3 col-sm-6 col-12">
-                  <div className="card card-info">
-                    <div className="card-body">
-                      <img
-                        src={`assets/images/icons/${step.icon}`}
-                        alt="Icon"
-                        height="46"
-                        width="46"
-                      />
-                      <h4>{step.title}</h4>
-                      <p>{step.description}</p>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section> */}
 
           <section className="section">
             <h3 className="text-primary mb-3">{transaction?.frequently_asked_questions || "Frequently Asked Questions"}</h3>

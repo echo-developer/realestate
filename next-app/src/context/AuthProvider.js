@@ -8,10 +8,7 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const { callApi, GetMemberId } = AuthUser();
-
-  const memberId = GetMemberId();
-  
+  const { callApi, GetMemberId } = AuthUser()
   const [propertyFor, setPropertyFor] = useState(null);
   const [defaultCity, setDefaultCity] = useState(null);
   const [getAllCity, setGetAllCity] = useState([]);
@@ -26,6 +23,8 @@ export const AuthProvider = ({ children }) => {
       );
     }
   }, []);
+
+  console.log(getAllCity)
 
   const handleDefaultCityChange = (city) => {
     setDefaultCity(city);

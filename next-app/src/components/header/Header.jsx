@@ -128,6 +128,7 @@ const Header = () => {
       });
       if (response && response.status === 1) {
         setCityData(response.data);
+        setGetAllCity(response.data);
       } else {
         toast.error(response.message);
       }

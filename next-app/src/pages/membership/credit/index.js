@@ -17,6 +17,7 @@ const StripePayment = ({ messageCredit, balance, allLanguageKey }) => {
   const planId = localStorage.getItem("planId");
   const PlanPrice = localStorage.getItem("plan_price");
   const PlanValidate = localStorage.getItem("plan_validate");
+  const PlanName = localStorage.getItem("plan_name");
 
   const handlePaymentOption = () => {
     if (selectedPaymentMethod === "stripe") {
@@ -26,6 +27,8 @@ const StripePayment = ({ messageCredit, balance, allLanguageKey }) => {
     }
   };
 
+
+  console.log(PlanValidate)
  
   const handleClose = () => {
     setShow(false);
@@ -45,11 +48,11 @@ const StripePayment = ({ messageCredit, balance, allLanguageKey }) => {
             <article className="col-xl-6 col-lg-8 col-12">
               <div className="card card-plan">
                 <div className="card-body">
-                  <h3 className="text-center mb-4">{messageCredit.plan_name}</h3>
+                  <h3 className="text-center mb-4">{PlanName ||"Standard"} Plan</h3>
                   <hr />
                   <h4 className="d-flex justify-content-between mb-4">
-                    <span>{allLanguageKey?.message_credit}</span>
-                    <span>{messageCredit.message_credit}</span>
+                    <span>{allLanguageKey?.plan_validity || "Plan Validity"}</span>
+                    <span>{PlanValidate || 30} Days</span>
                   </h4>
                   <h4 className="d-flex justify-content-between mb-4">
                     <span>{allLanguageKey?.message_price}</span>

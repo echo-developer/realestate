@@ -2,7 +2,6 @@
 import React from 'react'
 
 const MembershipBox = ({ data, handleSelectPlan }) => {
-    // Process the data to group by plan name and include all variants
     const planGroups = data.reduce((acc, item) => {
         if (!acc[item.plan_name]) {
             acc[item.plan_name] = [];
@@ -10,12 +9,8 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
         acc[item.plan_name].push(item);
         return acc;
     }, {});
-
-
-    // Get all unique plan groups
     const planGroupNames = Object.keys(planGroups);
     
-    // Find all unique features across all plans
     const allFeatures = [];
     data.forEach(item => {
         Object.keys(item.features).forEach(feature => {
@@ -25,17 +20,13 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
         });
     });
 
-    // Format feature names for display
     const formatFeatureName = (name) => {
         return name.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     };
 
-    // Format price display
     const formatPrice = (price) => {
         return `AED${parseFloat(price).toFixed(2)}`;
     };
-
-    // Determine column classes based on plan name
     const getPlanColumnClass = (planName, index) => {
         if (planName === 'Gold') return 'bg-warning';
         if (planName === 'Platinum') return 'bg-primary text-white';
@@ -51,7 +42,6 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
     return (
         <div className="ul-table-responsive membership d-none d-lg-block">
             <div className="ul-table">
-                {/* Header row with all plan variants */}
                 <ul className="head">
                     <li>&nbsp;</li>
                     {planGroupNames.flatMap(planName => 
