@@ -6,8 +6,12 @@ import { toast } from "react-toastify";
 import { useAuth } from "@/context/AuthProvider";
 
 const LoanDetailsModal = ({ show, handleClose }) => {
-  const {setGetAllCity}= useAuth();
+  const { getAllCity } = useAuth();
   const { callApi } = AuthUser();
+  const [loading, setLoading] = useState(false);
+  const [timer, setTimer] = useState(0);
+  const [isResendDisabled, setIsResendDisabled] = useState(false);
+  const [showOtpField, setShowOtpField] = useState(false);
   const [formData, setFormData] = useState({
     loan_amount: "30,00,000",
     tenure: "20",
@@ -24,13 +28,36 @@ const LoanDetailsModal = ({ show, handleClose }) => {
     consent: false,
   });
 
-  // Handle input change
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+  };
+
+  const handleOTPChange = (e, index) => {
+    const value = e.target.value.replace(/\D/, ""); // Only digits
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    // Auto-focus next input if value exists
+    if (value && index < 5) {
+      const nextInput = document.querySelector(
+        `input[name='otp-${index + 1}']`
+      );
+      if (nextInput) nextInput.focus();
+    }
+    // Check if all digits are filled
+    const isComplete = newOtp.every((digit) => digit !== "");
+    if (isComplete) {
+      verifyOtp(newOtp.join(""));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -50,6 +77,67 @@ const LoanDetailsModal = ({ show, handleClose }) => {
       }
     } catch (error) {
       console.error("API error:", error);
+    }
+  };
+  const sendOtp = async () => {
+    if (!formData.phone) return;
+    setLoading(true);
+    try {
+      const response = await callApi({
+        api: `/send-otp`,
+        method: "UPLOAD",
+        data: {
+          phone: formData.phone,
+        },
+      });
+      if (response) {
+        setOtpSent(true);
+        toast.success("OTP sent successfully!");
+        setShowOtpField(true);
+        setIsResendDisabled(true);
+        setTimer(60);
+        const countdown = setInterval(() => {
+          setTimer((prev) => {
+            if (prev === 1) {
+              clearInterval(countdown);
+              setIsResendDisabled(false);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+      } else {
+        toast.error("Failed to send OTP.");
+      }
+    } catch (error) {
+      toast.error("An error occurred while sending the OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const verifyOtp = async (otp) => {
+    setLoading(true);
+    try {
+      const response = await callApi({
+        api: `/verify-otp`,
+        method: "UPLOAD",
+        data: {
+          otp: otp,
+          Phone: formData.phone,
+        },
+      });
+
+      if (response) {
+        setOtpVerified(true);
+        toast.success("OTP verified successfully!");
+      } else {
+        toast.error("Invalid OTP");
+      }
+    } catch (error) {
+      toast.error("An error occurred while verifying the OTP");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -135,9 +223,11 @@ const LoanDetailsModal = ({ show, handleClose }) => {
                   onChange={handleChange}
                 >
                   <option value="">Select</option>
-                  <option value="Mumbai">Mumbai</option>
-                  <option value="Delhi">Delhi</option>
-                  <option value="Bangalore">Bangalore</option>
+                  {getAllCity.map((city) => (
+                    <option key={city.city_id} value={city.city_id}>
+                      {city.name}
+                    </option>
+                  ))}
                 </Form.Select>
               </Form.Group>
             </Col>
@@ -200,7 +290,7 @@ const LoanDetailsModal = ({ show, handleClose }) => {
             <Col md={6}>
               <Form.Group>
                 <Form.Label>
-                  phone Number (OTP verification required)
+                  Phone Number (OTP verification required)
                 </Form.Label>
                 <Form.Control
                   type="text"
@@ -211,19 +301,41 @@ const LoanDetailsModal = ({ show, handleClose }) => {
                 />
               </Form.Group>
             </Col>
-            <Col md={6}>
-              <Form.Group>
-                <Form.Label>Email ID</Form.Label>
-                <Form.Control
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter email"
-                />
-              </Form.Group>
+            <Col md={6} className="d-flex align-items-end">
+              <Button
+                variant="primary"
+                onClick={sendOtp}
+                disabled={!formData.phone || isResendDisabled}
+              >
+                {isResendDisabled ? `Resend OTP in ${timer}s` : "Send OTP"}
+              </Button>
             </Col>
           </Row>
+          {showOtpField && (
+            <Row className="mb-3">
+              <Col md={12}>
+                <Form.Label>Enter 6-digit OTP</Form.Label>
+                <div className="d-flex gap-2">
+                  {[...Array(6)].map((_, index) => (
+                    <Form.Control
+                      key={index}
+                      type="text"
+                      maxLength="1"
+                      name={`otp-${index}`}
+                      value={otp[index] || ""}
+                      onChange={(e) => handleOTPChange(e, index)}
+                      className="text-center"
+                      style={{
+                        width: "50px",
+                        height: "50px",
+                        fontSize: "20px",
+                      }}
+                    />
+                  ))}
+                </div>
+              </Col>
+            </Row>
+          )}
 
           <Form.Group className="mb-3">
             <Form.Check

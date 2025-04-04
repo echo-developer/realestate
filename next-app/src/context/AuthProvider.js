@@ -24,8 +24,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  console.log(getAllCity)
-
   const handleDefaultCityChange = (city) => {
     setDefaultCity(city);
     localStorage.setItem("city", JSON.stringify(city));
