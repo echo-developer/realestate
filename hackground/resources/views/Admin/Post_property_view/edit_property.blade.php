@@ -30,9 +30,9 @@
     <section class="content">
         <div class="container-fluid">
             <ul id="myTab" class="nav nav-underline mb-3" role="tablist">
-                <li class="nav-item"><a class="nav-link active" href="https://nikah.bestmatrimonialscripts.com/admin/users/user_details/125" id="home-tab" role="tab" aria-expanded="false">Property Details</a> </li>
+                <li class="nav-item"><a class="" href="{{ url('property/edit/'.$property_id) }}" aria-expanded="false">Property Details</a> </li>
 
-                <li class="nav-item"><a class="nav-link " href="https://nikah.bestmatrimonialscripts.com/admin/users/user_preference/125" role="tab" id="profile-tab2" aria-expanded="true">Property Photos</a> </li>
+                <li class="nav-item"><a class="" href="{{ url('property/edit-photos/'.$property_id) }}"  aria-expanded="true">Property Photos</a> </li>
             </ul>
 
             <div class="card">
@@ -84,77 +84,17 @@
                             <span>{{$propertyData->location->locality}}</span>
                         </li>
                         <li>
-                            <b>Address:</b>
-                            <span>{{$propertyData->location->property_address??'N/A'}}</span>
-                        </li>
-                        <li>
                             <b>Locality:</b>
                             <span>{{$propertyData->location->locality}}</span>
                         </li>
-
                         <li>
-                            <b>Configuration:</b>
-                            <span>N/A</span>
+                            <b>Address:</b>
+                            <span>{{$propertyData->location->property_address??'N/A'}}</span>
                         </li>
-                        <li>
-                            <b>Carpet Area:</b>
-                            <span>{{$propertyData->settings->carpet_area??'N/A'}}</span>
-                        </li>
-                        <li>
-                            <b>Super Area:</b>
-                            <span>{{$propertyData->settings->super_area??'N/A'}}</span>
-                        </li>
-                        <li>
-                            <b>Possession Status:</b>
-                            <span> {{get_name_by_id('property_status_names','status_id',$propertyData->additional->possession_status,'en')??'N/A'}}</span>
-                        </li>
-                        @if($propertyData->additional->possession_status==1)
-                        <li>
-                            <b>Age Of Constraction:</b>
-                            <span> {{$propertyData->additional->construct_year??'N/A'}}</span>
-                        </li>
-                        @endif
-                        @if($propertyData->additional->possession_status==2)
-                        <li>
-                            <b>Expected Possesion Month Year:</b>
-                            <span> {{ date('F Y', strtotime($propertyData->additional->expected_possesion_month_year)) ??'N/A'}}</span>
-                        </li>
-                        @endif
-                        <li>
-                            <b>Furnished:</b>
-                            <span>{{get_name_by_id('property_furnish_names','furnish_id',$propertyData->additional->property_furnish,'en')??'N/A'}}</span>
-                        </li>
-                        <li>
-                            <b>Parking:</b>
-                            <span>
-                                @php
-                                $parkingStatus = [
-                                'av' => 'Available',
-                                'na' => 'Not Available',
-                                'uc' => 'Under Construction'
-                                ];
-                                @endphp
-                                {{ $parkingStatus[$propertyData->settings->parking_ability] ?? 'N/A' }}
-                            </span>
-                        </li>
-                        <li>
-                            <b>Facing:</b>
-                            <span>{{$propertyData->additional->facing_direction??'N/A'}}</span>
-                        </li>
-                        <li>
-                            <b>OverLooking:</b>
-                            <span>
-                                @php
-                                $overlooking = $propertyData->additional->overlooking ?? '';
-                                $overlookingArray = !empty($overlooking) ? json_decode($overlooking, true) : [];
-                                echo $overlookingArray ? implode(', ', $overlookingArray) : 'N/A';
-                                @endphp
-                            </span>
-                        </li>
-
                     </ul>
                 </div>
             </div>
+
             <div class="card">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Floor Details </h4>
@@ -204,6 +144,24 @@
                             <b>Lifts in the Tower:</b>
                             <span>{{$propertyData->additional->lifts_in_tower ?? 'N/A'}}</span>
                         </li>
+                        <li>
+                            <b>Configuration:</b>
+                            <span>N/A</span>
+                        </li>
+                        <li>
+                            <b>Carpet Area:</b>
+                            <span>{{$propertyData->settings->carpet_area??'N/A'}}</span>
+                        </li>
+                        <li>
+                            <b>Super Area:</b>
+                            <span>{{$propertyData->settings->super_area??'N/A'}}</span>
+                        </li>
+                        
+                        <li>
+                            <b>Furnished:</b>
+                            <span>{{get_name_by_id('property_furnish_names','furnish_id',$propertyData->additional->property_furnish,'en')??'N/A'}}</span>
+                        </li>
+                        
                     </ul>
                 </div>
             </div>
@@ -227,7 +185,56 @@
                             <b>Type of Ownership:</b>
                             <span>{{$propertyData->additional->ownership_type ?? 'N/A'}}</span>
                         </li>
+                        <li>
+                            <b>Possession Status:</b>
+                            <span> {{get_name_by_id('property_status_names','status_id',$propertyData->additional->possession_status,'en')??'N/A'}}</span>
+                        </li>
 
+                        @if($propertyData->additional->possession_status == '1')
+                        <li>
+                            <b>Age Of Constraction:</b>
+                            <span> {{$propertyData->additional->construct_year ?? 'N/A'}}</span>
+                        </li>
+                        @endif
+                        @if($propertyData->additional->possession_status == '2')
+                        @php
+                            $month_arr = explode('-',$propertyData->additional->expected_possesion_month_year);
+                            $construction_month = $month_arr[0];
+                            $construction_year = $month_arr[1];
+                        @endphp
+                        <li>
+                            <b>Expected Possesion Month Year:</b>
+                            <span> {{ date('F Y', strtotime($propertyData->additional->expected_possesion_month_year)) ?? 'N/A'}}</span>
+                        </li>
+                        @endif
+
+                        <li>
+                            <b>Parking:</b>
+                            <span>
+                                @php
+                                $parkingStatus = [
+                                'av' => 'Available',
+                                'na' => 'Not Available',
+                                'uc' => 'Under Construction'
+                                ];
+                                @endphp
+                                {{ $parkingStatus[$propertyData->settings->parking_ability] ?? 'N/A' }}
+                            </span>
+                        </li>
+                        <li>
+                            <b>Facing:</b>
+                            <span>{{$propertyData->additional->facing_direction??'N/A'}}</span>
+                        </li>
+                        <li>
+                            <b>OverLooking:</b>
+                            <span>
+                                @php
+                                $overlooking = $propertyData->additional->overlooking ?? '';
+                                $overlookingArray = !empty($overlooking) ? json_decode($overlooking, true) : [];
+                                echo $overlookingArray ? implode(', ', $overlookingArray) : 'N/A';
+                                @endphp
+                            </span>
+                        </li>
 
                     </ul>
                 </div>
@@ -256,6 +263,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </section>
 </div>

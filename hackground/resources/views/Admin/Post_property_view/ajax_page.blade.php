@@ -742,6 +742,275 @@
     
 @endif
 
+@if($page == 'landmark')
+    <div class="modal-header">
+    <h4 class="modal-title"><?php echo $title;?></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        
+    </div>
+    <div class="modal-body">
+            <form role="form" id="add_form" action="<?php echo $form_action;?>" onsubmit="submitForm(this, event)">
+                  <div class="box-body">
+                    <input type="hidden" name="property_id" value="{{ $property_id }}" />
+
+                    <div class="image-tab-content">
+                        <ul class="nav nav-underline nav-custom">
+                            <li class="nav-item"><a class="nav-link active" data-tab='education'
+                                    href="javascript:void(0)">Education</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" data-tab='healthcare'
+                                    href="javascript:void(0)">Healthcare</a></li>
+                            <li class="nav-item"><a class="nav-link" data-tab='shopping'
+                                    href="javascript:void(0)">Shopping Center</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" data-tab='commercial'
+                                    href="javascript:void(0)">Commercial Hub</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" data-tab='transaportation'
+                                    href="javascript:void(0)">Transaportation Hub</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="img-content" id="tab-content-education">
+                        <div class="form-field" id="education-field">
+                            <button type="button" class="btn btn-primary" onclick="add_field('education')"><i class="fa fa-plus"></i> Add Education</button>
+                            <div class="education-con my-3">
+                                <?php  
+                                    if($propertyData['landmarks'])
+                                    {
+                                        foreach($propertyData['landmarks'] as $k=>$l)
+                                        {
+                                            if($l->landmark_type == 'education')
+                                            { 
+                                                $details = json_decode($l->landmark_details);
+                                                if($details)
+                                                {
+                                                    $name = $details->name;
+                                                    $distance = $details->distance;
+                                                    ?>
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                         <input type="text" class="form-control" name="education[name][]" placeholder="Name" value="<?php echo $name; ?>" />
+                                                       </div>
+                                                       <div class="col-md-5">
+                                                         <div class="form-group">
+                                                          <input type="text" class="form-control input-group" name="education[distance][]" placeholder="Distance" value="<?php echo $distance; ?>" />
+                                                         </div>
+                                                       </div>
+                                                       <div class="col-md-2">
+                                                         <div><a href="javascript:void(0)" onclick="remove_field(this)"><i class="fa fa-trash"></i></a></div>
+                                                        </div>
+                                                    </div>
+                                                    <?php 
+                                                }
+                                                
+                                            }
+                                        }
+                                    }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="img-content" id="tab-content-healthcare" style="display:none">
+                        <div class="form-field">
+                            <button type="button" class="btn btn-primary" onclick="add_field('healthcare')"><i class="fa fa-plus"></i> Add Healthcare</button>
+                            <div class="healthcare-con my-3">
+                                <?php  
+                                    if($propertyData['landmarks'])
+                                    {
+                                        foreach($propertyData['landmarks'] as $k=>$l)
+                                        {
+                                            if($l->landmark_type == 'healthcare')
+                                            { 
+                                                $details = json_decode($l->landmark_details);
+                                                if($details)
+                                                {
+                                                    $name = $details->name;
+                                                    $distance = $details->distance;
+                                                    ?>
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                         <input type="text" class="form-control" name="healthcare[name][]" placeholder="Name" value="<?php echo $name; ?>" />
+                                                       </div>
+                                                       <div class="col-md-5">
+                                                         <div class="form-group">
+                                                          <input type="text" class="form-control input-group" name="healthcare[distance][]" placeholder="Distance" value="<?php echo $distance; ?>" />
+                                                         </div>
+                                                       </div>
+                                                       <div class="col-md-2">
+                                                         <div><a href="javascript:void(0)" onclick="remove_field(this)"><i class="fa fa-trash"></i></a></div>
+                                                        </div>
+                                                    </div>
+                                                    <?php 
+                                                }
+                                                
+                                            }
+                                        }
+                                    }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="img-content" id="tab-content-shopping" style="display:none">
+                        <div class="form-field">
+                            <button type="button" class="btn btn-primary" onclick="add_field('shopping')"><i class="fa fa-plus"></i> Add Shopping</button>
+                            <div class="shopping-con my-3">
+                                <?php  
+                                    if($propertyData['landmarks'])
+                                    {
+                                        foreach($propertyData['landmarks'] as $k=>$l)
+                                        {
+                                            if($l->landmark_type == 'shopping')
+                                            { 
+                                                $details = json_decode($l->landmark_details);
+                                                if($details)
+                                                {
+                                                    $name = $details->name;
+                                                    $distance = $details->distance;
+                                                    ?>
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                         <input type="text" class="form-control" name="shopping[name][]" placeholder="Name" value="<?php echo $name; ?>" />
+                                                       </div>
+                                                       <div class="col-md-5">
+                                                         <div class="form-group">
+                                                          <input type="text" class="form-control input-group" name="shopping[distance][]" placeholder="Distance" value="<?php echo $distance; ?>" />
+                                                         </div>
+                                                       </div>
+                                                       <div class="col-md-2">
+                                                         <div><a href="javascript:void(0)" onclick="remove_field(this)"><i class="fa fa-trash"></i></a></div>
+                                                        </div>
+                                                    </div>
+                                                    <?php 
+                                                }
+                                                
+                                            }
+                                        }
+                                    }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="img-content" id="tab-content-commercial" style="display:none">
+                        <div class="form-field">
+                            <button type="button" class="btn btn-primary" onclick="add_field('commercial')"><i class="fa fa-plus"></i> Add Commercial</button>
+                            <div class="commercial-con my-3">
+                                <?php  
+                                    if($propertyData['landmarks'])
+                                    {
+                                        foreach($propertyData['landmarks'] as $k=>$l)
+                                        {
+                                            if($l->landmark_type == 'commercial')
+                                            { 
+                                                $details = json_decode($l->landmark_details);
+                                                if($details)
+                                                {
+                                                    $name = $details->name;
+                                                    $distance = $details->distance;
+                                                    ?>
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                         <input type="text" class="form-control" name="commercial[name][]" placeholder="Name" value="<?php echo $name; ?>" />
+                                                       </div>
+                                                       <div class="col-md-5">
+                                                         <div class="form-group">
+                                                          <input type="text" class="form-control input-group" name="commercial[distance][]" placeholder="Distance" value="<?php echo $distance; ?>" />
+                                                         </div>
+                                                       </div>
+                                                       <div class="col-md-2">
+                                                         <div><a href="javascript:void(0)" onclick="remove_field(this)"><i class="fa fa-trash"></i></a></div>
+                                                        </div>
+                                                    </div>
+                                                    <?php 
+                                                }
+                                                
+                                            }
+                                        }
+                                    }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="img-content" id="tab-content-transaportation" style="display:none">
+                        <div class="form-field">
+                            <button type="button" class="btn btn-primary" onclick="add_field('transaportation')"><i class="fa fa-plus"></i> Add transaportation</button>
+                            <div class="transaportation-con my-3">
+                                <?php  
+                                    if($propertyData['landmarks'])
+                                    {
+                                        foreach($propertyData['landmarks'] as $k=>$l)
+                                        {
+                                            if($l->landmark_type == 'transaportation')
+                                            { 
+                                                $details = json_decode($l->landmark_details);
+                                                if($details)
+                                                {
+                                                    $name = $details->name;
+                                                    $distance = $details->distance;
+                                                    ?>
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                         <input type="text" class="form-control" name="transaportation[name][]" placeholder="Name" value="<?php echo $name; ?>" />
+                                                       </div>
+                                                       <div class="col-md-5">
+                                                         <div class="form-group">
+                                                          <input type="text" class="form-control input-group" name="transaportation[distance][]" placeholder="Distance" value="<?php echo $distance; ?>" />
+                                                         </div>
+                                                       </div>
+                                                       <div class="col-md-2">
+                                                         <div><a href="javascript:void(0)" onclick="remove_field(this)"><i class="fa fa-trash"></i></a></div>
+                                                        </div>
+                                                    </div>
+                                                    <?php 
+                                                }
+                                                
+                                            }
+                                        }
+                                    }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                      
+                  </div>
+                  <!-- /.box-body -->
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+    </div>
+    <script>
+        $(".nav-link").click(function(e) {
+            e.preventDefault();
+            $(".nav-link").removeClass("active");
+            $(this).addClass("active");
+            var activeTab = $(this).attr("data-tab");
+            $(".img-content").hide();
+            $("#tab-content-" + activeTab).show();
+        });
+
+        function add_field(type) {
+            var html = '';
+            html += '<div class="row">';
+            html += '<div class="col-md-5"><input type="text" class="form-control" name="'+type+'[name][]" placeholder="Name" /></div>';
+            html += '<div class="col-md-5"><div class="form-group"><input type="text" class="form-control input-group" name="'+type+'[distance][]" placeholder="Distance" /></div></div>';
+            html += '<div class="col-md-2"><div><a href="javascript:void(0)" onclick="remove_field(this)"><i class="fa fa-trash"></i></a></div></div>';
+            html += '</div>';
+
+            $('.' + type + '-con').append(html);
+        }
+
+        function remove_field(evt)
+        {
+            $(evt).parent().parent().parent().remove();
+        }
+    </script>
+@endif
+
 <script>
     $(function(){
         $('.select2').select2();
