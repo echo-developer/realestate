@@ -98,10 +98,11 @@ const Membership = () => {
 
   const handleSelectPlan = (plan) => {
     setSelectedPlan(plan);
-    localStorage.setItem('planId', plan?.features?.id);
+    localStorage.setItem('planId', plan?.id);
     localStorage.setItem('plan_price', plan?.discounted_price || plan?.price);
+    localStorage.setItem('plan_validate', plan?.validity_days );
     router.push('/membership/credit')
-
+   console.log(plan)
   };
 
   const convertPlans = (data) => {

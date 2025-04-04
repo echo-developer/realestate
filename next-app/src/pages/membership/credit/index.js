@@ -16,6 +16,7 @@ const StripePayment = ({ messageCredit, balance, allLanguageKey }) => {
 
   const planId = localStorage.getItem("planId");
   const PlanPrice = localStorage.getItem("plan_price");
+  const PlanValidate = localStorage.getItem("plan_validate");
 
   const handlePaymentOption = () => {
     if (selectedPaymentMethod === "stripe") {
@@ -25,8 +26,7 @@ const StripePayment = ({ messageCredit, balance, allLanguageKey }) => {
     }
   };
 
-  console.log(planId ,PlanPrice)
-
+ 
   const handleClose = () => {
     setShow(false);
   };
