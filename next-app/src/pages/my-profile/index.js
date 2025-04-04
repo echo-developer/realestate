@@ -7,58 +7,59 @@ import withAuth from "@/utils/withAuth";
 import useTranslation from "@/hooks/useTranslation";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Envelope, Phone, Share, Whatsapp } from 'react-bootstrap-icons';
+import { AuthProvider, useAuth } from "@/context/AuthProvider";
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
-  const [userData, setUserData] = useState(null);
+  const { userData, userLoading } = useAuth();
+  // const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [userImage, setUserImage] = useState(localStorage.getItem("user_logo"));
 
   const memberId = GetMemberId();
   const translation = useTranslation();
 
-  useEffect(() => {
-    // Fetch the image from localStorage initially
-    const storedImage = localStorage.getItem("user_logo");
-    if (storedImage) {
-      setUserImage(storedImage);
-    }
+  // useEffect(() => {
+  //   const storedImage = localStorage.getItem("user_logo");
+  //   console.log("logo", storedImage);
+  //   if (storedImage) {
+  //     setUserImage(storedImage);
+  //   }
 
-    // Fetch data from API
-    if (memberId) {
-      fetchUserData();
-    }
-  }, [memberId ,userImage]);
+  //   if (memberId) {
+  //     fetchUserData();
+  //   }
+  // }, [memberId ,userImage]);
 
-  const fetchUserData = async () => {
-    setIsLoading(true);
-    try {
-      const response = await callApi({
-        api: `/my_profile`,
-        method: "GET",
-        data: {
-          user_id: memberId,
-        },
-      });
+  // const fetchUserData = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const response = await callApi({
+  //       api: `/my_profile`,
+  //       method: "GET",
+  //       data: {
+  //         user_id: memberId,
+  //       },
+  //     });
 
-      if (response?.status === 1) {
-        const user = response.data.user;
-        setUserData(response.data);
+  //     if (response?.status === 1) {
+  //       const user = response.data.user;
+  //       setUserData(response.data);
 
-        // Update the user image and store it in localStorage
-        if (user?.image) {
-          setUserImage(user.image);
-          localStorage.setItem("user_logo", user.image);
-        }
-      } else {
-        toast.error(response.message);
-      }
-    } catch (error) {
-      toast.error("Failed to fetch user data");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //       // Update the user image and store it in localStorage
+  //       if (user?.image) {
+  //         setUserImage(user.image);
+  //         // localStorage.setItem("user_logo", user.image);
+  //       }
+  //     } else {
+  //       toast.error(response.message);
+  //     }
+  //   } catch (error) {
+  //     toast.error("Failed to fetch user data");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   // Update the UI instantly when localStorage changes
   const updateImageInUI = (newImage) => {
@@ -66,12 +67,13 @@ const Index = () => {
     localStorage.setItem("user_logo", newImage);
   };
 
+
   return (
     <DashboardLayout>
       <div className="col-lg">
         <div className="p-4">
           <h1 className="h3">{translation?.my_profile || "My Profile"}</h1>
-          {isLoading ? (
+          {userLoading ? (
             <div className="text-center my-5">
               <div className="spinner-border text-primary" role="status">
                 <span className="visually-hidden">Loading...</span>
@@ -85,7 +87,7 @@ const Index = () => {
                     <img
                       alt="Profile"
                       className="img-fluid"
-                      src={userImage || "assets/images/agents/user.jpg"}
+                      src={userData?.image || "/assets/images/user.jpg"}
                       onError={(e) =>
                         (e.target.src = "assets/images/agents/user.jpg")
                       }

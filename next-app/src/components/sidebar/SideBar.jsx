@@ -6,10 +6,12 @@ import { useRouter } from "next/router";
 import UserLogoUpload from "../ModalData/UserLogoUpload";
 import Link from "next/link";
 import useTranslation from "@/hooks/useTranslation";
+import { useAuth } from "@/context/AuthProvider";
 
 const SideBar = () => {
   const { callApi, GetMemberId, logout } = AuthUser();
-  const [userData, setUserData] = useState();
+  // const [userData, setUserData] = useState();
+  const {userData, uploadUserImage} = useAuth();
   const router = useRouter();
   const { pathname } = router;
   const memberId = GetMemberId();
@@ -45,34 +47,34 @@ const SideBar = () => {
   }, []);
 
   const isActive = (path) => pathname === path;
-  useEffect(() => {
-    if (memberId) {
-      FetchUserData();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (memberId) {
+  //     FetchUserData();
+  //   }
+  // }, []);
 
   const handleShow = () => setShow(true);
 
-  const FetchUserData = async () => {
-    let response;
-    try {
-      response = await callApi({
-        api: `/get_user_data`,
-        method: "GET",
-        data: {
-          member_id: memberId,
-        },
-      });
-      if (response && response.success === 1) {
-        setUserData(response.data);
-        setUserLogo(response?.data?.image);
-      } else {
-        toast.error(response.message);
-      }
-    } catch (error) {
-      toast.error("data not found");
-    }
-  };
+  // const FetchUserData = async () => {
+  //   let response;
+  //   try {
+  //     response = await callApi({
+  //       api: `/get_user_data`,
+  //       method: "GET",
+  //       data: {
+  //         member_id: memberId,
+  //       },
+  //     });
+  //     if (response && response.success === 1) {
+  //       setUserData(response.data);
+  //       setUserLogo(response?.data?.image);
+  //     } else {
+  //       toast.error(response.message);
+  //     }
+  //   } catch (error) {
+  //     toast.error("data not found");
+  //   }
+  // };
 
   return (
     <React.Fragment>
@@ -84,7 +86,7 @@ const SideBar = () => {
             </a>
             <div className="avatar mb-3">
               <img
-                src={userLogo || "/assets/images/user.jpg"}
+                src={userData?.image || "/assets/images/user.jpg"}
                 alt="Profile Photo"
                 height="100"
                 width="100"
@@ -286,7 +288,7 @@ const SideBar = () => {
         <UserLogoUpload
           show={show}
           setShow={setShow}
-          setUserLogo={setUserLogo}
+          setUserLogo={uploadUserImage}
         />
       )}
     </React.Fragment>
