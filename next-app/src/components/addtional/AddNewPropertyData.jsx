@@ -52,7 +52,6 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
   
       if (response?.status === 1) {
         const data = response.data;
-        console.log("response data", data);
         // Ensure null values are replaced with defaults
         setPropertyData({
           buyer_message: data?.buyer_message || "",

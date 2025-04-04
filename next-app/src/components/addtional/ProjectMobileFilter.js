@@ -100,11 +100,11 @@ export function ProjectMobileFilters({
   }, []);
 
   useEffect(() => {
-    if (Array.isArray(selectedPropertyTypes) ? selectedPropertyTypes.length > 0 : selectedPropertyTypes) {
+    if(selectedFilters?.project_type) {
       const getSubPropertyType = async () => {
         try {
           const res = await callApi({
-            api: `/get_property_for/${selectedPropertyTypes}`,
+            api: `/get_property_for/${selectedFilters?.project_type}`,
             method: "GET",
           });
           if (res && res?.status === 1) {
@@ -119,7 +119,7 @@ export function ProjectMobileFilters({
 
       getSubPropertyType();
     }
-  }, [selectedPropertyTypes]);
+  }, [selectedFilters?.project_type]);
 
   const parseQueryParams = (params) => {
     const queryObject = {};
@@ -409,7 +409,7 @@ export function ProjectMobileFilters({
             ))}
           </ButtonGroup>
 
-          {selectedPropertyForList.length > 0 && <h6>Property For</h6>}
+          {/* {selectedPropertyForList.length > 0 && <h6>Property For</h6>}
           <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
             {selectedPropertyForList?.map((type) => (
               <React.Fragment key={type.sub_category_id}>
@@ -433,7 +433,7 @@ export function ProjectMobileFilters({
                 </label>
               </React.Fragment>
             ))}
-          </ButtonGroup>
+          </ButtonGroup> */}
           {/* Budget */}
           <h6>Budget (in Lakhs)</h6>
           <Form className="d-flex gap-2 mb-3">
