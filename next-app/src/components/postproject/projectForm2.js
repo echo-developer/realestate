@@ -4,7 +4,7 @@ import AuthUser from "../Authentication/AuthUser";
 import { ShimmerText } from "react-shimmer-effects";
 import useTranslation from "@/hooks/useTranslation";
 
-const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
+const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep  ,remainingData}) => {
   const { callApi, isLogin } = AuthUser();
   const [propertyTypeData, setPropertyTypeData] = useState([]);
   const [errors, setErrors] = useState({});
@@ -105,7 +105,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
       type="button"
       className="btn btn-primary btn-next-2 btn-next-1"
       onClick={onClick}
-      disabled={isDisabled} // Disabled when form is not valid
+      disabled={isDisabled || remainingData === 0}
     >
       {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
     </button>
@@ -125,7 +125,7 @@ const ProjectForm2 = ({ formData, setFormData, nextStep, prevStep }) => {
         type="button"
         className="btn btn-primary btn-next-2"
         onClick={nextClick}
-        disabled={isDisabled} // Disabled when form is not valid
+        disabled={isDisabled || remainingData === 0}
       >
         {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
       </button>

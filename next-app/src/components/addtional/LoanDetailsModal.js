@@ -31,6 +31,7 @@ const LoanDetailsModal = ({ show, handleClose }) => {
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [showSubmitBtn,setShowSubmitBtn]=useState(false)
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -90,7 +91,7 @@ const LoanDetailsModal = ({ show, handleClose }) => {
           phone: formData.phone,
         },
       });
-      if (response) {
+      if (response && response.status===1) {
         setOtpSent(true);
         toast.success("OTP sent successfully!");
         setShowOtpField(true);
@@ -128,8 +129,9 @@ const LoanDetailsModal = ({ show, handleClose }) => {
         },
       });
 
-      if (response) {
+      if (response && response.status === 1) {
         setOtpVerified(true);
+        setShowSubmitBtn(true)
         toast.success("OTP verified successfully!");
       } else {
         toast.error("Invalid OTP");
@@ -353,7 +355,7 @@ const LoanDetailsModal = ({ show, handleClose }) => {
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleSubmit}>
+        <Button variant="primary" onClick={handleSubmit} disabled={!showSubmitBtn}>
           Submit Details
         </Button>
       </Modal.Footer>

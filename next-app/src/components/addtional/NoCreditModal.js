@@ -1,3 +1,4 @@
+"use client"
 import { Modal, Button } from "react-bootstrap";
 import { useState } from "react";
 import { useRouter } from "next/router";
@@ -6,8 +7,8 @@ function NoCreditModal({ show, onHide }) {
   const router = useRouter();
 
   const goToMembership = () => {
-    onHide(); // Close the modal
-    router.push("/membership"); // Redirect to membership page
+    onHide();
+    router.push("/membership");
   };
 
   return (

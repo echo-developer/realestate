@@ -5,7 +5,13 @@ import { ShimmerText } from "react-shimmer-effects";
 import useTranslation from "@/hooks/useTranslation";
 import { ImGlass } from "react-icons/im";
 
-const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
+const Step2Form = ({
+  formData,
+  setFormData,
+  nextStep,
+  prevStep,
+  remainingData,
+}) => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const [propertyTypeData, setPropertyTypeData] = useState([]);
   const [propertyForData, setPropertyForData] = useState([]);
@@ -254,7 +260,9 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   htmlFor={`property_${property.category_id}`}
                 >
                   <img
-                    src={`${property.image ||"/assets/images/icons/home-2.png"}`}
+                    src={`${
+                      property.image || "/assets/images/icons/home-2.png"
+                    }`}
                     alt="Icon"
                     height={48}
                     width={48}
@@ -295,7 +303,9 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   htmlFor={`property_for_${property.sub_category_id}`}
                 >
                   <img
-                    src={`${property.image ||"/assets/images/icons/shopping.png"}`}
+                    src={`${
+                      property.image || "/assets/images/icons/shopping.png"
+                    }`}
                     alt="Icon"
                     height={48}
                     width={48}
@@ -310,9 +320,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <div className="text-danger small">{errors.property_for}</div>
           )}
 
-          <label className="form-label">
-            Property Under:
-          </label>
+          <label className="form-label">Property Under:</label>
           <div
             className="btn-group btn-group-light btn-group-card d-flex mb-3"
             role="group"
@@ -417,6 +425,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 type="button"
                 className="btn btn-primary btn-next-2 btn-next-1"
                 onClick={handleNext}
+                disabled={remainingData === 0}
               >
                 {translation?.next || "Next"}{" "}
                 <i className="bi bi-arrow-right"></i>
@@ -436,6 +445,7 @@ const Step2Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 type="button"
                 className="btn btn-primary btn-next-cta"
                 onClick={handleNext}
+                disabled={remainingData === 0}
               >
                 {translation?.next || "Next"}
               </button>

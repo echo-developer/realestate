@@ -13,6 +13,7 @@ import withAuth from "@/utils/withAuth";
 import ProgressBar from "@/components/addtional/ProgressBar";
 import { toast } from "react-toastify";
 import useTranslation from "@/hooks/useTranslation";
+import NoCreditModal from "@/components/addtional/NoCreditModal";
 import {
   PersonFill,
   EnvelopeFill,
@@ -69,7 +70,7 @@ import {
   Building,
   Hash,
   CheckCircle,
-  MapPin
+  MapPin,
 } from "lucide-react";
 
 const stepKeyPoints = {
@@ -306,6 +307,7 @@ const stepKeyPoints = {
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
+  const [remainingData, setRemainingData] = useState();
   const [formData, setFormData] = useState({
     project_amenity: [],
     latitude: "",
@@ -317,6 +319,7 @@ const Index = () => {
   const [userData, setUserData] = useState(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
+   const [showCreditModal, setShowCreditModal] = useState(false);
   const translation = useTranslation();
   const points = stepKeyPoints[currentStep]?.slice(0, 10) || [];
 
@@ -326,10 +329,38 @@ const Index = () => {
         ...prevFormData,
         uid: memberId,
       }));
+      fetchRemainPosting();
       fetchUserData();
       setCurrentStep(2);
     }
   }, [memberId]);
+
+  const fetchRemainPosting = async () => {
+    try {
+      const response = await callApi({
+        api: `/get_remaining_value`,
+        method: "GET",
+        data: {
+          user_id: memberId,
+        },
+      });
+      if (response && response.status === 1) {
+        setRemainingData(response.remaining_listings_allowed);
+        setShowCreditModal(false);
+      } else {
+        setRemainingData(response.remaining_listings_allowed);
+        setShowCreditModal(true);
+      }
+    } catch (error) {}
+  };
+
+  const handleCloseCreditModal = () => {
+    setShowCreditModal(false);
+  };
+
+  const handleShowCreditModal = () => {
+    setShowCreditModal(true);
+  };
 
   const fetchUserData = async () => {
     setLoading(true);
@@ -403,7 +434,7 @@ const Index = () => {
                         className={`nav-link ${
                           currentStep === 2 ? "active" : ""
                         }`}
-                        href="#"
+                        role="button"
                       >
                         {translation?.project_details || "Project Details"}
                       </a>
@@ -413,7 +444,7 @@ const Index = () => {
                         className={`nav-link ${
                           currentStep === 3 ? "active" : ""
                         }`}
-                        href="#"
+                        role="button"
                       >
                         {translation?.location || "Location"}
                       </a>
@@ -423,7 +454,7 @@ const Index = () => {
                         className={`nav-link ${
                           currentStep === 4 ? "active" : ""
                         }`}
-                        href="#"
+                        role="button"
                       >
                         {translation?.features || "Features"}
                       </a>
@@ -433,7 +464,7 @@ const Index = () => {
                         className={`nav-link ${
                           currentStep === 5 ? "active" : ""
                         }`}
-                        href="#"
+                        role="button"
                       >
                         {translation?.availability || "Availability"}
                       </a>
@@ -443,7 +474,7 @@ const Index = () => {
                         className={`nav-link ${
                           currentStep === 6 ? "active" : ""
                         }`}
-                        href="#"
+                        role="button"
                       >
                         {translation?.photos || "Photos"}
                       </a>
@@ -474,6 +505,7 @@ const Index = () => {
                         handleChange={handleChange}
                         nextStep={nextStep}
                         prevStep={prevStep}
+                        remainingData={remainingData}
                       />
                     )}
 
@@ -545,6 +577,9 @@ const Index = () => {
           </div>
         </div>
       </div>
+      {showCreditModal && (
+        <NoCreditModal show={showCreditModal} onHide={handleCloseCreditModal} />
+      )}
     </MainLayout>
   );
 };

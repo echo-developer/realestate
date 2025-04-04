@@ -346,11 +346,11 @@ const Index = () => {
       });
       if (response && response.status === 1) {
         setRemainingData(response.remaining_listings_allowed);
-        toast.success(response.message || "available credit for post ");
         setShowCreditModal(false);
       } else {
-        toast.error(response.message || " credit not available for post ");
+        setRemainingData(response.remaining_listings_allowed);
         setShowCreditModal(true);
+        
       }
     } catch (error) {}
   };
@@ -525,6 +525,7 @@ const Index = () => {
                         handleChange={handleChange}
                         nextStep={nextStep}
                         prevStep={prevStep}
+                        remainingData={remainingData}
                       />
                     )}
 
