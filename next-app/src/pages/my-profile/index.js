@@ -89,7 +89,7 @@ const Index = () => {
                       className="img-fluid"
                       src={userData?.image || "/assets/images/user.jpg"}
                       onError={(e) =>
-                        (e.target.src = "assets/images/agents/user.jpg")
+                        (e.target.src = "/assets/images/user.jpg")
                       }
                     />
                   </div>

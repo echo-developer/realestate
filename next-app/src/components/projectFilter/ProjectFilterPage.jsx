@@ -100,6 +100,7 @@ const ProjectFilterPage = ({ setPerPage }) => {
     }));
   };
 
+
   useEffect(() => {
     if (router.isReady) {
       let queryValue = router.query.project_for;
@@ -255,6 +256,16 @@ const ProjectFilterPage = ({ setPerPage }) => {
         }, {});
       };
       const stateObject = queryStringToObject(router?.query);
+      const maxPrice = JSON.parse(router.query?.max_price)
+      const minPrice = JSON.parse(router.query?.min_price)
+
+      if(maxPrice) {
+        setMaxBudget(maxPrice);
+      }
+      if(minPrice) {
+        setMinBudget(minPrice);
+      }
+      
       setFilters((prev) => {
         return {
           ...prev,
@@ -304,6 +315,7 @@ const ProjectFilterPage = ({ setPerPage }) => {
       block: "nearest",
       inline: "start",
     });
+
   };
 
   // const advanceFilterOption =
@@ -705,54 +717,49 @@ const ProjectFilterPage = ({ setPerPage }) => {
 
             {advanceFilter && (
               <>
-                <div className="more-filter-dropdown">
+                <div className="more-filter-dropdown d-flex">
                   {/* Left Side: Filter List */}
                   <div style={{ minWidth: "200px" }}>
                     <ListGroup style={{ height: "350px", overflowY: "auto" }}>
-                      {advanceFilterOption?.map((option, i) => {
-                        return (
-                          <ListGroup.Item
-                            role="button"
-                            key={i}
-                            className={
-                              selectedAdvanceFilter === option?.key
-                                ? "active"
-                                : ""
-                            }
-                            onClick={() =>
-                              handleSelecteAdvanceFilter(option?.key)
-                            }
-                          >
-                            {option?.name || ""}
-                          </ListGroup.Item>
-                        );
-                      })}
+                      {advanceFilterOption?.map((option, i) => (
+                        <ListGroup.Item
+                          role="button"
+                          key={i}
+                          className={selectedAdvanceFilter === option?.key ? "active" : ""}
+                          onClick={() => handleSelecteAdvanceFilter(option?.key)}
+                        >
+                          {option?.name || ""}
+                        </ListGroup.Item>
+                      ))}
                     </ListGroup>
                   </div>
 
                   {/* Right Side: Sub Options */}
-                  <div
-                    className="flex-grow-1 p-3"
-                    style={{ maxHeight: "350px", overflowY: "auto" }}
-                  >
-                    {advanceFilterOption?.map((option, i) => {
-                      return (
+                  <div className="d-flex flex-column flex-grow-1">
+                    {/* Scrollable Filters */}
+                    <div className="flex-grow-1 overflow-auto p-3" style={{ maxHeight: "350px" }}>
+                      {advanceFilterOption?.map((option, i) => (
                         <div
                           key={option?.key}
                           ref={(el) => (subFilterRef.current[option?.key] = el)}
                         >
                           {renderSubOptions(option?.key)}
                         </div>
-                      );
-                    })}
+                      ))}
+                    </div>
 
-                    {/* Sticky Button */}
-                    <Button variant="primary" onClick={handleViewProperty}>
-                      {translation?.view_property || "View Property"}
-                    </Button>
+                    {/* Button Container */}
+                    <div className="p-3 border-top bg-white d-flex justify-content-end">
+                      <Button variant="primary" onClick={handleViewProperty}>
+                        {/* {translation?.view_property || "View Property"} */}
+                        View Projects
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </>
+
+
             )}
           </form>
         </div>
