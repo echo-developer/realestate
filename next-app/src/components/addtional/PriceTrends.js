@@ -40,8 +40,9 @@ function RealEstateTrends() {
       });
       if (res && res?.status === 1) {
         setData(res?.data);
+        const keys = Object.keys(res?.data?.priceDataforLocalities) || [];
+        setSelectedLocalities(keys);
       }
-      console.log("res", res);
     } catch (error) {
       console.error(error.message || "Something went wrong");
     }
