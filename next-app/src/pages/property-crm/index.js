@@ -264,14 +264,14 @@ const Index = () => {
                                                     </p>
                                                     <p className="text-wrap mb-2">{lead?.message}</p>
                                                     <div class="d-flex justify-content-end">
-                                                        <button class="btn btn-sm btn-outline-primary me-2" onClick={() => handleModalOpen(lead?.Phone, lead?.Email, lead.assign_id, lead.enquery_id, lead.lead_type)}>{translation?.contact || "Contact"}
+                                                        <button class="btn btn-sm btn-outline-primary me-2" onClick={() => handleModalOpen(lead?.Phone, lead?.Email, lead.assign_id, lead.enquery_id, lead.lead_type)}>{translation?.contact ||"Contact"}
                                                         </button>
-                                                        <Link class="btn btn-sm btn-outline-primary me-2" href={`/property-crm-timeline?assign_id=${lead?.assign_id}`}>{translation?.contact_history || "Contact History"}
+                                                        <Link class="btn btn-sm btn-outline-primary me-2" href={`/property-crm-timeline?assign_id=${lead?.assign_id}`}>{translation?.contact_history ||"Contact History"}
                                                         </Link>
                                                         <Link class="btn btn-sm btn-outline-primary me-2" href={`/lead-details/${lead?.assign_id}`}>{translation?.lead_details || "Lead Details"}
                                                         </Link>
                                                         <select class="form-select form-select-sm ms-2" aria-label="Select action" value={lead?.lead_status} onChange={(e) => handleLeadStatusChange(e, i, lead.assign_id)}>
-                                                            <option value="">{translation?.select_an_option || "Select an option"}
+                                                            <option value="">{translation?.select_an_option ||"Select an option"}
                                                             </option>
                                                             {leadStatusList?.length > 0 && leadStatusList?.map((status, i) => {
                                                                 return (

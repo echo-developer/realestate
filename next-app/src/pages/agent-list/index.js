@@ -295,8 +295,8 @@ const Index = () => {
                           {brokerType === "A"
                             ? "Agency"
                             : brokerType === "F"
-                            ? "Francise"
-                            : "Independent"}
+                              ? "Francise"
+                              : "Independent"}
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
                           <Dropdown.Item onClick={() => handleSelect("I")}>
@@ -337,7 +337,7 @@ const Index = () => {
                                   eventKey="sale"
                                   onClick={() => handleTab("sale")}
                                 >
-                                  Buy
+                                  {translation?.buy || "Buy"}
                                 </Nav.Link>
                               </Nav.Item>
                               <Nav.Item>
@@ -346,14 +346,14 @@ const Index = () => {
                                   eventKey="rent"
                                   onClick={() => handleTab("rent")}
                                 >
-                                  Rent
+                                  {translation?.rent || "Rent"}
                                 </Nav.Link>
                               </Nav.Item>
                             </Nav>
                           </div>
 
                           {/* Property Type Selection */}
-                          <Form.Label className="fw-bold mt-3">Type</Form.Label>
+                          <Form.Label className="fw-bold mt-3">{translation?.type || "Type"}</Form.Label>
                           <div className="form-field">
                             <ButtonGroup className="btn-group-light d-flex flex-wrap">
                               {PropertyTypeData?.map((type) => (
@@ -388,13 +388,14 @@ const Index = () => {
                               variant="outline-secondary"
                               onClick={resetSelection}
                             >
-                              Reset
+                              {translation?.reset || "Reset"}
+
                             </Button>
                             <Button
                               variant="primary"
                               onClick={() => setPropertyTypeDropDown(false)}
                             >
-                              Done
+                              {translation?.done || "Done"}
                             </Button>
                           </div>
                         </Dropdown.Menu>
@@ -532,7 +533,7 @@ const Index = () => {
                                 {agent?.service_area?.length > 0 && (
                                   <p className="mb-1">
                                     <span className="text-muted ">
-                                      Serve in:
+                                      {translation?.serve_in || "Serve in"}
                                     </span>{" "}
                                     {[
                                       ...new Set(
@@ -548,12 +549,14 @@ const Index = () => {
                                   <div>
                                     {!agent?.forSell === 0 && (
                                       <span className="badge badge-outline-secondary text-dark me-2">
-                                        {agent?.forSell} SALE
+                                        {agent?.forSell} {translation?.sale || "SALE"}
+
                                       </span>
                                     )}
                                     {!agent?.forRent === 0 && (
                                       <span className="badge badge-outline-secondary text-dark">
-                                        {agent?.forRent} RENT
+                                        {agent?.forRent}{translation?.rent || "RENT"}
+
                                       </span>
                                     )}
                                   </div>
@@ -614,10 +617,11 @@ const Index = () => {
                     height={64}
                     width={64}
                   />
-                  <h4>How do agents earn badges?</h4>
+                  <h4>{translation?.how_do_agents_earn_badges || "How do agents earn badges?"}
+                  </h4>
                   <p>
-                    To highlight great performance, we reward agents with
-                    customised badges on Realestate.
+                    {translation?.badge_info || "To highlight great performance, we reward agents with customised badges on Realestate."}
+
                   </p>
 
                   <h5>
@@ -628,12 +632,13 @@ const Index = () => {
                       height={32}
                       width={32}
                     />{" "}
-                    TruBroker
+                    {translation?.trubroker || "TruBroker"}
+
                   </h5>
 
                   <p className="text-italic text-muted small">
-                    Exclusive badge awarded to agents who are highly responsive
-                    and advertise genuine properties.
+                    {translation?.trubroker_desc || "Exclusive badge awarded to agents who are highly responsive and advertise genuine properties."}
+
                   </p>
 
                   <h5>
@@ -644,12 +649,13 @@ const Index = () => {
                       height={32}
                       width={32}
                     />{" "}
-                    Quality Lister
+                    {translation?.quality_lister || "Quality Lister"}
+
                   </h5>
 
                   <p className="text-italic text-muted small">
-                    Exclusive badge awarded to agents who authenticate their
-                    listings using badges.
+                    {translation?.quality_lister_desc || "Exclusive badge awarded to agents who authenticate their listings using badges."}
+
                   </p>
 
                   <h5>
@@ -660,11 +666,12 @@ const Index = () => {
                       height={32}
                       width={32}
                     />{" "}
-                    Responsive Broker
+                    {translation?.responsive_broker || "Responsive Broker"}
+
                   </h5>
                   <p className="text-italic text-muted small">
-                    Exclusive badge awarded to agents who are highly reachable
-                    and responsive.
+                    {translation?.responsive_broker_desc || "Exclusive badge awarded to agents who are highly reachable and responsive."}
+
                   </p>
                 </div>
               </div>

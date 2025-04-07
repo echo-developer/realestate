@@ -560,7 +560,7 @@ const Index = () => {
             <aside className="col-lg-4 col-12 d-none d-lg-block">
               <div className="card border-0 shadow-1 mt-3 mt-lg-0">
                 <div className="card-body">
-                  <h3 className="mb-3">Key Points to Remember</h3>
+                  <h3 className="mb-3">{translation?.key_points_remember || "Key Points to Remember"}</h3>
                   <div className="ad-post-points">
                     {points.map((item, index) => (
                       <div className="d-flex mb-3" key={index}>
