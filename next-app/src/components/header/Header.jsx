@@ -900,7 +900,7 @@ const Header = () => {
                         </li>
                         <li>
                           <Link href="/postproperty">
-                            {translation?.post_property_free ||
+                            {translation?.post_property ||
                               "Post Property"}
                           </Link>
                         </li>
@@ -1088,7 +1088,7 @@ const Header = () => {
                       className="btn btn-primary btn-post"
                     >
                       <i className="icon-line-awesome-mouse-pointer"></i>{" "}
-                      {translation?.post_property_ || "Post Property"}{" "}
+                      {translation?.post_property || "Post Property"}{" "}
                       <img
                         src="/assets/images/icons/free-badge.png"
                         alt="Free Badge"

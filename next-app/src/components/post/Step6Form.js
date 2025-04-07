@@ -248,7 +248,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
           onClick={handleSubmit}
           disabled={!activeTab}
         >
-         {translation?.post_property_free || "Post Property"} 
+         {translation?.post_property || "Post Property"} 
         </button>
       </div>
     </div>
