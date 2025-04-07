@@ -1010,5 +1010,7 @@
   "business_phone": "Business Phone",
   "business_email": "Business Email",
   "working_hours": "Working Hours",
-  "experience": "Experience"
+  "experience": "Experience",
+  "other_project": "Other Project"
+
 }
