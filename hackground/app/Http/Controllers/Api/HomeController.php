@@ -6,14 +6,18 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
 use App\Models\PrefProject;
+use App\Models\PrefProperty;
+use App\Models\PrefPropertyLocation;
+use App\Models\ProjectPropertyMapping;
 use App\Models\TestimonialModel;
 use App\Models\User;
+use function Laravel\Prompts\select;
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
-use function Laravel\Prompts\select;
 
 class HomeController extends Controller
 {
@@ -512,6 +516,134 @@ class HomeController extends Controller
             return response()->json([
                 'status' => 0,
                 'message' => 'Something went wrong. Please try again later.',
+            ]);
+        }
+    }
+
+    public function propertyInTrendsandRates(Request $request)
+    {
+        try {
+
+            $cityId = $request->input('city_id');
+            $locality = $request->input('locality');
+
+            $topLocalities = PrefPropertyLocation::whereNotNull('city')
+                ->whereNotNull('locality')
+                ->whereNotNull('pid')
+                ->where('city', $cityId)
+                ->selectRaw('locality, COUNT(pid) as total_properties')
+                ->groupBy('locality')
+                ->orderByDesc('total_properties')
+                ->limit(5)
+                ->get();
+                
+
+            $startMonth = Carbon::now()->subMonths(8)->startOfMonth(); // 9 months including current
+            $endMonth = Carbon::now()->endOfMonth();
+            $allMonths = collect();
+            $current = $startMonth->copy();
+
+            while ($current <= $endMonth) {
+                $allMonths->push($current->format("M'y"));
+                $current->addMonth();
+            }
+
+            $priceDataforLocalities = [];
+            $localitiesMeta = [];
+
+            foreach ($topLocalities as &$locality) {
+                $monthlyPrices = PrefProperty::with(['location', 'settings'])
+                    ->whereHas('location', function ($query) use ($cityId, $locality) {
+                        $query->where('city', $cityId)
+                            ->where('locality', $locality['locality'])
+                            ->orWhere('locality',  $locality);
+                    })
+                    ->whereHas('settings', function ($query) {
+                        $query->whereNotNull('expected_price');
+                    })
+                    ->where('created_at', '>=', $startMonth)
+                    ->where('created_at', '<=', $endMonth)
+                    ->orderBy('created_at')
+                    ->get()
+                    ->groupBy(function ($item) {
+                        return $item->created_at->format("M'y");
+                    })
+                    ->map(function ($group) {
+                        return round($group->pluck('settings.expected_price')->avg(), 2);
+                    });
+
+                // Map to fixed month array, fill missing with 0 or null
+                $localityPrices = $allMonths->map(function ($month) use ($monthlyPrices) {
+                    return $monthlyPrices[$month] ?? 0;
+                });
+
+                $priceDataforLocalities[$locality['locality']] = $localityPrices->values()->toArray();
+
+                $localitiesMeta[] = [
+                    'name' => $locality['locality'],
+                    'total_properties' => $locality['total_properties'] ?? 0,
+                ];
+            }
+
+
+
+
+            $topProjects = PrefProject::with(['propertyMapping' => function ($q) {
+                $q->select('project_id', 'property_id');
+            }])
+                ->whereHas('propertyMapping')
+                ->select('id', 'project_name') // match primary key
+                ->limit(5)
+                ->get()->map(function ($topProject) {
+                    return [
+                        'project_id' => $topProject->id,
+                        'projectName' => $topProject->project_name,
+                        'total_properties' => count($topProject->propertyMapping) ?? 0,
+                    ];
+                });
+
+            // log::info("propertyInTrends" . json_encode($topProjects, JSON_PRETTY_PRINT));
+            $priceDataforProjects = [];
+
+            foreach ($topProjects as &$projects) {
+                $monthlyPrices = PrefProperty::with(['projectMapping'])
+                    ->whereHas('projectMapping', function ($query) use ($projects, $cityId, $locality) {
+                        $query->where('project_id', $projects['project_id']);
+                    })
+                    ->where('created_at', '>=', $startMonth)
+                    ->where('created_at', '<=', $endMonth)
+                    ->orderBy('created_at')
+                    ->get()
+                    ->groupBy(function ($item) {
+                        return $item->created_at->format("M'y");
+                    })
+                    ->map(function ($group) {
+                        return round($group->pluck('settings.expected_price')->avg(), 2);
+                    });
+
+                $projectPrices = $allMonths->map(function ($month) use ($monthlyPrices) {
+                    return $monthlyPrices[$month] ?? 0;
+                });
+
+                $priceDataforProjects[$projects['projectName']] = $projectPrices->values()->toArray();
+            }
+
+            $response = [
+                'months' => $allMonths->toArray(),
+                'priceDataforLocalities' => $priceDataforLocalities,
+                'localities' => $localitiesMeta,
+                'priceDataforProjects' => $priceDataforProjects,
+                'projects' => $topProjects,
+            ];
+            return response()->json([
+                'status' => 1,
+                'data' => $response,
+            ]);
+        } catch (\Exception $e) {
+            logError($e);
+            return response()->json([
+                'status' => 0,
+                'message' => 'An Error has occured.Try again' . $e,
             ]);
         }
     }

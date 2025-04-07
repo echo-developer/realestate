@@ -98,22 +98,22 @@ const Index = () => {
                   <div className="card-body">
                     <div className="card-title">
                       <h4 className="mb-1">
-                        {userData?.user?.name || "User"}
+                        {userData?.name || "User"}
                         <i className="icon-img-check ms-2"></i>
                       </h4>
                     </div>
 
                     <p className="mb-1">
                       <Envelope color="current" size={14} className="me-1" />
-                      <b>{userData?.user?.email || "Not available"}</b>
+                      <b>{userData?.email || "Not available"}</b>
                     </p>
                     <p className="mb-2">
                       <span>
                         <Phone color="current" size={14} className="me-1" />
                         <b>
-                          {userData?.user?.phone && userData?.user?.phone !== 0
-                            ? `${userData?.user?.phone_code || "+91"}-${
-                                userData?.user?.phone
+                          {userData?.phone && userData?.phone !== 0
+                            ? `${userData?.phone_code || "+91"}-${
+                                userData?.phone
                               }`
                             : "Not available"}
                         </b>
@@ -121,11 +121,11 @@ const Index = () => {
                     </p>
                     <p className="mb-1">
                       <Whatsapp color="current" size={14} className="me-1" />
-                      <b>{userData?.user?.whatsapp_no || "Not available"}</b>
+                      <b>{userData?.whatsapp_no || "Not available"}</b>
                     </p>
                     <p className="mb-2">
                       <i className="icon-feather-pin"></i>{" "}
-                      <b>{userData?.user?.address || "Not available"}</b>
+                      <b>{userData?.address || "Not available"}</b>
                     </p>
 
                     <div className="d-sm-flex justify-content-between">

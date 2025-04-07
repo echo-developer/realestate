@@ -56,7 +56,8 @@ const CommercialProjectDetails = ({
   const { adsData, logAdClick } = useAdvertisement(
     "project-listing-page",
     "right",
-    defaultCity?.city_id
+    defaultCity?.city_id,
+    detailsData?.detailsData?.project_type_id
   );
   const ShowGalleryList = (id) => {
     setVisible(true);
@@ -901,6 +902,7 @@ const CommercialProjectDetails = ({
               addRemoveFav={addRemoveFav}
               projectDetails={detailsData}
               setShowLoginErrorModal={setShowLoginErrorModal}
+              categoryId={detailsData?.project_type_id}
             />
           </div>
         </div>

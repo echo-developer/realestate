@@ -20,7 +20,10 @@ class ProjectPropertyMapping extends Model
     {
         return $this->belongsTo(PrefProperty::class, 'property_id', 'id');
     }
-
+    public function project()
+    {
+        return $this->belongsTo(PrefProject::class, 'project_id','id');
+    }
     public function floor() {
         return $this->belongsTo(ProjectFloor::class, 'floor_id', 'id');
     }

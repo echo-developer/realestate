@@ -33,10 +33,12 @@ const PropertySidebar = ({
   const [showAgentModal, setShowAgentModal] = useState(false);
   const translation = useTranslation();
   const memberId = GetMemberId();
+  const categoryId = propertyDetails?.property_type_id;
   const { adsData, logAdClick } = useAdvertisement(
     "detail-page",
     "right",
-    defaultCity?.city_id
+    defaultCity?.city_id,
+    categoryId
   );
   const [formData, setFormData] = useState({
     name: "",

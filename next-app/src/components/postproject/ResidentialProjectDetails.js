@@ -57,7 +57,8 @@ const ResidentialProjectDetails = ({
   const { adsData, logAdClick } = useAdvertisement(
     "project-detail-page",
     "footer",
-    defaultCity?.city_id
+    defaultCity?.city_id,
+    detailsData?.project_type_id
   );
 
   const ShowGalleryList = (id) => {
@@ -933,6 +934,7 @@ const ResidentialProjectDetails = ({
               addRemoveFav={addRemoveFav}
               projectDetails={detailsData}
               setShowLoginErrorModal={setShowLoginErrorModal}
+              categoryId={detailsData?.project_type_id}
             />
           </div>
         </div>
