@@ -19,6 +19,7 @@ const ProjectSidebar = ({
   addRemoveFav,
   projectDetails,
   setShowLoginErrorModal,
+  categoryId
 }) => {
   const [showAll, setShowAll] = useState(false);
   const { defaultCity } = useAuth();
@@ -41,7 +42,8 @@ const ProjectSidebar = ({
   const { adsData, logAdClick } = useAdvertisement(
     "project-detail-page",
     "right",
-    defaultCity?.city_id
+    defaultCity?.city_id,
+    categoryId
   );
 
   const handleReportClick = () => {

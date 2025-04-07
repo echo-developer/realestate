@@ -53,7 +53,7 @@ const index = () => {
   const [selectedOption, setSelectedOption] = useState(
     translation?.sort_by || "Sort By"
   );
-  const { adsData, logAdClick } = useAdvertisement("listing-page", "right" ,defaultCity?.city_id);
+  const { adsData, logAdClick } = useAdvertisement("listing-page", "right" ,defaultCity?.city_id, selectedPropertyType);
 
   const [localityData, setLocalityData] = useState(null);
   const [advanceFilter, setAdvanceFilter] = useState(false);

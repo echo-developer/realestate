@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import AuthUser from "@/components/Authentication/AuthUser";
 
-const useAdvertisement = (page, position, city) => {
+const useAdvertisement = (page, position, city, category) => {
   const { callApi } = AuthUser();
   const [adsData, setAdsData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,11 +12,18 @@ const useAdvertisement = (page, position, city) => {
     const fetchAdvertisementData = async () => {
       setLoading(true);
       setError(null);
+      let data = {
+        page, position, city
+      }
+
+      if(category) {
+        data.category = category
+      }
       try {
         const response = await callApi({
           api: `/get-advertisements`,
           method: "UPLOAD",
-          data: { page, position, city },
+          data: data,
         });
 
         if (response?.status === 1) {
@@ -32,7 +39,7 @@ const useAdvertisement = (page, position, city) => {
     };
 
     fetchAdvertisementData();
-  }, [page, position, city]);
+  }, [page, position, city, category]);
 
   const logAdClick = async (advertisement_id, ad_url) => {
     try {
