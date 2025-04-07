@@ -173,7 +173,8 @@ class ProjectDetailsController extends Controller
             $flattenedData['is_favourite'] = $is_fav;
             $flattenedData['is_my_project'] = $is_my_project;
             $flattenedData['top_agents'] = propertyTopAgentList($project->location->locality) ?? [];
-
+            $flattenedData['project_type_id'] = $project->settings->project_type;
+        
             unset($flattenedData['settings'], $flattenedData['additional'], $flattenedData['location'], $flattenedData['possesion_month_possesion_year']);
 
             // Fetching user details from uid
