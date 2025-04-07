@@ -103,9 +103,9 @@ class ProjectController extends Controller
                 $rules = [
                     'occupied_area' => 'required|numeric',
                     'total_area' => 'required|numeric',
-                    'total_unit' => 'required|integer',
+                    'total_units' => 'required|integer',
                     'parking' => 'required|string',
-                    'total_tower' => 'required|integer',
+                    'total_towers' => 'required|integer',
                     'project_facing' => 'required|string',
                     'main_road_facing' => 'required|string',
                 ];
@@ -149,7 +149,7 @@ class ProjectController extends Controller
 
                 return response()->json([
                     'success' => true,
-                    'message' => $request->proj_id ? 'Project updated successfully' : 'Project added successfully',
+                    'message' => 'Project added successfully',
                     'data' => ['project_id' => $project->id]
                 ]);
             } catch (\Exception $e) {
@@ -186,7 +186,7 @@ class ProjectController extends Controller
             'project_id' => $projectId,
             'locality' => is_string($request->locality) ? $request->locality : null,
             'city' => is_numeric($request->city) ? $request->city : null,
-            'address' => is_string($request->address) ? $request->address : null,
+            'address' => is_string($request->project_address) ? $request->project_address : null,
             'latitude' => $request->latitude ?? null,
             'longitude' => $request->longitude ?? null
         ]);
@@ -198,7 +198,7 @@ class ProjectController extends Controller
             'project_id' => $projectId,
 
             'project_budget' => is_numeric($request->min_budget) && is_numeric($request->max_budget) ? trim($request->min_budget . '-' . $request->max_budget) : null,
-            'parking_availability' => is_string($request->parking_availability) ? $request->parking_availability : null,
+            'parking_availability' => is_string($request->parking) ? $request->parking : null,
             'post_for' => is_string($request->post_for) ? $request->post_for : null,
             'project_facing' => is_string($request->project_facing) ? $request->project_facing : null,
             'total_towers' => is_numeric($request->total_towers) ? $request->total_towers : null,
@@ -224,8 +224,8 @@ class ProjectController extends Controller
         ProjectAdditional::create([
             'project_id' => $projectId,
             'main_road_facing' => is_string($request->main_road_facing) && $request->main_road_facing === 'Yes' ? 'Y' : 'N',
-            'project_amenity' => is_string($request->project_amenity) ?  $request->project_amenity : null,
-            'possession_status' => is_string($request->possession_status) ? $request->possession_status : null,
+           'project_amenity' => is_array($request->amenities) ? implode(',', array_filter($request->amenities)) : (is_string($request->amenities) ? $request->amenities : null),
+            'possession_status' => is_string($request->pstatus) ? $request->pstatus : null,
             'construct_year' => $construct_age,
             'possesion_month_possesion_year' => $possesion_month_possesion_year ?? null,
             'currency' => is_string($request->currency) ? $request->currency : null,
