@@ -313,7 +313,7 @@ const index = () => {
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
-                      <h4 className="mb-3 text-primary">Overview</h4>
+                      <h4 className="mb-3 text-primary"> {translation?.overview || "Overview"}</h4>
                     </div>
 
                     <ul className="list list-property-details mb-4">
@@ -635,7 +635,10 @@ const index = () => {
                       ></i>
                     </Button>
 
-                    <h4 className="mb-3 text-primary">Description</h4>
+                    <h4 className="mb-3 text-primary">{
+                            translation?.description ||
+                            "Description"
+                          }</h4>
                     <div
                       dangerouslySetInnerHTML={{
                         __html: propertyDetails?.property_description
@@ -654,7 +657,7 @@ const index = () => {
                   <Row className="-mb-3">
                     <Col className="col-lg-6 col-12 mb-3">
                       <h4 className="text-primary mb-3">
-                        {"Flooring Material"}
+                        {translation?.flooring_material || "Flooring Material"}
                       </h4>
                       <ul className="list list-none mb-0">
                         {propertyDetails?.flooring_style?.length > 0 ? (
