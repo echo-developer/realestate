@@ -327,7 +327,7 @@ const Index = () => {
                                 height={20}
                                 width={20}
                               />{" "}
-                              TruBroker
+                             {translation?.trubroker || "TruBrok"} 
                             </Button>
                             <Button
                               variant=""
