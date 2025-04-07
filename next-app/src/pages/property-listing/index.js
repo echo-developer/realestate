@@ -1605,7 +1605,7 @@ const index = () => {
                             </h5>
                             <p className="mb-1">
                               <small>
-                                Average Price:{" "}
+                                {translation?.average_price || "Average Price:"}{" "}
                                 {property?.price_currency ||
                                   property?.currency ||
                                   ""}{" "}

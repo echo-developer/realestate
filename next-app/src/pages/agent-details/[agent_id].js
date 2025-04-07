@@ -519,7 +519,7 @@ const Index = () => {
 
                               <p className="mb-1">
                                 <small>
-                                  Average Price:{" "}
+                                {translation?.average_price || "Average Price:"}{" "}
                                   {property?.price_per_sqft ? (
                                     <>
                                       {property?.price_currency ||

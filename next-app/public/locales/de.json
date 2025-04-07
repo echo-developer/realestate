@@ -995,5 +995,6 @@
   "responsive_broker": "Courtier Réactif",
   "responsive_broker_desc": "Badge exclusif décerné aux agents facilement joignables et très réactifs.",
   "category_name": "Sélectionnez le type de propriété",
-  "key_points_remember": "Points clés à retenir"
+  "key_points_remember": "Points clés à retenir",
+   "average_price": "Prix moyen"
 }

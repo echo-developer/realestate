@@ -101,7 +101,7 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                 </h5>
                 <p className="mb-1">
                   <small>
-                    Average Price:{" "}
+                  {translation?.average_price || "Average Price:"}{" "}
                     {project?.area_in_sqft ? (
                       <>
                         {project?.currency || project?.price_currency || ""}{" "}

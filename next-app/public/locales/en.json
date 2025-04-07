@@ -998,18 +998,5 @@
   "responsive_broker_desc": "Exclusive badge awarded to agents who are highly reachable and responsive.",
   "category_name": "Select Property Type",
   "key_points_remember": "Key Points to Remember",
-
-  
-    "choose_rent_or_sale": "Choose whether you are posting your property for Rent or Sale.",
-    "select_property_type_corretc": "Select the correct property type (Residential, Commercial, Agricultural).",
-    "provide_subtype_details": "Provide accurate property subtype details (e.g., Apartment, Villa, Office Space).",
-    "individual_or_project": "Mention if your property is an Individual Property or part of a Project.",
-    "select_project_name": "Select the project name from suggestions if available for added credibility.",
-    "ownership_type": "Indicate the ownership type (Freehold or Leasehold).",
-    "usage_classification": "Ensure the property usage is correctly classified (Residential, Commercial, Industrial).",
-    "highlight_unique_points": "Highlight any unique selling points such as scenic views or premium location.",
-    "legal_status_details": "Provide accurate legal status details, including any RERA registration.",
-    "review_all_info": "Review all information to ensure accuracy and avoid listing issues."
-  
-  
+  "average_price": "Average Price"
 }

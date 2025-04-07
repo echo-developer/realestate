@@ -998,5 +998,6 @@
   "responsive_broker": "الوسيط السريع الاستجابة",
   "responsive_broker_desc": "شارة حصرية تُمنح للوكلاء الذين يسهل الوصول إليهم وسريعو الاستجابة.",
   "category_name": "اختر نوع العقار",
-  "key_points_remember": "نقاط رئيسية يجب تذكرها"
+  "key_points_remember": "نقاط رئيسية يجب تذكرها",
+  "average_price": "متوسط السعر"
 }
