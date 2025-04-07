@@ -119,7 +119,7 @@ const Index = () => {
           setpropertyName(
             response?.options?.property_list || response?.options?.project_list
           );
-          setEnquiryShow(response?.data?.enquery_can_show);
+          setEnquiryShow(response?.data?.enquery_can_show || 5);
         } else {
           setEnquiryList((prev) => [
             ...prev,
