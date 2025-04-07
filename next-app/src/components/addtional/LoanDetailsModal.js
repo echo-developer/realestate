@@ -31,7 +31,7 @@ const LoanDetailsModal = ({ show, handleClose }) => {
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [showSubmitBtn,setShowSubmitBtn]=useState(false)
+  const [showSubmitBtn, setShowSubmitBtn] = useState(false)
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -91,7 +91,7 @@ const LoanDetailsModal = ({ show, handleClose }) => {
           phone: formData.phone,
         },
       });
-      if (response && response.status===1) {
+      if (response && response.status === 1) {
         setOtpSent(true);
         toast.success("OTP sent successfully!");
         setShowOtpField(true);
@@ -345,8 +345,17 @@ const LoanDetailsModal = ({ show, handleClose }) => {
               name="consent"
               checked={formData.consent}
               onChange={handleChange}
-              label="I authorize 99acres.com relevant loan providers to contact me."
+              label={
+                <>
+                  I authorize{" "}
+                  <a href="https://realestate.scriptlisting.com" target="_blank" rel="noopener noreferrer">
+                    realestate.scriptlisting.com
+                  </a>{" "}
+                  relevant loan providers to contact me.
+                </>
+              }
             />
+
           </Form.Group>
         </Form>
       </Modal.Body>
