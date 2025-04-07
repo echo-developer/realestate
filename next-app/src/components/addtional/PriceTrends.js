@@ -54,6 +54,17 @@ function RealEstateTrends() {
     }
   }, [defaultCity.city_id]);
 
+  useEffect(() => {
+    if (!data) return;
+
+    const defaultKeys =
+      viewType === "Localities"
+        ? Object.keys(data.priceDataforLocalities || {})
+        : Object.keys(data.priceDataforProjects || {});
+
+    setSelectedLocalities(defaultKeys);
+  }, [viewType, data]);
+
   const updateChart = () => {
     if (!chartRef.current || !data) return;
 
@@ -126,32 +137,14 @@ function RealEstateTrends() {
         <div className="position-relative d-inline-block mb-3">
           <div
             className="d-flex align-items-center cursor-pointer"
-            onClick={() => setShowDropdown((prev) => !prev)}
             style={{ userSelect: "none" }}
           >
             <h2 className="h5 mb-0">
-              {translation?.trends_for || "Trends for"} {selectedCity}
+              {translation?.trends_for || "Trends for"} {defaultCity?.name || ""}
             </h2>
-            <ChevronDown className="ms-2" />
+            {/* <ChevronDown className="ms-2" /> */}
           </div>
 
-          {showDropdown && (
-            <div
-              className="position-absolute bg-white border mt-2 p-2 shadow"
-              style={{ zIndex: 10, minWidth: "200px" }}
-            >
-              {cities.map((city, index) => (
-                <div
-                  key={index}
-                  className="dropdown-item"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => handleSelectCity(city)}
-                >
-                  {city}
-                </div>
-              ))}
-            </div>
-          )}
         </div>
 
         <div className="d-flex justify-content-between mb-3">
@@ -254,7 +247,6 @@ function RealEstateTrends() {
             ? `Currently displaying trends for: ${selectedLocalities.join(", ")}`
             : "No selections made. Please choose from the list to see trends."}
         </p>
-
         <Accordion defaultActiveKey="0" className="mt-5">
           <h2 className="h5 mb-3">
             {translation?.faq || "Frequently Asked Questions"}
@@ -318,12 +310,16 @@ function RealEstateTrends() {
             </Accordion.Item>
           ))}
         </Accordion>
+
       </div>
     </div>
   );
 }
 
 export default RealEstateTrends;
+
+
+
 
 
 
