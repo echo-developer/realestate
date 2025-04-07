@@ -1,0 +1,23 @@
+.blurred-item {
+    filter: blur(4px);
+    position: relative;
+    pointer-events: none;
+    user-select: none;
+  }
+  
+  .blurred-item .blur-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(255, 255, 255, 0.8);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: #333;
+    pointer-events: all;
+    user-select: none;
+  }
+  

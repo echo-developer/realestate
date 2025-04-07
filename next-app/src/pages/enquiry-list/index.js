@@ -11,6 +11,7 @@ import LocalityOption from "@/components/MapData/LocalitySelector";
 import { DateRangePicker } from "rsuite";
 import "rsuite/DateRangePicker/styles/index.css";
 import moment from "moment";
+import "./enquiry.css";
 import {
   Form,
   Row,
@@ -38,7 +39,7 @@ const Index = () => {
   const [status, setStatus] = useState("");
   const [dateRange, setDateRange] = useState(null);
   const [PropertyName, setpropertyName] = useState([]);
-
+  const [enquiryShow, setEnquiryShow] = useState();
 
   const handleDateChange = (value) => {
     setDateRange(value);
@@ -76,7 +77,7 @@ const Index = () => {
         fetchEnquiryList("/my_project_enquery_list");
       }
     }
-  }, [memberId, sortType, activeTab]);
+  }, [memberId, sortType, activeTab, enquiryShow]);
 
   const fetchEnquiryList = async (
     apiUrl,
@@ -111,9 +112,12 @@ const Index = () => {
         if (!loadMore) {
           setEnquiryList(
             response?.data?.enquiredProperties ||
-              response?.data?.enquiredProjects 
+              response?.data?.enquiredProjects
           );
-          setpropertyName(response?.options?.property_list || response?.options?.project_list);
+          setpropertyName(
+            response?.options?.property_list || response?.options?.project_list
+          );
+          setEnquiryShow(response?.data?.enquery_can_show);
         } else {
           setEnquiryList((prev) => [
             ...prev,
@@ -170,6 +174,8 @@ const Index = () => {
       data: null,
     });
   };
+
+  console.log(enquiryShow);
 
   return (
     <DashboardLayout>
@@ -229,22 +235,21 @@ const Index = () => {
           </div>
           <Row className="gx-3 mb-3">
             {/* Search Input */}
-            <Col className="col-lg col-sm-6 col-12">                              
-                <Form.Group
-                  label="Search"
-                  className="form-field with-icon-start mb-3"
-                >
-                  <i className="bi bi-search"></i>
-                  <Form.Control
-                    type="text"
-                    placeholder={
-                      translation?.search_enquiry_here || "Search enquiry here"
-                    }
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </Form.Group>
-              
+            <Col className="col-lg col-sm-6 col-12">
+              <Form.Group
+                label="Search"
+                className="form-field with-icon-start mb-3"
+              >
+                <i className="bi bi-search"></i>
+                <Form.Control
+                  type="text"
+                  placeholder={
+                    translation?.search_enquiry_here || "Search enquiry here"
+                  }
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </Form.Group>
             </Col>
 
             <Col className="col-lg col-sm-6 col-12">
@@ -253,31 +258,25 @@ const Index = () => {
 
             {/* Status Dropdown */}
             <Col className="col-lg col-sm-6 col-12">
-              <Form.Group 
-                className="form-field mb-3"
-              >
-                  <Form.Select
-                    aria-label="Floating label select example"
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                  >
-                    <option value="">Select Name</option>{" "}
-                    {/* Default option */}
-                    {PropertyName?.map((item) => (
-                      <option key={item.id} value={item.id}>
-                        {item.name || item.project_name}
-                      </option>
-                    ))}
-                  </Form.Select>
+              <Form.Group className="form-field mb-3">
+                <Form.Select
+                  aria-label="Floating label select example"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  <option value="">Select Name</option> {/* Default option */}
+                  {PropertyName?.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name || item.project_name}
+                    </option>
+                  ))}
+                </Form.Select>
               </Form.Group>
             </Col>
 
             {/* Date Range Picker */}
             <Col className="col-lg col-sm-6 col-12">
-              <Form.Group
-                label="Date Range"
-                className="mb-3"
-              >
+              <Form.Group label="Date Range" className="mb-3">
                 <DateRangePicker
                   format="yyyy-MM-dd"
                   showHeader={false}
@@ -310,7 +309,7 @@ const Index = () => {
           ) : enquiryList.length > 0 ? (
             <div className="dashboard-listing mb-4">
               <ul className="dashboard-box-list">
-                {enquiryList.map((listing) => {
+                {enquiryList.map((listing, index) => {
                   const firstImage = (() => {
                     if (activeTab === "property") {
                       return listing?.galleries?.[0]?.filename;
@@ -319,12 +318,15 @@ const Index = () => {
                         ?.filename;
                     }
                   })();
+
+                  const isBlurred = enquiryList.length > enquiryShow && index >= enquiryShow;
+
                   return (
-                    <li>
-                      <div
-                        key={listing.enquery_id}
-                        className="d-sm-flex align-items-center"
-                      >
+                    <li
+                      key={listing.enquery_id}
+                      className={isBlurred ? "blurred-item" : ""}
+                    >
+                      <div className="d-sm-flex align-items-center">
                         <div className="photox text-center mb-3 mb-sm-0">
                           <img
                             src={
@@ -394,18 +396,35 @@ const Index = () => {
                             onClick={() =>
                               handleViewEnquery(listing?.enquery_id)
                             }
+                            disabled={isBlurred}
                           >
                             {translation?.view_enquiry || "View Enquiry"}
                           </button>
                           <p>
-                            <Calendar color="#777" size={16} />{useDateFormat(listing.created_at)}
+                            <Calendar color="#777" size={16} />
+                            {useDateFormat(listing.created_at)}
                           </p>
                         </div>
                       </div>
+                      {isBlurred && (
+                        <div className="blur-overlay">
+                          <span>Upgrade to view more</span>
+                        </div>
+                      )}
                     </li>
                   );
                 })}
               </ul>
+              {enquiryList.length > enquiryShow && (
+                <div className="text-center mt-4">
+                  <button
+                    className="btn btn-success"
+                    onClick={() => router.push("/membership")}
+                  >
+                    Buy Membership Plan
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <>
