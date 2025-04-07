@@ -1001,5 +1001,14 @@
   "average_price": "Average Price",
   "similar_properties": "Similar Properties",
   "flooring_material": "Flooring Material",
-  "name_of_buldings": "Name of Building"
+  "name_of_buldings": "Name of Building",
+  "about": "About",
+  "expertise": "Expertise",
+  "service_areas": "Service Areas",
+  "social_media": "Social Media",
+  "licence_number": "Licence Number",
+  "business_phone": "Business Phone",
+  "business_email": "Business Email",
+  "working_hours": "Working Hours",
+  "experience": "Experience"
 }

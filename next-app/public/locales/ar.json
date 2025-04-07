@@ -1001,8 +1001,12 @@
   "average_price": "متوسط السعر",
   "similar_properties": "عقارات مشابهة",
   "flooring_material": "مواد الأرضيات",
-  "name_of_buldings": "اسم المبنى"
-
-
-
+  "name_of_buldings": "اسم المبنى",
+  "about": "حول",
+  "expertise": "الخبرة",
+  "service_areas": "مناطق الخدمة",
+  "social_media": "وسائل التواصل الاجتماعي",
+  "licence_number": "رقم الترخيص",
+  "working_hours": "ساعات العمل",
+  "experience": "الخبرة"
 }

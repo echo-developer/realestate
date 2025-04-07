@@ -999,5 +999,13 @@
   "average_price": "Prix moyen",
   "similar_properties": "Biens similaires",
   "flooring_material": "Matériau de revêtement de sol",
-  "name_of_buldings": "Nom du bâtiment"
+  "name_of_buldings": "Nom du bâtiment",
+  "about": "À propos",
+  "expertise": "Expertise",
+  "service_areas": "Zones de service",
+  "social_media": "Réseaux sociaux",
+  "licence_number": "Numéro de licence",
+  "business_phone": "Téléphone professionnel",
+  "working_hours": "Heures de travail",
+  "experience": "Expérience"
 }
