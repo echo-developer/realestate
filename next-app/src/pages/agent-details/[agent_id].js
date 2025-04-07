@@ -392,9 +392,11 @@ const Index = () => {
 
               <div className="card border-0 shadow-sm d-lg-none mb-4">
                 <div className="card-body">
-                  <h4>About</h4>
+                  <h4>{translation?.about || "About"}
+                  </h4>
                   <p>
-                    <span className="text-muted">Broker Type:</span>
+                    <span className="text-muted">{translation?.broker_type || "Broker Type"}:
+                    </span>
                     {agentDetailsData?.broker_type === "I"
                       ? "Indepedent"
                       : agentDetailsData?.broker_type === "F"
@@ -404,15 +406,18 @@ const Index = () => {
                       : "Not Available"}
                   </p>
                   <p>
-                    <span className="text-muted">Expertise:</span>{" "}
+                    <span className="text-muted">{translation?.expertise || "Expertise:"}
+                    </span>{" "}
                     {agentDetailsData?.specialization || "Not Available"}
                   </p>
                   <p>
-                    <span className="text-muted">Address:</span>{" "}
+                    <span className="text-muted">{translation?.address || "Address:"}
+                    </span>{" "}
                     {agentDetailsData?.address || "Not Available"}
                   </p>
                   <p>
-                    <span className="text-muted">Service Areas: </span>
+                    <span className="text-muted">{translation?.service_areas || "Service Areas:"}
+                    </span>
                     {[
                       ...new Set(
                         agentDetailsData?.service_area?.map((area) => area.city)
@@ -420,7 +425,8 @@ const Index = () => {
                     ].join(", ")}
                   </p>
                   <p>
-                    <span className="text-muted">Social Media: </span>
+                    <span className="text-muted">{translation?.social_media || "Social Media:"}
+                    </span>
                     {[
                       ...new Set(
                         agentDetailsData?.social?.map(
@@ -430,37 +436,46 @@ const Index = () => {
                     ].join(", ")}
                   </p>
                   <p>
-                    <span className="text-muted">Properties:</span> For Sale (
-                    {agentDetailsData?.forSell}), For Rent (
+                    <span className="text-muted">{translation?.properties_for_sale || "Properties For Sale"}
+                    </span> (
+                    {agentDetailsData?.forSell}), {translation?.for_rent || "For Rent"}
+                    (
                     {agentDetailsData?.forRent})
                   </p>
                   <p>
-                    <span className="text-muted">Licence Number:</span>{" "}
+                    <span className="text-muted">{translation?.licence_number || "Licence Number:"}
+                    </span>{" "}
                     {agentDetailsData?.license_no || "Not Available"}
                   </p>
                   <p>
-                    <span className="text-muted">Business Phone:</span>{" "}
+                    <span className="text-muted">{translation?.business_phone || "Business Phone:"}
+                    </span>{" "}
                     {agentDetailsData?.bussiness_phone || "Not Available"}
                   </p>
                   <p>
-                    <span className="text-muted">Business Email:</span>{" "}
+                    <span className="text-muted">{translation?.business_email || "Business Email:"}
+                    </span>{" "}
                     {agentDetailsData?.bussiness_email || "Not Available"}
                   </p>
                   <p>
-                    <span className="text-muted">Company Name:</span>{" "}
+                    <span className="text-muted">{translation?.company_name || "Company Name:"}
+                    </span>{" "}
                     {agentDetailsData?.company_name || "Not Available"}
                   </p>
                   <p>
-                    <span className="text-muted">Working Hours:</span>{" "}
+                    <span className="text-muted">{translation?.working_hours || "Working Hours:"}
+                    </span>{" "}
                     {agentDetailsData?.opening_hours} -{" "}
                     {agentDetailsData?.closing_hours}
                   </p>
                   <p>
-                    <span className="text-muted d-block">Description:</span>
+                    <span className="text-muted d-block">{translation?.description || "Description:"}
+                    </span>
                     {agentDetailsData?.description || "Not Available"}
                   </p>
                   <p>
-                    <span className="text-muted">Experience:</span>{" "}
+                    <span className="text-muted">{translation?.experience || "Experience:"}
+                    </span>{" "}
                     {agentDetailsData?.experience_yr || "Not Available"}
                     {agentDetailsData?.experience_yr && "Years"}
                   </p>
@@ -506,7 +521,8 @@ const Index = () => {
                                 </Link>
                               </h4>
                               <h5 className="mb-0">
-                                Price:{" "}
+                              {translation?.price || "Price:"}
+                              {" "}
                                 {property?.price_currency &&
                                 property?.expected_price
                                   ? `${
@@ -525,7 +541,8 @@ const Index = () => {
                                       {property?.price_currency ||
                                         property?.currency ||
                                         ""}{" "}
-                                      {property?.price_per_sqft} sq/ft
+                                      {property?.price_per_sqft} {translation?.sq_ft || "sq/ft"}
+
                                     </>
                                   ) : (
                                     "Not Available"
@@ -660,9 +677,11 @@ const Index = () => {
             </Col>
             <Col className="col-lg-4 col-12">
               <div className="d-none d-lg-block mb-2">
-                <h4>About</h4>
+                <h4>{translation?.about || "About"}
+                </h4>
                 <p>
-                  <span className="text-muted">Broker Type:</span>
+                  <span className="text-muted">{translation?.broker_type || "Broker Type:"}
+                  </span>
                   {agentDetailsData?.broker_type === "I"
                     ? "Indepedent"
                     : agentDetailsData?.broker_type === "F"
@@ -672,15 +691,18 @@ const Index = () => {
                     : "Not Available"}
                 </p>
                 <p>
-                  <span className="text-muted">Expertise:</span>{" "}
+                  <span className="text-muted">{translation?.expertise || "Expertise:"}
+                  </span>{" "}
                   {agentDetailsData?.specialization || "Not Available"}
                 </p>
                 <p>
-                  <span className="text-muted">Address:</span>{" "}
+                  <span className="text-muted">{translation?.address || "Address:"}
+                  </span>{" "}
                   {agentDetailsData?.address || "Not Available"}
                 </p>
                 <p>
-                  <span className="text-muted">Service Areas: </span>
+                  <span className="text-muted">{translation?.service_areas || "Service Areas:"}
+                  </span>
                   {[
                     ...new Set(
                       agentDetailsData?.service_area?.map((area) => area.city)
@@ -688,7 +710,8 @@ const Index = () => {
                   ].join(", ")}
                 </p>
                 <p>
-                  <span className="text-muted">Social Media: </span>
+                  <span className="text-muted">{translation?.social_media || "Social Media:"}
+                  </span>
                   {[
                     ...new Set(
                       agentDetailsData?.social?.map(
@@ -698,37 +721,46 @@ const Index = () => {
                   ].join(", ")}
                 </p>
                 <p>
-                  <span className="text-muted">Properties:</span> For Sale (
-                  {agentDetailsData?.forSell}), For Rent (
+                  <span className="text-muted">{translation?.properties_for_sale || "Properties For Sale"}
+                  </span>  (
+                  {agentDetailsData?.forSell}), {translation?.for_rent || "For Rent"}
+                  (
                   {agentDetailsData?.forRent})
                 </p>
                 <p>
-                  <span className="text-muted">Licence Number:</span>{" "}
+                  <span className="text-muted">{translation?.licence_number || "Licence Number:"}
+                  </span>{" "}
                   {agentDetailsData?.license_no || "Not Available"}
                 </p>
                 <p>
-                  <span className="text-muted">Business Phone:</span>{" "}
+                  <span className="text-muted">{translation?.business_phone || "Business Phone:"}
+                  </span>{" "}
                   {agentDetailsData?.bussiness_phone || "Not Available"}
                 </p>
                 <p>
-                  <span className="text-muted">Business Email:</span>{" "}
+                  <span className="text-muted">{translation?.business_email || "Business Email:"}
+                  </span>{" "}
                   {agentDetailsData?.bussiness_email || "Not Available"}
                 </p>
                 <p>
-                  <span className="text-muted">Company Name:</span>{" "}
+                  <span className="text-muted">{translation?.company_name || "Company Name:"}
+                  </span>{" "}
                   {agentDetailsData?.company_name || "Not Available"}
                 </p>
                 <p>
-                  <span className="text-muted">Working Hours:</span>{" "}
+                  <span className="text-muted">{translation?.working_hours || "Working Hours:"}
+                  </span>{" "}
                   {agentDetailsData?.opening_hours} -{" "}
                   {agentDetailsData?.closing_hours}
                 </p>
                 <p>
-                  <span className="text-muted d-block">Description:</span>
+                  <span className="text-muted d-block">{translation?.description || "Description:"}
+                  </span>
                   {agentDetailsData?.description || "Not Available"}
                 </p>
                 <p>
-                  <span className="text-muted">Experience:</span>{" "}
+                  <span className="text-muted">{translation?.experience || "Experience:"}
+                  </span>{" "}
                   {agentDetailsData?.experience_yr || "Not Available"}
                   {agentDetailsData?.experience_yr && "Years"}
                 </p>
@@ -795,7 +827,8 @@ const Index = () => {
 
       <Modal show={showEnquiryModal} onHide={handleEnquiryClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Contact Agent</Modal.Title>
+          <Modal.Title>{translation?.contact_agent || "Contact Agent"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <AgentEnquiryForm
