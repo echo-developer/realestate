@@ -441,6 +441,7 @@ class PropertyDetailsController extends Controller
                         'property_brochure_pdf' => $fileUrl,
                         'property_description' => $property->property_desc,
                         'property_key' => format_name(get_name_by_id('property_category_names', 'category_id', $property->property_type, 'en')),
+                        'property_type_id' => $property->property_type,
                         'post_for' => $property->post_for,
                         'user_details' => $customUserDetails ?? null,
                         'top_agents' => $topAgentList,
