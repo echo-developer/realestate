@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/base.min.css') }}">
 
     @foreach ($cssPaths as $cssFile)
-        <link rel="stylesheet" href="{{ asset($cssFile) }}">
+    <link rel="stylesheet" href="{{ asset($cssFile) }}">
     @endforeach
 
     @stack('custom-css')
@@ -142,9 +142,15 @@
         window.onload = function() {
             document.getElementById("loader").style.display = "none";
         };
-        const STATUS_ACTIVE = {!! json_encode(config('constants.STATUS_ACTIVE')) !!};
-        const STATUS_INACTIVE = {!! json_encode(config('constants.STATUS_INACTIVE')) !!};
-        const STATUS_DELETED = {!! json_encode(config('constants.STATUS_DELETED')) !!};
+        const STATUS_ACTIVE = {
+            !!json_encode(config('constants.STATUS_ACTIVE')) !!
+        };
+        const STATUS_INACTIVE = {
+            !!json_encode(config('constants.STATUS_INACTIVE')) !!
+        };
+        const STATUS_DELETED = {
+            !!json_encode(config('constants.STATUS_DELETED')) !!
+        };
         var toastrOptions = {
             "progressBar": true,
             "positionClass": "toast-top-right",
