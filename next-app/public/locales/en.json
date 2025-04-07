@@ -977,6 +977,14 @@
   "description_the_mathmatcial": "The mathematical formula to calculate EMI is: EMI = [P x R x(1+R)^N]/[(1+R)^N-1], where P stands for the loan amount or principal, R is the interest rate per month, and N is the number of monthly installments.",
   "what_factor_affect": "What factors affect my EMI?",
   "read_less": "Read Less",
+  "schedule_calender": "Schedule Calendar",
+  "leads_management": "Leads Management",
   "description_the_main": "The main factors that affect your EMI are the loan amount, interest rate, and loan tenure. A higher loan amount or interest rate will increase your EMI, while a longer loan tenure will decrease it (but increase the total interest paid).",
-  "calculate_emi_for": "Calculate EMI for the loan amount you require"
+  "calculate_emi_for": "Calculate EMI for the loan amount you require",
+  "property_leads": "Property Leads",
+  "project_leads": "Project Leads",
+  "genral_leads": "General Leads",
+  "contact_history": "Contact History",
+  "select_an_option": "Select an option",
+  "customer_name": "Customer Name"
 }

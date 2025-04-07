@@ -976,5 +976,13 @@
   "what_factor_affect": "Quels facteurs influencent mon EMI ?",
   "read_less": "Lire moins",
   "calculate_emi_for": "Calculez l'EMI pour le montant du prêt souhaité",
-  "description_the_main": "Les principaux facteurs qui influencent votre EMI sont le montant du prêt, le taux d’intérêt et la durée du prêt. Un montant ou un taux plus élevé augmentera votre EMI, tandis qu'une durée plus longue la réduira (mais augmentera le montant total des intérêts)."
+  "leads_management": "Gestion des prospects",
+  "schedule_calender": "Calendrier de planification",
+  "description_the_main": "Les principaux facteurs qui influencent votre EMI sont le montant du prêt, le taux d’intérêt et la durée du prêt. Un montant ou un taux plus élevé augmentera votre EMI, tandis qu'une durée plus longue la réduira (mais augmentera le montant total des intérêts).",
+  "property_leads": "Pistes immobilières",
+  "project_leads": "Pistes de projet",
+  "genral_leads": "Pistes générales",
+  "contact_history": "Historique des contacts",
+  "select_an_option": "Sélectionnez une option",
+  "customer_name": "Nom du client"
 }

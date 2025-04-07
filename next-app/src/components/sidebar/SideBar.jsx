@@ -187,7 +187,7 @@ const SideBar = () => {
                 aria-expanded={showDropDown}
               >
                 <i className="bi bi-building"></i>{" "}
-                <span>{translation?.leads_mennagement || "Leads Management"}</span>{" "}
+                <span>{translation?.leads_management || "Leads Management"}</span>{" "}
                 <i className="icon-line-awesome-angle-down ms-auto"></i>
               </a>
               <ul
@@ -206,7 +206,7 @@ const SideBar = () => {
                 <li>
                   <a href="/property-crm-calender">
                     <i className="icon-line-awesome-arrow-right"></i>{" "}
-                    Schedule Calendar
+                    {translation?.schedule_calender || "Schedule Calendar"} 
                   </a>
                 </li>
                 {/* <li>

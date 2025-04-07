@@ -177,14 +177,14 @@ const Index = () => {
         <DashboardLayout>
             <aside className="col-lg col-12">
                 <div className="p-4">
-                    <h1 className="h4 text-primary mb-3">Leads Management</h1>
+                    <h1 className="h4 text-primary mb-3">{translation?.leads_management || "Leads Management"}</h1>
 
 
                     <div className="container mt-4">
                         <div className="d-flex justify-content-start">
-                            <button className={`btn btn-${activeTab == 'property' ? 'primary' : 'secondary'} mx-2`} onClick={() => handleActiveTabChange("property")}>Property Leads</button>
-                            <button className={`btn btn-${activeTab == 'project' ? 'primary' : 'secondary'} mx-2`} onClick={() => handleActiveTabChange("project")}>Project Leads</button>
-                            <button className={`btn btn-${activeTab == 'general' ? 'primary' : 'secondary'} mx-2`} onClick={() => handleActiveTabChange("general")}>General Leads</button>
+                            <button className={`btn btn-${activeTab == 'property' ? 'primary' : 'secondary'} mx-2`} onClick={() => handleActiveTabChange("property")}>{translation?.property_leads || "Property Leads"}</button>
+                            <button className={`btn btn-${activeTab == 'project' ? 'primary' : 'secondary'} mx-2`} onClick={() => handleActiveTabChange("project")}>{translation?.project_leads || "Project Leads"}</button>
+                            <button className={`btn btn-${activeTab == 'general' ? 'primary' : 'secondary'} mx-2`} onClick={() => handleActiveTabChange("general")}>{translation?.genral_leads || "General Leads"}</button>
                         </div>
                     </div>
                     {loading && (
@@ -244,7 +244,7 @@ const Index = () => {
                                                 <div className="card-body">
                                                     <div className="d-flex align-items-center justify-content-between">
                                                         <h4>{lead?.property_name || "Not available"}</h4>
-                                                        <h6>Coustomer Name: {lead?.customer_name || "Not available"}</h6>
+                                                        <h6>{translation?.customer_name || "Coustomer Name:"} {lead?.customer_name || `${translation?.not_available}`}</h6>
                                                         <div className="text-end">
                                                             <span className={`badge ${statusClasses[lead?.lead_status]}`}>{leadStatusList[lead?.lead_status || 0]}</span>
                                                             <br />
@@ -264,11 +264,15 @@ const Index = () => {
                                                     </p>
                                                     <p className="text-wrap mb-2">{lead?.message}</p>
                                                     <div class="d-flex justify-content-end">
-                                                        <button class="btn btn-sm btn-outline-primary me-2" onClick={() => handleModalOpen(lead?.Phone, lead?.Email, lead.assign_id, lead.enquery_id, lead.lead_type)}>Contact</button>
-                                                        <Link class="btn btn-sm btn-outline-primary me-2" href={`/property-crm-timeline?assign_id=${lead?.assign_id}`}>Contact History</Link>
-                                                        <Link class="btn btn-sm btn-outline-primary me-2" href={`/lead-details/${lead?.assign_id}`}>Lead Details</Link>
+                                                        <button class="btn btn-sm btn-outline-primary me-2" onClick={() => handleModalOpen(lead?.Phone, lead?.Email, lead.assign_id, lead.enquery_id, lead.lead_type)}>{translation?.contact || "Contact"}
+                                                        </button>
+                                                        <Link class="btn btn-sm btn-outline-primary me-2" href={`/property-crm-timeline?assign_id=${lead?.assign_id}`}>{translation?.contact_history || "Contact History"}
+                                                        </Link>
+                                                        <Link class="btn btn-sm btn-outline-primary me-2" href={`/lead-details/${lead?.assign_id}`}>{translation?.lead_details || "Lead Details"}
+                                                        </Link>
                                                         <select class="form-select form-select-sm ms-2" aria-label="Select action" value={lead?.lead_status} onChange={(e) => handleLeadStatusChange(e, i, lead.assign_id)}>
-                                                            <option value="">select an option</option>
+                                                            <option value="">{translation?.select_an_option || "Select an option"}
+                                                            </option>
                                                             {leadStatusList?.length > 0 && leadStatusList?.map((status, i) => {
                                                                 return (
                                                                     <option key={i} value={i}>{status}</option>
