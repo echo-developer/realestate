@@ -11,6 +11,7 @@ import LocalityOption from "@/components/MapData/LocalitySelector";
 import { DateRangePicker } from "rsuite";
 import "rsuite/DateRangePicker/styles/index.css";
 import moment from "moment";
+import { useRouter } from "next/navigation";
 import "./enquiry.css";
 import {
   Form,
@@ -27,6 +28,7 @@ import { Calendar } from "react-bootstrap-icons";
 import useTranslation from "@/hooks/useTranslation";
 const Index = () => {
   const translation = useTranslation();
+  const router = useRouter();
   const { callApi, GetMemberId } = AuthUser();
   const [enquiryList, setEnquiryList] = useState([]);
   const [sortType, setSortType] = useState("all");
@@ -77,7 +79,7 @@ const Index = () => {
         fetchEnquiryList("/my_project_enquery_list");
       }
     }
-  }, [memberId, sortType, activeTab, enquiryShow]);
+  }, [memberId, sortType, activeTab]);
 
   const fetchEnquiryList = async (
     apiUrl,
@@ -174,8 +176,6 @@ const Index = () => {
       data: null,
     });
   };
-
-  console.log(enquiryShow);
 
   return (
     <DashboardLayout>
@@ -319,7 +319,8 @@ const Index = () => {
                     }
                   })();
 
-                  const isBlurred = enquiryList.length > enquiryShow && index >= enquiryShow;
+                  const isBlurred =
+                    enquiryList.length > enquiryShow && index >= enquiryShow;
 
                   return (
                     <li
@@ -421,7 +422,7 @@ const Index = () => {
                     className="btn btn-success"
                     onClick={() => router.push("/membership")}
                   >
-                    Buy Membership Plan
+                    Unlock More Enquiry
                   </button>
                 </div>
               )}
