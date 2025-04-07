@@ -860,7 +860,7 @@ const index = () => {
             <div className="position-relative">
               <input
                 type="text"
-                placeholder="Search Locality"
+                placeholder={translation?.search_locality || "Search Locality"}
                 className="form-control ps-5"
               />
               <Search
