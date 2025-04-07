@@ -579,7 +579,9 @@ class Enquery_CRM_Controller extends Controller
                         'current_page' => $recentPage,
                         'total_records' => $totalRecords,
                         'total_pages' => ceil($totalRecords / $limit),
-                    ]
+                    ],
+                    'enquery_can_show' => (int) get_remaining_values('owner_contacted',$user_id),
+
                 ]);
             } else {
                 return response()->json([
@@ -692,7 +694,8 @@ class Enquery_CRM_Controller extends Controller
                             'current_page' => $recentPage,
                             'total_records' => $totalRecords,
                             'total_pages' => ceil($totalRecords / $limit),
-                        ]
+                        ],
+                        'enquery_can_show' => (int) get_remaining_values('owner_contacted',$user_id),
                     ]);
                 }
 
@@ -799,7 +802,8 @@ class Enquery_CRM_Controller extends Controller
                         'current_page' => $recentPage,
                         'total_records' => $totalRecords,
                         'total_pages' => ceil($totalRecords / $limit),
-                    ]
+                    ],
+                    'enquery_can_show' => (int) get_remaining_values('owner_contacted',$user_id),
                 ]);
             }
         }else{
