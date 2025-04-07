@@ -19,7 +19,7 @@ class PrefProperty extends Model
         'is_populer',
         'status',
         'slug',
-        'is_under_project'
+        'is_under_project',
     ];
 
     public function settings()

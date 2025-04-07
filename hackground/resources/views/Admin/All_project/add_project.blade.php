@@ -6,53 +6,6 @@
 <link href="{{ asset('assets/css/style.css') }}" type="text/css" rel="stylesheet">
 <link href="{{ asset('assets/css/ltr.css') }}" type="text/css" rel="stylesheet">
 <link href="{{ asset('assets/css/responsive.css') }}" type="text/css" rel="stylesheet">
-
-<style>
-  .upload-gallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
-  }
-
-  .preview-item {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #f8f8f8;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  .preview-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 5px;
-  }
-
-  .remove-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: red;
-    color: white;
-    border: none;
-    width: 20px;
-    height: 20px;
-    font-size: 12px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-</style>
 @endpush
 
 @section('content')
@@ -185,29 +138,17 @@
                   <div class="col-md-6">
                     <label class="form-label">No. of Total Towers</label>
                     <select class="form-select "
-                      name="total_tower" style="max-height: 150px; overflow-y: auto;">
+                      name="total_towers" style="max-height: 150px; overflow-y: auto;">
                       <option value="">Select Total Towers</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
-                      <option value="8">8</option>
-                      <option value="9">9</option>
-                      <option value="10">10</option>
-                      <option value="11">11</option>
-                      <option value="12">12</option>
-                      <option value="13">13</option>
-                      <option value="14">14</option>
-                      <option value="15">15</option>
+                      @for ($i = 1; $i <= 15; $i++)
+                        <option value="{{ $i }}">{{ $i }}</option>
+                        @endfor
                     </select>
                   </div>
                   <div class="col-md-6">
                     <label class="form-label">Total Units</label>
                     <input class="form-control "
-                      placeholder="Enter total units" min="1" type="number" name="total_unit">
+                      placeholder="Enter total units" min="1" type="number" name="total_units">
                   </div>
                 </div>
 
@@ -244,7 +185,7 @@
                       for="main_road_facing_2">No</label></div>
                 </div>
                 <div class="form-group"><label class="form-label">Amenity Features:</label>
-                  @foreach($proepertyAmenities as $items)
+                  @foreach($projectAmenities as $items)
                   <div class="form-check form-check-inline">
                     <input name="amenities[]" value="{{ $items['amenity_id'] }}" class="form-check-input" id="feature-{{ $items['amenity_id'] }}" type="checkbox"><label class="form-check-label" for="feature-{{ $items['amenity_id'] }}">{{$items['amenity_name']}}</label>
                   </div>
@@ -295,19 +236,19 @@
 
                 <label class="form-label">Age Of Construction :</label>
                 <div class="btn-group btn-group-light d-flex mb-3" role="group" aria-label="Floors">
-                  <input type="radio" class="btn-check" name="age" id="age_1" autocomplete="off" checked>
+                  <input type="radio" class="btn-check" value="new" name="age" id="age_1" autocomplete="off" checked>
                   <label class="btn btn-outline-light" for="age_1">New</label>
 
-                  <input type="radio" class="btn-check" name="age" id="age_2" autocomplete="off">
+                  <input type="radio" class="btn-check" value="less_than_5_years" name="age" id="age_2" autocomplete="off">
                   <label class="btn btn-outline-light" for="age_2">Less Than 5 Years</label>
 
-                  <input type="radio" class="btn-check" name="age" id="age_3" autocomplete="off">
+                  <input type="radio" class="btn-check" value="5_10_years" name="age" id="age_3" autocomplete="off">
                   <label class="btn btn-outline-light" for="age_3">5-10 Years</label>
 
-                  <input type="radio" class="btn-check" name="age" id="age_4" autocomplete="off">
+                  <input type="radio" class="btn-check" value="10_15_years" name="age" id="age_4" autocomplete="off">
                   <label class="btn btn-outline-light" for="age_4">10-15 Years</label>
 
-                  <input type="radio" class="btn-check" name="age" id="age_5" autocomplete="off">
+                  <input type="radio" class="btn-check" value="15_20_years" name="age" id="age_5" autocomplete="off">
                   <label class="btn btn-outline-light" for="age_5">15-20 Years</label>
                 </div>
                 <div class="row gx-3">
@@ -327,7 +268,7 @@
                   <div class="col-lg-6 col-12">
                     <div class="form-field">
                       <label class="form-label">Booking/Token Amount (optional)</label>
-                      <input type="text" class="form-control" placeholder="Enter Token Amount" />
+                      <input type="text" name="token_amount" class="form-control" placeholder="Enter Token Amount" />
                     </div>
                   </div>
                 </div>
@@ -639,16 +580,21 @@
                   field.insertAdjacentElement("afterend", errorDiv);
                 }
               }
-
             });
           } else {
-
-            document.getElementById(`step-${currentStep}`).style.display = "none";
-            currentStep++;
-            document.getElementById(`step-${currentStep}`).style.display = "block";
-            activateTab(currentStep);
+            if (currentStep === 6) {
+              // Redirect to another URL after step 6
+              window.location.href = `{{ url('allproject/all-project-view') }}`;
+            } else {
+              // Move to the next step
+              document.getElementById(`step-${currentStep}`).style.display = "none";
+              currentStep++;
+              document.getElementById(`step-${currentStep}`).style.display = "block";
+              activateTab(currentStep);
+            }
           }
         })
+
     });
   });
 
