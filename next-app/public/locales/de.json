@@ -1007,5 +1007,7 @@
   "licence_number": "Numéro de licence",
   "business_phone": "Téléphone professionnel",
   "working_hours": "Heures de travail",
-  "experience": "Expérience"
+  "experience": "Expérience",
+  "other_project": "Autre projet"
+
 }
