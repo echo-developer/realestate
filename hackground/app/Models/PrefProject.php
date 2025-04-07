@@ -61,6 +61,11 @@ class PrefProject extends Model
         return $this->hasMany(PrefProjectReport::class, 'project_id', 'id');
     }
 
+    public function propertyMapping()
+    {
+        return $this->hasMany(ProjectPropertyMapping::class, 'project_id', 'id');
+    }
+
     public function certificates()
     {
         return $this->hasMany(CertificatesModel::class, 'project_id')->whereNotNull('project_id');
