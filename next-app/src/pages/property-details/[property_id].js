@@ -820,7 +820,7 @@ const index = () => {
               />
               <SimilarProperties
                 propertydata={propertyDetails?.similar_properties}
-                heading="Similar Properties"
+                heading={translation?.similar_properties || "Similar Properties"}
                 addFavSimilarProjects={addFavSimilarProjects}
               />
             </aside>

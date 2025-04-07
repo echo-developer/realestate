@@ -998,5 +998,7 @@
   "responsive_broker_desc": "Exclusive badge awarded to agents who are highly reachable and responsive.",
   "category_name": "Select Property Type",
   "key_points_remember": "Key Points to Remember",
-  "average_price": "Average Price"
+  "average_price": "Average Price",
+  "similar_properties": "Similar Properties",
+  "flooring_material": "Flooring Material"
 }

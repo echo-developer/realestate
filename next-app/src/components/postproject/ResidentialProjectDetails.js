@@ -708,7 +708,7 @@ const ResidentialProjectDetails = ({
                   <Row className="-mb-3">
                     <Col className="col-lg-6 col-12 mb-3">
                       <h4 className="text-primary mb-3">
-                        {"Flooring Material"}
+                        {translation?.flooring_material || "Flooring Material"}
                       </h4>
                       <ul className="list list-none mb-0">
                         {detailsData?.flooring_style?.length > 0 ? (

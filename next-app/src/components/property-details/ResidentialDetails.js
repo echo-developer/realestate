@@ -406,7 +406,7 @@ const ResidentialDetails = ({propertyDetails ,setVisible}) => {
               />
               <SimilarProperties
                 propertydata={propertyDetails?.similar_properties}
-                heading="Similar Properties"
+                heading={translation?.similar_properties || "Similar Properties"}
               />
             </aside>
             <PropertySidebar />

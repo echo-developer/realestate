@@ -996,5 +996,8 @@
   "responsive_broker_desc": "Badge exclusif décerné aux agents facilement joignables et très réactifs.",
   "category_name": "Sélectionnez le type de propriété",
   "key_points_remember": "Points clés à retenir",
-   "average_price": "Prix moyen"
+   "average_price": "Prix moyen",
+   "similar_properties": "Biens similaires",
+   "flooring_material": "Matériau de revêtement de sol"
+
 }
