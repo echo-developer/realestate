@@ -243,7 +243,8 @@ class Enquery_CRM_Controller extends Controller
                             'current_page' => $recentPage,
                             'per_page' => $limit,
                             'total_pages' => ceil($totalEnquery / $limit),
-                        ]
+                        ],
+                        'enquery_can_show' => get_remaining_values('owner_contacted',$user_id),
                     ],
                     'options' => ['property_list' => $property_list],
                 ]);
@@ -416,7 +417,8 @@ class Enquery_CRM_Controller extends Controller
                             'current_page' => $recentPage,
                             'per_page' => $limit,
                             'total_pages' => ceil($totalEnqueries / $limit),
-                        ]
+                        ],
+                        'enquery_can_show' => get_remaining_values('owner_contacted',$user_id),
                     ],
                     'options' => [
                         'project_list' => $project_list
