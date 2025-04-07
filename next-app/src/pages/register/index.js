@@ -457,7 +457,7 @@ const Index = () => {
                                   <Field
                                     type="text"
                                     className="form-control"
-                                    placeholder="Mobile Number"
+                                    placeholder={translation?.mobile_number || "Mobile Number"}
                                     name="phone"
                                   />
                                 </div>
