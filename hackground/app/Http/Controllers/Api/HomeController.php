@@ -520,156 +520,16 @@ class HomeController extends Controller
         }
     }
 
-    // public function propertyInTrendsandRates(Request $request)
-    // {
-    //     try {
-
-    //         $cityId = $request->input('city_id');
-    //         $locality = $request->input('locality');
-
-    //         $topLocalities = PrefPropertyLocation::whereNotNull('city')
-    //             ->whereNotNull('locality')
-    //             ->whereNotNull('pid')
-    //             ->where('city', $cityId)
-    //             ->selectRaw('locality, COUNT(pid) as total_properties')
-    //             ->groupBy('locality')
-    //             ->orderByDesc('total_properties')
-    //             ->limit(5)
-    //             ->get();
-
-
-    //         $startMonth = Carbon::now()->subMonths(8)->startOfMonth(); // 9 months including current
-    //         $endMonth = Carbon::now()->endOfMonth();
-    //         $allMonths = collect();
-    //         $current = $startMonth->copy();
-
-    //         while ($current <= $endMonth) {
-    //             $allMonths->push($current->format("M'y"));
-    //             $current->addMonth();
-    //         }
-
-    //         $priceDataforLocalities = [];
-    //         $localitiesMeta = [];
-
-    //         foreach ($topLocalities as &$locality) {
-    //             $monthlyPrices = PrefProperty::with(['location', 'settings'])
-    //                 ->whereHas('location', function ($query) use ($cityId, $locality) {
-    //                     $query->where('city', $cityId)
-    //                         ->where('locality', $locality['locality'])
-    //                         ->orWhere('locality',  $locality);
-    //                 })
-    //                 ->whereHas('settings', function ($query) {
-    //                     $query->whereNotNull('expected_price');
-    //                 })
-    //                 ->where('created_at', '>=', $startMonth)
-    //                 ->where('created_at', '<=', $endMonth)
-    //                 ->orderBy('created_at')
-    //                 ->get()
-    //                 ->groupBy(function ($item) {
-    //                     return $item->created_at->format("M'y");
-    //                 })
-    //                 ->map(function ($group) {
-    //                     return round($group->pluck('settings.expected_price')->avg(), 2);
-    //                 });
-
-    //             // Map to fixed month array, fill missing with 0 or null
-    //             $localityPrices = $allMonths->map(function ($month) use ($monthlyPrices) {
-    //                 return $monthlyPrices[$month] ?? 0;
-    //             });
-
-    //             $priceDataforLocalities[$locality['locality']] = $localityPrices->values()->toArray();
-
-    //             $localitiesMeta[] = [
-    //                 'name' => $locality['locality'],
-    //                 'total_properties' => $locality['total_properties'] ?? 0,
-    //             ];
-    //         }
-
-
-
-
-    //         $topProjects = PrefProject::with(['propertyMapping' => function ($q) {
-    //             $q->select('project_id', 'property_id');
-    //         }])
-    //             ->whereHas('propertyMapping')
-    //             ->select('id', 'project_name') // match primary key
-    //             ->limit(5)
-    //             ->get()->map(function ($topProject) {
-    //                 return [
-    //                     'project_id' => $topProject->id,
-    //                     'projectName' => $topProject->project_name,
-    //                     'total_properties' => count($topProject->propertyMapping) ?? 0,
-    //                 ];
-    //             });
-
-    //         // log::info("propertyInTrends" . json_encode($topProjects, JSON_PRETTY_PRINT));
-    //         $priceDataforProjects = [];
-
-    //         foreach ($topProjects as &$projects) {
-    //             $monthlyPrices = PrefProperty::with(['projectMapping','settings'])
-    //                 ->whereHas('projectMapping', function ($query) use ($projects, $cityId, $locality) {
-    //                     $query->where('project_id', $projects['project_id']);
-    //                 })
-    //                 ->where('created_at', '>=', $startMonth)
-    //                 ->where('created_at', '<=', $endMonth)
-    //                 ->orderBy('created_at')
-    //                 ->get()
-    //                 ->groupBy(function ($item) {
-    //                     return $item->created_at->format("M'y");
-    //                 })
-    //                 ->map(function ($group) {
-    //                     return round($group->pluck('settings.expected_price')->avg(), 2);
-    //                 });
-
-    //             $projectPrices = $allMonths->map(function ($month) use ($monthlyPrices) {
-    //                 return $monthlyPrices[$month] ?? 0;
-    //             });
-
-    //             $priceDataforProjects[$projects['projectName']] = $projectPrices->values()->toArray();
-    //         }
-
-    //         $response = [
-    //             'months' => $allMonths->toArray(),
-    //             'priceDataforLocalities' => $priceDataforLocalities,
-    //             'localities' => $localitiesMeta,
-    //             'priceDataforProjects' => $priceDataforProjects,
-    //             'projects' => $topProjects,
-    //         ];
-    //         return response()->json([
-    //             'status' => 1,
-    //             'data' => $response,
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         logError($e);
-    //         return response()->json([
-    //             'status' => 0,
-    //             'message' => 'An Error has occured.Try again' . $e,
-    //         ]);
-    //     }
-    // }
-
     public function propertyInTrendsandRates(Request $request)
     {
         try {
+
             $cityId = $request->input('city_id');
+            $locality = $request->input('locality');
 
-            // Optional Caching
-            // $cacheKey = 'price_trends_' . $cityId;
-            // return Cache::remember($cacheKey, 600, function () use ($cityId) {
-
-            $startMonth = Carbon::now()->subMonths(8)->startOfMonth(); // 9 months including current
-            $endMonth = Carbon::now()->endOfMonth();
-
-            $allMonths = collect();
-            $current = $startMonth->copy();
-            while ($current <= $endMonth) {
-                $allMonths->push($current->format("M'y"));
-                $current->addMonth();
-            }
-
-            /** TOP LOCALITIES **/
             $topLocalities = PrefPropertyLocation::whereNotNull('city')
                 ->whereNotNull('locality')
+                ->whereNotNull('pid')
                 ->where('city', $cityId)
                 ->selectRaw('locality, COUNT(pid) as total_properties')
                 ->groupBy('locality')
@@ -677,66 +537,95 @@ class HomeController extends Controller
                 ->limit(5)
                 ->get();
 
+
+            $startMonth = Carbon::now()->subMonths(8)->startOfMonth(); // 9 months including current
+            $endMonth = Carbon::now()->endOfMonth();
+            $allMonths = collect();
+            $current = $startMonth->copy();
+
+            while ($current <= $endMonth) {
+                $allMonths->push($current->format("M'y"));
+                $current->addMonth();
+            }
+
             $priceDataforLocalities = [];
             $localitiesMeta = [];
 
-            foreach ($topLocalities as $loc) {
-                $monthlyPrices = DB::table('properties as p')
-                    ->join('properties_location as pl', 'pl.pid', '=', 'p.id')
-                    ->join('properties_settings as ps', 'ps.pid', '=', 'p.id')
-                    ->where('pl.city', $cityId)
-                    ->where('pl.locality', $loc->locality)
-                    ->whereBetween('p.created_at', [$startMonth, $endMonth])
-                    ->selectRaw("DATE_FORMAT(pref_p.created_at, '%b\\'%y') as month, ROUND(AVG(pref_ps.expected_price), 2) as avg_price")
-                    ->groupBy('month')
-                    ->pluck('avg_price', 'month');
+            foreach ($topLocalities as &$locality) {
+                $monthlyPrices = PrefProperty::with(['location', 'settings'])
+                    ->whereHas('location', function ($query) use ($cityId, $locality) {
+                        $query->where('city', $cityId)
+                            ->where('locality', $locality['locality'])
+                            ->orWhere('locality',  $locality);
+                    })
+                    ->whereHas('settings', function ($query) {
+                        $query->whereNotNull('expected_price');
+                    })
+                    ->where('created_at', '>=', $startMonth)
+                    ->where('created_at', '<=', $endMonth)
+                    ->orderBy('created_at')
+                    ->get()
+                    ->groupBy(function ($item) {
+                        return $item->created_at->format("M'y");
+                    })
+                    ->map(function ($group) {
+                        return round($group->pluck('settings.expected_price')->avg(), 2);
+                    });
 
-
+                // Map to fixed month array, fill missing with 0 or null
                 $localityPrices = $allMonths->map(function ($month) use ($monthlyPrices) {
                     return $monthlyPrices[$month] ?? 0;
                 });
 
-                $priceDataforLocalities[$loc->locality] = $localityPrices->values()->toArray();
+                $priceDataforLocalities[$locality['locality']] = $localityPrices->values()->toArray();
+
                 $localitiesMeta[] = [
-                    'name' => $loc->locality,
-                    'total_properties' => $loc->total_properties ?? 0,
+                    'name' => $locality['locality'],
+                    'total_properties' => $locality['total_properties'] ?? 0,
                 ];
             }
 
-            /** TOP PROJECTS **/
+
+
+
             $topProjects = PrefProject::with(['propertyMapping' => function ($q) {
                 $q->select('project_id', 'property_id');
             }])
                 ->whereHas('propertyMapping')
-                ->select('id', 'project_name')
+                ->select('id', 'project_name') // match primary key
                 ->limit(5)
-                ->get()
-                ->map(function ($topProject) {
+                ->get()->map(function ($topProject) {
                     return [
                         'project_id' => $topProject->id,
                         'projectName' => $topProject->project_name,
-                        'total_properties' => count($topProject->propertyMapping),
+                        'total_properties' => count($topProject->propertyMapping) ?? 0,
                     ];
                 });
 
+            // log::info("propertyInTrends" . json_encode($topProjects, JSON_PRETTY_PRINT));
             $priceDataforProjects = [];
 
-            foreach ($topProjects as $proj) {
-                $monthlyPrices = DB::table('properties as p')
-                    ->join('project_property_mapping as ppm', 'ppm.property_id', '=', 'p.id')
-                    ->join('properties_settings as ps', 'ps.pid', '=', 'p.id')
-                    ->where('ppm.project_id', $proj['project_id'])
-                    ->whereBetween('p.created_at', [$startMonth, $endMonth])
-                    ->selectRaw("DATE_FORMAT(pref_p.created_at, '%b\\'%y') as month, ROUND(AVG(pref_ps.expected_price), 2) as avg_price")
-                    ->groupBy('month')
-                    ->pluck('avg_price', 'month');
-
+            foreach ($topProjects as &$projects) {
+                $monthlyPrices = PrefProperty::with(['projectMapping', 'settings'])
+                    ->whereHas('projectMapping', function ($query) use ($projects, $cityId, $locality) {
+                        $query->where('project_id', $projects['project_id']);
+                    })
+                    ->where('created_at', '>=', $startMonth)
+                    ->where('created_at', '<=', $endMonth)
+                    ->orderBy('created_at')
+                    ->get()
+                    ->groupBy(function ($item) {
+                        return $item->created_at->format("M'y");
+                    })
+                    ->map(function ($group) {
+                        return round($group->pluck('settings.expected_price')->avg(), 2);
+                    });
 
                 $projectPrices = $allMonths->map(function ($month) use ($monthlyPrices) {
                     return $monthlyPrices[$month] ?? 0;
                 });
 
-                $priceDataforProjects[$proj['projectName']] = $projectPrices->values()->toArray();
+                $priceDataforProjects[$projects['projectName']] = $projectPrices->values()->toArray();
             }
 
             $response = [
@@ -746,13 +635,10 @@ class HomeController extends Controller
                 'priceDataforProjects' => $priceDataforProjects,
                 'projects' => $topProjects,
             ];
-
             return response()->json([
                 'status' => 1,
                 'data' => $response,
             ]);
-
-            // }); // end cache
         } catch (\Exception $e) {
             logError($e);
             return response()->json([
@@ -761,4 +647,118 @@ class HomeController extends Controller
             ]);
         }
     }
+
+    // public function propertyInTrendsandRates(Request $request)
+    // {
+    //     try {
+    //         $cityId = $request->input('city_id');
+
+    //         // Optional Caching
+    //         // $cacheKey = 'price_trends_' . $cityId;
+    //         // return Cache::remember($cacheKey, 600, function () use ($cityId) {
+
+    //         $startMonth = Carbon::now()->subMonths(8)->startOfMonth(); // 9 months including current
+    //         $endMonth = Carbon::now()->endOfMonth();
+
+    //         $allMonths = collect();
+    //         $current = $startMonth->copy();
+    //         while ($current <= $endMonth) {
+    //             $allMonths->push($current->format("M'y"));
+    //             $current->addMonth();
+    //         }
+
+    //         /** TOP LOCALITIES **/
+    //         $topLocalities = PrefPropertyLocation::whereNotNull('city')
+    //             ->whereNotNull('locality')
+    //             ->where('city', $cityId)
+    //             ->selectRaw('locality, COUNT(pid) as total_properties')
+    //             ->groupBy('locality')
+    //             ->orderByDesc('total_properties')
+    //             ->limit(5)
+    //             ->get();
+
+    //         $priceDataforLocalities = [];
+    //         $localitiesMeta = [];
+
+    //         foreach ($topLocalities as $loc) {
+    //             $monthlyPrices = DB::table('properties as p')
+    //                 ->join('properties_location as pl', 'pl.pid', '=', 'p.id')
+    //                 ->join('properties_settings as ps', 'ps.pid', '=', 'p.id')
+    //                 ->where('pl.city', $cityId)
+    //                 ->where('pl.locality', $loc->locality)
+    //                 ->whereBetween('p.created_at', [$startMonth, $endMonth])
+    //                 ->selectRaw("DATE_FORMAT(pref_p.created_at, '%b\\'%y') as month, ROUND(AVG(pref_ps.expected_price), 2) as avg_price")
+    //                 ->groupBy('month')
+    //                 ->pluck('avg_price', 'month');
+
+
+    //             $localityPrices = $allMonths->map(function ($month) use ($monthlyPrices) {
+    //                 return $monthlyPrices[$month] ?? 0;
+    //             });
+
+    //             $priceDataforLocalities[$loc->locality] = $localityPrices->values()->toArray();
+    //             $localitiesMeta[] = [
+    //                 'name' => $loc->locality,
+    //                 'total_properties' => $loc->total_properties ?? 0,
+    //             ];
+    //         }
+
+    //         /** TOP PROJECTS **/
+    //         $topProjects = PrefProject::with(['propertyMapping' => function ($q) {
+    //             $q->select('project_id', 'property_id');
+    //         }])
+    //             ->whereHas('propertyMapping')
+    //             ->select('id', 'project_name')
+    //             ->limit(5)
+    //             ->get()
+    //             ->map(function ($topProject) {
+    //                 return [
+    //                     'project_id' => $topProject->id,
+    //                     'projectName' => $topProject->project_name,
+    //                     'total_properties' => count($topProject->propertyMapping),
+    //                 ];
+    //             });
+
+    //         $priceDataforProjects = [];
+
+    //         foreach ($topProjects as $proj) {
+    //             $monthlyPrices = DB::table('properties as p')
+    //                 ->join('project_property_mapping as ppm', 'ppm.property_id', '=', 'p.id')
+    //                 ->join('properties_settings as ps', 'ps.pid', '=', 'p.id')
+    //                 ->where('ppm.project_id', $proj['project_id'])
+    //                 ->whereBetween('p.created_at', [$startMonth, $endMonth])
+    //                 ->selectRaw("DATE_FORMAT(pref_p.created_at, '%b\\'%y') as month, ROUND(AVG(pref_ps.expected_price), 2) as avg_price")
+    //                 ->groupBy('month')
+    //                 ->pluck('avg_price', 'month');
+
+
+    //             $projectPrices = $allMonths->map(function ($month) use ($monthlyPrices) {
+    //                 return $monthlyPrices[$month] ?? 0;
+    //             });
+
+    //             $priceDataforProjects[$proj['projectName']] = $projectPrices->values()->toArray();
+    //         }
+
+    //         $response = [
+    //             'months' => $allMonths->toArray(),
+    //             'priceDataforLocalities' => $priceDataforLocalities,
+    //             'localities' => $localitiesMeta,
+    //             'priceDataforProjects' => $priceDataforProjects,
+    //             'projects' => $topProjects,
+    //         ];
+
+    //         return response()->json([
+    //             'status' => 1,
+    //             'data' => $response,
+    //         ]);
+
+    //         // }); // end cache
+    //     } catch (\Exception $e) {
+    //         logError($e);
+    //         return response()->json([
+    //             'status' => 0,
+    //             'message' => 'An Error has occured.Try again' . $e,
+    //         ]);
+    //     }
+    // }
 }
