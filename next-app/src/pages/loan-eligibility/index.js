@@ -91,6 +91,11 @@ const LoanEligibility = () => {
     setTotalAmount(Math.round(totalPayment));
     setInterestAmount(Math.round(totalInterest));
   };
+
+  const handleLoadAmountChange = (e) => {
+    const value = Number(e.target.value || 0);
+    setLoanAmount(value);
+  }
   
 
 
@@ -120,12 +125,10 @@ const LoanEligibility = () => {
                     <Col xs={12} md={6} className="mb-3">
                       <Form.Label>{translation?.loan_amount || "Loan Amount"}</Form.Label>
                       <Form.Control
-                        type="number"
+                        type="text"
                         value={loanAmount}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          setLoanAmount(val === '' ? 0 : Number(val));
-                        }}
+                        onChange={handleLoadAmountChange}
+
                       />
                     </Col>
                     <Col xs={12} md={6} className="mb-3">
