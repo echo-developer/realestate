@@ -1066,6 +1066,10 @@
   "when_to_avail_valuation_answer": "Property valuation should be availed before buying, selling, or mortgaging a property to ensure a fair market value.",
   "valuation_process": "What is the process of Property Valuation?",
   "valuation_process_answer": "The valuation process includes an inspection, market analysis, and final report preparation detailing the estimated value.",
+  "property_under": "Property Under:",
+  "balcony": "Balcony",
+  "bedroom": "Bedroom",
+  "celling_height": "Ceiling Height (in feet)",
   "valuation_report_meaning": "What is a Property Valuation report and how is it important?",
   "valuation_report_meaning_answer": "A valuation report provides a detailed analysis of a property’s worth, helping buyers and sellers make informed decisions."
 }

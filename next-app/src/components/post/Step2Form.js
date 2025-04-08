@@ -320,7 +320,7 @@ const Step2Form = ({
             <div className="text-danger small">{errors.property_for}</div>
           )}
 
-          <label className="form-label">Property Under:</label>
+          <label className="form-label">{translation?.property_under || "Property Under:"}</label>
           <div
             className="btn-group btn-group-light btn-group-card d-flex mb-3"
             role="group"

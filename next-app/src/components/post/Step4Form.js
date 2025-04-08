@@ -66,9 +66,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     // Validate dynamically while typing
     let errorMessage = "";
     if (!value) {
-      errorMessage = `${
-        key === "carpet_area" ? "Carpet" : "Super"
-      } area is required.`;
+      errorMessage = `${key === "carpet_area" ? "Carpet" : "Super"
+        } area is required.`;
     } else if (isNaN(value) || Number(value) <= 0) {
       errorMessage = "Please enter a valid positive number.";
     }
@@ -204,7 +203,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   };
 
   const getUnitLabel = (key) =>
-    unitOptions.find((option) => option.key === key)?.label || "Not Available";
+    unitOptions.find((option) => option.key === key)?.label || `${translation?.not_available || "Not Available"}`;
 
   useEffect(() => {
     if (!formData.property_furnish) {
@@ -267,36 +266,31 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     let errors = {};
 
     if (!formData.carpet_area) {
-      errors.carpet_area = `${
-        translation?.please_enter_carpet_area || "Please enter the carpet area."
-      }`;
+      errors.carpet_area = `${translation?.please_enter_carpet_area || "Please enter the carpet area."
+        }`;
     } else if (
       isNaN(formData.carpet_area) ||
       Number(formData.carpet_area) <= 0
     ) {
-      errors.carpet_area = `${
-        translation?.carpet_area_must_be_positive ||
+      errors.carpet_area = `${translation?.carpet_area_must_be_positive ||
         "Carpet area must be a positive number."
-      }`;
+        }`;
     }
 
     if (!formData.super_area) {
-      errors.super_area = `${
-        translation?.please_enter_super_area || "Please enter the super area."
-      }`;
+      errors.super_area = `${translation?.please_enter_super_area || "Please enter the super area."
+        }`;
     } else if (isNaN(formData.super_area) || Number(formData.super_area) <= 0) {
-      errors.super_area = `${
-        translation?.super_area_must_be_positive ||
+      errors.super_area = `${translation?.super_area_must_be_positive ||
         "Super area must be a positive number."
-      }`;
+        }`;
     }
 
     // Total Floors Validation
     if (!formData.total_floor) {
-      errors.total_floor = `${
-        translation?.please_select_total_floors ||
+      errors.total_floor = `${translation?.please_select_total_floors ||
         "Please select the total number of floors"
-      }`;
+        }`;
     }
 
     setErrors(errors);
@@ -322,7 +316,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
       if (response && response.status === 1) {
         setAmenityData(response.data);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const fetchFurnishData = async () => {
@@ -334,7 +328,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
       if (response && response.status === 1) {
         setFurnishData(response.data);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const visibleFloors = [
@@ -365,7 +359,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
       case "residential-house" || 6:
       case "villas" || 2:
       case "penthouse" || 9:
-        return ["bedroom", "balcony", "bathroom"];
+        return [`${translation?.bedroom || "bedroom"}`, `${translation?.balcony || "balcony"}`, `${translation?.bathrooms || "bathrooms"}`];
       case "studio-apartment" || 10:
         return ["balcony", "bathroom"];
       case "commercial-office-space" || 11:
@@ -437,9 +431,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
                 {/* Conditionally render room input fields */}
                 <fieldset className="">
-                  <legend>{`${
-                    key.charAt(0).toLocaleUpperCase() + key.slice(1)
-                  } (${getUnitLabel(formData?.unit_type)})`}</legend>
+                  <legend>{`${key.charAt(0).toLocaleUpperCase() + key.slice(1)
+                    } (${getUnitLabel(formData?.unit_type)})`}</legend>
 
                   <div className="row gx-3 -mb-3">
                     {(formData[key] || []).map((room, index) => (
@@ -479,15 +472,14 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 <div className="input-group">
                   <input
                     type="text"
-                    className={`form-control ${
-                      errors[key] ? "is-invalid" : ""
-                    }`}
+                    className={`form-control ${errors[key] ? "is-invalid" : ""
+                      }`}
                     placeholder={`Type ${label} in Numeric`}
                     value={formData[key]}
                     onChange={(e) => handleInputChange(e, key)}
                   />
                   <span className="input-group-text">
-                    {formData?.unit_type || "Not Available"}
+                    {formData?.unit_type || `${translation?.not_available || "Not Available"}`}
                   </span>
                 </div>
                 {errors[key] && (
@@ -503,82 +495,78 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
           propertyFor !== "residential-house" ||
           propertyFor !== "commercial-land" ||
           propertyFor !== "residential-land-plot") && (
-          <div className="form-group">
-            <label className="form-label">
-              {translation?.floor_no || "Floor No"}
-            </label>
-            <div
-              className="btn-group btn-group-light d-flex flex-wrap mb-3"
-              role="group"
-              aria-label="Floors"
-            >
-              {/* Render floors 1-5 + basement options */}
-              {visibleFloors.map((floor) => (
-                <React.Fragment key={`floor${floor.id}`}>
-                  <input
-                    type="radio"
-                    className="btn-check"
-                    name="floors"
-                    id={floor.id}
-                    autoComplete="off"
-                    checked={formData.floor === floor.id} // Ensure correct comparison
-                    onChange={() => handleFloorChange("floor", floor.id)} // Store ID
-                  />
-                  <label
-                    className={`btn btn-outline-light mb-2 ${
-                      formData.floor === floor.id ? "active" : ""
-                    }`}
-                    htmlFor={floor.id}
-                  >
-                    {floor.label}
-                  </label>
-                </React.Fragment>
-              ))}
-
-              {/* Dropdown for floors 6-15 */}
-              <div className="dropdown">
-                <button
-                  className={`btn btn-outline-light dropdown-toggle ${
-                    dropdownFloors.some((f) => f.id === formData.floor)
-                      ? "active"
-                      : ""
-                  }`}
-                  type="button"
-                  onClick={() => setShowDropdown(!showDropdown)}
-                >
-                  {dropdownFloors.some((f) => f.id === formData.floor) ? (
-                    dropdownFloors.find((f) => f.id === formData.floor)?.label // Show selected dropdown value
-                  ) : (
-                    <i className="bi bi-plus-lg"></i>
-                  )}
-                </button>
-                <ul
-                  className={`dropdown-menu dropdown-menu-end ${
-                    showDropdown ? "show" : ""
-                  }`}
-                >
-                  {dropdownFloors.map((floor) => (
-                    <li key={`floor${floor.id}`}>
-                      <a
-                        role="button"
-                        className={`dropdown-item ${
-                          formData.floor === floor.id ? "active" : ""
+            <div className="form-group">
+              <label className="form-label">
+                {translation?.floor_no || "Floor No"}
+              </label>
+              <div
+                className="btn-group btn-group-light d-flex flex-wrap mb-3"
+                role="group"
+                aria-label="Floors"
+              >
+                {/* Render floors 1-5 + basement options */}
+                {visibleFloors.map((floor) => (
+                  <React.Fragment key={`floor${floor.id}`}>
+                    <input
+                      type="radio"
+                      className="btn-check"
+                      name="floors"
+                      id={floor.id}
+                      autoComplete="off"
+                      checked={formData.floor === floor.id} // Ensure correct comparison
+                      onChange={() => handleFloorChange("floor", floor.id)} // Store ID
+                    />
+                    <label
+                      className={`btn btn-outline-light mb-2 ${formData.floor === floor.id ? "active" : ""
                         }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleFloorChange("floor", floor.id); // Store ID
-                          setShowDropdown(false); // Close dropdown
-                        }}
-                      >
-                        {floor.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                      htmlFor={floor.id}
+                    >
+                      {floor.label}
+                    </label>
+                  </React.Fragment>
+                ))}
+
+                {/* Dropdown for floors 6-15 */}
+                <div className="dropdown">
+                  <button
+                    className={`btn btn-outline-light dropdown-toggle ${dropdownFloors.some((f) => f.id === formData.floor)
+                        ? "active"
+                        : ""
+                      }`}
+                    type="button"
+                    onClick={() => setShowDropdown(!showDropdown)}
+                  >
+                    {dropdownFloors.some((f) => f.id === formData.floor) ? (
+                      dropdownFloors.find((f) => f.id === formData.floor)?.label // Show selected dropdown value
+                    ) : (
+                      <i className="bi bi-plus-lg"></i>
+                    )}
+                  </button>
+                  <ul
+                    className={`dropdown-menu dropdown-menu-end ${showDropdown ? "show" : ""
+                      }`}
+                  >
+                    {dropdownFloors.map((floor) => (
+                      <li key={`floor${floor.id}`}>
+                        <a
+                          role="button"
+                          className={`dropdown-item ${formData.floor === floor.id ? "active" : ""
+                            }`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleFloorChange("floor", floor.id); // Store ID
+                            setShowDropdown(false); // Close dropdown
+                          }}
+                        >
+                          {floor.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
         {/* Total Floor Selection */}
         {propertyFor !== "residential-land-plot" && (
@@ -610,9 +598,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     }
                   />
                   <label
-                    className={`btn btn-outline-light mb-2 ${
-                      formData.total_floor === floor.id ? "active" : ""
-                    }`}
+                    className={`btn btn-outline-light mb-2 ${formData.total_floor === floor.id ? "active" : ""
+                      }`}
                     htmlFor={floor.id}
                   >
                     {floor.label}
@@ -637,9 +624,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   }
                 </button>
                 <ul
-                  className={`dropdown-menu dropdown-menu-end ${
-                    showFloorDropdown ? "show" : ""
-                  }`}
+                  className={`dropdown-menu dropdown-menu-end ${showFloorDropdown ? "show" : ""
+                    }`}
                 >
                   {Array.from({ length: 8 }, (_, i) => ({
                     id: `${i + 13}`,
@@ -648,9 +634,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     <li key={`total_floor${floor.id}`}>
                       <a
                         role="button"
-                        className={`dropdown-item ${
-                          formData.total_floor === floor.id ? "active" : ""
-                        }`}
+                        className={`dropdown-item ${formData.total_floor === floor.id ? "active" : ""
+                          }`}
                         onClick={(e) => {
                           e.preventDefault();
                           handleTotalFloorChange("total_floor", floor.id); // Store ID
@@ -828,10 +813,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   onChange={handleChange}
                 />
                 <label htmlFor="ceiling_height">
-                  Celling Height in ("feets")
+                  {translation?.celling_height || "Celling Height in ('feets')"}
                 </label>
               </div>
-              
+
             </div>
             {/* Is Allowed for Floor Construction */}
             <div className="mb-3">
@@ -918,84 +903,84 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             {/* Corner Shop */}
             {(propertyFor === "commercial-shop" ||
               propertyFor === "commercial-showroom") && (
-              <div className="mb-3">
-                <label className="form-label">
-                  {translation?.corner_shop || "Corner Shop"}
-                </label>
-                <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="corner_shop"
-                    id="corner_shop_1"
-                    value="Yes"
-                    checked={formData.corner_shop === "Yes"}
-                    onChange={() => handleCornerShopChange("Yes")}
-                  />
-                  <label className="form-check-label" htmlFor="corner_shop_1">
-                    {translation?.yes || "Yes"}
+                <div className="mb-3">
+                  <label className="form-label">
+                    {translation?.corner_shop || "Corner Shop"}
                   </label>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="corner_shop"
+                      id="corner_shop_1"
+                      value="Yes"
+                      checked={formData.corner_shop === "Yes"}
+                      onChange={() => handleCornerShopChange("Yes")}
+                    />
+                    <label className="form-check-label" htmlFor="corner_shop_1">
+                      {translation?.yes || "Yes"}
+                    </label>
+                  </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="corner_shop"
+                      id="corner_shop_2"
+                      value="No"
+                      checked={formData.corner_shop === "No"}
+                      onChange={() => handleCornerShopChange("No")}
+                    />
+                    <label className="form-check-label" htmlFor="corner_shop_2">
+                      {translation?.no || "No"}
+                    </label>
+                  </div>
                 </div>
-                <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="corner_shop"
-                    id="corner_shop_2"
-                    value="No"
-                    checked={formData.corner_shop === "No"}
-                    onChange={() => handleCornerShopChange("No")}
-                  />
-                  <label className="form-check-label" htmlFor="corner_shop_2">
-                    {translation?.no || "No"}
-                  </label>
-                </div>
-              </div>
-            )}
+              )}
 
             {/* Main Road Facing */}
             {(propertyFor === "commercial-shop" ||
               propertyFor === "commercial-showroom") && (
-              <div className="mb-3">
-                <label className="form-label">
-                  {translation?.is_main_road_facing || "Is Main Road Facing:"}
-                </label>
-                <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="main_road_facing"
-                    id="main_road_facing_1"
-                    value="Yes"
-                    checked={formData.main_road_facing === "Yes"}
-                    onChange={() => handleMainRoadChange("Yes")}
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor="main_road_facing_1"
-                  >
-                    {translation?.yes || "Yes"}
+                <div className="mb-3">
+                  <label className="form-label">
+                    {translation?.is_main_road_facing || "Is Main Road Facing:"}
                   </label>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="main_road_facing"
+                      id="main_road_facing_1"
+                      value="Yes"
+                      checked={formData.main_road_facing === "Yes"}
+                      onChange={() => handleMainRoadChange("Yes")}
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="main_road_facing_1"
+                    >
+                      {translation?.yes || "Yes"}
+                    </label>
+                  </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="main_road_facing"
+                      id="main_road_facing_2"
+                      value="No"
+                      checked={formData.main_road_facing === "No"}
+                      onChange={() => handleMainRoadChange("No")}
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="main_road_facing_2"
+                    >
+                      {translation?.no || "No"}
+                    </label>
+                  </div>
                 </div>
-                <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="main_road_facing"
-                    id="main_road_facing_2"
-                    value="No"
-                    checked={formData.main_road_facing === "No"}
-                    onChange={() => handleMainRoadChange("No")}
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor="main_road_facing_2"
-                  >
-                    {translation?.no || "No"}
-                  </label>
-                </div>
-              </div>
-            )}
+              )}
 
             {/* Personal Washroom */}
             <div className="mb-3">
