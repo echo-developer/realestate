@@ -264,7 +264,7 @@ const Index = () => {
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
                 >
-                  <option value="">Select Name</option> {/* Default option */}
+                  <option value="">{translation?.select_name|| "Select Name"}</option> {/* Default option */}
                   {PropertyName?.map((item) => (
                     <option key={item.id} value={item.id}>
                       {item.name || item.project_name}

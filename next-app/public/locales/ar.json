@@ -777,6 +777,7 @@
   "emi": "القسط الشهري",
   "principal": "المبلغ الأساسي",
   "interest": "الفائدة",
+  "select_name": "اختر الاسم",
   "outstanding_balance": "الرصيد المستحق",
   "total_interest": "إجمالي الفائدة",
   "no_project_data_available": "لا توجد بيانات مشروع متاحة",
