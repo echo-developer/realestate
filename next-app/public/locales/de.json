@@ -1054,5 +1054,15 @@
   "trend_based_on_transactions": "Les valeurs des tendances sont-elles basées sur des transactions réelles ?",
   "trend_based_on_transactions_answer": "Oui, les données des tendances proviennent de ventes réelles, d’annonces et de sources de marché vérifiées.",
   "trend_accuracy": "Quelle est la précision de ces valeurs de tendance ?",
+  "property_valuer_role": "Quel est le rôle des experts en évaluation immobilière ?",
+  "property_valuer_role_answer": "Les experts en évaluation immobilière sont des professionnels qui réalisent une inspection détaillée d'un bien et fournissent ensuite un rapport estimant sa valeur.",
+  "how_valuer_helps": "Comment un expert en évaluation immobilière peut-il aider ?",
+  "how_valuer_helps_answer": "Un expert aide à déterminer la valeur marchande d’un bien immobilier en tenant compte de plusieurs facteurs comme l’emplacement, l’état et les tendances du marché.",
+  "when_to_avail_valuation": "Quand faut-il demander une évaluation immobilière ?",
+  "when_to_avail_valuation_answer": "L’évaluation immobilière doit être réalisée avant d’acheter, de vendre ou d’hypothéquer un bien pour s’assurer d’une juste valeur de marché.",
+  "valuation_process": "Quel est le processus d’évaluation immobilière ?",
+  "valuation_process_answer": "Le processus d’évaluation comprend une inspection, une analyse du marché et la préparation d’un rapport final détaillant la valeur estimée.",
+  "valuation_report_meaning": "Qu’est-ce qu’un rapport d’évaluation immobilière et pourquoi est-il important ?",
+  "valuation_report_meaning_answer": "Un rapport d’évaluation fournit une analyse détaillée de la valeur d’un bien, aidant acheteurs et vendeurs à prendre des décisions éclairées.",
   "trend_accuracy_answer": "Nous visons une grande précision en utilisant plusieurs sources de données, mais elles doivent être considérées comme indicatives, non comme des chiffres exacts."
 }

@@ -1057,5 +1057,15 @@
   "trend_based_on_transactions": "Are trend values based on actual transactions?",
   "trend_based_on_transactions_answer": "Yes, trend data is aggregated from actual sales, listings, and verified market sources.",
   "trend_accuracy": "How accurate are these trend values?",
-  "trend_accuracy_answer": "We strive for high accuracy by using multiple data sources, but they should be used as guidance, not exact figures."
+  "trend_accuracy_answer": "We strive for high accuracy by using multiple data sources, but they should be used as guidance, not exact figures.",
+  "property_valuer_role": "What's the role of Property Valuers?",
+  "property_valuer_role_answer": "Property Valuers are experts who carry out a detailed inspection of a property and then present a report with an estimation of the property’s value.",
+  "how_valuer_helps": "How does a Property Valuer help?",
+  "how_valuer_helps_answer": "A property valuer helps in assessing the market value of a property based on various factors like location, condition, and market trends.",
+  "when_to_avail_valuation": "When should you avail Property Valuation?",
+  "when_to_avail_valuation_answer": "Property valuation should be availed before buying, selling, or mortgaging a property to ensure a fair market value.",
+  "valuation_process": "What is the process of Property Valuation?",
+  "valuation_process_answer": "The valuation process includes an inspection, market analysis, and final report preparation detailing the estimated value.",
+  "valuation_report_meaning": "What is a Property Valuation report and how is it important?",
+  "valuation_report_meaning_answer": "A valuation report provides a detailed analysis of a property’s worth, helping buyers and sellers make informed decisions."
 }
