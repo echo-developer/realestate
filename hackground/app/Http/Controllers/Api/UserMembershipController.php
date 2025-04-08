@@ -27,12 +27,8 @@ class UserMembershipController extends Controller
                 'message' => 'Data Retrieved Successfully',
                 'data' => $membershipData
             ]);
-        } catch (\Exception $e) {
-            logError($e);
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while retrieving data',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -54,12 +50,8 @@ class UserMembershipController extends Controller
                     'message' => 'No Membership Found',
                 ]);
             }
-        } catch (\Exception $e) {
-            logError($e);
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while retrieving membership',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -83,11 +75,8 @@ class UserMembershipController extends Controller
                     'remaining_listings_allowed' =>  $can_post
                 ]);
             }
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while retrieving membership',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 }

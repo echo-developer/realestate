@@ -42,11 +42,8 @@ class AgentDetailsController extends Controller
                     'message' => 'Agent Id not found',
                 ]);
             }
-        } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -149,7 +146,7 @@ class AgentDetailsController extends Controller
                     'bedrooms' => $property->bedrooms,
                     'expected_price' => $property->expected_price,
                     'area_in_sqft' => $property->area_in_sqft,
-                    'price_per_sqft' => ($property->area_in_sqft > 0) ? round($property->expected_price / $property->area_in_sqft,2) : 0,
+                    'price_per_sqft' => ($property->area_in_sqft > 0) ? round($property->expected_price / $property->area_in_sqft, 2) : 0,
                     'price_currency' => $property->price_currency,
                     'created_at' => $property->created_at,
                     'property_address' => $property->property_address,
@@ -170,12 +167,8 @@ class AgentDetailsController extends Controller
                 ],
                 'data' => $paginatedResults->toArray(),
             ];
-        } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-            return response()->json(['error' => 'An error occurred while processing the request.'], 500);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -275,7 +268,6 @@ class AgentDetailsController extends Controller
 
     public function agentsRating(Request $request)
     {
-
         $agent_id =  $request->input('agent_id');
 
         try {
@@ -295,11 +287,8 @@ class AgentDetailsController extends Controller
                 'status' => 1,
                 'message' => 'Agents Rated successfully',
             ]);
-        } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -335,11 +324,8 @@ class AgentDetailsController extends Controller
                     'message' => 'Agents ID not found',
                 ]);
             }
-        } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 }

@@ -50,15 +50,8 @@ class VerifyUserMailController extends Controller
 
           
             return response()->json(['message' => 'OTP sent successfully.'], 200);
-        } catch (\Exception $e) {
-            logError($e);
-            return response()->json(
-                [
-                    'status' => 0,
-                    'message' => 'An error occurred while processing the request.'
-                ],
-                500
-            );
+        }catch (\Throwable $e) {
+            throw $e;
         }
     }
 

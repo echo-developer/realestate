@@ -77,23 +77,10 @@ class FloorPlaningController extends Controller
                 'floor_plans' => $allFloorPlanItems
             ]
         ]);
-    } catch (\Exception $e) {
-        Log::error('Error in floorPlanType: ' . $e->getMessage(), [
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-        ]);
-
-        return response()->json([
-            'status' => 0,
-            'message' => 'Something went wrong. Please try again later.'
-        ]);
+    } catch (\Throwable $e) {
+        throw $e;
     }
 }
-
-
-
-
-
  
 
 public function addFloorPlan(Request $req)
@@ -148,14 +135,8 @@ public function addFloorPlan(Request $req)
             'status' => 1,
             'message' => 'Floor plans added/updated successfully!',
         ]);
-    } catch (\Exception $e) {
-        log::error('Error adding/updating floor plans: ' . $e->getMessage());
-
-        // Return an error response
-        return response()->json([
-            'status' => 0,
-            'message' => 'Something went wrong. Please try again.',
-        ]);
+    } catch (\Throwable $e) {
+        throw $e;
     }
 }
 
