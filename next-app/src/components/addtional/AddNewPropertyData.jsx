@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import useTranslation from "@/hooks/useTranslation";
 import {
   Modal,
   Button,
@@ -23,6 +24,7 @@ import { CustomLoader } from "../postproject/ProjectAmenities";
 import PropertyLandmarkComponent from "../property/EditLandmarkData";
 
 const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
+  const translation = useTranslation();
   const { callApi } = AuthUser();
   const [propertyData, setPropertyData] = useState({
     buyer_message: "",
@@ -157,7 +159,7 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
   return (
     <Modal show={show} onHide={handleClose} centered size="lg">
       <Modal.Header closeButton>
-        <Modal.Title>Add New Property</Modal.Title>
+        <Modal.Title>{translation?.add_new_property || "Add New Property"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {loading ? (<CustomLoader />) : (
@@ -165,10 +167,10 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
           <Tab.Container defaultActiveKey="main">
           <Nav variant="underline mb-3">
             <Nav.Item>
-              <Nav.Link eventKey="main">Main Details</Nav.Link>
+              <Nav.Link eventKey="main">{translation?.main_details || "Main Details"}</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="landmark">Landmark</Nav.Link>
+              <Nav.Link eventKey="landmark">{translation?.landmark || "Landmark"}</Nav.Link>
             </Nav.Item>
           </Nav>
           <Tab.Content>
@@ -183,10 +185,10 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
                     placeholder="Enter buyer message"
                     style={{minHeight: '75px'}}
                   />
-                  <Form.Label>Buyer Message</Form.Label>
+                  <Form.Label>{translation?.buyer_message || "Buyer Message"}</Form.Label>
                 </Form.Group>               
                 <Form.Group className="mb-3">
-                  <Form.Label className="form-label d-block">Overlooking</Form.Label>
+                  <Form.Label className="form-label d-block">{translation?.overlooking || "Overlooking"}</Form.Label>
                   {propertyFeatures.map((feature) => (
                     <Form.Check
                       key={feature.key}
@@ -202,7 +204,7 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
                 </Form.Group>
                              
                 <Form.Group className="mb-4">
-                  <Form.Label className="form-label d-block">Flooring Style</Form.Label>
+                  <Form.Label className="form-label d-block">{translation?.flooring_style || "Flooring Style"}</Form.Label>
                   {flooringOptions.map((feature) => (
                     <Form.Check
                       key={feature.key}
@@ -226,14 +228,14 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
                         value={propertyData.water_available}
                         onChange={handleChange}
                       >
-                        <option value="">Select</option>
+                        <option value="">{translation?.select || "Select"}</option>
                         {waterAvailabilityOptions.map((option) => (
                           <option key={option.key} value={option.key}>
                             {option.value}
                           </option>
                         ))}
                       </Form.Select>
-                      <Form.Label>Water Available</Form.Label>
+                      <Form.Label>{translation?.water_available || "Water Available"}</Form.Label>
                     </Form.Group>
                   </Col>
                   <Col>
@@ -243,14 +245,14 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
                         value={propertyData.electric_available}
                         onChange={handleChange}
                       >
-                        <option value="">Select</option>
+                        <option value="">{translation?.select || "Select"}</option>
                         {electricityStatusOptions.map((option) => (
                           <option key={option.key} value={option.key}>
                             {option.value}
                           </option>
                         ))}
                       </Form.Select>
-                      <Form.Label>Electric</Form.Label>
+                      <Form.Label>{translation?.electric || "Electric"}</Form.Label>
                     </Form.Group>
                   </Col>
                 </Row>
@@ -262,14 +264,14 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
                         value={propertyData.ownership_type}
                         onChange={handleChange}
                       >
-                        <option value="">Select</option>
+                        <option value="">{translation?.select || "Select"}</option>
                         {ownershipTypeOptions.map((option) => (
                           <option key={option.key} value={option.key}>
                             {option.value}
                           </option>
                         ))}
                       </Form.Select>
-                      <Form.Label>ownership_type</Form.Label>
+                      <Form.Label>{translation?.type_of_ownership || "Type of Ownership"}</Form.Label>
                     </Form.Group>
                   </Col>
                   <Col>
@@ -279,14 +281,14 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
                         value={propertyData.approved_by}
                         onChange={handleChange}
                       >
-                        <option value="">Select</option>
+                        <option value="">{translation?.select || "Select"}</option>
                         {propertyApprovedByOptions.map((option) => (
                           <option key={option.key} value={option.key}>
                             {option.value}
                           </option>
                         ))}
                       </Form.Select>
-                      <Form.Label>Approved By</Form.Label>
+                      <Form.Label>{translation?.approved_by || "Approved By"}</Form.Label>
                     </Form.Group>
                   </Col>
                 </Row>
@@ -305,7 +307,7 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose} disabled={loading}>
-          Close
+        {translation?.close || "Close"}
         </Button>
         <Button variant="primary" onClick={handleSubmit} disabled={loading}>
           {loading ? <Spinner animation="border" size="sm" /> : "Save Property"}

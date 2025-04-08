@@ -35,7 +35,7 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
     landmarks: {},
     project_id: propId,
   });
-  const translation = useTranslation();
+
 
   const [loading, setLoading] = useState(false);
 
@@ -75,7 +75,7 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
       setLoading(false);
     }
   };
-
+  const translation = useTranslation();
   const handleChange = (e) => {
     const { name, type, checked, value } = e.target;
     if (type === "checkbox") {
