@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import useMetersToKilometers from "@/hooks/useMetersToKilometers";
+import useTranslation from "@/hooks/useTranslation";
 
 const PropertyLandmarkData = ({ detailsData }) => {
   const landmarks = detailsData?.landmarks || {};
@@ -13,7 +14,7 @@ const PropertyLandmarkData = ({ detailsData }) => {
       [key]: !prev[key],
     }));
   };
-
+  const translation = useTranslation();
   return (
     <section id="landmark">
       <div className="card border-0 shadow-1 mb-4">

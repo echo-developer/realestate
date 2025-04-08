@@ -62,11 +62,11 @@ const PropertyCompletionStatus = ({ propertyData }) => {
     return (
         <div className="card">
             <div className="card-header">
-                <h4>Completion Status</h4>
+                <h4>{translation?.completion_status || "Completion Status"}</h4>
             </div>
             <div className="card-body">
                 <p className="text-muted text-italic">
-                    Get 5 times more response! Just add the following
+                    {translation?.boost_response || "Get 5 times more response! Just add the following"}
                 </p>
                 <div className="card-body">
                     <div className="mx-auto" style={{ width: "250px", height: "250px" }}>
