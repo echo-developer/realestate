@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\BankLoanController;
 use App\Http\Controllers\Admin\CmsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\AuthController;
@@ -85,7 +86,7 @@ Route::middleware('admin_auth')->group(function () {
 
     // Dashboard routes
     Route::controller(DashboardController::class)->group(function () {
-        Route::get('dashboard', 'dashboard')->name('admin.dashboard');
+        Route::get('dashboard', 'index')->name('admin.dashboard');
     });
 
     // Authentication (logout) routes
@@ -498,7 +499,15 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('get_floor_plan_type', 'floorPlan')->name('floor.plan.type');
         Route::post('save_floor_data', 'addFloorPlan')->name('floor.addFloorPlan');
     });
-    
+
+    Route::prefix('bank/loan')
+        ->controller(BankLoanController::class)
+        ->name('bank.loan.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('save', 'store')->name('store');
+            Route::post('upload', 'upload')->name('upload');
+        });
 });
 
 Route::get('/artisan-run', function () {

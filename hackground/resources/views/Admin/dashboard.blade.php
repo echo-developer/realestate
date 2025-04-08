@@ -3,7 +3,6 @@
 @section('title', 'New Admin | Admin')
 
 @section('content')
-
 <div class="app-main__inner">
     <div class="app-page-title app-page-title-simple">
         <div class="page-title-wrapper">
@@ -128,13 +127,37 @@
             </div>
         </div>
     </div>
+    <div class="overview-card">
+        <div class="header">
+            <h3>Overview</h3>
+            <div class="metrics">
+                <div class="metric">
+                    <div class="metric-icon">🏠</div>
+                    <div>
+                        <div>Total Sale</div>
+                        <div class="metric-value"> {{ $data['properties_for_sale'] }}</div>
+                    </div>
+                </div>
+                <div class="metric green">
+                    <div class="metric-icon">🏢</div>
+                    <div>
+                        <div>Total Rent</div>
+                        <div class="metric-value"> {{ $data['properties_for_rent'] }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="chart-container">
+            <canvas id="overviewChart"></canvas>
+        </div>
+    </div>
     <div class="main-card mb-3 card">
         <div class="card-header">
             <div class="card-header-title font-size-lg text-capitalize font-weight-normal">Property Overview</div>
             <div class="btn-actions-pane-right">
                 <a href=" class=" btn-icon btn-wide btn-outline-2x btn btn-outline-focus btn-sm d-flex">
-                See All Properties
+                    See All Properties
                     <span class="pl-2 align-middle opacity-7">
                         <i class="fa fa-angle-right"></i>
                     </span>
@@ -160,13 +183,13 @@
                     <tr>
                         <td class="text-center text-muted" style="width: 80px;"> {{UniquePropertyCode($property->id)}}</td>
                         <td class="text-center"><a href="javascript:void(0)"></a>{{$property->name}}</td>
-                        <td class="text-center"><a href="javascript:void(0)"></a>{{$property->location->locality}}</td>
-                        <td class="text-center"><a href="javascript:void(0)"></a>{{$property->created_at}}</td>
+                        <td class="text-center"><a href="javascript:void(0)"></a>{{$property->location->locality??'N/A'}}</td>
+                        <td class="text-center"><a href="javascript:void(0)"></a>{{ date('d F Y', strtotime($property->created_at)) }}</td>
 
 
                         <td class="text-center">
-                        {{get_name_by_id('property_category_names','category_id',$property->settings->property_type,'en') ?? 'N/A'}}
-                         
+                            {{get_name_by_id('property_category_names','category_id',$property->settings->property_type,'en') ?? 'N/A'}}
+
                         </td>
 
                         <td class="text-center">
@@ -183,3 +206,60 @@
 </div>
 
 @endsection
+
+@push('custom-js')
+<script>
+  const saleData = [<?php echo implode(',', array_map(function($sale) { return '"' . $sale . '"'; }, $data['chart_sale'])); ?>].map(Number);
+  const rentData = [<?php echo implode(',', array_map(function($rent) { return '"' . $rent . '"'; }, $data['chart_rent'])); ?>].map(Number);
+
+  const allData = saleData.concat(rentData);
+  const maxValue = Math.max(...allData);
+  const suggestedMax = Math.ceil(maxValue / 10) * 10; 
+
+  const ctx = document.getElementById('overviewChart').getContext('2d');
+  const overviewChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: [<?php echo implode(',', array_map(function($month) { return '"' . $month . '"'; }, $data['chart_labels'])); ?>],
+      datasets: [
+        {
+          label: 'Total Sale',
+          data: saleData,
+          fill: true,
+          backgroundColor: 'rgba(79, 70, 229, 0.1)',
+          borderColor: '#4f46e5',
+          tension: 0.4
+        },
+        {
+          label: 'Total Rent',
+          data: rentData,
+          fill: true,
+          backgroundColor: 'rgba(34, 197, 94, 0.1)',
+          borderColor: '#22c55e',
+          tension: 0.4
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          suggestedMax: suggestedMax,
+          ticks: {
+            callback: value => value
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: false
+        }
+      }
+    }
+  });
+</script>
+
+
+@endpush
