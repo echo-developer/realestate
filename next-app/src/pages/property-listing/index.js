@@ -484,15 +484,15 @@ const index = () => {
     let option = null;
 
     if (sortKey === "created_at" && sortOrder === "desc") {
-      option = "Recent";
+      option = `${translation?.recent || "Recent"}`;
     } else if (sortKey === "exp_price" && sortOrder === "asc") {
-      option = "Price - Low to High";
+      option = `${translation?.price_low_high || "Price - Low to High"}`;
     } else if (sortKey === "exp_price" && sortOrder === "desc") {
-      option = "Price - High to Low";
+      option = `${translation?.price_high_low || "Price - High to Low"}`;
     } else if (sortKey === "property_size" && sortOrder === "asc") {
-      option = "size/sqft - Low to High";
+      option = `${translation?.size_low_high || "size/sqft - Low to High"}`;
     } else if (sortKey === "property_size" && sortOrder === "desc") {
-      option = "size/sqft - High to Low";
+      option = `${translation?.size_high_low || "size/sqft - High to Low"}`;
     }
 
     setSelectedOption(option || "Recent");
