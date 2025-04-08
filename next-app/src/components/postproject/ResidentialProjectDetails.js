@@ -110,18 +110,16 @@ const ResidentialProjectDetails = ({
                     <div className="mb-3 mb-md-0">
                       <h1 className="h3">
                         {detailsData?.project_name ||
-                          `${
-                            translation?.not_available ||
-                            `${translation?.not_available || "Not Available"}`
+                          `${translation?.not_available ||
+                          `${translation?.not_available || "Not Available"}`
                           }`}
                       </h1>
                       <p>
                         <a role="button">
                           <i className="icon-feather-map-pin"></i>{" "}
                           {detailsData?.address ||
-                            `${
-                              translation?.not_available ||
-                              `${translation?.not_available || "Not Available"}`
+                            `${translation?.not_available ||
+                            `${translation?.not_available || "Not Available"}`
                             }`}
                         </a>{" "}
                         <span className="text-muted">
@@ -175,9 +173,9 @@ const ResidentialProjectDetails = ({
                               style={
                                 index === 3
                                   ? {
-                                      position: "relative",
-                                      display: "block",
-                                    }
+                                    position: "relative",
+                                    display: "block",
+                                  }
                                   : {}
                               }
                             >
@@ -191,8 +189,8 @@ const ResidentialProjectDetails = ({
                                 style={
                                   index === 3
                                     ? {
-                                        display: "block", // Prevents inline-level gaps
-                                      }
+                                      display: "block", // Prevents inline-level gaps
+                                    }
                                     : {}
                                 }
                               />
@@ -202,20 +200,20 @@ const ResidentialProjectDetails = ({
                                 style={
                                   index === 3
                                     ? {
-                                        position: "absolute",
-                                        top: 0,
-                                        left: 0,
-                                        width: "100%",
-                                        height: "100%",
-                                        backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
-                                        backdropFilter: "blur(8px)", // Apply blur effect
-                                        WebkitBackdropFilter: "blur(8px)", // Safari support
-                                        display: "flex", // Center content
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        color: "#fff", // Text color
-                                        zIndex: 1, // Ensure overlay is above the image
-                                      }
+                                      position: "absolute",
+                                      top: 0,
+                                      left: 0,
+                                      width: "100%",
+                                      height: "100%",
+                                      backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+                                      backdropFilter: "blur(8px)", // Apply blur effect
+                                      WebkitBackdropFilter: "blur(8px)", // Safari support
+                                      display: "flex", // Center content
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      color: "#fff", // Text color
+                                      zIndex: 1, // Ensure overlay is above the image
+                                    }
                                     : {}
                                 }
                               >
@@ -254,9 +252,8 @@ const ResidentialProjectDetails = ({
                 <div className="col-md mb-3 mb-md-0">
                   <h3>
                     {detailsData?.currency ||
-                      `${
-                        translation?.not_available ||
-                        `${translation?.not_available || "Not Available"}`
+                      `${translation?.not_available ||
+                      `${translation?.not_available || "Not Available"}`
                       }`}{" "}
                     {detailsData?.expected_price ||
                       `${translation?.not_available || "Not Available"}`}
@@ -362,7 +359,7 @@ const ResidentialProjectDetails = ({
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
-                      <h4 className="mb-3 text-primary">{"Overview"}</h4>
+                      <h4 className="mb-3 text-primary">{translation?.overview || "Overview"}</h4>
                     </div>
                     <ul className="list list-property-details mb-4">
                       <li>
@@ -379,8 +376,7 @@ const ResidentialProjectDetails = ({
                             </span>
                             <h5>
                               {detailsData?.project_type ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}
                             </h5>
                           </div>
@@ -400,8 +396,7 @@ const ResidentialProjectDetails = ({
                             </span>
                             <h5>
                               {detailsData?.total_units ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}
                             </h5>
                           </div>
@@ -421,8 +416,7 @@ const ResidentialProjectDetails = ({
                             </span>
                             <h5>
                               {detailsData?.total_towers ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}
                             </h5>
                           </div>
@@ -443,8 +437,7 @@ const ResidentialProjectDetails = ({
                             </span>
                             <h5>
                               {detailsData?.occupied_area ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}{" "}
                               {detailsData?.unit_type}
                             </h5>
@@ -466,8 +459,7 @@ const ResidentialProjectDetails = ({
                             </span>
                             <h5>
                               {useDateFormat(detailsData?.created_at) ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}
                             </h5>
                           </div>
@@ -488,8 +480,7 @@ const ResidentialProjectDetails = ({
                             </span>
                             <h5>
                               {detailsData?.total_area ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}{" "}
                               {detailsData?.unit_type}
                             </h5>
@@ -511,8 +502,7 @@ const ResidentialProjectDetails = ({
                                 (item) =>
                                   item.key === detailsData?.project_facing
                               )?.value ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}
                             </h5>
                           </div>
@@ -534,8 +524,7 @@ const ResidentialProjectDetails = ({
                             <h5>
                               {detailsData?.currency || "Not Available"}{" "}
                               {detailsData?.token_amount ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}
                             </h5>
                           </div>
@@ -614,8 +603,7 @@ const ResidentialProjectDetails = ({
                             </p>
                             <h5>
                               {detailsData?.possession_status ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}
                             </h5>
                           </Col>
@@ -628,16 +616,14 @@ const ResidentialProjectDetails = ({
                               {detailsData?.parking_availability === "AV"
                                 ? "Available"
                                 : detailsData?.parking_availability === "NA"
-                                ? `${
-                                    translation?.not_available ||
-                                    "Not Available"
+                                  ? `${translation?.not_available ||
+                                  "Not Available"
                                   }`
-                                : detailsData?.parking_availability === "UC"
-                                ? "Under Construction"
-                                : `${
-                                    translation?.not_available ||
+                                  : detailsData?.parking_availability === "UC"
+                                    ? "Under Construction"
+                                    : `${translation?.not_available ||
                                     "Not Available"
-                                  }`}
+                                    }`}
                             </h5>
                           </Col>
 
@@ -651,8 +637,7 @@ const ResidentialProjectDetails = ({
                                 (item) =>
                                   item.key === detailsData?.water_availability
                               )?.value ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}
                             </h5>
                           </Col>
@@ -665,8 +650,7 @@ const ResidentialProjectDetails = ({
                               {electricityStatusOptions.find(
                                 (item) => item.key === detailsData?.electricity
                               )?.value ||
-                                `${
-                                  translation?.not_available || "Not Available"
+                                `${translation?.not_available || "Not Available"
                                 }`}
                             </h5>
                           </Col>
@@ -680,20 +664,18 @@ const ResidentialProjectDetails = ({
                       onClick={() => setViewMore(!viewMore)}
                     >
                       {viewMore
-                        ? `${
-                            translation?.view_less_details ||
-                            "View Less Details"
-                          }`
-                        : `${
-                            translation?.view_more_details ||
-                            "View More Details"
-                          }`}{" "}
+                        ? `${translation?.view_less_details ||
+                        "View Less Details"
+                        }`
+                        : `${translation?.view_more_details ||
+                        "View More Details"
+                        }`}{" "}
                       <i
                         className={`bi bi-chevron-${viewMore ? "up" : "down"}`}
                       ></i>
                     </Button>
 
-                    <h4 className="mb-3 text-primary">Description</h4>
+                    <h4 className="mb-3 text-primary">{translation?.description || "Description"}</h4>
                     <div
                       dangerouslySetInnerHTML={{
                         __html: detailsData?.project_desc
@@ -811,14 +793,12 @@ const ResidentialProjectDetails = ({
                           onClick={handleViewMore}
                         >
                           {showAllAmenities
-                            ? `${
-                                translation?.view_less_amenities ||
-                                "View Less Amenities"
-                              }`
-                            : `${
-                                translation?.view_more_amenities ||
-                                "View More Amenities"
-                              }`}
+                            ? `${translation?.view_less_amenities ||
+                            "View Less Amenities"
+                            }`
+                            : `${translation?.view_more_amenities ||
+                            "View More Amenities"
+                            }`}
                         </button>
                       </div>
                     )}
@@ -854,9 +834,8 @@ const ResidentialProjectDetails = ({
                         </h4>
                         <p>
                           {detailsData?.developer_experience ||
-                            `${
-                              translation?.not_available ||
-                              `${translation?.not_available || "Not Available"}`
+                            `${translation?.not_available ||
+                            `${translation?.not_available || "Not Available"}`
                             }`}{" "}
                         </p>
                       </article>

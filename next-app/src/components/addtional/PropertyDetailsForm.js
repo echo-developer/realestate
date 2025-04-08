@@ -115,7 +115,7 @@ const PropertyDetailsForm = ({ translation, propertyId, setShowLoginErrorModal }
             </option>
           ))}
         </BootstrapForm.Select>
-        <FloatingLabel controlId="phone" label={translation?.phone || "Phone Number"}>
+        <FloatingLabel controlId="phone" label={translation?.phone_number || "Phone Number"}>
           <input
             type="text"
             className="form-control"

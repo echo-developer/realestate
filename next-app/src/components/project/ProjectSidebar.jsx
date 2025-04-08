@@ -314,7 +314,7 @@ const ProjectSidebar = ({
                       <option value="+61">+61</option>
                       <option value="+51">+51</option>
                     </Form.Select>
-                    <FloatingLabel label={"Phone Number"}>
+                    <FloatingLabel label={translation?.phone_number|| "Phone Number"}>
                       <Form.Control
                         type="number"
                         id="phone"
