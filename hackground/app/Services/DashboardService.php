@@ -3,11 +3,13 @@
 namespace App\Services;
 
 use Carbon\Carbon;
-use Carbon\CarbonPeriod;
-use Illuminate\Support\Facades\DB;
-use App\Models\PrefProperty;
 use App\Models\User;
+use App\Models\Enquiry;
+use Carbon\CarbonPeriod;
+use App\Models\Notification;
+use App\Models\PrefProperty;
 use App\Models\UserTransaction;
+use Illuminate\Support\Facades\DB;
 
 class DashboardService
 {
@@ -51,23 +53,19 @@ class DashboardService
         });
 
         $activeStatus = config('constants.STATUS_ACTIVE');
+        $inactiveStatus = config('constants.STATUS_INACTIVE');
+        $deleteStatus = config('constants.STATUS_DELETE');
 
         return [
-            'total_properties' => PrefProperty::where('status', $activeStatus)->count(),
-            'properties_for_sale' => PrefProperty::whereHas('settings', fn($q) => $q->where('post_for', 'sale'))
-                ->where('status', $activeStatus)->count(),
-
-            'properties_for_rent' => PrefProperty::whereHas('settings', fn($q) => $q->where('post_for', 'rent'))
-                ->where('status', $activeStatus)->count(),
-
-            'total_agents' => User::where('user_type', 'A')->count(),
+            'total_properties' => PrefProperty::where('status', '!=', $deleteStatus)->count(),
+            'properties_for_sale' => PrefProperty::whereHas('settings', fn($q) => $q->where('post_for', 'sale'))->where('status', $activeStatus)->count(),
+            'properties_for_rent' => PrefProperty::whereHas('settings', fn($q) => $q->where('post_for', 'rent'))->where('status', $activeStatus)->count(),
+            'total_agents' => User::where([['user_type', 'A'],['status','!=', $deleteStatus]])->count(),
             'total_customer' => User::count(),
             'total_revenue' => UserTransaction::where('payment_status', 'succeeded')->sum('paid_amount'),
-
-            'properties_lists' => PrefProperty::select('id', 'name', 'created_at')
-                ->with(['settings:pid,post_for,property_type', 'location:pid,locality'])
-                ->latest()->take(5)->get(),
-
+            'properties_lists' => PrefProperty::select('id', 'name', 'created_at')->with(['settings:pid,post_for,property_type', 'location:pid,locality'])->latest()->take(5)->get(),
+            'notification'=>Notification::where('read_status', $inactiveStatus)->count(),
+            'enquiry'=>Enquiry::count(),
             'chart_labels' => $finalData->pluck('month')->toArray(),
             'chart_sale' => $finalData->pluck('total_sale')->toArray(),
             'chart_rent' => $finalData->pluck('total_rent')->toArray(),
