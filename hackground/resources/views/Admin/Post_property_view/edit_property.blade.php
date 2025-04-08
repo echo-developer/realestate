@@ -97,23 +97,73 @@
 
             <div class="card">
                 <div class="card-header d-flex">
-                    <h4 class="card-title">Floor Details </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('floor')"><i class="fa fa-edit"></i></a>
+                    <h4 class="card-title">Property Features </h4>
+                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('features')"><i class="fa fa-edit"></i></a>
                 </div>
                 <div class="card-body">
+                    <h4>Configuration:</h4>
+                    <ul class="list-info">
+                        <li>
+                            <b>Bedrooms:</b>  
+                            <span>{{$propertyData->settings->bedrooms ?? 'N/A'}}
+                                @if($propertyData->dimensions)
+                                    @foreach($propertyData->dimensions as $k=>$d)
+                                    @if($d->room_type == 'bedroom')
+                                    @php
+                                        $size = json_decode($d->size);
+                                    @endphp
+                                    <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
+                                    @endif
+                                    @endforeach
+                                @endif
+                            </span>
+                        </li>
+                        <li>
+                            <b>Bathrooms:</b>  
+                            <span>{{$propertyData->settings->bathrooms ?? 'N/A'}}
+                                @if($propertyData->dimensions)
+                                    @foreach($propertyData->dimensions as $k=>$d)
+                                    @if($d->room_type == 'bathroom')
+                                    @php
+                                        $size = json_decode($d->size);
+                                    @endphp
+                                    <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
+                                    @endif
+                                    @endforeach
+                                @endif
+                            </span>
+                        </li>
+                        <li>
+                            <b>Balcony:</b>  
+                            <span>{{$propertyData->additional->balcony ?? 'N/A'}}
+                                @if($propertyData->dimensions)
+                                    @foreach($propertyData->dimensions as $k=>$d)
+                                    @if($d->room_type == 'balcony')
+                                    @php
+                                        $size = json_decode($d->size);
+                                    @endphp
+                                    <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
+                                    @endif
+                                    @endforeach
+                                @endif
+                            </span>
+                        </li>
+                    </ul>
+
+                    <h4>Floor Details:</h4>
                     <ul class="list-info">
                         <li>
                             <b>Flooring Types:</b>
                             <span>
                                 @php
                                 $flooring_style_map = [
-                                'mosaic' => 'Mosaic',
-                                'vitrified' => 'Vitrified',
-                                'wooden' => 'Wooden',
-                                'marbonite' => 'Marble',
-                                'granite' => 'Granite',
-                                'normal_tiles' => 'Normal Tiles/Kotah Stone',
-                                'ceramic_tiles' => 'Ceramic Tiles'
+                                    'mosaic' => 'Mosaic',
+                                    'vitrified' => 'Vitrified',
+                                    'wooden' => 'Wooden',
+                                    'marbonite' => 'Marble',
+                                    'granite' => 'Granite',
+                                    'normal_tiles' => 'Normal Tiles/Kotah Stone',
+                                    'ceramic_tiles' => 'Ceramic Tiles'
                                 ];
 
                                 $flooring_styles = json_decode($propertyData->additional->flooring_style ?? '[]', true);
@@ -144,10 +194,7 @@
                             <b>Lifts in the Tower:</b>
                             <span>{{$propertyData->additional->lifts_in_tower ?? 'N/A'}}</span>
                         </li>
-                        <li>
-                            <b>Configuration:</b>
-                            <span>N/A</span>
-                        </li>
+                        
                         <li>
                             <b>Carpet Area:</b>
                             <span>{{$propertyData->settings->carpet_area??'N/A'}}</span>
@@ -175,7 +222,7 @@
                     <ul class="list-info">
                         <li>
                             <b>Water Availability:</b>
-                            <span>{{$propertyData->additional->water_available ?? 'N/A'}}</span>
+                            <span>{{$propertyData->additional->water_available ?? 'N/A' }}</span>
                         </li>
                         <li>
                             <b>Status of Electricity:</b>

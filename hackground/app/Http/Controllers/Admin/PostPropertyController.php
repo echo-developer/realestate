@@ -167,11 +167,11 @@ class PostPropertyController extends Controller
             $property_id = $srch['id'];
 			$form_action = url('property/save-edit-property/location');
         }
-        if($page == 'floor')
+        if($page == 'features')
         {
-            $title = 'Edit Location Details';
+            $title = 'Edit Property Features';
             $property_id = $srch['id'];
-			$form_action = url('property/save-edit-property/floor');
+			$form_action = url('property/save-edit-property/features');
         }
         if($page == 'additional')
         {
@@ -195,7 +195,7 @@ class PostPropertyController extends Controller
             'gallery.images'
         ])->first();
         // echo "<pre>";
-        // print_r($propertyData['landmarks']);exit;
+        // print_r($propertyData);exit;
         return view('Admin.Post_property_view.ajax_page', compact(
                                                             'page', 
                                                             'title', 
@@ -354,9 +354,22 @@ class PostPropertyController extends Controller
                     'expected_price' => 'required',
                     //'property_category' => 'required',
                 ]);
-                $this->savePropertySettings($prop_id, $request);
-                $this->savePropertyAdditional($prop_id, $request);
-              
+                
+                $settings_data = array(
+                    'post_for' => $request->postFor,
+                    'property_type' => $request->property_type,
+                    'property_type_for' => $request->property_for,
+                    'price_currency' => $request->currency,
+                    'expected_price' => $request->expected_price,
+                );
+
+                $additional_data = array(
+                    'buyer_message' => $request->buyer_message,
+                );
+
+                PrefPropertySetting::where('pid', $prop_id)->update($settings_data);
+                PrefPropertyAdditional::where('pid', $prop_id)->update($additional_data);
+                
                 return json_encode(array(
                     'status' => 'OK',
                 ));
@@ -373,14 +386,64 @@ class PostPropertyController extends Controller
                     'status' => 'OK',
                 ));
             }
-            if ($type == 'floor') {
+            if ($type == 'features') {
                 $request->validate([
                     'carpet_area' => 'required',
                     'super_area' => 'required',
                     'total_floors' => 'required',
                 ]);
-                $this->savePropertySettings($prop_id, $request);
-                $this->savePropertyAdditional($prop_id, $request);
+                //print_r($request->all());exit;
+            
+                $settings_data = array(
+                    'carpet_area' => $request->carpet_area,
+                    'super_area' => $request->super_area,
+                    'bedrooms' => $request->bedroom_count ?? null,
+                    'bathrooms' => $request->bathroom_count ?? null,
+                );
+
+                // $data = [
+                //     'pid' => $propertyId,
+                //     'floor' => $request->floors,
+                //     'total_floor' => $request->total_floors,
+                //     'flooring_style' => $request->flooring_style,
+                //     'facing_direction' => $request->facing_direction,
+                //     'corner_plot' => $request->corner_plot,
+                //     'allowed_construction' => $request->allowed_construction,
+                //     'construct_year' => $request->age,
+                //     'flat_each_floor' => $request->flat_each_floor,
+                //     'lifts_in_tower' => $request->lifts_in_tower,
+                //     'possession_status' => $request->possession_status,
+                //     'property_furnish' => $request->property_furnish,
+                //     'property_amenity' => is_array($request->amenities) ? implode(',', $request->amenities) : $request->property_amenity,
+                //     'is_personal_washroom' => $request->personal_washroom,
+                //     'pantry_cafeteria_status' => $request->cafeteria,
+                //     'is_corner_shop' => $request->corner_shop,
+                //     'faces_main_road' => $request->main_road_facing,
+                //     'property_desc' => $request->description,
+                //     'balcony' => $request->balcony_count ?? null,
+                //     'buyer_message' => $request->buyer_message ?? null,
+                //     'expected_possesion_month_year' => $expected_possesion_month_year
+                // ];
+
+                $additional_data = array(
+                    'floor' => $request->floors,
+                    'total_floor' => $request->total_floors,
+                    'flooring_style' => $request->flooring_style,
+                    'facing_direction' => $request->facing_direction,
+                    'corner_plot' => $request->corner_plot,
+                    'allowed_construction' => $request->allowed_construction,
+                    'construct_year' => $request->age,
+                    'flat_each_floor' => $request->flat_each_floor,
+                    'lifts_in_tower' => $request->lifts_in_tower,
+                    'property_furnish' => $request->property_furnish,
+                    'property_amenity' => is_array($request->amenities) ? implode(',', $request->amenities) : $request->property_amenity,
+                    'balcony' => $request->balcony_count ?? null,
+                );
+
+                PrefPropertySetting::where('pid', $prop_id)->update($settings_data);
+                PrefPropertyAdditional::where('pid', $prop_id)->update($additional_data);
+                $this->savePropertyDimensions($prop_id, $request);
+
                 return json_encode(array(
                     'status' => 'OK',
                 ));
@@ -623,7 +686,7 @@ class PostPropertyController extends Controller
         $settings = PrefPropertySetting::where('pid', $propertyId)->first();
         $data = [
             'pid' => $propertyId,
-            'parking_ability' => $request->parking_ability,
+            'parking_ability' => $request->parking,
             'property_type' => $request->property_type,
             'property_type_for' => $request->property_for,
             'carpet_area' => $request->carpet_area,
@@ -657,8 +720,13 @@ class PostPropertyController extends Controller
             'pid' => $propertyId,
             'floor' => $request->floors,
             'total_floor' => $request->total_floors,
+            'flooring_style' => $request->flooring_style,
+            'facing_direction' => $request->facing_direction,
             'corner_plot' => $request->corner_plot,
+            'allowed_construction' => $request->allowed_construction,
             'construct_year' => $request->age,
+            'flat_each_floor' => $request->flat_each_floor,
+            'lifts_in_tower' => $request->lifts_in_tower,
             'possession_status' => $request->possession_status,
             'property_furnish' => $request->property_furnish,
             'property_amenity' => is_array($request->amenities) ? implode(',', $request->amenities) : $request->property_amenity,
@@ -687,7 +755,7 @@ class PostPropertyController extends Controller
         // Then create new ones
         $dimension_arr = array();
         $structure = array();
-
+        
         foreach (['bedroom', 'bathroom', 'balcony'] as $room_type) {
             if ($request->$room_type && $request->$room_type['width']) {
                 foreach ($request->$room_type['width'] as $k => $w) {
@@ -699,9 +767,10 @@ class PostPropertyController extends Controller
                     ));
                     $dimension_arr[] = $structure;
                 }
+                
             }
         }
-
+        
         if (!empty($dimension_arr)) {
             PrefPropertyDimension::insert($dimension_arr);
         }

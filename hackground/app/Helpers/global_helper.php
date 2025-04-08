@@ -1290,4 +1290,124 @@ if (!function_exists('debit_membership_feature_value')) {
             return true;
         }
     }
+
+    if (!function_exists('get_floor_types')) {
+        function get_floor_types($key='')
+        {
+            $types = [
+                'mosaic' => 'Mosaic',
+                'vitrified' => 'Vitrified',
+                'wooden' => 'Wooden',
+                'marbonite' => 'Marble',
+                'granite' => 'Granite',
+                'normal_tiles' => 'Normal Tiles/Kotah Stone',
+                'ceramic_tiles' => 'Ceramic Tiles'
+            ];
+
+            if($key)
+            {
+                $selectedType = $types['key'] ?? '';
+                return $selectedType;
+            }else{
+                return $types;
+            }
+            
+        }
+    }
+
+    if (!function_exists('get_floor_numbers')) {
+        function get_floor_numbers($key='')
+        {
+            $types = [
+                '1' => 'Lower Basement',
+                '2' => 'Upper Basement',
+                '3' => 'Ground',
+                '4' => '1',
+                '5' => '2',
+                '6' => '3',
+                '7' => '4',
+                '8' => '5',
+                '9' => '6',
+                '10' => '7',
+            ];
+            
+            if($key)
+            {
+                $selectedType = $types['key'] ?? '';
+                return $selectedType;
+            }else{
+                return $types;
+            }
+        }
+    }
+
+    if (!function_exists('get_total_floors')) {
+        function get_total_floors($key='')
+        {
+            $types = [
+                'total_floor_1' => '1',
+                'total_floor_2' => '2',
+                'total_floor_3' => '3',
+                'total_floor_4' => '4',
+                'total_floor_5' => '5',
+                'total_floor_6' => '6',
+                'total_floor_7' => '7',
+                'total_floor_8' => '8',
+                'total_floor_9' => '9',
+                'total_floor_10' => '10'
+            ];
+            
+            if($key)
+            {
+                $selectedType = $types['key'] ?? '';
+                return $selectedType;
+            }else{
+                return $types;
+            }
+        }
+    }
+
+    if (!function_exists('flats_in_floor')) {
+        function flats_in_floor($key='')
+        {
+            $types = [
+                '1',
+                '2',
+                '3',
+                '4',
+                '5',
+                '6',
+                '7',
+                '8',
+                '9',
+                '10'
+            ];
+            
+            return $types;
+            
+        }
+    }
+
+    if (!function_exists('lifts_in_tower')) {
+        function lifts_in_tower($key='')
+        {
+            $types = [
+                '1',
+                '2',
+                '3',
+                '4',
+                '5',
+                '6',
+                '7',
+                '8',
+                '9',
+                '10'
+            ];
+            
+            return $types;
+            
+        }
+    }
+
 }
+
