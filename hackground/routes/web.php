@@ -2,9 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\BankLoanController;
+use App\Http\Controllers\Admin\BankLoanController;
 use App\Http\Controllers\Admin\CmsController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\RoleController;
@@ -17,6 +16,7 @@ use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\LocalityController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmailTempController;
 use App\Http\Controllers\Admin\FloorPlanController;
 use App\Http\Controllers\Admin\AllProjectController;

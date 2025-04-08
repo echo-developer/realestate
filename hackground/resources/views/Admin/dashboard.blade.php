@@ -126,6 +126,42 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-warning border-alternate card" onclick="location.href='/member'">
+                <div class="widget-chat-wrapper-outer">
+                    <div class="widget-chart-content">
+                        <div class="widget-title opacity-5 text-uppercase">Notification</div>
+                        <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
+                            <div class="widget-chart-flex align-items-center">
+                                <div>
+                                    {{ $data['notification'] ?? 0 }}
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-primary border-alternate card" onclick="location.href='/member'">
+                <div class="widget-chat-wrapper-outer">
+                    <div class="widget-chart-content">
+                        <div class="widget-title opacity-5 text-uppercase">All Enquires</div>
+                        <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
+                            <div class="widget-chart-flex align-items-center">
+                                <div>
+                                    {{ $data['enquiry'] }}
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="overview-card">
         <div class="header">
