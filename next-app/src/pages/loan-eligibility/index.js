@@ -167,9 +167,9 @@ const translation = useTranslation();
               </Col>
               <Col xs={6} md={3}>
                 <Form.Select aria-label="EMI Months">
-                  <option>240 Months</option>
-                  <option>180 Months</option>
-                  <option>300 Months</option>
+                  <option> {translation?.months || "240 Months"}</option>
+                  <option>{translation?.months || "180 Months"}</option>
+                  <option>{translation?.months || "300 Months"}</option>
                 </Form.Select>
               </Col>
             </Row>

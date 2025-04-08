@@ -4,6 +4,7 @@ import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context/AuthProvider";
+import useTranslation  from "@/hooks/useTranslation";
 
 const LoanDetailsModal = ({ show, handleClose }) => {
   const { getAllCity } = useAuth();
@@ -27,7 +28,7 @@ const LoanDetailsModal = ({ show, handleClose }) => {
     phone: "",
     consent: false,
   });
-
+const translation = useTranslation();
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -146,20 +147,22 @@ const LoanDetailsModal = ({ show, handleClose }) => {
   return (
     <Modal show={show} onHide={handleClose} centered size="lg">
       <Modal.Header closeButton>
-        <Modal.Title>Home Loan Details</Modal.Title>
+        <Modal.Title>{translation?.home_loan_details || "Home Loan Details"}
+        </Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
         <p className="mb-3">
-          We just need a few details to match you with the right home loan
-          product.
+        {translation?.home_loan_intro || "We just need a few details to match you with the right home loan product."}
+
         </p>
 
         <Form onSubmit={handleSubmit}>
           <Row className="mb-3">
             <Col md={6}>
               <Form.Group>
-                <Form.Label>Loan Amount</Form.Label>
+                <Form.Label>{translation?.loan_amount || "Loan Amount"}
+                </Form.Label>
                 <Form.Control
                   type="text"
                   name="loan_amount"
@@ -170,7 +173,8 @@ const LoanDetailsModal = ({ show, handleClose }) => {
             </Col>
             <Col md={6}>
               <Form.Group>
-                <Form.Label>Tenure</Form.Label>
+                <Form.Label>{translation?.tenure || "Tenure"}
+                </Form.Label>
                 <Form.Control
                   type="text"
                   name="tenure"
@@ -184,13 +188,15 @@ const LoanDetailsModal = ({ show, handleClose }) => {
           <Row className="mb-3">
             <Col md={6}>
               <Form.Group>
-                <Form.Label>Your Age </Form.Label>
+                <Form.Label>{translation?.your_age || "Your Age"}
+                </Form.Label>
                 <Form.Control type="text" value={formData.age} disabled />
               </Form.Group>
             </Col>
             <Col md={6}>
               <Form.Group>
-                <Form.Label>Property Cost</Form.Label>
+                <Form.Label>{translation?.property_cost || "Property Cost"}
+                </Form.Label>
                 <Form.Control
                   type="text"
                   name="property_cost"
@@ -204,27 +210,33 @@ const LoanDetailsModal = ({ show, handleClose }) => {
           <Row className="mb-3">
             <Col md={6}>
               <Form.Group>
-                <Form.Label>Is your property identified?</Form.Label>
+                <Form.Label>{translation?.property_identified || "Is your property identified?"}
+                </Form.Label>
                 <Form.Select
                   name="property_identified"
                   value={formData.property_identified}
                   onChange={handleChange}
                 >
-                  <option value="">Select</option>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
+                  <option value="">{translation?.select || "Select"}
+                  </option>
+                  <option value="Yes">{translation?.yes || "Yes"}
+                  </option>
+                  <option value="No">{translation?.no || "No"}
+                  </option>
                 </Form.Select>
               </Form.Group>
             </Col>
             <Col md={6}>
               <Form.Group>
-                <Form.Label>Property City</Form.Label>
+                <Form.Label>{translation?.property_city || "Property City"}
+                </Form.Label>
                 <Form.Select
                   name="property_city"
                   value={formData.property_city}
                   onChange={handleChange}
                 >
-                  <option value="">Select</option>
+                  <option value="">{translation?.select || "Select"}
+                  </option>
                   {getAllCity.map((city) => (
                     <option key={city.city_id} value={city.city_id}>
                       {city.name}
@@ -238,20 +250,24 @@ const LoanDetailsModal = ({ show, handleClose }) => {
           <Row className="mb-3">
             <Col md={6}>
               <Form.Group>
-                <Form.Label>Employment Type</Form.Label>
+                <Form.Label>{translation?.employment_type || "Employment Type"}
+                </Form.Label>
                 <Form.Select
                   name="employment_type"
                   value={formData.employment_type}
                   onChange={handleChange}
                 >
-                  <option value="salaried">Salaried</option>
-                  <option value="Self-Employed">Self-Employed</option>
+                  <option value="salaried">{translation?.salaried || "Salaried"}
+                  </option>
+                  <option value="Self-Employed">{translation?.self_employed || "Self-Employed"}
+                  </option>
                 </Form.Select>
               </Form.Group>
             </Col>
             <Col md={6}>
               <Form.Group>
-                <Form.Label>Your Income</Form.Label>
+                <Form.Label>{translation?.your_income || "Your Income"}
+                </Form.Label>
                 <Form.Control
                   type="text"
                   name="income"
@@ -265,7 +281,8 @@ const LoanDetailsModal = ({ show, handleClose }) => {
           <Row className="mb-3">
             <Col md={6}>
               <Form.Group>
-                <Form.Label>Current Total EMI (Monthly) </Form.Label>
+                <Form.Label>{translation?.current_total_emi || "Current Total EMI (Monthly)"}
+                </Form.Label>
                 <Form.Control
                   type="text"
                   name="current_emi"
@@ -276,13 +293,14 @@ const LoanDetailsModal = ({ show, handleClose }) => {
             </Col>
             <Col md={6}>
               <Form.Group>
-                <Form.Label>Full Name (as per PAN)</Form.Label>
+                <Form.Label>{translation?.full_name_pan || "Full Name (as per PAN)"}
+                </Form.Label>
                 <Form.Control
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="Enter full name"
+                  placeholder={translation?.enter_full_name || "Enter full name"}
                 />
               </Form.Group>
             </Col>
@@ -292,14 +310,16 @@ const LoanDetailsModal = ({ show, handleClose }) => {
             <Col md={6}>
               <Form.Group>
                 <Form.Label>
-                  Phone Number (OTP verification required)
+                {translation?.phone_number_otp_required || "Phone Number (OTP verification required)"}
+
                 </Form.Label>
                 <Form.Control
                   type="text"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="Enter phone number"
+                  placeholder={translation?.enter_phone_number || "Enter phone number"}
+
                 />
               </Form.Group>
             </Col>
@@ -309,14 +329,15 @@ const LoanDetailsModal = ({ show, handleClose }) => {
                 onClick={sendOtp}
                 disabled={!formData.phone || isResendDisabled}
               >
-                {isResendDisabled ? `Resend OTP in ${timer}s` : "Send OTP"}
+                {isResendDisabled ? `${translation?.resend_otp || "Resend OTP in"}`` ${timer}s` : `${translation?.send_otp || "Send OTP"}`}
               </Button>
             </Col>
           </Row>
           {showOtpField && (
             <Row className="mb-3">
               <Col md={12}>
-                <Form.Label>Enter 6-digit OTP</Form.Label>
+                <Form.Label>{translation?.enter_otp || "Enter 6-digit OTP"}
+                </Form.Label>
                 <div className="d-flex gap-2">
                   {[...Array(6)].map((_, index) => (
                     <Form.Control
@@ -347,11 +368,12 @@ const LoanDetailsModal = ({ show, handleClose }) => {
               onChange={handleChange}
               label={
                 <>
-                  I authorize{" "}
+               {translation?.authorize_contact || "I authorize"}
+               {" "}
                   <a href="https://realestate.scriptlisting.com" target="_blank" rel="noopener noreferrer">
                     realestate.scriptlisting.com
                   </a>{" "}
-                  relevant loan providers to contact me.
+                  {translation?.revelent_loan_providers || "relevant loan providers to contact me."}
                 </>
               }
             />
@@ -362,10 +384,11 @@ const LoanDetailsModal = ({ show, handleClose }) => {
 
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
-          Close
+        {translation?.close || "Close"}
+
         </Button>
         <Button variant="primary" onClick={handleSubmit} disabled={!showSubmitBtn}>
-          Submit Details
+        {translation?.submit_details || "Submit Details"}
         </Button>
       </Modal.Footer>
     </Modal>
