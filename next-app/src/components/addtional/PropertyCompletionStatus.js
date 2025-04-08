@@ -1,10 +1,13 @@
 import { useMemo } from "react";
 import { ListGroup } from "react-bootstrap";
 import { Doughnut } from "react-chartjs-2";
+import useTranslation from "@/hooks/useTranslation";
+
 
 const PropertyCompletionStatus = ({ propertyData }) => {
+    const translation = useTranslation();
     const groupedFields = useMemo(() => ({
-        "General Information": [
+       "General Information": [
             { key: "expected_price", label: "Price", weight: 10 },
             { key: "buyer_message", label: "Message to Buyer", weight: 5 },
             { key: "address", label: "Address", weight: 10 },
@@ -44,7 +47,7 @@ const PropertyCompletionStatus = ({ propertyData }) => {
     const completionPercentage = Object.values(completionData).flat().reduce((acc, field) => acc + field.weight, 0);
 
     const doughnutData = {
-        labels: ["Completed", "Pending"],
+        labels: [`${translation?.completed || "Completed"}`, `${translation?.completed || "Pending"}`],
         datasets: [
             {
                 data: [

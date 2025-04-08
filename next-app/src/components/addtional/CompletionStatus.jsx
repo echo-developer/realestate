@@ -1,12 +1,14 @@
 import React from "react";
 import "react-circular-progressbar/dist/styles.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import useTranslation from "@/hooks/useTranslation";
 
 const CompletionStatus = ({ completionPercentage, missingFields }) => {
+  const translation = useTranslation();
   return (
     <div className="w-72 bg-white shadow-md p-4 rounded-md border">
       {/* Title */}
-      <h2 className="text-lg font-semibold text-gray-800 mb-4">Completion Status</h2>
+      <h2 className="text-lg font-semibold text-gray-800 mb-4">{translation?.completion_status || "Completion Status"}</h2>
 
       {/* Circular Progress Bar */}
       <div className="w-24 mx-auto mb-4">
@@ -24,7 +26,7 @@ const CompletionStatus = ({ completionPercentage, missingFields }) => {
 
       {/* Info Message */}
       <p className="text-sm text-gray-700 font-medium text-center mb-3">
-        Get 5 times more response! Just add the following
+      {translation?.get_more_response || "Get 5 times more response! Just add the following"}
       </p>
 
       {/* Missing Fields */}
