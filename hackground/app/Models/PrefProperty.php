@@ -20,6 +20,7 @@ class PrefProperty extends Model
         'status',
         'slug',
         'is_under_project',
+        
     ];
 
     public function settings()

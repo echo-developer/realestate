@@ -90,6 +90,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::post('buyer_property_enquery', 'buyerEnquerytoAdmin');
     Route::get('verified_agents', 'VerifiedAgentList');
     Route::get('property_trending_rates', 'propertyInTrendsandRates');
+    Route::post('save_loan_enquery', 'saveLoanEnquery');
 });
 
 // Post Routes

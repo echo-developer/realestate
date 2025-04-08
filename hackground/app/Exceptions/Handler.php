@@ -3,6 +3,10 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
+use Psr\Log\LogLevel;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -44,5 +48,28 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $exception): Response
+    {
+        Log::error('ERROR ======>>>>: ' . $exception->getMessage(), [
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine(),
+        ]);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred',
+                'error' => config('app.debug') ? $exception->getMessage() : null,
+            ]);
+        }
+
+        // Web request fallback (for non-API routes)
+        return response()->json([
+            'status' => 0,
+            'message' => 'An error occurred',
+            'error' => config('app.debug') ? $exception->getMessage() : null,
+        ]);
     }
 }

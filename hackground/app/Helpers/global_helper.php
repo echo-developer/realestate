@@ -99,6 +99,8 @@ if (!function_exists('SendMail')) {
         return $send;
     }
 }
+
+
 if (!function_exists('UniquePropertyCode')) {
     function UniquePropertyCode($propertyId)
     {
@@ -800,10 +802,6 @@ if (!function_exists('logError')) {
         Log::error('ERROR ======>>>>: ' . $e->getMessage(), [
             'file' => $e->getFile(),
             'line' => $e->getLine(),
-        ]);
-        return response()->json([
-            'status' => 0,
-            'message' => 'An error occurred while fetching properties',
         ]);
     }
 }

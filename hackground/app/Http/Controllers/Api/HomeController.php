@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
+use App\Models\LoanEnquery;
 use App\Models\PrefProject;
 use App\Models\PrefProperty;
 use App\Models\PrefPropertyLocation;
@@ -12,8 +13,8 @@ use App\Models\ProjectPropertyMapping;
 use App\Models\TestimonialModel;
 use App\Models\User;
 use function Laravel\Prompts\select;
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +27,6 @@ class HomeController extends Controller
     public function __construct()
     {
         $apiModel = new ApiModel;
-        //  $this->middleware('auth:api');
         $this->apiModel = $apiModel;
     }
 
@@ -51,14 +51,8 @@ class HomeController extends Controller
                 'message' => 'Categories retrieved successfully.',
                 'data' => $data,
             ], 200);
-        } catch (\Exception $e) {
-            Log::error('Error in getPropertyType: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while retrieving categories.',
-                'error' => $e->getMessage(), // Provide a detailed error message
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -94,14 +88,8 @@ class HomeController extends Controller
                 'message' => 'Data retrieved successfully.',
                 'data' => $data,
             ], 200);
-        } catch (\Exception $e) {
-            Log::error('Error in getPropertyType: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while retrieving data.',
-                'error' => 'Unexpected error occurred.',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -124,15 +112,8 @@ class HomeController extends Controller
                 'message' => 'cities retrieved successfully.',
                 'data' => $data,
             ], 200);
-        } catch (\Exception $e) {
-            // Log the error for debugging
-            Log::error('Error in cities: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while retrieving cities.',
-                'error' => $e->getMessage(), // Provide a detailed error message
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
     public function get_properties(Request $request)
@@ -281,13 +262,8 @@ class HomeController extends Controller
                     'top_properties' => $topProperties
                 ],
             ]);
-        } catch (\Exception $e) {
-            logError($e);
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while fetching properties',
-                'error' => $e->getMessage(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -356,17 +332,8 @@ class HomeController extends Controller
                 'message' => 'Data retrieved successfully.',
                 'data' => $customArray,
             ]);
-        } catch (\Exception $e) {
-
-            Log::error('Error in getSearchedProjects: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'Something went wrong. Please try again later.',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -398,17 +365,8 @@ class HomeController extends Controller
                 'message' => 'Data retrieved successfully.',
                 'data' => $result,
             ]);
-        } catch (\Exception $e) {
-
-            Log::error('Error in getSearchedProjects: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'Something went wrong. Please try again later.',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -440,17 +398,8 @@ class HomeController extends Controller
                 'status' => 1,
                 'message' => 'Enquery Send',
             ]);
-        } catch (\Exception $e) {
-
-            Log::error('Error in getSearchedProjects: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'Something went wrong. Please try again later.',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -505,18 +454,8 @@ class HomeController extends Controller
                 'message' => 'Data retrived successfully',
                 'data' => $verifiedAgentsMerged,
             ]);
-        } catch (\Exception $e) {
-            log::error('Error fetching verified agents: ' . $e->getMessage());
-        } catch (\Exception $e) {
-            Log::error('Error in getSearchedProjects: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'Something went wrong. Please try again later.',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -639,12 +578,8 @@ class HomeController extends Controller
                 'status' => 1,
                 'data' => $response,
             ]);
-        } catch (\Exception $e) {
-            logError($e);
-            return response()->json([
-                'status' => 0,
-                'message' => 'An Error has occured.Try again' . $e,
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -761,4 +696,27 @@ class HomeController extends Controller
     //         ]);
     //     }
     // }
+
+    public function saveLoanEnquery(Request $request)
+    {
+        try {
+            $data = [
+                'user_name' => $request->user_name,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'address' => $request->address,
+                'loan_amount' => $request->loan_amount,
+                'tenure' => $request->tenure,
+                'is_property_identified' => $request->is_property_identified,
+            ];
+            LoanEnquery::create($data);
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Loan enquery send',
+            ]);
+        } catch (\Throwable $e) {
+            throw $e;
+        }
+    }
 }
