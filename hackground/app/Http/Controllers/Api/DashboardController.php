@@ -66,14 +66,8 @@ class DashboardController extends Controller
                 'message' => 'Data retrieved successfully.',
                 'data' => $data,
             ], 200);
-        } catch (\Exception $e) {
-            Log::error('Error in retrieving data: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while retrieving data.',
-                'error' => 'Unexpected error occurred.',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -129,12 +123,8 @@ class DashboardController extends Controller
                 'message' => 'File size limit exceeded. Max size 5 MB',
                 // 'errors' => $e->errors(),
             ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while updating the profile image.',
-                'error' => $e->getMessage(),
-            ], 500);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -240,14 +230,8 @@ class DashboardController extends Controller
                     'data' => [],
                 ]);
             }
-        } catch (\Exception $e) {
-            Log::error('Error in retrieved Data: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while retrieving data.',
-                'error' => 'Unexpected error occurred.',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -275,13 +259,8 @@ class DashboardController extends Controller
                     'message' => 'No changes made.',
                 ]);
             }
-        } catch (\Exception $e) {
-            Log::error('Unexpected Exception in PropertyfavoriteStaus: ' . $e->getMessage());
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while retrieving data.',
-                'error' => 'Unexpected error occurred.',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -310,13 +289,8 @@ class DashboardController extends Controller
                 'status' => 0,
                 'message' => 'Incorrect old password.',
             ]);
-        } catch (\Exception $e) {
-            Log::error('Error in ChangeUserPassword: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An unexpected error occurred.',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -337,13 +311,8 @@ class DashboardController extends Controller
                 'status' => 0,
                 'message' => 'No property deleted',
             ]);
-        } catch (\Exception $e) {
-            Log::error('Error in ChangeUserPassword: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An unexpected error occurred.',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -391,13 +360,8 @@ class DashboardController extends Controller
                 'project_amenity_ids' => $amenityProject,
                 'amenity_options' => $allAmenity,
             ]);
-        } catch (\Exception $e) {
-            Log::error('Error in ChangeUserPassword: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An unexpected error occurred.',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -448,13 +412,8 @@ class DashboardController extends Controller
                     'message' => 'No data found.',
                 ]);
             }
-        } catch (\Exception $e) {
-            Log::error('Error in UpdateAmenities: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An unexpected error occurred. Please try again later.',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -512,13 +471,8 @@ class DashboardController extends Controller
                 'message' => 'Data retrived successfully',
                 'data' => $filteredArray,
             ]);
-        } catch (\Exception $e) {
-            LOG::info($e->getMessage());
-            return response()->json([
-                'status' => 0,
-                'message' => 'Failed to update property',
-                'error' => $e->getMessage()
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -573,11 +527,8 @@ class DashboardController extends Controller
             }
 
             return response()->json(['status' => 1, 'message' => 'Property updated successfully']);
-        } catch (\Exception $e) {
-            Log::error('Error in UpdateExtraAdditionalData: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -642,11 +593,8 @@ class DashboardController extends Controller
                     }
                 }
             }
-        } catch (\Exception $e) {
-            Log::error('Error in UpdateExtraPropertyLandmarks: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -701,16 +649,8 @@ class DashboardController extends Controller
                     ]);
                 }
             }
-        } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An unexpected error occurred. Please try again later.',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -802,22 +742,13 @@ class DashboardController extends Controller
                     ]
                 ],
             ]);
-        } catch (\Exception $e) {
-            Log::error('Error in My_fav_Property_List: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An unexpected error occurred. Please try again later.',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
     public function PropertyFavoriteDelete(Request $request)
     {
-
         try {
             $data = [
                 'user_id' => $request->input('user_id'),
@@ -839,11 +770,8 @@ class DashboardController extends Controller
                 'status' => 1,
                 'message' => 'Property removed From Favorite List',
             ]);
-        } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -895,11 +823,8 @@ class DashboardController extends Controller
                     'message' => 'Project added to favorites',
                 ]);
             }
-        } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -1000,23 +925,14 @@ class DashboardController extends Controller
                     ]
                 ],
             ]);
-        } catch (\Exception $e) {
-            Log::error('Error in My_fav_Project_List: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'Something went wrong. Please try again later.',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
 
     public function ProjectFavoriteDelete(Request $request)
     {
-
         try {
             $data = [
                 'user_id' => $request->input('user_id'),
@@ -1043,18 +959,14 @@ class DashboardController extends Controller
                 'status' => 1,
                 'message' => 'Project removed From Favorite List',
             ]);
-        } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
 
     public function get_my_profile(Request $request)
     {
-
         try {
             $lang = $request->input('lang', 'en');
             $get_user = User::with(['userAdditional', 'agentAdditional', 'serviceArea', 'social'])
@@ -1105,11 +1017,8 @@ class DashboardController extends Controller
                     'cities' => $cities ?? [],
                 ]
             ]);
-        } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -1147,11 +1056,8 @@ class DashboardController extends Controller
                 'status' => 1,
                 'message' => 'User profile updated.'
             ]);
-        } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -1179,11 +1085,8 @@ class DashboardController extends Controller
                 ['agent_id' => $req->user_id],
                 $data
             );
-        } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -1231,11 +1134,8 @@ class DashboardController extends Controller
                 'success' => 1,
                 'message' => 'Document Uploaded',
             ]);
-        } catch (\Exception $e) {
-            Log::error('Error in agentDocUplaod: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -1286,16 +1186,8 @@ class DashboardController extends Controller
                 'status' => 1,
                 'message' => 'File removed successfully',
             ], 200);
-        } catch (\Exception $e) {
-            Log::error('Error in removeUploadedDoc: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while removing the file',
-            ], 500);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -1328,11 +1220,8 @@ class DashboardController extends Controller
             if (!empty($keysToDelete)) {
                 AgentSocialPlatform::whereIn('platform_key', $keysToDelete)->delete();
             }
-        } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -1366,18 +1255,14 @@ class DashboardController extends Controller
             if (!empty($keysToDelete)) {
                 AgentSecviceLocationModel::whereIn('loc_key', $keysToDelete)->delete();
             }
-        } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
 
     public function uploaodPrtBrochure(Request $request)
     {
-
         try {
             $property_brochure = $request->file('brochure_data');
             $property_id = $request->input('property_id');
@@ -1416,17 +1301,13 @@ class DashboardController extends Controller
                 'message' => 'Brochure Uploaded',
                 // 'file_url' => url("user_upload/property_brochure/{$fileName}") // Publicly accessible URL
             ]);
-        } catch (\Exception $e) {
-            Log::error('Error in uploaodPrtBrochure: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
     public function uploadPropProjcertificatesImages(Request $request)
     {
-
         try {
             $file = $request->file('file');
             $property_id = $request->input('property_id');
@@ -1486,12 +1367,8 @@ class DashboardController extends Controller
                 'fileName' => $fileName,
                 'filename_url' => $filename_url,
             ]);
-        } catch (\Exception $e) {
-            logError($e);
-            return response()->json([
-                'status' => 0,
-                'message' => 'An Error has Occured',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -1536,12 +1413,8 @@ class DashboardController extends Controller
                     'message' => 'Certificates Details Uploaded',
                 ]);
             }
-        } catch (\Exception $e) {
-            logError($e);
-            return response()->json([
-                'status' => 0,
-                'message' => 'An Error has Occured',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -1585,12 +1458,8 @@ class DashboardController extends Controller
                 'message' => 'Data retrieved successfully.',
                 'data' => $certificates,
             ]);
-        } catch (\Exception $e) {
-            logError($e);
-            return response()->json([
-                'status' => 0,
-                'message' => 'An Error has Occured',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -1626,8 +1495,8 @@ class DashboardController extends Controller
                 'status' => 1,
                 'message' => 'Certificate Details Deleted',
             ]);
-        } catch (\Exception $e) {
-            logError($e);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -1669,11 +1538,8 @@ class DashboardController extends Controller
                     'propPieChart' => $propPieChart,
                 ],
             ]);
-        } catch (\Exception $e) {
-            Log::error('Error in DashboardData: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
