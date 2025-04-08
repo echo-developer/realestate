@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import "./property_edit.css";
 import withAuth from "@/utils/withAuth";
+import useTranslation from "@/hooks/useTranslation";
 import {
   flat_image_tab,
   parkingOptions,
@@ -76,6 +77,7 @@ const Index = () => {
       },
     ],
   };
+  const translation = useTranslation();
 
   const { property_id } = router.query;
   const [propertyData, setPropertyData] = useState();
@@ -454,7 +456,7 @@ const Index = () => {
                   }))
                 }
               >
-                <option value="">Select...</option>
+                <option value="">{translation?.select || "Select..."}</option>
                 {options?.all_furnish?.map((furnish) => (
                   <option key={furnish.furnish_id} value={furnish.furnish_id}>
                     {furnish.furnish_name}
@@ -481,7 +483,8 @@ const Index = () => {
                   }))
                 }
               >
-                <option value="">Select Parking Type</option>
+                <option value="">{translation?.select_parking_type || "Select Parking Type"}
+                </option>
                 {parkingOptions.map((parking) => (
                   <option key={parking.key} value={parking.key}>
                     {parking.value}
@@ -515,7 +518,8 @@ const Index = () => {
                   placeholder="Carpet Area"
                 />
               </FloatingLabel>
-              <span className="input-group-text">sqft</span>
+              <span className="input-group-text">{translation?.sqft || "sqft"}
+              </span>
             </div>
 
             <div className="input-group">
@@ -527,7 +531,8 @@ const Index = () => {
                   placeholder="Super Area"
                 />
               </FloatingLabel>
-              <span className="input-group-text">sqft</span>
+              <span className="input-group-text">{translation?.sqft || "sqft"}
+              </span>
             </div>
           </>
         );
@@ -547,7 +552,7 @@ const Index = () => {
                   }))
                 }
               >
-                <option value="">Select...</option>
+                <option value="">{translation?.select || "Select..."}</option>
                 {facingOptions.map((facingType) => (
                   <option key={facingType.key} value={facingType.key}>
                     {facingType.value}
@@ -563,7 +568,8 @@ const Index = () => {
           <>
             <Form.Group>
               <Form.Label className="form-label d-block">
-                Select Overlooking Features:
+              {translation?.select_overlooking_features || "Select Overlooking Features:"}
+
               </Form.Label>
               <div className="checkbox-group">
                 {propertyFeatures.map((item) => (
@@ -597,7 +603,8 @@ const Index = () => {
           <>
             <Form.Group>
               <Form.Label className="form-label d-block">
-                Select Flooring Types:
+              {translation?.select_flooring_types || "Select Flooring Types:"}
+
               </Form.Label>
               <div className="checkbox-group">
                 {flooringOptions.map((flooring) => (
@@ -654,7 +661,8 @@ const Index = () => {
                 }
               >
                 <option value="" disabled>
-                  Select Water Availability
+                {translation?.select_water_availability || "Select Water Availability"}
+
                 </option>
                 {waterAvailabilityOptions.map((option) => (
                   <option key={option.key} value={option.key}>
@@ -683,7 +691,8 @@ const Index = () => {
                 }
               >
                 <option value="" disabled>
-                  Select Electricity Status
+                {translation?.select_electricity_status || "Select Electricity Status"}
+
                 </option>
                 {electricityStatusOptions.map((option) => (
                   <option key={option.key} value={option.key}>
@@ -712,7 +721,8 @@ const Index = () => {
                 }
               >
                 <option value="" disabled>
-                  Select Ownership Type
+                {translation?.select_ownership_type || "Select Ownership Type"}
+
                 </option>
                 {ownershipTypeOptions.map((option) => (
                   <option key={option.key} value={option.key}>
@@ -738,7 +748,8 @@ const Index = () => {
                 }
               >
                 <option value="" disabled>
-                  Select Anyone
+                {translation?.select_anyone || "Select Anyone"}
+
                 </option>
                 {propertyApprovedByOptions.map((option) => (
                   <option key={option.key} value={option.key}>
@@ -781,7 +792,8 @@ const Index = () => {
   };
 
   if (!propertyData) {
-    return <div hidden>No property data available</div>;
+    return <div hidden>{translation?.no_property_data || "No property data available"}
+</div>;
   }
 
   const completionPercentage = 41;
@@ -807,17 +819,19 @@ const Index = () => {
     <DashboardLayout>
       <div className="col-lg col-12">
         <div className="p-4">
-          <h3>Edit & Preview Your Property Ad</h3>
+          <h3>{translation?.edit_preview_property_ad || "Edit & Preview Your Property Ad"}
+          </h3>
           <p>
-            Modify your ad by clicking the appropriate Edit or Add link. Changes
-            may take up to 24 hours to appear online.
+          {translation?.edit_preview_note || "Modify your ad by clicking the appropriate Edit or Add link. Changes may take up to 24 hours to appear online."}
+
           </p>
 
           <Row>
             <Col className="col-lg-8">
               <div className="list-container">
                 {/* Basic Details */}
-                <h5 className="text-uppercase">Basic Details</h5>
+                <h5 className="text-uppercase">{translation?.basic_details || "Basic Details"}
+                </h5>
                 <ListGroup className="mb-3 p-0" style={{ listStyleType: "none" }}>
                   {groupItems.basic.map((item, index) => (
                     <ListGroup.Item key={index}>
@@ -834,7 +848,8 @@ const Index = () => {
                 </ListGroup>
 
                 {/* Property Features */}
-                <h5 className="text-uppercase">Property Features</h5>
+                <h5 className="text-uppercase">{translation?.property_features || "Property Features"}
+                </h5>
                 <ListGroup className="mb-3 p-0" style={{ listStyleType: "none" }}>
                   {groupItems.features.map((item, index) => (
                     <ListGroup.Item key={index}>
@@ -851,7 +866,8 @@ const Index = () => {
                 </ListGroup>
 
                 {/* Additional Information */}
-                <h5 className="text-uppercase">Additional Information</h5>
+                <h5 className="text-uppercase">{translation?.additional_info || "Additional Information"}
+                </h5>
                 <ListGroup className="p-0" style={{ listStyleType: "none" }}>
                   {groupItems.additional.map((item, index) => (
                     <ListGroup.Item key={index}>
@@ -887,17 +903,19 @@ const Index = () => {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Edit {formatTabName(selectedItem)}</Modal.Title>
+          <Modal.Title>{translation?.edit || "Edit"}  {formatTabName(selectedItem)}</Modal.Title>
         </Modal.Header>
         <Modal.Body>{renderModalContent()}</Modal.Body>
         {selectedItem !== "galleries" ? (
           <Modal.Footer>
             <Button variant="secondary" onClick={closeModal}>
-              Cancel
+            {translation?.cancel || "Cancel"}
+
             </Button>
 
             <Button variant="primary" onClick={handleSave}>
-              Save
+            {translation?.save || "Save"}
+
             </Button>
           </Modal.Footer>
         ) : (
