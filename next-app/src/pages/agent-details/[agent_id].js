@@ -340,7 +340,7 @@ const Index = () => {
                                 height={20}
                                 width={20}
                               />{" "}
-                              Quality Listner
+                              {translation?.quality_listner || "Quality Listner"}
                             </Button>
                             <Button
                               variant=""
@@ -353,7 +353,7 @@ const Index = () => {
                                 height={20}
                                 width={20}
                               />{" "}
-                              Responsive Broker
+                              {translation?.resopnse_broker || "Responsive Broker"}
                             </Button>
                           </div>
                         </Col>
@@ -364,7 +364,7 @@ const Index = () => {
                               size="sm"
                               onClick={() => setShowEnquiryModal(true)}
                             >
-                              <EnvelopeFill color="white" size={16} /> Email
+                              <EnvelopeFill color="white" size={16} /> {translation?.email || "Email"}
                             </Button>
                             <Button
                               variant="info"
@@ -372,7 +372,7 @@ const Index = () => {
                               className="text-white"
                               onClick={() => setShowEnquiryModal(true)}
                             >
-                              <PhoneFill color="white" size={16} /> {"Call"}
+                              <PhoneFill color="white" size={16} /> {translation?.call || "Call"}
                             </Button>
                             <Button
                               variant="success"

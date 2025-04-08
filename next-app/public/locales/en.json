@@ -1011,6 +1011,9 @@
   "business_email": "Business Email",
   "working_hours": "Working Hours",
   "experience": "Experience",
-  "other_project": "Other Project"
-
+  "other_project": "Other Project",
+  "resopnse_broker": "Responsive Broker",
+  "call": "Call",
+  "quality_listner": "Quality Listner",
+  "budget_range": "Budget Range"
 }

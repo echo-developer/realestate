@@ -989,7 +989,6 @@
   "select_an_option": "اختر خيارًا",
   "customer_name": "اسم العميل",
   "serve_in": "يخدم في",
-  
   "badge_info": "لإبراز الأداء المتميز، نقوم بمكافأة الوكلاء بشارات مخصصة على Realestate.",
   "trubroker": "الوسيط الموثوق",
   "trubroker_desc": "شارة حصرية تُمنح للوكلاء الذين يتمتعون باستجابة عالية ويعرضون عقارات حقيقية.",
@@ -1010,6 +1009,9 @@
   "licence_number": "رقم الترخيص",
   "working_hours": "ساعات العمل",
   "experience": "الخبرة",
-  "other_project": "مشروع آخر"
-
+  "other_project": "مشروع آخر",
+  "resopnse_broker": "الوسيط المتجاوب",
+  "call": "مكالمة",
+  "quality_listner": "مستمع الجودة",
+  "budget_range": "نطاق الميزانية"
 }

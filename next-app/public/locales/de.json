@@ -1008,6 +1008,9 @@
   "business_phone": "Téléphone professionnel",
   "working_hours": "Heures de travail",
   "experience": "Expérience",
-  "other_project": "Autre projet"
-
+  "other_project": "Autre projet",
+  "resopnse_broker": "Courtier réactif",
+  "call": "Appel",
+  "quality_listner": "Auditeur qualité",
+  "budget_range": "Plage budgétaire"
 }

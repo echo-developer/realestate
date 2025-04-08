@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
+import useTranslation from "@/hooks/useTranslation";
 
 const BudgetRangeSlider = ({ minLimit = 200, maxLimit = 5000, step = 100, setMinBudget, setMaxBudget }) => {
   const [budgetRange, setBudgetRange] = useState([minLimit, maxLimit]);
@@ -10,7 +11,7 @@ const BudgetRangeSlider = ({ minLimit = 200, maxLimit = 5000, step = 100, setMin
     setMinBudget(values[0]);
     setMaxBudget(values[1]);
   };
-
+const translation = useTranslation();
   useEffect(() => {
     setMinBudget(budgetRange[0]);
     setMaxBudget(budgetRange[1]);
@@ -18,7 +19,7 @@ const BudgetRangeSlider = ({ minLimit = 200, maxLimit = 5000, step = 100, setMin
 
   return (
     <div className="budget-slider-container">
-      <label className="form-label text-light">{`Budget Range: $${budgetRange[0]} - $${budgetRange[1]}`}</label>
+      <label className="form-label text-light">{`${translation?.budget_range ||"Budget Range"}: $${budgetRange[0]} - $${budgetRange[1]}`}</label>
 
       <div className="slider-wrapper">
         <RangeSlider
