@@ -310,7 +310,7 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
         {translation?.close || "Close"}
         </Button>
         <Button variant="primary" onClick={handleSubmit} disabled={loading}>
-          {loading ? <Spinner animation="border" size="sm" /> : "Save Property"}
+          {loading ? <Spinner animation="border" size="sm" /> : `${translation?.save_property || "Save Property"}`}
         </Button>
       </Modal.Footer>
     </Modal>
