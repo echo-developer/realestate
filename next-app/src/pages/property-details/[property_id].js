@@ -818,7 +818,7 @@ const index = () => {
               </div>
               <NearbyProperties
                 propertydata={propertyDetails?.nearby_properties}
-                heading="Near By Properties"
+                heading={translation?.near_by_properties || "Near By Properties"}
                 addFavNearByProperties={addFavNearByProperties}
               />
               <SimilarProperties
