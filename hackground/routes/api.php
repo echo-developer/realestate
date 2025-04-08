@@ -256,8 +256,8 @@ Route::post('add-advertisement-view', [AdvertisementController::class, 'add_view
 
 Route::controller(FloorPlaningController::class)->group(function () {
 
-    Route::get('get_floor_plan_type', 'floorPlan')->name('floor.plan.type');
-    Route::post('save_floor_data', 'addFloorPlan')->name('floor.addFloorPlan');
+    Route::get('get_floor_plan_type', 'floorPlan')->name('floor.plans.type');
+    Route::post('save_floor_data', 'addFloorPlan')->name('floor.addFloorPlans');
 });
 
 

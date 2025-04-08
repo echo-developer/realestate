@@ -53,12 +53,8 @@ class PaymentController extends Controller
                     'amount' => $payamount,
                 ]);
             }
-        } catch (\Exception $e) {
-            logError($e);
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while removing the file',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -111,12 +107,8 @@ class PaymentController extends Controller
                     'updated_at' => now()
                 ]);
             });
-        } catch (\Exception $e) {
-            logError($e);
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while processing payment success.',
-            ], 500);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 

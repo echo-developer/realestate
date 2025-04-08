@@ -540,5 +540,5 @@ ALTER TABLE `pref_property_additional` ADD `launch_date` VARCHAR(30) NULL DEFAUL
 
 CREATE TABLE `loan_enquery` (`id` BIGINT NOT NULL AUTO_INCREMENT , `user_name` VARCHAR(100) NULL DEFAULT NULL , `phone` INT(11) NULL DEFAULT NULL , `email` VARCHAR(50) NULL DEFAULT NULL , `address` TEXT NULL DEFAULT NULL , `loan_amount` DECIMAL(15,2) NULL DEFAULT NULL , `tenure` INT(11) NULL DEFAULT NULL , `is_property_identified` TINYINT NULL DEFAULT NULL , `created_ at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
-RENAME TABLE `realestate`.`loan_enquery` TO `realestate`.`pref_loan_enquery`;
+RENAME TABLE `loan_enquery` TO `pref_loan_enquery`;
 ALTER TABLE `pref_loan_enquery` CHANGE `created_ at` `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;

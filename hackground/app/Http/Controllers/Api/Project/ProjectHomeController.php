@@ -58,13 +58,9 @@ class ProjectHomeController extends Controller
             'message' => 'success',
             'data' => $projectsData
          ]);
-      } catch (\Throwable $th) {
-         return response()->json([
-            'status' => 0,
-            'message' => 'Something went wrong!',
-            'error' => $th->getMessage()
-         ]);
-      }
+      } catch (\Throwable $e) {
+         throw $e;
+     }
    }
 
    /**
@@ -139,8 +135,6 @@ class ProjectHomeController extends Controller
 
       return $flattened;
    }
-
-
 
    function getProjectsData()
    {
