@@ -254,54 +254,72 @@ function RealEstateTrends() {
 
           {[
             {
-              question: "What affects real estate price trends?",
+              question: `${translation?.what_effect_real || "What affects real estate price trends?"}`,
               answer:
-                "Property prices are influenced by location, demand and supply, infrastructure developments, government policies, and interest rates.",
+                `${translation?.what_effect_real || "What affects real estate price trends?"}`
+
             },
             {
-              question: "How often are the price trends updated?",
+              question: `${translation?.price_trend_update_freq || "How often are the price trends updated?"}
+`,
               answer:
-                "Price trends are updated monthly based on market data, builder inputs, and verified property listings.",
+                `${translation?.price_trend_update_answer || "Price trends are updated monthly based on market data, builder inputs, and verified property listings."}`,
             },
             {
-              question: "Can I compare price trends of different localities?",
+              question: `${translation?.compare_price_trends || "Can I compare price trends of different localities?"}
+`,
               answer:
-                "Yes, select multiple localities from the list to compare their price trends over time in the chart above.",
+                `${translation?.compare_price_trends_answer || "Yes, select multiple localities from the list to compare their price trends over time in the chart above."}
+`,
             },
             {
-              question: "Why do some areas show sudden price spikes?",
+              question: `${translation?.sudden_price_spike_reason || "Why do some areas show sudden price spikes?"}
+`,
               answer:
-                "Sudden spikes can be due to infrastructure development, new project launches, or increased buyer interest.",
+                `${translation?.sudden_price_spike_answer || "Sudden spikes can be due to infrastructure development, new project launches, or increased buyer interest."}
+`,
             },
             {
-              question: "What is the average price appreciation rate?",
+              question: `${translation?.avg_appreciation_rate || "What is the average price appreciation rate?"}
+`,
               answer:
-                "On average, real estate in prime localities appreciates 5–10% annually, but it varies by region.",
+                `${translation?.avg_appreciation_rate_answer || "On average, real estate in prime localities appreciates 5–10% annually, but it varies by region."}
+`,
             },
             {
-              question: "Can price trends predict future property value?",
+              question: `${translation?.can_trends_predict || "Can price trends predict future property value?"}
+`,
               answer:
-                "They provide insight, but future values depend on multiple factors like economy, development, and policies.",
+                `${translation?.can_trends_predict_answer || "They provide insight, but future values depend on multiple factors like economy, development, and policies."}
+`,
             },
             {
-              question: "Do commercial properties follow similar trends?",
+              question: `${translation?.commercial_trends || "Do commercial properties follow similar trends?"}
+`,
               answer:
-                "Commercial properties have their own trends, often tied to business activity and infrastructure.",
+                `${translation?.commercial_trends_answer || "Commercial properties have their own trends, often tied to business activity and infrastructure."}
+`,
             },
             {
-              question: "Is it a good time to buy property based on trends?",
+              question: `${translation?.good_time_to_buy || "Is it a good time to buy property based on trends?"}
+`,
               answer:
-                "It depends on your financial readiness, interest rates, and the locality’s performance. Trends help inform the decision.",
+                `${translation?.good_time_to_buy_answer || "It depends on your financial readiness, interest rates, and the locality’s performance. Trends help inform the decision."}
+`,
             },
             {
-              question: "Are trend values based on actual transactions?",
+              question: `${translation?.trend_based_on_transactions || "Are trend values based on actual transactions?"}
+`,
               answer:
-                "Yes, trend data is aggregated from actual sales, listings, and verified market sources.",
+                `${translation?.trend_based_on_transactions_answer || "Yes, trend data is aggregated from actual sales, listings, and verified market sources."}
+`,
             },
             {
-              question: "How accurate are these trend values?",
+              question: `${translation?.trend_accuracy || "How accurate are these trend values?"}
+`,
               answer:
-                "We strive for high accuracy by using multiple data sources, but they should be used as guidance, not exact figures.",
+                `${translation?.trend_accuracy_answer || "We strive for high accuracy by using multiple data sources, but they should be used as guidance, not exact figures."}
+`,
             },
           ].map((faq, idx) => (
             <Accordion.Item eventKey={idx.toString()} key={idx}>
