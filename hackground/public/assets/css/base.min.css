@@ -44552,3 +44552,111 @@ span.multiselect-native-select select {
 #myTable, #myTable th, #myTable td {
     border: none !important;
 }
+.overview-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.overview-card .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.overview-card h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.metrics {
+    display: flex;
+    gap: 20px;
+}
+
+.metric {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f5f5f5;
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+
+.metric-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    border-radius: 6px;
+    color: #fff;
+}
+
+.metric-value {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.metric .metric-icon {
+    background: #4f46e5;
+}
+
+.metric.green .metric-icon {
+    background: #22c55e;
+}
+
+.chart-container {
+    position: relative;
+    height: 320px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Table Enhancements */
+.main-card {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.main-card .card-header {
+    background: #f9f9f9;
+    padding: 20px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-card .table {
+    margin: 0;
+}
+
+.main-card th {
+    font-size: 14px;
+    font-weight: 600;
+    background: #fafafa;
+}
+
+.main-card td {
+    font-size: 13px;
+    vertical-align: middle;
+    padding: 12px 10px;
+}
+
+.btn-group .btn {
+    padding: 4px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+}
+
+.btn-primary {
+    background-color: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+}
