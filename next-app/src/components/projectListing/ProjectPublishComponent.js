@@ -202,7 +202,7 @@ const ProjectPendingComponent = ({ projectData }) => {
                         onClick={() => handleProjectCertificate(project.id)}
                         className="btn btn-sm btn-primary"
                       >
-                         {translation?.add_certificate || "Add Certificate"}
+                         {translation?.add_certificate || ""}
                       </button>
                       <Link
                         href={`/project-edit/${project.id}`}
