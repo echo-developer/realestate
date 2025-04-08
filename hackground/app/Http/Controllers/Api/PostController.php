@@ -63,7 +63,7 @@ class PostController extends Controller
 
     public function postProperty(Request $request)
     {
-        log::info(json_encode($request->all(), JSON_PRETTY_PRINT));
+        // log::info(json_encode($request->all(), JSON_PRETTY_PRINT));
         DB::beginTransaction();
 
         try {
@@ -122,17 +122,8 @@ class PostController extends Controller
             ]);
 
             return $user->id;
-        } catch (\Exception $e) {
-
-            Log::error('Error in getSearchedProjects: ' . $e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'Something went wrong. Please try again later.',
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -384,15 +375,8 @@ class PostController extends Controller
                 'message' => 'Budget retrieved successfully.',
                 'data' => $data,
             ], 200);
-        } catch (\Exception $e) {
-
-            Log::error('Error in getPropertyType: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while retrieving Budget.',
-                'error' => $e->getMessage(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -415,15 +399,8 @@ class PostController extends Controller
                 'message' => 'Amnity retrieved successfully.',
                 'data' => $data,
             ], 200);
-        } catch (\Exception $e) {
-
-            Log::error('Error in getPropertyType: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while retrieving Amnity.',
-                'error' => $e->getMessage(),
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -447,15 +424,8 @@ class PostController extends Controller
                 'message' => 'Localities retrieved successfully.',
                 'data' => $data,
             ], 200);
-        } catch (\Exception $e) {
-            // Log the error for debugging
-            Log::error('Error in Localities: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while retrieving Localities.',
-                'error' => $e->getMessage(), // Provide a detailed error message
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -478,15 +448,8 @@ class PostController extends Controller
                 'message' => 'Furnish retrieved successfully.',
                 'data' => $data,
             ], 200);
-        } catch (\Exception $e) {
-            // Log the error for debugging
-            Log::error('Error in furnish: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while retrieving furnish.',
-                'error' => $e->getMessage(), // Provide a detailed error message
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 
@@ -509,15 +472,8 @@ class PostController extends Controller
                 'message' => 'Status retrieved successfully.',
                 'data' => $data,
             ], 200);
-        } catch (\Exception $e) {
-            // Log the error for debugging
-            Log::error('Error in status: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'An error occurred while retrieving status.',
-                'error' => $e->getMessage(), // Provide a detailed error message
-            ]);
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 }
