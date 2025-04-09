@@ -2,6 +2,7 @@
 import { useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
+import useTranslation from "@/hooks/useTranslation";
 
 const EditImageGallery = ({
   flatImageTab,
@@ -19,7 +20,7 @@ const EditImageGallery = ({
     imageId: "",
     caption: "",
   })
-
+const translation = useTranslation();
   const handleTabChange = (key) => {
     setActiveTab(key);
   }
@@ -262,14 +263,12 @@ const EditImageGallery = ({
           />
           <i className="bi bi-upload"></i>
           <p>
-            Drag &amp; drop files here or{" "}
-            <span className="text-site">click</span> to select files
+          {translation?.drag || "Drag"} &amp; {translation?.drop_files_here || "drop files here or"}{" "}
+            <span className="text-site">{translation?.click || "click"}</span> {translation?.to_select_files || "to select files"}
           </p>
         </div>
         <p className="text-help">
-          Accepted formats are .jpg, .gif, .bmp &amp; .png. Maximum
-          size allowed is 20 MB. Minimum dimensions allowed are 600 x
-          400 pixels.
+          {translation?.accepted_formats_are || "Accepted formats are .jpg, .gif, .bmp   .png. Maximum size allowed is 20 MB. Minimum dimensions allowed are 600 x 400 pixels."}
         </p>
       </div>
       <div className="upload-gallery">

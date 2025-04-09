@@ -11,6 +11,7 @@
   "dont_have_account": "Kein Konto?",
   "register_now": "Jetzt registrieren",
   "welcome": "Willkommen!",
+  "accepted_formats_are": "Les formats acceptés sont .jpg, .gif, .bmp et .png. La taille maximale autorisée est de 20 Mo. Les dimensions minimales autorisées sont de 600 x 400 pixels.",
   "things_you_can_do": "Dinge, die Sie mit diesem Konto tun können",
   "post_property": "Veröffentlichen Sie eine Immobilie kostenlos",
   "set_alerts": "Legen Sie Immobilienbenachrichtigungen für Ihre Anforderungen fest",

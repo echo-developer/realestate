@@ -192,7 +192,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
           </p>
         </div>
         <p className="text-help">
-        {translation?.accepted_formats || "Accepted formats are .jpg, .gif, .bmp & .png. Maximum size allowed is 20 MB. Minimum dimensions allowed are 600 x 400 pixels."}
+        {translation?.accepted_formats || ""}
         </p>
       </div>
 

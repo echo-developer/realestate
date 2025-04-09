@@ -714,6 +714,7 @@
   "below_average": "Below Average",
   "average": "Average",
   "good": "Good",
+  "accepted_formats_are": "Accepted formats are .jpg, .gif, .bmp   .png. Maximum size allowed is 20 MB. Minimum dimensions allowed are 600 x 400 pixels.",
   "comment": "Comment",
   "upload_property_brochure": "Upload Property Brochure",
   "drag_drop_files": "Drag & Drop files here or",
