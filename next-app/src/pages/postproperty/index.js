@@ -317,7 +317,6 @@ const Index = () => {
     availability: "",
     possession_status: "",
     construct_age: "",
-    currency: "",
     expected_price: "",
     token_amount: "",
     project_id: "",
