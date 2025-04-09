@@ -8,65 +8,9 @@ import useTranslation from "@/hooks/useTranslation";
 import AuthUser from "@/components/Authentication/AuthUser";
 import MembershipBox from "@/components/membership/MembershipBox";
 
-const steps = [
-  {
-    title: "Know the Value of Your Home",
-    description: "Get the best value! Ensure your home sells for top price.",
-    icon: "bar-chart-1.png",
-  },
-  {
-    title: "Quick Steps to Post Online",
-    description: "Follow 5 simple steps to post and manage your property online.",
-    icon: "timing-1.png",
-  },
-  {
-    title: "Sell/Rent Your Property",
-    description: "Maximize your home's value! Secure the highest price when selling.",
-    icon: "transaction-1.png",
-  },
-  {
-    title: "Help Center",
-    description: "Check your package status using the tracking number or courier's website.",
-    icon: "technical-support-1.png",
-  },
-];
-
-const faqs = [
-  {
-    question: "What is Gold Membership?",
-    answer:
-      "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables.",
-    id: "collapseOne",
-  },
-  {
-    question: "How to avail membership benefits?",
-    answer:
-      "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables.",
-    id: "collapseTwo",
-  },
-  {
-    question: "How does the On-call Assistant help?",
-    answer:
-      "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables.",
-    id: "collapseThree",
-  },
-  {
-    question: "How does the On-call Assistant help?",
-    answer:
-      "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables.",
-    id: "collapseFour",
-  },
-  {
-    question: "How does the On-call Assistant help?",
-    answer:
-      "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables.",
-    id: "collapseFive",
-  },
-];
-
 const Membership = () => {
   const { callApi } = AuthUser();
-  const  translation = useTranslation();
+  const translation = useTranslation();
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [plans, setPlans] = useState([])
   const router = useRouter();
@@ -94,14 +38,81 @@ const Membership = () => {
 
     getMembershipPlans();
   }, [])
-
-
+  const faqs = [
+    {
+      question: `${translation?.what_is_gold_membership || "What is Gold Membership?"}
+`,
+      answer: `${translation?.collapse_info_text || "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables."}`,
+      id: "collapseOne",
+    },
+    {
+      question: `${translation?.how_to_avail_membership_benefits || "How to avail membership benefits?"}
+`,
+      answer:
+        `${translation?.collapse_info_text || "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables."}
+`,
+      id: "collapseTwo",
+    },
+    {
+      question: `${translation?.how_does_on_call_assistant_help || "How does the On-call Assistant help?"}
+`,
+      answer:
+        `${translation?.collapse_info_text || "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables."}
+`,
+      id: "collapseThree",
+    },
+    {
+      question: `${translation?.how_does_on_call_assistant_help || "How does the On-call Assistant help?"}
+`,
+      answer:
+        `${translation?.collapse_info_text || "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables."}
+`,
+      id: "collapseFour",
+    },
+    {
+      question: `${translation?.how_does_on_call_assistant_help || "How does the On-call Assistant help?"}
+`,
+      answer:
+        `${translation?.collapse_info_text || "It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables."}
+`,
+      id: "collapseFive",
+    },
+  ];
+  const steps = [
+    {
+      title: `${translation?.know_the_value_of_your_home || "Know the Value of Your Home"}
+`,
+      description: `${translation?.get_the_best_value || "Get the best value! Ensure your home sells for top price"}
+`,
+      icon: "bar-chart-1.png",
+    },
+    {
+      title: `${translation?.quick_steps_to_post_online || "Quick Steps to Post Online"}
+`,
+      description: `${translation?.follow_5_simple_steps || "Follow 5 simple steps to post and manage your property online."}
+`,
+      icon: "timing-1.png",
+    },
+    {
+      title: `${translation?.sell_rent_your_property || "Sell/Rent Your Property"}`,
+      description: `${translation?.maximize_home_value || "Maximize your home's value! Secure the highest price when selling."}
+`,
+      icon: "transaction-1.png",
+    },
+    {
+      title: `${translation?.help_center || "Help Center"}
+`,
+      description: `${translation?.check_package_status || "Check your package status using the tracking number or courier's website."}
+`,
+      icon: "technical-support-1.png",
+    },
+  ];
   const handleSelectPlan = (plan) => {
     setSelectedPlan(plan);
     localStorage.setItem('planId', plan?.id);
     localStorage.setItem('plan_price', plan?.discounted_price || plan?.price);
-    localStorage.setItem('plan_validate', plan?.validity_days );
-    localStorage.setItem('plan_name', plan?.plan_name );
+    localStorage.setItem('plan_validate', plan?.validity_days);
+    localStorage.setItem('plan_name', plan?.plan_name);
 
     router.push('/membership/credit')
 
@@ -216,7 +227,6 @@ const Membership = () => {
     </DashboardLayout>
   );
 };
-
 const PlansLoadingSkeleton = () => {
   return (
     <div className="pricing-table-shimmer">
