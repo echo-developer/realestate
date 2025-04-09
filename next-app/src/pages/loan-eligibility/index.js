@@ -137,7 +137,7 @@ const LoanEligibility = () => {
                         value={tenure}
                         onChange={(e) => setTenure(Number(e.target.value))}
                       >
-                        <option value="">select tenure</option>
+                        <option value="">{translation?.select_tenure || "select tenure"}</option>
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="15">15</option>
@@ -219,13 +219,13 @@ const LoanEligibility = () => {
                 <thead className="bg-light text-dark fw-semibold border-bottom">
                   <tr>
                     <th scope="col" className="py-3 px-3">
-                      Bank Name <i className="bi bi-info-circle"></i>
+                    {translation?.bank_name || "Bank Name"} <i className="bi bi-info-circle"></i>
                     </th>
                     <th scope="col" className="py-3 px-3">
-                      Rate of Interest <i className="bi bi-info-circle"></i>
+                    {translation?.rate_of_interset || "Rate of Interest"} <i className="bi bi-info-circle"></i>
                     </th>
                     <th scope="col" className="py-3 px-3">
-                      Processing fees <i className="bi bi-info-circle"></i>
+                    {translation?.processing_fees || "Processing fees"} <i className="bi bi-info-circle"></i>
                     </th>
                   </tr>
                 </thead>

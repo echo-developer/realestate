@@ -30,20 +30,20 @@ const LoanDetailsModal = ({ show, handleClose }) => {
     );
   }, [formData]);
 
-  const requiredFields = ["name", "email", "phone", "address"];
+  const requiredFields = [`${translation?.name || "name"}`, `${translation?.email || "email"}`, `${translation?.phone || "phone"}`, `${translation?.address || "address"}`];
 
   const validateField = (name, value) => {
     switch (name) {
       case "name":
-        return value.trim() ? "" : "Name is required";
+        return value.trim() ? "" : `${translation?.name_is_required || "Name is required"}`;
       case "email":
-        if (!value.trim()) return "Email is required";
-        if (!/\S+@\S+\.\S+/.test(value)) return "Invalid email format";
+        if (!value.trim()) return translation?.email_required || "Email is required";
+        if (!/\S+@\S+\.\S+/.test(value)) return translation?.invalid_email || "Invalid email format";
         return "";
       case "phone":
-        return value.trim() ? "" : "Phone is required";
+        return value.trim() ? "" : translation?.phone_number || "phone number is required";
       case "address":
-        return value.trim() ? "" : "Address is required";
+        return value.trim() ? "" : translation?.address_is_required || "Address is required";
       default:
         return "";
     }
@@ -70,13 +70,13 @@ const LoanDetailsModal = ({ show, handleClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const errors = {};
     requiredFields.forEach((field) => {
       const error = validateField(field, formData[field]);
       if (error) errors[field] = error;
     });
-  
+
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       const touched = {};
@@ -84,19 +84,19 @@ const LoanDetailsModal = ({ show, handleClose }) => {
       setTouchedFields(touched);
       return;
     }
-  
+
     const payload = {
       ...formData,
       property_identified: formData.property_identified === "Yes" ? 1 : 0,
     };
-  
+
     try {
       const response = await callApi({
         api: `/save_loan_enquery`,
         method: "UPLOAD",
         data: payload,
       });
-  
+
       if (response?.status == 1) {
         toast.success("Loan details submitted successfully!");
         handleClose();
@@ -109,7 +109,7 @@ const LoanDetailsModal = ({ show, handleClose }) => {
       console.error("API error:", error);
     }
   };
-  
+
 
   const requiredLabel = (label) => (
     <>
@@ -120,12 +120,14 @@ const LoanDetailsModal = ({ show, handleClose }) => {
   return (
     <Modal show={show} onHide={handleClose} centered size="lg">
       <Modal.Header closeButton>
-        <Modal.Title> Loan Enquiry</Modal.Title>
+        <Modal.Title>{translation?.loan_enquiry || "Loan Enquiry"}
+        </Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
         <p className="mb-3">
-          Just a few quick details to help us match you with the right loan options for your property or project.
+          {translation?.loan_enquiry_subtext || "Just a few quick details to help us match you with the right loan options for your property or project."}
+
         </p>
 
         <Form onSubmit={handleSubmit}>
@@ -157,7 +159,7 @@ const LoanDetailsModal = ({ show, handleClose }) => {
           <Row className="mb-3">
             <Col md={6}>
               <Form.Group>
-                <Form.Label>{requiredLabel("Name")}</Form.Label>
+                <Form.Label>{requiredLabel(translation.name)}</Form.Label>
                 <Form.Control
                   type="text"
                   name="name"
@@ -173,7 +175,7 @@ const LoanDetailsModal = ({ show, handleClose }) => {
             </Col>
             <Col md={6}>
               <Form.Group>
-                <Form.Label>{requiredLabel("Email")}</Form.Label>
+                <Form.Label>{requiredLabel(translation?.email)}</Form.Label>
                 <Form.Control
                   type="email"
                   name="email"
@@ -192,7 +194,7 @@ const LoanDetailsModal = ({ show, handleClose }) => {
           <Row className="mb-3">
             <Col md={6}>
               <Form.Group>
-                <Form.Label>{requiredLabel("Phone")}</Form.Label>
+                <Form.Label>{requiredLabel(translation.phone)}</Form.Label>
                 <Form.Control
                   type="text"
                   name="phone"
@@ -208,7 +210,7 @@ const LoanDetailsModal = ({ show, handleClose }) => {
             </Col>
             <Col md={6}>
               <Form.Group>
-                <Form.Label>{requiredLabel("Address")}</Form.Label>
+                <Form.Label>{requiredLabel(translation?.address)}</Form.Label>
                 <Form.Control
                   type="text"
                   name="address"
@@ -233,9 +235,12 @@ const LoanDetailsModal = ({ show, handleClose }) => {
                   value={formData.property_identified}
                   onChange={handleChange}
                 >
-                  <option value="">Select</option>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
+                  <option value="">{translation?.select || "Select"}
+                  </option>
+                  <option value="Yes">{translation?.yes || "Yes"}
+                  </option>
+                  <option value="No">{translation?.no || "No"}
+                  </option>
                 </Form.Select>
               </Form.Group>
             </Col>
