@@ -102,7 +102,7 @@ const ProjectReportModal = ({ projectId, handleClose }) => {
           value={formData.reason}
           onChange={handleChange}
         >
-          <option value="">Select Reason</option>
+          <option value="">{translation?.select_reason || "Select Reason"}</option>
           {reasons.map((reason, index) => (
             <option key={index} value={reason}>
               {reason}

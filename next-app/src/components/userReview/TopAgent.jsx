@@ -1,7 +1,9 @@
 import Link from "next/link";
 import React from "react";
+import useTranslation from "@/hooks/useTranslation";
 
 const TopAgentList = ({ agents }) => {
+  const translation = useTranslation();
   return (
     <>
       {agents?.map((agent, index) => (
@@ -27,7 +29,7 @@ const TopAgentList = ({ agents }) => {
             <p className="mb-0 text-muted">{agent?.email}</p>
             <p className="mb-2">
               <i className="icon-line-awesome-star text-warning"></i>{" "}
-              <span className="text-muted">{agent?.average_rating} Rating</span>
+              <span className="text-muted">{agent?.average_rating} {translation?.rating || "Rating"}</span>
             </p>
           </div>
         </div>
