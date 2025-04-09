@@ -33,7 +33,7 @@ const UploadProjectBrochure = ({ show, handleClose, projectId }) => {
   };
 
   const handleUpload = async () => {
-    
+
     if (selectedFile) {
       console.log(selectedFile)
       try {
@@ -65,7 +65,8 @@ const UploadProjectBrochure = ({ show, handleClose, projectId }) => {
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Upload Project Brochure</Modal.Title>
+        <Modal.Title>{translation?.upload_project_brochure || "Upload Project Brochure"}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div class="upload-area" id="uploadfile">
@@ -76,13 +77,19 @@ const UploadProjectBrochure = ({ show, handleClose, projectId }) => {
             onChange={handleFileChange}
           />
           <i class="bi bi-upload"></i>
-          <p>Drag &amp; Drop files here or <span class="text-site">Click</span> to select files</p>
+          <p>{translation?.drag || "Drag"}
+            &amp; {translation?.drop_files_here || "Drop files here"}
+            <span class="text-site">{translation?.click || "Click"}
+            </span> {translation?.to_select_files || "to select files"}
+          </p>
         </div>
-        <p class="text-help">Accepted formats are .jpg, .gif, .bmp &amp; .png.</p>      
+        <p class="text-help">{translation?.accepted_formats || "Accepted formats are .jpg, .gif, .bmp"}
+          &amp; .png.</p>
 
         {previewURL && (
           <div className="mt-3">
-            <p className="text-success">Selected File: {selectedFile.name}</p>
+            <p className="text-success">{translation?.selected_file || "Selected File:"}
+              {selectedFile.name}</p>
             <div className="border p-2 text-center">
               <iframe
                 src={previewURL}
@@ -93,7 +100,8 @@ const UploadProjectBrochure = ({ show, handleClose, projectId }) => {
               />
               <br />
               <a href={previewURL} target="_blank" rel="noopener noreferrer">
-                Open in New Tab
+                {translation?.open_in_new_tab || "Open in New Tab"}
+
               </a>
             </div>
           </div>
@@ -101,10 +109,12 @@ const UploadProjectBrochure = ({ show, handleClose, projectId }) => {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
-          Cancel
+          {translation?.cancel || "Cancel"}
+
         </Button>
         <Button variant="primary" onClick={handleUpload} disabled={!base64Data}>
-          Upload
+          {translation?.upload || "Upload"}
+
         </Button>
       </Modal.Footer>
     </Modal>
