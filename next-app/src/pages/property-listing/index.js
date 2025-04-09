@@ -135,6 +135,8 @@ const index = () => {
     }
   };
 
+  console.log("propertyList", propertyList);
+
   useEffect(() => {
     const parseArrayFromQuery = (param, setState) => {
       try {
@@ -1600,17 +1602,17 @@ const index = () => {
                                     property.price_currency
                                   } ${new Intl.NumberFormat("en-US").format(
                                     property.exp_price
-                                  )}`
+                                  )} ${property?.price_per_sqft ? `(${property?.price_currency} ${property.price_per_sqft} sq/ft)`: ""}`
                                 : "Price not available"}
                             </h5>
                             <p className="mb-1">
-                              <small>
+                              {/* <small>
                                 {translation?.average_price || "Average Price:"}{" "}
                                 {property?.price_currency ||
                                   property?.currency ||
                                   ""}{" "}
                                 {property?.area_in_sqft || ""} {" sq/ft"}
-                              </small>
+                              </small> */}
                             </p>
                             <ul className="list-info mb-2">
                               <li>
@@ -1639,8 +1641,7 @@ const index = () => {
                                   title="Carpet Area:"
                                 ></i>
                                 <span>
-                                  {property?.carpet_area || "Not Available"}{" "}
-                                  {property?.carpet_area && property?.unit_type}
+                                  {property?.area_in_sqft ? `${property?.area_in_sqft} sqft` : "Not Available"}{" "}
                                 </span>
                                 {property?.carpet_area && " Carpet Area"}
                               </li>
