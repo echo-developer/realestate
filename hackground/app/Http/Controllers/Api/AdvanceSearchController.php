@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
+use App\Models\UserSearchActivity;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -189,14 +190,23 @@ class AdvanceSearchController extends Controller
         return $qry->get();
     }
 
-
     public function propertiesBasedonSearch(Request $rq)
     {
+        $user_id = $rq->user_id ?? null;
+
+        if ($user_id === "null" || $user_id === "") {
+            $user_id = null;
+        }
+
+        if (!is_null($user_id)) {
+            $this->saveUserActivity($rq, $user_id);
+        }
+
+
         $currentpage = $rq->input('recent_page', 1);
         $lang = $rq->input('lang', 'en');
         $limit = $rq->input('limit', 10);
         $recentOffset = ($currentpage - 1) * $limit;
-        $user_id = $rq->user_id ?? null;
 
         try {
 
@@ -316,6 +326,38 @@ class AdvanceSearchController extends Controller
                 'message' => 'An error occurred while fetching properties',
                 'error' => $e->getMessage(),
             ]);
+        }
+    }
+
+    private function saveUserActivity($r, $uid)
+    {
+        
+        try {
+            // $uid = !empty($uid) ? $uid : auth_user_id();
+            $data = is_array(json_decode($r->SearchData, true)) ? json_decode($r->SearchData, true) : [];
+            $data2 = is_array(json_decode($r->searchPayload, true)) ? json_decode($r->searchPayload, true) : [];
+            $mergedData = array_merge($data, $data2);
+
+            $excludedKeys = ['property_type', 'property_for', 'post_for', 'city_id', 'min_budget', 'max_budget'];
+
+            $filteredData = array_filter($mergedData, function ($value) {
+                return !(is_array($value) && empty($value)) && $value !== "" && $value !== null;
+            });
+
+            $searchFilters = array_diff_key($filteredData, array_flip($excludedKeys));
+
+            $dataToInsert = [
+                'user_id' => $uid,
+                'json_filters' => !empty($searchFilters) ? json_encode($searchFilters) : null,
+            ];
+            foreach ($excludedKeys as $key) {
+                $dataToInsert[$key] = $filteredData[$key] ?? null;
+            }
+
+            UserSearchActivity::create($dataToInsert);
+            // Log::info("filteredArrayKeys:\n" . json_encode($dataToInsert, JSON_PRETTY_PRINT));  
+        } catch (\Throwable $e) {
+            throw $e;
         }
     }
 }
