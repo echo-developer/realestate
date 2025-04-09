@@ -66,7 +66,7 @@ const faqs = [
 
 const Membership = () => {
   const { callApi } = AuthUser();
-  const transaction = useTranslation();
+  const  translation = useTranslation();
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [plans, setPlans] = useState([])
   const router = useRouter();
@@ -169,13 +169,13 @@ const Membership = () => {
 
       <div className="col-lg col-12">
         <div className="p-4">
-          <h3 className="text-primary mb-3">{transaction?.membership || "Membership"}</h3>
+          <h3 className="text-primary mb-3">{translation?.membership || "Membership"}</h3>
           {loading && (<PlansLoadingSkeleton />)}
           {plans?.length > 0 && <MembershipBox data={plans} handleSelectPlan={handleSelectPlan} />}
 
 
           <section className="section banner-box-4 mt-0 pb-0">
-            <h3 className="text-primary mb-3"> {transaction?.how_it_works || "How it works"}</h3>
+            <h3 className="text-primary mb-3"> {translation?.how_it_works || "How it works"}</h3>
             <div className="row gx-3 -mb-3">
               {steps?.map((step, index) => (
                 <article key={index} className="col-lg-3 col-sm-6 col-12">
@@ -197,7 +197,7 @@ const Membership = () => {
           </section>
 
           <section className="section">
-            <h3 className="text-primary mb-3">{transaction?.frequently_asked_questions || "Frequently Asked Questions"}</h3>
+            <h3 className="text-primary mb-3">{translation?.frequently_asked_questions || "Frequently Asked Questions"}</h3>
             <Accordion flush>
               {faqs.map((faq, index) => (
                 <Accordion.Item eventKey={index.toString()} key={index}>

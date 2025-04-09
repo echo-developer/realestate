@@ -1,5 +1,6 @@
 "use client"
 import React from 'react'
+import useTranslation from '@/hooks/useTranslation';
 
 const MembershipBox = ({ data, handleSelectPlan }) => {
     const planGroups = data.reduce((acc, item) => {
@@ -10,7 +11,7 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
         return acc;
     }, {});
     const planGroupNames = Object.keys(planGroups);
-
+const translation = useTranslation();
     const allFeatures = [];
     data.forEach(item => {
         Object.keys(item.features).forEach(feature => {
@@ -101,9 +102,9 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
                                         {typeof featureValue === 'string' ? (
                                             featureValue === 'Y' || featureValue === 'N' ? (
                                                 featureValue === 'Y' ? (
-                                                    <i className="material-icons-outlined text-green">check</i>
+                                                    <i className="material-icons-outlined text-green">{translation?.check || "check"}</i>
                                                 ) : (
-                                                    <i className="material-icons-outlined text-danger">close</i>
+                                                    <i className="material-icons-outlined text-danger">{translation?.close || "close"}</i>
                                                 )
                                             ) : (
                                                 featureValue.trim() === '' ? '-' : featureValue
@@ -136,7 +137,7 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
                                     role="button"
                                     onClick={() => handleSelectPlan(plan)}
                                 >
-                                    SELECT
+                                    {translation?.select || "SELECT"}
                                 </a>
                             </li>
                         ))
