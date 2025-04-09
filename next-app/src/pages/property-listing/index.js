@@ -135,7 +135,7 @@ const index = () => {
     }
   };
 
-  console.log("propertyList", propertyList);
+
 
   useEffect(() => {
     const parseArrayFromQuery = (param, setState) => {
@@ -143,6 +143,7 @@ const index = () => {
         const decoded = router?.query?.[param]
           ? JSON.parse(decodeURIComponent(router.query[param]))
           : [];
+
         setState(Array.isArray(decoded) ? decoded : []);
       } catch (error) {
         console.error(`Error parsing ${param}:`, error);
@@ -162,6 +163,7 @@ const index = () => {
         : [...prev, value]
     );
   };
+
 
   const handleBathChange = (value) => {
     const state = SearchData.bathroom || [];
@@ -421,6 +423,7 @@ const index = () => {
   const handleSearchClick = () => {
     // handleViewProperty();
     const queryObject = getSearchParamsData();
+
     if (postFor) {
       queryObject.post_for = postFor;
     }
@@ -581,6 +584,7 @@ const index = () => {
 
   const handleViewProperty = () => {
     const existingParams = new URLSearchParams();
+  
     if (selectedPropertyType)
       existingParams.set("property_type", selectedPropertyType);
     if (selectedProeprtyFor)
@@ -588,12 +592,22 @@ const index = () => {
     if (postFor) existingParams.set("post_for", postFor);
     if (localityData && localityData !== null)
       existingParams.set("location_data", JSON.stringify(localityData));
-
+    if (minBudget && maxBudget) {
+      existingParams.set("min_budget", minBudget);
+      existingParams.set("max_budget", maxBudget);
+    }
+  
+    // ✅ Add these three lines:
+    if (bedroom) existingParams.set("bedrooms", JSON.stringify(bedroom));
+    if (bathroom) existingParams.set("bathroom", JSON.stringify(bathroom));
+    if (kitchens) existingParams.set("kitchens", JSON.stringify(kitchens));
+  
     const stringifiedSearchData = JSON.stringify(SearchData);
     const url = `/property-listing?${existingParams?.toString()}&searchData=${stringifiedSearchData}`;
     router.push(url);
     setAdvanceFilter(false);
   };
+  
 
   const openBudgetDropDown = (e) => {
     if (e.currentTarget.getAttribute("data-id") === "parent") {
@@ -662,7 +676,7 @@ const index = () => {
         );
 
         if (Array.isArray(decodedBathrooms)) {
-          setBedroom(decodedBathrooms);
+          setBathroom(decodedBathrooms);
           SearchData.bathroom = decodedBathrooms;
         } else {
           console.error("Bedrooms data is not in array format.");
@@ -679,7 +693,7 @@ const index = () => {
         );
 
         if (Array.isArray(decodedKitchens)) {
-          setBedroom(decodedKitchens);
+          setKitchens(decodedKitchens);
           SearchData.kitchens = decodedKitchens;
         } else {
           console.error("Bedrooms data is not in array format.");

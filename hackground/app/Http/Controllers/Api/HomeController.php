@@ -59,11 +59,13 @@ class HomeController extends Controller
     public function getPropertyTypeFor(Request $request)
     {
         try {
+            // log::info($request->all());
             $lang = strtolower($request->input('lang', 'en'));
             $data = $this->apiModel->getPropertyTypeFor($lang, $request->id);
             foreach ($data as $item) {
                 $item->image =  $item->image ? asset('user_upload/subCategory_image/' . $item->image) : '';
             }
+            // log::info('data'.$data);
             if ($data->isEmpty()) {
                 return response()->json([
                     'status' => 0,
