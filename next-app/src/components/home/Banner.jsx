@@ -198,9 +198,9 @@ const Banner = ({ translation }) => {
   };
 
   const getDisplayAreaText = () => {
-    if (minSize && maxSize) return `$${minSize} - $${maxSize}`;
-    if (minSize) return `Min: $${minSize}`;
-    if (maxSize) return `Max: $${maxSize}`;
+    if (minSize && maxSize) return `${minSize} - ${maxSize}`;
+    if (minSize) return `Min: ${minSize}`;
+    if (maxSize) return `Max: ${maxSize}`;
     return translation?.area_sqft || "Area (sqft)";
   };
 
