@@ -1252,162 +1252,162 @@ if (!function_exists('debit_membership_feature_value')) {
 
         return true;
     }
-
-
-    if (!function_exists('assign_free_plan')) {
-        function assign_free_plan($user_id, $transactionId = null)
-        {
-
-            $planDetails = MembershipPlans::with('plan_features')->find(1);
-
-            $subscriptionDate = now();
-            $expireDate = now()->addDays($planDetails->validity_days);
-
-            DB::transaction(function () use ($user_id, $transactionId, $subscriptionDate, $expireDate, $planDetails) {
-                $features = $planDetails->plan_features;
-
-                DB::table('user_membership')->where('user_id', $user_id)->delete();
-
-                DB::table('user_membership')->insert([
-                    'user_id'               => $user_id,
-                    'transaction_id'        => $transactionId ?? null,
-                    'plan_id'               => 1,
-                    'subcription_date'      => $subscriptionDate,
-                    'expire_date'           => $expireDate,
-                    'owner_contacted'       => $features->owner_contacted ?? null,
-                    'listings_allowed'      => $features->listings_allowed ?? null,
-                    'relationship_manager'  => $features->relationship_manager ?? 'N',
-                    'verified_badge'        => $features->verified_badge ?? 'N',
-                    'listing_visibility'    => $features->listing_visibility ?? null,
-                    'social_media_promotion' => $features->social_media_promotion ?? 'N',
-                    'remaining_owner_contacted' => $features->owner_contacted,
-                    'remaining_listings_allowed' => $features->listings_allowed,
-                    'created_at'            => now(),
-                    'updated_at'            => now(),
-                ]);
-            });
-
-            return true;
-        }
-    }
-
-    if (!function_exists('get_floor_types')) {
-        function get_floor_types($key='')
-        {
-            $types = [
-                'mosaic' => 'Mosaic',
-                'vitrified' => 'Vitrified',
-                'wooden' => 'Wooden',
-                'marbonite' => 'Marble',
-                'granite' => 'Granite',
-                'normal_tiles' => 'Normal Tiles/Kotah Stone',
-                'ceramic_tiles' => 'Ceramic Tiles'
-            ];
-
-            if($key)
-            {
-                $selectedType = $types['key'] ?? '';
-                return $selectedType;
-            }else{
-                return $types;
-            }
-            
-        }
-    }
-
-    if (!function_exists('get_floor_numbers')) {
-        function get_floor_numbers($key='')
-        {
-            $types = [
-                '1' => 'Lower Basement',
-                '2' => 'Upper Basement',
-                '3' => 'Ground',
-                '4' => '1',
-                '5' => '2',
-                '6' => '3',
-                '7' => '4',
-                '8' => '5',
-                '9' => '6',
-                '10' => '7',
-            ];
-            
-            if($key)
-            {
-                $selectedType = $types['key'] ?? '';
-                return $selectedType;
-            }else{
-                return $types;
-            }
-        }
-    }
-
-    if (!function_exists('get_total_floors')) {
-        function get_total_floors($key='')
-        {
-            $types = [
-                'total_floor_1' => '1',
-                'total_floor_2' => '2',
-                'total_floor_3' => '3',
-                'total_floor_4' => '4',
-                'total_floor_5' => '5',
-                'total_floor_6' => '6',
-                'total_floor_7' => '7',
-                'total_floor_8' => '8',
-                'total_floor_9' => '9',
-                'total_floor_10' => '10'
-            ];
-            
-            if($key)
-            {
-                $selectedType = $types['key'] ?? '';
-                return $selectedType;
-            }else{
-                return $types;
-            }
-        }
-    }
-
-    if (!function_exists('flats_in_floor')) {
-        function flats_in_floor($key='')
-        {
-            $types = [
-                '1',
-                '2',
-                '3',
-                '4',
-                '5',
-                '6',
-                '7',
-                '8',
-                '9',
-                '10'
-            ];
-            
-            return $types;
-            
-        }
-    }
-
-    if (!function_exists('lifts_in_tower')) {
-        function lifts_in_tower($key='')
-        {
-            $types = [
-                '1',
-                '2',
-                '3',
-                '4',
-                '5',
-                '6',
-                '7',
-                '8',
-                '9',
-                '10'
-            ];
-            
-            return $types;
-            
-        }
-    }
-
 }
+
+if (!function_exists('assign_free_plan')) {
+    function assign_free_plan($user_id, $transactionId = null)
+    {
+
+        $planDetails = MembershipPlans::with('plan_features')->find(1);
+
+        $subscriptionDate = now();
+        $expireDate = now()->addDays($planDetails->validity_days);
+
+        DB::transaction(function () use ($user_id, $transactionId, $subscriptionDate, $expireDate, $planDetails) {
+            $features = $planDetails->plan_features;
+
+            DB::table('user_membership')->where('user_id', $user_id)->delete();
+
+            DB::table('user_membership')->insert([
+                'user_id'               => $user_id,
+                'transaction_id'        => $transactionId ?? null,
+                'plan_id'               => 1,
+                'subcription_date'      => $subscriptionDate,
+                'expire_date'           => $expireDate,
+                'owner_contacted'       => $features->owner_contacted ?? null,
+                'listings_allowed'      => $features->listings_allowed ?? null,
+                'relationship_manager'  => $features->relationship_manager ?? 'N',
+                'verified_badge'        => $features->verified_badge ?? 'N',
+                'listing_visibility'    => $features->listing_visibility ?? null,
+                'social_media_promotion' => $features->social_media_promotion ?? 'N',
+                'remaining_owner_contacted' => $features->owner_contacted,
+                'remaining_listings_allowed' => $features->listings_allowed,
+                'created_at'            => now(),
+                'updated_at'            => now(),
+            ]);
+        });
+
+        return true;
+    }
+}
+
+if (!function_exists('get_floor_types')) {
+    function get_floor_types($key='')
+    {
+        $types = [
+            'mosaic' => 'Mosaic',
+            'vitrified' => 'Vitrified',
+            'wooden' => 'Wooden',
+            'marbonite' => 'Marble',
+            'granite' => 'Granite',
+            'normal_tiles' => 'Normal Tiles/Kotah Stone',
+            'ceramic_tiles' => 'Ceramic Tiles'
+        ];
+
+        if($key)
+        {
+            $selectedType = $types['key'] ?? '';
+            return $selectedType;
+        }else{
+            return $types;
+        }
+        
+    }
+}
+
+if (!function_exists('get_floor_numbers')) {
+    function get_floor_numbers($key='')
+    {
+        $types = [
+            '1' => 'Lower Basement',
+            '2' => 'Upper Basement',
+            '3' => 'Ground',
+            '4' => '1',
+            '5' => '2',
+            '6' => '3',
+            '7' => '4',
+            '8' => '5',
+            '9' => '6',
+            '10' => '7',
+        ];
+        
+        if($key)
+        {
+            $selectedType = $types['key'] ?? '';
+            return $selectedType;
+        }else{
+            return $types;
+        }
+    }
+}
+
+if (!function_exists('get_total_floors')) {
+    function get_total_floors($key='')
+    {
+        $types = [
+            'total_floor_1' => '1',
+            'total_floor_2' => '2',
+            'total_floor_3' => '3',
+            'total_floor_4' => '4',
+            'total_floor_5' => '5',
+            'total_floor_6' => '6',
+            'total_floor_7' => '7',
+            'total_floor_8' => '8',
+            'total_floor_9' => '9',
+            'total_floor_10' => '10'
+        ];
+        
+        if($key)
+        {
+            $selectedType = $types['key'] ?? '';
+            return $selectedType;
+        }else{
+            return $types;
+        }
+    }
+}
+
+if (!function_exists('flats_in_floor')) {
+    function flats_in_floor($key='')
+    {
+        $types = [
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            '10'
+        ];
+        
+        return $types;
+        
+    }
+}
+
+if (!function_exists('lifts_in_tower')) {
+    function lifts_in_tower($key='')
+    {
+        $types = [
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            '10'
+        ];
+        
+        return $types;
+        
+    }
+}
+
+
 
