@@ -93,7 +93,7 @@
     <div class="main-card mb-3 card">
         <div class="card-body">
             <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Transaction  <div
+                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Transaction <div
                     class="btn-actions-pane-right">
                     <div class="btn-group" id="global_action_btn" style="display:none">
                         <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title=""
@@ -111,7 +111,7 @@
             </div>
 
             <div class="table-responsive" id="main_table">
-                @if ($transactions->count() > 0) 
+                @if ($transactions->count() > 0)
                 <table id="myTable" class="table">
                     <thead>
                         <tr>
@@ -148,9 +148,8 @@
                 </table>
 
                 <!-- Always show pagination -->
-                <div class="d-flex justify-content-center">
-                    {!! $transactions->links('vendor.pagination.bootstrap-5') !!}
-                </div>
+
+                {!! $transactions->links('vendor.pagination.bootstrap-5') !!}
 
                 @else
                 <p class="text-center">No transactions found.</p>
