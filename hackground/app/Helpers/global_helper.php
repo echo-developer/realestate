@@ -1,6 +1,8 @@
 <?php
 
+use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Admin;
 use App\Models\PrefProject;
 use App\Models\ProjectView;
 use App\Models\PrefProperty;
@@ -9,15 +11,17 @@ use App\Models\ProjectSetting;
 use App\Models\MembershipPlans;
 use function PHPSTORM_META\type;
 use Illuminate\Http\JsonResponse;
+
 use App\Models\MembershipPlanType;
 use Illuminate\Support\Facades\DB;
-
 use PHPMailer\PHPMailer\PHPMailer;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Models\NotificationTempModel;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Model;
+use App\Notifications\NewUserRegistered;
 
 
 if (!function_exists('auth_user_id')) {
@@ -1187,7 +1191,7 @@ if (!function_exists('get_user_membership')) {
     {
 
         $membership_id = get_user_plan($user_id);
-       return DB::table('user_membership')->select(
+        return DB::table('user_membership')->select(
             'id',
             'relationship_manager',
             'owner_contacted',
@@ -1225,7 +1229,7 @@ if (!function_exists('get_remaining_values')) {
 }
 
 if (!function_exists('debit_membership_feature_value')) {
-    function debit_membership_feature_value($field, $remaining_field,$user_id)
+    function debit_membership_feature_value($field, $remaining_field, $user_id)
     {
         if (empty($field) || empty($remaining_field)) {
             return false;
@@ -1337,6 +1341,36 @@ if (!function_exists('get_floor_numbers')) {
             return $selectedType;
         }else{
             return $types;
+            $planDetails = MembershipPlans::with('plan_features')->where('plan_type_id', 1)->first();
+
+            $subscriptionDate = now();
+            $expireDate = now()->addDays($planDetails->validity_days);
+
+            DB::transaction(function () use ($user_id, $transactionId, $subscriptionDate, $expireDate, $planDetails) {
+                $features = $planDetails->plan_features;
+
+                DB::table('user_membership')->where('user_id', $user_id)->delete();
+
+                DB::table('user_membership')->insert([
+                    'user_id'               => $user_id,
+                    'transaction_id'        => $transactionId ?? null,
+                    'plan_id'               => 1,
+                    'subcription_date'      => $subscriptionDate,
+                    'expire_date'           => $expireDate,
+                    'owner_contacted'       => $features->owner_contacted ?? null,
+                    'listings_allowed'      => $features->listings_allowed ?? null,
+                    'relationship_manager'  => $features->relationship_manager ?? 'N',
+                    'verified_badge'        => $features->verified_badge ?? 'N',
+                    'listing_visibility'    => $features->listing_visibility ?? null,
+                    'social_media_promotion' => $features->social_media_promotion ?? 'N',
+                    'remaining_owner_contacted' => $features->owner_contacted,
+                    'remaining_listings_allowed' => $features->listings_allowed,
+                    'created_at'            => now(),
+                    'updated_at'            => now(),
+                ]);
+            });
+
+            return true;
         }
     }
 }
@@ -1411,3 +1445,32 @@ if (!function_exists('lifts_in_tower')) {
 
 
 
+if (!function_exists('notify_admins_with_template')) {
+    function notify_admins_with_template($templateKey, $replacements = [], $lang = 'en')
+    {
+        $template = DB::table('notification_templates')->join('notification_templates_names', 'notification_templates.id', '=', 'notification_templates_names.notification_template_id')
+            ->where('template_key', $templateKey)
+            ->where('notification_templates_names.lang', $lang)
+            ->select('notification_templates.template_for', 'notification_templates_names.content')
+            ->first();
+
+
+        if (!$template) return;
+        $body = $template->content;
+        $title = $template->template_for;
+        foreach ($replacements as $key => $value) {
+            $body = str_replace("{" . $key . "}", $value, $body);
+            $title = str_replace("{" . $key . "}", $value, $title);
+        }
+
+        DB::table('admin_notifications')->insert([
+            'message'       => $body,
+            'created_date'  => Carbon::now(),
+            'read_status'   => 0,
+            'link'          => $replacements['link'] ?? null,
+            'template_key'  => $templateKey,
+            'created_at'    => now(),
+            'updated_at'    => now(),
+        ]);
+    }
+}
