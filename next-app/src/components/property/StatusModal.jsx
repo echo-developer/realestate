@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { months } from "../../components/post/PropertyData";
+import useTranslation from "@/hooks/useTranslation";
 import {
     Form,
     Row,
@@ -15,7 +16,7 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
     const { callApi } = AuthUser();
     const [errors, setErrors] = useState()
 
-
+const translation = useTranslation();
     const [formData, setFormData] = useState({
         possession_status: propertyData?.possession_status || "Available",
         possesion_month: propertyData?.possesion_month || "",
@@ -138,7 +139,8 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
         <form onSubmit={handleSubmit}>
             {/* Possession Status */}
             <div className="mb-3">
-                <label className="form-label d-block">Possession Status:</label>
+                <label className="form-label d-block">{translation?.possession_status || "Possession Status"}
+                </label>
                 {possessionData.map((option) => {
                     return (
                         <div
@@ -178,7 +180,8 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
                 <div className="row gx-3">
                     <div className="col-lg-6 col-12">
                         <label className="form-label">
-                           Month of Possession
+                        {translation?.month_of_possession || "Month of Possession"}
+
                         </label>
                         <select
                             className={`form-control ${errors?.possesion_month ? "is-invalid" : ""
@@ -187,7 +190,8 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
                             value={formData.possesion_month || ""}
                             onChange={handleChange}
                         >
-                            <option value="">Select Month</option>
+                            <option value="">{translation?.select_month || "Select Month"}
+                            </option>
                             {months.map((month) => {
                                 return (
                                     <option key={month?.id} value={month?.id}>
@@ -199,7 +203,8 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
                     </div>
                     <div className="col-lg-6 col-12">
                         <label className="form-label">
-                           Year of Possession
+                        {translation?.year_of_possession || "Year of Possession"}
+
                         </label>
                         <select
                             className={`form-control ${errors?.possesion_year ? "is-invalid" : ""
@@ -208,7 +213,8 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
                             value={formData.possesion_year || ""}
                             onChange={handleChange}
                         >
-                            <option value="">Select Year</option>
+                            <option value="">{translation?.select_year || "Select Year"}
+                            </option>
                             {Array.from({ length: 21 }, (_, i) => {
                                 const year = new Date().getFullYear() + i;
                                 return (
@@ -232,7 +238,8 @@ const StatusModal = ({ value, propertyData, onChange, list: possessionData }) =>
                     value={formData.construct_year || ""}
                     onChange={handleChange}
                     >
-                    <option value="">Select Age</option>
+                    <option value="">{translation?.select_age || "Select Age"}
+                    </option>
                         {[
                             { name: "New Construction", key: "new" },
                             { name: "Less than 5 years", key: "less_than_5_years" },
