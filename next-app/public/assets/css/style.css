@@ -36924,6 +36924,10 @@ ul.card-listing li:last-child {
 .react-multi-carousel-list .react-multiple-carousel__arrow {
   min-width: 32px;
   min-height: 32px;
+  background-color: #1365cf;
+}
+.react-multi-carousel-list .react-multiple-carousel__arrow:hover {
+  background-color: #187dff;
 }
 
 .user-groups span i {

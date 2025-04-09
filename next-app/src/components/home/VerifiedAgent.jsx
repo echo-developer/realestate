@@ -32,7 +32,7 @@ const VerifiedAgent = ({ translation }) => {
       {Array.isArray(verifiedAgentList) && verifiedAgentList.length > 0 && (
         <section className="section">
           <div className="container-fluid">            
-            <div className="section-headline">
+            <div className="section-headline text-center">
               <h5>
                 <img src="/assets/images/icons/house-sm-1.png" alt="Icon" height="20" width="20" loading="lazy" />
                 {translation?.top_most || "Top Most"}
@@ -49,62 +49,58 @@ const VerifiedAgent = ({ translation }) => {
                 <article className="col-xl-3 col-lg-4 col-sm-6 col-12" key={i}>
                   <div className="card card-agent card-v-agent">
                     <div className="card-body d-flex flex-column">
-                      <div className="d-flex mb-3">
-                        {/* Removed the home icon */}
-                        <div className="flex-shrink-0">
-                          <img
-                            src={agent?.image || "/assets/images/user.jpg"}
-                            alt={agent?.name || ""}
-                            height="100"
-                            width="100"
-                            className="rounded-circle"
-                            loading="lazy"
-                          />
-                        </div>
-                        <div className="flex-grow-1 ps-3">                        
-                          <h4>
-                            <a role="button">
-                            {agent?.name || "Not available"}
-                            </a>
-                          </h4>
-                          <h5 className="text-muted">{agent?.company_name || "Not available"}</h5>
-                          <p className="mb-1">
-                            <i className="bi bi-calendar me-1"></i>
-                            {translation?.operating_since || "Operating Since"}{" "}
-                            {agent?.operating_since || "Not available"}
-                          </p>
-
-                          {/* Combined Properties */}
-                          <p className="mb-1">
-                            <i className="bi bi-building me-1"></i>
-                            {translation?.total_properties || "Total Properties:"}{" "}
-                            {(agent?.property_for_sell || 0) + (agent?.property_for_rent || 0)}
-                          </p>
-
-                          {/* Combined Projects */}
-                          <p className="mb-1">
-                          <i className="bi bi-pie-chart me-1"></i>
-                            {translation?.total_projects || "Total Projects:"}{" "}
-                            {(agent?.project_for_sell || 0) + (agent?.project_for_rent || 0)}
-                          </p>
-
-                          <p className="mb-1">
-                            <i className="icon-feather-mail me-1"></i>
-                            {agent?.bussiness_email || "Email not available"}
-                          </p>
-                          <p className="mb-2">
-                            <i className="bi bi-geo-alt me-1"></i>
-                            {agent?.city_name || agent?.address || "City not available"}
-                          </p>
-                          
-                        </div>
+                      <div className="mb-3 text-center">
+                        <img
+                          src={agent?.image || "/assets/images/user.jpg"}
+                          alt={agent?.name || ""}
+                          height="120"
+                          width="120"
+                          className="rounded-circle"
+                          loading="lazy"
+                        />
                       </div>
-                      <div className="mt-auto">
+                      <div className="mb-3 mx-auto">                                                               
+                        <h4 className='text-center mb-1'>
+                          <a role="button">
+                          {agent?.name || "Not available"}
+                          </a>
+                        </h4>
+                        <p className="text-center">{agent?.company_name || <span className="text-muted">Not available</span>}</p>
+                        <p className="mb-1">
+                          <i className="bi bi-calendar me-1"></i>
+                          {translation?.operating_since || "Operating Since"}:{" "}
+                          {agent?.operating_since || <span className="text-muted">Not available</span>}
+                        </p>
+
+                        {/* Combined Properties */}
+                        <p className="mb-1">
+                          <i className="bi bi-building me-1"></i>
+                          {translation?.total_properties || "Total Properties:"}:{" "}
+                          {(agent?.property_for_sell || 0) + (agent?.property_for_rent || 0)}
+                        </p>
+
+                        {/* Combined Projects */}
+                        <p className="mb-1">
+                        <i className="bi bi-pie-chart me-1"></i>
+                          {translation?.total_projects || "Total Projects:"}:{" "}
+                          {(agent?.project_for_sell || 0) + (agent?.project_for_rent || 0)}
+                        </p>
+
+                        <p className="mb-1">
+                          <i className="icon-feather-mail me-1"></i>
+                          {agent?.bussiness_email || "Email not available"}
+                        </p>
+                        <p className="mb-2">
+                          <i className="bi bi-geo-alt me-1"></i>
+                          {agent?.city_name || agent?.address || "City not available"}
+                        </p> 
+                      </div>
+                      <div className='mt-auto'>                                                                       
                         <a
                           href={`/agent-details/${agent?.id}`}
-                          className="btn btn-outline-primary w-100"
+                          className="btn btn-primary w-100"
                         >
-                          {translation?.view_details || "View Details"}
+                          {translation?.view_profile || "View Profile"}
                         </a>
                       </div>
                     </div>
@@ -115,7 +111,7 @@ const VerifiedAgent = ({ translation }) => {
               ))}
             </div>
             <div className='text-center'>
-              <Link target='_blank' href={`/agent-list?page=1&is_verified_agent=true`} className="btn btn-primary">
+              <Link target='_blank' href={`/agent-list?page=1&is_verified_agent=true`} className="btn btn-outline-primary">
                 {translation?.view_more || "View More"} <i className="bi bi-arrow-right"></i>
               </Link>
             </div>

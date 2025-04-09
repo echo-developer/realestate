@@ -134,8 +134,8 @@ const ProperTimeLine = ({ translation }) => {
                 src="/assets/images/icons/buyer.png"
                 alt="Buyer image"
                 className="img-fluid"
-                height="32"
-                width="32"
+                height="128"
+                width="128"
                 loading="lazy"
               />
             </aside>
@@ -149,8 +149,8 @@ const ProperTimeLine = ({ translation }) => {
                 src="/assets/images/icons/seller.png"
                 alt="Seller image"
                 className="img-fluid"
-                height="32"
-                width="32"
+                height="128"
+                width="128"
                 loading="lazy"
               />
             </aside>
@@ -239,8 +239,8 @@ const ProperTimeLine = ({ translation }) => {
                 src="/assets/images/icons/renters.png"
                 alt="Renters image"
                 className="img-fluid"
-                height="32"
-                width="32"
+                height="128"
+                width="128"
                 loading="lazy"
               />
             </aside>
