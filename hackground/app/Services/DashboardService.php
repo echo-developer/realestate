@@ -29,12 +29,12 @@ class DashboardService
 
         $salesData = DB::table('properties_settings as ps')
             ->join('properties as p', 'ps.pid', '=', 'p.id')
-            ->select([
-                DB::raw("DATE_FORMAT(pref_p.created_at, '%M %Y') as month"),
-                DB::raw("DATE_FORMAT(pref_p.created_at, '%Y-%m') as y_m"),
-                DB::raw("SUM(CASE WHEN pref_ps.post_for = 'sale' THEN 1 ELSE 0 END) as total_sale"),
-                DB::raw("SUM(CASE WHEN pref_ps.post_for = 'rent' THEN 1 ELSE 0 END) as total_rent"),
-            ])
+            ->selectRaw("
+            DATE_FORMAT(pref_p.created_at, '%M %Y') as month,
+            DATE_FORMAT(pref_p.created_at, '%Y-%m') as y_m,
+            SUM(CASE WHEN pref_ps.post_for = 'sale' THEN 1 ELSE 0 END) as total_sale,
+            SUM(CASE WHEN pref_ps.post_for = 'rent' THEN 1 ELSE 0 END) as total_rent
+            ")
             ->whereBetween('p.created_at', [$startDate, $endDate])
             ->where('p.status', config('constants.STATUS_ACTIVE'))
             ->groupBy(DB::raw("DATE_FORMAT(pref_p.created_at, '%Y-%m')"))
@@ -60,12 +60,12 @@ class DashboardService
             'total_properties' => PrefProperty::where('status', '!=', $deleteStatus)->count(),
             'properties_for_sale' => PrefProperty::whereHas('settings', fn($q) => $q->where('post_for', 'sale'))->where('status', $activeStatus)->count(),
             'properties_for_rent' => PrefProperty::whereHas('settings', fn($q) => $q->where('post_for', 'rent'))->where('status', $activeStatus)->count(),
-            'total_agents' => User::where([['user_type', 'A'],['status','!=', $deleteStatus]])->count(),
+            'total_agents' => User::where([['user_type', 'A'], ['status', '!=', $deleteStatus]])->count(),
             'total_customer' => User::count(),
             'total_revenue' => UserTransaction::where('payment_status', 'succeeded')->sum('paid_amount'),
             'properties_lists' => PrefProperty::select('id', 'name', 'created_at')->with(['settings:pid,post_for,property_type', 'location:pid,locality'])->latest()->take(5)->get(),
-            'notification'=>Notification::where('read_status', $inactiveStatus)->count(),
-            'enquiry'=>Enquiry::count(),
+            'notification' => Notification::where('read_status', $inactiveStatus)->count(),
+            'enquiry' => Enquiry::count(),
             'chart_labels' => $finalData->pluck('month')->toArray(),
             'chart_sale' => $finalData->pluck('total_sale')->toArray(),
             'chart_rent' => $finalData->pluck('total_rent')->toArray(),
