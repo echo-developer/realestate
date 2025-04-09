@@ -1262,7 +1262,8 @@ if (!function_exists('assign_free_plan')) {
     function assign_free_plan($user_id, $transactionId = null)
     {
 
-        $planDetails = MembershipPlans::with('plan_features')->find(1);
+        $planDetails = MembershipPlans::with('plan_features')->where('plan_type_id', 1)->first();
+
 
         $subscriptionDate = now();
         $expireDate = now()->addDays($planDetails->validity_days);
@@ -1341,36 +1342,6 @@ if (!function_exists('get_floor_numbers')) {
             return $selectedType;
         }else{
             return $types;
-            $planDetails = MembershipPlans::with('plan_features')->where('plan_type_id', 1)->first();
-
-            $subscriptionDate = now();
-            $expireDate = now()->addDays($planDetails->validity_days);
-
-            DB::transaction(function () use ($user_id, $transactionId, $subscriptionDate, $expireDate, $planDetails) {
-                $features = $planDetails->plan_features;
-
-                DB::table('user_membership')->where('user_id', $user_id)->delete();
-
-                DB::table('user_membership')->insert([
-                    'user_id'               => $user_id,
-                    'transaction_id'        => $transactionId ?? null,
-                    'plan_id'               => 1,
-                    'subcription_date'      => $subscriptionDate,
-                    'expire_date'           => $expireDate,
-                    'owner_contacted'       => $features->owner_contacted ?? null,
-                    'listings_allowed'      => $features->listings_allowed ?? null,
-                    'relationship_manager'  => $features->relationship_manager ?? 'N',
-                    'verified_badge'        => $features->verified_badge ?? 'N',
-                    'listing_visibility'    => $features->listing_visibility ?? null,
-                    'social_media_promotion' => $features->social_media_promotion ?? 'N',
-                    'remaining_owner_contacted' => $features->owner_contacted,
-                    'remaining_listings_allowed' => $features->listings_allowed,
-                    'created_at'            => now(),
-                    'updated_at'            => now(),
-                ]);
-            });
-
-            return true;
         }
     }
 }
