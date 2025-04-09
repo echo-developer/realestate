@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from "react";
 import useMetersToKilometers from "@/hooks/useMetersToKilometers";
+import useTranslation from "@/hooks/useTranslation";
 
 const ProjectLandmarkData = ({ detailsData }) => {
   const landmarks = detailsData?.landmarks || {};
@@ -14,7 +15,7 @@ const ProjectLandmarkData = ({ detailsData }) => {
       [key]: !prev[key],
     }));
   };
-
+const translation = useTranslation();
   return (
     <section id="landmark">
       <div className="card border-0 shadow-1 mb-4">
