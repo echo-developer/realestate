@@ -4,6 +4,7 @@ import AuthUser from "../Authentication/AuthUser";
 import { facingOptions } from "../post/PropertyData";
 import CustomLoading from "../LoadingSpinner/CustomLoading";
 import { toast } from "react-toastify";
+import useTranslation from "@/hooks/useTranslation";
 
 const AddPropertyData = ({
   show,
@@ -19,7 +20,7 @@ const AddPropertyData = ({
   const [validationErrors, setValidationErrors] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
   const [loading, setLoading] = useState(true);
-
+const translation = useTranslation();
   const bhkTypes = ["1BHK", "2BHK", "3BHK", "4BHK", "5BHK"];
 
   useEffect(() => {
@@ -408,7 +409,8 @@ const AddPropertyData = ({
   return (
     <Modal show={show} onHide={onClose} size="lg">
       <Modal.Header closeButton>
-        <Modal.Title>Property Configuration</Modal.Title>
+        <Modal.Title>{translation?.property_configuration || "Property Configuration"}
+        </Modal.Title>
       </Modal.Header>
 
       <Modal.Body style={{ maxHeight: "70vh", overflowY: "auto" }}>
@@ -427,7 +429,8 @@ const AddPropertyData = ({
                     }
                     placeholder=""
                   />
-                  <label>Tower Name</label>
+                  <label>{translation?.tower_name || "Tower Name"}
+                  </label>
                 </div>
                 {validationErrors[`tower_name_${towerIndex}`] && (
                   <div className="text-danger small">
@@ -446,7 +449,8 @@ const AddPropertyData = ({
                     }
                     placeholder=""
                   />
-                  <label>Lift Number</label>
+                  <label>{translation?.lift_number || "Lift Number"}
+                  </label>
                 </div>
                 {validationErrors[`lift_no_${towerIndex}`] && (
                   <div className="text-danger small">
@@ -465,7 +469,8 @@ const AddPropertyData = ({
                     }
                     placeholder=""
                   />
-                  <label>Stair Number</label>
+                  <label>{translation?.stair_number || "Stair Number"}
+                  </label>
                 </div>
                 {validationErrors[`stair_no_${towerIndex}`] && (
                   <div className="text-danger small">
@@ -484,7 +489,8 @@ const AddPropertyData = ({
                     }
                     placeholder=""
                   />
-                  <label>Fire Safety</label>
+                  <label>{translation?.fire_safety || "Fire Safety"}
+                  </label>
                 </div>
                 {validationErrors[`fire_safety_${towerIndex}`] && (
                   <div className="text-danger small">
@@ -496,11 +502,13 @@ const AddPropertyData = ({
 
             {/* Floor Section */}
             <div className="mb-0">
-              <h6>Floor Configuration</h6>
+              <h6>{translation?.floor_configuration || "Floor Configuration"}
+              </h6>
               {tower.floor_data.map((flat, flatIndex) => (
                 <fieldset key={flatIndex} className="border p-3 mb-3 position-relative">
                   <legend>
-                    Unit {flatIndex + 1}
+                  {translation?.unit || "Unit"}
+                  {flatIndex + 1}
                   </legend>
                   <Button
                     variant="danger btn-delete"
@@ -527,7 +535,8 @@ const AddPropertyData = ({
                           }
                           placeholder=""
                         />
-                        <label>Floor Number</label>
+                        <label>{translation?.floor_number || "Floor Number"}
+                        </label>
                       </div>
                       {validationErrors[
                         `floor_no_${towerIndex}_${flatIndex}`
@@ -557,7 +566,8 @@ const AddPropertyData = ({
                           }
                           placeholder=""
                         />
-                        <label>Flat Number</label>
+                        <label>{translation?.flat_number || "Flat Number"}
+                        </label>
                       </div>
                       {validationErrors[
                         `flat_no_${towerIndex}_${flatIndex}`
@@ -576,7 +586,7 @@ const AddPropertyData = ({
                   {/* BHK Configurations */}
                   {flat.bhk_configurations.map((bhk, bhkIndex) => (
                     <fieldset key={bhkIndex} className="border p-3 mb-3 position-relative">
-                      <legend>Flats {bhkIndex + 1}</legend>
+                      <legend>{translation?.flat || "Flat"}{bhkIndex + 1}</legend>
                       <Button
                         variant="danger btn-delete"
                         size="sm"
@@ -613,7 +623,8 @@ const AddPropertyData = ({
                                 </option>
                               ))}
                             </select>
-                            <label>BHK Type</label>
+                            <label>{translation?.bhk_type || "BHK Type"}
+                            </label>
                           </div>
                           {validationErrors[
                             `bhk_type_${towerIndex}_${flatIndex}_${bhkIndex}`
@@ -645,7 +656,8 @@ const AddPropertyData = ({
                               }
                               placeholder=""
                             />
-                            <label>Carpet Area</label>
+                            <label>{translation?.carpet_area || "Carpet Area"}
+                            </label>
                           </div>
                           {validationErrors[
                             `carpet_${towerIndex}_${flatIndex}_${bhkIndex}`
@@ -677,7 +689,8 @@ const AddPropertyData = ({
                               }
                               placeholder=""
                             />
-                            <label>Super Area</label>
+                            <label>{translation?.super_area || "Super Area"}
+                            </label>
                           </div>
                           {validationErrors[
                             `super_${towerIndex}_${flatIndex}_${bhkIndex}`
@@ -709,7 +722,8 @@ const AddPropertyData = ({
                               }
                               placeholder=""
                             />
-                            <label>Price</label>
+                            <label>{translation?.price || "Price"}
+                            </label>
                           </div>
                           {validationErrors[
                             `price_${towerIndex}_${flatIndex}_${bhkIndex}`
@@ -745,7 +759,8 @@ const AddPropertyData = ({
                                 </option>
                               ))}
                             </select>
-                            <label>Facing</label>
+                            <label>{translation?.facing || "Facing"}
+                            </label>
                           </div>
                           {validationErrors[
                             `facing_${towerIndex}_${flatIndex}_${bhkIndex}`
@@ -786,7 +801,8 @@ const AddPropertyData = ({
                                   className="form-control"
                                   onChange={(e) => handleBhkImgUpload(e, bhkIndex, flatIndex, towerIndex)}
                                 />
-                                <label>Upload Floor Image</label>
+                                <label>{translation?.upload_floor_image || "Upload Floor Image"}
+                                </label>
                               </>
                             )}
                           </div>
@@ -803,7 +819,8 @@ const AddPropertyData = ({
                     size="sm"
                     onClick={() => addBHKConfiguration(towerIndex, flatIndex)}
                   >
-                    Add BHK
+                    {translation?.add_bhk || "Add BHK"}
+
                   </Button>
                 </fieldset>
               ))}
@@ -812,7 +829,8 @@ const AddPropertyData = ({
                 size="sm"
                 onClick={() => addFlat(towerIndex)}
               >
-                Add Floor
+               {translation?.add_floor || "Add Floor"}
+
               </Button>
             </div>
           </div>
@@ -820,10 +838,12 @@ const AddPropertyData = ({
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose}>
-          Close
+        {translation?.close || "Close"}
+
         </Button>
         <Button variant="primary" onClick={handleSave} disabled={!isFormValid}>
-          Save
+        {translation?.save || "Save"}
+
         </Button>
       </Modal.Footer>
     </Modal>

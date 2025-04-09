@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
+import useTranslation from "@/hooks/useTranslation";
 
 const UploadProjectBrochure = ({ show, handleClose, projectId }) => {
   const { callApi } = AuthUser();
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewURL, setPreviewURL] = useState(null);
   const [base64Data, setBase64Data] = useState(null);
-
+const translation = useTranslation();
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file && file.type === "application/pdf") {
