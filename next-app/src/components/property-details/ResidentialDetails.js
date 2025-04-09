@@ -2,8 +2,10 @@ import React from 'react'
 import Link from 'next/link'
 import useDateFormat from '@/hooks/useDateFormat'
 import GalleryComponent from '../property/GalleryComponent'
+import useTranslation from '@/hooks/useTranslation'
 
 const ResidentialDetails = ({ propertyDetails, setVisible }) => {
+  const translation = useTranslation();
   return (
     <div className="section">
       <div className="container-fluid">
@@ -25,13 +27,15 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
               </div>
               <div className="text-md-end">
                 <p className="mb-2">
-                  Launched In:{" "}
+                {translation?.launched_in || "Launched In:"}
+                {" "}
                   <span className="text-muted">
                     {useDateFormat(propertyDetails?.created_at) || "Date "}
                   </span>
                 </p>
                 <p>
-                  Possession In: <span className="text-muted">2030</span>
+                {translation?.possession_in || "Possession In:"}
+                <span className="text-muted">2030</span>
                 </p>
               </div>
             </div>
@@ -53,15 +57,18 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
             <div className="row mb-3">
               <div className="col-md mb-3 mb-md-0">
                 <h3>{propertyDetails?.price}</h3>
-                <h4>Get Loan Offers From 32+ Banks</h4>
+                <h4>{translation?.get_loan_offers || "Get Loan Offers From 32+ Banks"}
+                </h4>
                 <p>
-                  <a href="">Check Market Value</a>
+                  <a href="">{translation?.check_market_value || "Check Market Value"}
+                  </a>
                 </p>
                 <p>
-                  {propertyDetails?.property_features?.bedrooms} BHK Flats
+                  {propertyDetails?.property_features?.bedrooms} {translation?.bhk_flats || "BHK Flats"}
                 </p>
                 <p>
-                  Download Brochure
+                {translation?.download_brochure || "Download Brochure"}
+
                   <a href="" className="ms-3">
                     <img
                       src="/assets/images/icons/brochure.png"
@@ -75,7 +82,8 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
               <div className="col-md-auto text-md-end">
                 <div className="d-grid flex-column gap-3 h-100">
                   <a onClick={handleShow} className="btn btn-primary mb-auto">
-                    Write A Review
+                  {translation?.write_a_review || "Write A Review"}
+
                   </a>
                   {/* <a href="" className="btn btn-outline-primary mt-auto">
                       Contact Now
@@ -90,25 +98,32 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
               <div className="one-page-menu mb-3">
                 <ul>
                   <li className="active">
-                    <a href="#overview">Overview</a>
+                    <a href="#overview">{translation?.overview || "Overview"}
+                    </a>
                   </li>
                   <li>
-                    <a href="#properties">Properties</a>
+                    <a href="#properties">{translation?.properties || "Properties"}
+                    </a>
                   </li>
                   <li>
-                    <a href="#about">About Projects</a>
+                    <a href="#about">{translation?.about_projects || "About Projects"}
+                    </a>
                   </li>
                   <li>
-                    <a href="#amenity">Amenities</a>
+                    <a href="#amenity">{translation?.amenities || "Amenities"}
+                    </a>
                   </li>
                   <li>
-                    <a href="#advertiser">Top Advertiser</a>
+                    <a href="#advertiser">{translation?.top_advertiser || "Top Advertiser"}
+                    </a>
                   </li>
                   <li>
-                    <a href="#floor-plan">Floor Plan 7 units</a>
+                    <a href="#floor-plan">{translation?.floor_plan_units || "Floor Plan 7 units"}
+                    </a>
                   </li>
                   <li>
-                    <a href="#locality">About Locality</a>
+                    <a href="#locality">{translation?.about_locality || "About Locality"}
+                    </a>
                   </li>
                 </ul>
               </div>
@@ -118,7 +133,8 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
               <div className="card border-0 shadow-1 mb-4">
                 <div className="card-body">
                   <div className="d-flex justify-content-between">
-                    <h4 className="mb-3 text-primary">More Details</h4>
+                    <h4 className="mb-3 text-primary">{translation?.more_details || "More Details"}
+                    </h4>
                   </div>
 
                   <ul className="list list-property-details mb-4">
@@ -147,7 +163,8 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
                           width="48"
                         />
                         <div className="flex-grow-1 ps-2">
-                          <span className="text-muted">Property Size</span>
+                          <span className="text-muted">{translation?.property_size || "Property Size"}
+                          </span>
                           <h5>
                             {propertyDetails?.property_features?.property_size
                               ? `${propertyDetails.property_features.property_size} sq ft`
@@ -165,7 +182,8 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
                           width="48"
                         />
                         <div className="flex-grow-1 ps-2">
-                          <span>Launch Date</span>
+                          <span>{translation?.launch_date || "Launch Date"}
+                          </span>
                           <h5>
                             {useDateFormat(propertyDetails?.created_at) ||
                               "Date"}
@@ -182,7 +200,8 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
                           width="48"
                         />
                         <div className="flex-grow-1 ps-2">
-                          <span>Bathrooms</span>
+                          <span>{translation?.bathrooms || "Bathrooms"}
+                          </span>
                           <h5>
                             {propertyDetails?.property_features?.bedrooms}
                           </h5>
@@ -198,7 +217,8 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
                           width="48"
                         />
                         <div className="flex-grow-1 ps-2">
-                          <span>Facing</span>
+                          <span>{translation?.facing || "Facing"}
+                          </span>
                           <h5>{propertyDetails?.facing_direction}</h5>
                         </div>
                       </div>
@@ -212,7 +232,8 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
                           width="48"
                         />
                         <div className="flex-grow-1 ps-2">
-                          <span className="text-muted">Booking Price</span>
+                          <span className="text-muted">{translation?.booking_price || "Booking Price"}
+                          </span>
                           <h5>$149.00</h5>
                         </div>
                       </div>
@@ -222,27 +243,32 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
                   <table className="table">
                     <tbody>
                       <tr>
-                        <td className="text-muted">Price Breakup:</td>
+                        <td className="text-muted">{translation?.price_breakup || "Price Breakup:"}
+                        </td>
                         <td>{propertyDetails?.price}</td>
                       </tr>
                       <tr>
-                        <td className="text-muted">Address:</td>
+                        <td className="text-muted">{translation?.address || "Address"}
+                        </td>
                         <td>{propertyDetails?.address || `${translation?.not_available || "Not available"}`}</td>
                       </tr>
                       <tr>
                         <td className="text-muted">Landmark:</td>
                         <td>
-                          Dakshineswar Dolpiri More temple, Adyapith temple
+                        {translation?.landmark_detail || "Dakshineswar Dolpiri More temple, Adyapith temple"}
+
                         </td>
                       </tr>
                       <tr>
-                        <td className="text-muted">Furnishing:</td>
+                        <td className="text-muted">{translation?.furnishing || "Furnishing"}
+                        </td>
                         <td>
                           {propertyDetails?.furnish_status || `${translation?.not_available || "Not available"}`}
                         </td>
                       </tr>
                       <tr>
-                        <td className="text-muted">Flooring:</td>
+                        <td className="text-muted">{translation?.flooring || "Flooring"}
+                        </td>
                         <td>
                           {propertyDetails?.flooring_style?.length > 0 ? (
                             propertyDetails.flooring_style.map(
@@ -256,19 +282,22 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
                               )
                             )
                           ) : (
-                            <span>No flooring information available</span>
+                            <span>{translation?.no_flooring_info || "No flooring information available"}
+</span>
                           )}
                         </td>
                       </tr>
 
                       <tr>
-                        <td className="text-muted">Type of Ownership:</td>
+                        <td className="text-muted">{translation?.type_of_ownership || "Type of Ownership:"}
+                        </td>
                         <td>
                           {propertyDetails?.ownership_type || `${translation?.not_available || "Not available"}`}
                         </td>
                       </tr>
                       <tr>
-                        <td className="text-muted">Overlooking:</td>
+                        <td className="text-muted">{translation?.overlooking || "Overlooking"}
+                        </td>
                         <td>
                           {propertyDetails?.overlooking?.length > 0 ? (
                             propertyDetails.overlooking.map((item, index) => (
@@ -280,15 +309,18 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
                               </span>
                             ))
                           ) : (
-                            <span>No overlooking information available</span>
+                            <span>{translation?.no_overlooking_info || "No overlooking information available"}
+</span>
                           )}
                         </td>
                       </tr>
                       <tr>
-                        <td className="text-muted">Loan Offered:</td>
+                        <td className="text-muted">{translation?.loan_offered || "Loan Offered"}
+                        </td>
                         <td>
                           <p>
-                            Estimated EMI ₹3867{" "}
+                          {translation?.estimated_emi || "Estimated EMI ₹3867"}
+                          {" "}
                             <img
                               src="/assets/images/bank/axis-bank-logo.png"
                               alt="Axis Bank"
@@ -296,7 +328,8 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
                               width="106"
                             />{" "}
                             <small>
-                              <a href="">Apply for Home loan</a>
+                              <a href="">{translation?.apply_for_home_loan || "Apply for Home loan"}
+                              </a>
                             </small>
                           </p>
                         </td>
@@ -316,9 +349,9 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
                   </table>
 
                   <p>
-                    <b>Description:</b> Marble flooring. Apartment was used
-                    once a year. Address: AC Sarkar Road, Ariadaha, PS
-                    Belghoria, Kolkata 76
+                    <b>{translation?.description || "Description:"}
+                    </b> {translation?.description_detail || "Marble flooring. Apartment was used once a year. Address: AC Sarkar Road, Ariadaha, PS Belghoria, Kolkata 76"}
+
                   </p>
 
                   {/* <div className="d-grid d-sm-block">
@@ -333,7 +366,8 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
             <section id="amenity">
               <div className="card border-0 shadow-1 mb-4">
                 <div className="card-body">
-                  <h4 className="mb-3 text-primary">Amenities</h4>
+                  <h4 className="mb-3 text-primary">{translation?.amenities || "Amenities"}
+                  </h4>
                   <ul className="list-info g-col-5 list-property-info mb-4">
                     {detailsData?.project_amenity?.length > 0 ? (
                       detailsData.project_amenity.map((amenity, index) => (
@@ -365,7 +399,8 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
               <div className="card border-0 shadow-1 mb-4">
                 <div className="card-body">
                   <h4 className="mb-3 text-primary">
-                    Why Buy In Real Estate Property
+                  {translation?.why_buy_real_estate || "Why Buy In Real Estate Property"}
+
                   </h4>
                   <ul className="list list-1 list-get">
                     {property_features
@@ -380,7 +415,8 @@ const ResidentialDetails = ({ propertyDetails, setVisible }) => {
                       className="ms-3"
                       onClick={() => setShowAll(true)}
                     >
-                      View More <i className="bi bi-plus-lg"></i>
+                      {translation?.view_more || "View More"}
+                      <i className="bi bi-plus-lg"></i>
                     </a>
                   )}
                 </div>
