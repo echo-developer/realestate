@@ -2,6 +2,7 @@
 import { useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
+import useTranslation from "@/hooks/useTranslation";
 
 const EditImageGallery = ({
     flatImageTab,
@@ -11,7 +12,7 @@ const EditImageGallery = ({
     propertyId,
     setPropertyData
 }) => {
-    
+
     const { callApi } = AuthUser();
     const [activeTab, setActiveTab] = useState(flatImageTab?.[0]?.key || "");
     const [tabData, setTabData] = useState({});
@@ -19,7 +20,7 @@ const EditImageGallery = ({
     const [currentImage, setCurrentImage] = useState(null);
     const [newCaption, setNewCaption] = useState("");
     const [isCaptionEditing, setIsCaptionEditing] = useState(false);
-
+const translation = useTranslation();
     const galleryData = Array.isArray(inputState?.galleries)
         ? inputState.galleries.find((gallery) => gallery.gallery === activeTab)
         : null;
@@ -42,109 +43,109 @@ const EditImageGallery = ({
     };
 
     const uploadFiles = async (fileArray) => {
-    const updatedTabData = { ...tabData };
-
-    
-
-    for (const file of fileArray) {
-        try {
-            const formData = new FormData();
-            formData.append("image_key", activeTab);
-            formData.append("property_id", propertyId);
-            formData.append("image", file);
-
-            const response = await callApi({
-                api: `/property_image_upload`,
-                method: "POST",
-                data: formData,
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-
-            if (response && response.status === 1) {
-                // Assuming the response structure contains images with 'id' and 'filename'
-                const uploadedFile = response.data.images?.at(-1);
-                const uploadedImageUrl = correctPath(response.data?.images?.at(-1).image_url);
+        const updatedTabData = { ...tabData };
 
 
-                if (!updatedTabData[activeTab]) {
-                    updatedTabData[activeTab] = {
-                        gallery: activeTab,
-                        caption: "",
-                        images: [],
-                    };
-                }
 
-                const newImage = {
-                    image_id: uploadedFile.id,  // Ensure 'id' exists in the response
-                    image_name: uploadedFile.filename,
-                    image_url: uploadedImageUrl,
-                };
+        for (const file of fileArray) {
+            try {
+                const formData = new FormData();
+                formData.append("image_key", activeTab);
+                formData.append("property_id", propertyId);
+                formData.append("image", file);
 
-                updatedTabData[activeTab]?.images?.push(newImage);
+                const response = await callApi({
+                    api: `/property_image_upload`,
+                    method: "POST",
+                    data: formData,
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
 
-                setInputState((prevState) => ({
-                    ...prevState,
-                    galleries: prevState.galleries.map((gallery) =>
-                        gallery.gallery === activeTab
-                            ? {
-                                  ...gallery,
-                                  images: [
-                                      ...(gallery.images || []),
-                                      newImage,
-                                  ],
-                              }
-                            : gallery
-                    ),
-                }));
-                const existingTab = propertyData?.galleries?.find(
-                    (item) => item?.gallery === activeTab
-                  );
-                if(existingTab) {
-                    const galaryArr = propertyData?.galleries?.map((item => {
-                        if(item?.gallery === activeTab) {
-                            return {
-                                ...item,
-                                images: [...item?.images, newImage]
-                            }
-                        } else {
-                            return item;
-                        }
-                    }))
-                    setPropertyData(prev => {
-                        return {
-                            ...prev,
-                            galleries: galaryArr
-                        }
-                    })
-                } else {
-                    const newTab = {
-                        gallery: activeTab,
-                        images: [newImage]
+                if (response && response.status === 1) {
+                    // Assuming the response structure contains images with 'id' and 'filename'
+                    const uploadedFile = response.data.images?.at(-1);
+                    const uploadedImageUrl = correctPath(response.data?.images?.at(-1).image_url);
+
+
+                    if (!updatedTabData[activeTab]) {
+                        updatedTabData[activeTab] = {
+                            gallery: activeTab,
+                            caption: "",
+                            images: [],
+                        };
                     }
-                    setPropertyData(prev => {
-                        return {
-                            ...prev,
-                            galleries: [...prev?.galleries, newTab]
+
+                    const newImage = {
+                        image_id: uploadedFile.id,  // Ensure 'id' exists in the response
+                        image_name: uploadedFile.filename,
+                        image_url: uploadedImageUrl,
+                    };
+
+                    updatedTabData[activeTab]?.images?.push(newImage);
+
+                    setInputState((prevState) => ({
+                        ...prevState,
+                        galleries: prevState.galleries.map((gallery) =>
+                            gallery.gallery === activeTab
+                                ? {
+                                    ...gallery,
+                                    images: [
+                                        ...(gallery.images || []),
+                                        newImage,
+                                    ],
+                                }
+                                : gallery
+                        ),
+                    }));
+                    const existingTab = propertyData?.galleries?.find(
+                        (item) => item?.gallery === activeTab
+                    );
+                    if (existingTab) {
+                        const galaryArr = propertyData?.galleries?.map((item => {
+                            if (item?.gallery === activeTab) {
+                                return {
+                                    ...item,
+                                    images: [...item?.images, newImage]
+                                }
+                            } else {
+                                return item;
+                            }
+                        }))
+                        setPropertyData(prev => {
+                            return {
+                                ...prev,
+                                galleries: galaryArr
+                            }
+                        })
+                    } else {
+                        const newTab = {
+                            gallery: activeTab,
+                            images: [newImage]
                         }
-                    })   
+                        setPropertyData(prev => {
+                            return {
+                                ...prev,
+                                galleries: [...prev?.galleries, newTab]
+                            }
+                        })
+                    }
+
+
+
+                    toast.success("File Uploaded Successfully");
+                } else {
+                    toast.error(response?.message || "File upload failed.");
                 }
-
-
-
-                toast.success("File Uploaded Successfully");
-            } else {
-                toast.error(response?.message || "File upload failed.");
+            } catch (error) {
+                console.error("Upload Error:", error);
+                toast.error("Error uploading file");
             }
-        } catch (error) {
-            console.error("Upload Error:", error);
-            toast.error("Error uploading file");
         }
-    }
 
-    setTabData(updatedTabData);
-};
+        setTabData(updatedTabData);
+    };
 
 
     const handleRemoveFile = async (imageId) => {
@@ -168,7 +169,7 @@ const EditImageGallery = ({
                 }));
 
                 const galaryArr = propertyData?.galleries?.map((item => {
-                    if(item?.gallery === activeTab) {
+                    if (item?.gallery === activeTab) {
                         const newArr = item?.images?.filter((img) => img?.image_id !== imageId);
                         return {
                             ...item,
@@ -190,11 +191,11 @@ const EditImageGallery = ({
                     galleries: prevState.galleries.map((gallery) =>
                         gallery.gallery === activeTab
                             ? {
-                                  ...gallery,
-                                  images: gallery.images.filter(
-                                      (image) => image.image_id !== imageId
-                                  ),
-                              }
+                                ...gallery,
+                                images: gallery.images.filter(
+                                    (image) => image.image_id !== imageId
+                                ),
+                            }
                             : gallery
                     ),
                 }));
@@ -215,13 +216,13 @@ const EditImageGallery = ({
             galleries: prevState.galleries.map((gallery) =>
                 gallery.gallery === activeTab
                     ? {
-                          ...gallery,
-                          images: gallery.images.map((image) =>
-                              image.image_id === currentImage.image_id
-                                  ? { ...image, caption: newCaption }
-                                  : image
-                          ),
-                      }
+                        ...gallery,
+                        images: gallery.images.map((image) =>
+                            image.image_id === currentImage.image_id
+                                ? { ...image, caption: newCaption }
+                                : image
+                        ),
+                    }
                     : gallery
             ),
         }));
@@ -238,12 +239,12 @@ const EditImageGallery = ({
 
             if (response && response.status === 1) {
                 toast.success("Caption updated successfully");
-                setIsCaptionEditing(false); 
+                setIsCaptionEditing(false);
                 // THIS CODE IS FOR UPDATING THE LOACAL STATE 
                 const newGalaryTab = propertyData?.galleries?.find(item => item?.gallery === activeTab)
-                if(newGalaryTab) {
+                if (newGalaryTab) {
                     const imgArr = newGalaryTab?.images?.map((img, i) => {
-                        if(img?.image_id === currentImage?.image_id) {
+                        if (img?.image_id === currentImage?.image_id) {
                             return {
                                 ...img,
                                 caption: newCaption
@@ -255,7 +256,7 @@ const EditImageGallery = ({
                     newGalaryTab.images = imgArr;
                 }
                 const newGalaryArr = propertyData?.galleries?.map((tab, i) => {
-                    if(tab?.gallery === newGalaryTab?.gallery) {
+                    if (tab?.gallery === newGalaryTab?.gallery) {
                         return newGalaryTab;
                     } else {
                         return tab;
@@ -311,9 +312,8 @@ const EditImageGallery = ({
                         {flatImageTab.map((tab, index) => (
                             <li className="nav-item" key={index}>
                                 <a role="button"
-                                    className={`nav-link ${
-                                        activeTab === tab.key ? "active" : ""
-                                    }`}
+                                    className={`nav-link ${activeTab === tab.key ? "active" : ""
+                                        }`}
                                     onClick={() => handleTabChange(tab.key)}
                                 >
                                     {tab.name}
@@ -337,14 +337,12 @@ const EditImageGallery = ({
                     />
                     <i className="bi bi-upload"></i>
                     <p>
-                        Drag &amp; drop files here or{" "}
-                        <span className="text-site">click</span> to select files
+                        {translation?.drag || "Drag"} &amp;{translation?.drop_files_here || "drop files here or"}  {" "}
+                        <span className="text-site">{translation?.click || "click"}</span> {translation?.to_select_files || "to select files"}
                     </p>
                 </div>
                 <p className="text-help">
-                    Accepted formats are .jpg, .gif, .bmp &amp; .png. Maximum
-                    size allowed is 20 MB. Minimum dimensions allowed are 600 x
-                    400 pixels.
+                    {translation?.accepted_formats_are || "Accepted formats are .jpg, .gif, .bmp &amp; .png. Maximum size allowed is 20 MB. Minimum dimensions allowed are 600 x 400 pixels."}
                 </p>
             </div>
 

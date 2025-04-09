@@ -904,7 +904,7 @@ const Index = () => {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>{translation?.edit || "Edit"}  {formatTabName(selectedItem)}</Modal.Title>
+          <Modal.Title>{translation?.edit || "Edit"}  {formatTabName[selectedItem]}</Modal.Title>
         </Modal.Header>
         <Modal.Body>{renderModalContent()}</Modal.Body>
         {selectedItem !== "galleries" ? (
