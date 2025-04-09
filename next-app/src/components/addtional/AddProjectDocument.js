@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
+import useTranslation from "@/hooks/useTranslation";
 
 const ProjectDocumentModal = ({ propId, show, onClose }) => {
   const { callApi } = AuthUser();
@@ -17,7 +18,7 @@ const ProjectDocumentModal = ({ propId, show, onClose }) => {
     project_id: propId,
   });
   const [loading, setLoading] = useState(false);
-
+const translation = useTranslation();
   // Fetch Previous Documents
   const fetchDocuments = async () => {
     try {
@@ -130,19 +131,19 @@ const ProjectDocumentModal = ({ propId, show, onClose }) => {
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Upload Documents</Modal.Title>
+        <Modal.Title>{translation?.upload_documents || "Upload Documents"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {/* Display Previous Documents */}
-        <h6>Previous Documents</h6>
+        <h6>{translation?.previous_documents || "Previous Documents"}</h6>
         {documents?.length === 0 ? (
-          <p>No documents added yet.</p>
+          <p>{translation?.no_documents_yet || "No documents added yet."}</p>
         ) : (
           <ul className="list-unstyled">
             {documents?.map((doc, index) => (
               <li key={index} className="d-flex align-items-center mb-3">
                 <span className="me-3">
-                  {doc?.certificate_name} (Reg No: {doc?.certificate_number}) -
+                  {doc?.certificate_name} ({translation?.reg_no || "Reg No"} {doc?.certificate_number}) -
                 </span>
                 {doc?.filename_url?.endsWith(".pdf") ? (
                   <a
@@ -150,7 +151,7 @@ const ProjectDocumentModal = ({ propId, show, onClose }) => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    View
+                    {translation?.view || "View"}
                   </a>
                 ) : (
                   <img
@@ -172,27 +173,27 @@ const ProjectDocumentModal = ({ propId, show, onClose }) => {
         <hr />
 
         {/* Form for New Upload */}
-        <h6>Upload New Document</h6>
+        <h6>{translation?.upload_new_document || "Upload New Document"}</h6>
         <Form.Group className="mb-3">
-          <Form.Label>Registration Number</Form.Label>
+          <Form.Label>{translation?.registration_number || "Registration Number"}</Form.Label>
           <Form.Control
             type="text"
             value={currentDoc.certificate_number}
             onChange={(e) => handleChange("certificate_number", e.target.value)}
-            placeholder="Enter Registration Number"
+            placeholder={translation?.enter_registration_number || "Enter Registration Number"}
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Document Name</Form.Label>
+          <Form.Label>{translation?.document_name || "Document Name"}</Form.Label>
           <Form.Control
             type="text"
             value={currentDoc.certificate_name}
             onChange={(e) => handleChange("certificate_name", e.target.value)}
-            placeholder="Enter Document Name"
+            placeholder={translation?.enter_document_name || "Enter Document Name"}
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Upload File</Form.Label>
+          <Form.Label>{translation?.upload_file || "Upload File"}</Form.Label>
           <Form.Control
             type="file"
             onChange={(e) => handleFileChange(e.target.files[0])}
@@ -203,14 +204,14 @@ const ProjectDocumentModal = ({ propId, show, onClose }) => {
         {fileUrl &&
           (fileUrl.endsWith(".pdf") ? (
             <p>
-              <strong>Uploaded File: </strong>
+              <strong>{translation?.uploaded_file || "Uploaded File:"} </strong>
               <a href={fileUrl} target="_blank" rel="noopener noreferrer">
-                View PDF
+              {translation?.view_pdf || "View PDF"}
               </a>
             </p>
           ) : (
             <div>
-              <strong>Uploaded Image Preview:</strong>
+              <strong>{translation?.uploaded_image_preview || "Uploaded Image Preview:"}</strong>
               <img
                 src={fileUrl}
                 alt="Uploaded Document"
@@ -223,7 +224,7 @@ const ProjectDocumentModal = ({ propId, show, onClose }) => {
         {newDocuments.length > 0 && (
           <>
             <hr />
-            <h6>Newly Uploaded Documents</h6>
+            <h6>{translation?.newly_uploaded_documents || "Newly Uploaded Documents"}</h6>
             <ul className="list-unstyled">
               {newDocuments?.map((doc, index) => (
                 <li key={index} className="d-flex align-items-center mb-3">
@@ -237,7 +238,7 @@ const ProjectDocumentModal = ({ propId, show, onClose }) => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      View PDF
+                       {translation?.view_pdf || "View PDF"}
                     </a>
                   ) : (
                     <img
@@ -263,7 +264,7 @@ const ProjectDocumentModal = ({ propId, show, onClose }) => {
           onClick={saveDocumentToAPI}
           disabled={loading}
         >
-          {loading ? "Saving..." : "Save Dcoument"}
+          {loading ? "Saving..." :`${translation?.save_document || "Save Document"}`}
         </Button>
       </Modal.Footer>
     </Modal>

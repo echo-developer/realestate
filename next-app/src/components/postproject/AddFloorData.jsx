@@ -19,7 +19,7 @@ const AddFloorData = ({ show, handleClose, propId }) => {
       fetchFloorData();
     }
   }, [propId]);
-const translation = useTransition();
+const translation = useTranslation();
   const fetchFloorData = async () => {
     setLoading(true); // Set loading state to true while fetching
     try {
