@@ -206,7 +206,7 @@
   "please_enter_a_project_name_or_locality": "Please enter a project name or locality.",
   "please_enter_a_locality": "Please enter a locality.",
   "please_select_a_city": "Please select a city.",
-  "possession_status": "Possession:",
+  "possession_status": "Possession: Status",
   "enter_amount": "Enter Amount",
   "enter_token_amount": "Enter Token Amount",
   "enter_locality": "Enter Locality",
