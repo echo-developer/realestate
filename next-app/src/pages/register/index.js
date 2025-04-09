@@ -100,24 +100,24 @@ const Index = () => {
     }
   };
   const handleOtpChange = (e, index) => {
-    const value = e.target.value.replace(/\D/, "");
-    if (!value) return;
-
+    const value = e.target.value.replace(/\D/, ""); // Only digits
+  
     const newOtp = [...otp];
-    newOtp[index] = value;
+    newOtp[index] = value; // Even if value is empty, we want to allow it
     setOtp(newOtp);
-
-    // Move to next input
-    if (value && index < 5) {
+  
+    // Move to next input if a digit is typed
+    if (value && index < otp.length - 1) {
       const next = document.querySelector(`input[name='otp-${index + 1}']`);
       if (next) next.focus();
     }
-
-    // Auto verify if 6 digits filled
+  
+    // Auto verify only if all fields are filled
     if (newOtp.every((digit) => digit !== "")) {
       handleVerifyOTP(newOtp.join(""));
     }
   };
+  
 
   const handleVerifyOTP = async (values) => {
     let response;
@@ -389,19 +389,25 @@ const Index = () => {
                               <div className="d-flex gap-2 justify-content-between mb-3">
                                 {otp.map((digit, index) => (
                                   <input
-                                    key={index}
-                                    type="text"
-                                    inputMode="numeric"
-                                    maxLength={1}
-                                    name={`otp-${index}`}
-                                    value={digit}
-                                    onChange={(e) => handleOtpChange(e, index)}
-                                    className="form-control text-center"
-                                    style={{
-                                      height: "50px",
-                                      fontSize: "20px",
-                                    }}
-                                  />
+                                  key={index}
+                                  type="text"
+                                  inputMode="numeric"
+                                  maxLength={1}
+                                  name={`otp-${index}`}
+                                  value={digit}
+                                  onChange={(e) => handleOtpChange(e, index)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Backspace" && !otp[index] && index > 0) {
+                                      const prev = document.querySelector(`input[name='otp-${index - 1}']`);
+                                      if (prev) prev.focus();
+                                    }
+                                  }}
+                                  className="form-control text-center"
+                                  style={{
+                                    height: "50px",
+                                    fontSize: "20px",
+                                  }}
+                                />
                                 ))}
                               </div>
                             )}
