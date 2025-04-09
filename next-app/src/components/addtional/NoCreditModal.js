@@ -14,18 +14,23 @@ function NoCreditModal({ show, onHide }) {
   return (
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header closeButton>
-        <Modal.Title>No Credits Available</Modal.Title>
+        <Modal.Title>{translation?.no_credits_available || "No Credits Available"}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>You don’t have enough credits to proceed.</p>
-        <p>Please upgrade your membership to continue.</p>
+        <p>{translation?.not_enough_credits || "You don’t have enough credits to proceed."}
+        </p>
+        <p>{translation?.upgrade_membership_to_continue || "Please upgrade your membership to continue."}
+        </p>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onHide}>
-          Cancel
+        {translation?.cancel || "Cancel"}
+
         </Button>
         <Button variant="primary" onClick={goToMembership}>
-          Go to Membership
+        {translation?.go_to_membership || "Go to Membership"}
+
         </Button>
       </Modal.Footer>
     </Modal>
