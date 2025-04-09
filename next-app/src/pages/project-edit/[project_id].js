@@ -406,7 +406,7 @@ const Index = () => {
             <FloatingLabel controlId="" label="Select Project Budget:">
               <Form.Control
                 type="number"
-                placeholder="Enter Project budget"
+                placeholder={translation?.enter_project_budget || "Enter Project budget"}
                 value={inputValue?.expected_price}
                 onChange={(e) =>
                   setInputValue((prevState) => ({
@@ -434,7 +434,7 @@ const Index = () => {
               <Form.Control
                 as="textarea"
                 id="address-input"
-                placeholder="Enter the address here"
+                placeholder={translation?.enter_the_address_here || "Enter the address here"}
                 rows={4}
                 value={inputValue[selectedItem] || ""}
                 onChange={(e) =>
@@ -498,7 +498,7 @@ const Index = () => {
                   }))
                 }
               >
-                <option value="">Select...</option>
+                <option value="">{translation?.select || "Select..."}</option>
                 {options?.all_furnish?.map((furnish) => (
                   <option key={furnish.furnish_id} value={furnish.furnish_id}>
                     {furnish.furnish_name}
@@ -532,7 +532,7 @@ const Index = () => {
                   }))
                 }
               >
-                <option value="">Select Parking Type</option>
+                <option value="">{translation?.select_parking_type || "Select Parking Type"}</option>
                 {parkingOptions.map((parking) => (
                   <option key={parking.key} value={parking.key}>
                     {parking.value}
@@ -566,7 +566,7 @@ const Index = () => {
                   placeholder="Carpet Area"
                 />
               </FloatingLabel>
-              <span className="input-group-text">sqft</span>
+              <span className="input-group-text">{translation?.sqft || "Sqft"}</span>
             </div>
 
             <div className="input-group">
@@ -578,7 +578,7 @@ const Index = () => {
                   placeholder="Super Area"
                 />
               </FloatingLabel>
-              <span className="input-group-text">sqft</span>
+              <span className="input-group-text">{translation?.sqft || "Sqft"}</span>
             </div>
           </>
         );
@@ -598,7 +598,7 @@ const Index = () => {
                   }))
                 }
               >
-                <option value="">Select...</option>
+                <option value="">{translation?.select || "Select..."}</option>
                 {facingOptions.map((facingType) => {
                   return (
                     <option key={facingType.key} value={facingType.key}>
@@ -616,7 +616,7 @@ const Index = () => {
           <>
             <Form.Group>
               <Form.Label className="form-label d-block">
-                Select Overlooking Features:
+              {translation?.select_overlooking_features || "Select Overlooking Features:"}
               </Form.Label>
               {projectFeatures?.map((item) => (
                 <Form.Check
@@ -649,7 +649,7 @@ const Index = () => {
           <>
             <Form.Group>
               <Form.Label className="form-label d-block">
-                Select Flooring Types:
+              {translation?.select_flooring_types || "Select Flooring Types:"}
               </Form.Label>
               {flooringOptions?.map((flooring) => (
                 <Form.Check
@@ -695,7 +695,8 @@ const Index = () => {
                 }
               >
                 <option value="" disabled>
-                  Select Water Availability
+                {translation?.select_water_availability || "Select Water Availability"}
+
                 </option>
                 {waterAvailabilityOptions.map((option) => (
                   <option key={option.key} value={option.key}>
@@ -711,7 +712,7 @@ const Index = () => {
         return (
           <>
             <label className="form-label d-block">
-              Select Electricity Status:
+            {translation?.select_electricity_status || "Select Electricity Status"}
             </label>
             <select
               value={inputValue[selectedItem] || ""}
@@ -724,7 +725,7 @@ const Index = () => {
               className="form-select"
             >
               <option value="" disabled>
-                Select Electricity Status
+              {translation?.select_electricity_status || "Select Electricity Status"}
               </option>
               {electricityStatusOptions.map((option) => (
                 <option key={option.key} value={option.key}>
@@ -738,7 +739,7 @@ const Index = () => {
       case "type_of_ownership":
         return (
           <>
-            <label className="form-label d-block">Select Ownership Type:</label>
+            <label className="form-label d-block"> {translation?.select_ownership_type || "Select Ownership Type"}</label>
             <select
               value={inputValue[selectedItem] || ""}
               onChange={(e) =>
@@ -750,7 +751,7 @@ const Index = () => {
               className="form-select"
             >
               <option value="" disabled>
-                Select Ownership Type
+              {translation?.select_ownership_type || "Select Ownership Type:"}
               </option>
               {ownershipTypeOptions.map((option) => (
                 <option key={option.key} value={option.key}>
@@ -764,7 +765,7 @@ const Index = () => {
       case "project_approved":
         return (
           <>
-            <label className="form-label d-block">Approved By:</label>
+            <label className="form-label d-block">{translation?.approved_by || "Approved By:"}</label>
             <select
               value={inputValue[selectedItem] || ""}
               onChange={(e) =>
@@ -776,7 +777,7 @@ const Index = () => {
               className="form-select"
             >
               <option value="" disabled>
-                Select Anyone
+              {translation?.select_anyone || "Select Anyone"}
               </option>
               {propertyApprovedByOptions?.map((option) => (
                 <option key={option.key} value={option.key}>
@@ -816,7 +817,7 @@ const Index = () => {
 
             <FloatingLabel controlId="floatingInput" label="Total Units:">
               <Form.Control
-                placeholder="total units"
+                placeholder={translation?.total_units || "total units"}
                 type="number"
                 value={inputValue?.total_units}
                 onChange={(e) =>
@@ -867,17 +868,16 @@ const Index = () => {
     <DashboardLayout>
       <div className="col-lg col-12">
         <div className="p-4">
-          <h3>Edit & Preview Your Project Ad</h3>
+          <h3>{translation?.edit_preview_project_ad || "Edit & Preview Your Project Ad"}</h3>
           <p>
-            Modify your ad by clicking the appropriate Edit or Add link. Changes
-            may take up to 24 hours to appear online.
+          {translation?.edit_preview_note || "Modify your ad by clicking the appropriate Edit or Add link. Changes may take up to 24 hours to appear online."}
           </p>
 
           <Row className="row">
             <Col className="col-lg-8">
               <div className="list-container">
                 {/* Basic Details */}
-                <h5 className="text-uppercase">Basic Details</h5>
+                <h5 className="text-uppercase">{translation?.basic_details || "Basic Details"}</h5>
                 <ListGroup
                   className="mb-3 p-0"
                   style={{ listStyleType: "none" }}
@@ -897,7 +897,7 @@ const Index = () => {
                 </ListGroup>
 
                 {/* Property Features */}
-                <h5 className="text-uppercase">Project Features</h5>
+                <h5 className="text-uppercase">{translation?.project_features || "Project Features"}</h5>
                 <ListGroup
                   className="mb-3 p-0"
                   style={{ listStyleType: "none" }}
@@ -917,7 +917,7 @@ const Index = () => {
                 </ListGroup>
 
                 {/* Additional Information */}
-                <h5 className="text-uppercase">Additional Features</h5>
+                <h5 className="text-uppercase">{translation?.additional_features || "Additional Features"}</h5>
                 <ListGroup className="p-0" style={{ listStyleType: "none" }}>
                   {groupItems.additional.map((item, index) => (
                     <ListGroup.Item key={index}>
