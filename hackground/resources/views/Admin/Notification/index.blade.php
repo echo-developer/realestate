@@ -78,7 +78,7 @@
                             </th>
                             <th>ID</th>
                             <th style="min-width:300px; width:85%">Notification</th>
-                            <th>Date</th>
+                            <th>Status</th>
                             <th class="text-right">Action</th>
                         </tr>
                     </thead>
@@ -94,7 +94,7 @@
                                 </div>
                             </td>
                             <td>{{ $notification->id }}</td>
-                            <td>{{ $notification->message }}
+                            <td>   {!! $notification->message !!}
                                 <div><small class="text-muted"> <i class="fa fa-clock"></i>
                                         {{ $notification->created_date }}</small></div>
                             </td>
@@ -279,4 +279,16 @@
         });
     });
 </script>
+
+<!-- <script>
+    setInterval(() => {
+        fetch("{{ route('admin.notifications.fetch') }}")
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector("#main_table tbody").innerHTML = data.html;
+                $('input[data-toggle="toggle"]').bootstrapToggle();
+            });
+    }, 10000); 
+
+</script> -->
 @endpush

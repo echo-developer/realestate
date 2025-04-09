@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Admin extends Model
 {
+    use Notifiable;
     protected $table = 'admin';
     protected $fillable = [
 
@@ -26,7 +28,7 @@ class Admin extends Model
 
     public function admin_role()
     {
-        return $this->belongsTo(Admin_Role::class, 'role', 'id'); // Eloquent relationship still works
+        return $this->belongsTo(Admin_Role::class, 'role', 'id');
     }
 
     use HasFactory;

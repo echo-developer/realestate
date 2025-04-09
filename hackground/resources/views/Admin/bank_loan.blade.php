@@ -75,7 +75,7 @@
                         </tr>
                     </thead>
 
-                    <tbody id="user">
+                    <tbody>
                         @foreach($data as $item)
                         <tr>
                             <td>{{$item->id}}</td>
@@ -86,7 +86,7 @@
                                 <img src="{{ asset('user_upload/bank/' . $item->logo) }}" alt="Bank Logo" width="90" height="50">
                             </td>
                             <td>
-                                <input data-id="" class="userstatus d-none" type="checkbox"
+                                <input data-id="{{$item->id}}" class="status d-none" id="status" type="checkbox"
                                     data-toggle="toggle" data-on="Active" data-off="Inactive"
                                     data-onstyle="success" data-offstyle="danger" data-size="mini" {{$item->status == 1  ? 'checked':''}}>
                             </td>
@@ -94,10 +94,10 @@
                             <td class="text-right">
 
                                 <i class="fa fa-edit text-success fa-md editButton"
-                                    data-userid="{{$item->id}}"></i>
+                                    data-id="{{$item->id}}"></i>
 
-                                <i class="fa fa-trash text-danger fa-md UserDeleteButton"
-                                    data-userid="{{$item->id}}"></i>
+                                <i class="fa fa-trash text-danger fa-md deleteButton"
+                                    data-id="{{$item->id}}"></i>
 
                             </td>
                         </tr>
@@ -124,6 +124,7 @@
                 <form id="bankForm" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="filename" id="file">
+                    <input type="hidden" name="id" id="id">
 
                     <div class="mb-3">
                         <label for="name" class="form-label">Bank Name</label>
@@ -147,7 +148,9 @@
                         <label for="logo" class="form-label">Bank Logo</label>
                         <input type="file" class="form-control" id="logo" accept="image/*" required>
                         <div class="invalid-feedback" id="logo_error"></div>
+                        <img id="logo_preview" src="" alt="Logo Preview" style="max-height: 80px; margin-top: 10px; display: none;">
                     </div>
+
 
                     <div class="mb-3">
                         <label class="form-label">Status</label>
@@ -179,23 +182,26 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const saveButton = document.getElementById('saveButton');
+        $('[data-toggle="toggle"]').bootstrapToggle();
         const modalElement = document.getElementById('bankModal');
         const modal = new bootstrap.Modal(modalElement);
         const form = document.getElementById('bankForm');
         const logoInput = document.getElementById('logo');
         const fileInput = document.getElementById('file');
         const addButton = document.getElementById('addButton');
+        const saveButton = document.getElementById('saveButton');
+        const bankModalLabel = document.getElementById('bankModalLabel');
 
-        // Reset form and show modal
+        // Event: Open modal and reset form
         addButton?.addEventListener('click', () => {
             form.reset();
             clearErrors();
+            bankModalLabel.innerText = 'Add'
             modal.show();
         });
 
-        // Save form data
-        saveButton.addEventListener('click', async () => {
+        // Event: Save form data
+        saveButton?.addEventListener('click', async () => {
             clearErrors();
             const formData = new FormData(form);
 
@@ -211,12 +217,12 @@
                 const result = await response.json();
 
                 if (result.status) {
-                    alert('Saved successfully!');
                     modal.hide();
-                    // Optionally refresh your data table here
+                    localStorage.setItem('successMessage', result.message);
+                    location.reload();
                 } else {
+                    handleValidationErrors(result.errors);
                     alert('Something went wrong.');
-                    console.log(result);
                 }
             } catch (error) {
                 console.error('Save error:', error);
@@ -224,8 +230,8 @@
             }
         });
 
-        // Upload logo immediately on file change
-        logoInput.addEventListener('change', async () => {
+        // Event: Upload logo on file change
+        logoInput?.addEventListener('change', async () => {
             const file = logoInput.files[0];
             if (!file) return;
 
@@ -255,17 +261,150 @@
             }
         });
 
-        // Clear validation errors
-        function clearErrors() {
-            ['name', 'interest_rate', 'processing_fees', 'logo'].forEach(id => {
-                const input = document.getElementById(id);
-                const errorDiv = document.getElementById(`${id}_error`);
+        // Delegated Event: Handle edit button clicks
+        document.body.addEventListener('click', async (e) => {
+            if (e.target.classList.contains('editButton')) {
+                const id = e.target.dataset.id;
+                if (!id) return;
+                try {
+                    const response = await fetch(`{{ route('bank.loan.edit', ['id' => '__ID__']) }}`.replace('__ID__', id));
+                    const result = await response.json();
 
-                if (input) input.classList.remove('is-invalid');
-                if (errorDiv) errorDiv.textContent = '';
+                    if (result) {
+                        populateForm(result);
+                        bankModalLabel.innerText = 'Edit'
+                        modal.show();
+                    }
+                } catch (error) {
+                    console.error('Edit fetch error:', error);
+                    alert('Failed to load data for editing.');
+                }
+            }
+        });
+
+        // Delegated Event: Handle delete button clicks
+        document.body.addEventListener('click', async (e) => {
+            if (e.target.classList.contains('deleteButton')) {
+                const id = e.target.dataset.id;
+                if (!id) return;
+
+                const confirmDelete = confirm('Are you sure you want to delete this bank loan?');
+                if (!confirmDelete) return;
+
+                try {
+                    const response = await fetch(`{{ route('bank.loan.delete') }}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                        },
+                        body: JSON.stringify({
+                            id: id
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (result.status) {
+                        localStorage.setItem('successMessage', result.message);
+                        location.reload();
+                    } else {
+                        alert(result.message || 'Delete failed.');
+                    }
+
+                } catch (error) {
+                    console.error('Delete fetch error:', error);
+                    alert('An error occurred while deleting the record.');
+                }
+            }
+        });
+
+        $(document).on('change', '#status', function() {
+            const id = $(this).data('id');
+            const status = $(this).prop('checked') ? 1 : 0;
+
+            if (!id) return;
+
+            $.ajax({
+                url: `{{ route('bank.loan.status') }}`,
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('input[name="_token"]').val(),
+                },
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    id,
+                    status
+                }),
+                success: function(response) {
+                    if (response.status) {
+                        toastr.success('Request processed successfully.', "Status Changed");
+
+                    } else {
+                        alert('Status update failed.');
+                    }
+                },
+                error: function(err) {
+                    console.error('AJAX error:', err);
+                    alert('An error occurred while updating status.');
+                }
             });
-        }
+        });
     });
+
+
+
+    // Clear form validation errors
+    function clearErrors() {
+        ['name', 'interest_rate', 'processing_fees', 'logo'].forEach(id => {
+            const input = document.getElementById(id);
+            const errorDiv = document.getElementById(`${id}_error`);
+            input?.classList.remove('is-invalid');
+            if (errorDiv) errorDiv.textContent = '';
+        });
+    }
+
+    // Display validation errors
+    function handleValidationErrors(errors) {
+        if (!errors) return;
+        Object.keys(errors).forEach(key => {
+            const input = document.getElementById(key);
+            const errorDiv = document.getElementById(`${key}_error`);
+            input?.classList.add('is-invalid');
+            if (errorDiv) errorDiv.textContent = errors[key][0];
+        });
+    }
+
+    function populateForm(response) {
+        const form = document.getElementById('bankForm');
+        form.reset();
+        clearErrors();
+
+        // Set simple inputs
+        document.getElementById('id').value = response.data.id;
+        document.getElementById('name').value = response.data.bank_name;
+        document.getElementById('interest_rate').value = response.data.interest_rate;
+        document.getElementById('processing_fees').value = response.data.processing_fees;
+        document.getElementById('file').value = response.data.logo;
+
+        // Set status radio
+        if (response.data.status == 1) {
+            document.getElementById('status_1').checked = true;
+        } else {
+            document.getElementById('status_2').checked = true;
+        }
+
+        // Optional: Preview the logo if needed
+        if (response.data.logo_url) {
+            const logoPreview = document.getElementById('logo_preview');
+            if (logoPreview) {
+                logoPreview.src = response.data.logo_url;
+                logoPreview.style.display = 'block';
+            }
+        }
+    }
+
 </script>
+
 
 @endpush

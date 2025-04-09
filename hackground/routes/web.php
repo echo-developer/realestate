@@ -125,9 +125,12 @@ Route::middleware('admin_auth')->group(function () {
 
     Route::controller(NotificationController::class)->group(function () {
         Route::get('admin_notifiaction', 'Admin_notifiaction_Page')->name('Admin_notifiaction_Page');
+        Route::get('/admin/fetch-notifications', 'fetchLatest')->name('admin.notifications.fetch');
         Route::post('/noti_stausUp', 'notification_stausUpdate')->name('notification.stausUpdate');
         Route::post('/deleteNotification/{id}', 'deleteNotification')->name('deleteNotification');
     });
+
+
 
     Route::controller(AllSettingController::class)->group(function () {
         Route::get('/Settings/{group_key?}', 'view_AllsettingList')->name('view.AllsettingList');
@@ -507,6 +510,9 @@ Route::middleware('admin_auth')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('save', 'store')->name('store');
             Route::post('upload', 'upload')->name('upload');
+            Route::get('edit/{id}', 'edit')->name('edit');
+            Route::post('status', 'status')->name('status');
+            Route::post('delete', 'destroy')->name('delete');
         });
 });
 

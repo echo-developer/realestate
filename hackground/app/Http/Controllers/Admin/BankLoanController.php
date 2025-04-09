@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Models\BankLoan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -10,7 +11,7 @@ class BankLoanController extends Controller
     public function index()
     {
 
-        $data = BankLoan::select('id', 'bank_name', 'interest_rate', 'processing_fees', 'logo', 'status')->where('status', config('constants.STATUS_ACTIVE'))->get();
+        $data = BankLoan::select('id', 'bank_name', 'interest_rate', 'processing_fees', 'logo', 'status')->where('status','!=' ,config('constants.STATUS_DELETE'))->get();
 
         return view('Admin.bank_loan', compact('data'));
     }
@@ -25,11 +26,15 @@ class BankLoanController extends Controller
             'status' => (int)$request->status
         ];
 
-        BankLoan::create($data);
+        $bankLoan = BankLoan::updateOrCreate(
+            ['id' => $request->id],
+            $data
+        );
 
         return response()->json([
             'status' => true,
-            'data' => $request->all()
+            'message' => $request->id ? 'Updated successfully' : 'Created successfully',
+            'data' => $bankLoan
         ]);
     }
 
@@ -50,4 +55,50 @@ class BankLoanController extends Controller
             'file' => $uploadedFile,
         ]);
     }
+
+    public function edit($id)
+    {
+
+        $data = BankLoan::select('id', 'bank_name', 'interest_rate', 'processing_fees', 'logo', 'status')->where('id', $id)->first();
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ]);
+    }
+
+    public function destroy(Request $request)
+    {
+        $updated = BankLoan::where('id', $request->id)->update(['status' => -1]);
+
+        if ($updated) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Deleted successfully.'
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Bank loan not found or update failed.'
+            ]);
+        }
+    }
+
+    public function status(Request $request)
+    {
+        $updated = BankLoan::where('id', $request->id)->update(['status' => $request->status]);
+
+        if ($updated) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Status Upadted.'
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Status Upadtede failed.'
+            ]);
+        }
+    }
+    
 }

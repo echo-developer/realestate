@@ -87,7 +87,15 @@
             });
         }
     </script>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const successMessage = localStorage.getItem('successMessage');
+            if (successMessage) {
+                toastr.success(successMessage, '', toastrOptions);
+                localStorage.removeItem('successMessage');
+            }
+        });
+    </script>
     <script>
         const STATUS_ACTIVE = {
             !!json_encode(config('constants.STATUS_ACTIVE')) !!
@@ -107,8 +115,8 @@
             "timeOut": "3000",
         };
     </script>
-  
-  <script>
+
+    <script>
         $(document).ready(function() {
             // Ensure modal closes when clicking close button or outside the modal
             $('#Modal').on('hidden.bs.modal', function() {

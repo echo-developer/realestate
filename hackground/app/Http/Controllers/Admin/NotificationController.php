@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
@@ -16,7 +17,6 @@ class NotificationController extends Controller
     {
         $peginate = 10;
         $notifications = Notification::where('read_status', '!=', config('constants.STATUS_DELETE'))->paginate($peginate);
-
         return view('Admin.Notification.index')->with(compact('notifications'));
     }
 
