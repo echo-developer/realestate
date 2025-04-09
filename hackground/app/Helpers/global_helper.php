@@ -1262,7 +1262,8 @@ if (!function_exists('assign_free_plan')) {
     function assign_free_plan($user_id, $transactionId = null)
     {
 
-        $planDetails = MembershipPlans::with('plan_features')->find(1);
+        $planDetails = MembershipPlans::with('plan_features')->where('plan_type_id', 1)->first();
+
 
         $subscriptionDate = now();
         $expireDate = now()->addDays($planDetails->validity_days);
@@ -1371,6 +1372,7 @@ if (!function_exists('get_floor_numbers')) {
             });
 
             return true;
+
         }
     }
 }
