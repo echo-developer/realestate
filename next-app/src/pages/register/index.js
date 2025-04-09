@@ -263,7 +263,7 @@ const Index = () => {
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                   >
-                    {({ isValid, dirty, handleChange, handleBlur, values }) => (
+                    {({ isValid, dirty, handleChange, handleBlur, values, setFieldValue }) => (
                       <div className="card border-0 authentication-form">
                         <div className="card-body">
                           <Form autoComplete="off">
@@ -413,9 +413,11 @@ const Index = () => {
                                 className="form-control"
                                 placeholder=""
                                 name="password"
-                                onChange={(e) =>
-                                  checkPasswordStrength(e.target.value)
-                                }
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  setFieldValue("password", val); // update Formik state
+                                  checkPasswordStrength(val); // check strength
+                                }}
                               />
                               <label
                                 htmlFor="current-password"
