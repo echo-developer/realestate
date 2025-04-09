@@ -20,7 +20,7 @@ const AddPropertyData = ({
   const [validationErrors, setValidationErrors] = useState({});
   const [isFormValid, setIsFormValid] = useState(false);
   const [loading, setLoading] = useState(true);
-const translation = useTranslation();
+  const translation = useTranslation();
   const bhkTypes = ["1BHK", "2BHK", "3BHK", "4BHK", "5BHK"];
 
   useEffect(() => {
@@ -201,54 +201,64 @@ const translation = useTranslation();
     towers.forEach((tower, tIdx) => {
       // Tower validation
       if (!tower.tower_name?.trim()) {
-        errors[`tower_name_${tIdx}`] = "Tower name required";
+        errors[`tower_name_${tIdx}`] = `${translation?.tower_name_required || "Tower name required"}`;
         isValid = false;
       }
       if (!tower.lift_no || tower.lift_no < 1) {
-        errors[`lift_no_${tIdx}`] = "Lift number must be greater than 0";
+        errors[`lift_no_${tIdx}`] = `${translation?.lift_number_greater_than_zero || "Lift number must be greater than 0"}
+`;
         isValid = false;
       }
       if (!tower.stair_no || tower.stair_no < 1) {
-        errors[`stair_no_${tIdx}`] = "Stair number must be greater than 0";
+        errors[`stair_no_${tIdx}`] = `${translation?.stair_number_greater_than_zero || "Stair number must be greater than 0"}
+`;
         isValid = false;
       }
       if (!tower.fire_safety || tower.fire_safety < 1) {
-        errors[`fire_safety_${tIdx}`] = "Fire Safety number must be greater than 0";
+        errors[`fire_safety_${tIdx}`] = `${translation?.fire_safety_greater_than_zero || "Fire Safety number must be greater than 0"}
+`;
         isValid = false;
       }
 
       // Flat validation
       tower.floor_data.forEach((flat, fIdx) => {
         if (!flat.flat_no) {
-          errors[`flat_no_${tIdx}_${fIdx}`] = "Flat number required";
+          errors[`flat_no_${tIdx}_${fIdx}`] = `${translation?.flat_number_required || "Flat number required"}
+`;
           isValid = false;
         }
         if (!flat.floor_no) {
-          errors[`floor_no_${tIdx}_${fIdx}`] = "Floor number required";
+          errors[`floor_no_${tIdx}_${fIdx}`] = `${translation?.floor_number_required || "Floor number required"}
+`;
           isValid = false;
         }
 
         // BHK validation
         flat.bhk_configurations.forEach((bhk, bIdx) => {
           if (!bhk.bhk_type) {
-            errors[`bhk_type_${tIdx}_${fIdx}_${bIdx}`] = "BHK type required";
+            errors[`bhk_type_${tIdx}_${fIdx}_${bIdx}`] = `${translation?.bhk_type_required || "BHK type required"}
+`;
             isValid = false;
           }
           if (!bhk.carpet_area || bhk.carpet_area < 1) {
-            errors[`carpet_${tIdx}_${fIdx}_${bIdx}`] = "Invalid carpet area";
+            errors[`carpet_${tIdx}_${fIdx}_${bIdx}`] = `${translation?.invalid_carpet_area || "Invalid carpet area"}
+`;
             isValid = false;
           }
           if (!bhk.super_area || bhk.super_area < 1) {
-            errors[`super_${tIdx}_${fIdx}_${bIdx}`] = "Invalid super area";
+            errors[`super_${tIdx}_${fIdx}_${bIdx}`] = `${translation?.invalid_super_area || "Invalid super area"}
+`;
             isValid = false;
           }
           if (!bhk.property_price || bhk.property_price < 1) {
-            errors[`price_${tIdx}_${fIdx}_${bIdx}`] = "Invalid price";
+            errors[`price_${tIdx}_${fIdx}_${bIdx}`] = `${translation?.invalid_price || "Invalid price"}
+`;
             isValid = false;
           }
           if (!bhk.property_facing) {
             errors[`facing_${tIdx}_${fIdx}_${bIdx}`] =
-              "Property facing is required";
+              `${translation?.property_facing_required || "Property facing is required"}
+`;
             isValid = false;
           }
         });
@@ -507,8 +517,8 @@ const translation = useTranslation();
               {tower.floor_data.map((flat, flatIndex) => (
                 <fieldset key={flatIndex} className="border p-3 mb-3 position-relative">
                   <legend>
-                  {translation?.unit || "Unit"}
-                  {flatIndex + 1}
+                    {translation?.unit || "Unit"}
+                    {flatIndex + 1}
                   </legend>
                   <Button
                     variant="danger btn-delete"
@@ -829,7 +839,7 @@ const translation = useTranslation();
                 size="sm"
                 onClick={() => addFlat(towerIndex)}
               >
-               {translation?.add_floor || "Add Floor"}
+                {translation?.add_floor || "Add Floor"}
 
               </Button>
             </div>
@@ -838,11 +848,11 @@ const translation = useTranslation();
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose}>
-        {translation?.close || "Close"}
+          {translation?.close || "Close"}
 
         </Button>
         <Button variant="primary" onClick={handleSave} disabled={!isFormValid}>
-        {translation?.save || "Save"}
+          {translation?.save || "Save"}
 
         </Button>
       </Modal.Footer>
