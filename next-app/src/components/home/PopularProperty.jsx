@@ -86,7 +86,7 @@ const PopularProperty = () => {
                 <div
                   key={property.id}
                   className="owl-item active"
-                  style={{ width: '323px', marginRight: '20px' }}
+                  style={{ marginRight: '20px' }}
                 >
                   <article className="item">
                     <div className="card card-ads card-overlay">

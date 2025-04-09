@@ -132,7 +132,7 @@ const FeatureProperty = () => {
           <div className="owl-stage-outer">
             <div className="owl-stage" style={{ transform: "translate3d(0px, 0px, 0px)", transition: "all", width: "2700px" }}>
             {properties.map(property => (
-                <div className="owl-item" key={property.id} style={{ width: "430px", marginRight: "20px" }}>
+                <div className="owl-item" key={property.id} style={{marginRight: "20px" }}>
                   <article className="item">
                     <div className="card card-ads card-overlay" style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}>
                       <div className="card-image">

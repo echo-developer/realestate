@@ -1125,7 +1125,6 @@ ul {
 			}
 		}
 	}
-
 	ul {
 		&.list-info {
 			list-style: none;
@@ -1143,14 +1142,12 @@ ul {
 			}
 		}
 	}
-
 	.card-img-top {		
 		border-radius: 0.5rem 0.5rem 0 0;
 		display: block;
 		object-fit: cover;
 		height: 200px;
 	}
-
 	.card-footer {
 		background-color: $white;
 		display: flex;
@@ -1175,7 +1172,6 @@ ul {
 			}
 		}
 	}
-
 	.breadcrumb {
 		margin-bottom: 0.25rem;
 	}
@@ -1186,7 +1182,7 @@ ul {
 		height: 100%;
 		padding: 1rem;
 	}
-	&.card-overylay{
+	&.card-overlay{
 		border-radius: 0.5rem;
 		.ads-type, .badge-agent{
 			z-index: 100;

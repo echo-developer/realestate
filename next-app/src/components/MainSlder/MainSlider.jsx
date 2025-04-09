@@ -121,8 +121,8 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
 
     return (
         <div className="custom-carousel-container">
-            {!isMobile && data?.length > 4 && (
-                <div className="carousel-controls" style={{ top: "150px" }}>
+            {/* {!isMobile && data?.length > 4 && (
+                <div className="carousel-controls">
                     <button onClick={goToPrevSlide} className="prev-button">
                         <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                     </button>
@@ -130,7 +130,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                         <span className="carousel-control-next-icon" aria-hidden="true"></span>
                     </button>
                 </div>
-            )}
+            )} */}
 
 
             <Slider ref={sliderRef} {...settings}>
@@ -138,11 +138,11 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                     const firstImage = item?.galleries?.[0]?.images?.[0]?.image_url || "/assets/images/uploads/d0d74748da69d1067d797427796723c5.jpg";
                     const id = mainType === "property" ? "property_id" : "project_id";
                     return (
-                        <div className="owl-item" key={i} style={{ marginInline: '10px' }}>
+                        <div className="owl-item" key={i}>
                             <article className="item">
-                                <div className="card card-ads card-overlay" style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}>
-                                    <div className="card-image" style={{ height: "336px" }}>
-                                        <a href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }} target='_blank'>
+                                <div className="card card-ads card-overlay">
+                                    <div className="card-image">
+                                        <a href={`${url}/${item?.slug}`} target='_blank'>
                                             <Image alt="" height="200" width="286" className="card-img" src={firstImage} loading="lazy" />
                                         </a>
                                         <span className={`ads-type ${item?.post_for}`}>for {item?.post_for}</span>
@@ -151,13 +151,13 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                                         </span>
                                     </div>
                                     <div className="card-img-overlay">
-                                        <a href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }} target="_blank">
-                                            <h4>{item?.property_name || `${translation?.not_available ||"Not available"}`}</h4>
-                                        </a>
+                                        <h4><a href={`${url}/${item?.slug}`} target="_blank">
+                                            {item?.property_name || `${translation?.not_available ||"Not available"}`}
+                                        </a></h4>
                                         <ul className="list-info">
                                             {item?.property_type_for && (
                                                 <li>
-                                                    <i className="icon-img-flat"></i>{item?.property_type_for}
+                                                    <i className="icon-img-flat"></i> {item?.property_type_for}
                                                 </li>
                                             )}
                                             {item?.bedrooms && (
@@ -178,12 +178,12 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                                         </ul>
                                         {item?.address && (
                                             <p className="mb-1">
-                                                <i className="icon-feather-map-pin"></i>{item?.address || `${translation?.not_available ||"Not available"}`}
+                                                <i className="icon-feather-map-pin text-white me-1"></i>{item?.address || `${translation?.not_available ||"Not available"}`}
                                             </p>
                                         )}
                                         <div className="d-flex align-items-center">
                                             <h4 className="mb-0 flex-grow-1">{item?.price}</h4>
-                                            <a href={`${url}/${item?.slug}`} style={{ textDecoration: 'none', color: 'inherit' }} target="_blank">
+                                            <a href={`${url}/${item?.slug}`} className='btn btn-primary' style={{ zIndex: '11'}} target="_blank">
                                                 {translation?.book_now || "Book Now"}
                                             </a>
                                         </div>

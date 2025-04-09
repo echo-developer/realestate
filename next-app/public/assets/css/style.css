@@ -33297,16 +33297,16 @@ ul.list-agency-details > li > span:last-child {
   height: 100%;
   padding: 1rem;
 }
-.card-ads.card-overylay {
+.card-ads.card-overlay {
   border-radius: 0.5rem;
 }
-.card-ads.card-overylay .ads-type, .card-ads.card-overylay .badge-agent {
+.card-ads.card-overlay .ads-type, .card-ads.card-overlay .badge-agent {
   z-index: 100;
 }
-.card-ads.card-overylay .card-img {
+.card-ads.card-overlay .card-img {
   border-radius: 0.5rem;
 }
-.card-ads.card-overylay .card-img-overlay {
+.card-ads.card-overlay .card-img-overlay {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -33314,13 +33314,13 @@ ul.list-agency-details > li > span:last-child {
   color: #fff;
   z-index: 99;
 }
-.card-ads.card-overylay .card-img-overlay h4 > a, .card-ads.card-overylay .card-img-overlay .h4 > a {
+.card-ads.card-overlay .card-img-overlay h4 > a, .card-ads.card-overlay .card-img-overlay .h4 > a {
   color: #fff;
 }
-.card-ads.card-overylay .card-img-overlay ul.list-info {
+.card-ads.card-overlay .card-img-overlay ul.list-info {
   margin-bottom: 1rem;
 }
-.card-ads.card-overylay:hover .card-img-overlay {
+.card-ads.card-overlay:hover .card-img-overlay {
   background-color: rgba(var(--bs-black-rgb), 0.5);
 }
 
