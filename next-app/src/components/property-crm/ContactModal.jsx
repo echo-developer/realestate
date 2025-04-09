@@ -1,6 +1,7 @@
 import { Modal, Button, Alert } from "react-bootstrap";
 import { useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
+import useTranslation from "@/hooks/useTranslation";
 
 function ContactModal({ show, handleClose, phone, email, submitHandler }) {
     const { } = AuthUser();
@@ -11,7 +12,7 @@ function ContactModal({ show, handleClose, phone, email, submitHandler }) {
         schedule_date: "",
         remarks: ""
     });
-
+const translation = useTranslation();
     // Contact button states
     const [showCallButton, setShowCallButton] = useState(true);
     const [showEmailButton, setShowEmailButton] = useState(true);
@@ -41,7 +42,7 @@ function ContactModal({ show, handleClose, phone, email, submitHandler }) {
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Contact Now</Modal.Title>
+                <Modal.Title>{translation?.contact_now || "Contact Now"}</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
@@ -57,7 +58,8 @@ function ContactModal({ show, handleClose, phone, email, submitHandler }) {
                                 }}
                                 className="w-100"
                             >
-                                📞 Call
+                                📞 {translation?.call || "Call"}
+
                             </Button>
                         ) : (
                             <Alert variant="info" className="mb-0 p-2 text-center">
@@ -77,7 +79,8 @@ function ContactModal({ show, handleClose, phone, email, submitHandler }) {
                                 }}
                                 className="w-100"
                             >
-                                ✉️ Email
+                                ✉️{translation?.email || "Email"}
+
                             </Button>
                         ) : (
                             <Alert variant="info" className="mb-0 p-2 text-center">
@@ -91,7 +94,8 @@ function ContactModal({ show, handleClose, phone, email, submitHandler }) {
                     {/* Contact Status Select */}
                     <div className="mb-3">
                         <label htmlFor="remark_type" className="form-label">
-                            Contact Status
+                        {translation?.contact_status || "Contact Status"}
+
                         </label>
                         <select 
                             className="form-select" 
@@ -101,17 +105,23 @@ function ContactModal({ show, handleClose, phone, email, submitHandler }) {
                             onChange={handleInputChange}
                             required
                         >
-                            <option value="">Select an option</option>
-                            <option value="not-interested">Not Interested</option>
-                            <option value="call-not-received">Call Not Received</option>
-                            <option value="not-connected">Not Connected</option>
-                            <option value="interested">Interested</option>
+                            <option value="">{translation?.select_an_option || "Select an option"}
+                            </option>
+                            <option value="not-interested">{translation?.not_interested || "Not Interested"}
+                            </option>
+                            <option value="call-not-received">{translation?.call_not_received || "Call Not Received"}
+                            </option>
+                            <option value="not-connected">{translation?.not_connected || "Not Connected"}
+                            </option>
+                            <option value="interested">{translation?.interested || "Interested"}
+                            </option>
                         </select>
                     </div>
 
                     {/* Schedule Option */}
                     <div className="mb-3">
-                        <strong>Do you want to schedule?</strong>
+                        <strong>{translation?.do_you_want_to_schedule || "Do you want to schedule?"}
+                        </strong>
                         <div className="form-check">
                             <input
                                 type="radio"
@@ -122,7 +132,8 @@ function ContactModal({ show, handleClose, phone, email, submitHandler }) {
                                 onChange={handleRadioChange}
                             />
                             <label className="form-check-label" htmlFor="schedule-no">
-                                No
+                            {translation?.no || "No"}
+
                             </label>
                         </div>
                         <div className="form-check">
@@ -135,7 +146,8 @@ function ContactModal({ show, handleClose, phone, email, submitHandler }) {
                                 onChange={handleRadioChange}
                             />
                             <label className="form-check-label" htmlFor="schedule-yes">
-                                Yes
+                            {translation?.yes || "Yes"}
+
                             </label>
                         </div>
                     </div>
@@ -144,7 +156,8 @@ function ContactModal({ show, handleClose, phone, email, submitHandler }) {
                     {formData.is_schedule === 1 && (
                         <div className="mb-3">
                             <label htmlFor="schedule_date" className="form-label">
-                                Scheduled Date & Time
+                            {translation?.scheduled_date_time || "Scheduled Date & Time"}
+
                             </label>
                             <input 
                                 type="datetime-local" 
@@ -161,7 +174,8 @@ function ContactModal({ show, handleClose, phone, email, submitHandler }) {
                     {/* Feedback */}
                     <div className="mb-3">
                         <label htmlFor="remarks" className="form-label">
-                            Please leave your feedback
+                        {translation?.please_leave_your_feedback || "Please leave your feedback"}
+
                         </label>
                         <textarea 
                             className="form-control" 
@@ -175,10 +189,12 @@ function ContactModal({ show, handleClose, phone, email, submitHandler }) {
 
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>
-                            Close
+                        {translation?.close || "Close"}
+
                         </Button>
                         <Button variant="primary" type="submit">
-                            Submit
+                        {translation?.submit || "Submit"}
+
                         </Button>
                     </Modal.Footer>
                 </form>
