@@ -371,7 +371,8 @@ const Index = () => {
             <FloatingLabel controlId="" label="Select Property Budget:" >
               <Form.Control
                 type="number"
-                placeholder="Enter property budget"
+                placeholder={translation?.enter_property_budget || "Enter property budget"}
+
                 value={inputValue?.expected_price}
                 onChange={(e) => {
                   setInputValue((prev) => {
@@ -392,7 +393,7 @@ const Index = () => {
               <Form.Control
                 as="textarea"
                 id="address-input"
-                placeholder="Enter the address here"
+                placeholder={translation?.enter_the_address_here || "Enter the address here"}
                 rows={4}
                 value={inputValue[selectedItem] || ""}
                 onChange={(e) =>

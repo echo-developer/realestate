@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import useTranslation from "@/hooks/useTranslation";
 
 const ConfigurationComponent = ({ propertyType, onChange, propertyData, value }) => {
   const initialFormData = value?.rooms || propertyData?.rooms || {
@@ -9,7 +10,7 @@ const ConfigurationComponent = ({ propertyType, onChange, propertyData, value })
   const [formData, setFormData] = useState(initialFormData);
   const [activeTab, setActiveTab] = useState("bedroom");
   const roomTypes = propertyType === "Apartment" ? ["bedroom", "bathroom", "kitchen", "balcony"] : ["washroom", "hall"];
-
+const translation = useTranslation();
   const increment = (key) => {
     const updatedFormData = { ...formData };
     
@@ -103,7 +104,7 @@ const ConfigurationComponent = ({ propertyType, onChange, propertyData, value })
                         <strong>{`${key.charAt(0).toUpperCase() + key.slice(1)} ${index + 1}`}</strong>
                       </div>
                       <div className="col-sm-6">
-                        <label className="form-label">Height</label>
+                        <label className="form-label">{translation?.height || "Height"}</label>
                         <input
                           type="text"
                           className="form-control"
@@ -115,7 +116,7 @@ const ConfigurationComponent = ({ propertyType, onChange, propertyData, value })
                         />
                       </div>
                       <div className="col-sm-6">
-                        <label className="form-label">Width</label>
+                        <label className="form-label">{translation?.width || "Width"}</label>
                         <input
                           type="text"
                           className="form-control"
