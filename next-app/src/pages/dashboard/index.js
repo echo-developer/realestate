@@ -82,6 +82,7 @@ const data = {
 };
 
 const Index = () => {
+  const translation = useTranslation();
   const { callApi, GetMemberId } = AuthUser();
   const [dashboardList, setDashboardList] = useState({});
   const memberId = GetMemberId();
@@ -92,11 +93,12 @@ const Index = () => {
     property: property.locality || "Not Available",
     date: moment(property.created_at).format("DD/MM/YYYY"),
     type: property.property_type || "Not Available",
-    status: property.property_for === "Rent" ? "On Rent" : "On Sale",
+    status: property.property_for === "Rent" ? "On Rent" : `${translation?.on_sale || "On Sale"}`,
     badgeClass: property.property_for === "Rent" ? "bg-success" : "bg-warning",
     slug: property.slug,
   }));
-  const translation = useTranslation();
+  
+  // `${translation?.on_sale || "On Sale"}`
   useEffect(() => {
     if (memberId) {
       fetchDashboardListData();
