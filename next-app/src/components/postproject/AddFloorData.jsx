@@ -3,6 +3,8 @@ import { Modal, Button, Form, Tab, Nav, Spinner } from "react-bootstrap";
 import { AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
+import useTranslation from "@/hooks/useTranslation";
+import { useTransition } from "react";
 
 const AddFloorData = ({ show, handleClose, propId }) => {
   const { callApi, GetMemberId } = AuthUser();
@@ -17,7 +19,7 @@ const AddFloorData = ({ show, handleClose, propId }) => {
       fetchFloorData();
     }
   }, [propId]);
-
+const translation = useTransition();
   const fetchFloorData = async () => {
     setLoading(true); // Set loading state to true while fetching
     try {
@@ -152,14 +154,16 @@ const AddFloorData = ({ show, handleClose, propId }) => {
     <Modal show={show} onHide={handleClose} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title>
-          Insert New Value for {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+        {translation?.insert_new_value_for || "Insert New Value for"}
+        {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {loading ? (
           <div className="text-center spinner-container">
             <Spinner animation="border" variant="primary" />
-            <p>Loading...</p>
+            <p>{translation?.loading || "Loading..."}
+            </p>
           </div>
         ) : (
           <Tab.Container activeKey={activeTab} onSelect={(tab) => setActiveTab(tab)}>
@@ -212,7 +216,8 @@ const AddFloorData = ({ show, handleClose, propId }) => {
                           value={newItem.item}
                           onChange={handleInputChange}
                         />
-                        <Form.Label>Title</Form.Label>
+                        <Form.Label>{translation?.title || "Title"}
+                        </Form.Label>
                         </div>
                       </Form.Group>
 
@@ -225,11 +230,13 @@ const AddFloorData = ({ show, handleClose, propId }) => {
                           value={newItem.description}
                           onChange={handleInputChange}
                         />
-                        <Form.Label>Description</Form.Label>
+                        <Form.Label>{translation?.description || "Description"}
+                        </Form.Label>
                         </div>
                       </Form.Group>
                       <Button variant="primary" type="submit">
-                        Save
+                      {translation?.save || "Save"}
+
                       </Button>
                     </div>
                     </fieldset>
@@ -242,10 +249,11 @@ const AddFloorData = ({ show, handleClose, propId }) => {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
-          Close
+        {translation?.close || "Close"}
+
         </Button>
         <Button variant="primary" onClick={handleSave}>
-          Save All
+        {translation?.save_all || "Save All"}
         </Button>
       </Modal.Footer>
 
