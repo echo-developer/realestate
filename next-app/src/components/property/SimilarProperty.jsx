@@ -63,13 +63,13 @@ const SimilarProperties = ({ propertydata, heading, addFavSimilarProjects }) => 
   const displayedProperties = propertydata?.slice(0, 3);
 
   return (
-    <div className="card border-0 shadow-1 mb-4">
+    <div className="card border-0 shadow-1">
       <div className="card-body">
         <div className="d-flex justify-content-between">
           <h4 className="mb-3 text-primary">{heading || "Similar Properties"}</h4>
           <h5>
             <Link target="_blank" href="/property-listing">
-            {translation?.explore_all_properties|| "Explore All Properties"}
+            {translation?.explore_all_properties|| "Explore All Properties"}&nbsp;
             <i className="bi bi-arrow-right"></i>
             </Link>
           </h5>
@@ -77,7 +77,7 @@ const SimilarProperties = ({ propertydata, heading, addFavSimilarProjects }) => 
         <div className="row gx-3 -mb-3">
           {displayedProperties?.map((property, index) => {
             return (
-              <article key={index} className="col-lg-4 col-sm-6 mb-3">
+              <article key={index} className="col-lg-4 col-sm-6">
                 <div className="card card-ads">
                   <CardImageSlider data={property} keyword="gallery" addRemoveFav={addFavSimilarProjects} id="id"  />
                   <div className="card-body">
