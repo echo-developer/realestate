@@ -518,6 +518,7 @@ Route::middleware('admin_auth')->group(function () {
 
 Route::get('/artisan-run', function () {
     Artisan::call('config:clear');
+    Artisan::call('route:clear');
     Artisan::call('cache:clear');
     Artisan::call('config:cache');
 
