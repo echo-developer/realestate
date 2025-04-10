@@ -354,7 +354,6 @@
         $('.prop_status').on('change', function() {
             var propertyId = $(this).data('property-id');
             var status = $(this).val();
-            alert(status)
             switch (status) {
                 case 'delete':
                     var url = `{{ url('allproperties/delete') }}`
