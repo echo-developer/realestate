@@ -347,7 +347,7 @@ header {
 		.navbar .dropdown .btn-link {
 			color: #fff;
 		}
-		.navbar-brand>img {
+		.navbar-brand > div > img {
 			filter: brightness(0) invert(1);
 		}
 	}
@@ -5533,7 +5533,9 @@ fieldset{
 		}
 	}
 }
-
+.contact-form-section{
+	border-radius: 0.5rem;
+}
 .galleryClientInfo{
 	background-color: #eee;
 	border-top: 1px solid var(--#{$prefix}border-color-translucent);
@@ -5650,9 +5652,11 @@ fieldset{
 		padding-top: 74px;
 	}
 	.navbar-brand {
-		>img {
-			max-height: 64px;
-		}
+		& > div{
+			& >img {
+				max-height: 64px;
+			}
+		}		
 	}
 	.short-banner {
 		min-height: 80px;
@@ -5843,9 +5847,11 @@ fieldset{
 		padding-bottom: 60px;
 	}
 	.navbar-brand {
-		>img {
-			max-height: 48px;
-		}
+		& > div{
+			& >img {
+				max-height: 48px;
+			}
+		}		
 	}
 	.short-banner {
 		min-height: 64px;

@@ -32645,7 +32645,7 @@ header {
 .header-sticky.transparentH .navbar .dropdown .btn-link {
   color: #fff;
 }
-.header-sticky.transparentH .navbar-brand > img {
+.header-sticky.transparentH .navbar-brand > div > img {
   filter: brightness(0) invert(1);
 }
 
@@ -37172,6 +37172,10 @@ fieldset .btn-delete {
   object-fit: contain;
 }
 
+.contact-form-section {
+  border-radius: 0.5rem;
+}
+
 .galleryClientInfo {
   background-color: #eee;
   border-top: 1px solid var(--bs-border-color-translucent);
@@ -37264,7 +37268,7 @@ fieldset .btn-delete {
   #wrapper {
     padding-top: 74px;
   }
-  .navbar-brand > img {
+  .navbar-brand > div > img {
     max-height: 64px;
   }
   .short-banner {
@@ -37398,7 +37402,7 @@ fieldset .btn-delete {
     padding-top: 58px;
     padding-bottom: 60px;
   }
-  .navbar-brand > img {
+  .navbar-brand > div > img {
     max-height: 48px;
   }
   .short-banner {
