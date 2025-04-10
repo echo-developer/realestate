@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import ProjectEnquiryForm from "./ProjectEnquiryForm";
 import useTranslation from "@/hooks/useTranslation";
 import {
+  Card,
   Form,
   Row,
   Col,
@@ -20,6 +21,7 @@ import {
   EnvelopeFill,
   PhoneFill,
   Whatsapp,
+  XLg,
 } from "react-bootstrap-icons";
 
 const ProjectGallery = ({ setVisible, projectId, userDetails }) => {
@@ -120,22 +122,21 @@ const ProjectGallery = ({ setVisible, projectId, userDetails }) => {
         }}
       >
         {showContactForm ? (
-          <div className="contact-form-section bg-light ">
-            <div className="d-flex justify-content-between">
-              <h4 className="">Contact Us</h4>
-              <h4
-                className=""
-                role="button"
-                onClick={() => setShowContactForm(false)}
-              >
-                Back to Gallery
-              </h4>
-            </div>
-
-            <ProjectEnquiryForm
-              projectId={projectId} handleClose={handleClose}
-            />
-          </div>
+          <Row className="justify-content-center">
+          <Col xl={5} lg={6}>
+            <Card className="contact-form-section bg-light">
+              <Card.Header className="d-flex justify-content-between">
+                <h4 className="">Contact Us</h4>
+                <Button variant="light p-1" role="button" onClick={()=>setShowContactForm(false)} title="Back to Gallery"><XLg size={20} color="currentColor" /> </Button>
+              </Card.Header>
+              <Card.Body>
+                <ProjectEnquiryForm
+                  projectId={projectId} handleClose={handleClose}
+                />
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>          
         ) : (
           <div
             className="pop-header clearfix open-state"

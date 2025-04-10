@@ -129,18 +129,18 @@ const GalleryList = ({ setVisible, propertyId, userDetails }) => {
         {showContactForm ? (
           <Row className="justify-content-center">
             <Col xl={5} lg={6}>
-            <Card className="contact-form-section bg-light ">
-              <Card.Header className="d-flex justify-content-between border-bottom">
-                <h4 className="">Contact Us</h4>
-                <Button variant="light p-1" role="button" onClick={()=>setShowContactForm(false)} title="Back to Gallery"><XLg size={20} color="currentColor" /> </Button>
-              </Card.Header>
-              <Card.Body>
-                <EnquiryForm
-                  propertyId={property_id}
-                  handleClose={handleCloseForm}
-                />
-              </Card.Body>
-            </Card>
+              <Card className="contact-form-section bg-light">
+                <Card.Header className="d-flex justify-content-between">
+                  <h4 className="">Contact Us</h4>
+                  <Button variant="light p-1" role="button" onClick={()=>setShowContactForm(false)} title="Back to Gallery"><XLg size={20} color="currentColor" /> </Button>
+                </Card.Header>
+                <Card.Body>
+                  <EnquiryForm
+                    propertyId={property_id}
+                    handleClose={handleCloseForm}
+                  />
+                </Card.Body>
+              </Card>
             </Col>
           </Row>
         ) : (
