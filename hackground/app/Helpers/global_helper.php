@@ -1145,7 +1145,7 @@ if (!function_exists('get_property_sub_category_name')) {
     }
 }
 
-if (!function_exists('get_all_country')) {
+if (!function_exists('get_all_city')) {
     function get_all_city()
     {
         $result = DB::table('city as c')
@@ -1158,12 +1158,38 @@ if (!function_exists('get_all_country')) {
     }
 }
 
+if (!function_exists('get_property_for_types')) {
+    function get_property_for_types()
+    {
+       $types = [
+          'rent' => 'Rent',
+          'sale' => 'Sale',
+          'pg' => 'PG/Hostel',
+       ];
+
+       return $types;
+    }
+}
+
 if (!function_exists('get_all_property_category')) {
     function get_all_property_category()
     {
         $result = DB::table('property_category as p_c')
             ->select('p_c.*', 'p_c_n.name')
             ->join('property_category_names as p_c_n', 'p_c.id', '=', 'p_c_n.category_id')
+            ->where(['p_c.status' => '1', 'p_c_n.lang' => 'en'])
+            ->get();
+
+        return $result;
+    }
+}
+
+if (!function_exists('get_all_property_sub_category')) {
+    function get_all_property_sub_category()
+    {
+        $result = DB::table('property_sub_category as p_c')
+            ->select('p_c.*', 'p_c_n.name')
+            ->join('property_sub_category_names as p_c_n', 'p_c.id', '=', 'p_c_n.sub_category_id')
             ->where(['p_c.status' => '1', 'p_c_n.lang' => 'en'])
             ->get();
 
