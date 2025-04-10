@@ -2,10 +2,11 @@
 import { Modal, Button } from "react-bootstrap";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import useTranslation from "@/hooks/useTranslation";
 
 function NoCreditModal({ show, onHide }) {
   const router = useRouter();
-
+  const translation = useTranslation()
   const goToMembership = () => {
     onHide();
     router.push("/membership");
@@ -25,11 +26,11 @@ function NoCreditModal({ show, onHide }) {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onHide}>
-        {translation?.cancel || "Cancel"}
+          {translation?.cancel || "Cancel"}
 
         </Button>
         <Button variant="primary" onClick={goToMembership}>
-        {translation?.go_to_membership || "Go to Membership"}
+          {translation?.go_to_membership || "Go to Membership"}
 
         </Button>
       </Modal.Footer>
