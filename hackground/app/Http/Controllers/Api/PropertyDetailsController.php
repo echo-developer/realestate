@@ -330,7 +330,8 @@ class PropertyDetailsController extends Controller
                             'user_relation'
                         )->where('property_reviews.property_id', '=', $property->property_id)
                         ->get()
-                        ->sortByDesc('overall_rating');
+                        ->sortByDesc('overall_rating')
+                        ->values();
 
                     $total_count = $property_review->count();
                     $average_rating = round($property_review->avg('overall_rating'), 1);
@@ -341,7 +342,7 @@ class PropertyDetailsController extends Controller
                         $items->name = get_user_name($items->user_id ?? null);
                         unset($items->user_id);
                         return $items;
-                    });
+                    })->values();
 
                     //TOP AGENT LIST
 
@@ -507,7 +508,7 @@ class PropertyDetailsController extends Controller
                         'property_reviews' => [
                             'rating' => $average_rating ?? null,
                             'total_reviews' => $total_count ?? null,
-                            'reviews' => $property_review->toArray() ?? [],
+                            'reviews' => $property_review ?? [],
                         ]
                     ];
                 });
