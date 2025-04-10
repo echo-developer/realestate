@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from "react"
-import { Container, Row, Col, Card, Form, Button, ListGroup } from "react-bootstrap"
+import { Container, Row, Col, Card, Form, Button, ListGroup, FloatingLabel } from "react-bootstrap"
 import { CheckCircle, Check, ArrowRight } from "lucide-react"
 import Image from "next/image"
 import MainLayout from "@/components/layout/MainLayout"
@@ -56,7 +56,7 @@ export default function PropertyValuation() {
   return (
     <MainLayout>
       {/* Hero Section */}
-      <section className="bg-primary-subtle py-4">
+      <section className="section bg-primary-subtle">
         <Container>
           <Row className="align-items-center">
             <Col md={6}>
@@ -71,7 +71,7 @@ export default function PropertyValuation() {
                 <ArrowRight className="ms-2" size={20} />
               </Button>
             </Col>
-            <Col md={6}>
+            <Col md={6} className="d-none d-md-block">
               <Image
                 src={`/assets/images/young-man-with-mortgage.png`}
                 alt="Property Valuation Illustration"
@@ -87,9 +87,9 @@ export default function PropertyValuation() {
       {/* Benefits Section */}
       <section className="section">
         <Container>
-          <Row className="g-4">
+          <Row className="-mb-3">
             <Col md={6}>
-              <Card>
+              <Card className="mb-3">
                 <Card.Body>
                   <h3>{translation?.benefits_for_buyers || 'Benefits for Buyers'}</h3>
                   <ListGroup variant="flush">
@@ -118,7 +118,7 @@ export default function PropertyValuation() {
               </Card>
             </Col>
             <Col md={6}>
-              <Card>
+              <Card className="mb-3">
                 <Card.Body>
                   <h3>{translation?.benefits_for_sellers || 'Benefits for Sellers'}</h3>
                   <ListGroup variant="flush">
@@ -153,13 +153,13 @@ export default function PropertyValuation() {
       {/* Pricing Section */}
       <section className="section bg-white">
         <Container>          
-          <Row className="justify-content-center">
+          <Row className="-mb-3">
             <Col lg={6}>
-              <Card className="">
-                <Card.Body className="p-4">
+              <Card className="mb-3">
+                <Card.Body>
                   <h3 className="mb-3">{translation?.sellers_know_price || 'Know the right price of your property'}</h3>
-                  <Row className="align-items-center mb-4">
-                    <Col lg>
+                  <Row>
+                    <Col lg className="mb-3">
                       <div className="d-flex align-items-center mb-2">
                         <Check className="text-success me-2" size={20} />
                         <span>{translation?.online_verification || 'Online Verification'}
@@ -191,7 +191,7 @@ export default function PropertyValuation() {
                         </span>
                       </div>
                     </Col>
-                    <Col lg="auto">
+                    <Col lg="auto" className="mb-3">
                       <h6 className="text-muted mb-0">{translation?.starting_from || 'Starting from'}</h6>
                       <h2 className="fw-bold mb-0">₹2399</h2>
                       <span className="badge bg-success">20% OFF</span>
@@ -205,22 +205,21 @@ export default function PropertyValuation() {
             </Col>
             <Col lg={6}>
               {/* Contact Form */}
-              <Card className="">
-                <Card.Body className="p-4">
+              <Card className="mb-3">
+                <Card.Body>
                   <h3 className="mb-4">{translation?.free_advice || 'Get Free Advice on your Property Valuation requirement'}</h3>
                   <Form>
-                    <Form.Group className="mb-3">
-                      <Form.Control type="text" placeholder={translation?.name || "Name"} />
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                      <Form.Control type="tel" placeholder={translation?.mobile || "Mobile"} />
-                    </Form.Group>
-                    <Form.Group className="mb-4">
-                      <Form.Control type="email" placeholder={translation?.email || "Email"} />
-                    </Form.Group>
+                    <FloatingLabel label={translation?.name || "Name"} className="mb-3">
+                      <Form.Control type="text" placeholder="" />
+                    </FloatingLabel>                    
+                    <FloatingLabel label={translation?.mobile || "Mobile"} className="mb-3">
+                      <Form.Control type="tel" placeholder="" />
+                    </FloatingLabel>
+                    <FloatingLabel label={translation?.email || "Email"} className="mb-4">
+                      <Form.Control type="email" placeholder="" />
+                    </FloatingLabel>
                     <Button variant="primary" className="w-100">
                       {translation?.free_valuation || 'Get FREE Valuation'}
-
                     </Button>
                   </Form>
                 </Card.Body>
@@ -233,31 +232,31 @@ export default function PropertyValuation() {
       {/* Features Section */}
       <section className="section">
         <Container>
-          <h2 className="text-center mb-5">{translation?.magicbricks_valuation || 'Property Valuation from MagicBricks'}
+          <h2 className="text-center mb-4">{translation?.magicbricks_valuation || 'Property Valuation from MagicBricks'}
           </h2>
-          <Row className="g-4">
-            <Col md={3} className="text-center">
+          <Row className="-mb-3">
+            <Col md={3} sm={6} className="text-center mb-3">
               <Image src="/assets/images/icons/govt.png" alt="Govt. Registered Valuers" width={64} height={64} className="mb-3" />
               <h5>{translation?.govt_registered_valuers || 'Govt. Registered Valuers'}
               </h5>
               <p className="text-muted">{translation?.ibbi_registered_valuers || 'IBBI Registered Valuers'}
               </p>
             </Col>
-            <Col md={3} className="text-center">
+            <Col md={3} sm={6} className="text-center mb-3">
               <Image src="/assets/images/icons/property-value-2.png" alt="Reasonable Charges" width={64} height={64} className="mb-3" />
               <h5>{translation?.reasonable_charges || 'Reasonable Charges'}
               </h5>
               <p className="text-muted">{translation?.discount_mrp || '20% Discount on MRP'}
               </p>
             </Col>
-            <Col md={3} className="text-center">
+            <Col md={3} sm={6} className="text-center mb-3">
               <Image src="/assets/images/icons/inspection.png" alt="Property Inspection" width={64} height={64} className="mb-3" />
               <h5>{translation?.property_inspection || 'Property Inspection'}
               </h5>
               <p className="text-muted">{translation?.on_site_inspection || 'On-site Inspection Available'}
               </p>
             </Col>
-            <Col md={3} className="text-center">
+            <Col md={3} sm={6} className="text-center mb-3">
               <Image src="/assets/images/icons/detailed-report.png" alt="Detailed Report" width={64} height={64} className="mb-3" />
               <h5>{translation?.detailed_report || 'Detailed Report'}
               </h5>
@@ -272,7 +271,7 @@ export default function PropertyValuation() {
       <section className="section bg-white">
         <Container>
           <h2 className="text-center mb-4">{translation?.how_it_works || 'How it works'}</h2>
-          <Row className="justify-content-center">
+          <Row className="-mb-3">
             <Col md={4}>
               <Card className="text-center mb-3"
               >
@@ -315,7 +314,7 @@ export default function PropertyValuation() {
 
       <section className="section bg-light">
         <Container>
-          <h2 className="text-center mb-5">{translation?.all_about_valuation || 'All You Need to Know About Property Valuation'}</h2>
+          <h2 className="text-center mb-4">{translation?.all_about_valuation || 'All You Need to Know About Property Valuation'}</h2>
           <Row>
             {/* Sidebar Navigation */}
             <Col md={4}>
@@ -325,6 +324,7 @@ export default function PropertyValuation() {
                     key={key}
                     active={activeTab === key}
                     onClick={() => setActiveTab(key)}
+                    className="fw-medium"
                     style={{ cursor: "pointer" }}
                   >
                     {tabContent[key].title}

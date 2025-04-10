@@ -209,12 +209,7 @@ const Header = () => {
               <Link href="/" className="navbar-brand">
                 {/* Desktop Logo with Shimmer */}
                 <div
-                  className="d-none d-md-block"
-                  style={{
-                    width: "173px",
-                    height: "64px",
-                    position: "relative",
-                  }}
+                  className="d-none d-md-block"                  
                 >
                   {!isDesktopLogoLoaded && (
                     <div className="shimmer-placeholder"></div>
@@ -224,7 +219,6 @@ const Header = () => {
                       src="/assets/images/logo.png"
                       alt="Logo"
                       loading="lazy"
-                      style={{ width: "173px", height: "64px" }}
                     />
                   )}
                 </div>
@@ -232,11 +226,6 @@ const Header = () => {
                 {/* Mobile Logo with Shimmer */}
                 <div
                   className="d-md-none"
-                  style={{
-                    width: "173px",
-                    height: "64px",
-                    position: "relative",
-                  }}
                 >
                   {!isMobileLogoLoaded && (
                     <div className="shimmer-placeholder"></div>
@@ -246,7 +235,6 @@ const Header = () => {
                       src="/assets/images/logo-mobile.png"
                       alt="Logo"
                       loading="lazy"
-                      style={{ width: "173px", height: "64px" }}
                     />
                   )}
                 </div>
