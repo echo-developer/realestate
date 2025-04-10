@@ -5533,7 +5533,9 @@ fieldset{
 		}
 	}
 }
-
+.contact-form-section{
+	border-radius: 0.5rem;
+}
 .galleryClientInfo{
 	background-color: #eee;
 	border-top: 1px solid var(--#{$prefix}border-color-translucent);

@@ -37172,6 +37172,10 @@ fieldset .btn-delete {
   object-fit: contain;
 }
 
+.contact-form-section {
+  border-radius: 0.5rem;
+}
+
 .galleryClientInfo {
   background-color: #eee;
   border-top: 1px solid var(--bs-border-color-translucent);
