@@ -28,10 +28,10 @@
 
     <div class="row">
         <div class="col-md-6 col-lg-3">
-            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-primary border-primary card" onclick="location.href='ist_record'">
+            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-primary border-primary card"  onclick="window.location.href='{{ url('allproperties/all-property-view') }}'">
                 <div class="widget-chat-wrapper-outer">
                     <div class="widget-chart-content">
-                        <div class="widget-title opacity-5 text-uppercase">All Property</div>
+                        <div class="widget-title opacity-5 text-uppercase">Total Property</div>
                         <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
                             <div class="widget-chart-flex align-items-center">
                                 <div>
@@ -44,7 +44,7 @@
             </div>
         </div>
         <div class="col-md-6 col-lg-3">
-            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-danger border-success card" onclick="location.href='st_record'">
+            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-danger border-success card" onclick="location.href='{{ url('member/memberUser/Agent') }}'">
                 <div class="widget-chat-wrapper-outer">
                     <div class="widget-chart-content">
                         <div class="widget-title opacity-5 text-uppercase">Total Agents</div>
@@ -60,14 +60,14 @@
             </div>
         </div>
         <div class="col-md-6 col-lg-3">
-            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-danger border-warning card" onclick="location.href='llment/list_record'">
+            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-danger border-warning card" onclick="location.href='{{ url('member/memberUser/Builder') }}'">
                 <div class="widget-chat-wrapper-outer">
                     <div class="widget-chart-content">
-                        <div class="widget-title opacity-5 text-uppercase">Customers</div>
+                        <div class="widget-title opacity-5 text-uppercase">Total Builder</div>
                         <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
                             <div class="widget-chart-flex align-items-center">
                                 <div>
-                                    {{ $data['total_customer'] }}
+                                    {{ $data['total_builder'] }}
                                 </div>
                             </div>
                         </div>
@@ -76,7 +76,7 @@
             </div>
         </div>
         <div class="col-md-6 col-lg-3">
-            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-danger border-danger card" onclick="location.href='/Notification'">
+            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-danger border-danger card" onclick="location.href='{{ url('transaction/transaction_list') }}'">
                 <div class="widget-chat-wrapper-outer">
                     <div class="widget-chart-content">
                         <div class="widget-title opacity-5 text-uppercase">Total Revenue</div>
@@ -92,10 +92,10 @@
             </div>
         </div>
         <div class="col-md-6 col-lg-3">
-            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-warning border-info card" onclick="location.href='list_record'">
+            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-warning border-info card" onclick="location.href='{{ url('allproject/all-project-view') }}'">
                 <div class="widget-chat-wrapper-outer">
                     <div class="widget-chart-content">
-                        <div class="widget-title opacity-5 text-uppercase">Properties for Sale</div>
+                        <div class="widget-title opacity-5 text-uppercase">Total Projects</div>
                         <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
                             <div class="widget-chart-flex align-items-center">
                                 <div>
@@ -109,14 +109,14 @@
             </div>
         </div>
         <div class="col-md-6 col-lg-3">
-            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-success border-alternate card" onclick="location.href='/member'">
+            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-success border-alternate card" onclick="location.href='{{ url('member/memberUser/Owner') }}'">
                 <div class="widget-chat-wrapper-outer">
                     <div class="widget-chart-content">
-                        <div class="widget-title opacity-5 text-uppercase">Properties for Rent</div>
+                        <div class="widget-title opacity-5 text-uppercase">Total Owner</div>
                         <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
                             <div class="widget-chart-flex align-items-center">
                                 <div>
-                                    {{ $data['properties_for_rent'] }}
+                                    {{ $data['total_owner'] }}
 
                                 </div>
 
@@ -127,7 +127,7 @@
             </div>
         </div>
         <div class="col-md-6 col-lg-3">
-            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-warning border-alternate card" onclick="location.href='/member'">
+            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-warning border-alternate card" onclick="location.href='{{ url('admin_notifiaction') }}'">
                 <div class="widget-chat-wrapper-outer">
                     <div class="widget-chart-content">
                         <div class="widget-title opacity-5 text-uppercase">Notification</div>
@@ -145,7 +145,7 @@
             </div>
         </div>
         <div class="col-md-6 col-lg-3">
-            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-primary border-alternate card" onclick="location.href='/member'">
+            <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-primary border-alternate card" onclick="location.href='{{ url('enquiry/list') }}'">
                 <div class="widget-chat-wrapper-outer">
                     <div class="widget-chart-content">
                         <div class="widget-title opacity-5 text-uppercase">All Enquires</div>
