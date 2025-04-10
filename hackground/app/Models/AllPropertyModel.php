@@ -16,6 +16,7 @@ class AllPropertyModel extends Model
             ->leftJoin('property_gallary_images as pgi', 'pg.id', '=', 'pgi.gallary_id')
             ->leftJoin('properties_settings as ps', 'pt.id', '=', 'ps.pid')
             ->leftJoin('properties_location as ploc', 'pt.id', '=', 'ploc.pid')
+            ->leftJoin('users as u', 'pt.uid', '=', 'u.id')
             ->where([
                 ['pt.is_deleted', '!=', config('constants.STATUS_ACTIVE')],
             ])
@@ -38,8 +39,26 @@ class AllPropertyModel extends Model
         if (array_key_exists('term',$srch) && $srch['term']) {
             $query->where('pt.name', 'like', "%{$srch['term']}%");
         }
+        if (array_key_exists('username',$srch) && $srch['username']) {
+            $query->where('u.name', 'like', "%{$srch['username']}%");
+        }
         if (array_key_exists('user_id',$srch) && $srch['user_id']) {
             $query->where('pt.uid', $srch['user_id']);
+        }
+        if (array_key_exists('post_for',$srch) && $srch['post_for']) {
+            $query->where('ps.post_for', $srch['post_for']);
+        }
+        if (array_key_exists('property_type',$srch) && $srch['property_type']) {
+            $query->where('ps.property_type', $srch['property_type']);
+        }
+        if (array_key_exists('property_for',$srch) && $srch['property_for']) {
+            $query->where('ps.property_type_for', $srch['property_for']);
+        }
+        if (array_key_exists('city',$srch) && $srch['city']) {
+            $query->where('ploc.city', $srch['city']);
+        }
+        if (array_key_exists('post_date',$srch) && $srch['post_date']) {
+            $query->whereDate('pt.created_at', $srch['post_date']);
         }
         $query->orderBy('pt.id','desc');
         if ($paginate) {
