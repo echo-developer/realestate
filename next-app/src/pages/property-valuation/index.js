@@ -85,13 +85,13 @@ export default function PropertyValuation() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-5">
+      <section className="section">
         <Container>
           <Row className="g-4">
             <Col md={6}>
               <Card>
                 <Card.Body>
-                  <h4>{translation?.benefits_for_buyers || 'Benefits for Buyers'}</h4>
+                  <h3>{translation?.benefits_for_buyers || 'Benefits for Buyers'}</h3>
                   <ListGroup variant="flush">
                     <ListGroup.Item className="d-flex align-items-center border-0 mb-2 p-0">
                       <Check className="text-success me-2 flex-shrink-0" size={20} />
@@ -120,7 +120,7 @@ export default function PropertyValuation() {
             <Col md={6}>
               <Card>
                 <Card.Body>
-                  <h4>{translation?.benefits_for_sellers || 'Benefits for Sellers'}</h4>
+                  <h3>{translation?.benefits_for_sellers || 'Benefits for Sellers'}</h3>
                   <ListGroup variant="flush">
                     <ListGroup.Item className="d-flex align-items-center border-0 mb-2 p-0">
                       <Check className="text-success me-2 flex-shrink-0" size={20} />
@@ -151,7 +151,7 @@ export default function PropertyValuation() {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-5 bg-white">
+      <section className="section bg-white">
         <Container>          
           <Row className="justify-content-center">
             <Col lg={6}>
@@ -231,7 +231,7 @@ export default function PropertyValuation() {
       </section>
 
       {/* Features Section */}
-      <section className="py-5">
+      <section className="section">
         <Container>
           <h2 className="text-center mb-5">{translation?.magicbricks_valuation || 'Property Valuation from MagicBricks'}
           </h2>
@@ -269,51 +269,51 @@ export default function PropertyValuation() {
       </section>
 
       {/* How it works */}
-      <section className="py-5 bg-white">
+      <section className="section bg-white">
         <Container>
-          <h2 className="text-center mb-5">{translation?.how_it_works || 'How it works'}</h2>
-          <Row className="justify-content-center g-4">
-            <Col md={4} className="text-center">
-              <div
-                className="bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
-                style={{ width: "80px", height: "80px" }}
+          <h2 className="text-center mb-4">{translation?.how_it_works || 'How it works'}</h2>
+          <Row className="justify-content-center">
+            <Col md={4}>
+              <Card className="text-center mb-3"
               >
-                <Image src="/assets/images/agents/user.jpg" alt="Choose a Service" width={40} height={40} />
-              </div>
-              <h3 className="h5 mb-2">{translation?.choose_service || 'Choose a Service'}
-              </h3>
-              <p className="text-muted">{translation?.choose_service_description || 'Select the valuation service that meets your needs'}
-              </p>
+                <Card.Body>
+                <Image src="/assets/images/icons/15164840.png" alt="Choose a Service" width={64} height={64} className="mb-3" />              
+                <h5>{translation?.choose_service || 'Choose a Service'}                
+                </h5>
+                <p className="text-muted">{translation?.choose_service_description || 'Select the valuation service that meets your needs'}
+                </p>
+              </Card.Body>
+              </Card>
             </Col>
-            <Col md={4} className="text-center">
-              <div
-                className="bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
-                style={{ width: "80px", height: "80px" }}
+            <Col md={4}>
+              <Card className="text-center mb-3"
               >
-                <Image src="/assets/images/agents/user.jpg" alt="Share details of property" width={40} height={40} />
-              </div>
-              <h3 className="h5 mb-2">{translation?.share_property_details || 'Share details of property'}
-              </h3>
-              <p className="text-muted">{translation?.share_property_description || 'Provide your property information'}
-              </p>
+                <Card.Body>
+                <Image src="/assets/images/icons/15164806.png" alt="Share details of property" width={64} height={64} className="mb-3" />              
+                <h5>{translation?.share_property_details || 'Share details of property'}                
+                </h5>
+                <p className="text-muted">{translation?.share_property_description || 'Provide your property information'}
+                </p>
+              </Card.Body>
+              </Card>
             </Col>
-            <Col md={4} className="text-center">
-              <div
-                className="bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
-                style={{ width: "80px", height: "80px" }}
+            <Col md={4}>
+              <Card className="text-center mb-3"
               >
-                <Image src="/assets/images/agents/user.jpg" alt="Get valuation report" width={40} height={40} />
-              </div>
-              <h3 className="h5 mb-2">{translation?.get_valuation_report || 'Get valuation report'}
-              </h3>
-              <p className="text-muted">{translation?.get_valuation_description || 'Receive detailed valuation analysis'}
-              </p>
+                <Card.Body>
+                  <Image src="/assets/images/icons/15164729.png" alt="Get valuation report" width={64} height={64} className="mb-3" />                
+                  <h5>{translation?.get_valuation_report || 'Get valuation report'}                
+                  </h5>
+                  <p className="text-muted">{translation?.get_valuation_description || 'Receive detailed valuation analysis'}
+                  </p>
+                </Card.Body>
+              </Card>
             </Col>
           </Row>
         </Container>
       </section>
 
-      <section className="py-5 bg-light">
+      <section className="section bg-light">
         <Container>
           <h2 className="text-center mb-5">{translation?.all_about_valuation || 'All You Need to Know About Property Valuation'}</h2>
           <Row>
