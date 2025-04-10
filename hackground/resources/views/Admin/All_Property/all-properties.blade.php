@@ -354,14 +354,14 @@
         $('.prop_status').on('change', function() {
             var propertyId = $(this).data('property-id');
             var status = $(this).val();
-            
+            alert(status)
             switch (status) {
                 case 'delete':
                     var url = `{{ url('allproperties/delete') }}`
                     break;
                 case 'edit_view':
-                    window.location.href = `{{ url('property/edit') }}/${propertyId}`;
-                    break;
+                    window.location.href = `{{ url('property/edit') }}/${propertyId}`
+                    return;
                 default:
                     var url = `{{ url('allproperties/statusupdate') }}`
                     break;
