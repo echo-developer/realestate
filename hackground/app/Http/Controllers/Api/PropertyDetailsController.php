@@ -507,7 +507,7 @@ class PropertyDetailsController extends Controller
                         'property_reviews' => [
                             'rating' => $average_rating ?? null,
                             'total_reviews' => $total_count ?? null,
-                            'reviews' => $property_review ?? [],
+                            'reviews' => $property_review->toArray() ?? [],
                         ]
                     ];
                 });
