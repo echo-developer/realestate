@@ -9,6 +9,7 @@ use App\Models\ProjectFloor;
 use Illuminate\Http\Request;
 use App\Models\ProjectSetting;
 use App\Models\ProjectLocation;
+use App\Models\SubCategoryModel;
 use App\Models\PrefFloorPlanType;
 use App\Models\ProjectAdditional;
 use App\Models\ProjectProperties;
@@ -32,33 +33,26 @@ class AllProjectController extends Controller
         $statusMapping = config('property_status.status');
         $term = $request->input('term');
         $user_id = $request->route('uid');
-
-        $query = PrefProject::where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
-            ->with([
-                'settings:project_id,project_budget,parking_availability,total_towers',
-                'additional:project_id,expected_price,project_amenity',
-                'location:project_id,address',
-                'gallery:id,project_id,image_type',
-                'gallery.images:gallary_id,filename,caption'
-            ])
-            ->orderBy('id', 'desc');
-        if ($term) {
-            $query->where(function ($q) use ($term) {
-                $q->where('project_name', 'like', "%{$term}%")
-                    ->orWhereHas('location', function ($q) use ($term) {
-                        $q->where('address', 'like', "%{$term}%");
-                    });
-            });
-        }
-
-        if ($user_id) {
-            $query->where('uid', $user_id);
-        }
-        $project = $query->paginate($paginate);
+        $SubCategoryModel = new SubCategoryModel;
+        $project_type = $SubCategoryModel->getCategories();
+        $postController = new PostController();
+        $projectStatus = json_decode($postController->status($request)->getContent(), true)['data'] ?? [];
+        $filters = $request->only([
+            'term',
+            'project_type',
+            'address',
+            'occupied_area',
+            'total_area',
+            'possession_status',
+            'price',
+            'user_id'
+        ]);
+        
+        $project = PrefProject::filter($filters)->paginate($paginate);
 
         $amenities = new ProjectAmenityModel();
         $projectAmenities = $amenities->getProjectAmenities();
-        return view('Admin.All_project.all-project', compact('project', 'statusMapping', 'user_id', 'projectAmenities'));
+        return view('Admin.All_project.all-project', compact('project', 'statusMapping', 'user_id', 'projectAmenities', 'project_type', 'projectStatus'));
     }
 
     public function getTowers(Request $req)
@@ -123,7 +117,7 @@ class AllProjectController extends Controller
                 'projectLocation' => $project_location
             ];
         }
-        return response()->json(['towers_data'=>$result,'total_towers'=>$total_tower]);
+        return response()->json(['towers_data' => $result, 'total_towers' => $total_tower]);
     }
     public function FeaturedStatus(Request $req)
     {
@@ -237,7 +231,7 @@ class AllProjectController extends Controller
 
             $project_id = $req->project_id;
             $user_id = PrefProject::where('id', $project_id)->value('uid');
-    
+
 
             $properties = PrefProperty::whereHas('projectMapping', function ($query) use ($project_id) {
                 $query->where('project_id', $project_id);
