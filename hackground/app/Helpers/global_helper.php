@@ -1106,7 +1106,7 @@ if (!function_exists('print_select_option')) {
     if (!function_exists('log_anything')) {
         function log_anything($data)
         {
-            log::info($data);
+            log::info(json_encode($data, JSON_PRETTY_PRINT));
         }
     }
 }
