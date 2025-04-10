@@ -547,3 +547,7 @@ ALTER TABLE `pref_loan_enquery` CHANGE `created_ at` `created_at` TIMESTAMP NOT 
 
 
 CREATE TABLE `pref_user_activity` (`id` BIGINT NOT NULL AUTO_INCREMENT , `user_id` INT(11) NULL DEFAULT NULL , `property_type` INT(11) NULL DEFAULT NULL , `property_for` INT(11) NULL DEFAULT NULL , `post_for` VARCHAR(20) NULL DEFAULT NULL , `city_id` INT(11) NULL DEFAULT NULL , `min_budget` VARCHAR(20) NULL DEFAULT NULL , `max_budget` VARCHAR(20) NULL DEFAULT NULL , `json_filters` TEXT NULL DEFAULT NULL , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+
+10/04/2025
+ALTER TABLE `pref_menu_management` CHANGE `url` `url` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '#';
