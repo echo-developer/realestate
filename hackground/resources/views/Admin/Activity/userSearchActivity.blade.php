@@ -62,7 +62,7 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>User</th>
+                                <th>User</th>                                           
                                 <th>Intent</th>
                                 <th>City</th>
                                 <th>Budget</th>

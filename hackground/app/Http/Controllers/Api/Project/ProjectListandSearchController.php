@@ -148,7 +148,7 @@ class ProjectListandSearchController extends Controller
                 'status' => 1,
                 'message' => 'Data retrieved successfully.',
                 'data' => [
-                    'searched_properties' => $searchedProperties,
+                    'searched_projects' => $searchedProperties,
                     'pagination' => [
                         'total_properties' => $totalProperties,
                         'total_pages' => $totalPages,
