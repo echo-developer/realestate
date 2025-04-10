@@ -1311,7 +1311,7 @@ if (!function_exists('get_floor_types')) {
 
         if($key)
         {
-            $selectedType = $types['key'] ?? '';
+            $selectedType = $types[$key] ?? '';
             return $selectedType;
         }else{
             return $types;
@@ -1338,7 +1338,7 @@ if (!function_exists('get_floor_numbers')) {
         
         if($key)
         {
-            $selectedType = $types['key'] ?? '';
+            $selectedType = $types[$key] ?? '';
             return $selectedType;
         }else{
             return $types;
@@ -1364,7 +1364,7 @@ if (!function_exists('get_total_floors')) {
         
         if($key)
         {
-            $selectedType = $types['key'] ?? '';
+            $selectedType = $types[$key] ?? '';
             return $selectedType;
         }else{
             return $types;
@@ -1411,6 +1411,83 @@ if (!function_exists('lifts_in_tower')) {
         
         return $types;
         
+    }
+}
+
+if (!function_exists('get_water_availability')) {
+    function get_water_availability($key='')
+    {
+        $types = [
+            '24_hours' => '24 Hours Available',
+            'partially_available' => 'Partially Available',
+            'not_available' => 'Not Available'
+        ];
+        
+        if($key)
+        {
+            $selectedType = $types[$key] ?? '';
+            return $selectedType;
+        }else{
+            return $types;
+        }
+    }
+}
+
+if (!function_exists('electricity_status')) {
+    function electricity_status($key='')
+    {
+        $types = [
+            'full_power_backup' => 'Full Power Backup',
+            'partial_power_backup' => 'Partial Power Backup',
+            'no_power_backup' => 'No Power Backup'
+        ];
+        
+        if($key)
+        {
+            $selectedType = $types[$key] ?? '';
+            return $selectedType;
+        }else{
+            return $types;
+        }
+    }
+}
+
+if (!function_exists('get_overlooking_list')) {
+    function get_overlooking_list($key='')
+    {
+        $types = [
+            'pool' => 'Pool',
+            'garden_park' => 'Garden Park',
+            'main_road' => 'Main Road'
+        ];
+        
+        if($key)
+        {
+            $selectedType = $types[$key] ?? '';
+            return $selectedType;
+        }else{
+            return $types;
+        }
+    }
+}
+
+if (!function_exists('get_ownership_types')) {
+    function get_ownership_types($key='')
+    {
+        $types = [
+            'freehold' => 'Freehold',
+            'leasehold' => 'Leasehold',
+            'cooperative_society' => 'Co-operative Society',
+            'power_of_attorney' => 'Power of Attorney'
+        ];
+        
+        if($key)
+        {
+            $selectedType = $types[$key] ?? '';
+            return $selectedType;
+        }else{
+            return $types;
+        }
     }
 }
 

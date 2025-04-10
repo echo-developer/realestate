@@ -352,7 +352,6 @@ class PostPropertyController extends Controller
                     'property_type' => 'required',
                     'property_for' => 'required',
                     'expected_price' => 'required',
-                    //'property_category' => 'required',
                 ]);
                 
                 $settings_data = array(
@@ -361,6 +360,7 @@ class PostPropertyController extends Controller
                     'property_type_for' => $request->property_for,
                     'price_currency' => $request->currency,
                     'expected_price' => $request->expected_price,
+                    'project_name' => $request->project_name
                 );
 
                 $additional_data = array(
@@ -392,7 +392,6 @@ class PostPropertyController extends Controller
                     'super_area' => 'required',
                     'total_floors' => 'required',
                 ]);
-                //print_r($request->all());exit;
             
                 $settings_data = array(
                     'carpet_area' => $request->carpet_area,
@@ -400,30 +399,6 @@ class PostPropertyController extends Controller
                     'bedrooms' => $request->bedroom_count ?? null,
                     'bathrooms' => $request->bathroom_count ?? null,
                 );
-
-                // $data = [
-                //     'pid' => $propertyId,
-                //     'floor' => $request->floors,
-                //     'total_floor' => $request->total_floors,
-                //     'flooring_style' => $request->flooring_style,
-                //     'facing_direction' => $request->facing_direction,
-                //     'corner_plot' => $request->corner_plot,
-                //     'allowed_construction' => $request->allowed_construction,
-                //     'construct_year' => $request->age,
-                //     'flat_each_floor' => $request->flat_each_floor,
-                //     'lifts_in_tower' => $request->lifts_in_tower,
-                //     'possession_status' => $request->possession_status,
-                //     'property_furnish' => $request->property_furnish,
-                //     'property_amenity' => is_array($request->amenities) ? implode(',', $request->amenities) : $request->property_amenity,
-                //     'is_personal_washroom' => $request->personal_washroom,
-                //     'pantry_cafeteria_status' => $request->cafeteria,
-                //     'is_corner_shop' => $request->corner_shop,
-                //     'faces_main_road' => $request->main_road_facing,
-                //     'property_desc' => $request->description,
-                //     'balcony' => $request->balcony_count ?? null,
-                //     'buyer_message' => $request->buyer_message ?? null,
-                //     'expected_possesion_month_year' => $expected_possesion_month_year
-                // ];
 
                 $additional_data = array(
                     'floor' => $request->floors,
@@ -465,7 +440,29 @@ class PostPropertyController extends Controller
                         'construction_year' => 'required'
                     ]);
                 }
-                $this->savePropertyAdditional($prop_id, $request);
+
+                $expected_possesion_month_year = trim(
+                    ($request->construction_month ?? '') .
+                        ((!empty($request->construction_month) && !empty($request->construction_year)) ? '-' : '') .
+                        ($request->construction_year ?? '')
+                );
+                
+                $additional_data = array(
+                    'possession_status' => $request->possession_status,
+                    'expected_possesion_month_year' => $expected_possesion_month_year,
+                    'facing_direction' => $request->facing_direction,
+                    'overlooking' => $request->overlooking,
+                    'electric_available' => $request->electric_available,
+                    'water_available' => $request->water_available,
+                    'ownership_type' => $request->ownership_type,
+                );
+
+                $settings_data = array(
+                    'parking_ability' => $request->parking,
+                );
+
+                PrefPropertySetting::where('pid', $prop_id)->update($settings_data);
+                PrefPropertyAdditional::where('pid', $prop_id)->update($additional_data);
                 return json_encode(array(
                     'status' => 'OK',
                 ));

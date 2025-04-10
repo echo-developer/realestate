@@ -53,15 +53,22 @@
                         <span class="text-danger" id="price_currencyError"></span>
                     </div> --}}
 
-                    <select class="" data-width="fit" title="Currency" name="currency">
-                        <option disabled="disabled">Currency</option>
-                        <option value="AED">AED</option>
-                        <option value="EURO">EURO</option>
-                        <option value="POND">POUND</option>
-                        <option value="USD">USD</option>
-                    </select>
-                    <input type="text" class="form-control" name="expected_price"
-                        placeholder="Enter Amount" />
+                    <div class="form-group">
+                        <select class="" data-width="fit" title="Currency" name="currency">
+                            <option disabled="disabled">Currency</option>
+                            <option value="AED" {{ $propertyData->settings->price_currency == 'AED' ? 'selected' : '' }} >AED</option>
+                            <option value="EURO" {{ $propertyData->settings->price_currency == 'EURO' ? 'selected' : '' }} >EURO</option>
+                            <option value="POND" {{ $propertyData->settings->price_currency == 'POND' ? 'selected' : '' }} >POUND</option>
+                            <option value="USD" {{ $propertyData->settings->price_currency == 'USD' ? 'selected' : '' }} >USD</option>
+                        </select>
+                        <input type="text" class="form-control" name="expected_price" placeholder="Enter Amount" value="{{ $propertyData->settings->expected_price }}" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Project Name</label>
+                        <input class="form-control" name="project_name" id="project_name" value="{{ $propertyData->settings->project_name }}" />
+                        <span class="text-danger" id="project_nameError"></span>
+                    </div>
 
                     <div class="form-group">
                         <label for="buyer_message">Message to buyer</label>
@@ -330,7 +337,7 @@
                                     <label class="form-label">Balcony</label>
                                     <div class="cart-plus-minus mb-4 d-flex align-items-center">
                                         <button type="button" class="btn btn-danger minus qtybutton" amenity="balcony">-</button>
-                                        <input class="form-control text-center mx-2 room-count" name="balcony_count" type="text" value="{{ $propertyData->settings->balcony ? $propertyData->settings->balcony : '0' }}" readonly style="max-width: 80px;" >
+                                        <input class="form-control text-center mx-2 room-count" name="balcony_count" type="text" value="{{ $propertyData->additional->balcony ? $propertyData->additional->balcony : '0' }}" readonly style="max-width: 80px;" >
                                         <button type="button" class="btn btn-success plus qtybutton" amenity="balcony">+</button>
                                     </div>
                                     <span class="error balcony_countError text-danger"></span>
@@ -416,17 +423,18 @@
                                 </div>
                             </div>
                         </div>
-
+                        
                         <div class="form-group">
                             <label class="form-label">Floor Type</label>
-                            <select class="form-control" name="flooring_style">
+                            <select class="form-control select2" name="flooring_style[]" multiple>
                                 <option value="">Slect Floor Type</option>
                                 @php  
                                     $floor_types = get_floor_types();
+                                    $style_arr = json_decode($propertyData->additional->flooring_style);
                                 @endphp
                                 @if($floor_types)
                                 @foreach($floor_types as $k=>$f)
-                                    <option value="{{$k}}" {{ $propertyData->additional->flooring_style == $k ? 'selected' : '' }}  >{{$f}}</option>
+                                    <option value="{{$k}}" {{ $style_arr && in_array($k, $style_arr) ? 'selected' : '' }} >{{$f}}</option>
                                 @endforeach
                                 @endif
                             </select>
@@ -600,6 +608,10 @@
     </div>
 
     <script>
+        $(function(){
+            $('.select2').select2();
+        });
+
         $(".qtybutton").off("click").on("click", function () {  
         let parent = $(this).closest(".form-field");  
         let input = parent.find(".room-count"); 
@@ -778,13 +790,81 @@
                             <div class="form-field">
                                 <select class="form-control" name="parking">
                                     <option value="">Select Parking Option</option>
-                                    <option value="av" {{ $propertyData['additional']->parking_ability == 'av' ? 'selected' : '' }}>Available</option>
-                                    <option value="na" {{ $propertyData['additional']->parking_ability == 'na' ? 'selected' : '' }}>Not Available</option>
-                                    <option value="uc" {{ $propertyData['additional']->parking_ability == 'uc' ? 'selected' : '' }}>Under Construction</option>
+                                    <option value="av" {{ $propertyData->additional->parking_ability == 'av' ? 'selected' : '' }}>Available</option>
+                                    <option value="na" {{ $propertyData->additional->parking_ability == 'na' ? 'selected' : '' }}>Not Available</option>
+                                    <option value="uc" {{ $propertyData->additional->parking_ability == 'uc' ? 'selected' : '' }}>Under Construction</option>
                                 </select>
                                 <span class="error parkingError text-danger"></span>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row gx-3">
+                        <div class="col-lg-6 col-12"><label class="form-label">Water Availability</label>
+                            <div class="form-field">
+                                <select class="form-control" name="water_available">
+                                    <option value="">--Select Water Availability--</option>
+                                    @php  
+                                        $water_availability = get_water_availability();
+                                    @endphp
+                                    @if($water_availability)
+                                        @foreach($water_availability as $k=>$a)
+                                            <option value="{{ $k }}" {{ $propertyData->additional->water_available == $k ? 'selected' : '' }} >{{ $a }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                                <span class="error facing_directionError text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-12"><label class="form-label">Status of Electricity</label>
+                            <div class="form-field">
+                                <select class="form-control" name="electric_available">
+                                    <option value="">Select status of electricity</option>
+                                    @php  
+                                        $electricity_status = electricity_status();
+                                    @endphp
+                                    @if($electricity_status)
+                                        @foreach($electricity_status as $k=>$a)
+                                            <option value="{{ $k }}" {{ $propertyData->additional->electric_available == $k ? 'selected' : '' }} >{{ $a }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                                <span class="error electric_availableError text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Overlooking</label>
+                        <select class="form-control select2" name="overlooking[]" multiple>
+                            <option value="">Slect Overlooking</option>
+                            @php  
+                                $overlooking_list = get_overlooking_list();
+                                $overlooking_arr = json_decode($propertyData->additional->overlooking);
+                            @endphp
+                            @if($overlooking_list)
+                            @foreach($overlooking_list as $k=>$f)
+                                <option value="{{ $k }}" {{ $overlooking_arr && in_array($k, $overlooking_arr) ? 'selected' : '' }} >{{ $f }}</option>
+                            @endforeach
+                            @endif
+                        </select>
+                        <span class="error overlookingError text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Ownership Type</label>
+                        <select class="form-control" name="ownership_type">
+                            <option value="">Slect Ownership Type</option>
+                            @php  
+                                $ownership_types = get_ownership_types();
+                            @endphp
+                            @if($ownership_types)
+                            @foreach($ownership_types as $k=>$f)
+                                <option value="{{ $k }}" {{ $propertyData->additional->ownwership_type ? 'selected' : '' }} >{{ $f }}</option>
+                            @endforeach
+                            @endif
+                        </select>
+                        <span class="error ownership_typeError text-danger"></span>
                     </div>
 
                     {{-- <div class="row gx-3">
