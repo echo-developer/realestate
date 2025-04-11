@@ -35,7 +35,6 @@ class Enquery_CRM_Controller extends Controller
                 'updated_at' => now(),
             ];
 
-
             $existCustomer = DB::table('customer')
                 ->where('Phone', $dataToInsert['Phone'])
                 ->first();
@@ -62,10 +61,21 @@ class Enquery_CRM_Controller extends Controller
             ];
 
             if ($customer_id != null || $customer_id != '') {
-
-                $saveEnquery = DB::table('property_enquiry')
-                    ->insert($dataToInsertEnqueryTable);
+                $enquery_id = DB::table('property_enquiry')
+                    ->insertGetId($dataToInsertEnqueryTable);
             }
+
+            if($enquery_id && $getUserId_ofthePropertyId)
+            {
+                $assign_data = array(
+                    'lead_type'=> 'P',
+                    'user_id'=> $getUserId_ofthePropertyId,
+                    'enquery_id'=> $enquery_id
+                );
+
+                DB::table('leads_assigned')->insert($assign_data);
+            }
+            
 
             return response()->json([
                 'status' => 1,
