@@ -221,7 +221,7 @@ const Index = () => {
                   <ul className="list list-1 list-get">
                     <li>
                       {translation?.post_property ||
-                        "Post one Single Property for FREE"}
+                        "Post Property for FREE"}
                     </li>
                     <li>
                       {translation?.set_alerts ||
