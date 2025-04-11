@@ -11,6 +11,7 @@ use App\Models\CertificatesModel;
 use App\Models\PrefProject;
 use App\Models\PrefProperty;
 use App\Models\PrefPropertyAdditional;
+use App\Models\ProjectAdditional;
 use App\Models\ProjectFavorite;
 use App\Models\ProjectView;
 use App\Models\PropertyView;
@@ -193,6 +194,8 @@ class DashboardController extends Controller
                         'price' => $property->expected_price,
                         'created_at' => $property->created_at,
                         'address' => $property->property_address,
+                        'brochure_file' => $property->brochure_file,
+                        'brochure_url' => !empty($property->brochure_file) ? asset('user_upload/property_brochure/' . $property->brochure_file) : '',
                         'galleries' => $transformedData,
                     ];
                 });
@@ -1305,6 +1308,49 @@ class DashboardController extends Controller
             throw $e;
         }
     }
+
+    // public function getAllBrochureData(Request $request)
+    // {
+    //     try {
+    //         $property_id = $request->input('property_id');
+    //         $project_id = $request->input('project_id');
+
+    //         if (!empty($property_id) && !empty($project_id)) {
+    //             return response()->json([
+    //                 'status' => 1,
+    //                 'message' => 'Both Property and Project IDs are present. Unable to proceed.',
+    //             ]);
+    //         }
+
+    //         $filter = [];
+    //         if (!empty($property_id)) {
+    //             $brochureData = PrefPropertyAdditional::where('pid',$property_id)->value('brochure_file');
+    //         } elseif (!empty($project_id)) {
+    //             $brochureData = ProjectAdditional::where('project_id',$project_id)->value('brochure_file');
+    //         } else {
+    //             return response()->json([
+    //                 'status' => 1,
+    //                 'message' => 'Either Property ID or Project ID must be provided.',
+    //             ]);
+    //         }
+
+    //         if ($brochureData->isEmpty()) {
+    //             return response()->json([
+    //                 'status' => 1,
+    //                 'message' => 'No certificates found.',
+    //                 'data' => []
+    //             ]);
+    //         }
+
+    //         return response()->json([
+    //             'status' => 1,
+    //             'message' => 'Data retrieved successfully.',
+    //             'data' => $brochureData,
+    //         ]);
+    //     } catch (\Throwable $e) {
+    //         throw $e;
+    //     }
+    // }
 
     public function uploadPropProjcertificatesImages(Request $request)
     {

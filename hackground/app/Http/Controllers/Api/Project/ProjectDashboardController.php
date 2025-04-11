@@ -60,7 +60,7 @@ class ProjectDashboardController extends Controller
             ['is_deleted', false]
         ])->with([
             'settings:project_id,project_budget,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type,post_for,area_in_sqft',
-            'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
+            'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name,brochure_file',
             'location:project_id,locality,city,address',
             'gallery:id,project_id,image_type',
             'gallery.images:gallary_id,filename,caption'
@@ -105,6 +105,11 @@ class ProjectDashboardController extends Controller
                 $flattenedData['uname'] = $flattenedData['uid'];
                 unset($flattenedData['uid']);
             }
+
+            $flattenedData['brochure_url'] = !empty($flattenedData['brochure_file'])
+                ? asset('user_upload/project_brochure/' . $flattenedData['brochure_file'])
+                : '';
+
 
             $flattenedData['image_count'] = getGalleriesCount($flattenedData['id'], 'project');
 
