@@ -17,9 +17,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const translation = useTranslation();
 
   const unitOptions = [
-    { label: translation?.acre || "Acre", key: "acre" },
-    { label: translation?.sqft || "sqft", key: "sqft" },
-    { label: translation?.sqm || "sqm", key: "sqm" },
+    { label: translation?.acre || "Acre", key: translation?.acre || "acre"},
+    { label: translation?.sqft || "sqft", key: translation?.sqft || "sqft" },
+    { label: translation?.sqm || "sqm", key: translation?.sqm ||"sqm" },
   ];
 
   let propertyFor = localStorage.getItem("property_for_key");

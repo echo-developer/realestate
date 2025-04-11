@@ -134,7 +134,7 @@ Route::controller(DashboardController::class)->group(function () {
     Route::post('update_my_profile', 'update_my_profile')->name('update.my.profile');
 
     Route::post('upload_prt_brochure', 'uploaodPrtBrochure')->name('upload.prt.brochure');
-    Route::get('download_prt_brochure', 'downloadprtBrochure')->name('download.prt.brochure');
+    // Route::get('download_prt_brochure', 'downloadprtBrochure')->name('download.prt.brochure'); not needed
     Route::post('uploadDocument', 'agentDocUplaod')->name('agent.doc.upload');
     Route::post('remove_document', 'removeUploadedDoc')->name('agent.doc.remove');
 
@@ -229,7 +229,7 @@ Route::get('additional_project_details', [ProjectDashboardController::class, 'Ex
 Route::post('add_extra_project_details', [ProjectDashboardController::class, 'AddExtraProjectDetails']);
 
 Route::post('upload_prj_brochure', [ProjectDashboardController::class, 'uploaodPrjBrochure'])->name('uplaod.project.brochure');
-Route::get('download_prj_brochure', [ProjectDashboardController::class, 'downloadprjBrochure']);
+// Route::get('download_prj_brochure', [ProjectDashboardController::class, 'downloadprjBrochure']); not needed
 
 Route::get('get-searchedprojects', [ProjectListandSearchController::class, 'getSearchedProjects']);
 Route::post('project_delete', [ProjectDeleteController::class, 'ProjectDelete']);

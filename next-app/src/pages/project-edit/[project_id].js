@@ -954,7 +954,7 @@ const Index = () => {
       >
         <Modal.Header closeButton>
           <Modal.Title>
-            {translation?.edit || "Edit"} {formatTabName(selectedItem)}
+            {translation?.edit || "Edit"} {formatTabName[selectedItem]}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>{renderModalContent()}</Modal.Body>

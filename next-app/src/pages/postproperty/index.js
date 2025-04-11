@@ -349,9 +349,9 @@ const Index = () => {
       } else {
         setRemainingData(response.remaining_listings_allowed);
         setShowCreditModal(true);
-        
+
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const handleCloseCreditModal = () => {
@@ -445,9 +445,8 @@ const Index = () => {
                     <li className="nav-item">
                       {!memberId && (
                         <a
-                          className={`nav-link ${
-                            currentStep === 1 ? "active" : ""
-                          }`}
+                          className={`nav-link ${currentStep === 1 ? "active" : ""
+                            }`}
                         >
                           {translation?.personal_info || "Personal Info"}
                         </a>
@@ -455,45 +454,40 @@ const Index = () => {
                     </li>
                     <li className="nav-item">
                       <a
-                        className={`nav-link ${
-                          currentStep === 2 ? "active" : ""
-                        }`}
+                        className={`nav-link ${currentStep === 2 ? "active" : ""
+                          }`}
                       >
                         {translation?.property_details || "Property Details"}
                       </a>
                     </li>
                     <li className="nav-item">
                       <a
-                        className={`nav-link ${
-                          currentStep === 3 ? "active" : ""
-                        }`}
+                        className={`nav-link ${currentStep === 3 ? "active" : ""
+                          }`}
                       >
                         {translation?.location || "Location"}
                       </a>
                     </li>
                     <li className="nav-item">
                       <a
-                        className={`nav-link ${
-                          currentStep === 4 ? "active" : ""
-                        }`}
+                        className={`nav-link ${currentStep === 4 ? "active" : ""
+                          }`}
                       >
                         {translation?.features || "Features"}
                       </a>
                     </li>
                     <li className="nav-item">
                       <a
-                        className={`nav-link ${
-                          currentStep === 5 ? "active" : ""
-                        }`}
+                        className={`nav-link ${currentStep === 5 ? "active" : ""
+                          }`}
                       >
                         {translation?.availability || "Availability"}
                       </a>
                     </li>
                     <li className="nav-item">
                       <a
-                        className={`nav-link ${
-                          currentStep === 6 ? "active" : ""
-                        }`}
+                        className={`nav-link ${currentStep === 6 ? "active" : ""
+                          }`}
                       >
                         {translation?.photos || "Photos"}
                       </a>
@@ -515,7 +509,6 @@ const Index = () => {
                         memberId={memberId}
                       />
                     )}
-
                     {/* Step 2: Property Details */}
                     {currentStep === 2 && (
                       <Step2Form
@@ -579,7 +572,7 @@ const Index = () => {
             <aside className="col-lg-4 col-12 d-none d-lg-block">
               <div className="card border-0 shadow-1 mt-3 mt-lg-0">
                 <div className="card-body">
-                  <h3 className="mb-3">Key Points to Remember</h3>
+                  <h3 className="mb-3">{translation?.key_points_remember || "Key Points to Remember"}</h3>
                   <div className="ad-post-points">
                     {points.map((item, index) => (
                       <div className="d-flex mb-3" key={index}>

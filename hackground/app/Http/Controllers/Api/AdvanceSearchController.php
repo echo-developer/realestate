@@ -189,13 +189,9 @@ class AdvanceSearchController extends Controller
 
     public function propertiesBasedonSearch(Request $rq)
     {
-        $user_id = $rq->user_id ?? null;
+        $user_id = $rq->user_id;
 
-        if ($user_id === "null" || $user_id === "") {
-            $user_id = null;
-        }
-
-        if (!is_null($user_id)) {
+        if (!is_null($user_id) && is_numeric($user_id)) {
             $this->saveUserActivity($rq, $user_id);
         }
 

@@ -116,19 +116,6 @@
         };
     </script>
 
-    <script>
-        $(document).ready(function() {
-            // Ensure modal closes when clicking close button or outside the modal
-            $('#Modal').on('hidden.bs.modal', function() {
-                $(this).find("form").trigger("reset"); // Reset form fields after closing
-            });
-
-            // Close modal on close button click
-            $('.close, .btn-secondary').on('click', function() {
-                $('#Modal').modal('hide');
-            });
-        });
-    </script>
     @stack('custom-js')
 </body>
 <div class="modal fade" id="ajax_modal" tabindex="-1" role="dialog" aria-labelledby="ajax_modal" aria-hidden="true">

@@ -12,8 +12,8 @@ import useDateFormat from "@/hooks/useDateFormat";
 import UploadProjectBrochure from "../BrochureData/UploadProjectBrochure";
 import AddExtraProjectData from "../addtional/AddExtraProjectData";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
-import useTranslation from '../../hooks/useTranslation'
-
+import useTranslation from "../../hooks/useTranslation";
+import ProjectDocumentModal from "../addtional/AddProjectDocument";
 
 const ProjectExpiredComponent = ({ projectData }) => {
   const { callApi } = AuthUser();
@@ -32,6 +32,7 @@ const ProjectExpiredComponent = ({ projectData }) => {
   const [showModal, setShowModal] = useState(false);
   const [showExtraField, setShowExtraField] = useState(false);
   const translation = useTranslation();
+  const [docModal, setShowDocModal] = useState(false);
 
   const handleShowFloorModal = (id) => {
     setShowModal(true);
@@ -109,6 +110,14 @@ const ProjectExpiredComponent = ({ projectData }) => {
     setShowBrochModal(true);
     setPropId(id);
   };
+  const handleProjectCertificate = (id) => {
+    setShowDocModal(true);
+    setPropId(id);
+  };
+
+  const handleDocClose = () => {
+    setShowDocModal(false);
+  };
 
   return (
     <>
@@ -118,8 +127,13 @@ const ProjectExpiredComponent = ({ projectData }) => {
             <div className="card card-ads" key={project.id}>
               <div className="row g-0">
                 <div className="col-sm-4">
-                  
-                  <CardImageSlider data={project} keyword="gallery" icons={false} showSq={true} showPrice={false} />
+                  <CardImageSlider
+                    data={project}
+                    keyword="gallery"
+                    icons={false}
+                    showSq={true}
+                    showPrice={false}
+                  />
                 </div>
                 <div className="col-sm-8 position-relative">
                   <div className="card-body">
@@ -133,15 +147,18 @@ const ProjectExpiredComponent = ({ projectData }) => {
                     </p>
                     <ul className="list-info mb-2">
                       <li>
-                        <i className="icon-img-flat"></i>  {translation?.occupied_area || "Occupied Area:"}{" "}
+                        <i className="icon-img-flat"></i>{" "}
+                        {translation?.occupied_area || "Occupied Area:"}{" "}
                         {project.occupied_area}
                       </li>
                       <li>
-                        <i className="icon-img-bed"></i>{translation?.total_area || "Total Area:"}{" "}
+                        <i className="icon-img-bed"></i>
+                        {translation?.total_area || "Total Area:"}{" "}
                         {project.total_area}
                       </li>
                       <li>
-                        <i className="icon-img-tub"></i> {translation?.total_units || "Total Units:"}{" "}
+                        <i className="icon-img-tub"></i>{" "}
+                        {translation?.total_units || "Total Units:"}{" "}
                         {project.total_units}
                       </li>
                     </ul>
@@ -187,6 +204,12 @@ const ProjectExpiredComponent = ({ projectData }) => {
                       >
                         {translation?.add_extra_field || "Add Extra Feild"}
                       </button>
+                      <button
+                        onClick={() => handleProjectCertificate(project.id)}
+                        className="btn btn-sm btn-primary"
+                      >
+                        {translation?.add_certificate || "Add Certificate"}
+                      </button>
                       <Link
                         href={`/project-edit/${project.id}`}
                         className="btn btn-sm btn-outline-primary ms-auto"
@@ -207,10 +230,19 @@ const ProjectExpiredComponent = ({ projectData }) => {
           ))
         ) : (
           <>
-            <div className='card border-0 text-center'>
+            <div className="card border-0 text-center">
               <div className="card-body">
-                <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" loading="lazy"/>
-                <p className='text-muted'>{translation?.no_record_founds || "No Record Founds"}</p>
+                <img
+                  src="/assets/images/icons/9939447.png"
+                  alt="Icon"
+                  height={48}
+                  width={48}
+                  className="mb-2"
+                  loading="lazy"
+                />
+                <p className="text-muted">
+                  {translation?.no_record_founds || "No Record Founds"}
+                </p>
               </div>
             </div>
           </>
@@ -220,7 +252,7 @@ const ProjectExpiredComponent = ({ projectData }) => {
       <div className="text-center">
         {currentPage < totalPages && properties.length > 10 && (
           <button className="btn btn-primary" onClick={loadMoreProperties}>
-           {translation?.load_more || "Load More"}
+            {translation?.load_more || "Load More"}
           </button>
         )}
       </div>
@@ -256,6 +288,13 @@ const ProjectExpiredComponent = ({ projectData }) => {
           show={showExtraField}
           handleClose={handleCloseExtraField}
           propId={propId}
+        />
+      )}
+      {docModal && (
+        <ProjectDocumentModal
+          propId={propId}
+          show={docModal}
+          onClose={handleDocClose}
         />
       )}
       <UploadProjectBrochure

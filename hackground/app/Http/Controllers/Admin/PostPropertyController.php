@@ -31,7 +31,7 @@ class PostPropertyController extends Controller
             //load CSS
             $cssFiles = File::files(public_path('assets/property_css'));
             $userData = User::where('id', $user_id)->first();
-
+            
             $cssPaths = [];
             foreach ($cssFiles as $file) {
                 $cssPaths[] = 'assets/property_css/' . $file->getFilename();
@@ -41,10 +41,10 @@ class PostPropertyController extends Controller
 
             //load Property type
             $propertyTypes = json_decode($homeontroller->getPropertyType($request)->getContent(), true)['data'] ?? [];
-
+            
             //load cities
             $cities = json_decode($homeontroller->city($request)->getContent(), true)['data'] ?? [];
-
+            
             $postController = new PostController();
 
             //load proepertyAmenities
@@ -57,7 +57,7 @@ class PostPropertyController extends Controller
             //load Property Status
             $propertyStatus = json_decode($postController->status($request)->getContent(), true)['data'] ?? [];
             // dd($propertyStatus);
-
+            
             return view('Admin.Post_property_view.post_property', compact('cssPaths', 'userData', 'propertyTypes', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus'));
         } else {
             return redirect('member/memberUser');
@@ -220,7 +220,6 @@ class PostPropertyController extends Controller
 
             if ($step == '1') {
                 $request->validate([
-                    'postAs' => 'required',
                     'name' => 'required',
                     'email' => 'required',
                 ]);
@@ -232,6 +231,7 @@ class PostPropertyController extends Controller
             }
             if ($step == '2') {
                 $request->validate([
+                    'postAs' => 'required',
                     'postFor' => 'required',
                     'property_type' => 'required',
                     'property_for' => 'required',
@@ -246,7 +246,7 @@ class PostPropertyController extends Controller
             if ($step == '3') {
                 $request->validate([
                     'city' => 'required',
-                    'landmark' => 'required',
+                    //'landmark' => 'required',
                     'address' => 'required',
                     'description' => 'required'
                 ]);

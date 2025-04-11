@@ -10,7 +10,7 @@
     <title>New Admin | Admin</title>
     <meta name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">public\
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Disable tap highlight on IE -->
     <meta name="msapplication-tap-highlight" content="no">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
@@ -72,7 +72,7 @@
 
 
 <body>
-    <div id="loader"
+    {{-- <div id="loader"
         style="
     position: fixed;
     top: 0;
@@ -88,7 +88,7 @@
         <div class="spinner-border text-primary" role="status">
             <span class="sr-only">Loading...</span>
         </div>
-    </div>
+    </div> --}}
     <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
         @include('Admin.layouts.header')
 

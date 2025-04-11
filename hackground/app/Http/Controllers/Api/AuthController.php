@@ -197,12 +197,10 @@ class AuthController extends Controller
         $cacheKey = "password_reset_token:{$user->email}";
         Cache::put($cacheKey, $token, now()->addMinutes(30));
 
-        // Generate the reset URL for the React app
-        $resetUrl = "http://localhost:3002/reset-password?token=$token&email={$user->email}";
+        $resetUrl = config('app.frontend_url') . '/reset-password?token=' . urlencode($token) . '&email=' . urlencode($user->email);
 
-        // Send the email with the reset URL
-        $message = "Click the link below to reset your password. This link is valid for 30 minutes: $resetUrl";
-        SendPasswordResetEmail::dispatch($user->email, $message);
+        $mail_unique_title = 'reset-password';
+        SendPasswordResetEmail::dispatch($user->email,$mail_unique_title,['RESET_A_LINK' =>  $resetUrl]);
 
         return response()->json([
             'status' => 1,

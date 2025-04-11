@@ -255,8 +255,8 @@ const index = () => {
                     </p>
                   )}
                 </div>
-
-                <div class="col-md-auto text-md-end">
+                {propertyDetails?.property_brochure_pdf && (
+                  <div class="col-md-auto text-md-end">
                   <div class="d-grid flex-column gap-3 h-100">
                     <p>
                       {translation?.download_brochure || "Download Brochure"}
@@ -274,6 +274,7 @@ const index = () => {
                     </p>
                   </div>
                 </div>
+                )}
 
                 <div className="col-md-auto text-md-end"></div>
               </div>

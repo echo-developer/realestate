@@ -50,7 +50,7 @@
     </div>
     @endif
 
-    <form action="{{ url('allproperties/all-property-view') }}" method="get">
+    {{-- <form action="{{ url('allproperties/all-property-view') }}" method="get">
         <section class="content-header mb-2">
             <div class="row">
                 <div class="offset-sm-8 col-sm-4">
@@ -66,7 +66,124 @@
                 </div>
             </div>
         </section>
-    </form>
+    </form> --}}
+
+    <form action="{{ url('allproperties/all-property-view') }}" method="get" class="form-horizontal">
+        {{-- <div class="row">
+          <div class="col-xl-4 col-lg-6 col-12">
+            <div class="form-field">
+              <label>Search by ID</label>
+              <div class="input-group">
+                <input type="search" class="form-control rounded-2" name="unique_id" placeholder="Profile ID" value="<?php echo !empty($srch['unique_id']) ? $srch['unique_id'] : '';?>">
+                <a href="javascript:void(0)" class="btn btn-site ml-3" title="Advance Search" onclick="$('#advanceFilter').slideToggle();"><i class="bi bi-funnel"></i></a>
+              </div>
+            </div>
+          </div>
+        </div> --}}
+        <fieldset id="advanceFilter">
+          <h3>Filter</h3>
+          <div class="row">
+
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+              <div class="form-field">
+                <label>Property Name</label>
+                <input type="text" class="form-control" name="term" placeholder="Property Name" value="<?php echo !empty($srch['term']) ? $srch['term'] : '';?>">
+              </div>
+            </div>
+        
+            @if(!$user_id)
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="form-field">
+                    <label>User Name</label>
+                    <input type="text" class="form-control" name="username" placeholder="Name" value="<?php echo !empty($srch['username']) ? $srch['username'] : '';?>">
+                </div>
+            </div>
+            @endif
+
+            @php  
+                $post_for = get_property_for_types();
+            @endphp
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="form-field">
+                    <label>Post For</label>
+                    <select class="form-control" name="post_for">
+                        <option  value="">--Select--</option>
+                        @if($post_for)
+                            @foreach($post_for as $k=>$t)
+                            <option value="{{ $k }}" <?php echo (!empty($srch['post_for']) && ($srch['post_for'] == $k)) ? 'selected' : ''; ?> >{{ $t }}</option>
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+            </div>
+
+            @php  
+              $property_types = get_all_property_category();
+            @endphp
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="form-field">
+                    <label>Property Type</label>
+                    <select class="form-control" name="property_type">
+                        <option  value="">--Select--</option>
+                        @if($property_types)
+                            @foreach($property_types as $k=>$t)
+                            <option value="{{ $t->id }}" <?php echo (!empty($srch['property_types']) && ($srch['property_types'] == $t->id)) ? 'selected' : ''; ?> >{{ $t->name }}</option>
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+            </div>
+
+           @php  
+            $property_types_for = get_all_property_sub_category();
+           @endphp
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+              <div class="form-field">
+                  <label>Property For</label>
+                  <select class="form-control" name="property_for">
+                      <option  value="">--Select--</option>
+                      @if($property_types_for)
+                          @foreach($property_types_for as $k=>$t)
+                          <option value="{{ $t->id }}" <?php echo (!empty($srch['property_for']) && ($srch['property_for'] == $t->id)) ? 'selected' : ''; ?> >{{ $t->name }}</option>
+                          @endforeach
+                      @endif
+                  </select>
+              </div>
+            </div>
+
+            @php  
+            $cities = get_all_city();
+            @endphp
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+              <div class="form-field">
+                <label>City</label>			
+                <select class="form-control" name="city">
+                  <option value="">--Select--</option>
+                  @if($cities)
+                    @foreach($cities as $k=>$c)
+                       <option value="{{ $c->city_id }}" <?php echo (!empty($srch['city']) && ($srch['city'] == $c->city_id)) ? 'selected' : ''; ?> >{{ $c->name }}</option>
+                    @endforeach
+                  @endif
+                </select>
+              </div>
+            </div>
+          
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="form-field">
+                    <label>Post Date</label>
+                    <input type="date" class="form-control" name="post_date" placeholder="Post Date" value="<?php echo !empty($srch['post_date']) ? $srch['post_date'] : '';?>" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+              <div class="form-field mb-0">
+                <label class="d-none d-xl-block">&nbsp;</label>
+                <button class="btn btn-primary btn-block">Search</button>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
 
     <div class="main-card mb-3 card">
         <div class="card-body">
@@ -237,14 +354,13 @@
         $('.prop_status').on('change', function() {
             var propertyId = $(this).data('property-id');
             var status = $(this).val();
-            
             switch (status) {
                 case 'delete':
                     var url = `{{ url('allproperties/delete') }}`
                     break;
                 case 'edit_view':
-                    window.location.href = `{{ url('property/edit') }}/${propertyId}`;
-                    break;
+                    window.location.href = `{{ url('property/edit') }}/${propertyId}`
+                    return;
                 default:
                     var url = `{{ url('allproperties/statusupdate') }}`
                     break;

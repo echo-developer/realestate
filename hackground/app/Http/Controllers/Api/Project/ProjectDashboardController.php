@@ -60,7 +60,7 @@ class ProjectDashboardController extends Controller
             ['is_deleted', false]
         ])->with([
             'settings:project_id,project_budget,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type,post_for,area_in_sqft',
-            'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
+            'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name,brochure_file',
             'location:project_id,locality,city,address',
             'gallery:id,project_id,image_type',
             'gallery.images:gallary_id,filename,caption'
@@ -106,6 +106,11 @@ class ProjectDashboardController extends Controller
                 unset($flattenedData['uid']);
             }
 
+            $flattenedData['brochure_url'] = !empty($flattenedData['brochure_file'])
+                ? asset('user_upload/project_brochure/' . $flattenedData['brochure_file'])
+                : '';
+
+
             $flattenedData['image_count'] = getGalleriesCount($flattenedData['id'], 'project');
 
             if (isset($flattenedData['gallery'])) {
@@ -136,8 +141,6 @@ class ProjectDashboardController extends Controller
         ]);
     }
 
-
-
     public function uploaodPrjBrochure(Request $request)
     {
 
@@ -145,7 +148,7 @@ class ProjectDashboardController extends Controller
             $project_brochure = $request->file('brochure_data');
             $project_id = $request->input('project_id');
 
-            $fileName = "project_{$project_id}_" . $project_brochure->getClientOriginalName();
+            $fileName = $project_brochure->getClientOriginalName();
 
 
             $uploadPath = public_path('user_upload/project_brochure');

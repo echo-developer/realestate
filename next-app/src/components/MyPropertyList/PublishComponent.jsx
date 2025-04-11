@@ -199,7 +199,7 @@ const PublishComponent = ({ propertiesData }) => {
                         }
                         className="btn btn-sm btn-danger me-2"
                       >
-                        {translation?.certificate || "Add Certificate"}
+                        {translation?.add_certificate || "Add Certificate"}
                       </a>
                       <Link
                         href={`/property-edit/${property?.property_id}`}
