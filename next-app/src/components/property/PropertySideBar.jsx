@@ -15,7 +15,6 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import TopAgentList from "../userReview/TopAgent";
 import Link from "next/link";
 import useTranslation from "@/hooks/useTranslation";
-import { property_features } from "@/components/post/PropertyData";
 import useAdvertisement from "@/hooks/useAdvertisement";
 import { useAuth } from "@/context/AuthProvider";
 
@@ -51,6 +50,28 @@ const PropertySidebar = ({
 
   const [errors, setErrors] = useState({});
   const countryCodes = ["IND +91", "+81", "+71", "+61", "+51"];
+  const property_features = [
+    `${translation?.prime_location || "Prime location in a well-developed neighborhood."}
+`,
+    `${translation?.spacious_living || "Spacious and well-ventilated living areas."}
+`,
+    `${translation?.smart_home_features || "State-of-the-art smart home automation features."}
+`,
+    `${translation?.modern_kitchen || "Modern kitchen with high-end appliances."}
+`,
+    `${translation?.luxury_bathroom || "Luxury bathroom fittings and stylish interiors."}
+`,
+    `${translation?.energy_efficient || "Energy-efficient lighting and power backup."}
+`,
+    `${translation?.dedicated_parking || "Dedicated parking spaces and EV charging stations."}
+`,
+    `${translation?.high_speed_internet || "High-speed internet and fiber optic connectivity."}
+`,
+    `${translation?.fire_earthquake_safety || "Advanced fire safety and earthquake-resistant design."}
+`,
+    `${translation?.proximity_to_nature || "Proximity to parks, lakes, and natural landscapes."}
+`,
+  ];
 
   const validateForm = () => {
     const newErrors = {};
@@ -162,18 +183,16 @@ const PropertySidebar = ({
                       height="84"
                       width="84"
                       className="rounded-circle"
-                      src={`${
-                        propertyDetails?.user_details?.image ||
+                      src={`${propertyDetails?.user_details?.image ||
                         "/assets/images/user.jpg"
-                      }`}
+                        }`}
                     />
                   </div>
                   <div>
                     <h4>
                       {propertyDetails?.user_details?.name ||
-                        `${
-                          translation?.not_available ||
-                          `${translation?.not_available || "Not Available"}`
+                        `${translation?.not_available ||
+                        `${translation?.not_available || "Not Available"}`
                         }`}
                       <i
                         className="icon-img-check ms-2"
@@ -186,9 +205,8 @@ const PropertySidebar = ({
                     <p className="mb-0">
                       <i>
                         {propertyDetails?.user_details?.totalProperty ||
-                          `${
-                            translation?.not_available ||
-                            `${translation?.not_available || "Not Available"}`
+                          `${translation?.not_available ||
+                          `${translation?.not_available || "Not Available"}`
                           }`}{" "}
                         {translation?.buyer_served || "Buyer served"}
                       </i>
@@ -214,21 +232,19 @@ const PropertySidebar = ({
                       {propertyDetails?.user_details?.user_type === "A"
                         ? `${translation?.agent || "Agent"}`
                         : propertyDetails?.user_details?.user_type === "O"
-                        ? `${translation?.owner || "Owner"}`
-                        : propertyDetails?.user_details?.user_type === "B"
-                        ? `${translation?.builder || "Builder"}`
-                        : `${
-                            translation?.not_available ||
+                          ? `${translation?.owner || "Owner"}`
+                          : propertyDetails?.user_details?.user_type === "B"
+                            ? `${translation?.builder || "Builder"}`
+                            : `${translation?.not_available ||
                             `${translation?.not_available || "Not Available"}`
-                          }`}
+                            }`}
                     </p>
 
                     <p>
                       <i className="icon-feather-map-pin text-site"></i>
                       {propertyDetails?.user_details?.address ||
-                        `${
-                          translation?.not_available ||
-                          `${translation?.not_available || "Not Available"}`
+                        `${translation?.not_available ||
+                        `${translation?.not_available || "Not Available"}`
                         }`}
                     </p>
                     <ul className="p-0">
@@ -262,11 +278,10 @@ const PropertySidebar = ({
                         >
                           {showPhoneNumber
                             ? propertyDetails?.user_details?.phone_code +
-                              propertyDetails?.user_details?.phone
-                            : `${
-                                translation?.get_phone_number ||
-                                "Get Phone Number"
-                              }`}
+                            propertyDetails?.user_details?.phone
+                            : `${translation?.get_phone_number ||
+                            "Get Phone Number"
+                            }`}
                         </button>
                       )}
                       <button
@@ -431,9 +446,8 @@ const PropertySidebar = ({
               <i className="icon-line-awesome-star text-warning"></i>{" "}
               <span>
                 {propertyDetails?.project_reviews?.total_reviews ||
-                  `${
-                    translation?.not_available ||
-                    `${translation?.not_available || "Not Available"}`
+                  `${translation?.not_available ||
+                  `${translation?.not_available || "Not Available"}`
                   }`}
                 {"/5"}
               </span>
@@ -443,9 +457,8 @@ const PropertySidebar = ({
           {!propertyDetails?.is_my_property && (
             <a
               role="button"
-              className={` btn me-2 ads-fav ${
-                propertyDetails?.is_favourite ? "active" : ""
-              }`}
+              className={` btn me-2 ads-fav ${propertyDetails?.is_favourite ? "active" : ""
+                }`}
               title="Save for Later"
               onClick={handleSaveFav}
             >
