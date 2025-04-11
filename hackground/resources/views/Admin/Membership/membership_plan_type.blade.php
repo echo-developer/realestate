@@ -86,7 +86,7 @@
                             <td>
                                 Listings Allowed: {{$planType->listings_allowed}}
                                 <br>
-                                Contact Owners : {{$planType->owner_contacted}}
+                                Contact Owners : {{$planType->leads}}
                                 <br>
                                 Listing Visibility : {{$planType->listing_visibility}}
                                 <br>
@@ -146,8 +146,8 @@
                     @endforeach
 
                     <div class="form-group">
-                        <label for="contact_owners">Contact Owners:</label>
-                        <input type="text" class="form-control" id="owner_contacted" name="owner_contacted">
+                        <label for="leads">Leads:</label>
+                        <input type="text" class="form-control" id="leads" name="leads">
                         <div class="invalid-feedback" id="contact_owners_error"></div>
                     </div>
 
@@ -323,7 +323,7 @@
 
         function populateForm(data) {
             $('#planTypeId').val(data.id);
-            $('#owner_contacted').val(data.owner_contacted);
+            $('#leads').val(data.leads);
             $('#listing_visibility').val(data.listing_visibility);
             $('#listings_allowed').val(data.listings_allowed);
             $(`input[name="status"][value="${data.status}"]`).prop('checked', true);

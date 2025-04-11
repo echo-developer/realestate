@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\EmailTempController;
 use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\FloorPlanController;
 use App\Http\Controllers\Admin\GroupSettingController;
+use App\Http\Controllers\Admin\LoanEnqueryController;
 use App\Http\Controllers\Admin\LocalityController;
 use App\Http\Controllers\Admin\MembershipFeaturesController;
 use App\Http\Controllers\Admin\MembershipPlanController;
@@ -46,6 +47,7 @@ use App\Http\Controllers\Api\FloorPlaningController;
 use App\Http\Controllers\Api\Project\ProjectImageUploade;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -520,6 +522,11 @@ Route::middleware('admin_auth')->group(function () {
             Route::post('status', 'status')->name('status');
             Route::post('delete', 'destroy')->name('delete');
         });
+
+    Route::prefix('bank/loan')->controller(LoanEnqueryController::class)->group(function () {
+
+        Route::get('enquery_list', 'loanEnquery')->name('delete');
+    });
 });
 
 Route::get('/artisan-run', function () {

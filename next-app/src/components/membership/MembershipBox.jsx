@@ -102,11 +102,11 @@ const translation = useTranslation();
                                         {typeof featureValue === 'string' ? (
                                             featureValue === 'Y' || featureValue === 'N' ? (
                                                 featureValue === 'Y' ? (
-                                                    <i className="material-icons-outlined text-green">{translation?.check || "check"}</i>
+                                                    <i className="material-icons-outlined text-green">check</i>
                                                 ) : (
-                                                    <i className="material-icons-outlined text-danger">{translation?.close || "close"}</i>
+                                                    <i className="material-icons-outlined text-danger">close</i>
                                                 )
-                                            ) : (
+                                            ) : ( 
                                                 featureValue.trim() === '' ? '-' : featureValue
                                             )
                                         ) : featureValue === null || featureValue === undefined ? (

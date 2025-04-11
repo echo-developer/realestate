@@ -43,6 +43,10 @@
                 <div class="card-body">
                     <ul class="list-info">
                         <li>
+                            <b>Property Name:</b>
+                            <span>{{ ucfirst(optional($propertyData->settings)->post_for ?? 'N/A') }}</span>
+                        </li>
+                        <li>
                             <b>Post For:</b>
                             <span>{{ ucfirst(optional($propertyData->settings)->post_for ?? 'N/A') }}</span>
                         </li>
@@ -81,7 +85,7 @@
                     <ul class="list-info">
                         <li>
                             <b>City:</b>
-                            <span>{{$propertyData->location->locality}}</span>
+                            <span>{{ $propertyData->location->city }}</span>
                         </li>
                         <li>
                             <b>Locality:</b>

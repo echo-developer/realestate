@@ -18,7 +18,7 @@ class MembershipPlanTypeService
     $lang = 'en'; // Assuming this comes from request or settings
 
     return MembershipPlanType::where('status', '!=', config('constants.STATUS_DELETE'))
-        ->select(['id', 'relationship_manager', 'owner_contacted', 
+        ->select(['id', 'relationship_manager', 'leads', 
                   'listings_allowed', 'verified_badge', 
                   'listing_visibility', 'social_media_promotion', 'status'])
         ->with(['names' => function ($query) use ($lang) {
@@ -30,7 +30,7 @@ class MembershipPlanTypeService
 
     public function editMembershipPlansType($id)
     {
-        return MembershipPlanType::select('id', 'relationship_manager', 'owner_contacted','listings_allowed','verified_badge','listing_visibility', 'social_media_promotion','status')
+        return MembershipPlanType::select('id', 'relationship_manager', 'leads','listings_allowed','verified_badge','listing_visibility', 'social_media_promotion','status')
             ->with(['names:id,plan_name,lang'])
             ->where('id', $id)
             ->first();
@@ -44,7 +44,7 @@ class MembershipPlanTypeService
 
             $plan->update([
                 'relationship_manager' => $data['relationship_manager'],
-                'owner_contacted' => $data['owner_contacted']??null,
+                'leads' => $data['leads']??null,
                 'listings_allowed' => $data['listings_allowed']?? null,
                 'verified_badge' => $data['verified_badge'],
                 'listing_visibility' => $data['listing_visibility'],

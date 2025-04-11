@@ -8,10 +8,16 @@ use App\Http\Controllers\Controller;
 
 class BankLoanController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('view_permit:loan');
+    }
+
     public function index()
     {
 
-        $data = BankLoan::select('id', 'bank_name', 'interest_rate', 'processing_fees', 'logo', 'status')->where('status','!=' ,config('constants.STATUS_DELETE'))->get();
+        $data = BankLoan::select('id', 'bank_name', 'interest_rate', 'processing_fees', 'logo', 'status')->where('status', '!=', config('constants.STATUS_DELETE'))->get();
 
         return view('Admin.bank_loan', compact('data'));
     }
@@ -100,5 +106,6 @@ class BankLoanController extends Controller
             ]);
         }
     }
-    
+
+
 }

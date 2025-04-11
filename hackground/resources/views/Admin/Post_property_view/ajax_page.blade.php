@@ -9,7 +9,13 @@
             <form role="form" id="add_form" action="<?php echo $form_action;?>" onsubmit="submitForm(this, event)">
                   <div class="box-body">
                     <input type="hidden" name="property_id" value="{{ $property_id }}" />
-        
+                    
+                    {{-- <div class="form-group">
+                        <label class="form-label">Property Name</label>
+                        <input class="form-control" name="property_name" id="project_name" value="{{ $propertyData->settings->project_name }}" />
+                        <span class="text-danger" id="project_nameError"></span>
+                    </div> --}}
+
                     <div class="form-group">
                       <label for="post_for">Post For </label>
                       <select class="form-control" name="postFor" id="postFor">
@@ -255,12 +261,6 @@
 
                         </select>
                         <span class="error cityError text-danger"></span>
-                    </div>
-                    
-                    <div class="form-field">
-                        <label class="form-label">Landmark</label>
-                        <input class="form-control" placeholder="Enter landmark" id="landmark" required="" type="text" name="landmark" autocomplete="off" >
-                        <span class="error landmarkError text-danger"></span>
                     </div>
                     
                     <div class="form-field">

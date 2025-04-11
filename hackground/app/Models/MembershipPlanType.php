@@ -11,7 +11,7 @@ class MembershipPlanType extends Model
     protected $fillable = [
         'id',
         'relationship_manager',
-        'owner_contacted',
+        'leads',
         'listings_allowed',
         'verified_badge', 
         'listing_visibility',
@@ -19,7 +19,7 @@ class MembershipPlanType extends Model
         'remaining_listings_allowed',
         'status'
     ];
-
+    
     public function names()
     {
         return $this->hasMany(MembershipPlanTypeNames::class, 'id');
