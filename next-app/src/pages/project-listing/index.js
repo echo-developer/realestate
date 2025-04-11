@@ -88,12 +88,12 @@ const Index = () => {
       });
       if (response && response?.status === 1) {
         if (!loadMore) {
-          setProjectListData(response?.data?.searched_properties || []);
+          setProjectListData(response?.data?.searched_projects || []);
           setTotalPages(response?.data?.pagination?.total_pages || 0);
           setCurrentPages(response?.data?.pagination?.current_page || 0);
         } else {
           setProjectListData((prev) => {
-            return [...prev, ...response?.data?.searched_properties];
+            return [...prev, ...response?.data?.searched_projects];
           });
         }
 

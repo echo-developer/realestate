@@ -117,6 +117,7 @@ class ProjectPropertyController extends Controller
                                 ['pid' => $prop_ID],
                                 [
                                     'carpet_area' => $bhkdata['carpet_area'],
+                                    'post_for' => 'sale',
                                     'super_area' => $bhkdata['super_area'],
                                     'expected_price' => $bhkdata['property_price']
                                 ]
@@ -128,13 +129,13 @@ class ProjectPropertyController extends Controller
                                 [
                                     'bhk_type' => $bhkdata['bhk_type'],
                                     'facing_direction' => $bhkdata['property_facing'],
-                                    'floor_plan_image'=>$bhkdata['floor_plan_image']
+                                    'floor_plan_image' => $bhkdata['floor_plan_image']
                                 ]
                             );
 
 
                             PrefPropertyLocation::updateOrCreate(
-                                ['pid' => $prop_ID],
+                                ['pid' => $prop_ID],  
                                 ['property_address' => $items['projectLocation']]
                             );
 

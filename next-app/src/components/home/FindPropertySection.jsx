@@ -71,7 +71,7 @@ const FindPropertySection = ({translation}) => {
 
             <div className="row justify-content-center align-items-center mb-4">
               <article className="col-lg col-sm-6 col-12"></article>
-             
+              <article className="col-auto text-center"></article>
               <article className="col-lg col-sm-6 col-12 text-center">
                 <div className="arrowDir">
                   <img

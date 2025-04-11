@@ -32645,7 +32645,7 @@ header {
 .header-sticky.transparentH .navbar .dropdown .btn-link {
   color: #fff;
 }
-.header-sticky.transparentH .navbar-brand > img {
+.header-sticky.transparentH .navbar-brand > div > img {
   filter: brightness(0) invert(1);
 }
 
@@ -32853,7 +32853,7 @@ select.form-control {
   background-color: #d0e0f5;
   border-radius: 0.5rem;
   padding: 2rem 1rem;
-  margin-bottom: -3.5rem;
+  margin-bottom: -6rem;
   position: relative;
   z-index: 9;
 }
@@ -32865,7 +32865,7 @@ footer {
   background-position: bottom center;
   color: #eee;
   font-size: 0.938rem;
-  padding: 6rem 0 0;
+  padding: 3rem 0 0;
   position: relative;
 }
 
@@ -33297,16 +33297,16 @@ ul.list-agency-details > li > span:last-child {
   height: 100%;
   padding: 1rem;
 }
-.card-ads.card-overylay {
+.card-ads.card-overlay {
   border-radius: 0.5rem;
 }
-.card-ads.card-overylay .ads-type, .card-ads.card-overylay .badge-agent {
+.card-ads.card-overlay .ads-type, .card-ads.card-overlay .badge-agent {
   z-index: 100;
 }
-.card-ads.card-overylay .card-img {
+.card-ads.card-overlay .card-img {
   border-radius: 0.5rem;
 }
-.card-ads.card-overylay .card-img-overlay {
+.card-ads.card-overlay .card-img-overlay {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -33314,13 +33314,13 @@ ul.list-agency-details > li > span:last-child {
   color: #fff;
   z-index: 99;
 }
-.card-ads.card-overylay .card-img-overlay h4 > a, .card-ads.card-overylay .card-img-overlay .h4 > a {
+.card-ads.card-overlay .card-img-overlay h4 > a, .card-ads.card-overlay .card-img-overlay .h4 > a {
   color: #fff;
 }
-.card-ads.card-overylay .card-img-overlay ul.list-info {
+.card-ads.card-overlay .card-img-overlay ul.list-info {
   margin-bottom: 1rem;
 }
-.card-ads.card-overylay:hover .card-img-overlay {
+.card-ads.card-overlay:hover .card-img-overlay {
   background-color: rgba(var(--bs-black-rgb), 0.5);
 }
 
@@ -36924,6 +36924,10 @@ ul.card-listing li:last-child {
 .react-multi-carousel-list .react-multiple-carousel__arrow {
   min-width: 32px;
   min-height: 32px;
+  background-color: #1365cf;
+}
+.react-multi-carousel-list .react-multiple-carousel__arrow:hover {
+  background-color: #187dff;
 }
 
 .user-groups span i {
@@ -37164,6 +37168,13 @@ fieldset .btn-delete {
 .photoGallery .sliderImages, .thumbnails-gallery .sliderImages {
   max-height: 65vh;
 }
+.photoGallery .sliderImages .img-fluid, .thumbnails-gallery .sliderImages .img-fluid {
+  object-fit: contain;
+}
+
+.contact-form-section {
+  border-radius: 0.5rem;
+}
 
 .galleryClientInfo {
   background-color: #eee;
@@ -37257,7 +37268,7 @@ fieldset .btn-delete {
   #wrapper {
     padding-top: 74px;
   }
-  .navbar-brand > img {
+  .navbar-brand > div > img {
     max-height: 64px;
   }
   .short-banner {
@@ -37391,7 +37402,7 @@ fieldset .btn-delete {
     padding-top: 58px;
     padding-bottom: 60px;
   }
-  .navbar-brand > img {
+  .navbar-brand > div > img {
     max-height: 48px;
   }
   .short-banner {

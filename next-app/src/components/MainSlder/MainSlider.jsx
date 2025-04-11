@@ -73,34 +73,40 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
         afterChange: (index) => setCurrentSlide(index),
         responsive: [
             {
+                breakpoint: 1440,
+                settings: {
+                    slidesToShow: 4,
+                }
+            },
+            {
                 breakpoint: 1200,
                 settings: {
                     slidesToShow: 3,
-                },
+                }
             },
             {
-                breakpoint: 1024,
+                breakpoint: 992,
                 settings: {
                     slidesToShow: 2,
-                },
+                }
             },
             {
                 breakpoint: 768, // Small tablets and large phones
                 settings: {
                     slidesToShow: 1, // Show 1 slide on smaller screens
-                },
+                }
             },
             {
                 breakpoint: 600, // Mobile
                 settings: {
                     slidesToShow: 1, // Show 1 slide on mobile
-                },
+                }
             },
             {
                 breakpoint: 480, // Very small mobile screens
                 settings: {
                     slidesToShow: 1, // Show 1 slide on very small screens
-                },
+                }
             },
         ],
     };
@@ -140,10 +146,10 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                     return (
                         <div className="owl-item" key={i}>
                             <article className="item">
-                                <div className="card card-ads card-overlay">
+                                <div className="card card-ads card-overlay mb-0">
                                     <div className="card-image">
                                         <a href={`${url}/${item?.slug}`} target='_blank'>
-                                            <Image alt="" height="200" width="286" className="card-img" src={firstImage} loading="lazy" />
+                                            <Image alt="" height="300" width="300" className="card-img" src={firstImage} loading="lazy" />
                                         </a>
                                         <span className={`ads-type ${item?.post_for}`}>for {item?.post_for}</span>
                                         <span className={`ads-fav ${item?.is_favourite ? "active" : ""}`} onClick={() => addRemoveFav(item?.[id], mainType, listKey)}>

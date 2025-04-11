@@ -1106,7 +1106,7 @@ if (!function_exists('print_select_option')) {
     if (!function_exists('log_anything')) {
         function log_anything($data)
         {
-            log::info($data);
+            log::info(json_encode($data, JSON_PRETTY_PRINT));
         }
     }
 }
@@ -1145,7 +1145,7 @@ if (!function_exists('get_property_sub_category_name')) {
     }
 }
 
-if (!function_exists('get_all_country')) {
+if (!function_exists('get_all_city')) {
     function get_all_city()
     {
         $result = DB::table('city as c')
@@ -1158,12 +1158,38 @@ if (!function_exists('get_all_country')) {
     }
 }
 
+if (!function_exists('get_property_for_types')) {
+    function get_property_for_types()
+    {
+       $types = [
+          'rent' => 'Rent',
+          'sale' => 'Sale',
+          'pg' => 'PG/Hostel',
+       ];
+
+       return $types;
+    }
+}
+
 if (!function_exists('get_all_property_category')) {
     function get_all_property_category()
     {
         $result = DB::table('property_category as p_c')
             ->select('p_c.*', 'p_c_n.name')
             ->join('property_category_names as p_c_n', 'p_c.id', '=', 'p_c_n.category_id')
+            ->where(['p_c.status' => '1', 'p_c_n.lang' => 'en'])
+            ->get();
+
+        return $result;
+    }
+}
+
+if (!function_exists('get_all_property_sub_category')) {
+    function get_all_property_sub_category()
+    {
+        $result = DB::table('property_sub_category as p_c')
+            ->select('p_c.*', 'p_c_n.name')
+            ->join('property_sub_category_names as p_c_n', 'p_c.id', '=', 'p_c_n.sub_category_id')
             ->where(['p_c.status' => '1', 'p_c_n.lang' => 'en'])
             ->get();
 
@@ -1311,7 +1337,7 @@ if (!function_exists('get_floor_types')) {
 
         if($key)
         {
-            $selectedType = $types['key'] ?? '';
+            $selectedType = $types[$key] ?? '';
             return $selectedType;
         }else{
             return $types;
@@ -1338,7 +1364,7 @@ if (!function_exists('get_floor_numbers')) {
         
         if($key)
         {
-            $selectedType = $types['key'] ?? '';
+            $selectedType = $types[$key] ?? '';
             return $selectedType;
         }else{
             return $types;
@@ -1364,7 +1390,7 @@ if (!function_exists('get_total_floors')) {
         
         if($key)
         {
-            $selectedType = $types['key'] ?? '';
+            $selectedType = $types[$key] ?? '';
             return $selectedType;
         }else{
             return $types;
@@ -1411,6 +1437,83 @@ if (!function_exists('lifts_in_tower')) {
         
         return $types;
         
+    }
+}
+
+if (!function_exists('get_water_availability')) {
+    function get_water_availability($key='')
+    {
+        $types = [
+            '24_hours' => '24 Hours Available',
+            'partially_available' => 'Partially Available',
+            'not_available' => 'Not Available'
+        ];
+        
+        if($key)
+        {
+            $selectedType = $types[$key] ?? '';
+            return $selectedType;
+        }else{
+            return $types;
+        }
+    }
+}
+
+if (!function_exists('electricity_status')) {
+    function electricity_status($key='')
+    {
+        $types = [
+            'full_power_backup' => 'Full Power Backup',
+            'partial_power_backup' => 'Partial Power Backup',
+            'no_power_backup' => 'No Power Backup'
+        ];
+        
+        if($key)
+        {
+            $selectedType = $types[$key] ?? '';
+            return $selectedType;
+        }else{
+            return $types;
+        }
+    }
+}
+
+if (!function_exists('get_overlooking_list')) {
+    function get_overlooking_list($key='')
+    {
+        $types = [
+            'pool' => 'Pool',
+            'garden_park' => 'Garden Park',
+            'main_road' => 'Main Road'
+        ];
+        
+        if($key)
+        {
+            $selectedType = $types[$key] ?? '';
+            return $selectedType;
+        }else{
+            return $types;
+        }
+    }
+}
+
+if (!function_exists('get_ownership_types')) {
+    function get_ownership_types($key='')
+    {
+        $types = [
+            'freehold' => 'Freehold',
+            'leasehold' => 'Leasehold',
+            'cooperative_society' => 'Co-operative Society',
+            'power_of_attorney' => 'Power of Attorney'
+        ];
+        
+        if($key)
+        {
+            $selectedType = $types[$key] ?? '';
+            return $selectedType;
+        }else{
+            return $types;
+        }
     }
 }
 

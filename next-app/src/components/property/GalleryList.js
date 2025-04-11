@@ -6,6 +6,7 @@ import EnquiryForm from "../charts/EnquiryForm";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import {
+  Card,
   Form,
   Row,
   Col,
@@ -21,6 +22,7 @@ import {
   EnvelopeFill,
   PhoneFill,
   Whatsapp,
+  XLg,
 } from "react-bootstrap-icons";
 
 const GalleryList = ({ setVisible, propertyId, userDetails }) => {
@@ -125,17 +127,22 @@ const GalleryList = ({ setVisible, propertyId, userDetails }) => {
         }}
       >
         {showContactForm ? (
-          <div className="contact-form-section bg-light ">
-            <div className="d-flex justify-content-between">
-              <h4 className="">Contact Us</h4>
-              <h4 className="" role="button" onClick={()=>setShowContactForm(false)}>Back to Gallery</h4>
-            </div>
-
-            <EnquiryForm
-              propertyId={property_id}
-              handleClose={handleCloseForm}
-            />
-          </div>
+          <Row className="justify-content-center">
+            <Col xl={5} lg={6}>
+              <Card className="contact-form-section bg-light">
+                <Card.Header className="d-flex justify-content-between">
+                  <h4 className="">Contact Us</h4>
+                  <Button variant="light p-1" role="button" onClick={()=>setShowContactForm(false)} title="Back to Gallery"><XLg size={20} color="currentColor" /> </Button>
+                </Card.Header>
+                <Card.Body>
+                  <EnquiryForm
+                    propertyId={property_id}
+                    handleClose={handleCloseForm}
+                  />
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
         ) : (
           <div className="pop-header clearfix open-state">
             <div className="tabSlider">

@@ -17,9 +17,10 @@ class AllPropertyController extends Controller
         $this->middleware('view_permit:all-properties');
     }
 
-    public function AllPropertyView($user_id='')
+    public function AllPropertyView(Request $request)
     {
-        $srch = array();
+        $user_id = $request->route('id');
+        $srch = $request->query();
         $srch['user_id'] = $user_id;
         $paginate = 10;
         $statusMapping = config('property_status.status');

@@ -347,7 +347,7 @@ header {
 		.navbar .dropdown .btn-link {
 			color: #fff;
 		}
-		.navbar-brand>img {
+		.navbar-brand > div > img {
 			filter: brightness(0) invert(1);
 		}
 	}
@@ -607,18 +607,18 @@ select {
 	background-color: $primary-bg-subtle;
 	border-radius: 0.5rem;
 	padding: 2rem 1rem;
-	margin-bottom: -3.5rem;
+	margin-bottom: -6rem;
     position: relative;
     z-index: 9;
 }
-footer {
+footer{
 	background-color: #000;
 	background-image: url('../images/footer-bg.png');
 	background-repeat: no-repeat;
 	background-position: bottom center;
 	color: #eee;
 	font-size: 0.938rem;
-	padding: 6rem 0 0;
+	padding: 3rem 0 0;
 	position: relative;
 }
 .footer-top {
@@ -1125,7 +1125,6 @@ ul {
 			}
 		}
 	}
-
 	ul {
 		&.list-info {
 			list-style: none;
@@ -1143,14 +1142,12 @@ ul {
 			}
 		}
 	}
-
 	.card-img-top {		
 		border-radius: 0.5rem 0.5rem 0 0;
 		display: block;
 		object-fit: cover;
 		height: 200px;
 	}
-
 	.card-footer {
 		background-color: $white;
 		display: flex;
@@ -1175,7 +1172,6 @@ ul {
 			}
 		}
 	}
-
 	.breadcrumb {
 		margin-bottom: 0.25rem;
 	}
@@ -1186,7 +1182,7 @@ ul {
 		height: 100%;
 		padding: 1rem;
 	}
-	&.card-overylay{
+	&.card-overlay{
 		border-radius: 0.5rem;
 		.ads-type, .badge-agent{
 			z-index: 100;
@@ -5272,6 +5268,10 @@ ul.card-listing{
 	.react-multiple-carousel__arrow{
 		min-width: 32px;
 		min-height: 32px;
+		background-color: #1365cf;
+		&:hover{
+			background-color: #187dff;
+		}
 	}
 }
 .user-groups{
@@ -5528,9 +5528,14 @@ fieldset{
 	}
 	.sliderImages{
 		max-height: 65vh;
+		.img-fluid{
+			object-fit: contain;
+		}
 	}
 }
-
+.contact-form-section{
+	border-radius: 0.5rem;
+}
 .galleryClientInfo{
 	background-color: #eee;
 	border-top: 1px solid var(--#{$prefix}border-color-translucent);
@@ -5647,9 +5652,11 @@ fieldset{
 		padding-top: 74px;
 	}
 	.navbar-brand {
-		>img {
-			max-height: 64px;
-		}
+		& > div{
+			& >img {
+				max-height: 64px;
+			}
+		}		
 	}
 	.short-banner {
 		min-height: 80px;
@@ -5840,9 +5847,11 @@ fieldset{
 		padding-bottom: 60px;
 	}
 	.navbar-brand {
-		>img {
-			max-height: 48px;
-		}
+		& > div{
+			& >img {
+				max-height: 48px;
+			}
+		}		
 	}
 	.short-banner {
 		min-height: 64px;

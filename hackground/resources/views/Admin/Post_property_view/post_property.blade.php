@@ -8,53 +8,34 @@
                     <div class="card border-0 post-form">
                         <div class="card-header pb-0">
                             <ul class="nav nav-underline mb-0 gap-5 d-flex">
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     <a class="nav-link tab-1 active" href="javascript:void(0)">Personal Info</a>
+                                </li> --}}
+                                <li class="nav-item">
+                                    <a class="nav-link tab-2 active" href="javascript:void(0)">Basic Details</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link tab-2" href="javascript:void(0)">Property Details</a>
+                                    <a class="nav-link tab-3" href="javascript:void(0)">Location Details</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link tab-3" href="javascript:void(0)">Location</a>
+                                    <a class="nav-link tab-4" href="javascript:void(0)">Property Features</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link tab-4" href="javascript:void(0)">Feature</a>
+                                    <a class="nav-link tab-5" href="javascript:void(0)">Additional Details</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link tab-5" href="javascript:void(0)">Availability</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link tab-6" href="javascript:void(0)">Photos</a>
+                                    <a class="nav-link tab-6" href="javascript:void(0)">Photos/Gallery</a>
                                 </li>
                             </ul>
                         </div>
                         <div class="card-body">
                             <form method="post" id='post-property-form'>
-                                <input type="hidden" name="step" value="1" id="step" />
+                                <input type="hidden" name="step" value="2" id="step" />
                                 <input type="hidden" name="user_id" value="{{ $userData->id }}" id="user_id" />
                                 
-                                <div id="step-1" style="display:none1;">
+                                <div id="step-1" style="display:none;">
                                     <label class="d-block mb-2">I'm a</label>
-                                    <div class="btn-group btn-group-light d-flex mb-3" role="group">
-                                        <input type="radio" class="btn-check" name="postAs" id="owner"
-                                            autocomplete="off" @php if($userData->user_type == 'O'){echo 'checked';}  @endphp >
-                                        <label class="btn btn-outline-light" for="owner"><img
-                                                src="{{ asset('assets/icons/owner.png') }}" alt="Icon" height="24"
-                                                width="24" />
-                                            Owner</label>
-                                        <input type="radio" class="btn-check" name="postAs" id="agent"
-                                            autocomplete="off" @php if($userData->user_type == 'A'){echo 'checked';}  @endphp >
-                                        <label class="btn btn-outline-light" for="agent"><img
-                                                src="{{ asset('assets/icons/agent.png') }}" alt="Icon" height="24"
-                                                width="24" />
-                                            Agent</label>
-                                        <input type="radio" class="btn-check" name="postAs" id="builder"
-                                            autocomplete="off" @php if($userData->user_type == 'B'){echo 'checked';}  @endphp>
-                                        <label class="btn btn-outline-light" for="builder"><img
-                                                src="{{ asset('assets/icons/builder.png') }}" alt="Icon" height="24"
-                                                width="24" /> Builder</label>
-                                    </div>
-
+                                
                                     <div class="form-field mb-3">
                                         <label for="name" class="form-label">Name</label>
                                         <input type="text" class="form-control" name="name"
@@ -93,7 +74,27 @@
                                     </div>
                                 </div>
                                  
-                                <div id="step-2" style="display:none;">
+                                <div id="step-2" style="display:none1;">
+                                    <label class="form-label">User Type</label>
+                                    <div class="btn-group btn-group-light d-flex mb-3" role="group">
+                                        <input type="radio" class="btn-check" name="postAs" id="owner"
+                                            autocomplete="off" @php if($userData->user_type == 'O'){echo 'checked';}  @endphp >
+                                        <label class="btn btn-outline-light" for="owner"><img
+                                                src="{{ asset('assets/icons/owner.png') }}" alt="Icon" height="24"
+                                                width="24" />
+                                            Owner</label>
+                                        <input type="radio" class="btn-check" name="postAs" id="agent"
+                                            autocomplete="off" @php if($userData->user_type == 'A'){echo 'checked';}  @endphp >
+                                        <label class="btn btn-outline-light" for="agent"><img
+                                                src="{{ asset('assets/icons/agent.png') }}" alt="Icon" height="24"
+                                                width="24" />
+                                            Agent</label>
+                                        <input type="radio" class="btn-check" name="postAs" id="builder"
+                                            autocomplete="off" @php if($userData->user_type == 'B'){echo 'checked';}  @endphp>
+                                        <label class="btn btn-outline-light" for="builder"><img
+                                                src="{{ asset('assets/icons/builder.png') }}" alt="Icon" height="24"
+                                                width="24" /> Builder</label>
+                                    </div>
                                     <div>
                                         <label class="form-label">You are here to</label>
                                         <div class="btn-group btn-group-light d-flex mb-3" role="group">
@@ -136,6 +137,18 @@
                                             </select>
                                             <span class="error property_forError text-danger"></span>
                                         </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="buyer_message">Message to buyer</label>
+                                        <textarea class="form-control" name="buyer_message" id="buyer_message"></textarea>
+                                        <span class="text-danger" id="buyer_messageError"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Project Name</label>
+                                        <input class="form-control" name="project_name" id="project_name" value="" />
+                                        <span class="text-danger" id="project_nameError"></span>
                                     </div>
 
                                     <div>
@@ -184,7 +197,7 @@
                                                 <span class="error cityError text-danger"></span>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 col-12">
+                                        {{-- <div class="col-lg-6 col-12">
                                             <div class="form-field">
                                                 <label class="form-label">Landmark</label>
                                                 <input class="form-control" placeholder="Enter landmark"
@@ -192,7 +205,7 @@
                                                     autocomplete="off">
                                                 <span class="error landmarkError text-danger"></span>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <div class="form-field">
                                         <label class="form-label">Name of Project Or Locality</label>
@@ -291,108 +304,50 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label class="form-label">Floor Type</label>
+                                        <select class="form-control select2" name="flooring_style[]" multiple>
+                                            <option value="">Slect Floor Type</option>
+                                            @php  
+                                                $floor_types = get_floor_types();
+                                            @endphp
+                                            @if($floor_types)
+                                            @foreach($floor_types as $k=>$f)
+                                                <option value="{{$k}}" >{{$f}}</option>
+                                            @endforeach
+                                            @endif
+                                        </select>
+                                        <span class="error flooring_styleError text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label class="form-label">Floor No.</label>
-                                        <div class="btn-group btn-group-light d-flex mb-3" role="group"
-                                            aria-label="Floors">
-                                            <input class="btn-check" id="floors_1" value="1" autocomplete="off"
-                                                type="radio" name="floors" checked>
-                                            <label class="btn btn-outline-light" for="floors_1">Lower Basement</label>
-
-                                            <input class="btn-check" id="floors_2" value="2" autocomplete="off"
-                                                type="radio" name="floors">
-                                            <label class="btn btn-outline-light" for="floors_2">Upper Basement</label>
-
-                                            <input class="btn-check" id="floors_3" value="3" autocomplete="off"
-                                                type="radio" name="floors">
-                                            <label class="btn btn-outline-light" for="floors_3">Ground</label>
-
-                                            <input class="btn-check" id="floors_4" value="4" autocomplete="off"
-                                                type="radio" name="floors">
-                                            <label class="btn btn-outline-light" for="floors_4">1</label>
-
-                                            <input class="btn-check" id="floors_5" value="5" autocomplete="off"
-                                                type="radio" name="floors">
-                                            <label class="btn btn-outline-light" for="floors_5">2</label>
-
-                                            <input class="btn-check" id="floors_6" value="6" autocomplete="off"
-                                                type="radio" name="floors">
-                                            <label class="btn btn-outline-light" for="floors_6">3</label>
-
-                                            <input class="btn-check" id="floors_7" value="7" autocomplete="off"
-                                                type="radio" name="floors">
-                                            <label class="btn btn-outline-light" for="floors_7">4</label>
-
-                                            <input class="btn-check" id="floors_8" value="8" autocomplete="off"
-                                                type="radio" name="floors">
-                                            <label class="btn btn-outline-light" for="floors_8">5</label>
-
-                                            <input class="btn-check" id="floors_6_plus" autocomplete="off"
-                                                type="radio" name="floors">
-                                            <label class="btn btn-outline-light" for="floors_6_plus"><i
-                                                    class="bi bi-plus-lg"></i></label>
-                                        </div>
+                                        <select class="form-control" name="floors">
+                                            <option value="">--Select--</option>
+                                            @php  
+                                                $floor_numbers = get_floor_numbers();
+                                            @endphp
+                                            @if($floor_numbers)
+                                            @foreach($floor_numbers as $k=>$f)
+                                                <option value="{{$k}}">{{$f}}</option>
+                                            @endforeach
+                                            @endif
+                                        </select>
                                         <span class="error floorsError text-danger"></span>
                                     </div>
 
                                     <div class="form-group">
                                         <label class="form-label">Total Floors</label>
-                                        <div class="btn-group btn-group-light d-flex mb-3" role="group"
-                                            aria-label="Total Floors">
-                                            <input class="btn-check" id="total_floor_1" value="total_floor_1"
-                                                autocomplete="off" type="radio" name="total_floors" checked>
-                                            <label class="btn btn-outline-light" for="total_floor_1">1</label>
-
-                                            <input class="btn-check" id="total_floor_2" value="total_floor_2"
-                                                autocomplete="off" type="radio" name="total_floors">
-                                            <label class="btn btn-outline-light" for="total_floor_2">2</label>
-
-                                            <input class="btn-check" id="total_floor_3" value="total_floor_3"
-                                                autocomplete="off" type="radio" name="total_floors">
-                                            <label class="btn btn-outline-light" for="total_floor_3">3</label>
-
-                                            <input class="btn-check" id="total_floor_4" value="total_floor_4"
-                                                autocomplete="off" type="radio" name="total_floors">
-                                            <label class="btn btn-outline-light" for="total_floor_4">4</label>
-
-                                            <input class="btn-check" id="total_floor_5" value="total_floor_5"
-                                                autocomplete="off" type="radio" name="total_floors">
-                                            <label class="btn btn-outline-light" for="total_floor_5">5</label>
-
-                                            <input class="btn-check" id="total_floor_6" value="total_floor_6"
-                                                autocomplete="off" type="radio" name="total_floors">
-                                            <label class="btn btn-outline-light" for="total_floor_6">6</label>
-
-                                            <input class="btn-check" id="total_floor_7" value="total_floor_7"
-                                                autocomplete="off" type="radio" name="total_floors">
-                                            <label class="btn btn-outline-light" for="total_floor_7">7</label>
-
-                                            <input class="btn-check" id="total_floor_8" value="total_floor_8"
-                                                autocomplete="off" type="radio" name="total_floors">
-                                            <label class="btn btn-outline-light" for="total_floor_8">8</label>
-
-                                            <input class="btn-check" id="total_floor_9" value="total_floor_9"
-                                                autocomplete="off" type="radio" name="total_floors">
-                                            <label class="btn btn-outline-light" for="total_floor_9">9</label>
-
-                                            <input class="btn-check" id="total_floor_10" value="total_floor_10"
-                                                autocomplete="off" type="radio" name="total_floors">
-                                            <label class="btn btn-outline-light" for="total_floor_10">10</label>
-
-                                            <input class="btn-check" id="total_floor_11" value="total_floor_11"
-                                                autocomplete="off" type="radio" name="total_floors">
-                                            <label class="btn btn-outline-light" for="total_floor_11">11</label>
-
-                                            <input class="btn-check" id="total_floor_12" value="total_floor_12"
-                                                autocomplete="off" type="radio" name="total_floors">
-                                            <label class="btn btn-outline-light" for="total_floor_12">12</label>
-
-                                            <input class="btn-check" id="floors_12_plus" value="floors_12_plus"
-                                                autocomplete="off" type="radio" name="total_floors">
-                                            <label class="btn btn-outline-light" for="floors_12_plus">
-                                                <i class="bi bi-plus-lg"></i>
-                                            </label>
-
-                                        </div>
+                                        <select class="form-control" name="total_floors">
+                                            <option value="">--Select--</option>
+                                            @php  
+                                                $total_floors = get_total_floors();
+                                            @endphp
+                                            @if($total_floors)
+                                            @foreach($total_floors as $k=>$f)
+                                                <option value="{{$k}}">{{$f}}</option>
+                                            @endforeach
+                                            @endif
+                                        </select>
                                         <span class="error total_floorsError text-danger"></span>
                                     </div>
 
@@ -516,6 +471,36 @@
                                         @else
                                             No Furnish Found !
                                         @endif
+                                    </div>
+
+                                    <div class="form-field">
+                                        <select class="form-control" name="water_available">
+                                            <option value="">--Select Water Availability--</option>
+                                            @php  
+                                                $water_availability = get_water_availability();
+                                            @endphp
+                                            @if($water_availability)
+                                                @foreach($water_availability as $k=>$a)
+                                                    <option value="{{ $k }}" >{{ $a }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        <span class="error water_availableError text-danger"></span>
+                                    </div>
+
+                                    <div class="form-field">
+                                        <select class="form-control" name="electric_available">
+                                            <option value="">Select status of electricity</option>
+                                            @php  
+                                                $electricity_status = electricity_status();
+                                            @endphp
+                                            @if($electricity_status)
+                                                @foreach($electricity_status as $k=>$a)
+                                                    <option value="{{ $k }}" >{{ $a }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        <span class="error electric_availableError text-danger"></span>
                                     </div>
 
                                     <div class="d-grid columns-2">

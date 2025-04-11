@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Row, Col, Form, Button, Table, Card } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Table, Card, FloatingLabel } from "react-bootstrap";
 import MainLayout from "@/components/layout/MainLayout";
 import useTranslation from "@/hooks/useTranslation";
 
@@ -40,136 +40,144 @@ const translation = useTranslation();
 
   return (
     <MainLayout>
-    <Container className="p-2">
-      <Card className="p-4 shadow">
-        <h1 className="text-center text-primary">{translation?.home_loan_emi_calculator || 'Home Loan EMI Calculator'}
-        </h1>
+      <section className="section">
+        <Container>
+          <Row>
+            <Col lg={6}>
+              <Card className="mb-4">            
+                <Card.Body>
+                  <h1 className="text-center h3 mb-3">{translation?.home_loan_emi_calculator || 'Home Loan EMI Calculator'}
+                  </h1>
+                  {/* Form Inputs */}
+                  <Row className="gx-3">
+                    <Col md={12}>
+                      <FloatingLabel label={translation?.loan_amount || 'Loan Amount (₹)'} className="mb-4">
+                        <Form.Control
+                          type="number"
+                          value={loanAmount}
+                          onChange={(e) => setLoanAmount(Number(e.target.value))}
+                          placeholder=""
+                        />
+                      </FloatingLabel>
+                    </Col>
 
-        {/* Form Inputs */}
-        <Row className="mt-4">
-          <Col md={4}>
-            <Form.Group>
-              <Form.Label>{translation?.loan_amount || 'Loan Amount (₹)'}
-              </Form.Label>
-              <Form.Control
-                type="number"
-                value={loanAmount}
-                onChange={(e) => setLoanAmount(Number(e.target.value))}
-              />
-            </Form.Group>
-          </Col>
+                    <Col md={6}>
+                      <FloatingLabel label={translation?.loan_tenure_years || 'Loan Tenure (years)'} className="mb-4">
+                        <Form.Control
+                          type="number"
+                          value={tenure}
+                          onChange={(e) => setTenure(Number(e.target.value))}
+                          placeholder=""
+                        />
+                      </FloatingLabel>
+                    </Col>
 
-          <Col md={4}>
-            <Form.Group>
-              <Form.Label>{translation?.loan_tenure_years || 'Loan Tenure (years)'}
-              </Form.Label>
-              <Form.Control
-                type="number"
-                value={tenure}
-                onChange={(e) => setTenure(Number(e.target.value))}
-              />
-            </Form.Group>
-          </Col>
+                    <Col md={6}>
+                      <FloatingLabel label={translation?.interest_rate || 'Interest Rate (% p.a.)'} className="mb-4">
+                        <Form.Control
+                          type="number"
+                          value={interestRate}
+                          onChange={(e) => setInterestRate(Number(e.target.value))}
+                          placeholder=""
+                        />
+                      </FloatingLabel>
+                    </Col>
+                  </Row>
 
-          <Col md={4}>
-            <Form.Group>
-              <Form.Label>{translation?.interest_rate || 'Interest Rate (% p.a.)'}
-              </Form.Label>
-              <Form.Control
-                type="number"
-                value={interestRate}
-                onChange={(e) => setInterestRate(Number(e.target.value))}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
-
-        {/* Button */}
-        <Button className="mt-4 w-100" variant="primary" onClick={calculateEMI}>
-        {translation?.recalculate_emi || 'Recalculate EMI'}
-
-        </Button>
-
-        {/* EMI Result */}
-        <Card className="mt-4 p-4 text-center bg-light">
-          <h3>{translation?.eligible_emi_amount || 'You are Eligible for EMI Amount'}
-          </h3>
-          <h2 className="text-success">₹{emi.toLocaleString()}</h2>
-
-          <Row className="mt-3">
-            <Col>
-              <p className="text-muted">{translation?.principal_amount || 'Principal Amount'}
-              </p>
-              <h5>₹{loanAmount.toLocaleString()}</h5>
+                  {/* Button */}
+                  <Button className="w-100" variant="primary" onClick={calculateEMI}>
+                  {translation?.recalculate_emi || 'Recalculate EMI'}
+                  </Button>
+                </Card.Body>
+              </Card>
             </Col>
-            <Col>
-              <p className="text-muted">{translation?.total_interest || 'Total Interest'}</p>
-              <h5>₹{(emi * tenure * 12 - loanAmount).toLocaleString()}</h5>
+            
+            {/* EMI Result */}
+            <Col lg={6}>
+              <Card className="mb-4 text-center bg-light">
+                <Card.Body>
+                  <h3>{translation?.eligible_emi_amount || 'You are Eligible for EMI Amount'}
+                  </h3>
+                  <h2 className="text-success mb-3">₹{emi.toLocaleString()}</h2>
+
+                  <Row>
+                    <Col xs={12} className="mb-3">
+                      <p className="text-muted mb-1">{translation?.principal_amount || 'Principal Amount'}
+                      </p>
+                      <h4 className="mb-1">₹{loanAmount.toLocaleString()}</h4>
+                    </Col>
+                    <Col xs={12}>
+                      <p className="text-muted mb-1">{translation?.total_interest || 'Total Interest'}</p>
+                      <h4>₹{(emi * tenure * 12 - loanAmount).toLocaleString()}</h4>
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card>
             </Col>
           </Row>
-        </Card>
 
-        {/* Top Bank Offers */}
-        <h4 className="mt-4">{translation?.top_banks_home_loan_offers || 'Top Banks Home Loan Offers'}
-        </h4>
-        <Row>
-          <Col md={6}>
-            <Card className="p-3">
-              <h5>{translation?.bank_of_baroda || 'Bank of Baroda'}
-              </h5>
-              <p>{translation?.base_all_main_term || 'Base & All; Main Term 30yrs'}
-              </p>
-              <Button variant="link">{translation?.view || 'View'}
-              </Button>
-            </Card>
-          </Col>
-          <Col md={6}>
-            <Card className="p-3">
-              <h5>{translation?.state_bank_of_india || 'State Bank of India'}
-              </h5>
-              <p>{translation?.base_all_main_term || 'Base & All; Main Term 30yrs'}
-              </p>
-              <Button variant="link">{translation?.check_bank_offers || 'Check Bank Offers'}
-              </Button>
-            </Card>
-          </Col>
-        </Row>
+          {/* Top Bank Offers */}
+          <h4 className="mt-4">{translation?.top_banks_home_loan_offers || 'Top Banks Home Loan Offers'}
+          </h4>
+          <Row>
+            <Col md={6}>
+              <Card className="p-3">
+                <h5>{translation?.bank_of_baroda || 'Bank of Baroda'}
+                </h5>
+                <p>{translation?.base_all_main_term || 'Base & All; Main Term 30yrs'}
+                </p>
+                <Button variant="link">{translation?.view || 'View'}
+                </Button>
+              </Card>
+            </Col>
+            <Col md={6}>
+              <Card className="p-3">
+                <h5>{translation?.state_bank_of_india || 'State Bank of India'}
+                </h5>
+                <p>{translation?.base_all_main_term || 'Base & All; Main Term 30yrs'}
+                </p>
+                <Button variant="link">{translation?.check_bank_offers || 'Check Bank Offers'}
+                </Button>
+              </Card>
+            </Col>
+          </Row>
 
-        {/* Repayment Table */}
-        <h4 className="mt-4">{translation?.your_repayment_details || 'Your Repayment Details'}
-        </h4>
-        <Table striped bordered hover responsive className="mt-3">
-          <thead className="bg-light">
-            <tr>
-              <th>{translation?.month || 'Month'}
-              </th>
-              <th>{translation?.beginning_balance || 'Beginning Balance'}
-              </th>
-              <th>{translation?.emi || 'EMI'}
-              </th>
-              <th>{translation?.principal || 'Principal'}
-              </th>
-              <th>{translation?.interest || 'Interest'}
-              </th>
-              <th>{translation?.outstanding_balance || 'Outstanding Balance'}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {repaymentSchedule.map((row, index) => (
-              <tr key={index}>
-                <td>{row.month}</td>
-                <td>₹{row.beginningBalance.toLocaleString()}</td>
-                <td>₹{row.emi.toLocaleString()}</td>
-                <td>₹{row.principal.toLocaleString()}</td>
-                <td>₹{row.interest.toLocaleString()}</td>
-                <td>₹{row.outstanding.toLocaleString()}</td>
+          {/* Repayment Table */}
+          <h4 className="mt-4">{translation?.your_repayment_details || 'Your Repayment Details'}
+          </h4>
+          <Table striped bordered hover responsive className="mt-3">
+            <thead className="bg-light">
+              <tr>
+                <th>{translation?.month || 'Month'}
+                </th>
+                <th>{translation?.beginning_balance || 'Beginning Balance'}
+                </th>
+                <th>{translation?.emi || 'EMI'}
+                </th>
+                <th>{translation?.principal || 'Principal'}
+                </th>
+                <th>{translation?.interest || 'Interest'}
+                </th>
+                <th>{translation?.outstanding_balance || 'Outstanding Balance'}
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-      </Card>
-    </Container>
+            </thead>
+            <tbody>
+              {repaymentSchedule.map((row, index) => (
+                <tr key={index}>
+                  <td>{row.month}</td>
+                  <td>₹{row.beginningBalance.toLocaleString()}</td>
+                  <td>₹{row.emi.toLocaleString()}</td>
+                  <td>₹{row.principal.toLocaleString()}</td>
+                  <td>₹{row.interest.toLocaleString()}</td>
+                  <td>₹{row.outstanding.toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          
+        </Container>
+      </section>
     </MainLayout>
   );
 };

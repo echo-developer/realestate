@@ -140,7 +140,6 @@ class AdvanceSearchController extends Controller
             'max_carpet' => 'properties_settings.carpet_area',
         ];
 
-        $jsonArrayKeys = ['amenities', 'floor'];
         $rangeKeys = ['min_budget', 'max_budget', 'min_carpet', 'max_carpet'];
 
         foreach ($filterConditions as $key => $column) {
@@ -153,14 +152,12 @@ class AdvanceSearchController extends Controller
                 }
 
                 if (is_array($data[$key])) {
-                    if (is_array($data[$key])) {
-                        if ($key === 'amenities' || $key === 'floor') {
-                            $qry->where(function ($query) use ($data, $column, $key) {
-                                foreach ($data[$key] as $value) {
-                                    $query->orWhereJsonContains($column, $value);
-                                }
-                            });
-                        }
+                    if ($key === 'amenities' || $key === 'floor') {
+                        $qry->where(function ($query) use ($data, $column, $key) {
+                            foreach ($data[$key] as $value) {
+                                $query->orWhereJsonContains($column, $value);
+                            }
+                        });
                     } else {
                         $qry->whereIn($column, $data[$key]);
                     }
@@ -185,20 +182,16 @@ class AdvanceSearchController extends Controller
                 }
             });
         }
-        // Log::info('SQL Query: ' . json_encode($qry->toSql(),JSON_PRETTY_PRINT));
+        // Log::info('SQL Query: ' . json_encode($qry->toSql(), JSON_PRETTY_PRINT));
         // Log::info('Query Bindings: ', $qry->getBindings());
         return $qry->get();
     }
 
     public function propertiesBasedonSearch(Request $rq)
     {
-        $user_id = $rq->user_id ?? null;
+        $user_id = $rq->user_id;
 
-        if ($user_id === "null" || $user_id === "") {
-            $user_id = null;
-        }
-
-        if (!is_null($user_id)) {
+        if (!is_null($user_id) && is_numeric($user_id)) {
             $this->saveUserActivity($rq, $user_id);
         }
 
@@ -331,7 +324,7 @@ class AdvanceSearchController extends Controller
 
     private function saveUserActivity($r, $uid)
     {
-        
+
         try {
             // $uid = !empty($uid) ? $uid : auth_user_id();
             $data = is_array(json_decode($r->SearchData, true)) ? json_decode($r->SearchData, true) : [];

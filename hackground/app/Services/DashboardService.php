@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Enquiry;
 use Carbon\CarbonPeriod;
 use App\Models\Notification;
+use App\Models\PrefProject;
 use App\Models\PrefProperty;
 use App\Models\UserTransaction;
 use Illuminate\Support\Facades\DB;
@@ -58,10 +59,12 @@ class DashboardService
 
         return [
             'total_properties' => PrefProperty::where('status', '!=', $deleteStatus)->count(),
+            'total_projects' => PrefProject::where('status', '!=', $deleteStatus)->count(),
             'properties_for_sale' => PrefProperty::whereHas('settings', fn($q) => $q->where('post_for', 'sale'))->where('status', $activeStatus)->count(),
             'properties_for_rent' => PrefProperty::whereHas('settings', fn($q) => $q->where('post_for', 'rent'))->where('status', $activeStatus)->count(),
             'total_agents' => User::where([['user_type', 'A'], ['status', '!=', $deleteStatus]])->count(),
-            'total_customer' => User::count(),
+            'total_builder' => User::where([['user_type', 'B'], ['status', '!=', $deleteStatus]])->count(),
+            'total_owner' => User::where([['user_type', 'O'], ['status', '!=', $deleteStatus]])->count(),
             'total_revenue' => UserTransaction::where('payment_status', 'succeeded')->sum('paid_amount'),
             'properties_lists' => PrefProperty::select('id', 'name', 'created_at')->with(['settings:pid,post_for,property_type', 'location:pid,locality'])->latest()->take(5)->get(),
             'notification' => Notification::where('read_status', $inactiveStatus)->count(),

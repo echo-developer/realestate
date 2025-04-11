@@ -1,7 +1,6 @@
 .custom-carousel-container {
     position: relative;
     width: 100%;
-    overflow: hidden; /* Hide the overflow content */
 }
 
 .carousel-controls {

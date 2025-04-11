@@ -57,7 +57,7 @@
 
                         <li>
                             <b>Price:</b>
-                            <span>{{ $propertyData->settings->expected_price ?? 'N/A'}}</span>
+                            <span>{{ $propertyData->settings->price_currency ?? 'N/A'}}{{ $propertyData->settings->expected_price ?? 'N/A'}}</span>
                         </li>
                         <li>
                             <b>Message to Buyer:</b>
@@ -66,7 +66,7 @@
                        
                         <li>
                             <b>Project/Society Name:</b>
-                            <span>{{$propertyData->additional->project_name ?? 'N/A'}}</span>
+                            <span>{{$propertyData->settings->project_name ?? 'N/A'}}</span>
                         </li>
                     </ul>
                 </div>
@@ -155,28 +155,19 @@
                         <li>
                             <b>Flooring Types:</b>
                             <span>
-                                @php
-                                $flooring_style_map = [
-                                    'mosaic' => 'Mosaic',
-                                    'vitrified' => 'Vitrified',
-                                    'wooden' => 'Wooden',
-                                    'marbonite' => 'Marble',
-                                    'granite' => 'Granite',
-                                    'normal_tiles' => 'Normal Tiles/Kotah Stone',
-                                    'ceramic_tiles' => 'Ceramic Tiles'
-                                ];
-
-                                $flooring_styles = json_decode($propertyData->additional->flooring_style ?? '[]', true);
-                                if ($flooring_styles) {
-                                $formatted_styles = array_map(function($style) use ($flooring_style_map) {
-                                return $flooring_style_map[$style] ?? $style;
-                                }, $flooring_styles);
-                                echo implode(', ', $formatted_styles);
-                                } else {
-                                echo 'N/A';
-                                }
-                                @endphp
-
+                                <?php 
+                                    $types = get_floor_types();
+                                    $style_arr = json_decode($propertyData->additional->flooring_style);
+                                    if($style_arr)
+                                    {
+                                        foreach($style_arr as $s)
+                                        {
+                                            echo $types[$s].', ';
+                                        }
+                                    }
+                                    
+                                ?>
+                            </span>
                         </li>
                         <li>
                             <b>Floor No:</b>
@@ -222,19 +213,19 @@
                     <ul class="list-info">
                         <li>
                             <b>Water Availability:</b>
-                            <span>{{$propertyData->additional->water_available ?? 'N/A' }}</span>
+                            <span>{{ $propertyData->additional->water_available ? get_water_availability($propertyData->additional->water_available) : '' }}</span>
                         </li>
                         <li>
                             <b>Status of Electricity:</b>
-                            <span>{{$propertyData->additional->electric_available ?? 'N/A'}}</span>
+                            <span>{{ $propertyData->additional->electric_available ? electricity_status($propertyData->additional->electric_available) : '' }}</span>
                         </li>
                         <li>
                             <b>Type of Ownership:</b>
-                            <span>{{$propertyData->additional->ownership_type ?? 'N/A'}}</span>
+                            <span>{{ $propertyData->additional->ownership_type ? get_ownership_types($propertyData->additional->ownership_type) : '' }}</span>
                         </li>
                         <li>
                             <b>Possession Status:</b>
-                            <span> {{get_name_by_id('property_status_names','status_id',$propertyData->additional->possession_status,'en')??'N/A'}}</span>
+                            <span> {{get_name_by_id('property_status_names','status_id',$propertyData->additional->possession_status,'en') ?? 'N/A'}}</span>
                         </li>
 
                         @if($propertyData->additional->possession_status == '1')
@@ -260,9 +251,9 @@
                             <span>
                                 @php
                                 $parkingStatus = [
-                                'av' => 'Available',
-                                'na' => 'Not Available',
-                                'uc' => 'Under Construction'
+                                    'av' => 'Available',
+                                    'na' => 'Not Available',
+                                    'uc' => 'Under Construction'
                                 ];
                                 @endphp
                                 {{ $parkingStatus[$propertyData->settings->parking_ability] ?? 'N/A' }}
@@ -279,6 +270,10 @@
                                 $overlooking = $propertyData->additional->overlooking ?? '';
                                 $overlookingArray = !empty($overlooking) ? json_decode($overlooking, true) : [];
                                 echo $overlookingArray ? implode(', ', $overlookingArray) : 'N/A';
+                                if($overlookingArray)
+                                {
+
+                                }
                                 @endphp
                             </span>
                         </li>

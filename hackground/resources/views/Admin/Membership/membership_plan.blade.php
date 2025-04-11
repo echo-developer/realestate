@@ -87,7 +87,7 @@
                     <tbody id="membershipPlan">
                         @foreach ($MembershipPlans as $membershipPlan)
                         <tr>
-                        <td>{{ optional($membershipPlan->plan_type_names)->plan_name ?? 'N/A' }}</td>
+                            <td>{{ optional($membershipPlan->plan_type_names)->plan_name ?? 'N/A' }}</td>
                             <td>{{ $membershipPlan->price }}</td>
                             <td>{{ $membershipPlan->validity_days }} Days</td>
                             <td>
@@ -122,7 +122,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="MembershipPlanAddEditModalLabel"> </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -367,20 +367,5 @@
             });
         }
     });
-</script>
-
-<script>
-$(document).ready(function () {
-    // Ensure modal closes when clicking close button or outside the modal
-    $('#MembershipPlanModal').on('hidden.bs.modal', function () {
-        $(this).find("form").trigger("reset"); // Reset form fields after closing
-    });
-
-    // Close modal on close button click
-    $('.close, .btn-secondary').on('click', function () {
-        $('#MembershipPlanModal').modal('hide');
-    });
-});
-
 </script>
 @endpush
