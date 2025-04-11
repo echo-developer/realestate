@@ -30,9 +30,9 @@
     <section class="content">
         <div class="container-fluid">
             <ul id="myTab" class="nav nav-underline mb-3" role="tablist">
-                <li class="nav-item"><a class="" href="{{ url('property/edit/'.$property_id) }}" aria-expanded="false">Property Details</a> </li>
+                <li class="nav-item"><a class="nav-link active" href="{{ url('property/edit/'.$property_id) }}" aria-expanded="false">Property Details</a> </li>
 
-                <li class="nav-item"><a class="" href="{{ url('property/edit-photos/'.$property_id) }}"  aria-expanded="true">Property Photos</a> </li>
+                <li class="nav-item"><a class="nav-link" href="{{ url('property/edit-photos/'.$property_id) }}"  aria-expanded="true">Property Photos</a> </li>
             </ul>
 
             <div class="card">
@@ -378,9 +378,9 @@
 
 
     $(document).ready(function() {
-        $(".nav-link").click(function(e) {
+        $(".image-tab-content .nav-link").click(function(e) {
             e.preventDefault();
-            $(".nav-link").removeClass("active");
+            $(".image-tab-content .nav-link").removeClass("active");
             $(this).addClass("active");
             var activeTab = $(this).attr("data-tab");
             $(".img-content").hide();

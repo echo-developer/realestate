@@ -18,13 +18,16 @@
                                     <a class="nav-link tab-3" href="javascript:void(0)">Location Details</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link tab-4" href="javascript:void(0)">Property Features</a>
+                                    <a class="nav-link tab-4" href="javascript:void(0)">Landmark Details</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link tab-5" href="javascript:void(0)">Additional Details</a>
+                                    <a class="nav-link tab-5" href="javascript:void(0)">Property Features</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link tab-6" href="javascript:void(0)">Photos/Gallery</a>
+                                    <a class="nav-link tab-6" href="javascript:void(0)">Additional Details</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link tab-7" href="javascript:void(0)">Photos/Gallery</a>
                                 </li>
                             </ul>
                         </div>
@@ -151,6 +154,31 @@
                                         <span class="text-danger" id="project_nameError"></span>
                                     </div>
 
+                                    <div class="row gx-3">
+                                        <div class="col-lg-6 col-12">
+                                            <label class="form-label">Expected Price</label>
+                                            <div class="input-group mb-3">
+                                                <select class="" data-width="fit" title="Currency"
+                                                    name="currency">
+                                                    <option disabled="disabled">Currency</option>
+                                                    <option value="AED">AED</option>
+                                                    <option value="EURO">EURO</option>
+                                                    <option value="POND">POUND</option>
+                                                    <option value="USD">USD</option>
+                                                </select>
+                                                <input type="text" class="form-control" name="expected_price"
+                                                    placeholder="Enter Amount" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-12">
+                                            <div class="form-field">
+                                                <label class="form-label">Booking/Token Amount (optional)</label>
+                                                <input type="number" class="form-control" name="token_amount"
+                                                    placeholder="Enter Token Amount" />
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div>
                                         <div class="btn-group btn-group-light d-flex mb-3" role="group"
                                             aria-label="Property Type">
@@ -197,15 +225,7 @@
                                                 <span class="error cityError text-danger"></span>
                                             </div>
                                         </div>
-                                        {{-- <div class="col-lg-6 col-12">
-                                            <div class="form-field">
-                                                <label class="form-label">Landmark</label>
-                                                <input class="form-control" placeholder="Enter landmark"
-                                                    id="landmark" required="" type="text" name="landmark"
-                                                    autocomplete="off">
-                                                <span class="error landmarkError text-danger"></span>
-                                            </div>
-                                        </div> --}}
+                                        
                                     </div>
                                     <div class="form-field">
                                         <label class="form-label">Name of Project Or Locality</label>
@@ -235,7 +255,80 @@
                                     </div>
                                 </div>
 
-                                <div id="step-4" style="display:none;">
+                                <div id="step-4" style="display:none">
+                                    <div class="landmark-tab-content">
+                                        <ul class="nav nav-underline nav-custom">
+                                            <li class="nav-item"><a class="nav-link active" data-tab='education'
+                                                    href="javascript:void(0)">Education</a>
+                                            </li>
+                                            <li class="nav-item"><a class="nav-link" data-tab='healthcare'
+                                                    href="javascript:void(0)">Healthcare</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-tab='shopping'
+                                                    href="javascript:void(0)">Shopping Center</a>
+                                            </li>
+                                            <li class="nav-item"><a class="nav-link" data-tab='commercial'
+                                                    href="javascript:void(0)">Commercial Hub</a>
+                                            </li>
+                                            <li class="nav-item"><a class="nav-link" data-tab='transaportation'
+                                                    href="javascript:void(0)">Transaportation Hub</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                
+                                    <div class="landmark-content" id="tab-content-education">
+                                        <div class="form-field" id="education-field">
+                                            <button type="button" class="btn btn-primary" onclick="add_landmark('education')"><i class="fa fa-plus"></i> Add Education</button>
+                                            <div class="education-con my-3">
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="landmark-content" id="tab-content-healthcare" style="display:none">
+                                        <div class="form-field">
+                                            <button type="button" class="btn btn-primary" onclick="add_landmark('healthcare')"><i class="fa fa-plus"></i> Add Healthcare</button>
+                                            <div class="healthcare-con my-3">
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="landmark-content" id="tab-content-shopping" style="display:none">
+                                        <div class="form-field">
+                                            <button type="button" class="btn btn-primary" onclick="add_landmark('shopping')"><i class="fa fa-plus"></i> Add Shopping</button>
+                                            <div class="shopping-con my-3">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="landmark-content" id="tab-content-commercial" style="display:none">
+                                        <div class="form-field">
+                                            <button type="button" class="btn btn-primary" onclick="add_landmark('commercial')"><i class="fa fa-plus"></i> Add Commercial</button>
+                                            <div class="commercial-con my-3">
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="landmark-content" id="tab-content-transaportation" style="display:none">
+                                        <div class="form-field">
+                                            <button type="button" class="btn btn-primary" onclick="add_landmark('transaportation')"><i class="fa fa-plus"></i> Add transaportation</button>
+                                            <div class="transaportation-con my-3">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid columns-2">
+                                        <button type="button" class="btn btn-secondary btn-back-4"><i
+                                                class="bi bi-arrow-left"></i> Back</button>
+                                        <button type="button" class="btn btn-primary btn-next" data-step="4">Next <i
+                                                class="bi bi-arrow-right"></i></button>
+                                    </div>
+                                </div>
+
+                                <div id="step-5" style="display:none;">
 
                                     <div class="row gx-3">
                                         <!-- Bedroom -->
@@ -303,36 +396,38 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="form-label">Floor Type</label>
-                                        <select class="form-control select2" name="flooring_style[]" multiple>
-                                            <option value="">Slect Floor Type</option>
-                                            @php  
-                                                $floor_types = get_floor_types();
-                                            @endphp
-                                            @if($floor_types)
-                                            @foreach($floor_types as $k=>$f)
-                                                <option value="{{$k}}" >{{$f}}</option>
-                                            @endforeach
-                                            @endif
-                                        </select>
-                                        <span class="error flooring_styleError text-danger"></span>
-                                    </div>
+                                    <div class="row gx-3">
+                                        <div class="form-group col-lg-6 col-12">
+                                            <label class="form-label">Floor Type</label>
+                                            <select class="form-control select2" name="flooring_style[]" multiple>
+                                                <option value="">Slect Floor Type</option>
+                                                @php  
+                                                    $floor_types = get_floor_types();
+                                                @endphp
+                                                @if($floor_types)
+                                                @foreach($floor_types as $k=>$f)
+                                                    <option value="{{$k}}" >{{$f}}</option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                            <span class="error flooring_styleError text-danger"></span>
+                                        </div>
 
-                                    <div class="form-group">
-                                        <label class="form-label">Floor No.</label>
-                                        <select class="form-control" name="floors">
-                                            <option value="">--Select--</option>
-                                            @php  
-                                                $floor_numbers = get_floor_numbers();
-                                            @endphp
-                                            @if($floor_numbers)
-                                            @foreach($floor_numbers as $k=>$f)
-                                                <option value="{{$k}}">{{$f}}</option>
-                                            @endforeach
-                                            @endif
-                                        </select>
-                                        <span class="error floorsError text-danger"></span>
+                                        <div class="form-group col-lg-6 col-12">
+                                            <label class="form-label">Floor No.</label>
+                                            <select class="form-control" name="floors">
+                                                <option value="">--Select--</option>
+                                                @php  
+                                                    $floor_numbers = get_floor_numbers();
+                                                @endphp
+                                                @if($floor_numbers)
+                                                @foreach($floor_numbers as $k=>$f)
+                                                    <option value="{{$k}}">{{$f}}</option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                            <span class="error floorsError text-danger"></span>
+                                        </div>
                                     </div>
 
                                     <div class="form-group">
@@ -352,37 +447,7 @@
                                     </div>
 
                                     <div id="residential_features">
-                                        <div class="row gx-3">
-                                            <div class="col-lg-6 col-12"><label class="form-label">Facing</label>
-                                                <div class="form-field">
-                                                    <select class="form-control"
-                                                        name="facing_direction">
-                                                        <option value="">Select Facing</option>
-                                                        <option value="east">East</option>
-                                                        <option value="north">North</option>
-                                                        <option value="north_east">North - East</option>
-                                                        <option value="north_west">North - West</option>
-                                                        <option value="south">South</option>
-                                                        <option value="south_east">South - East</option>
-                                                        <option value="south_west">South - West</option>
-                                                        <option value="west">West</option>
-                                                    </select>
-                                                    <span class="error facing_directionError text-danger"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 col-12"><label class="form-label">Parking</label>
-                                                <div class="form-field">
-                                                    <select class="form-control" name="parking">
-                                                        <option value="">Select Parking Option</option>
-                                                        <option value="av">Available</option>
-                                                        <option value="na">Not Available</option>
-                                                        <option value="uc">Under Construction</option>
-                                                    </select>
-                                                    <span class="error parkingError text-danger"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
+                                        
                                         <div class="form-group"><label class="form-label">Amenity Features : </label>
 
                                             @if (!empty($proepertyAmenities) && is_array($proepertyAmenities))
@@ -473,45 +538,15 @@
                                         @endif
                                     </div>
 
-                                    <div class="form-field">
-                                        <select class="form-control" name="water_available">
-                                            <option value="">--Select Water Availability--</option>
-                                            @php  
-                                                $water_availability = get_water_availability();
-                                            @endphp
-                                            @if($water_availability)
-                                                @foreach($water_availability as $k=>$a)
-                                                    <option value="{{ $k }}" >{{ $a }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <span class="error water_availableError text-danger"></span>
-                                    </div>
-
-                                    <div class="form-field">
-                                        <select class="form-control" name="electric_available">
-                                            <option value="">Select status of electricity</option>
-                                            @php  
-                                                $electricity_status = electricity_status();
-                                            @endphp
-                                            @if($electricity_status)
-                                                @foreach($electricity_status as $k=>$a)
-                                                    <option value="{{ $k }}" >{{ $a }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <span class="error electric_availableError text-danger"></span>
-                                    </div>
-
                                     <div class="d-grid columns-2">
-                                        <button type="button" class="btn btn-secondary btn-back-4"><i
+                                        <button type="button" class="btn btn-secondary btn-back-5"><i
                                                 class="bi bi-arrow-left"></i> Back</button>
-                                        <button type="button" class="btn btn-primary btn-next" data-step="4">Next <i
+                                        <button type="button" class="btn btn-primary btn-next" data-step="5">Next <i
                                                 class="bi bi-arrow-right"></i></button>
                                     </div>
                                 </div>
 
-                                <div id="step-5" style="display:none;">
+                                <div id="step-6" style="display:none;">
                                     <div class="mb-3">
                                         <label class="form-label">Possession Status :</label>
                                         @if (!empty($propertyStatus) && is_array($propertyStatus))
@@ -604,38 +639,78 @@
                                     </div>
 
                                     <div class="row gx-3">
+                                        <div class="form-field col-lg-6 col-12">
+                                            <select class="form-control" name="water_available">
+                                                <option value="">--Select Water Availability--</option>
+                                                @php  
+                                                    $water_availability = get_water_availability();
+                                                @endphp
+                                                @if($water_availability)
+                                                    @foreach($water_availability as $k=>$a)
+                                                        <option value="{{ $k }}" >{{ $a }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                            <span class="error water_availableError text-danger"></span>
+                                        </div>
+
+                                        <div class="form-field col-lg-6 col-12">
+                                            <select class="form-control" name="electric_available">
+                                                <option value="">Select status of electricity</option>
+                                                @php  
+                                                    $electricity_status = electricity_status();
+                                                @endphp
+                                                @if($electricity_status)
+                                                    @foreach($electricity_status as $k=>$a)
+                                                        <option value="{{ $k }}" >{{ $a }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                            <span class="error electric_availableError text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row gx-3">
                                         <div class="col-lg-6 col-12">
-                                            <label class="form-label">Expected Price</label>
-                                            <div class="input-group mb-3">
-                                                <select class="" data-width="fit" title="Currency"
-                                                    name="currency">
-                                                    <option disabled="disabled">Currency</option>
-                                                    <option value="AED">AED</option>
-                                                    <option value="EURO">EURO</option>
-                                                    <option value="POND">POUND</option>
-                                                    <option value="USD">USD</option>
+                                            <label class="form-label">Facing</label>
+                                            <div class="form-field">
+                                                <select class="form-control"
+                                                    name="facing_direction">
+                                                    <option value="">Select Facing</option>
+                                                    <option value="east">East</option>
+                                                    <option value="north">North</option>
+                                                    <option value="north_east">North - East</option>
+                                                    <option value="north_west">North - West</option>
+                                                    <option value="south">South</option>
+                                                    <option value="south_east">South - East</option>
+                                                    <option value="south_west">South - West</option>
+                                                    <option value="west">West</option>
                                                 </select>
-                                                <input type="text" class="form-control" name="expected_price"
-                                                    placeholder="Enter Amount" />
+                                                <span class="error facing_directionError text-danger"></span>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 col-12">
+                                        <div class="col-lg-6 col-12"><label class="form-label">Parking</label>
                                             <div class="form-field">
-                                                <label class="form-label">Booking/Token Amount (optional)</label>
-                                                <input type="number" class="form-control" name="token_amount"
-                                                    placeholder="Enter Token Amount" />
+                                                <select class="form-control" name="parking">
+                                                    <option value="">Select Parking Option</option>
+                                                    <option value="av">Available</option>
+                                                    <option value="na">Not Available</option>
+                                                    <option value="uc">Under Construction</option>
+                                                </select>
+                                                <span class="error parkingError text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="d-grid columns-2">
-                                        <button type="button" class="btn btn-secondary btn-back-5"><i
+                                        <button type="button" class="btn btn-secondary btn-back-6"><i
                                                 class="bi bi-arrow-left"></i> Back</button>
-                                        <button type="button" class="btn btn-primary btn-next" data-step="5">Next <i
+                                        <button type="button" class="btn btn-primary btn-next" data-step="6">Next <i
                                                 class="bi bi-arrow-right"></i></button>
                                     </div>
                                 </div>
 
-                                <div id="step-6" style="display:none;">
+                                <div id="step-7" style="display:none;">
                                     <div class="form-field">
                                         <div class="image-tab-content">
                                             <ul class="nav nav-underline nav-custom">
@@ -732,9 +807,9 @@
                                     </div>
 
                                     <div class="d-grid columns-2">
-                                        <button type="button" class="btn btn-secondary btn-back-6"><i
+                                        <button type="button" class="btn btn-secondary btn-back-7"><i
                                                 class="bi bi-arrow-left"></i> Back</button>
-                                        <button type="button" class="btn btn-primary btn-next" data-step="6" id="submit-btn">Post
+                                        <button type="button" class="btn btn-primary btn-next" data-step="7" id="submit-btn">Post
                                             Property</button>
                                     </div>
                                 </div>
@@ -787,6 +862,26 @@
             });
         });
 
+        $(function(){
+            $('.select2').select2();
+        });
+
+        function add_landmark(type) {
+            var html = '';
+            html += '<div class="row">';
+            html += '<div class="col-md-5"><input type="text" class="form-control" name="'+type+'[name][]" placeholder="Name" /></div>';
+            html += '<div class="col-md-5"><div class="form-group"><input type="text" class="form-control input-group" name="'+type+'[distance][]" placeholder="Distance" /></div></div>';
+            html += '<div class="col-md-2"><div><a href="javascript:void(0)" onclick="remove_landmark(this)"><i class="fa fa-trash"></i></a></div></div>';
+            html += '</div>';
+
+            $('.' + type + '-con').append(html);
+        }
+
+        function remove_landmark(evt)
+        {
+            $(evt).parent().parent().parent().remove();
+        }
+
         function previewImage(imageUrl, filename, type) {
             let gallery = $('#previewGallery');
             let imgWrapper = $('<div class="preview-item"></div>');
@@ -807,6 +902,7 @@
                 $(this).addClass("active");
                 var activeTab = $(this).attr("data-tab");
                 $(".img-content").hide();
+                $(".landmark-content").hide();
                 $("#tab-content-"+activeTab).show();
             });
 

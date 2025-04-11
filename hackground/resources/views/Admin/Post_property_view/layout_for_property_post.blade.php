@@ -118,7 +118,7 @@
     <!--Perfect Scrollbar -->
     <script src="{{ asset('assets/js/vendors/scrollbar.js') }}"></script>
     <script src="{{ asset('assets/js/scripts-init/scrollbar.js') }}"></script>
-    <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/scripts-init/select2/dist/js/select2.js') }}"></script>
     <!--Toastr-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" crossorigin="anonymous"></script>
     <script src="{{ asset('assets/js/scripts-init/toastr.js') }}"></script>

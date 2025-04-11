@@ -257,6 +257,12 @@ class PostPropertyController extends Controller
                 ));
             }
             if ($step == '4') {
+                return json_encode(array(
+                    'status' => 'OK',
+                    'nextStep' => '5'
+                ));
+            }
+            if ($step == '5') {
                 $request->validate([
                     'carpet_area' => 'required',
                     'super_area' => 'required',
@@ -265,10 +271,10 @@ class PostPropertyController extends Controller
 
                 return json_encode(array(
                     'status' => 'OK',
-                    'nextStep' => '5'
+                    'nextStep' => '6'
                 ));
             }
-            if ($step == '5') {
+            if ($step == '6') {
                 $request->validate([
                     'possession_status' => 'required',
                     'expected_price' => 'required',
@@ -290,10 +296,10 @@ class PostPropertyController extends Controller
 
                 return json_encode(array(
                     'status' => 'OK',
-                    'nextStep' => '6'
+                    'nextStep' => '7'
                 ));
             }
-            if ($step == '6') {
+            if ($step == '7') {
                 try {
                     DB::beginTransaction();
                     log::info(json_encode($request->all()));
@@ -315,6 +321,7 @@ class PostPropertyController extends Controller
                     $this->savePropertyDimensions($property->id, $request);
                     $this->savePropertyAdditional($property->id, $request);
                     $this->savePropertyGalleries($property->id, $request);
+                    $this->savePropertyLandmark($property->id, $request);
 
                     DB::commit();
 
@@ -403,7 +410,7 @@ class PostPropertyController extends Controller
                 $additional_data = array(
                     'floor' => $request->floors,
                     'total_floor' => $request->total_floors,
-                    'flooring_style' => $request->flooring_style,
+                    'flooring_style' => is_array($request->flooring_style) ? implode(',', $request->flooring_style) : $request->flooring_style,
                     'facing_direction' => $request->facing_direction,
                     'corner_plot' => $request->corner_plot,
                     'allowed_construction' => $request->allowed_construction,
@@ -695,6 +702,7 @@ class PostPropertyController extends Controller
             'post_for' => $request->postFor,
             'price_currency' => $request->currency,
             'property_budget' => $request->property_budget,
+            'project_name' => $request->project_name
         ];
 
         if ($settings) {
@@ -712,12 +720,12 @@ class PostPropertyController extends Controller
                 ((!empty($request->construction_month) && !empty($request->construction_year)) ? '-' : '') .
                 ($request->construction_year ?? '')
         );
-
+        //print_r($request->all());exit;
         $data = [
             'pid' => $propertyId,
             'floor' => $request->floors,
             'total_floor' => $request->total_floors,
-            'flooring_style' => $request->flooring_style,
+            'flooring_style' => is_array($request->flooring_style) ? implode(',', $request->flooring_style) : $request->flooring_style,
             'facing_direction' => $request->facing_direction,
             'corner_plot' => $request->corner_plot,
             'allowed_construction' => $request->allowed_construction,
@@ -726,7 +734,7 @@ class PostPropertyController extends Controller
             'lifts_in_tower' => $request->lifts_in_tower,
             'possession_status' => $request->possession_status,
             'property_furnish' => $request->property_furnish,
-            'property_amenity' => is_array($request->amenities) ? implode(',', $request->amenities) : $request->property_amenity,
+            'property_amenity' => is_array($request->amenities) ? implode(',', $request->amenities) : $request->amenities,
             'is_personal_washroom' => $request->personal_washroom,
             'pantry_cafeteria_status' => $request->cafeteria,
             'is_corner_shop' => $request->corner_shop,
@@ -734,9 +742,12 @@ class PostPropertyController extends Controller
             'property_desc' => $request->description,
             'balcony' => $request->balcony_count ?? null,
             'buyer_message' => $request->buyer_message ?? null,
-            'expected_possesion_month_year' => $expected_possesion_month_year
+            'expected_possesion_month_year' => $expected_possesion_month_year,
+            'electric_available' => $request->electric_available,
+            'water_available' => $request->water_available,
+            'ownership_type' => $request->ownership_type,
         ];
-
+        //print_r($data);exit;
         if ($additional) {
             $additional->update($data);
         } else {

@@ -613,22 +613,22 @@
         });
 
         $(".qtybutton").off("click").on("click", function () {  
-        let parent = $(this).closest(".form-field");  
-        let input = parent.find(".room-count"); 
-        let formContainer = parent.find(".size-forms");
-        var amenity =  $(this).attr('amenity');
-        
-        let value = parseInt(input.val()) || 0;  
-        if ($(this).hasClass("plus")) {  
-            value++;  
-            input.val(value);
-            addForm(formContainer,amenity,value);
-        } else if ($(this).hasClass("minus") && value > 0) {  
-            value--;  
-            input.val(value);  
-            removeForm(formContainer);  
-        }  
-    });
+            let parent = $(this).closest(".form-field");  
+            let input = parent.find(".room-count"); 
+            let formContainer = parent.find(".size-forms");
+            var amenity =  $(this).attr('amenity');
+            
+            let value = parseInt(input.val()) || 0;  
+            if ($(this).hasClass("plus")) {  
+                value++;  
+                input.val(value);
+                addForm(formContainer,amenity,value);
+            } else if ($(this).hasClass("minus") && value > 0) {  
+                value--;  
+                input.val(value);  
+                removeForm(formContainer);  
+            }  
+        });
 
     function addForm(formContainer,amenity,value) {  
         let formHtml = `<div class="size-form mt-3 p-3 border rounded bg-light">  
