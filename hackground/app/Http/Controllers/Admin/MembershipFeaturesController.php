@@ -42,7 +42,7 @@ class MembershipFeaturesController extends Controller
         $validatedData['social_media_promotion'] =$request->social_media_promotion;
         $validatedData['verified_badge'] =$request->verified_badge;
         $validatedData['relationship_manager'] =$request->relationship_manager;
-        $validatedData['owner_contacted'] =$request->owner_contacted;
+        $validatedData['leads'] =$request->leads;
         $validatedData['listings_allowed'] =$request->listings_allowed;
 
         $updatedPlan = $this->membershipPlanService->updateMembershipPlansType($validatedData, $request->id);

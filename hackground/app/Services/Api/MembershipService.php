@@ -20,7 +20,7 @@ class MembershipService
                     $query->select(
                         'id',
                         'relationship_manager',
-                        'owner_contacted',
+                        'leads',
                         'listings_allowed',
                         'verified_badge',
                         'listing_visibility',

@@ -106,7 +106,7 @@ const translation = useTranslation();
                                                 ) : (
                                                     <i className="material-icons-outlined text-danger">close</i>
                                                 )
-                                            ) : (
+                                            ) : ( 
                                                 featureValue.trim() === '' ? '-' : featureValue
                                             )
                                         ) : featureValue === null || featureValue === undefined ? (
