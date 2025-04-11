@@ -47,7 +47,28 @@ const PropertySidebar = ({
     propertyId: propertyId || "",
     countryCode: "IND +91",
   });
-
+  const featureList = [
+    `${translation?.connectivity_highlight || "Highlight excellent connectivity to major roads, highways, airports, or business hubs, making commuting easier."}
+`,
+    `${translation?.luxury_features || "Emphasize high-end finishes, spacious layouts, modern designs, and luxury amenities like swimming pools, gyms, clubhouses, and green spaces"}
+`,
+    `${translation?.investment_potential || "Explain how the property's location, development trends, and demand in the area make it a sound investment with high returns in the future."}
+`,
+    `${translation?.sustainability_showcase || "Showcase sustainable design and construction, energy-efficient appliances, green building certifications, water-saving features, and access to natural light and ventilation."}
+`,
+    `${translation?.nearby_facilities || "Provide proximity to top schools, hospitals, shopping centers, and recreational facilities."}
+`,
+    `${translation?.security_highlight || "Highlight 24/7 security, CCTV surveillance, gated community features, and other safety measures."}
+`,
+    `${translation?.smart_home_features || "Emphasize the availability of smart home technology, home automation, and advanced connectivity features."}
+`,
+    `${translation?.infrastructure_boost || "Describe upcoming infrastructure projects that could further boost property value."}
+`,
+    `${translation?.payment_incentives || "Showcase flexible payment plans, attractive loan offers, and government incentives for homebuyers."}
+`,
+    `${translation?.builder_reputation || "Mention the reputation and reliability of the builder, along with previous successful projects."}
+`
+  ];
   const [errors, setErrors] = useState({});
   const countryCodes = ["IND +91", "+81", "+71", "+61", "+51"];
   const property_features = [
