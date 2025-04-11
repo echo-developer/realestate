@@ -1270,7 +1270,7 @@ class DashboardController extends Controller
             $property_brochure = $request->file('brochure_data');
             $property_id = $request->input('property_id');
 
-            $fileName = "property_{$property_id}_" . $property_brochure->getClientOriginalName();
+            $fileName =$property_brochure->getClientOriginalName();
 
 
             $uploadPath = public_path('user_upload/property_brochure');
