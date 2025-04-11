@@ -21,7 +21,7 @@ const PropertyReviewDetails = ({ property_reviews, handleShowCanvas, isMyPropert
         <div className="card border-0 shadow-1 mb-4">
           <div className="card-body">
             <div className="d-flex justify-content-between">
-              <h4 className="mb-3 text-primary">{translation?.property_reviews_ratings || "Property Reviews & Ratings"}</h4>
+              <h4 className="mb-3 text-primary">{translation?.reviews_ratings || "Reviews & Ratings"}</h4>
               {!isMyProperty && (
                 <h5>
                   <Button variant="primary" onClick={handleShowCanvas}>{translation?.write_a_review || "Write A Review"}  <i className="bi bi-arrow-right"></i></Button>

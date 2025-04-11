@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Container, Row, Col, Form, Button, Table, Card, FloatingLabel } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import MainLayout from '@/components/layout/MainLayout';
 import useTranslation from '@/hooks/useTranslation';
 const PropertyLegalCheck = () => {
@@ -111,9 +111,9 @@ const PropertyLegalCheck = () => {
                       />
                     </div>
 
-                    <button type="button" className="btn btn-primary" onClick={handleSubmit}>
+                    <Button variant="primary" onClick={handleSubmit}>
                       {translation?.submit || 'Submit'}
-                    </button>
+                    </Button>
                   </form>
                 </Card.Body>
               </Card>

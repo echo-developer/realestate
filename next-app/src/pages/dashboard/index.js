@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import Link from "next/link";
 import useTranslation from "@/hooks/useTranslation";
+import { BoxArrowUpRight, Calendar, GeoAlt, Hash } from "react-bootstrap-icons";
 
 const customerReviews = [
   {
@@ -92,7 +93,7 @@ const Index = () => {
     customer: property.name || "Not Available",
     property: property.locality || "Not Available",
     date: moment(property.created_at).format("DD/MM/YYYY"),
-    type: property.property_type || "Not Available",
+    type: property.property_type ? property.property_type : <i className="text-muted">Not Available</i>,
     status: property.property_for === "Rent" ? "On Rent" : `${translation?.on_sale || "On Sale"}`,
     badgeClass: property.property_for === "Rent" ? "bg-success" : "bg-warning",
     slug: property.slug,
@@ -330,7 +331,7 @@ const Index = () => {
               </h4>
               <div className="dropdown dots-only">
                 <a
-                  className="btn btn-link dropdown-toggle"
+                  className="btn btn-link dropdown-toggle p-1"
                   href="#"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
@@ -372,11 +373,11 @@ const Index = () => {
               </div>
               <div
                 className="simplebar-scroll-content"
-                style={{ paddingRight: "17px", marginBottom: "-34px" }}
+                style={{ paddingRight: "17px", }}
               >
                 <div
                   className="simplebar-content"
-                  style={{ paddingBottom: "17px", marginRight: "-17px" }}
+                  style={{ marginRight: "-17px" }}
                 >
                   <ul className="card-listing">
                     {customerReviews.map((review) => (
@@ -423,10 +424,10 @@ const Index = () => {
                 </div>
               </div>
             </div>
-            <div className="text-end">
-              <Link target="_blank" href={`/review-list`} className="btn btn-link text-decoration-none">
-              {translation?.view_more_reviews || 'View More Reviews'}
-              <i className="bi bi-arrow-right"></i>
+            <div className="text-center mb-3">
+              <Link target="_blank" href={`/review-list`} className="btn btn-primary">
+                {translation?.view_more_reviews || 'View More Reviews'} {/*  */}
+                <i className="bi bi-arrow-right"></i>
               </Link>
             </div>
           </div>
@@ -465,10 +466,10 @@ const Index = () => {
                 {propertyData?.length > 0 ? (
                   propertyData?.map((property, index) => (
                     <ul key={index} className="property-row">
-                      <li>{property.orderNo}</li>
-                      <Link target="_blank" href={`/property-details/${property.slug}`}><li>{property.customer}</li></Link>
-                      <li>{property.property}</li>
-                      <li>{property.date}</li>
+                      <li><span className="text-primary"><Hash color="currentColor" size={18} /></span> {property.orderNo}</li>
+                      <li><Link target="_blank" href={`/property-details/${property.slug}`}><span className="text-primary"><BoxArrowUpRight color="currentColor" size={16} /></span> {property.customer}</Link></li>
+                      <li><span className="text-primary"><GeoAlt color="currentColor" size={16} /></span> {property.property}</li>
+                      <li><span className="text-primary"><Calendar color="currentColor" size={16} /></span> {property.date}</li>
                       <li>{property.type}</li>
                       <li>
                         <span className={`badge ${property.badgeClass}`}>

@@ -1836,8 +1836,19 @@ h4 {
 			background-color: $white;
 			border-color: var(--#{$prefix}border-color-translucent);
 			color: var(--#{$prefix}body-color);
-			img{
-				margin-inline-end: 0.5rem;
+			position: relative;
+			&::before{
+				content: '\f26a';
+				font-family: 'bootstrap-icons';
+				color: #0a0;
+				position: absolute;
+				right: -8px;
+				top: -8px;
+				background-color: $white;
+				border-radius: 50%;
+				font-size: 1.125rem;
+				line-height: 1;
+				display: none;
 			}
 		}
 		.btn-check {
@@ -1845,10 +1856,12 @@ h4 {
 				&+.btn-outline-light {
 					background-color: $primary-bg-subtle;
 					border-color: rgba($primary, 50%);
-					color: $primary;
-					/* img {
-						filter: brightness(0) invert(1);
-					} */
+					color: $primary;										
+				}
+				&+.btn{
+					&::before{
+						display: block;
+					}
 				}
 			}
 		}
@@ -2637,45 +2650,69 @@ ul.dashboard-box-list {
 .ul-table {
 	background-color: $white;
 	border-radius: 0.25rem;
-	display: table;
 	border-collapse: collapse;
 	overflow-x: auto;
 	width: 100%;
-
 	&>ul {
 		border-bottom: 1px solid #dedede;
 		list-style: none;
-		margin-bottom: 0;
 		padding: 0;
-		display: table-row;
-
 		&:last-child {
 			border-bottom: none;
 		}
-
 		&.head {
 			font-weight: 500;
 		}
-
 		&>li {
-			display: table-cell;
-			max-width: 250px;
-			white-space: nowrap;
 			text-overflow: ellipsis;
 			overflow: hidden;
 			padding: 0.5rem 0.25rem;
 			vertical-align: middle;
 			z-index: 1;
-
-			&:first-child {
-				padding-inline-start: 1rem;
-			}
-
-			&:last-child {
-				padding-inline-end: 1rem;
-			}
 			.status{
 				transform: scale(0.5);
+			}
+		}
+	}
+}
+@media screen and (min-width: 992px){
+	.ul-table {
+		display: table;
+		&>ul {
+			display: table-row;
+			margin-bottom: 0;
+			&>li {
+				display: table-cell;
+				max-width: 250px;
+				white-space: nowrap;
+				&:first-child {
+					padding-inline-start: 1rem;
+				}
+	
+				&:last-child {
+					padding-inline-end: 1rem;
+				}
+			}
+		}
+	}
+	
+}
+@media screen and (max-width: 991.98px){
+	.ul-table {
+		&>ul {
+			display: flex;
+			flex-wrap: wrap;
+			margin-bottom: 0.75rem;
+			padding-bottom: 0.75rem;
+			&>li {
+				padding: 0.25rem 1rem;
+
+				&:nth-child(2), &:nth-child(3){
+					flex: 0 0 100%;
+				}
+			}
+			&.head {
+				display: none;
 			}
 		}
 	}
