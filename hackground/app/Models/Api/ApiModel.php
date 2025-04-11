@@ -25,7 +25,7 @@ class ApiModel extends Model
     {
         return getTableData(
             'property_category_names',
-            ['property_category_names.category_id', 'property_category_names.name as category_name', 'property_category.slug as category_key','property_category.image'],
+            ['property_category_names.category_id', 'property_category_names.name as category_name', 'property_category.slug as category_key', 'property_category.image'],
             [
                 [
                     'table' => 'property_category',
@@ -382,12 +382,15 @@ class ApiModel extends Model
             ->addSelect(
                 'properties_settings.unit_type',
                 'properties_settings.super_area',
-                'properties_settings.area_in_sqft'
+                'properties_settings.area_in_sqft',
+                'property_additional.brochure_file',
             )
+            ->leftJoin('property_additional', 'properties.id', '=', 'property_additional.pid')
             ->groupBy(
                 'properties_settings.unit_type',
                 'properties_settings.super_area',
-                'properties_settings.area_in_sqft'
+                'properties_settings.area_in_sqft',
+                'property_additional.brochure_file',
             )
             ->where('properties.uid', '=', $user_id)
             ->get();
@@ -817,7 +820,7 @@ class ApiModel extends Model
                 'leads_assigned.lead_type' => 'P',
                 'property_enquiry.is_deleted' => config('constants.STATUS_INACTIVE'),
             ])
-            ->where('property_enquiry.property_id','!=','')
+            ->where('property_enquiry.property_id', '!=', '')
             ->select(
                 'leads_assigned.assign_id',
                 'leads_assigned.lead_status',
@@ -883,12 +886,12 @@ class ApiModel extends Model
             ->get();
     }
 
-    public function updateUserLeadStatus($data=array())
+    public function updateUserLeadStatus($data = array())
     {
         $assign_id = $data['assign_id'];
         $user_id = $data['user_id'];
         $status = $data['lead_status'];
-        $query = DB::table('leads_assigned')->where(['assign_id'=>$assign_id,'user_id'=>$user_id])->update(['lead_status'=>$status]);
+        $query = DB::table('leads_assigned')->where(['assign_id' => $assign_id, 'user_id' => $user_id])->update(['lead_status' => $status]);
 
         return true;
     }
@@ -1071,14 +1074,14 @@ class ApiModel extends Model
         return $data;
     }
 
-    public function getLeadsScheduleList($user_id,$start_date,$end_date)
+    public function getLeadsScheduleList($user_id, $start_date, $end_date)
     {
         $data = DB::table('crm_log as log')
-                    ->where([
-                        'log.user_id'=>$user_id,
-                    ])
-                    ->whereBetween('log.schedule_date', [$start_date . ' 00:00:00', $end_date . ' 23:59:59'])
-                    ->get();
+            ->where([
+                'log.user_id' => $user_id,
+            ])
+            ->whereBetween('log.schedule_date', [$start_date . ' 00:00:00', $end_date . ' 23:59:59'])
+            ->get();
         return $data;
     }
 
@@ -1365,39 +1368,34 @@ class ApiModel extends Model
         return $availableBHKs;
     }
 
-    public function getPageAdvertisements($data=array())
+    public function getPageAdvertisements($data = array())
     {
         $query = DB::table('advertisements as a')
-            ->select('a.advertisement_id','a.ad_image','a.ad_image_mobile','a.ad_url','a.ad_type','a.ad_code')
+            ->select('a.advertisement_id', 'a.ad_image', 'a.ad_image_mobile', 'a.ad_url', 'a.ad_type', 'a.ad_code')
             ->leftJoin('advertisement_category as a_c', 'a.advertisement_id', '=', 'a_c.advertisement_id')
             ->leftJoin('advertisement_locations as a_l', 'a.advertisement_id', '=', 'a_l.advertisement_id');
 
-        $query->where('status','1');
-        
-        if(array_key_exists('page', $data) && !empty($data['page']))
-        {
-            $query->where('a.page',$data['page']); 
+        $query->where('status', '1');
+
+        if (array_key_exists('page', $data) && !empty($data['page'])) {
+            $query->where('a.page', $data['page']);
         }
-        if(array_key_exists('position', $data) && !empty($data['position']))
-        {
-            $query->where('a.position',$data['position']); 
+        if (array_key_exists('position', $data) && !empty($data['position'])) {
+            $query->where('a.position', $data['position']);
         }
-        if(array_key_exists('city', $data) && !empty($data['city']))
-        {
-            $query->where('a_l.city_id',$data['city']); 
+        if (array_key_exists('city', $data) && !empty($data['city'])) {
+            $query->where('a_l.city_id', $data['city']);
         }
-        if(array_key_exists('category', $data) && !empty($data['category']))
-        {
-            $query->where('a_c.property_category',$data['category']); 
+        if (array_key_exists('category', $data) && !empty($data['category'])) {
+            $query->where('a_c.property_category', $data['category']);
         }
         $query->groupBy('a.advertisement_id');
-        if(array_key_exists('limit', $data) && !empty($data['limit']))
-        {
-            $query->inRandomOrder()->limit($data['limit']); 
-        }else{
-            $query->inRandomOrder(); 
+        if (array_key_exists('limit', $data) && !empty($data['limit'])) {
+            $query->inRandomOrder()->limit($data['limit']);
+        } else {
+            $query->inRandomOrder();
         }
-            
+
         $result = $query->get()->toArray();
         return $result;
     }
@@ -1405,53 +1403,52 @@ class ApiModel extends Model
     public function getGeneralLeadsList($user_id)
     {
         $query = DB::table('leads_assigned as l_a')
-                ->select('e.*','l_a.assign_id','l_a.lead_status')
-                ->leftJoin('buyer_property_enquery as e', 'e.id', '=', 'l_a.enquery_id')
-                ->where([
-                    'l_a.user_id'=>$user_id, 
-                    'l_a.lead_type'=>'G'
-                ])
-                ->orderBy('e.id', 'desc')
-                ->get();
-        
-        return $query;   
+            ->select('e.*', 'l_a.assign_id', 'l_a.lead_status')
+            ->leftJoin('buyer_property_enquery as e', 'e.id', '=', 'l_a.enquery_id')
+            ->where([
+                'l_a.user_id' => $user_id,
+                'l_a.lead_type' => 'G'
+            ])
+            ->orderBy('e.id', 'desc')
+            ->get();
+
+        return $query;
     }
 
-    public function addAdvertisementView($data=array())
+    public function addAdvertisementView($data = array())
     {
-        $prev = DB::table('advertisements as a')->select('a.views')->where('a.advertisement_id',$data['advertisement_id'])->first();
-        if($prev)
-        {
+        $prev = DB::table('advertisements as a')->select('a.views')->where('a.advertisement_id', $data['advertisement_id'])->first();
+        if ($prev) {
             $prev_views = $prev->views;
-            $curr_views = $prev_views+1;
-            DB::table('advertisements as a')->where('a.advertisement_id',$data['advertisement_id'])->update(['a.views'=>$curr_views]);
+            $curr_views = $prev_views + 1;
+            DB::table('advertisements as a')->where('a.advertisement_id', $data['advertisement_id'])->update(['a.views' => $curr_views]);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function getScheduleMeetingList($user_id,$schedule_date)
+    public function getScheduleMeetingList($user_id, $schedule_date)
     {
         $schedule_date = Carbon::parse($schedule_date)->format('Y-m-d');
         $query = DB::table('crm_log as log')
-                ->select('log.*','p_e.property_id','p_e.project_id','p.name as property_name','pj.project_name','c.Name as customer_name','c.Phone as customer_phone','c.Email as customer_email','g_e.name as g_customer_name','g_e.phone as g_customer_phone','g_e.email as g_customer_email')
-                ->leftJoin('property_enquiry as p_e', 'log.enquiry_id', '=', 'p_e.enquery_id')
-                ->leftJoin('properties as p', 'p.id', '=', 'p_e.property_id')
-                ->leftJoin('project as pj', 'pj.id', '=', 'p_e.project_id')
-                ->leftJoin('customer as c', 'p_e.cid', '=', 'c.cid')
-                ->leftJoin('buyer_property_enquery as g_e', 'log.enquiry_id', '=', 'g_e.id')
-                ->where([
-                    'log.user_id'=>$user_id, 
-                ])
-                ->whereDate('log.schedule_date',$schedule_date)
-                ->orderBy('log.schedule_date', 'asc')
-                ->get();
-        
-        return $query;   
+            ->select('log.*', 'p_e.property_id', 'p_e.project_id', 'p.name as property_name', 'pj.project_name', 'c.Name as customer_name', 'c.Phone as customer_phone', 'c.Email as customer_email', 'g_e.name as g_customer_name', 'g_e.phone as g_customer_phone', 'g_e.email as g_customer_email')
+            ->leftJoin('property_enquiry as p_e', 'log.enquiry_id', '=', 'p_e.enquery_id')
+            ->leftJoin('properties as p', 'p.id', '=', 'p_e.property_id')
+            ->leftJoin('project as pj', 'pj.id', '=', 'p_e.project_id')
+            ->leftJoin('customer as c', 'p_e.cid', '=', 'c.cid')
+            ->leftJoin('buyer_property_enquery as g_e', 'log.enquiry_id', '=', 'g_e.id')
+            ->where([
+                'log.user_id' => $user_id,
+            ])
+            ->whereDate('log.schedule_date', $schedule_date)
+            ->orderBy('log.schedule_date', 'asc')
+            ->get();
+
+        return $query;
     }
 
-    public function updateMeetingStatus($data=array())
+    public function updateMeetingStatus($data = array())
     {
         DB::table('crm_log as log')
             ->where([
@@ -1461,23 +1458,21 @@ class ApiModel extends Model
         return true;
     }
 
-    public function getLeadDetails($enquiry_id,$lead_type)
+    public function getLeadDetails($enquiry_id, $lead_type)
     {
-        if($lead_type == 'P')
-        {
+        if ($lead_type == 'P') {
             $query = DB::table('property_enquiry as p_e')
-                        ->select('p_e.*','p.name as property_name','pj.project_name','c.Phone as phone','c.Name as name','c.Email as email')
-                        ->leftJoin('properties as p', 'p.id', '=', 'p_e.property_id')
-                        ->leftJoin('project as pj', 'pj.id', '=', 'p_e.project_id')
-                        ->leftJoin('customer as c', 'p_e.cid', '=', 'c.cid')
-                        ->where('p_e.enquery_id',$enquiry_id);
-        }elseif($lead_type == 'G'){
+                ->select('p_e.*', 'p.name as property_name', 'pj.project_name', 'c.Phone as phone', 'c.Name as name', 'c.Email as email')
+                ->leftJoin('properties as p', 'p.id', '=', 'p_e.property_id')
+                ->leftJoin('project as pj', 'pj.id', '=', 'p_e.project_id')
+                ->leftJoin('customer as c', 'p_e.cid', '=', 'c.cid')
+                ->where('p_e.enquery_id', $enquiry_id);
+        } elseif ($lead_type == 'G') {
             $query = DB::table('buyer_property_enquery as p_e')
-                            ->select('p_e.*')
-                            ->where('p_e.id',$enquiry_id);
+                ->select('p_e.*')
+                ->where('p_e.id', $enquiry_id);
         }
         $result = $query->first();
         return $result;
     }
-    
 }
