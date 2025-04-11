@@ -703,13 +703,13 @@ class HomeController extends Controller
     {
         try {
             $data = [
-                'user_name' => $request->user_name,
+                'user_name' => $request->name,
                 'phone' => $request->phone,
                 'email' => $request->email,
                 'address' => $request->address,
                 'loan_amount' => $request->loan_amount,
                 'tenure' => $request->tenure,
-                'is_property_identified' => $request->is_property_identified,
+                'is_property_identified' => $request->property_identified,
             ];
             LoanEnquery::create($data);
 
