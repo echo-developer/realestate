@@ -148,7 +148,7 @@ class ProjectDashboardController extends Controller
             $project_brochure = $request->file('brochure_data');
             $project_id = $request->input('project_id');
 
-            $fileName = "project_{$project_id}_" . $project_brochure->getClientOriginalName();
+            $fileName = $project_brochure->getClientOriginalName();
 
 
             $uploadPath = public_path('user_upload/project_brochure');
