@@ -42,7 +42,7 @@ const translation = useTranslation();
     <MainLayout>
       <section className="section">
         <Container>
-          <Row>
+          <Row className="mb-3">
             <Col lg={6}>
               <Card className="mb-4">            
                 <Card.Body>
@@ -117,35 +117,39 @@ const translation = useTranslation();
           </Row>
 
           {/* Top Bank Offers */}
-          <h4 className="mt-4">{translation?.top_banks_home_loan_offers || 'Top Banks Home Loan Offers'}
-          </h4>
-          <Row>
+          <h3 className="mb-3">{translation?.top_banks_home_loan_offers || 'Top Banks Home Loan Offers'}
+          </h3>
+          <Row className="mb-3">
             <Col md={6}>
-              <Card className="p-3">
-                <h5>{translation?.bank_of_baroda || 'Bank of Baroda'}
-                </h5>
-                <p>{translation?.base_all_main_term || 'Base & All; Main Term 30yrs'}
-                </p>
-                <Button variant="link">{translation?.view || 'View'}
-                </Button>
+              <Card className="mb-3">
+                <Card.Body>
+                  <h4>{translation?.bank_of_baroda || 'Bank of Baroda'}
+                  </h4>
+                  <p>{translation?.base_all_main_term || 'Base & All; Main Term 30yrs'}
+                  </p>
+                  <Button variant="outline-primary">{translation?.check_bank_offers || 'Check Bank Offers'}
+                  </Button>
+                </Card.Body>
               </Card>
             </Col>
             <Col md={6}>
-              <Card className="p-3">
-                <h5>{translation?.state_bank_of_india || 'State Bank of India'}
-                </h5>
+              <Card className="mb-3">
+              <Card.Body>
+                <h4>{translation?.state_bank_of_india || 'State Bank of India'}
+                </h4>
                 <p>{translation?.base_all_main_term || 'Base & All; Main Term 30yrs'}
                 </p>
-                <Button variant="link">{translation?.check_bank_offers || 'Check Bank Offers'}
+                <Button variant="outline-primary">{translation?.check_bank_offers || 'Check Bank Offers'}
                 </Button>
+                </Card.Body>
               </Card>
             </Col>
           </Row>
 
           {/* Repayment Table */}
-          <h4 className="mt-4">{translation?.your_repayment_details || 'Your Repayment Details'}
-          </h4>
-          <Table striped bordered hover responsive className="mt-3">
+          <h3 className="mb-3">{translation?.your_repayment_details || 'Your Repayment Details'}
+          </h3>
+          <Table striped bordered hover responsive>
             <thead className="bg-light">
               <tr>
                 <th>{translation?.month || 'Month'}
