@@ -321,10 +321,11 @@ export function PropertyMobileFilters({
               variant="link"
               className="p-0 text-danger text-decoration-none"
               onClick={() => {
+                console.log("handle reset ran")
                 setSelectedPropertyTypes([]);
                 setSelectedPropertyFor([])
-                setBudgetRange({ min_budget: 5, max_budget: 40 });
-                setAreaRange({ min_carpet: 500, max_carpet: 5000 });
+                setBudgetRange({ min_budget: null, max_budget:  null });
+                setAreaRange({ min_carpet: null, max_carpet: null });
                 setSelectedFilters({});
               }}
             >
@@ -416,7 +417,7 @@ export function PropertyMobileFilters({
             <Form.Control
               type="number"
               placeholder="Min"
-              value={budgetRange.min_budget}
+              value={budgetRange.min_budget || ""}
               onChange={(e) =>
                 setBudgetRange({
                   ...budgetRange,
@@ -427,7 +428,7 @@ export function PropertyMobileFilters({
             <Form.Control
               type="number"
               placeholder="Max"
-              value={budgetRange.max_budget}
+              value={budgetRange.max_budget || ""}
               onChange={(e) =>
                 setBudgetRange({
                   ...budgetRange,
@@ -443,7 +444,7 @@ export function PropertyMobileFilters({
             <Form.Control
               type="number"
               placeholder="Min"
-              value={areaRange.min_carpet}
+              value={areaRange.min_carpet || ""}
               onChange={(e) =>
                 setAreaRange({ ...areaRange, min_carpet: e.target.value })
               }
@@ -451,7 +452,7 @@ export function PropertyMobileFilters({
             <Form.Control
               type="number"
               placeholder="Max"
-              value={areaRange.max_carpet}
+              value={areaRange.max_carpet || ""}
               onChange={(e) =>
                 setAreaRange({ ...areaRange, max_carpet: e.target.value })
               }
