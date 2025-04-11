@@ -5,6 +5,7 @@ import AuthUser from "@/components/Authentication/AuthUser";
 import { useRouter } from 'next/router';
 import { toast } from "react-toastify";
 import Link from 'next/link';
+import useTranslation from '@/hooks/useTranslation';
 
 const Index = () => {
   const router = useRouter();
@@ -15,17 +16,17 @@ const Index = () => {
   const toggleConfirmPassword = () => {
     setConfirmPasswordType(confirm_passwordType === 'password' ? 'text' : 'password');
   };
-
+const translation = useTranslation();
   const validationSchemaPassword = Yup.object({
-    password: Yup.string().required('Password is required'),
+    password: Yup.string().required(translation?.password_required || "Password is required"),
     confirm_password: Yup.string()
-      .required('Confirm Password is required')
-      .min(6, 'Confirm Password must be at least 6 characters')
-      .oneOf([Yup.ref('password'), null], 'Passwords must match'),
+      .required(translation?.confirm_password_required || "Confirm Password is required")
+      .min(6, translation?.confirm_password_min_length || "Confirm Password must be at least 6 characters")
+      .oneOf([Yup.ref('password'), null], translation?.passwords_must_match || "Passwords must match"),
   });
 
   const validationSchemaOtp = Yup.object({
-    otp: Yup.string().required('OTP is required').length(6, 'OTP must be 6 digits'),
+    otp: Yup.string().required(translation?.otp_required || "OTP is required").length(6, translation?.otp_must_be_6_digits || "OTP must be 6 digits"),
   });
 
   const handleSubmitOtp = async (values) => {
@@ -79,16 +80,25 @@ const Index = () => {
                   alt="Authentication"
                   className="img-fluid auth"
                 />
-                <h1>Welcome!</h1>
-                <h4>Things you can do with this account</h4>
+                <h1>{translation?.welcome || "Welcome!"}
+                </h1>
+                <h4>{translation?.account_features_info || "Things you can do with this account"}
+                </h4>
                 <ul className="list list-1 list-get">
-                  <li>Post one Single Property for FREE</li>
-                  <li>Set property alerts for your requirement</li>
-                  <li>Get accessed by over 1 Lakh buyers</li>
-                  <li>Showcase your property as Rental, PG or for Sale</li>
-                  <li>Get instant queries over Phone, password and SMS</li>
-                  <li>Performance in search &amp; Track responses &amp; views online</li>
-                  <li>Add detailed property information &amp; multiple photos per listing</li>
+                  <li>{translation?.post_one_property_free || "Post one Single Property for FREE"}
+                  </li>
+                  <li>{translation?.set_property_alerts || "Set property alerts for your requirement"}
+                  </li>
+                  <li>{translation?.accessed_by_buyers || "Get accessed by over 1 Lakh buyers"}
+                  </li>
+                  <li>{translation?.showcase_property_options || "Showcase your property as Rental, PG or for Sale"}
+                  </li>
+                  <li>{translation?.instant_queries || "Get instant queries over Phone, password and SMS"}
+                  </li>
+                  <li>{translation?.performance_tracking || "Performance in search & Track responses & views online"}
+                  </li>
+                  <li>{translation?.add_property_details || "Add detailed property information & multiple photos per listing"}
+                  </li>
                 </ul>
               </aside>
               <aside className="col-lg-6 col-12">
@@ -100,7 +110,8 @@ const Index = () => {
                   >
                     {({ isValid, dirty }) => (
                       <Form className="authentication-form" autoComplete="off">
-                        <h3 className="mb-4">Set New Password</h3>
+                        <h3 className="mb-4">{translation?.set_new_password || "Set New Password"}
+                        </h3>
 
                         <div className="form-floating mb-4">
                           <Field
@@ -111,7 +122,8 @@ const Index = () => {
                             placeholder=" "
                           />
                           <label htmlFor="password" className="floating-label">
-                            Password
+                          {translation?.password || "Password"}
+
                           </label>
                           <ErrorMessage name="password" component="div" className="text-danger" />
                         </div>
@@ -125,7 +137,8 @@ const Index = () => {
                             placeholder=" "
                           />
                           <label htmlFor="confirm_password" className="floating-label">
-                            Confirm Password
+                          {translation?.confirm_password || "Confirm Password"}
+
                           </label>
                           <a
                             href="#"
@@ -146,12 +159,14 @@ const Index = () => {
                             className="btn btn-primary mb-2"
                             disabled={!isValid || !dirty}
                           >
-                            Set Password
+                            {translation?.set_password || "Set Password"}
+
                           </button>
                         </div>
 
                         <p className="text-end">
-                          <Link href="/forget-password">Forgot Password?</Link>
+                          <Link href="/forget-password">{translation?.forgot_password || "Forgot Password?"}
+                          </Link>
                         </p>
                       </Form>
                     )}
@@ -164,7 +179,8 @@ const Index = () => {
                   >
                     {({ isValid, dirty }) => (
                       <Form className="authentication-form" autoComplete="off">
-                        <h3 className="mb-4">Verify OTP</h3>
+                        <h3 className="mb-4">{translation?.verify_otp || "Verify OTP"}
+                        </h3>
 
                         <div className="form-floating mb-4">
                           <Field
@@ -176,7 +192,8 @@ const Index = () => {
                             maxLength="6"
                           />
                           <label htmlFor="otp" className="floating-label">
-                            Enter OTP
+                          {translation?.enter_otp || "Enter OTP"}
+
                           </label>
                           <ErrorMessage name="otp" component="div" className="text-danger" />
                         </div>
@@ -187,7 +204,8 @@ const Index = () => {
                             className="btn btn-primary mb-2"
                             disabled={!isValid || !dirty}
                           >
-                            Verify OTP
+                            {translation?.verify_otp || "Verify OTP"}
+
                           </button>
                         </div>
                       </Form>
