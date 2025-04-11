@@ -307,12 +307,6 @@ const MobileMenu = ({
                   </Link>
                 </li>
                 <li>
-                  <Link href="/message">
-                    <ChatSquareText color="currentColor" size={18} />{" "}
-                    {translation?.message || "Message"}
-                  </Link>
-                </li>
-                <li>
                   <Link href="/my-property-listing">
                     <House color="currentColor" size={18} />{" "}
                     {translation?.my_properties || "My Properties"}

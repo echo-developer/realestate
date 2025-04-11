@@ -13,6 +13,7 @@ import UploadProjectBrochure from "../BrochureData/UploadProjectBrochure";
 import AddExtraProjectData from "../addtional/AddExtraProjectData";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import useTranslation from '../../hooks/useTranslation'
+import ProjectDocumentModal from "../addtional/AddProjectDocument";
 
 
 const ProjectDraftComponent = ({ projectData }) => {
@@ -32,6 +33,7 @@ const ProjectDraftComponent = ({ projectData }) => {
   const [showExtraField, setShowExtraField] = useState(false);
   const [showBrochModal, setShowBrochModal] = useState(false);
   const translation = useTranslation();
+  const [docModal,setShowDocModal]=useState(false)
 
   const handleShowFloorModal = (id) =>{
     setShowModal(true);
@@ -110,6 +112,15 @@ const ProjectDraftComponent = ({ projectData }) => {
     setPropId(id);
   };
 
+  const handleProjectCertificate = (id) => {
+    setShowDocModal(true);
+    setPropId(id);
+  };
+
+  const handleDocClose=()=>{
+    setShowDocModal(false);
+  }
+
   return (
     <>
       <div className="list-display">
@@ -187,6 +198,12 @@ const ProjectDraftComponent = ({ projectData }) => {
                       >
                        {translation?.add_extra_field || "Add Extra Feild"}
                       </button>
+                      <button
+                        onClick={() => handleProjectCertificate(project.id)}
+                        className="btn btn-sm btn-primary"
+                      >
+                         {translation?.add_certificate || "Add Certificate"}
+                      </button>
                       <Link
                         href={`/project-edit/${project.id}`}
                         className="btn btn-sm btn-outline-primary ms-auto"
@@ -254,6 +271,9 @@ const ProjectDraftComponent = ({ projectData }) => {
       {showModal && (
          <AddFloorData show={showModal} handleClose={handleCloseFloorModal} propId={propId}/>
       )}
+
+{docModal && <ProjectDocumentModal propId={propId} show={docModal} onClose={handleDocClose}/>}
+
       <UploadProjectBrochure
         show={showBrochModal}
         handleClose={() => setShowBrochModal(false)}

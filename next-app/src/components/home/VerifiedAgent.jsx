@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import AuthUser from '../Authentication/AuthUser'
-
+import Carousel from 'react-multi-carousel'
+import 'react-multi-carousel/lib/styles.css'
 
 const VerifiedAgent = ({ translation }) => {
   const { callApi } = AuthUser();
@@ -27,11 +28,30 @@ const VerifiedAgent = ({ translation }) => {
     getVerifiedAgentList();
   }, [])
 
+  const responsive = {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 1440 },
+      items: 4
+    },
+    desktop: {
+      breakpoint: { max: 1440, min: 1024 },
+      items: 3
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 768 },
+      items: 2
+    },
+    mobile: {
+      breakpoint: { max: 768, min: 0 },
+      items: 1
+    }
+  };
+
   return (
     <>
       {Array.isArray(verifiedAgentList) && verifiedAgentList.length > 0 && (
         <section className="section">
-          <div className="container-fluid">            
+          <div className="container-fluid">
             <div className="section-headline text-center">
               <h5>
                 <img src="/assets/images/icons/house-sm-1.png" alt="Icon" height="20" width="20" loading="lazy" />
@@ -42,12 +62,12 @@ const VerifiedAgent = ({ translation }) => {
                 {translation?.top_agents_description ||
                   "Top agents are experienced professionals offering expert guidance, market insights, and personalized services to help you find the perfect property"}
               </p>
-            </div>              
+            </div>
 
-            <div className="row gx-3">
-              {verifiedAgentList?.slice(0, 4)?.map((agent, i) => (
-                <article className="col-xl-3 col-lg-4 col-sm-6 col-12" key={i}>
-                  <div className="card card-agent card-v-agent">
+            <Carousel responsive={responsive} infinite autoPlay={false} arrows={true} keyBoardControl containerClass="py-4">
+              {verifiedAgentList?.slice(0, 8)?.map((agent, i) => (
+                <div className="p-2" key={i}>
+                  <div className="card card-agent card-v-agent h-100">
                     <div className="card-body d-flex flex-column">
                       <div className="mb-3 text-center">
                         <img
@@ -59,11 +79,9 @@ const VerifiedAgent = ({ translation }) => {
                           loading="lazy"
                         />
                       </div>
-                      <div className="mb-3 mx-auto">                                                               
+                      <div className="mb-3 mx-auto">
                         <h4 className='text-center mb-1'>
-                          <a role="button">
-                          {agent?.name || "Not available"}
-                          </a>
+                          <a role="button">{agent?.name || "Not available"}</a>
                         </h4>
                         <p className="text-center">{agent?.company_name || <span className="text-muted">Not available</span>}</p>
                         <p className="mb-1">
@@ -71,21 +89,16 @@ const VerifiedAgent = ({ translation }) => {
                           {translation?.operating_since || "Operating Since"}:{" "}
                           {agent?.operating_since || <span className="text-muted">Not available</span>}
                         </p>
-
-                        {/* Combined Properties */}
                         <p className="mb-1">
                           <i className="bi bi-building me-1"></i>
                           {translation?.total_properties || "Total Properties:"}:{" "}
                           {(agent?.property_for_sell || 0) + (agent?.property_for_rent || 0)}
                         </p>
-
-                        {/* Combined Projects */}
                         <p className="mb-1">
-                        <i className="bi bi-pie-chart me-1"></i>
+                          <i className="bi bi-pie-chart me-1"></i>
                           {translation?.total_projects || "Total Projects:"}:{" "}
                           {(agent?.project_for_sell || 0) + (agent?.project_for_rent || 0)}
                         </p>
-
                         <p className="mb-1">
                           <i className="icon-feather-mail me-1"></i>
                           {agent?.bussiness_email || "Email not available"}
@@ -93,9 +106,9 @@ const VerifiedAgent = ({ translation }) => {
                         <p className="mb-2">
                           <i className="bi bi-geo-alt me-1"></i>
                           {agent?.city_name || agent?.address || "City not available"}
-                        </p> 
+                        </p>
                       </div>
-                      <div className='mt-auto'>                                                                       
+                      <div className='mt-auto'>
                         <a
                           href={`/agent-details/${agent?.id}`}
                           className="btn btn-primary w-100"
@@ -104,25 +117,21 @@ const VerifiedAgent = ({ translation }) => {
                         </a>
                       </div>
                     </div>
-                    {/* Removed Properties For Sale footer */}
                   </div>
-                </article>
-
+                </div>
               ))}
-            </div>
-            <div className='text-center'>
+            </Carousel>
+
+            <div className='text-center mt-4'>
               <Link target='_blank' href={`/agent-list?page=1&is_verified_agent=true`} className="btn btn-outline-primary">
                 {translation?.view_more || "View More"} <i className="bi bi-arrow-right"></i>
               </Link>
             </div>
-            
           </div>
         </section>
       )}
-
     </>
-
   )
 }
 
-export default VerifiedAgent
+export default VerifiedAgent;

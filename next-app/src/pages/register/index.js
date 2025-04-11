@@ -483,7 +483,7 @@ const Index = () => {
                                 className="btn btn-primary mb-2"
                                 disabled={!isValid || !dirty || !otpvalidate}
                               >
-                                {translation?.sign_in || "Sign Up"}
+                                {translation?.sign_up || "Sign Up"}
                               </button>
                             </div>
 
