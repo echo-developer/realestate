@@ -43,8 +43,8 @@
                 <div class="card-body">
                     <ul class="list-info">
                         <li>
-                            <b>Property Name:</b>
-                            <span>{{ ucfirst(optional($propertyData->settings)->post_for ?? 'N/A') }}</span>
+                            <b>Name:</b>
+                            <span>{{ ucfirst($propertyData->name ?? 'N/A') }}</span>
                         </li>
                         <li>
                             <b>Post For:</b>
@@ -85,7 +85,8 @@
                     <ul class="list-info">
                         <li>
                             <b>City:</b>
-                            <span>{{ $propertyData->location->city }}</span>
+                            {{ get_name_by_id('city_names', 'city_id', $propertyData->location->city, 'en') }}
+                            {{-- <span>{{ $propertyData->location->city ? get_name_by_id('city_names', 'name', $propertyData->location->city, 'en') : '' }}</span> --}}
                         </li>
                         <li>
                             <b>Locality:</b>
@@ -162,14 +163,7 @@
                                 <?php 
                                     $types = get_floor_types();
                                     $style_arr = json_decode($propertyData->additional->flooring_style);
-                                    if($style_arr)
-                                    {
-                                        foreach($style_arr as $s)
-                                        {
-                                            echo $types[$s].', ';
-                                        }
-                                    }
-                                    
+                                    print_r($propertyData->additional->flooring_style);
                                 ?>
                             </span>
                         </li>

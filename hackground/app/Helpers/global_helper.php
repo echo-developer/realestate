@@ -1548,3 +1548,30 @@ if (!function_exists('notify_admins_with_template')) {
         ]);
     }
 }
+
+if (!function_exists('user_leads_availability')) {
+    function user_leads_availability($field, $remaining_field, $user_id)
+    {
+        if (empty($field) || empty($remaining_field)) {
+            return false;
+        }
+
+        $login_user = auth_user_id() ?? $user_id;
+
+        if (!$login_user) {
+            return false;
+        }
+
+        $count_det = DB::table('user_membership')
+            ->where('user_id', $login_user)
+            ->select('plan_id', $field, $remaining_field)
+            ->first();
+
+        if (!$count_det || $count_det->$remaining_field <= 0) {
+            return false;
+        }else{
+            return true;
+        }
+
+    }
+}

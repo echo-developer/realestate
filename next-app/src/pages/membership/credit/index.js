@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import PaymentForm from "@/components/Payment/PaymentForm";
-import { ButtonGroup, Modal, Row, Col, Form, Button, Card } from "react-bootstrap";
+import {ButtonGroup, Modal, Row, Col} from "react-bootstrap";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import withAuth from "@/utils/withAuth";
 import { Paypal, Stripe } from "react-bootstrap-icons";
@@ -45,20 +45,19 @@ const StripePayment = ({ messageCredit, balance, allLanguageKey }) => {
         <div className="col-lg">
         <section className="section">
           <Row className="justify-content-center">
-            <Col xxl={5} xl={6} lg={8}>
-              <Card className="border-0 shadow-sm card-plan mb-3">
-                <Card.Header>
-                  <h3 className="text-center mb-0">{PlanName ||"Standard"} Plan</h3>
-                </Card.Header>
-                <Card.Body>                                    
-                  <div className="d-flex justify-content-between mb-3">
-                    <h5>{allLanguageKey?.plan_validity || "Plan Validity"}</h5>
-                    <h4>{PlanValidate || 30} Days</h4>
-                  </div>
-                  <div className="d-flex justify-content-between mb-4">
-                    <h5>{allLanguageKey?.message_price}</h5>
-                    <h4 className="price_container">$ {PlanPrice}</h4>
-                  </div>
+            <article className="col-xl-6 col-lg-8 col-12">
+              <div className="card card-plan">
+                <div className="card-body">
+                  <h3 className="text-center mb-4">{PlanName ||"Standard"} Plan</h3>
+                  <hr />
+                  <h4 className="d-flex justify-content-between mb-4">
+                    <span>{allLanguageKey?.plan_validity || "Plan Validity"}</span>
+                    <span>{PlanValidate || 30} Days</span>
+                  </h4>
+                  <h4 className="d-flex justify-content-between mb-4">
+                    <span>{allLanguageKey?.message_price}</span>
+                    <span className="price_container">$ {PlanPrice}</span>
+                  </h4>
 
                   <div className="input-group mb-4">
                     <input
@@ -77,9 +76,9 @@ const StripePayment = ({ messageCredit, balance, allLanguageKey }) => {
                     </button>
                   </div>
 
-                  <h5>{allLanguageKey?.payment_method}</h5>
+                  <h4>{allLanguageKey?.payment_method}</h4>
                   <ButtonGroup
-                    className="btn-group btn-group-light gap-3 mb-4"
+                    className="btn-group btn-group-light d-flex gap-3 mb-4"
                     role="group"
                   >
                     <input
@@ -91,9 +90,10 @@ const StripePayment = ({ messageCredit, balance, allLanguageKey }) => {
                       value="paypal"
                       onChange={handlePaymentMethodChange}
                     />
-                    <label className="btn btn-outline-light" htmlFor="btnradio1">                 
-                      <img src="/assets/images/paypal.png" alt="Paypal" height={64} width={128} />
-                      {/* <span className="d-block">PayPal</span> */}
+                    <label className="btn btn-outline-light p-3" htmlFor="btnradio1">
+                      {/* Removed PayPal image */}
+                      <Paypal color="#333" size={36} className="me-2" />
+                      <span className="d-block">PayPal</span>
                     </label>
 
                     <input
@@ -105,33 +105,26 @@ const StripePayment = ({ messageCredit, balance, allLanguageKey }) => {
                       value="stripe"
                       onChange={handlePaymentMethodChange}
                     />
-                    <label className="btn btn-outline-light" htmlFor="btnradio2">
-                      <img src="/assets/images/stripe.png" alt="Stripe" height={64} width={128} />
-                      {/* <span className="d-block">Stripe</span> */}
+                    <label className="btn btn-outline-light p-3" htmlFor="btnradio2">
+                      {/* Removed Stripe image */}
+                      <Stripe color="#333" size={36} className="me-2" />
+                      <span className="d-block">Stripe</span>
                     </label>
                   </ButtonGroup>
 
-                  <div className="d-grid">
-                    <Button
-                      variant="primary"
+                  <div className="d-grid text-center mb-4">
+                    <button
+                      type="button"
                       id="subscribe_plan"
+                      className="btn btn-primary"
                       onClick={handlePaymentOption}
                     >
                       {allLanguageKey?.message_payment_process}
-                    </Button>
+                    </button>
                   </div>
-                  
-                </Card.Body>
-              </Card>
-              <Row>
-                <Col lg>
-                  <img src="/assets/images/credit-cards.png" alt="SSL" height={150} className="img-fluid" />                
-                </Col>
-                <Col lg="auto">
-                  <img src="/assets/images/ssl-secure-badge.png" alt="SSL" height={128} width={170} />
-                </Col>
-              </Row>
-            </Col>
+                </div>
+              </div>
+            </article>
           </Row>
         
         </section>

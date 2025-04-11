@@ -170,18 +170,18 @@ const PublishComponent = ({ propertiesData }) => {
                       <i className="bi bi-calendar4"></i>{" "}
                       {useDateFormat(property.created_at)}
                     </p>
-                    <div className="d-flex flex-wrap gap-2">
+                    <div className="d-sm-flex">
                       <a
                         onClick={() =>
                           handleShowBrochueModal(property?.property_id)
                         }
-                        className="btn btn-sm btn-success"
+                        className="btn btn-sm btn-success me-2"
                       >
                          {translation?.upload_brochure || "Upload Brochure"}
                       </a>
                       <a
                         onClick={() => handleShowModal(property?.property_id)}
-                        className="btn btn-sm btn-warning"
+                        className="btn btn-sm btn-warning me-2"
                       >
                         {translation?.add_amenity || "Add Amenity"}
                       </a>
@@ -189,7 +189,7 @@ const PublishComponent = ({ propertiesData }) => {
                         onClick={() =>
                           handleAdditionalproperty(property?.property_id)
                         }
-                        className="btn btn-sm btn-info"
+                        className="btn btn-sm btn-info me-2"
                       >
                         {translation?.add_new_field || "Add New Field"}
                       </a>
@@ -197,13 +197,13 @@ const PublishComponent = ({ propertiesData }) => {
                         onClick={() =>
                           handlePropertyCertificate(property?.property_id)
                         }
-                        className="btn btn-sm btn-danger"
+                        className="btn btn-sm btn-danger me-2"
                       >
                         {translation?.add_certificate || "Add Certificate"}
                       </a>
                       <Link
                         href={`/property-edit/${property?.property_id}`}
-                        className="btn btn-sm btn-outline-primary ms-auto"
+                        className="btn btn-sm btn-outline-primary me-2 ms-auto"
                       >
                         <i className="bi bi-pencil-square"></i>
                       </Link>

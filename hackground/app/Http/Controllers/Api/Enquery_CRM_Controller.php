@@ -483,13 +483,10 @@ class Enquery_CRM_Controller extends Controller
             if (!empty($user_id)) {
 
                 $crmData = $this->apiModel->GetCRMList($user_id);
-
-
+                
                 $totalRecords = count($crmData);
 
-
                 $crmData = collect($crmData)->slice(($recentPage - 1) * $limit, $limit)->values();
-
 
                 $customArray = [];
                 foreach ($crmData as $row) {
@@ -590,7 +587,7 @@ class Enquery_CRM_Controller extends Controller
                         'total_records' => $totalRecords,
                         'total_pages' => ceil($totalRecords / $limit),
                     ],
-                    'enquery_can_show' => (int) get_remaining_values('owner_contacted',$user_id),
+                    //'enquery_can_show' => (int) get_remaining_values('owner_contacted',$user_id),
 
                 ]);
             } else {
@@ -705,7 +702,7 @@ class Enquery_CRM_Controller extends Controller
                             'total_records' => $totalRecords,
                             'total_pages' => ceil($totalRecords / $limit),
                         ],
-                        'enquery_can_show' => (int) get_remaining_values('owner_contacted',$user_id),
+                        //'enquery_can_show' => (int) get_remaining_values('owner_contacted',$user_id),
                     ]);
                 }
 
@@ -814,7 +811,7 @@ class Enquery_CRM_Controller extends Controller
                         'total_records' => $totalRecords,
                         'total_pages' => ceil($totalRecords / $limit),
                     ],
-                    'enquery_can_show' => (int) get_remaining_values('owner_contacted',$user_id),
+                    //'enquery_can_show' => (int) get_remaining_values('owner_contacted',$user_id),
                 ]);
             }
         }else{

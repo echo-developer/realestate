@@ -120,9 +120,9 @@ const translation = useTranslation();
 
               return (
                 <li>
-                <div key={i} className="d-flex mb-2 align-items-center">
+                <div key={i} className="d-flex align-items-center">
                   {/* Dynamic Image */}
-                  <div className="photox mx-auto mb-md-0">
+                  <div className="photox">
                     <img
                       src={
                         isProperty
@@ -137,37 +137,31 @@ const translation = useTranslation();
                   </div>
 
                   {/* Dynamic Details */}
-                  <div className="flex-grow-1 ps-3">
-                    <div className="row">
-                      <div className="col-md">
-                        <h4 className="mb-0">
-                          <small>
-                          {report?.name || "Unknown"}
-                          (ID:{" "}
-                          {isProperty
-                            ? report?.property_id
-                            : report?.project_id || "Not Available"}
-                          )
-                          </small>
-                        </h4>
-                        <p className="mb-0">
-                          <Person color="primary" size={16} /> {report?.reported_by || "Anonymous"}
-                        </p>
-                      </div>
-
-                      {/* Report Details */}
-                      <div className="col-md-auto text-md-end">
-                        <i className="text-muted">{translation?.reason || "Reason"}{" "}</i>:{" "}
-                        <span className="mb-0">
-                          {report?.reason || "No Reason"}
-                        </span>                    
-                      </div>
-                    </div>
+                  <div className="flex-grow-1 ms-3">
+                    <h4 className="mb-0">
+                      <small>
+                      {report?.name || "Unknown"}
+                      (ID:{" "}
+                      {isProperty
+                        ? report?.property_id
+                        : report?.project_id || "Not Available"}
+                      )
+                      </small>
+                    </h4>
+                    <p className="mb-0">
+                      <Person color="primary" size={12} /> {report?.reported_by || "Anonymous"}
+                    </p>
+                    <TextComponent text={report?.description || "No description"} />
                   </div>
 
-                  
+                  {/* Report Details */}
+                  <div className="text-end">
+                  {translation?.reason || "Reason"}{" "}
+                    <span className="mb-0">
+                      {report?.reason || "No Reason"}
+                    </span>                    
+                  </div>
                 </div>
-                <TextComponent text={report?.description || "No description"} />
                 </li>
               );
             })}

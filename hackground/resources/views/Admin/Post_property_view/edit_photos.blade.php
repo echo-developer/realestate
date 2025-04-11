@@ -106,63 +106,63 @@
                                 if($i->image_type == 'living')
                                 { 
                                     if ($filename && file_exists(public_path('user_upload/property_images/'.$filename))) {
-                                        $living_images .= '<img src="'.$imageUrl.'" alt="Uploaded Image" style="width: 150px; height: auto;">
-                                        <button class="remove-btn" data-type="'.$type.'" data-filename="'.$filename.'">X</button>
-                                        <input type="hidden" name="image['.$type.'][]" value="'.$filename.'" />';
+                                        $living_images .= '<div class="preview-item"><img src="'.$imageUrl.'" alt="Uploaded Image" style="width: 150px; height: auto;">
+                                        <button type="button" class="remove-btn" data-type="'.$type.'" data-filename="'.$filename.'" onclick="removeImage($(this))">X</button>
+                                        <input type="hidden" name="image['.$type.'][]" value="'.$filename.'" /></div>';
                                     }
                                     $living_desc = $i->description;
                                 }
                                 if($i->image_type == 'bathroom')
                                 { 
                                     if ($filename && file_exists(public_path('user_upload/property_images/'.$filename))) {
-                                        $bathroom_images .= '<img src="'.$imageUrl.'" alt="Uploaded Image" style="width: 150px; height: auto;">
-                                        <button class="remove-btn" data-type="'.$type.'" data-filename="'.$filename.'">X</button>
-                                        <input type="hidden" name="image['.$type.'][]" value="'.$filename.'" />';
+                                        $bathroom_images .= '<div class="preview-item"><img src="'.$imageUrl.'" alt="Uploaded Image" style="width: 150px; height: auto;">
+                                        <button type="button" class="remove-btn" data-type="'.$type.'" data-filename="'.$filename.'" onclick="removeImage($(this))">X</button>
+                                        <input type="hidden" name="image['.$type.'][]" value="'.$filename.'" /></div>';
                                     }
                                     $bathroom_desc = $i->description;
                                 }
                                 if($i->image_type == 'balcony')
                                 { 
                                     if ($filename && file_exists(public_path('user_upload/property_images/'.$filename))) {
-                                        $balcony_images .= '<img src="'.$imageUrl.'" alt="Uploaded Image" style="width: 150px; height: auto;">
-                                        <button class="remove-btn" data-type="'.$type.'" data-filename="'.$filename.'">X</button>
-                                        <input type="hidden" name="image['.$type.'][]" value="'.$filename.'" />';
+                                        $balcony_images .= '<div class="preview-item"><img src="'.$imageUrl.'" alt="Uploaded Image" style="width: 150px; height: auto;">
+                                        <button class="remove-btn" data-type="'.$type.'" data-filename="'.$filename.'" onclick="removeImage($(this))">X</button>
+                                        <input type="hidden" name="image['.$type.'][]" value="'.$filename.'" /></div>';
                                     }
                                     $balcony_desc = $i->description;
                                 }
                                 if($i->image_type == 'floor')
                                 { 
                                     if ($filename && file_exists(public_path('user_upload/property_images/'.$filename))) {
-                                        $floor_images .= '<img src="'.$imageUrl.'" alt="Uploaded Image" style="width: 150px; height: auto;">
-                                        <button class="remove-btn" data-type="'.$type.'" data-filename="'.$filename.'">X</button>
-                                        <input type="hidden" name="image['.$type.'][]" value="'.$filename.'" />';
+                                        $floor_images .= '<div class="preview-item"><img src="'.$imageUrl.'" alt="Uploaded Image" style="width: 150px; height: auto;">
+                                        <button class="remove-btn" data-type="'.$type.'" data-filename="'.$filename.'" onclick="removeImage($(this))">X</button>
+                                        <input type="hidden" name="image['.$type.'][]" value="'.$filename.'" /></div>';
                                     }
                                     $floor_desc = $i->description;
                                 }
                                 if($i->image_type == 'master')
                                 { 
                                     if ($filename && file_exists(public_path('user_upload/property_images/'.$filename))) {
-                                        $master_images .= '<img src="'.$imageUrl.'" alt="Uploaded Image" style="width: 150px; height: auto;">
-                                        <button class="remove-btn" data-type="'.$type.'" data-filename="'.$filename.'">X</button>
-                                        <input type="hidden" name="image['.$type.'][]" value="'.$filename.'" />';
+                                        $master_images .= '<div class="preview-item"><img src="'.$imageUrl.'" alt="Uploaded Image" style="width: 150px; height: auto;">
+                                        <button class="remove-btn" data-type="'.$type.'" data-filename="'.$filename.'" onclick="removeImage($(this))">X</button>
+                                        <input type="hidden" name="image['.$type.'][]" value="'.$filename.'" /></div>';
                                     }
                                     $master_desc = $i->description;
                                 }
                                 if($i->image_type == 'exterior')
                                 { 
                                     if ($filename && file_exists(public_path('user_upload/property_images/'.$filename))) {
-                                        $exterior_images .= '<img src="'.$imageUrl.'" alt="Uploaded Image" style="width: 150px; height: auto;">
-                                        <button class="remove-btn" data-type="'.$type.'" data-filename="'.$filename.'">X</button>
-                                        <input type="hidden" name="image['.$type.'][]" value="'.$filename.'" />';
+                                        $exterior_images .= '<div class="preview-item"><img src="'.$imageUrl.'" alt="Uploaded Image" style="width: 150px; height: auto;">
+                                        <button class="remove-btn" data-type="'.$type.'" data-filename="'.$filename.'" onclick="removeImage($(this))">X</button>
+                                        <input type="hidden" name="image['.$type.'][]" value="'.$filename.'" /></div>';
                                     }
                                     $exterior_desc = $i->description;
                                 }
                                 if($i->image_type == 'other')
                                 { 
                                     if ($filename && file_exists(public_path('user_upload/property_images/'.$filename))) {
-                                        $other_images .= '<img src="'.$imageUrl.'" alt="Uploaded Image" style="width: 150px; height: auto;">
-                                        <button class="remove-btn" data-type="'.$type.'" data-filename="'.$filename.'">X</button>
-                                        <input type="hidden" name="image['.$type.'][]" value="'.$filename.'" />';
+                                        $other_images .= '<div class="preview-item"><img src="'.$imageUrl.'" alt="Uploaded Image" style="width: 150px; height: auto;">
+                                        <button class="remove-btn" data-type="'.$type.'" data-filename="'.$filename.'" onclick="removeImage($(this))">X</button>
+                                        <input type="hidden" name="image['.$type.'][]" value="'.$filename.'" /></div>';
                                     }
                                     $other_desc = $i->description;
                                 }
@@ -348,17 +348,18 @@
     function previewImage(imageUrl, filename, type) {
         let imgWrapper = $('<div class="preview-item"></div>');
         imgWrapper.html(`
-        <img src="${imageUrl}" alt="Uploaded Image" style="width: 150px; height: auto;">
-        <button class="remove-btn" data-type="${type}" data-filename="${filename}">X</button>
-        <input type="hidden" name="image[${type}][]" value="${filename}" />
-    `);
-
-        imgWrapper.find('.remove-btn').click(function() {
-            removeImage(imgWrapper, filename, type);
-        });
+            <img src="${imageUrl}" alt="Uploaded Image" style="width: 150px; height: auto;">
+            <button class="remove-btn" data-type="${type}" data-filename="${filename}" onclick="removeImage($(this))">X</button>
+            <input type="hidden" name="image[${type}][]" value="${filename}" />
+        `);
 
         $("#preview-" + type).append(imgWrapper);
     }
+
+    function removeImage(evt) {
+        $(evt).parent().remove();
+    }
+
 
 
     $(document).ready(function() {
