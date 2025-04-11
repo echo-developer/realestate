@@ -37202,6 +37202,11 @@ fieldset .btn-delete {
   margin-bottom: 1rem;
 }
 
+.h-100-mb-4 {
+  height: calc(100% - 1.5rem);
+  margin-bottom: 1.5rem;
+}
+
 /* Media Start */
 @media (min-width: 576px) {
   .card-ads .row .card-img-top {
@@ -37222,8 +37227,6 @@ fieldset .btn-delete {
   .footer-links h4 > a, .footer-links .h4 > a {
     display: none;
   }
-}
-@media (min-width: 576px) {
   .g-col-sm-6 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
