@@ -51,10 +51,10 @@ class PropertyDetailsController extends Controller
 
 
         $property = PrefProperty::find($property_id);
-        log::info("property_id: " . $property_id);
+
         $this->project_id = ProjectPropertyMapping::where('property_id', $property_id)
             ->value('project_id');
-        log::info("project_id: " . $this->project_id);
+
         $this->project = PrefProject::where('id', $this->project_id)
             ->with(
                 'settings',
@@ -62,7 +62,7 @@ class PropertyDetailsController extends Controller
                 'galleries.images:id,gallary_id,filename,caption',
             )
             ->first();
-        log::info("project: " .  $this->project);
+            
         if ($property) {
             $property->increment('views');
             if ($property->views >= 10) {
@@ -439,7 +439,7 @@ class PropertyDetailsController extends Controller
                         'is_favourite' => $is_favorite,
                         'is_my_property' => $is_my_property,
                         'property_name' => $property->property_name,
-                        'property_brochure_pdf' => $fileUrl,
+                        'property_brochure_pdf' => $fileUrl ?? '',
                         'property_description' => $property->property_desc,
                         'property_key' => format_name(get_name_by_id('property_category_names', 'category_id', $property->property_type, 'en')),
                         'property_type_id' => $property->property_type,
