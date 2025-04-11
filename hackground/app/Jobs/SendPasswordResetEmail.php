@@ -14,27 +14,17 @@ class SendPasswordResetEmail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $email;
-    protected $message;
+    protected $to, $mail_unique_title, $data_parse;
 
-    /**
-     * Create a new job instance.
-     */
-    public function __construct($email, $message)
+    public function __construct($to, $mail_unique_title, $data_parse)
     {
-        $this->email = $email;
-        $this->message = $message;
+        $this->to = $to;
+        $this->mail_unique_title = $mail_unique_title;
+        $this->data_parse = $data_parse;
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle()
     {
-
-        Mail::raw($this->message, function ($message) {
-            $message->to($this->email)
-                ->subject('Reset Password');
-        });
+        SendMail($this->to, $this->mail_unique_title, $this->data_parse);
     }
 }
