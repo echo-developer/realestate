@@ -15,7 +15,6 @@
 	--fontSize: 16px;
 	--transition: 0.5s;
 }
-
 $primary: #1365CF;
 $success: #198754;
 $danger: #dc3545;
@@ -803,7 +802,7 @@ ul {
 			margin-bottom: 0.5rem;
 			a {
 				border-radius: 2rem 0 0 2rem;
-				color: var(--#{$prefix}light);
+				color: var(--#{$prefix}body-color);
 				display: flex;
 				align-items: center;
 				padding: 0.5rem 1rem;
@@ -2381,9 +2380,8 @@ h4 {
 }
 
 .user-sidebar {
-	background-color: $primary;
-	color: $white;
-	color: var(--#{$prefix}light);
+	background-color: $primary-bg-subtle;
+	color: $dark;
 	height: 100%;
 	padding: 1rem;
 }
@@ -2427,7 +2425,7 @@ h4 {
 	}
 }
 #toggleZ {
-	color: $white;
+	color: $dark;
 	display: block;
 	font-size: 1.5rem;
 	position: absolute;
@@ -5375,6 +5373,9 @@ fieldset{
 		min-width: 80px;
 		padding-inline-end: 2rem;
 		text-align: start;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
 		&:hover, &:focus{
 			background-color: $white;
 			border-color: var(--#{$prefix}border-color-translucent);
@@ -5407,8 +5408,6 @@ fieldset{
 	display: flex;
 	position: absolute;
 	right: 0px;
-	max-height: 400px;
-	overflow-y: auto;
 	width: 700px;
 	z-index: 11;
 	.list-group{
@@ -5421,7 +5420,13 @@ fieldset{
 			}
 		}
 	}
-	
+	.scroll-part{
+		max-height: 350px;
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
 }
 .rangeSliderParent{
 	.range-slider{

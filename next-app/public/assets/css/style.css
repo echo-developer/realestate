@@ -2363,7 +2363,7 @@ textarea.form-control-lg {
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  border: var(--bs-border-width) solid var(--bs-border-color);
+  border: var(--bs-border-width) solid #6c757d;
   print-color-adjust: exact;
 }
 .form-check-input[type=checkbox] {
@@ -33000,7 +33000,7 @@ ul.user-nav > li {
 }
 ul.user-nav > li a {
   border-radius: 2rem 0 0 2rem;
-  color: var(--bs-light);
+  color: var(--bs-body-color);
   display: flex;
   align-items: center;
   padding: 0.5rem 1rem;
@@ -34388,9 +34388,8 @@ h4 .icon-img-check, .h4 .icon-img-check {
 }
 
 .user-sidebar {
-  background-color: #1365CF;
-  color: #fff;
-  color: var(--bs-light);
+  background-color: #d0e0f5;
+  color: #333;
   height: 100%;
   padding: 1rem;
 }
@@ -34428,7 +34427,7 @@ h4 .icon-img-check, .h4 .icon-img-check {
 }
 
 #toggleZ {
-  color: #fff;
+  color: #333;
   display: block;
   font-size: 1.5rem;
   position: absolute;
@@ -37030,6 +37029,9 @@ fieldset .btn-delete {
   min-width: 80px;
   padding-inline-end: 2rem;
   text-align: start;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .select-dropdown .btn-form-control:hover, .select-dropdown .btn-form-control:focus {
   background-color: #fff;
@@ -37061,8 +37063,6 @@ fieldset .btn-delete {
   display: flex;
   position: absolute;
   right: 0px;
-  max-height: 400px;
-  overflow-y: auto;
   width: 700px;
   z-index: 11;
 }
@@ -37075,6 +37075,13 @@ fieldset .btn-delete {
 }
 .more-filter-dropdown .list-group .list-group-item:last-child {
   border-bottom: none;
+}
+.more-filter-dropdown .scroll-part {
+  max-height: 350px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .rangeSliderParent .range-slider {

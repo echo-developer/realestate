@@ -1259,35 +1259,35 @@ const index = () => {
                           display: "flex",
                         }}
                       >
-                        <div style={{ minWidth: "200px" }}>
-                          <ListGroup
-                            style={{ height: "350px", overflowY: "auto" }}
-                          >
-                            {advanceFilters?.map((item, i) => {
-                              return (
-                                <ListGroup.Item
-                                  role="button"
-                                  className={
-                                    selectedAdvanceFilter === item?.key
-                                      ? "active"
-                                      : ""
-                                  }
-                                  onClick={() => {
-                                    setSelectedAdvanceFilter(item?.key);
-                                    setSelectedSubFilters([]);
-                                  }}
-                                >
-                                  {item?.name ||
-                                    `${
-                                      translation?.not_available ||
-                                      "Not available"
-                                    }`}
-                                </ListGroup.Item>
-                              );
-                            })}
-                          </ListGroup>
-                        </div>
-                        <div className="flex-grow-1 p-3">
+                        
+                        <ListGroup
+                          style={{ height: "350px", minWidth: "200px", overflowY: "auto" }}
+                        >
+                          {advanceFilters?.map((item, i) => {
+                            return (
+                              <ListGroup.Item
+                                role="button"
+                                className={
+                                  selectedAdvanceFilter === item?.key
+                                    ? "active"
+                                    : ""
+                                }
+                                onClick={() => {
+                                  setSelectedAdvanceFilter(item?.key);
+                                  setSelectedSubFilters([]);
+                                }}
+                              >
+                                {item?.name ||
+                                  `${
+                                    translation?.not_available ||
+                                    "Not available"
+                                  }`}
+                              </ListGroup.Item>
+                            );
+                          })}
+                        </ListGroup>
+                        
+                        <div className="flex-grow-1 p-3 scroll-part">
                           {selectedAdvanceFilter &&
                           (selectedAdvanceFilter === "furnishing" ||
                             selectedAdvanceFilter === "amenities" ||

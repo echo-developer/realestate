@@ -83,7 +83,7 @@ const SideBar = () => {
         <div className="user-sidebar">
           <div className="user-profile text-center">
             <a href="#" id="toggleZ">
-              <i className="bi bi-chevron-left"></i>
+              <i className="bi bi-arrow-left"></i>
             </a>
             <div className="avatar mb-3">
               <img
@@ -112,10 +112,10 @@ const SideBar = () => {
                 </p>
               )}
               <div className="d-grid columns-2 mb-3">
-                <Link href="/postproject" className="btn btn-outline-light">
+                <Link href="/postproject" className="btn btn-outline-primary">
                   {translation?.post_project || "Post Project"}
                 </Link>
-                <Link href="/my-profile" className="btn btn-outline-light">
+                <Link href="/my-profile" className="btn btn-outline-primary">
                   {translation?.view_profile || "View Profile"}
                 </Link>
               </div>

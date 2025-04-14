@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { ShimmerContentBlock } from "react-shimmer-effects";
 import withAuth from "@/utils/withAuth";
 import useTranslation from '../../hooks/useTranslation'
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown, Row, Col } from 'react-bootstrap';
 
 
 const TabComponent = () => {
@@ -161,61 +161,66 @@ const TabComponent = () => {
             <aside className="col-lg col-12">
                 <div className="p-4">
                     <h1 className="h4 text-primary">{translation?.my_property_listing || "My Property Listing"}</h1>
-                    <ul className="nav nav-underline mb-3 gap-4 align-items-center">
-                        <li className="nav-item">
-                            <a
-                                className={`nav-link ${activeTab === "published_properties" ? "active" : ""}`}
-                                role="button"
-                                onClick={() => handleTabChange("published_properties")}
-                            >
-                                {translation?.publish || "Publish"}
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a
-                                className={`nav-link ${activeTab === "pending_properties" ? "active" : ""}`}
-                                role="button"
-                                onClick={() => handleTabChange("pending_properties")}
-                            >
-                                {translation?.pending || "Pending"}
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a
-                                className={`nav-link ${activeTab === "expired_properties" ? "active" : ""}`}
-                                role="button"
-                                onClick={() => handleTabChange("expired_properties")}
-                            >
-                                {translation?.expired || "Expired"}
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a
-                                className={`nav-link ${activeTab === "draft_properties" ? "active" : ""}`}
-                                role="button"
-                                onClick={() => handleTabChange("draft_properties")}
-                            >
-                                {translation?.draft || "Draft"}
-                            </a>
-                        </li>
-                    </ul>
+                    <Row>
+                    <Col lg>
+                        <ul className="nav nav-underline mb-3 gap-4 align-items-center">
+                            <li className="nav-item">
+                                <a
+                                    className={`nav-link ${activeTab === "published_properties" ? "active" : ""}`}
+                                    role="button"
+                                    onClick={() => handleTabChange("published_properties")}
+                                >
+                                    {translation?.publish || "Publish"}
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a
+                                    className={`nav-link ${activeTab === "pending_properties" ? "active" : ""}`}
+                                    role="button"
+                                    onClick={() => handleTabChange("pending_properties")}
+                                >
+                                    {translation?.pending || "Pending"}
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a
+                                    className={`nav-link ${activeTab === "expired_properties" ? "active" : ""}`}
+                                    role="button"
+                                    onClick={() => handleTabChange("expired_properties")}
+                                >
+                                    {translation?.expired || "Expired"}
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a
+                                    className={`nav-link ${activeTab === "draft_properties" ? "active" : ""}`}
+                                    role="button"
+                                    onClick={() => handleTabChange("draft_properties")}
+                                >
+                                    {translation?.draft || "Draft"}
+                                </a>
+                            </li>
+                        </ul>
+                    </Col>
+                    <Col lg="auto">
+                        <Dropdown>
+                            <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
+                                Select Option
+                            </Dropdown.Toggle>
 
-                    <Dropdown>
-                        <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                            Select Option
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu style={{ position: 'absolute' }}>
-                            <Dropdown.Item onClick={() => console.log('Rent selected')}>Rent</Dropdown.Item>
-                            <Dropdown.Item onClick={() => console.log('Sale selected')}>Sale</Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
+                            <Dropdown.Menu style={{ position: 'absolute' }}>
+                                <Dropdown.Item onClick={() => console.log('Rent selected')}>Rent</Dropdown.Item>
+                                <Dropdown.Item onClick={() => console.log('Sale selected')}>Sale</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </Col>
+                </Row>
 
 
                     {renderTabContent()}
                     {propertyData[activeTab]?.current_page < propertyData[activeTab]?.total_pages && (
                         <button
-                            className="btn btn-primary btn-lg d-block mx-auto mt-4"
+                            className="btn btn-primary d-block mx-auto mt-4"
                             onClick={() => handleLoadMoreClick(activeTab)}> {translation?.load_more || "Load More"}</button>
                     )}
                 </div>
