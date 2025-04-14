@@ -198,21 +198,19 @@ const TabComponent = () => {
                                 {translation?.draft || "Draft"}
                             </a>
                         </li>
-
-                        <li className="nav-item ms-auto" >
-                            <Dropdown>
-                                <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                                    Select Option
-                                </Dropdown.Toggle>
-
-                                <Dropdown.Menu style={{ position: 'absolute' }}>
-                                    <Dropdown.Item href="#/option1">Option 1</Dropdown.Item>
-                                    <Dropdown.Item href="#/option2">Option 2</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </li>
-
                     </ul>
+
+                    <Dropdown>
+                        <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                            Select Option
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu style={{ position: 'absolute' }}>
+                            <Dropdown.Item onClick={() => console.log('Rent selected')}>Rent</Dropdown.Item>
+                            <Dropdown.Item onClick={() => console.log('Sale selected')}>Sale</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+
 
                     {renderTabContent()}
                     {propertyData[activeTab]?.current_page < propertyData[activeTab]?.total_pages && (
