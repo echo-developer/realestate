@@ -272,7 +272,7 @@ const EnquiryForm = ({ propertyId, handleClose }) => {
                 className="error-message text-danger"
               />
 
-              {values?.email && (
+              {!token && values?.email && (
                 <button
                   type="button"
                   className="btn btn-primary position-absolute end-0 top-50 translate-middle-y me-2"
@@ -286,7 +286,7 @@ const EnquiryForm = ({ propertyId, handleClose }) => {
               )}
             </FloatingLabel>
 
-            {showOTPField && (
+            {!token && showOTPField && (
               <div className="d-flex gap-2 justify-content-between mb-3">
                 {otp.map((digit, index) => (
                   <input

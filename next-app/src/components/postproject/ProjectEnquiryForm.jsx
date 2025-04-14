@@ -220,11 +220,7 @@ const ProjectEnquiryForm = ({ projectId, handleClose }) => {
         validateOnChange={false}
         validateOnBlur={false}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          if (!token && !otpVerified) {
-            toast.error("Please verify the OTP first.");
-          } else {
-            await submitFormData(values, resetForm);
-          }
+          await submitFormData(values, resetForm);
           setSubmitting(false);
         }}
       >
@@ -273,7 +269,7 @@ const ProjectEnquiryForm = ({ projectId, handleClose }) => {
                 className="error-message text-danger"
               />
 
-              {values?.email && (
+              {!token &&  values?.email && (
                 <button
                   type="button"
                   className="btn btn-primary position-absolute end-0 top-50 translate-middle-y me-2"
@@ -287,7 +283,7 @@ const ProjectEnquiryForm = ({ projectId, handleClose }) => {
               )}
             </FloatingLabel>
 
-            {showOTPField && (
+            {!token && showOTPField && (
               <div className="d-flex gap-2 justify-content-between mb-3">
                 {otp.map((digit, index) => (
                   <input
