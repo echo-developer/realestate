@@ -522,7 +522,11 @@ class Enquery_CRM_Controller extends Controller
                     if ($logData) {
                         $logData->enquery_status = $row->enquery_status;
                     }
-
+                    $is_blur = 1;
+                    if($row->leads > $row->remaining_leads)
+                    {
+                        $is_blur = 0;
+                    }
                     $customArray[] = [
                         'assign_id' => $row->assign_id,
                         'log_data' => $logData ?? [],
@@ -547,7 +551,8 @@ class Enquery_CRM_Controller extends Controller
                         'plot_area' => $row->plot_area,
                         'size' => ($row->plot_area ?? 0) + ($row->super_area ?? 0) + ($row->carpet_area ?? 0),
                         'galleries' => $transformedData,
-                        'lead_type' => 'P'
+                        'lead_type' => 'P',
+                        'is_blur' => $is_blur
                     ];
                 }
 
@@ -658,6 +663,11 @@ class Enquery_CRM_Controller extends Controller
                     if ($logData) {
                         $logData->enquery_status = $row->enquery_status;
                     }
+                    $is_blur = 1;
+                    if($row->leads > $row->remaining_leads)
+                    {
+                        $is_blur = 0;
+                    }
                    // print_r($row);exit;
                     $customArray[] = [
                         'assign_id' => $row->assign_id,
@@ -681,7 +691,8 @@ class Enquery_CRM_Controller extends Controller
                         'area_in_sqft' => $row->area_in_sqft,
                         //'size' => ($row->plot_area ?? 0) + ($row->super_area ?? 0) + ($row->carpet_area ?? 0),
                         'galleries' => $transformedData,
-                        'lead_type' => 'P'
+                        'lead_type' => 'P',
+                        'is_blur' => $is_blur
                     ];
                 }
 
@@ -777,6 +788,11 @@ class Enquery_CRM_Controller extends Controller
                 $customArray = [];
                 foreach ($leads as $row) {
                     $row = (object) $row;
+                    $is_blur = 1;
+                    if($row->leads > $row->remaining_leads)
+                    {
+                        $is_blur = 0;
+                    }
                     $customArray[] = [
                         'assign_id' => $row->assign_id,
                         'name' => $row->name,
@@ -792,7 +808,8 @@ class Enquery_CRM_Controller extends Controller
                         'property_for' => $row->property_for,
                         'created_at' => $row->created_at,
                         'updated_at' => $row->updated_at,
-                        'lead_type' => 'G'
+                        'lead_type' => 'G',
+                        'is_blur' => $is_blur
                     ];
                 }
                 return response()->json([

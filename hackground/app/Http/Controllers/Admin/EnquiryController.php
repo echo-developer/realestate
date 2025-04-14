@@ -124,6 +124,7 @@ class EnquiryController extends Controller
         }
         
         $list = $this->enquiry->get_unassign_member_list($srch, $paginate);
+        
         return view('Admin.Enquiry.assign_member_list', compact('main_title','second_title','title','list','enquiry','assign_type'));
     }
 

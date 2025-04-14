@@ -815,6 +815,7 @@ class ApiModel extends Model
             ->leftJoin('properties', 'property_enquiry.property_id', '=', 'properties.id')
             ->leftJoin('properties_location', 'properties.id', '=', 'properties_location.pid')
             ->leftJoin('properties_settings', 'properties.id', '=', 'properties_settings.pid')
+            ->leftJoin('user_membership', 'user_membership.user_id', '=', 'leads_assigned.user_id')
             ->where([
                 'leads_assigned.user_id' => $user_id,
                 'leads_assigned.lead_type' => 'P',
@@ -841,7 +842,9 @@ class ApiModel extends Model
                 'properties_settings.bathrooms',
                 'properties_settings.carpet_area',
                 'properties_settings.super_area',
-                'properties_settings.plot_area'
+                'properties_settings.plot_area',
+                'user_membership.leads',
+                'user_membership.remaining_leads'
             )
             ->orderBy('property_enquiry.created_at', 'desc')
             ->get();
@@ -855,6 +858,7 @@ class ApiModel extends Model
             ->leftJoin('project', 'property_enquiry.project_id', '=', 'project.id')
             ->leftJoin('project_location', 'project.id', '=', 'project_location.project_id')
             ->leftJoin('project_settings', 'project.id', '=', 'project_settings.project_id')
+            ->leftJoin('user_membership', 'user_membership.user_id', '=', 'leads_assigned.user_id')
             ->where([
                 'leads_assigned.user_id' => $user_id,
                 'leads_assigned.lead_type' => 'P',
@@ -881,6 +885,8 @@ class ApiModel extends Model
                 'project_settings.unit_type',
                 'project_settings.occupied_area',
                 'project_settings.area_in_sqft',
+                'user_membership.leads',
+                'user_membership.remaining_leads'
             )
             ->orderBy('property_enquiry.created_at', 'desc')
             ->get();
@@ -1403,8 +1409,9 @@ class ApiModel extends Model
     public function getGeneralLeadsList($user_id)
     {
         $query = DB::table('leads_assigned as l_a')
-            ->select('e.*', 'l_a.assign_id', 'l_a.lead_status')
+            ->select('e.*', 'l_a.assign_id', 'l_a.lead_status','u_m.leads','u_m.remaining_leads')
             ->leftJoin('buyer_property_enquery as e', 'e.id', '=', 'l_a.enquery_id')
+            ->leftJoin('user_membership as u_m', 'u_m.user_id', '=', 'l_a.user_id')
             ->where([
                 'l_a.user_id' => $user_id,
                 'l_a.lead_type' => 'G'

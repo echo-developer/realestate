@@ -173,7 +173,7 @@
                         </li>
                         <li>
                             <b>Total Floors:</b>
-                            <span>{{$propertyData->additional->total_floor ?? 'N/A'}}</span>
+                            <span>{{$propertyData->additional->total_floor ? get_total_floors($propertyData->additional->total_floor) : 'N/A'}}</span>
                         </li>
                         <li>
                             <b>Flats on the Floor:</b>
@@ -239,8 +239,8 @@
                             $construction_year = $month_arr[1];
                         @endphp
                         <li>
-                            <b>Expected Possesion Month Year:</b>
-                            <span> {{ date('F Y', strtotime($propertyData->additional->expected_possesion_month_year)) ?? 'N/A'}}</span>
+                            <b>Expected Possesion Month Year: </b>
+                            <span> {{ date('M',strtotime($construction_month)).', '.date('Y',strtotime($construction_year)), }}</span>
                         </li>
                         @endif
 

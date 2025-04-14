@@ -430,7 +430,8 @@
                                 <option value="">Slect Floor Type</option>
                                 @php  
                                     $floor_types = get_floor_types();
-                                    $style_arr = json_decode($propertyData->additional->flooring_style);
+                                    $style_string = $propertyData->additional->flooring_style;
+                                    $style_arr = explode(',', $style_string);
                                 @endphp
                                 @if($floor_types)
                                 @foreach($floor_types as $k=>$f)
@@ -460,7 +461,7 @@
                             <div class="form-group col-lg-6 col-12">
                                 <label class="form-label">Lifts in the Tower</label>
                                 <select class="form-control" name="lifts_in_tower">
-                                    <option value="">Slect Floor Type</option>
+                                    <option value="">--Select--</option>
                                     @php  
                                         $lifts_in_tower = lifts_in_tower();
                                     @endphp
@@ -490,7 +491,7 @@
                                 </select>
                                 <span class="error floorsError text-danger"></span>
                             </div>
-
+                           
                             <div class="form-group col-lg-6 col-12">
                                 <label class="form-label">Total Floors</label>
                                 <div class="btn-group btn-group-light d-flex mb-3" role="group"

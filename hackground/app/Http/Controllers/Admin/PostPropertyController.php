@@ -194,8 +194,7 @@ class PostPropertyController extends Controller
             'gallery',
             'gallery.images'
         ])->first();
-        // echo "<pre>";
-        // print_r($propertyData);exit;
+       
         return view('Admin.Post_property_view.ajax_page', compact(
                                                             'page', 
                                                             'title', 

@@ -82,11 +82,11 @@
                             class="custom-file-input">
                         <label class="custom-file-label" for="ufile">Choose file</label>
                     </div>
-                    <input type="hidden" name="ad_image" id="ad_image" />
                 </div>
             </div>
             <div class="form-group">
                 <img id="image_preview1" style="display:none; width: 100px; height: auto;" />
+                <input type="hidden" class="filename" name="ad_image" id="ad_image" />
                 <button type="button" id="delete_image_btn1" style="display:none;"
                     class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
             </div>
@@ -101,11 +101,11 @@
                             class="custom-file-input">
                         <label class="custom-file-label" for="ufile">Choose file</label>
                     </div>
-                    <input type="hidden" name="ad_image_mobile" id="ad_image_mobile" />
                 </div>
             </div>
             <div class="form-group">
                 <img id="image_preview2" src=" " style="display:none; width: 100px; height: auto;" />
+                <input type="hidden" class="filename" name="ad_image_mobile" id="ad_image_mobile" />
                 <button type="button" id="delete_image_btn2" style="display:none;"
                     class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
             </div>
@@ -302,6 +302,11 @@
             }
         });
     });
+    function deleteUploadedImage() {
+        $(event.target).closest('button').siblings('img').first().attr('src', '');
+        $(event.target).closest('button').siblings('.filename').first().val('');
+        $(event.target).closest('button').hide();
+    }
 </script>
 @endif
 
@@ -403,17 +408,18 @@
                                 class="custom-file-input">
                             <label class="custom-file-label" for="ufile">Choose file</label>
                         </div>
-                        <input type="hidden" name="ad_image" id="ad_image" value="{{ !empty($detail['ad_image']) ? $detail['ad_image'] : '' }}" />
                     </div>
                 </div>
                 @if($detail['ad_image'])
                 <div class="form-group">
                     <img id="image_preview1" src="{{ asset('user_upload/advertisement/'.$detail['ad_image']) }}" style="width: 100px; height: auto;" />
+                    <input type="hidden" class="filename" name="ad_image" id="ad_image" value="{{ !empty($detail['ad_image']) ? $detail['ad_image'] : '' }}" />
                     <button type="button" id="delete_image_btn1" class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
                 </div>
                 @else
                 <div class="form-group">
                     <img id="image_preview1" style="display:none; width: 100px; height: auto;" />
+                    <input type="hidden" class="filename" name="ad_image" id="ad_image" value="" />
                     <button type="button" id="delete_image_btn1" style="display:none;"
                         class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
                 </div>
@@ -429,18 +435,19 @@
                                 class="custom-file-input">
                             <label class="custom-file-label" for="ufile">Choose file</label>
                         </div>
-                        <input type="hidden" name="ad_image_mobile" id="ad_image_mobile" value="{{ !empty($detail['ad_image_mobile']) ? $detail['ad_image_mobile'] : '' }}" />
                     </div>
                 </div>
                 @if($detail['ad_image_mobile'])
                 <div class="form-group">
                     <img id="image_preview2" src="{{ asset('user_upload/advertisement/'.$detail['ad_image_mobile']) }}" style="width: 100px; height: auto;" />
+                    <input type="hidden" class="filename" name="ad_image_mobile" id="ad_image_mobile" value="{{ !empty($detail['ad_image_mobile']) ? $detail['ad_image_mobile'] : '' }}" />
                     <button type="button" id="delete_image_btn2"
                         class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
                 </div>
                 @else
                 <div class="form-group">
                     <img id="image_preview2" src="" style="display:none; width: 100px; height: auto;" />
+                    <input type="hidden" class="filename" name="ad_image_mobile" id="ad_image_mobile" value="" />
                     <button type="button" id="delete_image_btn2" style="display:none;"
                         class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
                 </div>
@@ -638,5 +645,11 @@
             }
         });
     });
+
+    function deleteUploadedImage() {
+        $(event.target).closest('button').siblings('img').first().attr('src', '');
+        $(event.target).closest('button').siblings('.filename').first().val('');
+        $(event.target).closest('button').hide();
+    }
 </script>
 @endif
