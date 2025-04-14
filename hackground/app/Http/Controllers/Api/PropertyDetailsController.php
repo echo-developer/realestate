@@ -649,6 +649,7 @@ class PropertyDetailsController extends Controller
                 $mapppedReviews = $prop_reviews->map(function ($items) {
 
                     $items->name = get_user_name($items->user_id ?? null);
+                    $items->image = get_user_image($items->user_id ?? null);
                     unset($items->user_id);
                     return $items;
                 });

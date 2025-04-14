@@ -13,75 +13,75 @@ import useTranslation from "@/hooks/useTranslation";
 import { BoxArrowUpRight, Calendar, GeoAlt, Hash } from "react-bootstrap-icons";
 import { useRouter } from "next/router";
 
-const customerReviews = [
-  {
-    id: 1,
-    name: "Hawkins Marow",
-    timeAgo: "4 min ago",
-    rating: 3.5,
-    comment:
-      "I viewed a number of properties with Just Property and found them to be professional, efficient, patient, courteous and helpful every time.",
-    avatar: "/assets/images/agents/agent-1.jpg",
-  },
-  {
-    id: 2,
-    name: "Hawkins Marow",
-    timeAgo: "4 min ago",
-    rating: 4.5,
-    comment:
-      "I viewed a number of properties with Just Property and found them to be professional, efficient, patient, courteous and helpful every time.",
-    avatar: "/assets/images/agents/agent-3.jpg",
-  },
-];
+// const customerReviews = [
+//   {
+//     id: 1,
+//     name: "Hawkins Marow",
+//     timeAgo: "4 min ago",
+//     rating: 3.5,
+//     comment:
+//       "I viewed a number of properties with Just Property and found them to be professional, efficient, patient, courteous and helpful every time.",
+//     avatar: "/assets/images/agents/agent-1.jpg",
+//   },
+//   {
+//     id: 2,
+//     name: "Hawkins Marow",
+//     timeAgo: "4 min ago",
+//     rating: 4.5,
+//     comment:
+//       "I viewed a number of properties with Just Property and found them to be professional, efficient, patient, courteous and helpful every time.",
+//     avatar: "/assets/images/agents/agent-3.jpg",
+//   },
+// ];
 
-const data = {
-  bestSellers: [
-    {
-      imgSrc: "/assets/images/uploads/property-1.jpg",
-      description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
-      sold: 318,
-      price: 320,
-      earnings: 9800,
-    },
-    {
-      imgSrc: "/assets/images/uploads/property-2.jpg",
-      description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
-      sold: 450,
-      price: 800,
-      earnings: 1278.3,
-    },
-    {
-      imgSrc: "/assets/images/uploads/property-3.jpg",
-      description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
-      sold: 510,
-      price: 750,
-      earnings: 1249,
-    },
-  ],
-  topClients: [
-    {
-      imgSrc: "/assets/images/uploads/property-1.jpg",
-      description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
-      location: "USA",
-      status: "Online",
-      amount: 9800,
-    },
-    {
-      imgSrc: "/assets/images/uploads/property-2.jpg",
-      description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
-      location: "India",
-      status: "Offline",
-      amount: 1278.3,
-    },
-    {
-      imgSrc: "/assets/images/uploads/property-3.jpg",
-      description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
-      location: "Saudi Arabia",
-      status: "Online",
-      amount: 1249,
-    },
-  ],
-};
+// const data = {
+//   bestSellers: [
+//     {
+//       imgSrc: "/assets/images/uploads/property-1.jpg",
+//       description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
+//       sold: 318,
+//       price: 320,
+//       earnings: 9800,
+//     },
+//     {
+//       imgSrc: "/assets/images/uploads/property-2.jpg",
+//       description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
+//       sold: 450,
+//       price: 800,
+//       earnings: 1278.3,
+//     },
+//     {
+//       imgSrc: "/assets/images/uploads/property-3.jpg",
+//       description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
+//       sold: 510,
+//       price: 750,
+//       earnings: 1249,
+//     },
+//   ],
+//   topClients: [
+//     {
+//       imgSrc: "/assets/images/uploads/property-1.jpg",
+//       description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
+//       location: "USA",
+//       status: "Online",
+//       amount: 9800,
+//     },
+//     {
+//       imgSrc: "/assets/images/uploads/property-2.jpg",
+//       description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
+//       location: "India",
+//       status: "Offline",
+//       amount: 1278.3,
+//     },
+//     {
+//       imgSrc: "/assets/images/uploads/property-3.jpg",
+//       description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
+//       location: "Saudi Arabia",
+//       status: "Online",
+//       amount: 1249,
+//     },
+//   ],
+// };
 
 const Index = () => {
   const translation = useTranslation();
@@ -89,7 +89,9 @@ const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
   const [dashboardList, setDashboardList] = useState({});
   const memberId = GetMemberId();
+  const [customerReviews, setCustomerReviews] = useState([])
   const [facts, setFacts] = useState([]);
+  const [reviewLoading, setReviewLoading] = useState(true);
   const propertyData = dashboardList?.topViewsPropList?.map((property) => ({
     orderNo: property.id || "Not Available",
     customer: property.name || "Not Available",
@@ -100,16 +102,39 @@ const Index = () => {
     badgeClass: property.property_for === "Rent" ? "bg-success" : "bg-warning",
     slug: property.slug,
   }));
-  
+
   // `${translation?.on_sale || "On Sale"}`
   useEffect(() => {
     if (memberId) {
       fetchDashboardListData();
+      fetchCustomerReviews();
     }
   }, []);
 
+  const fetchCustomerReviews = async () => {
+    setReviewLoading(true);
+    try {
+      const res = await callApi({
+        api: `/get_users_property_review`,
+        method: "GET",
+        data: {
+          user_id: memberId,
+          currentpage: 1
+        }
+      })
+
+      if (res && res?.status == 1) {
+        setCustomerReviews(res.data?.property_reviews || []);
+      }
+    } catch (error) {
+      console.error(error?.message || "Something went wrong")
+    } finally {
+      setReviewLoading(false);
+    }
+  }
+
   const routePush = (url) => {
-    if(url) {
+    if (url) {
       router.push(url);
     }
   }
@@ -183,14 +208,14 @@ const Index = () => {
       } else {
         toast.error(response.message);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   return (
     <DashboardLayout>
       <Helmet>
         <title>
-        {translation?.realestate_dashboard || 'RealEstate Dashboard | Manage Your Properties & Investments'}
+          {translation?.realestate_dashboard || 'RealEstate Dashboard | Manage Your Properties & Investments'}
 
         </title>
         <meta
@@ -204,7 +229,6 @@ const Index = () => {
           <div className="row">
             {facts.map((fact, index) => (
               <article className="col-md-4 col-sm-6 col-12" key={index} onClick={() => routePush(fact?.url)}>
-                {console.log("fact", fact)}
                 <a
                   role="button"
                   className="fun-fact"
@@ -324,7 +348,7 @@ const Index = () => {
                     <h5>{translation?.your_reviews || 'Your Reviews'}
                     </h5>
                     <h3>
-                    {dashboardList?.counters?.propertyTotalReviews?.totalCount || "0"}{" "}
+                      {dashboardList?.counters?.propertyTotalReviews?.totalCount || "0"}{" "}
                       <small>
                         (<span className="text-site">{dashboardList?.counters?.propertyTotalReviews?.lastweekCount || "0"}{" "}</span> this week)
                       </small>
@@ -343,7 +367,7 @@ const Index = () => {
             <div className="card-header d-flex">
               <h4 className="text-primary">{translation?.customer_reviews || 'Customer Reviews'}
               </h4>
-              <div className="dropdown dots-only">
+              {/* <div className="dropdown dots-only">
                 <a
                   className="btn btn-link dropdown-toggle p-1"
                   href="#"
@@ -372,7 +396,7 @@ const Index = () => {
                     </a>
                   </li>
                 </ul>
-              </div>
+              </div> */}
             </div>
 
             <div data-simplebar="init">
@@ -394,11 +418,34 @@ const Index = () => {
                   style={{ marginRight: "-17px" }}
                 >
                   <ul className="card-listing">
+                    {reviewLoading && (
+                      <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "200px",
+                        width: "100%", // Ensure full width
+                      }}
+                      className="d-flex justify-content-center align-items-center w-100"
+                    >
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                      >
+                        <span className="visually-hidden">
+                          {translation?.loading ||
+                            "Loading...."}{" "}
+                        </span>
+                      </div>
+                    </div>
+                    )}
                     {customerReviews.map((review) => (
                       <li key={review.id}>
+                        {console.log("review loop", review)}
                         <div className="d-flex">
                           <img
-                            src={review.avatar}
+                            src={review?.image || '/assets/images/user.jpg'}
                             alt=""
                             height="40"
                             width="40"
@@ -406,7 +453,7 @@ const Index = () => {
                           />
                           <div className="flex-grow-1 ps-3">
                             <h5 className="mb-0">{review.name}</h5>
-                            <p className="text-muted">{review.timeAgo}</p>
+                            <p className="text-muted">{review.updated_at}</p>
                           </div>
                           <div className="flex-shrink-0">
                             <div
@@ -414,7 +461,7 @@ const Index = () => {
                               data-rating={review.rating}
                             >
                               {[...Array(5)].map((_, index) => {
-                                return index < Math.floor(review.rating) ? (
+                                return index < Math.floor(review.overall_rating) ? (
                                   <span key={index} className="star"></span>
                                 ) : index < Math.ceil(review.rating) ? (
                                   <span
@@ -434,16 +481,28 @@ const Index = () => {
                         <p>{review.comment}</p>
                       </li>
                     ))}
+                    {!reviewLoading && customerReviews?.length == 0 && (
+                      <>
+                      <div className='card border-0 text-center'>
+                        <div className="card-body">
+                          <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" loading="lazy"/>
+                          <p className='text-muted'> {translation?.no_record_founds || "No Record Founds"}</p>
+                        </div>
+                      </div>
+                    </>
+                    )}
                   </ul>
                 </div>
               </div>
             </div>
-            <div className="text-center mb-3">
-              <Link target="_blank" href={`/review-list`} className="btn btn-primary">
-                {translation?.view_more_reviews || 'View More Reviews'} {/*  */}
-                <i className="bi bi-arrow-right"></i>
-              </Link>
-            </div>
+            {!reviewLoading && customerReviews?.length > 0 && (
+              <div className="text-center mb-3">
+                <Link target="_blank" href={`/review-list`} className="btn btn-primary">
+                  {translation?.view_more_reviews || 'View More Reviews'} {/*  */}
+                  <i className="bi bi-arrow-right"></i>
+                </Link>
+              </div>
+            )}
           </div>
 
           <div className="card border-0">
@@ -451,7 +510,7 @@ const Index = () => {
               <h4 className="text-primary">{translation?.property_overview || 'Property Overview'}
               </h4>
               <Link
-                href="/property-listing"
+                href="/my-property-listing"
                 className="btn btn-link text-decoration-none"
               >
                 {translation?.see_all_properties || 'See All Properties'}
@@ -494,7 +553,7 @@ const Index = () => {
                   ))
                 ) : (
                   <p className="text-center my-3">
-                 {translation?.no_property_data_available || 'No property data available'}
+                    {translation?.no_property_data_available || 'No property data available'}
                   </p>
                 )}
               </div>

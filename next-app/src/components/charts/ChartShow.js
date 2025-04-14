@@ -217,7 +217,7 @@ const ChartsRow = ({ dashboardList }) => {
             <div className="card-header d-flex justify-content-between align-items-center">
               <h4 className="text-primary">{translation?.sale_summary || 'Sale Summary'}
               </h4>
-              <select
+              {/* <select
                 className="form-select form-select-sm"
                 style={{ width: "110px" }}
               >
@@ -228,7 +228,7 @@ const ChartsRow = ({ dashboardList }) => {
                 {dropdownOptions.map((option, index) => (
                   <option key={index}>{option}</option>
                 ))}
-              </select>
+              </select> */}
             </div>
             <div className="card-body">
               <Line data={lineData} options={chartOptions} />
@@ -242,7 +242,7 @@ const ChartsRow = ({ dashboardList }) => {
             <div className="card-header d-flex justify-content-between align-items-center">
               <h4 className="text-primary">{translation?.active_buyers || 'Active Buyers'}
               </h4>
-              <select
+              {/* <select
                 className="form-select form-select-sm"
                 style={{ width: "110px" }}
               >
@@ -253,7 +253,7 @@ const ChartsRow = ({ dashboardList }) => {
                 {dropdownOptions.map((option, index) => (
                   <option key={index}>{option}</option>
                 ))}
-              </select>
+              </select> */}
             </div>
             <div className="card-body">
               <Line data={lineData} options={chartOptions} />

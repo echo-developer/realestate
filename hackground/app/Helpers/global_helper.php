@@ -478,6 +478,23 @@ if (!function_exists('get_user_name')) {
         return !empty($data) && isset($data[0]->name) ? $data[0]->name : null;
     }
 }
+if (!function_exists('get_user_image')) {
+
+    function get_user_image($id)
+    {
+        $data = getTableData(
+            'users',
+            ['image'],
+            [],
+            ['id' => $id],
+            null
+        );
+
+        return !empty($data) && isset($data[0]->image) ? asset('user_upload/profile_image/'.$data[0]->image) : null;
+        // $data = User::value("image")->where('id',$id)->first();
+        // return !empty($data) ? asset('user_upload/profile_image/' . $data) : null;
+    }
+}
 
 if (!function_exists('format_name')) {
     /**
@@ -1161,13 +1178,13 @@ if (!function_exists('get_all_city')) {
 if (!function_exists('get_property_for_types')) {
     function get_property_for_types()
     {
-       $types = [
-          'rent' => 'Rent',
-          'sale' => 'Sale',
-          'pg' => 'PG/Hostel',
-       ];
+        $types = [
+            'rent' => 'Rent',
+            'sale' => 'Sale',
+            'pg' => 'PG/Hostel',
+        ];
 
-       return $types;
+        return $types;
     }
 }
 
@@ -1323,7 +1340,7 @@ if (!function_exists('assign_free_plan')) {
 }
 
 if (!function_exists('get_floor_types')) {
-    function get_floor_types($key='')
+    function get_floor_types($key = '')
     {
         $types = [
             'mosaic' => 'Mosaic',
@@ -1335,19 +1352,17 @@ if (!function_exists('get_floor_types')) {
             'ceramic_tiles' => 'Ceramic Tiles'
         ];
 
-        if($key)
-        {
+        if ($key) {
             $selectedType = $types[$key] ?? '';
             return $selectedType;
-        }else{
+        } else {
             return $types;
         }
-        
     }
 }
 
 if (!function_exists('get_floor_numbers')) {
-    function get_floor_numbers($key='')
+    function get_floor_numbers($key = '')
     {
         $types = [
             '1' => 'Lower Basement',
@@ -1361,19 +1376,18 @@ if (!function_exists('get_floor_numbers')) {
             '9' => '6',
             '10' => '7',
         ];
-        
-        if($key)
-        {
+
+        if ($key) {
             $selectedType = $types[$key] ?? '';
             return $selectedType;
-        }else{
+        } else {
             return $types;
         }
     }
 }
 
 if (!function_exists('get_total_floors')) {
-    function get_total_floors($key='')
+    function get_total_floors($key = '')
     {
         $types = [
             'total_floor_1' => '1',
@@ -1387,19 +1401,18 @@ if (!function_exists('get_total_floors')) {
             'total_floor_9' => '9',
             'total_floor_10' => '10'
         ];
-        
-        if($key)
-        {
+
+        if ($key) {
             $selectedType = $types[$key] ?? '';
             return $selectedType;
-        }else{
+        } else {
             return $types;
         }
     }
 }
 
 if (!function_exists('flats_in_floor')) {
-    function flats_in_floor($key='')
+    function flats_in_floor($key = '')
     {
         $types = [
             '1',
@@ -1413,14 +1426,13 @@ if (!function_exists('flats_in_floor')) {
             '9',
             '10'
         ];
-        
+
         return $types;
-        
     }
 }
 
 if (!function_exists('lifts_in_tower')) {
-    function lifts_in_tower($key='')
+    function lifts_in_tower($key = '')
     {
         $types = [
             '1',
@@ -1434,71 +1446,67 @@ if (!function_exists('lifts_in_tower')) {
             '9',
             '10'
         ];
-        
+
         return $types;
-        
     }
 }
 
 if (!function_exists('get_water_availability')) {
-    function get_water_availability($key='')
+    function get_water_availability($key = '')
     {
         $types = [
             '24_hours' => '24 Hours Available',
             'partially_available' => 'Partially Available',
             'not_available' => 'Not Available'
         ];
-        
-        if($key)
-        {
+
+        if ($key) {
             $selectedType = $types[$key] ?? '';
             return $selectedType;
-        }else{
+        } else {
             return $types;
         }
     }
 }
 
 if (!function_exists('electricity_status')) {
-    function electricity_status($key='')
+    function electricity_status($key = '')
     {
         $types = [
             'full_power_backup' => 'Full Power Backup',
             'partial_power_backup' => 'Partial Power Backup',
             'no_power_backup' => 'No Power Backup'
         ];
-        
-        if($key)
-        {
+
+        if ($key) {
             $selectedType = $types[$key] ?? '';
             return $selectedType;
-        }else{
+        } else {
             return $types;
         }
     }
 }
 
 if (!function_exists('get_overlooking_list')) {
-    function get_overlooking_list($key='')
+    function get_overlooking_list($key = '')
     {
         $types = [
             'pool' => 'Pool',
             'garden_park' => 'Garden Park',
             'main_road' => 'Main Road'
         ];
-        
-        if($key)
-        {
+
+        if ($key) {
             $selectedType = $types[$key] ?? '';
             return $selectedType;
-        }else{
+        } else {
             return $types;
         }
     }
 }
 
 if (!function_exists('get_ownership_types')) {
-    function get_ownership_types($key='')
+    function get_ownership_types($key = '')
     {
         $types = [
             'freehold' => 'Freehold',
@@ -1506,12 +1514,11 @@ if (!function_exists('get_ownership_types')) {
             'cooperative_society' => 'Co-operative Society',
             'power_of_attorney' => 'Power of Attorney'
         ];
-        
-        if($key)
-        {
+
+        if ($key) {
             $selectedType = $types[$key] ?? '';
             return $selectedType;
-        }else{
+        } else {
             return $types;
         }
     }
@@ -1569,9 +1576,8 @@ if (!function_exists('user_leads_availability')) {
 
         if (!$count_det || $count_det->$remaining_field <= 0) {
             return false;
-        }else{
+        } else {
             return true;
         }
-
     }
 }
