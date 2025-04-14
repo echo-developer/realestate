@@ -264,7 +264,7 @@ const EnquiryForm = ({ propertyId, handleClose }) => {
                 type="email"
                 name="email"
                 className="form-control"
-                placeholder=" "
+                placeholder=""
               />
               <ErrorMessage
                 name="email"
