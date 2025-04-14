@@ -398,7 +398,7 @@ const EnquiryForm = ({ propertyId, handleClose }) => {
               <Button
                 variant="primary"
                 type="submit"
-                disabled={isSubmitting || loading || otpvalidate}
+                // disabled={isSubmitting || loading || otpvalidate}
               >
                 {loading ? "Sending..." : `${translation?.send || "Send"}`}
               </Button>

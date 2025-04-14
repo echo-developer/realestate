@@ -402,7 +402,7 @@ const ProjectEnquiryForm = ({ projectId, handleClose }) => {
               <Button
                 variant="primary"
                 type="submit"
-                disabled={isSubmitting || loading || otpvalidate}
+                // disabled={isSubmitting || loading || otpvalidate}
               >
                 {loading
                   ? "Sending..."
