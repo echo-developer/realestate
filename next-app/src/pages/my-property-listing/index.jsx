@@ -204,7 +204,7 @@ const TabComponent = () => {
                     </Col>
                     <Col lg="auto">
                         <Dropdown>
-                            <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">
+                            <Dropdown.Toggle variant="outline-primary" size="sm" id="dropdown-basic">
                                 Select Option
                             </Dropdown.Toggle>
 
