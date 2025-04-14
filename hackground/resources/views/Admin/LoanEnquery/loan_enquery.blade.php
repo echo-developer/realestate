@@ -84,7 +84,7 @@
                                         @if ($item->is_property_identified)
                                             <span class="badge bg-success">Yes</span>
                                         @else
-                                            <span class="badge bg-secondary">No</span>
+                                            <span class="badge bg-warning">No</span>
                                         @endif
                                     </td>
                                     <td><small>{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y h:i A') }}</small>

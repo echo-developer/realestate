@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Container, Row, Col, Form, Button, Table, Card, FloatingLabel } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import MainLayout from '@/components/layout/MainLayout';
 import useTranslation from '@/hooks/useTranslation';
 const PropertyLegalCheck = () => {
@@ -39,14 +39,15 @@ const PropertyLegalCheck = () => {
       </div>
       <section className="section">        
         <Container>
-          <Row className="justify-content-center">
-            <Col lg="auto">
-              <Card className="mb-4">
+          <Row className="-mb-4 justify-content-center">
+            <Col lg="4">
+              <Card className="border-0 shadow-sm mb-4">
                 <Card.Body>
+                  <h4 className='mb-3'>{translation?.legal_check || 'Legal Check'}</h4>
                   <form>
                     <div className="mb-3">
                       <Form.Check
-                        type="checkbox"
+                        type="switch"
                         name="validOwnership"
                         label={translation?.valid_ownership_documents || 'Valid Ownership Documents'}
                         id="legal_check_1"
@@ -57,7 +58,7 @@ const PropertyLegalCheck = () => {
 
                     <div className="mb-3">
                       <Form.Check
-                        type="checkbox"
+                        type="switch"
                         name="noPendingLitigation"
                         label={translation?.no_pending_litigation || 'No Pending Litigation'}
                         id="legal_check_2"
@@ -68,7 +69,7 @@ const PropertyLegalCheck = () => {
 
                     <div className="mb-3">
                       <Form.Check
-                        type="checkbox"
+                        type="switch"
                         name="clearTitle"
                         label={translation?.clear_title || 'Clear Title'}
                         id="legal_check_3"
@@ -79,7 +80,7 @@ const PropertyLegalCheck = () => {
 
                     <div className="mb-3">
                       <Form.Check
-                        type="checkbox"
+                        type="switch"
                         name="validBuildingPermit"
                         label={translation?.valid_building_permit || 'Valid Building Permit'}
                         id="legal_check_4"
@@ -90,7 +91,7 @@ const PropertyLegalCheck = () => {
 
                     <div className="mb-3">
                       <Form.Check
-                        type="checkbox"
+                        type="switch"
                         name="taxClearance"
                         label={translation?.tax_clearance || 'Tax Clearance'}
                         id="legal_check_5"
@@ -101,7 +102,7 @@ const PropertyLegalCheck = () => {
 
                     <div className="mb-3">
                       <Form.Check
-                        type="checkbox"
+                        type="switch"
                         name="noIllegalConstruction"
                         label={translation?.no_illegal_construction || 'No Illegal Construction'}
                         id="legal_check_6"
@@ -110,31 +111,45 @@ const PropertyLegalCheck = () => {
                       />
                     </div>
 
-                    <button type="button" className="btn btn-primary" onClick={handleSubmit}>
+                    <Button variant="primary" onClick={handleSubmit}>
                       {translation?.submit || 'Submit'}
-                    </button>
+                    </Button>
                   </form>
                 </Card.Body>
               </Card>
             </Col>
-            <Col lg="auto">
-              <div className="">
-                <h4 className='mb-3'>{translation?.legal_check_summary || 'Legal Check Summary'}</h4>
-                <ul className='list-unstyled d-flex flex-column gap-3'>
-                  <li>{translation?.valid_ownership_documents || 'Valid Ownership Documents'}
-                    {checks.validOwnership ? '✔️' : '❌'}</li>
-                  <li>{translation?.no_pending_litigation || 'No Pending Litigation'}
-                    {checks.noPendingLitigation ? '✔️' : '❌'}</li>
-                  <li>{translation?.clear_title || 'Clear Title'}
-                    {checks.clearTitle ? '✔️' : '❌'}</li>
-                  <li>{translation?.valid_building_permit || 'Valid Building Permit'}
-                    {checks.validBuildingPermit ? '✔️' : '❌'}</li>
-                  <li>{translation?.tax_clearance || 'Tax Clearance'}
-                    {checks.taxClearance ? '✔️' : '❌'}</li>
-                  <li>{translation?.no_illegal_construction || 'No Illegal Construction'}
-                    {checks.noIllegalConstruction ? '✔️' : '❌'}</li>
-                </ul>
-              </div>
+            <Col lg="4">   
+              <Card className="border-0 bg-primary-subtle mb-4 h-100-mb-4">
+                <Card.Body>         
+                  <h4 className='mb-3'>{translation?.legal_check_summary || 'Legal Check Summary'}</h4>
+                  <ul className='list-unstyled d-flex flex-column gap-3'>
+                    <li className='d-flex justify-content-between'>
+                      <span>{translation?.valid_ownership_documents || 'Valid Ownership Documents'}</span>
+                      <span className='ps-3'>{checks.validOwnership ? <i className="bi bi-check-circle-fill text-success"></i> : <i className="bi bi-x-circle-fill text-danger"></i>}</span>
+                    </li>
+                    <li className='d-flex justify-content-between'>
+                      <span>{translation?.no_pending_litigation || 'No Pending Litigation'}</span>
+                      <span className='ps-3'>{checks.noPendingLitigation ? <i className="bi bi-check-circle-fill text-success"></i> : <i className="bi bi-x-circle-fill text-danger"></i>}</span>
+                      </li>
+                    <li className='d-flex justify-content-between'>
+                      <span>{translation?.clear_title || 'Clear Title'}</span>
+                      <span className='ps-3'>{checks.clearTitle ? <i className="bi bi-check-circle-fill text-success"></i> : <i className="bi bi-x-circle-fill text-danger"></i>}</span>
+                      </li>
+                    <li className='d-flex justify-content-between'>
+                      <span>{translation?.valid_building_permit || 'Valid Building Permit'}</span>
+                      <span className='ps-3'>{checks.validBuildingPermit ? <i className="bi bi-check-circle-fill text-success"></i> : <i className="bi bi-x-circle-fill text-danger"></i>}</span>
+                    </li>
+                    <li className='d-flex justify-content-between'>
+                      <span>{translation?.tax_clearance || 'Tax Clearance'}</span>
+                      <span className='ps-3'>{checks.taxClearance ? <i className="bi bi-check-circle-fill text-success"></i> : <i className="bi bi-x-circle-fill text-danger"></i>}</span>
+                    </li>
+                    <li className='d-flex justify-content-between'>
+                      <span>{translation?.no_illegal_construction || 'No Illegal Construction'}</span>
+                      <span className='ps-3'>{checks.noIllegalConstruction ? <i className="bi bi-check-circle-fill text-success"></i> : <i className="bi bi-x-circle-fill text-danger"></i>}</span>
+                    </li>
+                  </ul>  
+                </Card.Body>
+              </Card>            
             </Col>
           </Row>
 

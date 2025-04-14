@@ -896,13 +896,21 @@
         }
 
         $(document).ready(function () {
-            $(".nav-link").click(function (e) {
+            $(".landmark-tab-content .nav-link").click(function (e) {
                 e.preventDefault();
-                $(".nav-link").removeClass("active");
+                $(".landmark-tab-content .nav-link").removeClass("active");
+                $(this).addClass("active");
+                var activeTab = $(this).attr("data-tab");
+                $(".landmark-content").hide();
+                $("#tab-content-"+activeTab).show();
+            });
+
+            $(".image-tab-content .nav-link").click(function (e) {
+                e.preventDefault();
+                $(".image-tab-content .nav-link").removeClass("active");
                 $(this).addClass("active");
                 var activeTab = $(this).attr("data-tab");
                 $(".img-content").hide();
-                $(".landmark-content").hide();
                 $("#tab-content-"+activeTab).show();
             });
 
