@@ -1244,7 +1244,7 @@ class Enquery_CRM_Controller extends Controller
                             'customer_name' => $item->g_customer_name,
                             'customer_phone' => $item->g_customer_phone,
                             'customer_email' => $item->g_customer_email,
-                            'status' => $status,
+                            'status' => $item->status,
                             'schedule_date' => $item->schedule_date,
                             'created_at' => $item->created_at
                         );
