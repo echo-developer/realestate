@@ -11,7 +11,7 @@ import withAuth from "@/utils/withAuth";
 import { RiMapPinTimeLine } from "react-icons/ri";
 import useTranslation from "@/hooks/useTranslation";
 import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Nav } from "react-bootstrap";
 import ContactModal from "@/components/property-crm/ContactModal";
 
 const ITEMS_PER_PAGE = 10;
@@ -177,16 +177,20 @@ const Index = () => {
         <DashboardLayout>
             <aside className="col-lg col-12">
                 <div className="p-4">
-                    <h1 className="h4 text-primary mb-3">{translation?.leads_management || "Leads Management"}</h1>
+                    <h1 className="h4 text-primary mb-4">{translation?.leads_management || "Leads Management"}</h1>
 
-
-                    <div className="container mt-4">
-                        <div className="d-flex justify-content-start">
-                            <button className={`btn btn-${activeTab == 'property' ? 'primary' : 'secondary'} mx-2`} onClick={() => handleActiveTabChange("property")}>{translation?.property_leads || "Property Leads"}</button>
-                            <button className={`btn btn-${activeTab == 'project' ? 'primary' : 'secondary'} mx-2`} onClick={() => handleActiveTabChange("project")}>{translation?.project_leads || "Project Leads"}</button>
-                            <button className={`btn btn-${activeTab == 'general' ? 'primary' : 'secondary'} mx-2`} onClick={() => handleActiveTabChange("general")}>{translation?.genral_leads || "General Leads"}</button>
-                        </div>
-                    </div>
+                    <Nav variant="underline">
+                        <Nav.Item>
+                            <Nav.Link role="button" className={`${activeTab == 'property' ? 'active' : ''}`} onClick={() => handleActiveTabChange("property")}>{translation?.property_leads || "Property Leads"}</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link role="button" className={`${activeTab == 'project' ? 'active' : ''}`} onClick={() => handleActiveTabChange("project")}>{translation?.project_leads || "Project Leads"}</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link role="button" className={`${activeTab == 'general' ? 'active' : ''}`} onClick={() => handleActiveTabChange("general")}>{translation?.genral_leads || "General Leads"}</Nav.Link>
+                        </Nav.Item>
+                    </Nav>
+                
                     {loading && (
                         <div
                             style={{
@@ -242,35 +246,41 @@ const Index = () => {
                                             </div>
                                             <div className="col-lg-9 col-sm-8 position-relative">
                                                 <div className="card-body">
-                                                    <div className="d-flex align-items-center justify-content-between">
+                                                    <div className="d-flex justify-content-between">
                                                         <h4>{lead?.property_name || lead?.project_name || "Not available"}</h4>
-                                                        <h6>{translation?.customer_name || "Coustomer Name:"} {lead?.customer_name || `${translation?.not_available}`}</h6>
+                                                        
                                                         <div className="text-end">
                                                             <span className={`badge ${statusClasses[lead?.lead_status]}`}>{leadStatusList[lead?.lead_status || 0]}</span>
                                                             <br />
                                                             {/* <button className="btn btn-secondary btn-sm mt-1">Actions</button> */}
                                                         </div>
                                                     </div>
-                                                    <p>
-                                                        <span className="d-block">
+                                                    <p className="mb-2"><span className="text-muted">{translation?.customer_name || "Coustomer Name:"}</span> <strong>{lead?.customer_name || `${translation?.not_available}`}</strong></p>
+                                                    <p className="d-flex flex-column flex-md-row mb-2">
+                                                        <span className="me-3">
                                                             <i className="bi bi-telephone"></i> {lead?.phone}
                                                         </span>
-                                                        <span className="d-block">
+                                                        <span className="me-3">
                                                             <i className="bi bi-envelope"></i> {lead?.email}
                                                         </span>
-                                                        <span className="d-block">
+                                                        <span className="me-3">
                                                             <i className="bi bi-clock"></i> {lead?.created_at}
                                                         </span>
                                                     </p>
                                                     <p className="text-wrap mb-2">{lead?.message}</p>
-                                                    <div class="d-flex justify-content-end">
-                                                        <button class="btn btn-sm btn-outline-primary me-2" onClick={() => handleModalOpen(lead?.Phone, lead?.Email, lead.assign_id, lead.enquery_id, lead.lead_type)}>{translation?.contact || "Contact"}
-                                                        </button>
-                                                        <Link class="btn btn-sm btn-outline-primary me-2" href={`/property-crm-timeline?assign_id=${lead?.assign_id}`}>{translation?.contact_history || "Contact History"}
-                                                        </Link>
-                                                        <Link class="btn btn-sm btn-outline-primary me-2" href={`/lead-details/${lead?.assign_id}`}>{translation?.lead_details || "Lead Details"}
-                                                        </Link>
-                                                        <select class="form-select form-select-sm ms-2" aria-label="Select action" value={lead?.lead_status} onChange={(e) => handleLeadStatusChange(e, i, lead.assign_id)}>
+                                                    <div class="row">
+                                                        <div className="col-lg mb-2 mb-lg-0">
+                                                            <div className="d-flex d-md-block gap-2">
+                                                                <button class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" onClick={() => handleModalOpen(lead?.Phone, lead?.Email, lead.assign_id, lead.enquery_id, lead.lead_type)}>{translation?.contact || "Contact"}
+                                                                </button>
+                                                                <Link class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" href={`/property-crm-timeline?assign_id=${lead?.assign_id}`}>{translation?.contact_history || "Contact History"}
+                                                                </Link>
+                                                                <Link class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" href={`/lead-details/${lead?.assign_id}`}>{translation?.lead_details || "Lead Details"}
+                                                                </Link>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-lg-auto">
+                                                        <select class="form-select form-select-sm" aria-label="Select action" value={lead?.lead_status} onChange={(e) => handleLeadStatusChange(e, i, lead.assign_id)}>
                                                             <option value="">{translation?.select_an_option || "Select an option"}
                                                             </option>
                                                             {leadStatusList?.length > 0 && leadStatusList?.map((status, i) => {
@@ -279,6 +289,7 @@ const Index = () => {
                                                                 )
                                                             })}
                                                         </select>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -305,43 +316,49 @@ const Index = () => {
                                             </div>
                                             <div className="col-lg-9 col-sm-8 position-relative">
                                                 <div className="card-body">
-                                                    <div className="d-flex align-items-center justify-content-between">
+                                                    <div className="d-flex justify-content-between">
                                                         <h4>{lead?.name || "Not available"}</h4>
                                                         {/* <h6>{translation?.customer_name || "Coustomer Name:"} {lead?.customer_name || `${translation?.not_available}`}</h6> */}
                                                         <div className="text-end">
                                                             <span className={`badge ${statusClasses[lead?.lead_status]}`}>{leadStatusList[lead?.lead_status || 0]}</span>
-                                                            <br />
+                                                            
                                                             {/* <button className="btn btn-secondary btn-sm mt-1">Actions</button> */}
                                                         </div>
                                                     </div>
-                                                    <p>
-                                                        <span className="d-block">
+                                                    <p className="d-flex flex-column flex-md-row mb-2">
+                                                        <span className="me-3">
                                                             <i className="bi bi-telephone"></i> {lead?.phone}
                                                         </span>
-                                                        <span className="d-block">
+                                                        <span className="me-3">
                                                             <i className="bi bi-envelope"></i> {lead?.email}
                                                         </span>
-                                                        <span className="d-block">
+                                                        <span className="me-3">
                                                             <i className="bi bi-clock"></i> {lead?.created_at}
                                                         </span>
                                                     </p>
                                                     <p className="text-wrap mb-2">{lead?.message}</p>
-                                                    <div class="d-flex justify-content-end">
-                                                        <button class="btn btn-sm btn-outline-primary me-2" onClick={() => handleModalOpen(lead?.Phone, lead?.Email, lead.assign_id, lead.enquery_id, lead.lead_type)}>{translation?.contact || "Contact"}
-                                                        </button>
-                                                        <Link class="btn btn-sm btn-outline-primary me-2" href={`/property-crm-timeline?assign_id=${lead?.assign_id}`}>{translation?.contact_history || "Contact History"}
-                                                        </Link>
-                                                        <Link class="btn btn-sm btn-outline-primary me-2" href={`/lead-details/${lead?.assign_id}`}>{translation?.lead_details || "Lead Details"}
-                                                        </Link>
-                                                        <select class="form-select form-select-sm ms-2" aria-label="Select action" value={lead?.lead_status} onChange={(e) => handleLeadStatusChange(e, i, lead.assign_id)}>
-                                                            <option value="">{translation?.select_an_option || "Select an option"}
-                                                            </option>
-                                                            {leadStatusList?.length > 0 && leadStatusList?.map((status, i) => {
-                                                                return (
-                                                                    <option key={i} value={i}>{status}</option>
-                                                                )
-                                                            })}
-                                                        </select>
+                                                    <div class="row">
+                                                        <div className="col-lg mb-2 mb-lg-0">
+                                                            <div className="d-flex d-md-block gap-2">
+                                                                <button class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" onClick={() => handleModalOpen(lead?.Phone, lead?.Email, lead.assign_id, lead.enquery_id, lead.lead_type)}>{translation?.contact || "Contact"}
+                                                                </button>
+                                                                <Link class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" href={`/property-crm-timeline?assign_id=${lead?.assign_id}`}>{translation?.contact_history || "Contact History"}
+                                                                </Link>
+                                                                <Link class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" href={`/lead-details/${lead?.assign_id}`}>{translation?.lead_details || "Lead Details"}
+                                                                </Link>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-lg-auto">
+                                                            <select class="form-select form-select-sm" aria-label="Select action" value={lead?.lead_status} onChange={(e) => handleLeadStatusChange(e, i, lead.assign_id)}>
+                                                                <option value="">{translation?.select_an_option || "Select an option"}
+                                                                </option>
+                                                                {leadStatusList?.length > 0 && leadStatusList?.map((status, i) => {
+                                                                    return (
+                                                                        <option key={i} value={i}>{status}</option>
+                                                                    )
+                                                                })}
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
 

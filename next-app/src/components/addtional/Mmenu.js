@@ -261,6 +261,62 @@ const MobileMenu = ({
       {isMobile && (
         <nav id="menu" className="menuHidden">
           <ul>
+          <li className="setlang">
+              <span>
+                <img
+                  src={`/assets/images/flags/${
+                    currentLang === "ar"
+                      ? "ae"
+                      : currentLang === "de"
+                      ? "de"
+                      : "gb"
+                  }.svg`}
+                  alt={currentLang?.toUpperCase()}
+                  height="20"
+                  width="20"
+                />
+                {currentLang === "ar"
+                  ? "Arabic"
+                  : currentLang === "de"
+                  ? "German"
+                  : "English"}
+              </span>
+              <ul>
+                <li className={currentLang === "en" ? "active" : ""}>
+                  <a role="button" onClick={() => changeLanguage("en")}>
+                    <img
+                      src="/assets/images/flags/gb.svg"
+                      alt="English"
+                      height="16"
+                      width="16"
+                    />{" "}
+                    English
+                  </a>
+                </li>
+                <li className={currentLang === "ar" ? "active" : ""}>
+                  <a role="button" onClick={() => changeLanguage("ar")}>
+                    <img
+                      src="/assets/images/flags/ae.svg"
+                      alt="Arabic"
+                      height="16"
+                      width="16"
+                    />{" "}
+                    Arabic
+                  </a>
+                </li>
+                <li className={currentLang === "de" ? "active" : ""}>
+                  <a role="button" onClick={() => changeLanguage("de")}>
+                    <img
+                      src="/assets/images/flags/de.svg"
+                      alt="German"
+                      height="16"
+                      width="16"
+                    />{" "}
+                    German
+                  </a>
+                </li>
+              </ul>
+            </li>
             {menuData.map((item) => (
               <li key={item.name}>
                  <span>{item.icon} {item.name}</span>
@@ -386,62 +442,7 @@ const MobileMenu = ({
                 </li>
               </React.Fragment>
             )}
-            <li className="setlang">
-              <a className="nav-link dropdown-toggle" role="button">
-                <img
-                  src={`/assets/images/flags/${
-                    currentLang === "ar"
-                      ? "ae"
-                      : currentLang === "de"
-                      ? "de"
-                      : "gb"
-                  }.svg`}
-                  alt={currentLang?.toUpperCase()}
-                  height="20"
-                  width="20"
-                />
-                {currentLang === "ar"
-                  ? "Arabic"
-                  : currentLang === "de"
-                  ? "German"
-                  : "English"}
-              </a>
-              <ul>
-                <li className={currentLang === "en" ? "active" : ""}>
-                  <a role="button" onClick={() => changeLanguage("en")}>
-                    <img
-                      src="/assets/images/flags/gb.svg"
-                      alt="English"
-                      height="16"
-                      width="16"
-                    />{" "}
-                    English
-                  </a>
-                </li>
-                <li className={currentLang === "ar" ? "active" : ""}>
-                  <a role="button" onClick={() => changeLanguage("ar")}>
-                    <img
-                      src="/assets/images/flags/ae.svg"
-                      alt="Arabic"
-                      height="16"
-                      width="16"
-                    />{" "}
-                    Arabic
-                  </a>
-                </li>
-                <li className={currentLang === "de" ? "active" : ""}>
-                  <a role="button" onClick={() => changeLanguage("de")}>
-                    <img
-                      src="/assets/images/flags/de.svg"
-                      alt="German"
-                      height="16"
-                      width="16"
-                    />{" "}
-                    German
-                  </a>
-                </li>
-              </ul>
-            </li>
+            
           </ul>
         </nav>
       )}
