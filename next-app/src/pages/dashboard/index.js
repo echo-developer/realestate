@@ -11,6 +11,7 @@ import moment from "moment";
 import Link from "next/link";
 import useTranslation from "@/hooks/useTranslation";
 import { BoxArrowUpRight, Calendar, GeoAlt, Hash } from "react-bootstrap-icons";
+import { useRouter } from "next/router";
 
 const customerReviews = [
   {
@@ -84,6 +85,7 @@ const data = {
 
 const Index = () => {
   const translation = useTranslation();
+  const router = useRouter();
   const { callApi, GetMemberId } = AuthUser();
   const [dashboardList, setDashboardList] = useState({});
   const memberId = GetMemberId();
@@ -106,6 +108,12 @@ const Index = () => {
     }
   }, []);
 
+  const routePush = (url) => {
+    if(url) {
+      router.push(url);
+    }
+  }
+
   useEffect(() => {
     if (dashboardList) {
       setFacts([
@@ -114,6 +122,7 @@ const Index = () => {
           iconBgColor: "rgb(19, 101, 207)",
           iconSrc: "/assets/images/icons/home-2.png",
           number: dashboardList?.counters?.allProperty,
+          url: '/my-property-listing',
           title: `${translation?.all_property || 'All Property'}`,
         },
         {
@@ -121,6 +130,7 @@ const Index = () => {
           iconBgColor: "rgb(24, 150, 52)",
           iconSrc: "/assets/images/icons/sale-2.png",
           number: dashboardList?.counters?.forSell,
+          url: '/my-property-listing?post_for=sale',
           title: `${translation?.property_for_sale || 'Property for Sale'}`,
         },
         {
@@ -128,6 +138,7 @@ const Index = () => {
           iconBgColor: "rgb(232, 82, 124)",
           iconSrc: "/assets/images/icons/rent-3.png",
           number: dashboardList?.counters?.forRent,
+          url: '/my-property-listing?post_for=rent',
           title: `${translation?.property_for_rent || 'Property for Rent'}`,
         },
         {
@@ -142,6 +153,7 @@ const Index = () => {
           iconBgColor: "rgb(34, 185, 190)",
           iconSrc: "/assets/images/icons/favourite-property.png",
           number: dashboardList?.counters?.favProperty,
+          url: "/my-favourite-list",
           title: `${translation?.favourite_property || 'Favourite Property'}`,
         },
         {
@@ -149,6 +161,7 @@ const Index = () => {
           iconBgColor: "rgb(224, 135, 28)",
           iconSrc: "/assets/images/icons/home-2.png",
           number: dashboardList?.counters?.propertyEnquery,
+          url: '/property-crm',
           title: `${translation?.property_enquiries || 'Property Enquiries'}`
           ,
         },
@@ -190,7 +203,8 @@ const Index = () => {
         <div className="p-4">
           <div className="row">
             {facts.map((fact, index) => (
-              <article className="col-md-4 col-sm-6 col-12" key={index}>
+              <article className="col-md-4 col-sm-6 col-12" key={index} onClick={() => routePush(fact?.url)}>
+                {console.log("fact", fact)}
                 <a
                   role="button"
                   className="fun-fact"

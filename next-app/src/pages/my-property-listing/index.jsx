@@ -10,9 +10,11 @@ import { ShimmerContentBlock } from "react-shimmer-effects";
 import withAuth from "@/utils/withAuth";
 import useTranslation from '../../hooks/useTranslation'
 import { Dropdown, Row, Col } from 'react-bootstrap';
+import { useRouter } from "next/router";
 
 
 const TabComponent = () => {
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState("published_properties");
     const [loading, setLoading] = useState(true);
     const { callApi, GetMemberId } = AuthUser();
@@ -51,18 +53,25 @@ const TabComponent = () => {
 
 
     useEffect(() => {
-        if (memberId) {
-            FetchPropertyData();
+        if (memberId && router.isReady) {
+            if(router?.query?.post_for) {
+                setPostFor(router.query.post_for)
+                FetchPropertyData(null, null, router.query.post_for);
+            } else {
+                FetchPropertyData(null, null);
+            }
         }
-    }, [memberId]);
+    }, [memberId, router.query]);
 
-    const FetchPropertyData = async (loadMore, nextPage = 1) => {
-        if (!loadMore) {
+    const FetchPropertyData = async (loadMore, nextPage = 1, filter) => {
+        if (!loadMore || filter) {
             setLoading(true);
         }
         const pageKey = generatePageKey(activeTab);
         const data = {};
         data[pageKey] = nextPage;
+        data.post_for = filter;
+        data.active_tab = generateActiveTab(activeTab);
         try {
             const response = await callApi({
                 api: `/my_property_list?user_id=${memberId}`,
@@ -102,6 +111,15 @@ const TabComponent = () => {
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
+        setPostFor("");
+    
+        const { pathname, query } = router;
+        delete query.post_for; 
+    
+        router.push({
+            pathname,
+            query
+        }, undefined, { shallow: true });  
     };
 
     const renderTabContent = () => {
@@ -154,6 +172,20 @@ const TabComponent = () => {
         FetchPropertyData(true, nextPage);
     }
 
+    const handleFilterSelect = (queryVal) => {
+        if (queryVal) {
+            const { pathname, query } = router;
+            query.post_for = queryVal;  // set or update your query param
+
+            router.push({
+                pathname,
+                query
+            }, undefined, { shallow: true });
+        } else {
+            router.push('/my-property-listing');
+        }
+    }
+
 
 
     return (
@@ -162,63 +194,71 @@ const TabComponent = () => {
                 <div className="p-4">
                     <h1 className="h4 text-primary">{translation?.my_property_listing || "My Property Listing"}</h1>
                     <Row>
-                    <Col lg>
-                        <ul className="nav nav-underline mb-3 gap-4 align-items-center">
-                            <li className="nav-item">
-                                <a
-                                    className={`nav-link ${activeTab === "published_properties" ? "active" : ""}`}
-                                    role="button"
-                                    onClick={() => handleTabChange("published_properties")}
-                                >
-                                    {translation?.publish || "Publish"}
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a
-                                    className={`nav-link ${activeTab === "pending_properties" ? "active" : ""}`}
-                                    role="button"
-                                    onClick={() => handleTabChange("pending_properties")}
-                                >
-                                    {translation?.pending || "Pending"}
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a
-                                    className={`nav-link ${activeTab === "expired_properties" ? "active" : ""}`}
-                                    role="button"
-                                    onClick={() => handleTabChange("expired_properties")}
-                                >
-                                    {translation?.expired || "Expired"}
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a
-                                    className={`nav-link ${activeTab === "draft_properties" ? "active" : ""}`}
-                                    role="button"
-                                    onClick={() => handleTabChange("draft_properties")}
-                                >
-                                    {translation?.draft || "Draft"}
-                                </a>
-                            </li>
-                        </ul>
-                    </Col>
-                    <Col lg="auto">
-                        <Dropdown>
-                            <Dropdown.Toggle variant="outline-primary" size="sm" id="dropdown-basic">
-                                Select Option
-                            </Dropdown.Toggle>
+                        <Col lg>
+                            <ul className="nav nav-underline mb-3 gap-4 align-items-center">
+                                <li className="nav-item">
+                                    <a
+                                        className={`nav-link ${activeTab === "published_properties" ? "active" : ""}`}
+                                        role="button"
+                                        onClick={() => handleTabChange("published_properties")}
+                                    >
+                                        {translation?.publish || "Publish"}
+                                    </a>
+                                </li>
+                                <li className="nav-item">
+                                    <a
+                                        className={`nav-link ${activeTab === "pending_properties" ? "active" : ""}`}
+                                        role="button"
+                                        onClick={() => handleTabChange("pending_properties")}
+                                    >
+                                        {translation?.pending || "Pending"}
+                                    </a>
+                                </li>
+                                <li className="nav-item">
+                                    <a
+                                        className={`nav-link ${activeTab === "expired_properties" ? "active" : ""}`}
+                                        role="button"
+                                        onClick={() => handleTabChange("expired_properties")}
+                                    >
+                                        {translation?.expired || "Expired"}
+                                    </a>
+                                </li>
+                                <li className="nav-item">
+                                    <a
+                                        className={`nav-link ${activeTab === "draft_properties" ? "active" : ""}`}
+                                        role="button"
+                                        onClick={() => handleTabChange("draft_properties")}
+                                    >
+                                        {translation?.draft || "Draft"}
+                                    </a>
+                                </li>
+                            </ul>
+                        </Col>
+                        <Col lg="auto">
+                            <Dropdown>
+                                <Dropdown.Toggle variant="outline-primary" size="sm" id="dropdown-basic">
+                                     {postFor || "Select Option"}
+                                </Dropdown.Toggle>
 
-                            <Dropdown.Menu style={{ position: 'absolute' }}>
-                                <Dropdown.Item onClick={() => console.log('Rent selected')}>Rent</Dropdown.Item>
-                                <Dropdown.Item onClick={() => console.log('Sale selected')}>Sale</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </Col>
-                </Row>
+                                <Dropdown.Menu>
+                                <Dropdown.Item className="py-1 px-2 small" onClick={() => handleFilterSelect('')}>
+                                        Select Option
+                                    </Dropdown.Item>
+                                    <Dropdown.Item className="py-1 px-2 small" onClick={() => handleFilterSelect('rent')}>
+                                        Rent
+                                    </Dropdown.Item>
+                                    <Dropdown.Item className="py-1 px-2 small" onClick={() => handleFilterSelect('sale')}>
+                                        Sale
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+
+                        </Col>
+                    </Row>
 
 
                     {renderTabContent()}
-                    {propertyData[activeTab]?.current_page < propertyData[activeTab]?.total_pages && (
+                    {!loading && propertyData[activeTab]?.current_page < propertyData[activeTab]?.total_pages && (
                         <button
                             className="btn btn-primary d-block mx-auto mt-4"
                             onClick={() => handleLoadMoreClick(activeTab)}> {translation?.load_more || "Load More"}</button>
@@ -254,5 +294,20 @@ const generatePageKey = (tab) => {
             return "draft_page"
         default:
             return "published_page";
+    }
+}
+
+const generateActiveTab = (tab) => {
+    switch (tab) {
+        case "published_properties":
+            return "published";
+        case "pending_properties":
+            return "pending";
+        case "expired_properties":
+            return "expired";
+        case "draft_properties":
+            return "draft"
+        default:
+            return "published";
     }
 }
