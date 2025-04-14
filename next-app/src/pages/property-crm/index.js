@@ -227,7 +227,7 @@ const Index = () => {
                             </div>
                         </>
                     )}
-                    {list?.length > 0 && !loading && (
+                    {activeTab !== 'general' &&  list?.length > 0 && !loading && (
                         <div className="list-display mt-4">
                             {list.map((lead, i) => {
                                 return (
@@ -243,7 +243,7 @@ const Index = () => {
                                             <div className="col-lg-9 col-sm-8 position-relative">
                                                 <div className="card-body">
                                                     <div className="d-flex align-items-center justify-content-between">
-                                                        <h4>{lead?.property_name || "Not available"}</h4>
+                                                        <h4>{lead?.property_name || lead?.project_name || "Not available"}</h4>
                                                         <h6>{translation?.customer_name || "Coustomer Name:"} {lead?.customer_name || `${translation?.not_available}`}</h6>
                                                         <div className="text-end">
                                                             <span className={`badge ${statusClasses[lead?.lead_status]}`}>{leadStatusList[lead?.lead_status || 0]}</span>
@@ -287,6 +287,67 @@ const Index = () => {
                                     </div>
                                 )
                             })}
+                        </div>
+                    )}
+
+                    {activeTab == "general" && (
+                        <div className="list-display mt-4">
+                            return (
+                                <div className="card card-ads" key={i}>
+                                        <div className="row g-0">
+                                            <div className="col-lg-3 col-sm-4">
+                                                <CardImageSlider
+                                                    data={lead}
+                                                    icons={false}
+                                                    showFavIcon={false}
+                                                />
+                                            </div>
+                                            <div className="col-lg-9 col-sm-8 position-relative">
+                                                <div className="card-body">
+                                                    <div className="d-flex align-items-center justify-content-between">
+                                                        <h4>{lead?.name || "Not available"}</h4>
+                                                        {/* <h6>{translation?.customer_name || "Coustomer Name:"} {lead?.customer_name || `${translation?.not_available}`}</h6> */}
+                                                        <div className="text-end">
+                                                            <span className={`badge ${statusClasses[lead?.lead_status]}`}>{leadStatusList[lead?.lead_status || 0]}</span>
+                                                            <br />
+                                                            {/* <button className="btn btn-secondary btn-sm mt-1">Actions</button> */}
+                                                        </div>
+                                                    </div>
+                                                    <p>
+                                                        <span className="d-block">
+                                                            <i className="bi bi-telephone"></i> {lead?.phone}
+                                                        </span>
+                                                        <span className="d-block">
+                                                            <i className="bi bi-envelope"></i> {lead?.email}
+                                                        </span>
+                                                        <span className="d-block">
+                                                            <i className="bi bi-clock"></i> {lead?.created_at}
+                                                        </span>
+                                                    </p>
+                                                    <p className="text-wrap mb-2">{lead?.message}</p>
+                                                    <div class="d-flex justify-content-end">
+                                                        <button class="btn btn-sm btn-outline-primary me-2" onClick={() => handleModalOpen(lead?.Phone, lead?.Email, lead.assign_id, lead.enquery_id, lead.lead_type)}>{translation?.contact ||"Contact"}
+                                                        </button>
+                                                        <Link class="btn btn-sm btn-outline-primary me-2" href={`/property-crm-timeline?assign_id=${lead?.assign_id}`}>{translation?.contact_history ||"Contact History"}
+                                                        </Link>
+                                                        <Link class="btn btn-sm btn-outline-primary me-2" href={`/lead-details/${lead?.assign_id}`}>{translation?.lead_details || "Lead Details"}
+                                                        </Link>
+                                                        <select class="form-select form-select-sm ms-2" aria-label="Select action" value={lead?.lead_status} onChange={(e) => handleLeadStatusChange(e, i, lead.assign_id)}>
+                                                            <option value="">{translation?.select_an_option ||"Select an option"}
+                                                            </option>
+                                                            {leadStatusList?.length > 0 && leadStatusList?.map((status, i) => {
+                                                                return (
+                                                                    <option key={i} value={i}>{status}</option>
+                                                                )
+                                                            })}
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                            )
                         </div>
                     )}
                     {/* {propertyCRM?.length > 0 && (
