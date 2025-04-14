@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { ShimmerContentBlock } from "react-shimmer-effects";
 import withAuth from "@/utils/withAuth";
 import useTranslation from '../../hooks/useTranslation'
+import { Dropdown } from 'react-bootstrap';
 
 
 const TabComponent = () => {
@@ -16,9 +17,15 @@ const TabComponent = () => {
     const [loading, setLoading] = useState(true);
     const { callApi, GetMemberId } = AuthUser();
     const [propertyData, setPropertyData] = useState([]);
+    const [postFor, setPostFor] = useState("");
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleToggle = () => {
+        setIsOpen(prev => !prev);
+    };
     const memberId = GetMemberId();
     const [publishPagination, setPublishPagination] = useState({
-        
+
         page: 1,
         current_page: 0,
         total_page: 0
@@ -40,7 +47,7 @@ const TabComponent = () => {
         current_page: 0,
         total_page: 0
     })
-const translation = useTranslation();
+    const translation = useTranslation();
 
 
     useEffect(() => {
@@ -48,9 +55,9 @@ const translation = useTranslation();
             FetchPropertyData();
         }
     }, [memberId]);
-    
-    const FetchPropertyData = async (loadMore, nextPage=1) => {
-        if(!loadMore) {
+
+    const FetchPropertyData = async (loadMore, nextPage = 1) => {
+        if (!loadMore) {
             setLoading(true);
         }
         const pageKey = generatePageKey(activeTab);
@@ -63,7 +70,7 @@ const translation = useTranslation();
                 data: data
             });
             if (response && response?.status === 1) {
-                if(!loadMore) {
+                if (!loadMore) {
                     setPropertyData(response?.data);
                 } else {
                     updateLoadMoreState(response?.data);
@@ -77,7 +84,7 @@ const translation = useTranslation();
             setLoading(false);
         }
     };
-    
+
     const updateLoadMoreState = (data) => {
         let state = propertyData?.[activeTab];
         state = {
@@ -112,41 +119,41 @@ const translation = useTranslation();
 
         switch (activeTab) {
             case "published_properties":
-                return <PublishComponent propertiesData={propertyData}  />;
+                return <PublishComponent propertiesData={propertyData} />;
             case "pending_properties":
-                return <PendingComponent propertiesData={propertyData}  />;
+                return <PendingComponent propertiesData={propertyData} />;
             case "expired_properties":
-                return <ExpiredComponent propertiesData={propertyData}  />;
+                return <ExpiredComponent propertiesData={propertyData} />;
             case "draft_properties":
-                return <DraftComponent propertiesData={propertyData}  />;
+                return <DraftComponent propertiesData={propertyData} />;
             default:
-                return <PublishComponent propertiesData={propertyData}  />;
+                return <PublishComponent propertiesData={propertyData} />;
         }
     };
 
     const handleLoadMoreClick = () => {
         let nextPage = (() => {
-            switch(activeTab) {
+            switch (activeTab) {
                 case "pending_properties":
-                    setPendingPagination(prev => ({...prev, page: prev?.page + 1}))
+                    setPendingPagination(prev => ({ ...prev, page: prev?.page + 1 }))
                     return pendingPagination?.page + 1;
                 case "published_properties":
-                    setPublishPagination(prev => ({...prev, page: prev?.page + 1}))
+                    setPublishPagination(prev => ({ ...prev, page: prev?.page + 1 }))
                     return publishPagination?.page + 1;
                 case "draft_properties":
-                    setDraftPagination(prev => ({...prev, page: prev?.page + 1}))
+                    setDraftPagination(prev => ({ ...prev, page: prev?.page + 1 }))
                     return draftPagination?.page + 1;
                 case "expired_properties":
-                    setExpiredPagination(prev => ({...prev, page: prev?.page + 1}))
+                    setExpiredPagination(prev => ({ ...prev, page: prev?.page + 1 }))
                     return expiredPagination?.page + 1;
                 default:
-                    setPendingPagination(prev => ({...prev, page: prev?.page + 1}))
+                    setPendingPagination(prev => ({ ...prev, page: prev?.page + 1 }))
                     return pendingPagination?.page + 1;
             }
         })()
         FetchPropertyData(true, nextPage);
     }
-    
+
 
 
     return (
@@ -154,13 +161,11 @@ const translation = useTranslation();
             <aside className="col-lg col-12">
                 <div className="p-4">
                     <h1 className="h4 text-primary">{translation?.my_property_listing || "My Property Listing"}</h1>
-                    <ul className="nav nav-underline mb-3 gap-4">
+                    <ul className="nav nav-underline mb-3 gap-4 align-items-center">
                         <li className="nav-item">
                             <a
-                                className={`nav-link ${
-                                    activeTab === "published_properties" ? "active" : ""
-                                }`}
-                               role="button"
+                                className={`nav-link ${activeTab === "published_properties" ? "active" : ""}`}
+                                role="button"
                                 onClick={() => handleTabChange("published_properties")}
                             >
                                 {translation?.publish || "Publish"}
@@ -168,10 +173,8 @@ const translation = useTranslation();
                         </li>
                         <li className="nav-item">
                             <a
-                                className={`nav-link ${
-                                    activeTab === "pending_properties" ? "active" : ""
-                                }`}
-                               role="button"
+                                className={`nav-link ${activeTab === "pending_properties" ? "active" : ""}`}
+                                role="button"
                                 onClick={() => handleTabChange("pending_properties")}
                             >
                                 {translation?.pending || "Pending"}
@@ -179,10 +182,8 @@ const translation = useTranslation();
                         </li>
                         <li className="nav-item">
                             <a
-                                className={`nav-link ${
-                                    activeTab === "expired_properties" ? "active" : ""
-                                }`}
-                               role="button"
+                                className={`nav-link ${activeTab === "expired_properties" ? "active" : ""}`}
+                                role="button"
                                 onClick={() => handleTabChange("expired_properties")}
                             >
                                 {translation?.expired || "Expired"}
@@ -190,22 +191,35 @@ const translation = useTranslation();
                         </li>
                         <li className="nav-item">
                             <a
-                                className={`nav-link ${
-                                    activeTab === "draft_properties" ? "active" : ""
-                                }`}
-                               role="button"
+                                className={`nav-link ${activeTab === "draft_properties" ? "active" : ""}`}
+                                role="button"
                                 onClick={() => handleTabChange("draft_properties")}
                             >
-                                 {translation?.draft || "Draft"}
+                                {translation?.draft || "Draft"}
                             </a>
                         </li>
+
+                        <li className="nav-item ms-auto" >
+                            <Dropdown>
+                                <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                                    Select Option
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu style={{ position: 'absolute' }}>
+                                    <Dropdown.Item href="#/option1">Option 1</Dropdown.Item>
+                                    <Dropdown.Item href="#/option2">Option 2</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </li>
+
                     </ul>
+
                     {renderTabContent()}
                     {propertyData[activeTab]?.current_page < propertyData[activeTab]?.total_pages && (
                         <button
-                        className="btn btn-primary btn-lg d-block mx-auto mt-4"
-                        onClick={() => handleLoadMoreClick(activeTab)}> {translation?.load_more || "Load More"}</button>
-                     )} 
+                            className="btn btn-primary btn-lg d-block mx-auto mt-4"
+                            onClick={() => handleLoadMoreClick(activeTab)}> {translation?.load_more || "Load More"}</button>
+                    )}
                 </div>
             </aside>
             <aside className="col-xl-auto col-12">
@@ -226,7 +240,7 @@ export default withAuth(TabComponent);
 
 
 const generatePageKey = (tab) => {
-    switch(tab) {
+    switch (tab) {
         case "published_properties":
             return "published_page";
         case "pending_properties":
@@ -235,7 +249,7 @@ const generatePageKey = (tab) => {
             return "expired_page";
         case "draft_properties":
             return "draft_page"
-        default: 
-        return "published_page";
+        default:
+            return "published_page";
     }
 }
