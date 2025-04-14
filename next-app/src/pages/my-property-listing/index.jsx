@@ -194,7 +194,7 @@ const TabComponent = () => {
                 <div className="p-4">
                     <h1 className="h4 text-primary">{translation?.my_property_listing || "My Property Listing"}</h1>
                     <Row>
-                        <Col lg>
+                        <Col sm>
                             <ul className="nav nav-underline mb-3 gap-4 align-items-center">
                                 <li className="nav-item">
                                     <a
@@ -234,20 +234,20 @@ const TabComponent = () => {
                                 </li>
                             </ul>
                         </Col>
-                        <Col lg="auto">
-                            <Dropdown>
+                        <Col sm="auto">
+                            <Dropdown className="mb-3 mb-sm-0">
                                 <Dropdown.Toggle variant="outline-primary" size="sm" id="dropdown-basic">
                                      {postFor || "Select Option"}
                                 </Dropdown.Toggle>
 
-                                <Dropdown.Menu>
-                                <Dropdown.Item className="py-1 px-2 small" onClick={() => handleFilterSelect('')}>
+                                <Dropdown.Menu className="dropdown-menu-end">
+                                    <Dropdown.Item onClick={() => handleFilterSelect('')}>
                                         Select Option
                                     </Dropdown.Item>
-                                    <Dropdown.Item className="py-1 px-2 small" onClick={() => handleFilterSelect('rent')}>
+                                    <Dropdown.Item onClick={() => handleFilterSelect('rent')}>
                                         Rent
                                     </Dropdown.Item>
-                                    <Dropdown.Item className="py-1 px-2 small" onClick={() => handleFilterSelect('sale')}>
+                                    <Dropdown.Item onClick={() => handleFilterSelect('sale')}>
                                         Sale
                                     </Dropdown.Item>
                                 </Dropdown.Menu>
