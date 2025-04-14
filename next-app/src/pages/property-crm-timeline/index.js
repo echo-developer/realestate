@@ -265,54 +265,29 @@ const Timeline = () => {
                     </div>
                   )
                 })}
+
+                {!loading && (timelineData?.length == 0 || timelineData == null) && (
+                  <>
+                  <div className="card border-0 text-center mt-4">
+                      <div className="card-body">
+                          <img
+                              src="/assets/images/icons/9939447.png"
+                              alt="Icon"
+                              height={48}
+                              width={48}
+                              className="mb-2"
+                              loading="lazy"
+                          />
+                          <p className="text-muted">{translation?.no_record_founds || "No Record Founds"}</p>
+                      </div>
+                  </div>
+              </>
+                )}
               </div>
             </div>
           </aside>
         </div>
 
-        {/* <Modal show={showModal} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>{translation?.add_new_data || "Add New Data"}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div>
-              <form>
-                <div className="form-floating mb-4">
-                  <select className="form-select" id="floatingSelect" name="enq_status" aria-label="Floating label select example" value={CRMEnquiryForm.enq_status}
-                        onChange={changeCRMForm}>
-                  {enquiryStatuses?.map((status) => (
-                            <option key={status.id} value={status.id}>
-                                {status.label}
-                            </option>
-                        ))}
-                  </select>
-                  <label htmlFor="floatingSelect">{translation?.status || "Status"}</label>
-                </div>
-
-                <div className="form-floating mb-4">
-                  <input type="datetime-local" className="form-control" id="scheduleDate" name="date" value={CRMEnquiryForm.date}
-                        onChange={changeCRMForm} />
-                  <label htmlFor="scheduleDate">{translation?.schedule_date || "Schedule Date"}</label>
-                </div>
-
-                <div className="form-floating mb-4">
-                  <textarea rows="4" className="form-control" id="remarks" name="remarks" placeholder="Remarks" style={{ minHeight: "80px" }} value={CRMEnquiryForm.remarks}
-                        onChange={changeCRMForm}></textarea>
-                  <label htmlFor="remarks">{translation?.remarks || "Remarks"}</label>
-                </div>
-              </form>
-            </div>
-
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-            {translation?.close || "Close"}
-            </Button>
-            <Button variant="primary" onClick={handleSubmitEnquery}>
-            {translation?.submit || "Submit"}
-            </Button>
-          </Modal.Footer>
-        </Modal> */}
         <ContactModal show={showModal} handleClose={handleClose} phone={leadData?.phone} email={leadData?.email} submitHandler={submitHandler} />
       </div>
     </DashboardLayout>

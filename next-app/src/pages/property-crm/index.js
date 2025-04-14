@@ -271,7 +271,7 @@ const Index = () => {
                                                     <div class="row">
                                                         <div className="col-lg mb-2 mb-lg-0">
                                                             <div className="d-flex d-md-block gap-2">
-                                                                <button class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" onClick={() => handleModalOpen(lead?.Phone, lead?.Email, lead.assign_id, lead.enquery_id, lead.lead_type)}>{translation?.contact || "Contact"}
+                                                                <button class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" onClick={() => handleModalOpen(lead?.phone, lead?.email, lead.assign_id, lead.enquery_id, lead.lead_type)}>{translation?.contact || "Contact"}
                                                                 </button>
                                                                 <Link class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" href={`/property-crm-timeline?assign_id=${lead?.assign_id}`}>{translation?.contact_history || "Contact History"}
                                                                 </Link>
@@ -370,112 +370,6 @@ const Index = () => {
                         </div>
                     )}
 
-
-                    {/* {propertyCRM?.length > 0 && (
-                        <div className="list-display">
-                            {propertyCRM?.map((property, index) => (
-                                <div className="card card-ads" key={index}>
-                                    <div className="row g-0">
-                                        <div className="col-lg-3 col-sm-4">
-                                            <div className="card-image">
-                                                <img
-                                                    src={
-                                                        property?.gallery?.[0]?.images?.[0]?.image_url || "/default-image.jpg"
-                                                    }
-                                                    alt="Property Image"
-                                                    className="card-img-top"
-                                                    loading="lazy"
-                                                />
-                                                <span
-                                                    className={`ads-type ${property?.type}`}
-                                                >
-                                                    {property?.property_code}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-9 col-sm-8 position-relative">
-                                            <div className="card-body">
-                                                <div className="d-flex align-items-center justify-content-between">
-                                                    <h4>{property?.customer_name || "Not available"}</h4>
-                                                    <div className="text-end">
-                                                        <span
-                                                            className={`badge ${property?.enquery_status == "1"
-                                                                ? "bg-primary"
-                                                                : property?.enquery_status == "2"
-                                                                    ? "bg-success"
-                                                                    : property?.enquery_status == "3"
-                                                                        ? "bg-danger"
-                                                                        : property?.enquery_status == "4"
-                                                                            ? "bg-info"
-                                                                            : property?.enquery_status == "5"
-                                                                                ? "bg-warning"
-                                                                                : "bg-primary"
-                                                                }`}
-                                                        >
-                                                            {getStatusLabel(property?.enquery_status)}
-                                                        </span>
-                                                        <br />
-                                                        <button
-                                                            className="btn btn-secondary btn-sm mt-1"
-                                                            onClick={() => handleShowModal(property, "remarks")}
-                                                        >
-                                                            {translation?.actions || "Actions"}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <p className="d-flex gap-2">
-                                                    <span>
-                                                        <i className="bi bi-telephone"></i> {property?.Phone}
-                                                    </span>
-                                                    <span>
-                                                        <i className="bi bi-envelope"></i> {property?.Email}
-                                                    </span>
-                                                    <span>
-                                                        <i className="bi bi-clock"></i> {useDateFormat(property?.created_at)}
-                                                    </span>
-                                                </p>
-                                                <p className="text-wrap mb-2">
-                                                    {property?.message}
-                                                </p>
-                                                <div className="d-sm-flex">
-                                                    <button
-                                                        className="btn btn-sm btn-primary me-2"
-                                                        onClick={() => handleShowModal(property, "details")}
-                                                    >
-                                                        {translation?.read_more || "Read more"}
-                                                    </button>
-                                                    <Link
-                                                        href={`/property-crm-schedule/${property?.enquery_id}`}
-                                                        className="btn btn-sm btn-outline-primary me-2 ms-auto"
-                                                    >
-                                                        <i className="bi bi-box-arrow-up-right"></i>
-                                                    </Link>
-                                                    <Link href={`/property-crm-timeline?enquery_id=${property?.enquery_id}`} className="btn btn-sm btn-outline-primary me-2">
-                                                        <RiMapPinTimeLine />
-                                                    </Link>
-                                                    <button
-                                                        className="btn btn-sm btn-outline-danger"
-                                                        onClick={() => handleDeleteClick(property?.enquery_id)}
-                                                    >
-                                                        <i className="bi bi-trash3"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-
-                    {currentPages < totalPages && (
-                        <button
-                            className="btn btn-primary btn-lg d-block mx-auto mt-4"
-                            onClick={() => handleLoadMoreClick(perPage + 1)}
-                        >
-                            {translation?.read_more || "Load More"}
-                        </button>
-                    )} */}
                     {currentPage < totalPage && (
                         <button
                             className="btn btn-primary btn-lg d-block mx-auto mt-4"
@@ -488,68 +382,6 @@ const Index = () => {
                 </div>
             </aside>
 
-
-
-            {/* <CRMEnquiry
-                showModal={show}
-                modalContent={modalContent}
-                handleCloseModal={handleCloseModal}
-                logData={modalContent?.log_data}
-                fecthPropertyCRMData={fecthPropertyCRMData}
-                enquiryId={modalContent?.enquery_id}
-                actionUpdateFunction={actionUpdateFunction} /> */}
-            {/* {console.log("show", show)} */}
-            {/* <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Modal Title</Modal.Title>
-                </Modal.Header>
-
-                <Modal.Body>
-
-                    <form>
-                        <div className="form-floating mb-4">
-                            <select className="form-select" id="floatingSelect" aria-label="Select Status">
-                                <option value="">select an option</option>
-                                {leadStatusList?.length > 0 &&
-                                    leadStatusList.map((status, i) => (
-                                        <option key={i} value={i}>{status}</option>
-                                    ))
-                                }
-                            </select>
-
-                            <label htmlFor="floatingSelect">Status</label>
-                        </div>
-
-                        <div className="form-floating mb-4">
-                            <input
-                                type="datetime-local"
-                                className="form-control"
-                                id="scheduleDate"
-                                aria-label="Schedule Date"
-                            />
-                            <label htmlFor="scheduleDate">Schedule Date</label>
-                        </div>
-
-                        <div className="form-floating mb-4">
-                            <textarea
-                                rows="4"
-                                className="form-control"
-                                id="remarks"
-                                placeholder="Remarks"
-                                style={{ minHeight: "80px" }}
-                            ></textarea>
-                            <label htmlFor="remarks">Remarks</label>
-                        </div>
-                    </form>
-                </Modal.Body>
-
-                <Modal.Footer>
-                    <button className="btn btn-secondary" onClick={handleClose}>
-                        Close
-                    </button>
-                    <Button variant="primary">Submit</Button>
-                </Modal.Footer>
-            </Modal> */}
             <ContactModal show={show} handleClose={handleClose} phone={activeModalData?.phone} email={activeModalData?.email} submitHandler={contactSave} />
         </DashboardLayout>
     );
