@@ -140,8 +140,8 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
 
         try {
             $query = User::where([
-                    ['users.status', '!=', config('constants.STATUS_DELETE')],
-                ]);
+                ['users.status', '!=', config('constants.STATUS_DELETE')],
+            ]);
 
             if ($term) {
                 $query->where('users.name', 'like', "%{$term}%");
@@ -242,5 +242,29 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
         return [
             'message' => 'category deleted successfully.',
         ];
+    }
+
+    public function getUserFullDetails($userId)
+    {
+        $user = User::with([
+            'userAdditional',
+            'agentAdditional',
+            'serviceArea',
+            'social',
+            'membership',
+        ])->where('id', $userId)->first();
+
+        if (!$user) {
+            return response()->json(['status' => false, 'message' => 'User not found'], 404);
+        }
+
+        if ($user) {
+            $user->image = !empty($user->image) ? asset('user_upload/profile_image/' . $user->image) : null;
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $user
+        ]);
     }
 }

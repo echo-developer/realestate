@@ -364,6 +364,7 @@ Route::middleware('admin_auth')->group(function () {
 
     Route::prefix('member')->controller(UserController::class)->group(function () {
         Route::get('/memberUser/{typeName?}', 'MemberUserView')->name('memberUser.view');
+        Route::get('/memberUser/all-details/{id?}', 'MemberUserAllDetails')->name('memberUser.allDetails');
         Route::post('/memberUSer-image', 'MemberUserImage')->name('MemberUserImage');
         Route::post('/delete-memberUSer-image', 'DeleteMemberUserImage')->name('MemberUser.deleteImage');
         Route::post('/member-add', 'AddMemberUser')->name('memberUser.add');

@@ -62,7 +62,7 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>User</th>                                           
+                                <th>User</th>
                                 <th>Intent</th>
                                 <th>City</th>
                                 <th>Budget</th>
@@ -75,10 +75,18 @@
                                 <tr>
                                     <td>{{ $act->user_name ?? 'N/A' }}</td>
                                     <td>
-                                        <span class="badge bg-info">{{ $act->post_for }}</span>
-                                        <br>
-                                        <span class="badge bg-success">{{ $act->property_type }}</span><br>
-                                        <span class="badge bg-warning"><small>{{ $act->property_for }}</small></span>
+                                        @if ($act->post_for)
+                                            <span
+                                                class="badge bg-info">{{ $act->post_for === 'Sale' ? 'Buy' : 'Rent' }}</span><br>
+                                        @endif
+
+                                        @if ($act->property_type)
+                                            <span class="badge bg-success">{{ $act->property_type }}</span><br>
+                                        @endif
+
+                                        @if ($act->property_for)
+                                            <span class="badge bg-warning"><small>{{ $act->property_for }}</small></span>
+                                        @endif
                                     </td>
                                     <td>{{ $act->city_id ?? 'N/A' }}</td>
                                     <td>
