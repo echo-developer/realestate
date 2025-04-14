@@ -1302,9 +1302,10 @@ const index = () => {
                                   ).name
                                 }
                               </h5>
-                              <div className="mb-3">
+                              <Row className="mb-3">
                                 {dynamicFieldLoading && (
                                   <>
+                                  <Col xs={12}>
                                     <div
                                       style={{
                                         width: "40px",
@@ -1320,16 +1321,17 @@ const index = () => {
 
                                     <style>
                                       {`
-                                 @keyframes spin {
-                                     0% {
-                                         transform: rotate(0deg);
-                                     }
-                                     100% {
-                                         transform: rotate(360deg);
-                                     }
-                                 }
-                             `}
+                                        @keyframes spin {
+                                            0% {
+                                                transform: rotate(0deg);
+                                            }
+                                            100% {
+                                                transform: rotate(360deg);
+                                            }
+                                        }
+                                      `}
                                     </style>
+                                    </Col>
                                   </>
                                 )}
                                 {!dynamicFieldLoading &&
@@ -1339,6 +1341,7 @@ const index = () => {
                                     ) {
                                       return (
                                         <>
+                                        <Col xs={6}>
                                           <Form.Check
                                             key={item?.furnish_id || i}
                                             inline
@@ -1355,6 +1358,7 @@ const index = () => {
                                               selectedAdvanceFilter
                                             ]?.includes(item?.furnish_id)}
                                           />
+                                        </Col>
                                         </>
                                       );
                                     } else if (
@@ -1362,6 +1366,7 @@ const index = () => {
                                     ) {
                                       return (
                                         <>
+                                        <Col xs={6}>
                                           <Form.Check
                                             key={item?.amenity_id}
                                             inline
@@ -1378,6 +1383,7 @@ const index = () => {
                                               selectedAdvanceFilter
                                             ]?.includes(item?.amenity_id)}
                                           />
+                                        </Col>
                                         </>
                                       );
                                     } else if (
@@ -1386,6 +1392,7 @@ const index = () => {
                                     ) {
                                       return (
                                         <>
+                                        <Col xs={6}>
                                           <Form.Check
                                             key={item?.status_id || i}
                                             inline
@@ -1402,11 +1409,12 @@ const index = () => {
                                               selectedAdvanceFilter
                                             ]?.includes(item?.status_id)}
                                           />
+                                        </Col>
                                         </>
                                       );
                                     }
                                   })}
-                              </div>
+                              </Row>
                             </div>
                           ) : selectedAdvanceFilter === "carpet_area" ? (
                             <>
@@ -1455,11 +1463,12 @@ const index = () => {
                                   )?.name
                                 }
                               </h5>
-                              <div className="mb-3">
+                              <Row className="mb-3">
                                 {subfilterOptions[selectedAdvanceFilter]?.map(
                                   (subFilter, i) => {
                                     return (
                                       <>
+                                      <Col xs={6}>
                                         <Form.Check
                                           key={subFilter.key}
                                           inline
@@ -1482,29 +1491,26 @@ const index = () => {
                                             selectedAdvanceFilter
                                           ]?.includes(subFilter?.key)}
                                         />
+                                      </Col>
                                       </>
                                     );
                                   }
                                 )}
-                              </div>
+                              </Row>
                             </div>
                           ) : (
                             selectedAdvanceFilter === "price_range" && <></>
                           )}
+                        
+                          <div className="text-end">
+                          <Button    
+                            variant="primary"                   
+                            onClick={() => handleViewProperty()}
+                          >
+                            {translation?.view_property || "View Property"}
+                          </Button>
+                          </div>
                         </div>
-                        <button
-                          type="button"
-                          className="btn btn-success"
-                          style={{
-                            height: "40px",
-                            position: "absolute",
-                            bottom: "20px",
-                            right: "20px",
-                          }}
-                          onClick={() => handleViewProperty()}
-                        >
-                          {translation?.view_property || "View Property"}
-                        </button>
                       </div>
                     )}
                 </form>

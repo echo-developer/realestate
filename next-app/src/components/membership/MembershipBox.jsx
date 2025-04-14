@@ -41,6 +41,7 @@ const translation = useTranslation();
 
 
     return (
+        <>
         <div className="ul-table-responsive membership d-none d-lg-block">
             <div className="ul-table">
                 <ul className="head">
@@ -145,6 +146,109 @@ const translation = useTranslation();
                 </ul>
             </div>
         </div>
+        <div className="ul-table-responsive membership d-lg-none">
+            <div className="ul-table">
+                <ul className="head">
+                    {planGroupNames.flatMap(planName =>
+                        planGroups[planName].map((plan, index) => (
+                            <li
+                                key={`${planName}-${plan.validity_days}`}
+                                className={getPlanColumnClass(planName, index)}
+                            >
+                                {planName}
+                                {planName === 'Gold' && index === 0 && (
+                                    <span
+                                        className="material-icons-outlined"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        style={{ verticalAlign: "sub", cursor: "default" }}
+                                        data-bs-original-title="Recommended"
+                                    >
+                                    </span>
+                                )}
+                                <div className="small">{plan.validity_days} days</div>
+                            </li>
+                        ))
+                    )}
+                </ul>
+
+                {/* Price Row */}
+                <ul>
+                    {planGroupNames.flatMap(planName =>
+                        planGroups[planName].map(plan => (
+                            <li key={`price-${planName}-${plan.validity_days}`}>
+                                {shouldShowDiscount(plan) ? (
+                                    <>
+                                        <strike>{formatPrice(plan.price)}</strike>
+                                        <span className="badge bg-green ms-1">{parseFloat(plan.discount).toFixed(0)}% OFF</span>
+
+                                        <br />
+                                        <span className="text-price">{formatPrice(plan.discounted_price)}</span>
+                                    </>
+                                ) : (
+                                    <span className="text-price">{formatPrice(plan.price)}</span>
+                                )}
+                            </li>
+                        ))
+                    )}
+                </ul>
+
+                {/* Feature Rows */}
+                {allFeatures.map(feature => (
+                    <ul key={feature}>
+                        <li>{formatFeatureName(feature)}</li>
+                        {planGroupNames.flatMap(planName =>
+                            planGroups[planName].map(plan => {
+                                const featureValue = plan.features[feature];
+                                return (
+                                    <li key={`${planName}-${plan.validity_days}-${feature}`}>
+                                        {typeof featureValue === 'string' ? (
+                                            featureValue === 'Y' || featureValue === 'N' ? (
+                                                featureValue === 'Y' ? (
+                                                    <i className="material-icons-outlined text-green">check</i>
+                                                ) : (
+                                                    <i className="material-icons-outlined text-danger">close</i>
+                                                )
+                                            ) : ( 
+                                                featureValue.trim() === '' ? '-' : featureValue
+                                            )
+                                        ) : featureValue === null || featureValue === undefined ? (
+                                            'Unlimited'
+                                        ) : featureValue === 0 ? (
+                                            '-'
+                                        ) : (
+                                            featureValue
+                                        )}
+                                    </li>
+                                );
+                            })
+                        )}
+                    </ul>
+                ))}
+
+
+                {/* Select Buttons */}
+                <ul>
+                    <li>&nbsp;</li>
+                    {planGroupNames.flatMap(planName =>
+                        planGroups[planName].map((plan, index) => (
+                            <li key={`select-${planName}-${plan.validity_days}`}>
+                                <a
+                                    className={`btn btn-sm btn-success ${planName === 'Gold' ? 'btn-outline-gold' :
+                                            planName === 'Platinum' ? 'btn-outline-platinum' : 'btn-outline-plan-name'
+                                        } w-75`}
+                                    role="button"
+                                    onClick={() => handleSelectPlan(plan)}
+                                >
+                                    {translation?.select || "SELECT"}
+                                </a>
+                            </li>
+                        ))
+                    )}
+                </ul>
+            </div>
+        </div>
+        </>
     )
 }
 
