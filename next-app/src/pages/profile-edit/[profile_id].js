@@ -9,11 +9,13 @@ import { X } from "lucide-react";
 import useTranslation from "@/hooks/useTranslation";
 
 import {
+  Button,
   Form,
   Row,
   Col,
   ListGroup,
   FloatingLabel,
+  Card
 } from "react-bootstrap";
 
 const ProfileForm = () => {
@@ -268,515 +270,519 @@ const ProfileForm = () => {
         <h1 className="h4 text-primary mb-4">
           {translation?.profile_update || "Profile Update"}
         </h1>
-        <form
-          className="authentication-form"
-          autoComplete="off"
-          onSubmit={handleSubmit}
-        >
-          
-            {/* Common Fields */}
-            <Row>
-              {/* Name */}
-              <div className="col-md-6 col-12">
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label={
-                    translation?.enter_your_name || "Enter your name"
-                  }
-                  className="mb-4"
-                >
-                  <Form.Control
-                    name="name"
-                    placeholder={
-                      translation?.enter_your_name || "Enter your name"
-                    }
-                    value={formData.name}
-                    onChange={handleChange}
-                  />
-                  {errors.name && (
-                    <small className="text-danger">{errors.name}</small>
-                  )}
-                </FloatingLabel>
-              </div>
-
-              {/* Email */}
-              <div className="col-md-6 col-12">
-                <FloatingLabel
-                    controlId="floatingInput"
-                    label={
-                      translation?.your_email_address || "Your email address"
-                    }
-                    className="mb-4"
-                  >
-                  <Form.Control
-                    type="email"
-                    name="email"
-                    placeholder={
-                      translation?.your_email_address || "Your email address"
-                    }
-                    value={formData.email}
-                    onChange={handleChange}
-                  />
-                  {errors.email && (
-                    <small className="text-danger">{errors.email}</small>
-                  )}
-                </FloatingLabel>
-              </div>
-
-              {/* Phone Number */}
-              <div className="col-md-6 col-12">
-                <div className="input-group mb-4">                  
-                  <FloatingLabel controlId="floatingSelect" label={translation?.code || "Code"}
-                  style={{maxWidth: '120px'}}>
-                    <Form.Select
-                      name="phone_code"
-                      value={formData.phone_code}
-                      onChange={handleChange}
-                      
-                    >
-                      <option value="">{translation?.code || "Code"}</option>
-                      <option value="IND +91">IND +91</option>
-                      <option value="+71">+71</option>
-                      <option value="+81">+81</option>
-                      <option value="+30">+30</option>
-                    </Form.Select>
-                  </FloatingLabel>
-                
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label={
-                      translation?.enter_your_phone_number ||
-                      "Enter your phone number"
-                    }
-                  >
-                    <Form.Control
-                      type="text"
-                      name="phone"
-                      placeholder={
-                        translation?.enter_your_phone_number ||
-                        "Enter your phone number"
+        <Card>
+          <Card.Body className="pt-4">
+            <form
+              className="authentication-form"
+              autoComplete="off"
+              onSubmit={handleSubmit}
+            >
+              
+                {/* Common Fields */}
+                <Row>
+                  {/* Name */}
+                  <div className="col-md-6 col-12">
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label={
+                        translation?.enter_your_name || "Enter your name"
                       }
-                      value={formData.phone}
-                      onChange={handleChange}
-                    />
-                    {errors.phone && (
-                      <small className="text-danger">{errors.phone}</small>
-                    )}
-                  </FloatingLabel>                  
-                </div>
-              </div>
+                      className="mb-4"
+                    >
+                      <Form.Control
+                        name="name"
+                        placeholder={
+                          translation?.enter_your_name || "Enter your name"
+                        }
+                        value={formData.name}
+                        onChange={handleChange}
+                      />
+                      {errors.name && (
+                        <small className="text-danger">{errors.name}</small>
+                      )}
+                    </FloatingLabel>
+                  </div>
 
-              {/* WhatsApp Number */}
-              <div className="col-md-6 col-12">
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label={
-                    translation?.enter_your_whatsapp_number || "Enter your WhatsApp number"
-                  }
-                  className="mb-4"
-                >
-                  <Form.Control
-                    type="text"
-                    name="whatsapp"
-                    placeholder={
-                      translation?.enter_your_whatsapp_number ||
-                      "Enter your WhatsApp number"
-                    }
-                    value={formData.whatsapp}
-                    onChange={handleChange}
-                  />
-                </FloatingLabel>
-              </div>
-
-              {/* Address */}
-              <div className="col-md-6 col-12">
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label={
-                    translation?.enter_your_address || "Enter your address"
-                  }
-                  className="mb-4"
-                >
-                  <Form.Control
-                    type="text"
-                    name="address"
-                    placeholder={
-                      translation?.enter_your_address || "Enter your address"
-                    }
-                    value={formData.address}
-                    onChange={handleChange}
-                  />
-                </FloatingLabel>
-              </div>
-
-              {/* City */}
-              <div className="col-md-6 col-12">
-                <FloatingLabel className="mb-4" controlId="floatingSelect" label={translation?.select_city || "Select City"}>
-                  <Form.Select
-                    name="city_id"
-                    value={formData.city_id}
-                    onChange={handleChange}
-                  >
-                    <option value="">
-                      {translation?.select_city || "Select City"}{" "}
-                    </option>
-                    {userData?.cities?.map((city) => (
-                      <option
-                        key={city?.city_id}
-                        value={city?.city_id.toString()}
+                  {/* Email */}
+                  <div className="col-md-6 col-12">
+                    <FloatingLabel
+                        controlId="floatingInput"
+                        label={
+                          translation?.your_email_address || "Your email address"
+                        }
+                        className="mb-4"
                       >
-                        {city?.name}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </FloatingLabel>
-              </div>
+                      <Form.Control
+                        type="email"
+                        name="email"
+                        placeholder={
+                          translation?.your_email_address || "Your email address"
+                        }
+                        value={formData.email}
+                        onChange={handleChange}
+                      />
+                      {errors.email && (
+                        <small className="text-danger">{errors.email}</small>
+                      )}
+                    </FloatingLabel>
+                  </div>
 
-              {/* Website Title */}
-              <div className="col-md-6 col-12">
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label={translation?.website_title ||"Website Title"}
-                  className="mb-4"
-                >
-                  <Form.Control
-                    type="text"
-                    name="website_title"
-                    placeholder={
-                      translation?.enter_your_website_title ||
-                      "Enter your website title"
-                    }
-                    value={formData.website_title}
-                    onChange={handleChange}
-                  />
-                </FloatingLabel>
-              </div>
+                  {/* Phone Number */}
+                  <div className="col-md-6 col-12">
+                    <div className="input-group mb-4">                  
+                      <FloatingLabel controlId="floatingSelect" label={translation?.code || "Code"}
+                      style={{maxWidth: '120px'}}>
+                        <Form.Select
+                          name="phone_code"
+                          value={formData.phone_code}
+                          onChange={handleChange}
+                          
+                        >
+                          <option value="">{translation?.code || "Code"}</option>
+                          <option value="IND +91">IND +91</option>
+                          <option value="+71">+71</option>
+                          <option value="+81">+81</option>
+                          <option value="+30">+30</option>
+                        </Form.Select>
+                      </FloatingLabel>
+                    
+                      <FloatingLabel
+                        controlId="floatingInput"
+                        label={
+                          translation?.enter_your_phone_number ||
+                          "Enter your phone number"
+                        }
+                      >
+                        <Form.Control
+                          type="text"
+                          name="phone"
+                          placeholder={
+                            translation?.enter_your_phone_number ||
+                            "Enter your phone number"
+                          }
+                          value={formData.phone}
+                          onChange={handleChange}
+                        />
+                        {errors.phone && (
+                          <small className="text-danger">{errors.phone}</small>
+                        )}
+                      </FloatingLabel>                  
+                    </div>
+                  </div>
 
-              {/* Website URL */}
-              <div className="col-md-6 col-12">
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label={translation?.website_url ||"Website URL"}
-                  className="mb-4"
-                >
-                  <Form.Control
-                    type="text"
-                    name="website_url"
-                    placeholder={
-                      translation?.enter_your_website_url ||
-                      "Enter your website URL"
-                    }
-                    value={formData.website_url}
-                    onChange={handleChange}
-                  />
-                  {errors.website_url && (
-                    <small className="text-danger">{errors.website_url}</small>
-                  )}
-                </FloatingLabel>
-              </div>
-            </Row>
-            {userType === "A" && (
+                  {/* WhatsApp Number */}
+                  <div className="col-md-6 col-12">
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label={
+                        translation?.enter_your_whatsapp_number || "Enter your WhatsApp number"
+                      }
+                      className="mb-4"
+                    >
+                      <Form.Control
+                        type="text"
+                        name="whatsapp"
+                        placeholder={
+                          translation?.enter_your_whatsapp_number ||
+                          "Enter your WhatsApp number"
+                        }
+                        value={formData.whatsapp}
+                        onChange={handleChange}
+                      />
+                    </FloatingLabel>
+                  </div>
 
-              <>
-              <Row>
-                <div className="col-md-6 col-12">
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label={translation?.company_name || "Company Name"}
-                    className="mb-4"
-                  >
-                    <Form.Control
-                      type="text"
-                      name="company_name"
-                      placeholder={translation?.company_name || "Company Name"}
-                      value={formData.company_name}
-                      onChange={handleChange}
-                    />
-                  </FloatingLabel>                  
-                </div>
-                <div className="col-md-6 col-12 mb-4">
-                  {/* File Upload Label */}
-                  <label
-                    htmlFor="agent_document"
-                    style={{
-                      display: "block",
-                      background: "#f8f9fa",
-                      border: "1px solid #ced4da",
-                      padding: "10px",
-                      borderRadius: "5px",
-                      textAlign: "center",
-                      cursor: "pointer",
-                      color: "#6c757d",
-                    }}
-                  >
-                    {uploadedFile
-                      ? uploadedFile.name
-                      : `${translation?.upload_document ||"Upload Document (PDF, DOC, JPG, PNG)" }`}
-                  </label>
+                  {/* Address */}
+                  <div className="col-md-6 col-12">
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label={
+                        translation?.enter_your_address || "Enter your address"
+                      }
+                      className="mb-4"
+                    >
+                      <Form.Control
+                        type="text"
+                        name="address"
+                        placeholder={
+                          translation?.enter_your_address || "Enter your address"
+                        }
+                        value={formData.address}
+                        onChange={handleChange}
+                      />
+                    </FloatingLabel>
+                  </div>
 
-                  {/* Hidden File Input */}
-                  <input
-                    type="file"
-                    id="agent_document"
-                    name="agent_document"
-                    style={{ display: "none" }}
-                    accept=".pdf,.doc,.docx,.jpg,.png"
-                    onChange={handleFileUpload}
-                  />
-
-                  {/* Preview Section */}
-                  {preview && (
-                    <div className="mt-2 d-flex align-items-center gap-2">
-                      {preview.split(".").pop().toLowerCase() === "pdf" ? (
-                        // Show PDF Preview
-                        <div className="d-flex align-items-center">
-                          <i
-                            className="bi bi-file-earmark-pdf text-danger"
-                            style={{ fontSize: "2rem" }}
-                          ></i>
-                          <p className="mb-0 ms-2">{uploadedFile?.name}</p>
-                          <a
-                            href={preview}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn btn-primary btn-sm ms-2"
+                  {/* City */}
+                  <div className="col-md-6 col-12">
+                    <FloatingLabel className="mb-4" controlId="floatingSelect" label={translation?.select_city || "Select City"}>
+                      <Form.Select
+                        name="city_id"
+                        value={formData.city_id}
+                        onChange={handleChange}
+                      >
+                        <option value="">
+                          {translation?.select_city || "Select City"}{" "}
+                        </option>
+                        {userData?.cities?.map((city) => (
+                          <option
+                            key={city?.city_id}
+                            value={city?.city_id.toString()}
                           >
-                            {translation?.view || "View"}
-                          </a>
-                          <button
-                            type="button"
-                            className="btn btn-danger btn-sm ms-2"
-                            onClick={removeFile}
-                          >
-                            <X size={14} />
-                          </button>
-                        </div>
-                      ) : (
-                        // Show Image Preview
-                        <div className="position-relative">
-                          <img
-                            src={preview}
-                            alt="Preview"
-                            style={{
-                              maxWidth: "100px",
-                              height: "auto",
-                              borderRadius: "5px",
-                            }}
-                          />
-                          <button
-                            type="button"
-                            className="btn btn-danger btn-sm position-absolute"
-                            style={{
-                              top: "-5px",
-                              right: "-5px",
-                              borderRadius: "50%",
-                              padding: "2px 5px",
-                            }}
-                            onClick={removeFile}
-                          >
-                            <X size={14} />
-                          </button>
+                            {city?.name}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </FloatingLabel>
+                  </div>
+
+                  {/* Website Title */}
+                  <div className="col-md-6 col-12">
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label={translation?.website_title ||"Website Title"}
+                      className="mb-4"
+                    >
+                      <Form.Control
+                        type="text"
+                        name="website_title"
+                        placeholder={
+                          translation?.enter_your_website_title ||
+                          "Enter your website title"
+                        }
+                        value={formData.website_title}
+                        onChange={handleChange}
+                      />
+                    </FloatingLabel>
+                  </div>
+
+                  {/* Website URL */}
+                  <div className="col-md-6 col-12">
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label={translation?.website_url ||"Website URL"}
+                      className="mb-4"
+                    >
+                      <Form.Control
+                        type="text"
+                        name="website_url"
+                        placeholder={
+                          translation?.enter_your_website_url ||
+                          "Enter your website URL"
+                        }
+                        value={formData.website_url}
+                        onChange={handleChange}
+                      />
+                      {errors.website_url && (
+                        <small className="text-danger">{errors.website_url}</small>
+                      )}
+                    </FloatingLabel>
+                  </div>
+                </Row>
+                {userType === "A" && (
+
+                  <>
+                  <Row>
+                    <div className="col-md-6 col-12">
+                      <FloatingLabel
+                        controlId="floatingInput"
+                        label={translation?.company_name || "Company Name"}
+                        className="mb-4"
+                      >
+                        <Form.Control
+                          type="text"
+                          name="company_name"
+                          placeholder={translation?.company_name || "Company Name"}
+                          value={formData.company_name}
+                          onChange={handleChange}
+                        />
+                      </FloatingLabel>                  
+                    </div>
+                    <div className="col-md-6 col-12 mb-4">
+                      {/* File Upload Label */}
+                      <label
+                        htmlFor="agent_document"
+                        style={{
+                          display: "block",
+                          background: "#f8f9fa",
+                          border: "1px solid #ced4da",
+                          padding: "10px",
+                          borderRadius: "5px",
+                          textAlign: "center",
+                          cursor: "pointer",
+                          color: "#6c757d",
+                        }}
+                      >
+                        {uploadedFile
+                          ? uploadedFile.name
+                          : `${translation?.upload_document ||"Upload Document (PDF, DOC, JPG, PNG)" }`}
+                      </label>
+
+                      {/* Hidden File Input */}
+                      <input
+                        type="file"
+                        id="agent_document"
+                        name="agent_document"
+                        style={{ display: "none" }}
+                        accept=".pdf,.doc,.docx,.jpg,.png"
+                        onChange={handleFileUpload}
+                      />
+
+                      {/* Preview Section */}
+                      {preview && (
+                        <div className="mt-2 d-flex align-items-center gap-2">
+                          {preview.split(".").pop().toLowerCase() === "pdf" ? (
+                            // Show PDF Preview
+                            <div className="d-flex align-items-center">
+                              <i
+                                className="bi bi-file-earmark-pdf text-danger"
+                                style={{ fontSize: "2rem" }}
+                              ></i>
+                              <p className="mb-0 ms-2">{uploadedFile?.name}</p>
+                              <a
+                                href={preview}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn btn-primary btn-sm ms-2"
+                              >
+                                {translation?.view || "View"}
+                              </a>
+                              <button
+                                type="button"
+                                className="btn btn-danger btn-sm ms-2"
+                                onClick={removeFile}
+                              >
+                                <X size={14} />
+                              </button>
+                            </div>
+                          ) : (
+                            // Show Image Preview
+                            <div className="position-relative">
+                              <img
+                                src={preview}
+                                alt="Preview"
+                                style={{
+                                  maxWidth: "100px",
+                                  height: "auto",
+                                  borderRadius: "5px",
+                                }}
+                              />
+                              <button
+                                type="button"
+                                className="btn btn-danger btn-sm position-absolute"
+                                style={{
+                                  top: "-5px",
+                                  right: "-5px",
+                                  borderRadius: "50%",
+                                  padding: "2px 5px",
+                                }}
+                                onClick={removeFile}
+                              >
+                                <X size={14} />
+                              </button>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
-                  )}
-                </div>
-                <div className="col-md-6 col-12">
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label={
-                      translation?.license_number || "License Number"
-                    }
-                    className="mb-4"
-                  >
-                    <Form.Control
-                      type="text"
-                      name="license_number"
-                      placeholder={translation?.license_number || "License Number"}
-                      value={formData.license_number}
-                      onChange={handleChange}
-                    />
-                  </FloatingLabel>
-                </div>
-                <div className="col-md-6 col-12">
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label={
-                      translation?.experience_years || "Experience (Years)"
-                    }
-                    className="mb-4"
-                  >
-                    <Form.Control
-                      type="text"
-                      name="experience_years"
-                      placeholder={translation?.experience_years || "Experience (Years)"}
-                      value={formData.experience_years}
-                      onChange={handleChange}
-                    />
-                  </FloatingLabel>
-                </div>
-                <div className="col-md-6 col-12">
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label={
-                      translation?.specialization || "Specialization"
-                    }
-                    className="mb-4"
-                  >
-                    <Form.Control
-                      type="text"
-                      name="specialization"
-                      placeholder={translation?.specialization || "Specialization"}
-                      value={formData.specialization}
-                      onChange={handleChange}
-                    />
-                  </FloatingLabel>
-                </div>
-                <div className="col-md-6 col-12">
-                  <label className="form-label">
-                    {translation?.broker_type || "Broker Type"}
-                  </label>
-                  {['radio'].map((type) => (
-                  <div key={`inline-${type}`} className="mb-3">
-                    
-                    <Form.Check
-                      inline
-                      type={type}
-                      label={translation?.independent || "Independent"}
-                      name="broker_type"
-                      value="I"
-                      checked={formData.broker_type === "I"}
-                      onChange={handleChange}
-                      id={`broker_type_1`}
-                    />                    
-                    <Form.Check
-                      inline
-                      type={type}
-                      label={translation?.agency || "Agency"}
-                      name="broker_type"
-                      value="A"
-                      checked={formData.broker_type === "A"}
-                      onChange={handleChange}
-                      id={`broker_type_2`}
-                    />                                          
-                    <Form.Check
-                        inline
-                        type={type}
-                        label={translation?.franchise || "Franchise"}
-                        name="broker_type"
-                        value="F"
-                        checked={formData.broker_type === "F"}
-                        onChange={handleChange}
-                        id={`broker_type_3`}
-                      />                      
-                  </div>
-                  ))}
-                </div>
+                    <div className="col-md-6 col-12">
+                      <FloatingLabel
+                        controlId="floatingInput"
+                        label={
+                          translation?.license_number || "License Number"
+                        }
+                        className="mb-4"
+                      >
+                        <Form.Control
+                          type="text"
+                          name="license_number"
+                          placeholder={translation?.license_number || "License Number"}
+                          value={formData.license_number}
+                          onChange={handleChange}
+                        />
+                      </FloatingLabel>
+                    </div>
+                    <div className="col-md-6 col-12">
+                      <FloatingLabel
+                        controlId="floatingInput"
+                        label={
+                          translation?.experience_years || "Experience (Years)"
+                        }
+                        className="mb-4"
+                      >
+                        <Form.Control
+                          type="text"
+                          name="experience_years"
+                          placeholder={translation?.experience_years || "Experience (Years)"}
+                          value={formData.experience_years}
+                          onChange={handleChange}
+                        />
+                      </FloatingLabel>
+                    </div>
+                    <div className="col-md-6 col-12">
+                      <FloatingLabel
+                        controlId="floatingInput"
+                        label={
+                          translation?.specialization || "Specialization"
+                        }
+                        className="mb-4"
+                      >
+                        <Form.Control
+                          type="text"
+                          name="specialization"
+                          placeholder={translation?.specialization || "Specialization"}
+                          value={formData.specialization}
+                          onChange={handleChange}
+                        />
+                      </FloatingLabel>
+                    </div>
+                    <div className="col-md-6 col-12">
+                      <label className="form-label">
+                        {translation?.broker_type || "Broker Type"}
+                      </label>
+                      {['radio'].map((type) => (
+                      <div key={`inline-${type}`} className="mb-3">
+                        
+                        <Form.Check
+                          inline
+                          type={type}
+                          label={translation?.independent || "Independent"}
+                          name="broker_type"
+                          value="I"
+                          checked={formData.broker_type === "I"}
+                          onChange={handleChange}
+                          id={`broker_type_1`}
+                        />                    
+                        <Form.Check
+                          inline
+                          type={type}
+                          label={translation?.agency || "Agency"}
+                          name="broker_type"
+                          value="A"
+                          checked={formData.broker_type === "A"}
+                          onChange={handleChange}
+                          id={`broker_type_2`}
+                        />                                          
+                        <Form.Check
+                            inline
+                            type={type}
+                            label={translation?.franchise || "Franchise"}
+                            name="broker_type"
+                            value="F"
+                            checked={formData.broker_type === "F"}
+                            onChange={handleChange}
+                            id={`broker_type_3`}
+                          />                      
+                      </div>
+                      ))}
+                    </div>
 
-                <Col className="col-12">
-                  <BusinessAddressForm
-                    addresses={addresses}
-                    setAddresses={setAddresses}
+                    <Col className="col-12">
+                      <BusinessAddressForm
+                        addresses={addresses}
+                        setAddresses={setAddresses}
+                      />
+                    </Col>
+
+                    <div className="col-md-6 col-12">
+                      <FloatingLabel
+                          controlId="floatingInput"
+                          label={
+                            translation?.bussiness_phone || "Business Phone"
+                          }
+                          className="mb-4"
+                        >
+                          <Form.Control
+                          type="text"
+                          name="business_phone"
+                          placeholder={translation?.bussiness_phone || "Business Phone" }
+                          value={formData.business_phone}
+                          onChange={handleChange}
+                        />
+                      </FloatingLabel>
+                    </div>
+                    <div className="col-md-6 col-12">
+                      <FloatingLabel
+                          controlId="floatingInput"
+                          label={translation?.business_email ||"Business Email" }
+                          className="mb-4"
+                        >
+                          <Form.Control
+                          type="text"
+                          name="business_email"
+                          className="form-control"
+                          placeholder={translation?.business_email ||"Business Email" }
+                          value={formData.business_email}
+                          onChange={handleChange}
+                        />
+                      </FloatingLabel>
+                    </div>
+                    <Col className="col-12">
+                      <SocialMediaLinks
+                        socialLinks={socialLinks}
+                        setSocialLinks={setSocialLinks}
+                      />
+                    </Col>                
+
+                    <Col className="col-sm-6 col-12">
+                      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                        <Form.Label>{translation?.opening_hours || "Opening Hours"}</Form.Label>
+                        <Form.Control 
+                          type="time"
+                          name="opening_hours"
+                          value={formData.opening_hours}
+                          placeholder=""
+                          onChange={handleChange}
+                        />
+                      </Form.Group>
+                    </Col>
+
+                    <Col className="col-sm-6 col-12">
+                      <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
+                        <Form.Label>{translation?.closing_hours || "Closing Hours"}</Form.Label>
+                        <Form.Control
+                          type="time" 
+                          name="closing_hours" 
+                          value={formData.closing_hours} 
+                          placeholder=""
+                          onChange={handleChange}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  </>
+                )}
+
+                {/* Description */}
+              
+                <FloatingLabel controlId="floatingTextarea2"
+                  label={translation?.comments ||"Comments"}
+                  className="mb-4"
+                  >
+                  <Form.Control
+                    as="textarea"
+                    name="description"
+                    placeholder={
+                      translation?.write_a_brief_description_about_yourself ||
+                      "Write a brief description about yourself"
+                    }
+                    rows="5"
+                    value={formData.description}
+                    onChange={handleChange}
+                    style={{ height: '100px' }}
                   />
-                </Col>
+                </FloatingLabel>              
+                
+              
 
-                <div className="col-md-6 col-12">
-                  <FloatingLabel
-                      controlId="floatingInput"
-                      label={
-                        translation?.bussiness_phone || "Business Phone"
-                      }
-                      className="mb-4"
-                    >
-                      <Form.Control
-                      type="text"
-                      name="business_phone"
-                      placeholder={translation?.bussiness_phone || "Business Phone" }
-                      value={formData.business_phone}
-                      onChange={handleChange}
-                    />
-                  </FloatingLabel>
-                </div>
-                <div className="col-md-6 col-12">
-                  <FloatingLabel
-                      controlId="floatingInput"
-                      label={translation?.business_email ||"Business Email" }
-                      className="mb-4"
-                    >
-                      <Form.Control
-                      type="text"
-                      name="business_email"
-                      className="form-control"
-                      placeholder={translation?.business_email ||"Business Email" }
-                      value={formData.business_email}
-                      onChange={handleChange}
-                    />
-                  </FloatingLabel>
-                </div>
-                <Col className="col-12">
-                  <SocialMediaLinks
-                    socialLinks={socialLinks}
-                    setSocialLinks={setSocialLinks}
-                  />
-                </Col>                
-
-                <Col className="col-sm-6 col-12">
-                  <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                    <Form.Label>{translation?.opening_hours || "Opening Hours"}</Form.Label>
-                    <Form.Control 
-                      type="time"
-                      name="opening_hours"
-                      value={formData.opening_hours}
-                      placeholder=""
-                      onChange={handleChange}
-                    />
-                  </Form.Group>
-                </Col>
-
-                <Col className="col-sm-6 col-12">
-                  <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
-                    <Form.Label>{translation?.closing_hours || "Closing Hours"}</Form.Label>
-                    <Form.Control
-                      type="time" 
-                      name="closing_hours" 
-                      value={formData.closing_hours} 
-                      placeholder=""
-                      onChange={handleChange}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-              </>
-            )}
-
-            {/* Description */}
-           
-            <FloatingLabel controlId="floatingTextarea2"
-              label={translation?.comments ||"Comments"}
-              className="mb-4"
-              >
-              <Form.Control
-                as="textarea"
-                name="description"
-                placeholder={
-                  translation?.write_a_brief_description_about_yourself ||
-                  "Write a brief description about yourself"
-                }
-                rows="5"
-                value={formData.description}
-                onChange={handleChange}
-                style={{ height: '100px' }}
-              />
-            </FloatingLabel>              
-            
-          
-
-          <div className="d-grid d-sm-block">
-            <button type="submit" className="btn btn-primary mb-2">
-              {translation?.update || "Update"}
-            </button>
-          </div>
-        </form>
+              <div className="d-grid d-sm-block">
+                <Button type="submit" variant="primary">
+                  {translation?.update || "Update"}
+                </Button>
+              </div>
+            </form>
+          </Card.Body>
+        </Card>
         </div>
       </div>
     </DashboardLayout>
