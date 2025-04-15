@@ -154,7 +154,7 @@ const Index = () => {
                           {review.name || review.user_name} ({review.user_relation})
                         </h5>
                         <p className="text-muted mb-1">
-                          <Calendar color="primary" size={12} />{" "}
+                          <span className="text-primary"><Calendar color="currentColor" size={12} style={{verticalAlign: 'inherit'}} /></span>{" "}
                           {new Date(review.created_at).toLocaleString()}
                         </p>
                         <p className="text-muted mb-1">{review.review_title}</p>
