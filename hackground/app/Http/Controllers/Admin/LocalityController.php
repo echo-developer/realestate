@@ -38,23 +38,21 @@ class LocalityController extends Controller
             ['lang' => $lang],
             null
         );
-
-
-
+        // echo "<pre>";
+        // print_r($data);exit;
         return view('Admin.Location.locality', compact('city_data', 'data'));
-        // 
     }
 
     public function AddLocality(Request $req)
     {
-
         // return response()->json($req);
-
         $langs = array_keys($req->input('name', []));
-
 
         $rules = [
             'city_id' => 'required',
+            'key'=> 'required',
+            'latitude'=> 'required',
+            'longitude'=> 'required',
             'status' => 'required|boolean',
         ];
 
@@ -71,7 +69,7 @@ class LocalityController extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
-        $validated['order'] = $req->order;
+        // $validated['order'] = $req->order;
 
         try {
             $response = $this->locality->createLocality($validated);
@@ -88,7 +86,6 @@ class LocalityController extends Controller
     {
 
         $data = $this->locality->getLocalityDetails($id);
-
         if ($data->isEmpty()) {
             return response()->json(['error' => 'Locality not found.'], 404);
         }
@@ -102,6 +99,9 @@ class LocalityController extends Controller
 
         $rules = [
             'city_id' => 'required',
+            'key'=> 'required',
+            'latitude'=> 'required',
+            'longitude'=> 'required',
             'status' => 'required|boolean',
         ];
 

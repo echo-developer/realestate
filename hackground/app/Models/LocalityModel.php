@@ -21,7 +21,9 @@ class LocalityModel extends Model
     {
         $localityId = DB::table($this->localityTable)->insertGetId([
             'city' => $data['city_id'],
-            'order' => $data['order'],
+            'locality_key' => $data['key'],
+            'latitude' => $data['latitude'],
+            'longitude' => $data['longitude'],
             'status' => $data['status'],
             'created_at' => now(),
             'updated_at' => now(),
@@ -54,7 +56,8 @@ class LocalityModel extends Model
             ->select(
                 $this->localityTable . '.locality_id',
                 $this->localityNamesTable . '.name',
-                $this->localityTable . '.order',
+                $this->localityTable . '.locality_key',
+                $this->localityTable . '.city',
                 $this->localityTable . '.status',
             );
 
@@ -76,7 +79,9 @@ class LocalityModel extends Model
                 $this->localityTable . '.city',
                 $this->localityNamesTable . '.name',
                 $this->localityTable . '.locality_id as locality_id',
-                $this->localityTable . '.order',
+                $this->localityTable . '.locality_key',
+                $this->localityTable . '.latitude',
+                $this->localityTable . '.longitude',
                 $this->localityTable . '.status',
                 $this->localityNamesTable . '.lang'
             )
@@ -92,7 +97,9 @@ class LocalityModel extends Model
         try {
             $LocalityData = [
                 'city' => $data['city_id'],
-                'order' => $data['order'],
+                'locality_key' => $data['key'],
+                'latitude' => $data['latitude'],
+                'longitude' => $data['longitude'],
                 'status' => $data['status'],
                 'updated_at' => now(),
             ];

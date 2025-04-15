@@ -85,7 +85,8 @@
                             <tr>
                                 <th style="width:5%">ID</th>
                                 <th style="width:25%"> Name</th>
-                                <th style="width:40%">Order</th>
+                                <th style="width:15%">Key</th>
+                                <th style="width:15%">City</th>
                                 <th style="width:20%">Status</th>
                                 <th style="min-width:80px;" class="text-right">Action</th>
                             </tr>
@@ -96,7 +97,8 @@
                                     <tr>
                                         <td>{{ $item->locality_id }}</td>
                                         <td>{{ $item->name }}</td>
-                                        <td>{{ $item->order }}</td>
+                                        <td>{{ $item->locality_key }}</td>
+                                        <td>{{ get_name_by_id('city_names','city_id',$item->city,'en') }}</td>
                                         <td>
                                             <input data-id="{{ $item->locality_id }}" class="status d-none" type="checkbox"
                                                 data-toggle="toggle" data-on="Active" data-off="Inactive"
@@ -181,17 +183,16 @@
                     <h5 class="modal-title" id="AddEditModalLabel"></h5>
 
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
 
                     <form id="formData">
                         <input type="text" class='d-none' id="localityId" name="localityId">
 
-
                         <div class="form-group">
-                            <label for="ufile">City Name</label>
+                            <label for="ufile">Select City</label>
                             <div class="input-group">
                                 <div class="custom-file">
                                     <select name="city_id" id="city_id" class="form-control">
@@ -220,11 +221,22 @@
                         @endforeach
 
                         <div class="form-group">
-                            <label for="Order">Order</label>
-                            <input type="Order" class="form-control" id="order" name="order" required>
-                            <div class="invalid-feedback" id="Order_error"></div>
+                            <label for="key">Key</label>
+                            <input type="text" class="form-control" id="key" name="key" required>
+                            <div class="invalid-feedback" id="key_error"></div>
                         </div>
 
+                        <div class="form-group">
+                            <label for="latitude">Latitude</label>
+                            <input type="number" class="form-control" id="latitude" name="latitude" required>
+                            <div class="invalid-feedback" id="latitude_error"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="longitude">Longitude</label>
+                            <input type="number" class="form-control" id="longitude" name="longitude" required>
+                            <div class="invalid-feedback" id="longitude_error"></div>
+                        </div>
 
                         <div class="form-group">
                             <label class="form-label">Status</label>
@@ -256,6 +268,9 @@
             var $formData = $('#formData');
             var $modalAction = $('#modal_action');
             var $localityId = $('#localityId');
+            var $localityKey = $('#key');
+            var $latitude = $('#latitude');
+            var $longitude = $('#longitude');
             var $order = $('#order');
             var $button = $('#button');
             var $modalLabel = $('#AddEditModalLabel');
@@ -329,8 +344,12 @@
                 $stateId.val('');
                 if (id) {
                     $.get(`{{ url('/locality/details') }}/${id}`, function(data) {
+                        console.log(data);
                         $localityId.val(data[0].locality_id);
                         $cityid.val(data[0].city);
+                        $latitude.val(data[0].latitude);
+                        $longitude.val(data[0].longitude);
+                        $localityKey.val(data[0].locality_key);
                         // fetchStates(data[0].country, data[0].state);
                         data.forEach(function(locality) {
                             $(`#name_${locality.lang}`).val(locality.name);
