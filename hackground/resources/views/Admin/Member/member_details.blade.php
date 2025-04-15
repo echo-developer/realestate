@@ -1,6 +1,6 @@
 @extends('Admin.layouts.app')
 @php
-    log_anything($data);
+    // log_anything($data);
     // log_anything($cities);
     $serviceAreas = $data->serviceArea;
     $social = $data->social;

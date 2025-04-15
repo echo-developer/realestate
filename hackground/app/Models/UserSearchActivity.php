@@ -26,12 +26,25 @@ class UserSearchActivity extends Model
     ];
 
     public $timestamps = true;
-    protected $appends = ['user_name'];
+    protected $appends = ['user_name', 'user_phone', 'user_email'];
 
     protected function userName(): Attribute
     {
         return Attribute::make(
             get: fn() => get_user_name($this->user_id)
+        );
+    }
+    protected function userPhone(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => User::find($this->user_id)?->phone
+        );
+    }
+
+    protected function userEmail(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => User::find($this->user_id)?->email
         );
     }
     protected function propertyType(): Attribute

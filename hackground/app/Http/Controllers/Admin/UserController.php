@@ -194,9 +194,6 @@ class UserController extends Controller
 
     public function SaveMemberDetails(Request $req)
     {
-        
-        log_anything($req->all());
-
         $user_id = $req->user_id;
         $user_type = $req->user_type;
 

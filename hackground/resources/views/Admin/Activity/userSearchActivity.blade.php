@@ -1,5 +1,5 @@
 @extends('Admin.layouts.app')
-{{-- {{ log_anything($data) }} --}}
+{{ log_anything($data) }}
 @section('content')
     <div class="body-page-loader d-none">
         <div class="loader">
@@ -73,7 +73,12 @@
                         <tbody>
                             @foreach ($data as $act)
                                 <tr>
-                                    <td>{{ $act->user_name ?? 'N/A' }}</td>
+                                    <td>
+                                        <a
+                                            href="{{ route('memberUser.allDetails', $act->user_id) }}">{{ $act->user_name ?? 'N/A' }}</a>
+                                        <br><small>{{ $act->user_email ?? 'N/A' }}</small>
+                                        <br><small>{{ $act->user_phone ?? 'N/A' }}</small>
+                                    </td>
                                     <td>
                                         @if ($act->post_for)
                                             <span
