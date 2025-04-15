@@ -123,7 +123,7 @@ const PropertyLandmarkComponent = ({ value, onChange, propertyData }) => {
                     <span className="input-group-text">meter</span>
                   </div>                  
                 </Col>
-                <Col className="col-sm-auto">
+                <Col xs="auto" className="col-sm-auto">
                   <Button 
                     className="btn btn-danger" 
                     onClick={() => decrement(key)}

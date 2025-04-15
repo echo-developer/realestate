@@ -189,39 +189,47 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
                 </Form.Group>               
                 <Form.Group className="mb-3">
                   <Form.Label className="form-label d-block">{translation?.overlooking || "Overlooking"}</Form.Label>
+                  <Row className="gx-3">
                   {propertyFeatures.map((feature) => (
-                    <Form.Check
-                      key={feature.key}
-                      type="checkbox"
-                      label={feature.value}
-                      id={feature.key}
-                      name={feature.key}
-                      checked={propertyData.overlooking.includes(feature.key)}
-                      onChange={handleChange}
-                      className="form-check-inline"
-                    />
+                    <Col xs={12} sm={6}>
+                      <Form.Check
+                        //inline
+                        key={feature.key}
+                        type="checkbox"
+                        label={feature.value}
+                        id={feature.key}
+                        name={feature.key}
+                        checked={propertyData.overlooking.includes(feature.key)}
+                        onChange={handleChange}                      
+                      />
+                    </Col>
                   ))}
+                  </Row>
                 </Form.Group>
                              
                 <Form.Group className="mb-4">
                   <Form.Label className="form-label d-block">{translation?.flooring_style || "Flooring Style"}</Form.Label>
+                  <Row className="gx-3">
                   {flooringOptions.map((feature) => (
-                    <Form.Check
-                      key={feature.key}
-                      type="checkbox"
-                      label={feature.value}
-                      name={feature.key}
-                      checked={propertyData.flooring_style.includes(
-                        feature.key
-                      )}
-                      onChange={handleChange}
-                      className="form-check-inline"
-                    />
+                    <Col xs={12} sm={6}>
+                      <Form.Check
+                        //inline
+                        key={feature.key}
+                        type="checkbox"
+                        label={feature.value}
+                        name={feature.key}
+                        checked={propertyData.flooring_style.includes(
+                          feature.key
+                        )}
+                        onChange={handleChange}
+                      />
+                    </Col>
                   ))}
+                  </Row>
                 </Form.Group>
                 
                 <Row className="gx-3">
-                  <Col>
+                  <Col xs={12} sm={6}>
                     <Form.Group className="form-floating mb-3">                      
                       <Form.Select
                         name="water_available"
@@ -238,7 +246,7 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
                       <Form.Label>{translation?.water_available || "Water Available"}</Form.Label>
                     </Form.Group>
                   </Col>
-                  <Col>
+                  <Col xs={12} sm={6}>
                     <Form.Group className="form-floating mb-3">                      
                       <Form.Select
                         name="electric_available"
@@ -257,7 +265,7 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
                   </Col>
                 </Row>
                 <Row className="gx-3">
-                  <Col>
+                  <Col xs={12} sm={6}>
                     <Form.Group className="form-floating mb-3">                      
                       <Form.Select
                         name="ownership_type"
@@ -274,7 +282,7 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
                       <Form.Label>{translation?.type_of_ownership || "Type of Ownership"}</Form.Label>
                     </Form.Group>
                   </Col>
-                  <Col>
+                  <Col xs={12} sm={6}>
                     <Form.Group className="form-floating mb-3">                      
                       <Form.Select
                         name="approved_by"
