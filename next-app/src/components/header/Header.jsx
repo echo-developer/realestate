@@ -873,7 +873,7 @@ const Header = () => {
                     </div>
                   </li>
                   {/* for sale  */}
-                  <li className="nav-item mega-menu">
+                  {/* <li className="nav-item mega-menu">
                     <a className="nav-link dropdown-toggle" role="button">
                       {translation?.sale || "sale"}
                     </a>
@@ -950,7 +950,7 @@ const Header = () => {
                         </li>
                       </ul>
                     </div>
-                  </li>
+                  </li> */}
                   {/* for agent  */}
                   <li className="nav-item">
                     <Link href="/agent-list" className="nav-link">
@@ -960,7 +960,7 @@ const Header = () => {
                   {translation ? (
                     validLogin ? (
                       <React.Fragment>
-                        <li className="nav-item">
+                        {/* <li className="nav-item">
                           <a className="nav-link dropdown-toggle" role="button">
                             {translation.help}
                           </a>
@@ -976,7 +976,7 @@ const Header = () => {
                               </a>
                             </li>
                           </ul>
-                        </li>
+                        </li> */}
                         <li className="nav-item me-lg-3 userInitial">
                           <Link
                             href={`/`}
