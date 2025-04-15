@@ -29,6 +29,18 @@ ChartJS.register(
 );
 
 const ChartsRow = ({ dashboardList }) => {
+  const doughnutOptions = {
+    plugins: {
+      legend: {
+        display: true,
+        position: "bottom",
+        labels: {
+          usePointStyle: true,
+          pointStyle: "circle", // ✅ circle bullets!
+        },
+      },
+    },
+  };
   const [doughnutData, setDoughnutData] = useState({
     labels: [],
     datasets: [
@@ -173,7 +185,7 @@ const ChartsRow = ({ dashboardList }) => {
                 className="mx-auto"
                 style={{ width: "320px", height: "320px" }}
               >
-                <Doughnut data={doughnutData} />
+                <Doughnut data={doughnutData} options={doughnutOptions} />
               </div>
             </div>
           </div>

@@ -45,6 +45,19 @@ const ProjectCompletionStatus = ({ projectData }) => {
 
   const completionPercentage = Object.values(completionData).flat().reduce((acc, field) => acc + field.weight, 0);
 
+  const doughnutOptions = {
+    plugins: {
+      legend: {
+        display: true,
+        position: "bottom",
+        labels: {
+          usePointStyle: true,
+          pointStyle: "circle", // ✅ circle bullets!
+        },
+      },
+    },
+  };
+
   const doughnutData = {
     labels: [`${translation?.completed || "Completed"}`, `${translation?.pending || "Pending"}`],
     datasets: [
@@ -56,15 +69,15 @@ const ProjectCompletionStatus = ({ projectData }) => {
   };
 
   return (
+    <>
+    <h5 className="text-uppercase">{translation?.completion_status || "Completion Status"}</h5>
     <div className="card">
-      <div className="card-header">
-        <h4>{translation?.completion_status || "Completion Status"}</h4>
-      </div>
+      
       <div className="card-body">
-        <p className="text-muted text-italic"> {translation?.get_more_response || "Get 5 times more response! Just add the following"}</p>
+        <p className="text-help"> {translation?.get_more_response || "Get 5 times more response! Just add the following"}</p>
         <div className="card-body">
-          <div className="mx-auto" style={{ width: "250px", height: "250px" }}>
-            <Doughnut data={doughnutData} />
+          <div className="mx-auto" style={{ width: "240px", height: "240px" }}>
+            <Doughnut data={doughnutData} options={doughnutOptions} />
           </div>
         </div>
         {Object.entries(completionData).map(([group, fields]) => (
@@ -86,6 +99,7 @@ const ProjectCompletionStatus = ({ projectData }) => {
         ))}
       </div>
     </div>
+    </>
   );
 };
 

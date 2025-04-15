@@ -867,7 +867,7 @@ const Index = () => {
   return (
     <DashboardLayout>
       <div className="col-lg col-12">
-        <div className="p-4">
+        <div className="p-lg-4 p-3">
           <h3>{translation?.edit_preview_project_ad || "Edit & Preview Your Project Ad"}</h3>
           <p>
           {translation?.edit_preview_note || "Modify your ad by clicking the appropriate Edit or Add link. Changes may take up to 24 hours to appear online."}
@@ -875,7 +875,7 @@ const Index = () => {
 
           <Row className="row">
             <Col className="col-lg-8">
-              <div className="list-container">
+              <div className="list-container mb-3 mb-lg-0">
                 {/* Basic Details */}
                 <h5 className="text-uppercase">{translation?.basic_details || "Basic Details"}</h5>
                 <ListGroup
