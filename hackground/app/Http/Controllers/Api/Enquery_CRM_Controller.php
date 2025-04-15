@@ -1247,6 +1247,8 @@ class Enquery_CRM_Controller extends Controller
                             'customer_name' => $item->customer_name,
                             'customer_phone' => $item->customer_phone,
                             'customer_email' => $item->customer_email,
+                            'remark_type' => $item->remark_type,
+                            'remarks' => $item->remarks,
                             'status' => $item->status,
                             'status_text' => $status_text,
                             'schedule_date' => $item->schedule_date,
@@ -1261,7 +1263,10 @@ class Enquery_CRM_Controller extends Controller
                             'customer_name' => $item->g_customer_name,
                             'customer_phone' => $item->g_customer_phone,
                             'customer_email' => $item->g_customer_email,
+                            'remark_type' => $item->remark_type,
+                            'remarks' => $item->remarks,
                             'status' => $item->status,
+                            'status_text' => $status_text,
                             'schedule_date' => $item->schedule_date,
                             'created_at' => $item->created_at
                         );
