@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Doughnut, Bar, Line } from "react-chartjs-2";
 import moment from "moment";
 import useTranslation from "@/hooks/useTranslation";
+import { Row, Col } from "react-bootstrap";
 
 import {
   Chart as ChartJS,
@@ -163,56 +164,56 @@ const ChartsRow = ({ dashboardList }) => {
 
   return (
     <>
-      <div className="row">
+      <Row>
         {/* Doughnut Chart */}
-        <div className="col-lg-4">
+        <Col lg={6} xs={12}>
           <div className="card border-0 mb-4">
             <div className="card-body">
               <div
                 className="mx-auto"
-                style={{ width: "250px", height: "250px" }}
+                style={{ width: "320px", height: "320px" }}
               >
                 <Doughnut data={doughnutData} />
               </div>
             </div>
           </div>
-        </div>
+        </Col>
 
         {/* Bar Chart 1 */}
-        <div className="col-lg-4">
+        <Col lg={6} xs={12}>
           <div className="card border-0 mb-4">
             <div className="card-body">
               <div
                 className="mx-auto"
-                style={{ width: "100%", height: "250px" }}
+                style={{ width: "100%", height: "320px" }}
               >
                 <Bar data={barData} options={chartOptions} />
               </div>
             </div>
           </div>
-        </div>
+        </Col>
 
         {/* Bar Chart 2 */}
-        <div className="col-lg-4">
+        <Col lg={6} xs={12}>
           <div className="card border-0 mb-4">
             <div className="card-body">
               <div
                 className="mx-auto"
                 style={{
                   width: "100%",
-                  height: "250px",
+                  height: "320px",
                 }}
               >
                 <Bar data={viewbarData} options={chartOptions} />
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </Col>
+      </Row>
 
-      <div className="row">
+      <Row>
         {/* Sale Summary */}
-        <aside className="col-lg-6">
+        <Col lg={6} xs={12}>
           <div className="card border-0 mb-4">
             <div className="card-header d-flex justify-content-between align-items-center">
               <h4 className="text-primary">{translation?.sale_summary || 'Sale Summary'}
@@ -234,10 +235,10 @@ const ChartsRow = ({ dashboardList }) => {
               <Line data={lineData} options={chartOptions} />
             </div>
           </div>
-        </aside>
+        </Col>
 
         {/* Active Buyers */}
-        <aside className="col-lg-6">
+        <Col lg={6} xs={12}>
           <div className="card border-0 mb-4">
             <div className="card-header d-flex justify-content-between align-items-center">
               <h4 className="text-primary">{translation?.active_buyers || 'Active Buyers'}
@@ -259,8 +260,8 @@ const ChartsRow = ({ dashboardList }) => {
               <Line data={lineData} options={chartOptions} />
             </div>
           </div>
-        </aside>
-      </div>
+        </Col>
+      </Row>
     </>
   );
 };
