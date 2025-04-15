@@ -11,27 +11,28 @@ export default function MobileFooter() {
   const isDetailsPage = pathname.startsWith('/property-details') || pathname.startsWith('/project-details');
   const { translation } = useTranslation();
 
-  if (isDetailsPage) {
-    return (
-      <footer className="small-footer special-footer p-3">
-        <div className="d-grid columns-2">
-          <button
-              className="btn btn-outline-primary"
-              onClick={() => setShowCommunicationModal(true)}
-            >
-            {translation?.get_phone_number || "Get Phone Number"}            
-          </button>
-          <button
-            className="btn btn-primary"
-            onClick={() => setShowCommunicationModal(true)}
-          >
-            {translation?.contact_now || "Contact Now"}
-          </button>
-        </div>
-      </footer>
-    );
-  }
+  // if (isDetailsPage) {
+  //   return (
+  //     <footer className="small-footer special-footer p-3">
+  //       <div className="d-grid columns-2">
+  //         <button
+  //             className="btn btn-outline-primary"
+  //             onClick={() => setShowCommunicationModal(true)}
+  //           >
+  //           {translation?.get_phone_number || "Get Phone Number"}            
+  //         </button>
+  //         <button
+  //           className="btn btn-primary"
+  //           onClick={() => setShowCommunicationModal(true)}
+  //         >
+  //           {translation?.contact_now || "Contact Now"}
+  //         </button>
+  //       </div>
+  //     </footer>
+  //   );
+  // }
 
+if(!isDetailsPage) {
   return (
     <footer className="small-footer">
       <ul>
@@ -43,4 +44,5 @@ export default function MobileFooter() {
       </ul>
     </footer>
   );
+}
 }

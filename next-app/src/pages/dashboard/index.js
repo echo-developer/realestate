@@ -442,7 +442,6 @@ const Index = () => {
                     )}
                     {customerReviews.length > 0 && customerReviews?.slice(0, 2).map((review) => (
                       <li key={review.id}>
-                        {console.log("review loop", review)}
                         <div className="d-flex">
                           <img
                             src={review?.image || '/assets/images/user.jpg'}

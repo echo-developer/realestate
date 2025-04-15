@@ -8,6 +8,9 @@ import { Helmet } from "react-helmet-async";
 import { toast } from "react-toastify";
 import { Modal } from "react-bootstrap";
 import useTranslation from "@/hooks/useTranslation";
+import { People, House, HouseAddFill, Person, Search } from 'react-bootstrap-icons';
+import Link from "next/link";
+
 
 const Index = () => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
@@ -18,7 +21,9 @@ const Index = () => {
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const memberId = GetMemberId();
   const translation = useTranslation();
-  const [userDetails,setUserDetails]=useState()
+  const [showCommunicationModal, setShowCommunicationModal] = useState(false);
+  const [showPhoneNumber, setShowPhoneNumber] = useState(false);
+  const [userDetails, setUserDetails] = useState()
   useEffect(() => {
     if (project_id) {
       FetchProjectDetails();
@@ -43,6 +48,7 @@ const Index = () => {
     }
   };
 
+
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
   const addRemoveFav = async (projectId, type) => {
@@ -61,12 +67,12 @@ const Index = () => {
           toast.success(res?.message);
           if (type === "similar_projects") {
             updateSimilarProjects(projectId);
-          } else if(type === "nearby_projects") {
+          } else if (type === "nearby_projects") {
             updateNearByProjects(projectId)
-          } else if(type === "other_projects") {
+          } else if (type === "other_projects") {
             updateOtherProjects(projectId)
           }
-           else {
+          else {
             setDetailsData((prev) => {
               return {
                 ...prev,
@@ -183,6 +189,10 @@ const Index = () => {
           loginCheck={isLogin}
           setShowLoginErrorModal={setShowLoginErrorModal}
           userDetails={userDetails}
+          showCommunicationModal={showCommunicationModal}
+          setShowCommunicationModal={setShowCommunicationModal}
+          showPhoneNumber={showPhoneNumber}
+          setShowPhoneNumber={setShowPhoneNumber}
         />
       ) : (
         <CommercialProjectDetails
@@ -195,7 +205,39 @@ const Index = () => {
           loginCheck={isLogin}
           setShowLoginErrorModal={setShowLoginErrorModal}
           userDetails={userDetails}
+          showCommunicationModal={showCommunicationModal}
+          setShowCommunicationModal={setShowCommunicationModal}
+          showPhoneNumber={showPhoneNumber}
+          setShowPhoneNumber={setShowPhoneNumber}
         />
+      )}
+      {detailsData?.is_my_project ? (
+        <footer className="small-footer special-footer p-3">
+          <div className="d-grid columns-2">
+            <button
+              className="btn btn-outline-primary"
+              onClick={() => setShowPhoneNumber(true)}
+            >
+              {showPhoneNumber ? `${projectDetails?.user_details?.phone_code + projectDetails?.user_details?.phone || "Not Available"}`: `${translation?.get_phone_number || "Get Phone Number"}`}
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={() => setShowCommunicationModal(true)}
+            >
+              {translation?.contact_now || "Contact Now"}
+            </button>
+          </div>
+        </footer>
+      ) : (
+        <footer className="small-footer">
+          <ul>
+            <li><Link href="/" className=''><House color="current" size={20} /> {translation?.home || "Home"} </Link></li>
+            <li><Link href="/property-listing" className=''><Search color="current" size={20} /> Search</Link></li>
+            <li><Link href="/postproperty" className='postAd-btn'><HouseAddFill color="white" size={32} /></Link></li>
+            <li><Link href="/agent-list" className=''><People color="current" size={20} /> Agents</Link></li>
+            <li><Link href="/dashboard" className=''><Person color="current" size={20} /> You</Link></li>
+          </ul>
+        </footer>
       )}
 
       {/* Modal for login error */}

@@ -21,6 +21,7 @@ import { Modal, Row, Col, Button } from "react-bootstrap";
 import useTranslation from "@/hooks/useTranslation";
 import DOMPurify from "dompurify";
 import useAdvertisement from "@/hooks/useAdvertisement";
+import { People, House, HouseAddFill, Person, Search } from 'react-bootstrap-icons';
 import { useAuth } from "@/context/AuthProvider";
 import {
   facingOptions,
@@ -30,7 +31,7 @@ import {
   propertyFeatures,
   flooringOptions,
 } from "@/components/post/PropertyData";
-import { CheckCircleFill, XCircleFill , Calendar2Check } from "react-bootstrap-icons";
+import { CheckCircleFill, XCircleFill, Calendar2Check } from "react-bootstrap-icons";
 
 const index = () => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
@@ -44,8 +45,10 @@ const index = () => {
   const [showAllAmenities, setShowAllAmenities] = useState(false);
   const [visible, setVisible] = useState(false);
   const [show, setShow] = useState(false);
+  const [showPhoneNumber, setShowPhoneNumber] = useState(false);
   const [viewMore, setViewMore] = useState(false);
   const memberId = GetMemberId();
+  const [showCommunicationModal, setShowCommunicationModal] = useState(false);
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const [userDetails, setUserDetails] = useState();
   const { adsData, logAdClick } = useAdvertisement(
@@ -215,11 +218,11 @@ const index = () => {
                 </div>
                 <div className="text-md-end" style={{ minWidth: "150px" }}>
                   <p className="mb-0 text-muted">
-                  {translation?.launched_in || "Launched In"}
+                    {translation?.launched_in || "Launched In"}
                   </p>
                   <h5 className="mb-0">
-                  {/* <Calendar2Check size={18}/> */}
-                  {useDateFormat(propertyDetails?.created_at) || "Date "}
+                    {/* <Calendar2Check size={18}/> */}
+                    {useDateFormat(propertyDetails?.created_at) || "Date "}
                   </h5>
                 </div>
               </div>
@@ -257,23 +260,23 @@ const index = () => {
                 </div>
                 {propertyDetails?.property_brochure_pdf && (
                   <div class="col-md-auto text-md-end">
-                  <div class="d-grid flex-column gap-3 h-100">
-                    <p>
-                      {translation?.download_brochure || "Download Brochure"}
-                      <Link
-                        target="_blank"
-                        href={`${propertyDetails?.property_brochure_pdf}`}
-                        className="ms-3"
-                      >
-                        <img
-                          src="/assets/images/icons/brochure.png"
-                          alt="Download Brochure"
-                          height="32"
-                        />
-                      </Link>
-                    </p>
+                    <div class="d-grid flex-column gap-3 h-100">
+                      <p>
+                        {translation?.download_brochure || "Download Brochure"}
+                        <Link
+                          target="_blank"
+                          href={`${propertyDetails?.property_brochure_pdf}`}
+                          className="ms-3"
+                        >
+                          <img
+                            src="/assets/images/icons/brochure.png"
+                            alt="Download Brochure"
+                            height="32"
+                          />
+                        </Link>
+                      </p>
+                    </div>
                   </div>
-                </div>
                 )}
 
                 <div className="col-md-auto text-md-end"></div>
@@ -350,9 +353,8 @@ const index = () => {
                               </span>
                               <h5>
                                 {propertyDetails?.property_features?.washroom ||
-                                  `${
-                                    translation?.not_available ||
-                                    "Not available"
+                                  `${translation?.not_available ||
+                                  "Not available"
                                   }`}
                               </h5>
                             </div>
@@ -375,10 +377,9 @@ const index = () => {
                             <h5>
                               {propertyDetails?.carpet_area
                                 ? `${propertyDetails?.carpet_area} ${propertyDetails?.unit_type}`
-                                : `${
-                                    translation?.not_available ||
-                                    "Not available"
-                                  }`}
+                                : `${translation?.not_available ||
+                                "Not available"
+                                }`}
                             </h5>
                           </div>
                         </div>
@@ -417,8 +418,7 @@ const index = () => {
                                 (item) =>
                                   item.key === propertyDetails?.facing_direction
                               )?.value ||
-                                `${
-                                  translation?.not_available || "Not available"
+                                `${translation?.not_available || "Not available"
                                 }`}
                             </h5>
                           </div>
@@ -505,12 +505,11 @@ const index = () => {
                           {propertyDetails?.parking_ability === "av"
                             ? "Available"
                             : propertyDetails?.parking_ability === "na"
-                            ? `${translation?.not_available || "Not available"}`
-                            : propertyDetails?.parking_ability === "uc"
-                            ? "Under Construction"
-                            : `${
-                                translation?.not_available || "Not available"
-                              }`}
+                              ? `${translation?.not_available || "Not available"}`
+                              : propertyDetails?.parking_ability === "uc"
+                                ? "Under Construction"
+                                : `${translation?.not_available || "Not available"
+                                }`}
                         </h5>
                       </Col>
 
@@ -521,8 +520,7 @@ const index = () => {
                         </p>
                         <h5>
                           {propertyDetails?.possession_status ||
-                            `${
-                              translation?.not_available || "Not available"
+                            `${translation?.not_available || "Not available"
                             }`}{" "}
                         </h5>
                       </Col>
@@ -554,8 +552,7 @@ const index = () => {
                             </p>
                             <h5>
                               {propertyDetails?.main_road_facing ||
-                                `${
-                                  translation?.not_available || "Not available"
+                                `${translation?.not_available || "Not available"
                                 }`}
                             </h5>
                           </Col>
@@ -565,8 +562,7 @@ const index = () => {
                             </p>
                             <h5>
                               {propertyDetails?.flats_per_floor ||
-                                `${
-                                  translation?.not_available || "Not available"
+                                `${translation?.not_available || "Not available"
                                 }`}
                             </h5>
                           </Col>
@@ -577,8 +573,7 @@ const index = () => {
                             </p>
                             <h5>
                               {propertyDetails?.lifts_in_tower ||
-                                `${
-                                  translation?.not_available || "Not available"
+                                `${translation?.not_available || "Not available"
                                 }`}
                             </h5>
                           </Col>
@@ -593,8 +588,7 @@ const index = () => {
                                   item.key ===
                                   propertyDetails?.water_availability
                               )?.value ||
-                                `${
-                                  translation?.not_available || "Not available"
+                                `${translation?.not_available || "Not available"
                                 }`}
                             </h5>
                           </Col>
@@ -608,8 +602,7 @@ const index = () => {
                                 (item) =>
                                   item.key === propertyDetails?.electricity
                               )?.value ||
-                                `${
-                                  translation?.not_available || "Not available"
+                                `${translation?.not_available || "Not available"
                                 }`}
                             </h5>
                           </Col>
@@ -623,29 +616,27 @@ const index = () => {
                       onClick={() => setViewMore(!viewMore)}
                     >
                       {viewMore
-                        ? `${
-                            translation?.view_less_details ||
-                            "View Less Details"
-                          }`
-                        : `${
-                            translation?.view_more_details ||
-                            "View More Details"
-                          }`}{" "}
+                        ? `${translation?.view_less_details ||
+                        "View Less Details"
+                        }`
+                        : `${translation?.view_more_details ||
+                        "View More Details"
+                        }`}{" "}
                       <i
                         className={`bi bi-chevron-${viewMore ? "up" : "down"}`}
                       ></i>
                     </Button>
 
                     <h4 className="mb-3 text-primary">{
-                            translation?.description ||
-                            "Description"
-                          }</h4>
+                      translation?.description ||
+                      "Description"
+                    }</h4>
                     <div
                       dangerouslySetInnerHTML={{
                         __html: propertyDetails?.property_description
                           ? DOMPurify.sanitize(
-                              propertyDetails.property_description
-                            )
+                            propertyDetails.property_description
+                          )
                           : "Description not available",
                       }}
                     />
@@ -764,14 +755,12 @@ const index = () => {
                           onClick={handleViewMore}
                         >
                           {showAllAmenities
-                            ? `${
-                                translation?.view_less_amenities ||
-                                "View Less Amenities"
-                              }`
-                            : `${
-                                translation?.view_more_amenities ||
-                                "View More Amenities"
-                              }`}
+                            ? `${translation?.view_less_amenities ||
+                            "View Less Amenities"
+                            }`
+                            : `${translation?.view_more_amenities ||
+                            "View More Amenities"
+                            }`}
                         </button>
                       </div>
                     )}
@@ -833,11 +822,47 @@ const index = () => {
               propertyDetails={propertyDetails}
               addRemoveFav={addRemoveFav}
               setShowLoginErrorModal={setShowLoginErrorModal}
+              showCommunicationModal={showCommunicationModal}
+              setShowCommunicationModal={setShowCommunicationModal}
+
             />
           </div>
         </div>
       </div>
 
+      {!propertyDetails?.is_my_property ? (
+        <footer className="small-footer special-footer p-3">
+        <div className="d-grid columns-2">
+          <button
+            className="btn btn-outline-primary"
+            onClick={() => setShowPhoneNumber(true)}
+          >
+            {showPhoneNumber
+                            ? propertyDetails?.user_details?.phone_code +
+                            propertyDetails?.user_details?.phone
+                            : `${translation?.get_phone_number ||
+                            "Get Phone Number"
+                            }`}
+          </button>
+          <button
+            className="btn btn-primary"
+            onClick={() => setShowCommunicationModal(true)}
+          >
+            {translation?.contact_now || "Contact Now"}
+          </button>
+        </div>
+      </footer>
+      ) : (
+        <footer className="small-footer">
+      <ul>
+        <li><Link href="/" className=''><House color="current" size={20} /> {translation?.home || "Home"} </Link></li>
+        <li><Link href="/property-listing" className=''><Search color="current" size={20} /> Search</Link></li>
+        <li><Link href="/postproperty" className='postAd-btn'><HouseAddFill color="white" size={32} /></Link></li>
+        <li><Link href="/agent-list" className=''><People color="current" size={20} /> Agents</Link></li>
+        <li><Link href="/dashboard" className=''><Person color="current" size={20} /> You</Link></li>
+      </ul>
+    </footer>
+      )}
       <>
         <Offcanvas show={show} placement="end" onHide={handleClose}>
           <Offcanvas.Header closeButton>

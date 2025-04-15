@@ -19,12 +19,15 @@ const ProjectSidebar = ({
   addRemoveFav,
   projectDetails,
   setShowLoginErrorModal,
-  categoryId
+  categoryId,
+  showCommunicationModal, 
+  setShowCommunicationModal,
+  showPhoneNumber,
+  setShowPhoneNumber
 }) => {
   const [showAll, setShowAll] = useState(false);
   const { defaultCity } = useAuth();
   const { callApi, isLogin, GetMemberId } = AuthUser();
-  const [showCommunicationModal, setShowCommunicationModal] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -33,7 +36,6 @@ const ProjectSidebar = ({
     countryCode: "IND +91",
     projectID: projectId,
   });
-  const [showPhoneNumber, setShowPhoneNumber] = useState(false);
   const handleClose = () => setShowCommunicationModal(false);
   const memberId = GetMemberId();
   const [showReportModal, setShowReportModal] = useState(false);
@@ -53,6 +55,7 @@ const ProjectSidebar = ({
       setShowLoginErrorModal(true);
     }
   };
+
 
   const [errors, setErrors] = useState({
     name: "",
@@ -243,9 +246,9 @@ const ProjectSidebar = ({
                       {projectDetails?.user_details?.phone && (
                         <button
                           className="btn btn-primary mb-1"
-                          onClick={() => setShowCommunicationModal(true)}
+                          onClick={() => setShowPhoneNumber(true)}
                         >
-                          {translation?.get_phone_number || "Get Phone Number"}
+                          {showPhoneNumber ? `${projectDetails?.user_details?.phone_code + projectDetails?.user_details?.phone || "Not Available"}`: `${translation?.get_phone_number || "Get Phone Number"}`}
                         </button>
                       )}
 

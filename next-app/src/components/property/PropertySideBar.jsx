@@ -23,13 +23,15 @@ const PropertySidebar = ({
   propertyDetails,
   addRemoveFav,
   setShowLoginErrorModal,
+  showCommunicationModal,
+  setShowCommunicationModal
 }) => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);
   const { defaultCity } = useAuth();
-  const [showCommunicationModal, setShowCommunicationModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [showAgentModal, setShowAgentModal] = useState(false);
+  const [viewNumber, setViewNumber] = useState(false);
   const translation = useTranslation();
   const memberId = GetMemberId();
   const categoryId = propertyDetails?.property_type_id;
@@ -295,7 +297,7 @@ const PropertySidebar = ({
                       {propertyDetails?.user_details?.phone && (
                         <button
                           className="btn btn-primary mb-2"
-                          onClick={() => setShowCommunicationModal(true)}
+                          onClick={() => setShowPhoneNumber(true)}
                         >
                           {showPhoneNumber
                             ? propertyDetails?.user_details?.phone_code +

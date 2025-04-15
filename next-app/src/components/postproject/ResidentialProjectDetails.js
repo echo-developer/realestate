@@ -43,6 +43,10 @@ const ResidentialProjectDetails = ({
   loginCheck,
   setShowLoginErrorModal,
   userDetails,
+  showCommunicationModal,
+  setShowCommunicationModal,
+  showPhoneNumber, 
+  setShowPhoneNumber
 }) => {
   const { defaultCity } = useAuth();
   const [visible, setVisible] = useState(false);
@@ -914,6 +918,10 @@ const ResidentialProjectDetails = ({
               projectDetails={detailsData}
               setShowLoginErrorModal={setShowLoginErrorModal}
               categoryId={detailsData?.project_type_id}
+              showCommunicationModal={showCommunicationModal}
+              setShowCommunicationModal={setShowCommunicationModal}
+              showPhoneNumber={showPhoneNumber}
+              setShowPhoneNumber={setShowPhoneNumber}
             />
           </div>
         </div>

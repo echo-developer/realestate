@@ -43,6 +43,10 @@ const CommercialProjectDetails = ({
   loginCheck,
   setShowLoginErrorModal,
   userDetails,
+  showCommunicationModal,
+  setShowCommunicationModal,
+  showPhoneNumber, 
+  setShowPhoneNumber
 }) => {
   const { defaultCity } = useAuth();
   const [visible, setVisible] = useState(false);
@@ -892,6 +896,9 @@ const CommercialProjectDetails = ({
               projectDetails={detailsData}
               setShowLoginErrorModal={setShowLoginErrorModal}
               categoryId={detailsData?.project_type_id}
+              showCommunicationModal={showCommunicationModal}
+              setShowCommunicationModal={setShowCommunicationModal}
+              
             />
           </div>
         </div>
