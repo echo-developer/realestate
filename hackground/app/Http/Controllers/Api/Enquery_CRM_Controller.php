@@ -904,7 +904,7 @@ class Enquery_CRM_Controller extends Controller
                 }
                 
                 $data = [
-                    'enquiry_id' => $request->enquiry_id,
+                    'enquiry_id' => $request->enquery_id,
                     'assign_id' => $request->assign_id,
                     'user_id' => $request->user_id,
                     'lead_type' => $request->lead_type,
