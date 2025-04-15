@@ -262,9 +262,6 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
             $user->image = !empty($user->image) ? asset('user_upload/profile_image/' . $user->image) : null;
         }
 
-        return response()->json([
-            'status' => true,
-            'data' => $user
-        ]);
+        return $user;
     }
 }

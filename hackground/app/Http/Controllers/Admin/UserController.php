@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Controller;
+use App\Models\AgentAdditional;
+use App\Models\Api\ApiModel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -10,13 +13,15 @@ use Illuminate\Support\Facades\Log;
 class UserController extends Controller
 {
     protected $memberUserModel;
+    protected $apiModel;
 
     /**
      * Inject MemberUserModel via Dependency Injection.
      */
-    public function __construct(User $memberUserModel)
+    public function __construct(User $memberUserModel, ApiModel $apiModel)
     {
         $this->memberUserModel = $memberUserModel;
+        $this->apiModel = $apiModel;
         $this->middleware('view_permit:all-users');
     }
     public function MemberUserView(Request $request, string $typeName = null)
@@ -43,7 +48,7 @@ class UserController extends Controller
 
             $file = $req->file('file');
             $fileName = time() . '-' . $file->getClientOriginalName();
-            $file->move(public_path('memberUser_image'), $fileName);
+            $file->move(public_path('user_upload/profile_image'), $fileName);
 
 
             return response()->json(['fileName' => $fileName]);
@@ -176,5 +181,64 @@ class UserController extends Controller
     {
         $response = $this->memberUserModel->DeleteMemberUser($id);
         return response()->json($response);
+    }
+
+    public function MemberUserAllDetails(String $id, $lang = 'en')
+    {
+        $data = $this->memberUserModel->getUserFullDetails($id);
+
+        $cities = $this->apiModel->getCity($lang);
+
+        return view('Admin.Member.member_details', compact('data', 'cities'));
+    }
+
+    public function SaveMemberDetails(Request $req)
+    {
+        
+        log_anything($req->all());
+
+        $user_id = $req->user_id;
+        $user_type = $req->user_type;
+
+        $requestData1 = [
+            'name' => $req->name,
+            'email' => $req->email,
+            'phone_code' => $req->phone_code,
+            'phone' => $req->phone,
+            'whatsapp_no' => $req->w_number,
+            'address' => $req->address,
+            'city' => $req->city,
+            'website_title' => $req->web_title,
+            'website_url' => $req->web_url,
+            'description' => $req->comment,
+            'updated_at' => now(),
+        ];
+        $update  = $this->apiModel->UpdateMyProfileData($user_id, $requestData1);
+
+        if ($user_type === 'A') {
+
+            $requestData2 = [
+                'license_no' => $req->license_no,
+                'experience_yr' => $req->experience_yr,
+                'specialization' => $req->specialization,
+                'broker_type' => $req->broker_type,
+                'bussiness_phone' => $req->bussiness_phone,
+                'bussiness_email' => $req->bussiness_email,
+                'opening_hours' => $req->opening_hours,
+                'closing_hours' => $req->closing_hours,
+                'company_name' => $req->company_name,
+            ];
+
+            $data = array_filter($requestData2, function ($value) {
+                return !is_null($value) && $value !== '';
+            });
+
+            $insert = AgentAdditional::updateOrCreate(
+                ['agent_id' => $user_id],
+                $data
+            );
+        }
+
+        return redirect()->back();
     }
 }

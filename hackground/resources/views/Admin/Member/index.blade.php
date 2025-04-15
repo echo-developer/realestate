@@ -138,14 +138,14 @@
                         <thead>
                             <tr>
                                 <th style="width:5%">Id</th>
-                                <th style="width:15%">User Name</th>
-                                <th style="width:15%">Email</th>
+                                <th style="width:13%">User Name</th>
+                                <th style="width:13%">Email</th>
                                 <th style="width:10%">Phone</th>
-                                <th style="width:15%">Created At</th>
-                                <th style="width:10%">Leads</th>
-                                <th style="width:10%">Verify</th>
-                                <th style="width:10%">Status</th>
-                                <th style="width:15%" class="text-right" style="padding-right:15px;">Action</th>
+                                <th style="width:14%">Created At</th>
+                                <th style="width:8%">Leads</th>
+                                <th style="width:8%">Verify</th>
+                                <th style="width:9%">Status</th>
+                                <th style="width:20%; text-align: right; padding-right: 15px;">Action</th>
 
                             </tr>
                             <thead>
@@ -153,7 +153,8 @@
                                 @forelse ($data  as $items)
                                     <tr>
                                         <td>{{ $items->id }}</td>
-                                        <td>{{ $items->name }}
+                                        <td><a
+                                                href="{{ route('memberUser.allDetails', $items->id) }}">{{ $items->name }}</a>
                                             <br><small>({{ $userTypes[$items->user_type] ?? 'Unknown' }})
                                         </td>
                                         <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
@@ -162,12 +163,13 @@
                                         <td>{{ $items->phone }}</td>
                                         <td>{{ date('d-M-Y', strtotime($items->created_at)) }}</td>
                                         <td>
-                                            @php 
+                                            @php
                                                 $leads_count = memberLeadsCount($items->id);
                                             @endphp
                                             {{ memberLeadsCount($items->id) }}
-                                            @if($leads_count > 0)
-                                            <a href="{{ url('/enquiry/member-leads?user_id='.$items->id.'&lead_type=P') }}" title="View Leads"><i class="fa fa-eye"></i></a>
+                                            @if ($leads_count > 0)
+                                                <a href="{{ url('/enquiry/member-leads?user_id=' . $items->id . '&lead_type=P') }}"
+                                                    title="View Leads"><i class="fa fa-eye"></i></a>
                                             @endif
                                         </td>
                                         @if ($items->user_type == 'A')
@@ -205,8 +207,10 @@
                                                 user-id="{{ $items->id }}"><i
                                                     class="fa fa-building text-success fa-md"></i></a>
                                             &nbsp;
-                                            <a href="{{ url('allproject/all-project-view/'.$items->id); }}" data-placement="top" data-original-title="Projects"
-                                            user-id="{{ $items->id }}"><i class="fas fa-gopuram text-success fa-md"></i></a>
+                                            <a href="{{ url('allproject/all-project-view/' . $items->id) }}"
+                                                data-placement="top" data-original-title="Projects"
+                                                user-id="{{ $items->id }}"><i
+                                                    class="fas fa-gopuram text-success fa-md"></i></a>
                                             {{-- @endif --}}
                                         </td>
                                     @empty
@@ -277,8 +281,8 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="usersAddEditModalLabel"></h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <!-- Example form -->
@@ -615,8 +619,8 @@
                         console.log('File uploaded successfully');
 
                         $('#prop_userimage').val(response.fileName);
-                        $('#image_preview').attr('src', '/' + 'memberUser_image/' + response
-                            .fileName).show();
+                        $('#image_preview').attr('src', asset('user_upload/profile_image/') + response
+                        .fileName).show();
                         $('#delete_image_btn').show();
                     },
                     error: function(xhr, status, error) {

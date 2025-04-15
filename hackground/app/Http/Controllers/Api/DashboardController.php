@@ -1136,6 +1136,7 @@ class DashboardController extends Controller
             return response()->json([
                 'success' => 1,
                 'message' => 'Document Uploaded',
+                'doc_url' => asset('user_upload/agent_docs/' . $fileName),
             ]);
         } catch (\Throwable $e) {
             throw $e;
@@ -1270,7 +1271,7 @@ class DashboardController extends Controller
             $property_brochure = $request->file('brochure_data');
             $property_id = $request->input('property_id');
 
-            $fileName =$property_brochure->getClientOriginalName();
+            $fileName = $property_brochure->getClientOriginalName();
 
 
             $uploadPath = public_path('user_upload/property_brochure');
