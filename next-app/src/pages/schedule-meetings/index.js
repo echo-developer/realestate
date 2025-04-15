@@ -138,7 +138,7 @@ const index = () => {
                                             <i className="bi bi-clock"></i> Schedule Time: {item?.schedule_date || "Not available"}
                                         </span>
                                     </p>
-                                    <p className="text-wrap mb-2">No message</p>
+                                    <p className="text-wrap mb-2">{item?.remarks || "No message"}</p>
                                     <Row>
                                         <Col sm>
                                             <Button size='sm'>
