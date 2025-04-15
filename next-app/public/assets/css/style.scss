@@ -2645,8 +2645,7 @@ ul.dashboard-box-list {
 	overflow-x: auto;
 }
 
-.ul-table {
-	background-color: $white;
+.ul-table {	
 	border-radius: 0.25rem;
 	border-collapse: collapse;
 	overflow-x: auto;
@@ -2676,6 +2675,7 @@ ul.dashboard-box-list {
 
 @media screen and (min-width: 992px){
 	.ul-table {
+		background-color: $white;
 		display: table;
 		&>ul {
 			display: table-row;
@@ -5402,7 +5402,7 @@ fieldset{
 	.dropdown-menu{
 		max-height: 250px;
     	overflow-y: auto;
-		width: 100%;
+		max-width: 100%;
 		.btn-group.column-2{
 			.btn{
 				width: calc(50% - 1rem);

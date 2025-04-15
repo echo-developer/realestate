@@ -524,7 +524,7 @@ const Banner = ({ translation }) => {
                                                 readOnly={false}
                                               />
                                               <label
-                                                className="btn btn-outline-light"
+                                                className="btn btn-outline-light btn-sm"
                                                 htmlFor={`propertyFor-${index}`}
                                               >
                                                 {property.sub_category_name}
@@ -982,7 +982,7 @@ const Banner = ({ translation }) => {
                                                 readOnly={false}
                                               />
                                               <label
-                                                className="btn btn-outline-light"
+                                                className="btn btn-outline-light btn-sm"
                                                 htmlFor={`propertyFor-${index}`}
                                               >
                                                 {property.sub_category_name}

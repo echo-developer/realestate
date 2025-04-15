@@ -34624,7 +34624,6 @@ ul.dashboard-box-list {
 }
 
 .ul-table {
-  background-color: #fff;
   border-radius: 0.25rem;
   border-collapse: collapse;
   overflow-x: auto;
@@ -34654,6 +34653,7 @@ ul.dashboard-box-list {
 
 @media screen and (min-width: 992px) {
   .ul-table {
+    background-color: #fff;
     display: table;
   }
   .ul-table > ul {
