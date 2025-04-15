@@ -188,7 +188,7 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
                   <Form.Label>{translation?.buyer_message || "Buyer Message"}</Form.Label>
                 </Form.Group>               
                 <Form.Group className="mb-3">
-                  <Form.Label className="form-label d-block">{translation?.overlooking || "Overlooking"}</Form.Label>
+                  <Form.Label className="form-label d-block fw-medium">{translation?.overlooking || "Overlooking"}</Form.Label>
                   <Row className="gx-3">
                   {propertyFeatures.map((feature) => (
                     <Col xs={12} sm={6}>
@@ -208,7 +208,7 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
                 </Form.Group>
                              
                 <Form.Group className="mb-4">
-                  <Form.Label className="form-label d-block">{translation?.flooring_style || "Flooring Style"}</Form.Label>
+                  <Form.Label className="form-label d-block fw-medium">{translation?.flooring_style || "Flooring Style"}</Form.Label>
                   <Row className="gx-3">
                   {flooringOptions.map((feature) => (
                     <Col xs={12} sm={6}>
@@ -283,7 +283,7 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
                     </Form.Group>
                   </Col>
                   <Col xs={12} sm={6}>
-                    <Form.Group className="form-floating mb-3">                      
+                    <Form.Group className="form-floating">                      
                       <Form.Select
                         name="approved_by"
                         value={propertyData.approved_by}

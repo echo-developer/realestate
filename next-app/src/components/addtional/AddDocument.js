@@ -202,15 +202,14 @@ const translation = useTranslation();
           />
         </FloatingLabel>
         <Form.Group 
-          label={translation?.upload_file || "Upload File"}
-          className="upload-area"
+          className="upload-area mb-3"
         >
           <Form.Control
             type="file"
             id="fileinput"
             onChange={(e) => handleFileChange(e.target.files[0])}
           />
-          <i class="bi bi-upload"></i>
+          {translation?.upload_file || "Upload File"} <i class="bi bi-upload"></i>
           <p>Drag &amp; Drag &amp; Drop files here or <span class="text-site">Click</span> Click to select files</p>
         </Form.Group>
 
@@ -227,8 +226,7 @@ const translation = useTranslation();
             </p>
           ) : (
             <div>
-              <strong>{translation?.uploaded_image_preview || "Uploaded Image Preview:"}
-              </strong>
+              <h5>{translation?.uploaded_image_preview || "Uploaded Image Preview:"}</h5>
               <img
                 src={fileUrl}
                 alt="Uploaded Document"
