@@ -3519,6 +3519,16 @@ input::-webkit-inner-spin-button {
 	z-index: 1010;
 	opacity: 0.5;
 }
+.page-overlay{
+	position: fixed;
+	background-color: #000;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 999;
+	opacity: 0.5;
+}
 
 .loading-wrap {
 	display: none;

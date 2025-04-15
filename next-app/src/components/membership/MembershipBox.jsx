@@ -151,7 +151,7 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
 
                     {planGroupNames?.flatMap(planName =>
                         planGroups?.[planName]?.map((plan, index) => (
-                            <div key={`${planName}-${plan?.validity_days}`} className="mb-4 border p-2 rounded">
+                            <div key={`${planName}-${plan?.validity_days}`} className="mb-4 border p-3 rounded">
 
                                 <ul className="head mb-2 list-unstyled text-center">
                                     <li className={getPlanColumnClass(planName, index)}>
@@ -215,18 +215,18 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
                                     </ul>
                                 ))}
 
-<ul className="list-unstyled text-center mt-3">
-    <li>
-        <a
-            className={`btn btn-success ${planName === 'Gold' ? 'btn-outline-gold' :
-                planName === 'Platinum' ? 'btn-outline-platinum' : 'btn-outline-plan-name'} w-100 py-2 fw-semibold`}
-            role="button"
-            onClick={() => handleSelectPlan(plan)}
-        >
-            {translation?.select || "SELECT"}
-        </a>
-    </li>
-</ul>
+                                <ul className="list-unstyled text-center mt-3 mb-0">
+                                    <li>
+                                        <a
+                                            className={`btn btn-success ${planName === 'Gold' ? 'btn-outline-gold' :
+                                                planName === 'Platinum' ? 'btn-outline-platinum' : 'btn-outline-plan-name'} w-100 py-2 fw-semibold`}
+                                            role="button"
+                                            onClick={() => handleSelectPlan(plan)}
+                                        >
+                                            {translation?.select || "SELECT"}
+                                        </a>
+                                    </li>
+                                </ul>
 
 
 
