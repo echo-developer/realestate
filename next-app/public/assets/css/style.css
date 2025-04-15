@@ -34438,6 +34438,10 @@ h4 .icon-img-check, .h4 .icon-img-check {
   position: relative;
 }
 
+.folded .user-profile .avatar {
+  height: 48px;
+  width: 48px;
+}
 .folded .user-profile .avatar > img {
   height: 48px;
   width: 48px;
@@ -34658,7 +34662,7 @@ ul.dashboard-box-list {
   }
   .ul-table > ul > li {
     display: table-cell;
-    max-width: 250px;
+    max-width: 230px;
     white-space: nowrap;
   }
   .ul-table > ul > li:first-child {

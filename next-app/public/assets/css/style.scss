@@ -2435,9 +2435,13 @@ h4 {
 	position: relative;
 }
 
-.folded .user-profile .avatar>img {
+.folded .user-profile .avatar {
 	height: 48px;
 	width: 48px;
+	& >img{
+		height: 48px;
+		width: 48px;
+	}
 }
 
 .folded .user-profile-details,
@@ -2677,7 +2681,7 @@ ul.dashboard-box-list {
 			margin-bottom: 0;
 			&>li {
 				display: table-cell;
-				max-width: 250px;
+				max-width: 230px;
 				white-space: nowrap;
 				&:first-child {
 					padding-inline-start: 1rem;

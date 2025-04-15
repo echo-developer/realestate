@@ -257,7 +257,7 @@ const Index = () => {
           <ChartsRow dashboardList={dashboardList} />
           <div className="row mb-4">
             {/* Active Listings Card */}
-            <article className="col-lg-3 col-md-4 col-sm-6 col-12">
+            <article className="col-xxl-3 col-lg-4 col-sm-6 col-12">
               <div className="card card-summary">
                 <div className="card-body d-flex align-items-center">
                   <div className="iconx">
@@ -280,7 +280,7 @@ const Index = () => {
               </div>
             </article>
             {/* favourite list  */}
-            <article className="col-lg-3 col-md-4 col-sm-6 col-12">
+            <article className="col-xxl-3 col-lg-4 col-sm-6 col-12">
               <div className="card card-summary">
                 <div className="card-body d-flex align-items-center">
                   <div className="iconx">
@@ -304,7 +304,7 @@ const Index = () => {
             </article>
 
             {/* Listing Views Card */}
-            <article className="col-lg-3 col-md-4 col-sm-6 col-12">
+            <article className="col-xxl-3 col-lg-4 col-sm-6 col-12">
               <div className="card card-summary">
                 <div className="card-body d-flex align-items-center">
                   <div className="iconx">
@@ -333,7 +333,7 @@ const Index = () => {
             </article>
 
             {/* Your Reviews Card */}
-            {/* <article className="col-lg-3 col-md-4 col-sm-6 col-12">
+            {/* <article className="col-xxl-3 col-lg-4 col-sm-6 col-12">
               <div className="card card-summary">
                 <div className="card-body d-flex align-items-center">
                   <div className="iconx">

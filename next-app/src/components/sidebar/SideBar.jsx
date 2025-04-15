@@ -12,6 +12,7 @@ const SideBar = () => {
   const { callApi, GetMemberId, logout } = AuthUser();
   // const [userData, setUserData] = useState();
   const {userData, uploadUserImage} = useAuth();
+
   const router = useRouter();
   const { pathname } = router;
   const memberId = GetMemberId();
@@ -77,12 +78,17 @@ const SideBar = () => {
   //   }
   // };
 
+  const handleToggle = (e) => {
+    e.preventDefault(); // prevent default <a> behavior
+    document.body.classList.toggle("folded");
+  };
+
   return (
     <React.Fragment>
       <aside className="col-lg-auto col-12">
         <div className="user-sidebar">
           <div className="user-profile text-center">
-            <a href="#" id="toggleZ">
+            <a role="button" id="toggleZ" onClick={handleToggle}>
               <i className="bi bi-arrow-left"></i>
             </a>
             <div className="avatar mb-3">

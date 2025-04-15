@@ -58,8 +58,8 @@ const Index = () => {
   const renderDetail = (label, value, formatter = null) => {
     if (value === undefined || value === null) return null;
     return (
-      <p>
-        <b>{label}:</b> {formatter ? formatter(value) : value}
+      <p className="mb-2">
+        <b style={{display: 'inline-block', minWidth: '120px'}}>{label}:</b> {formatter ? formatter(value) : value}
       </p>
     );
   };
@@ -107,8 +107,8 @@ const Index = () => {
             </ul>
 
             <h4 className="text-primary mb-3">Lead Details</h4>
-            <div className="bg-secondary-subtle rounded-3 p-3">
-            <h4>Customer Name: {leadDetails?.name}</h4>
+            <div className="bg-primary-subtle rounded-3 p-3">
+            <h4 className="mb-3"><span className="text-muted">Customer Name:</span> {leadDetails?.name}</h4>
               {renderDetail("Mobile No.", leadDetails?.phone)}
               {renderDetail("Email I'd", leadDetails?.email)}
               {renderDetail("Remarks", leadDetails?.message || "No Remarks Available")}
