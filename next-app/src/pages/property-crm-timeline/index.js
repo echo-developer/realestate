@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { Modal, Button } from "react-bootstrap";
 import {
   BsPlusLg,
@@ -169,8 +168,7 @@ const Timeline = () => {
 
   return (
     <DashboardLayout>
-      <div className="container">
-        <div className="row">
+
           <aside className="col-lg col-12">
             <div className="p-4">
               <h1 className="h4 text-primary">{translation?.leads_management || "Leads Management"}</h1>
@@ -198,7 +196,7 @@ const Timeline = () => {
 
               <div className="d-flex align-items-center justify-content-end mb-4">
                 <Button variant="primary" onClick={handleShow}>
-                  {translation?.add_new_data || "Add New Data"} <BsPlusLg />
+                  <BsPlusLg /> {translation?.add_new_data || "Add New Data"} 
                 </Button>
               </div>
               {loading && (
@@ -286,10 +284,10 @@ const Timeline = () => {
               </div>
             </div>
           </aside>
-        </div>
+        
 
         <ContactModal show={showModal} handleClose={handleClose} phone={leadData?.phone} email={leadData?.email} submitHandler={submitHandler} />
-      </div>
+      
     </DashboardLayout>
   );
 };
