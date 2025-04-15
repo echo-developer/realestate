@@ -273,7 +273,7 @@ const Index = () => {
                     </h5>
                     <h3>{dashboardList?.counters?.activeListing || "0"}</h3>
                   </div>
-                  <Link target="_blank" href="/property-listing" className="">
+                  <Link target="_blank" href="/my-property-listing" className="">
                     <i className="bi bi-box-arrow-up-right"></i>
                   </Link>
                 </div>
@@ -325,15 +325,15 @@ const Index = () => {
                       </small>
                     </h3>
                   </div>
-                  <Link target="_blank" href="/property-listing" className="">
+                  {/* <Link target="_blank" href="/property-listing" className="">
                     <i className="bi bi-box-arrow-up-right"></i>
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
             </article>
 
             {/* Your Reviews Card */}
-            <article className="col-lg-3 col-md-4 col-sm-6 col-12">
+            {/* <article className="col-lg-3 col-md-4 col-sm-6 col-12">
               <div className="card card-summary">
                 <div className="card-body d-flex align-items-center">
                   <div className="iconx">
@@ -359,7 +359,7 @@ const Index = () => {
                   </Link>
                 </div>
               </div>
-            </article>
+            </article> */}
           </div>
 
           {/* Customer Reviews Section */}
@@ -440,7 +440,7 @@ const Index = () => {
                       </div>
                     </div>
                     )}
-                    {customerReviews.map((review) => (
+                    {customerReviews.length > 0 && customerReviews?.slice(0, 2).map((review) => (
                       <li key={review.id}>
                         {console.log("review loop", review)}
                         <div className="d-flex">
