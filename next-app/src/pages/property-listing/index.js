@@ -53,6 +53,10 @@ const index = () => {
   const [selectedOption, setSelectedOption] = useState(
     translation?.sort_by || "Sort By"
   );
+  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+  const [dropdownState, setDropdownState] = useState({});
+
+
   const { adsData, logAdClick } = useAdvertisement("listing-page", "right", defaultCity?.city_id, selectedPropertyType);
 
   const [localityData, setLocalityData] = useState(null);
@@ -108,6 +112,37 @@ const index = () => {
   const [bedBathDropDown, setBedBathDropDown] = useState(false);
 
   const isMobile = useIsMobile();
+
+
+  const toggleDropdown = (key) => {
+    setDropdownState(prevState => {
+      const newState = { ...prevState };
+      if (!newState[key]) {
+        newState[key] = true;
+        setIsOverlayVisible(true); // Show overlay when dropdown is open
+      } else {
+        newState[key] = false;
+        setIsOverlayVisible(false); // Hide overlay when dropdown is closed
+      }
+
+      // Close other dropdowns when one is opened
+      Object.keys(newState).forEach(k => {
+        if (k !== key) newState[k] = false;
+      });
+
+      return newState;
+    });
+  };
+
+  const handleClickOutside = (e) => {
+    // If clicked outside the dropdown and overlay, close all dropdowns
+    if (!e.target.closest('.dropdown') && !e.target.closest('.overlay')) {
+      setDropdownState({});
+      setIsOverlayVisible(false);
+    }
+  };
+
+  console.log("isOverlayVisible", isOverlayVisible)
 
   const handleMinChange = (e) => {
     const value = e.target.value;
@@ -605,7 +640,13 @@ const index = () => {
     const stringifiedSearchData = JSON.stringify(SearchData);
     const url = `/property-listing?${existingParams?.toString()}&searchData=${stringifiedSearchData}`;
     router.push(url);
-    setAdvanceFilter(false);
+    // setAdvanceFilter(false);
+    setDropdownState(prev => {
+      return {
+        ...prev,
+        advanceFilter: false
+      }
+    })
   };
 
 
@@ -857,7 +898,23 @@ const index = () => {
   };
 
   return (
-    <MainLayout>
+    <>
+        {isOverlayVisible && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            background: 'rgba(0, 0, 0, 1)',
+            zIndex: 999
+          }}
+          className="overlay"
+          onClick={handleClickOutside}
+        ></div>
+      )}
+      <MainLayout>
       <Helmet>
         <title>
           {translation?.explore_property_listings ||
@@ -927,11 +984,12 @@ const index = () => {
                       <Col
                         className="col-lg col-sm-4 col-12"
                         data-id="parent"
-                        onClick={handlePropertyTypeDropDown}
+                        // onClick={handlePropertyTypeDropDown}
+                        onClick={() => toggleDropdown('property_type')}
                       >
                         <Dropdown
                           className="select-dropdown mb-3 d-grid"
-                          show={propertyTypeDropDown}
+                          show={dropdownState?.property_type}
                         >
                           <Dropdown.Toggle className="btn-form-control">
                             {displayPropertyTyep()}
@@ -1033,11 +1091,13 @@ const index = () => {
                         <Col
                           className="col-lg col-sm-4 col-12"
                           data-id="parent"
-                          onClick={handleBedDropDown}
+                          // onClick={handleBedDropDown}
+                          onClick={() => toggleDropdown('bath_beds')}
                         >
                           <Dropdown
                             className="select-dropdown d-grid mb-3"
-                            show={bedBathDropDown}
+                            // show={bedBathDropDown}
+                            show={dropdownState?.bath_beds}
                           >
                             <Dropdown.Toggle className="btn-form-control">
                               {displayBedsBathKitchen()}
@@ -1154,11 +1214,13 @@ const index = () => {
                       <Col
                         className="col-lg col-sm-4 col-12"
                         data-id="parent"
-                        onClick={openBudgetDropDown}
+                        // onClick={openBudgetDropDown}
+                        onClick={() => toggleDropdown('budget')}
                       >
                         <Dropdown
                           className="select-dropdown d-grid mb-3"
-                          show={BudgetDropdown}
+                          // show={BudgetDropdown}
+                          show={dropdownState?.budget}
                         >
                           <Dropdown.Toggle
                             className="btn-form-control"
@@ -1239,10 +1301,11 @@ const index = () => {
                       <div className="d-grid">
                         <Button
                           variant="primary"
-                          onClick={() => setAdvanceFilter((prev) => !prev)}
+                          // onClick={() => setAdvanceFilter((prev) => !prev)}
+                          onClick={() => toggleDropdown('advanceFilter')}
                           disabled={selectedPropertyType ? false : true}
                         >
-                          {advanceFilter
+                          {dropdownState?.advanceFilter
                             ? translation?.hide_advanced || "Less Filter"
                             : translation?.advanced || "More Filter"}
                         </Button>
@@ -1252,7 +1315,7 @@ const index = () => {
 
                   {selectedPropertyType &&
                     postFor !== "pg_hostel" &&
-                    advanceFilter && (
+                    dropdownState?.advanceFilter && (
                       <div
                         className="more-filter-dropdown"
                         style={{
@@ -1518,6 +1581,8 @@ const index = () => {
         </React.Fragment>
       )}
 
+  
+
       <div className="d-md-none mb-4">
         <PropertyMobileFilters
           showDrop={showDrop}
@@ -1655,9 +1720,9 @@ const index = () => {
                               <li>
                                 {property?.area_in_sqft && (
                                   <i
-                                  className="icon-img-ratio"
-                                  title="Carpet Area:"
-                                ></i>
+                                    className="icon-img-ratio"
+                                    title="Carpet Area:"
+                                  ></i>
                                 )}
                                 <span>
                                   {property?.area_in_sqft ? `${property?.area_in_sqft} sqft` : "Not Available"}{" "}
@@ -1809,6 +1874,7 @@ const index = () => {
         </Modal.Body>
       </Modal>
     </MainLayout>
+    </>
   );
 };
 
