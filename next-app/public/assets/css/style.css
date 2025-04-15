@@ -37059,7 +37059,7 @@ fieldset .btn-delete {
 .select-dropdown .dropdown-menu {
   max-height: 250px;
   overflow-y: auto;
-  width: 100%;
+  max-width: 100%;
 }
 .select-dropdown .dropdown-menu .btn-group.column-2 .btn {
   width: calc(50% - 1rem);
