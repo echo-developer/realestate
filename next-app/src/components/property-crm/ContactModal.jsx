@@ -46,48 +46,45 @@ const translation = useTranslation();
             </Modal.Header>
 
             <Modal.Body>
-                <div className="d-flex justify-content-between mb-3">
+                <div className="d-grid columns-2 mb-3">
                     {/* Call Button Section */}
-                    <div className="text-center" style={{ width: "48%" }}>
-                        {showCallButton ? (
-                            <Button 
-                                variant="outline-primary" 
-                                onClick={() => {
-                                    setCallInfo(phone ? `📞 ${phone}` : "Not Available");
-                                    setShowCallButton(false);
-                                }}
-                                className="w-100"
-                            >
-                                📞 {translation?.call || "Call"}
-
-                            </Button>
-                        ) : (
-                            <Alert variant="info" className="mb-0 p-2 text-center">
-                                {callInfo}
-                            </Alert>
-                        )}
-                    </div>
+                    
+                    {showCallButton ? (
+                        <Button 
+                            variant="outline-primary" 
+                            onClick={() => {
+                                setCallInfo(phone ? ` ${phone}` : "Not Available");
+                                setShowCallButton(false);
+                            }}
+                            className="w-100"
+                        >
+                            <i className="bi bi-telephone-fill me-2"></i> {translation?.call || "Call"} 
+                        </Button>
+                    ) : (
+                        <Button variant="outline-primary" className="bg-primary-subtle border-primary-subtle text-primary">
+                            <i className="bi bi-telephone-fill me-2"></i>{callInfo}
+                        </Button>
+                    )}                   
 
                     {/* Email Button Section */}
-                    <div className="text-center" style={{ width: "48%" }}>
-                        {showEmailButton ? (
-                            <Button 
-                                variant="outline-primary" 
-                                onClick={() => {
-                                    setEmailInfo(email ? `✉️ ${email}` : "Not Available");
-                                    setShowEmailButton(false);
-                                }}
-                                className="w-100"
-                            >
-                                ✉️{translation?.email || "Email"}
+                    {showEmailButton ? (
+                        <Button 
+                            variant="outline-primary" 
+                            onClick={() => {
+                                setEmailInfo(email ? ` ${email}` : "Not Available");
+                                setShowEmailButton(false);
+                            }}
+                            className="w-100"
+                        >
+                            <i className="bi bi-envelope-fill me-2"></i> {translation?.email || "Email"}
 
-                            </Button>
-                        ) : (
-                            <Alert variant="info" className="mb-0 p-2 text-center">
-                                {emailInfo}
-                            </Alert>
-                        )}
-                    </div>
+                        </Button>
+                    ) : (
+                        <Button variant="outline-primary" className="bg-primary-subtle border-primary-subtle text-primary">
+                            <i className="bi bi-envelope-fill me-2"></i>{emailInfo}
+                        </Button>
+                    )}
+                    
                 </div>
 
                 <form onSubmit={handleSubmit}>
@@ -187,16 +184,15 @@ const translation = useTranslation();
                         ></textarea>
                     </div>
 
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
-                        {translation?.close || "Close"}
-
-                        </Button>
+                    <div className="d-flex justify-content-end gap-2">
+                        {/* <Button variant="secondary" onClick={handleClose}>
+                            {translation?.close || "Close"}
+                        </Button> */}
                         <Button variant="primary" type="submit">
                         {translation?.submit || "Submit"}
 
                         </Button>
-                    </Modal.Footer>
+                    </div>
                 </form>
             </Modal.Body>
         </Modal>

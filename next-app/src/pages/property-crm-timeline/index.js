@@ -173,10 +173,10 @@ const Timeline = () => {
             <div className="p-4">
               <h1 className="h3 text-primary mb-4">{translation?.leads_management || "Leads Management"}</h1>
 
-              <ul className="nav mb-3 gap-4">
+              <ul className="nav mb-3">
                 <li className="nav-item">
                   <a className="nav-link" href={`/lead-details/${assign_id}`}>
-                    Lead Details
+                    CRM Lead Details
                   </a>
                 </li>
                 <li className="nav-item nav-underline">

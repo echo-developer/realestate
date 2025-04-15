@@ -150,9 +150,30 @@ const Index = () => {
                         />
                       </div>
                       <div className="flex-grow-1 ps-3">
-                        <h5 className="mb-0">
+                        <h5 className="mb-1">
                           {review.name || review.user_name} ({review.user_relation})
                         </h5>
+                        {/* Star rating */}
+                        <div
+                          className="star-rating d-sm-none"
+                          data-rating={review.overall_rating}
+                        >
+                          {[...Array(5)].map((_, index) => {
+                            const starValue = index + 1;
+                            const rating = parseFloat(review.overall_rating);
+                            if (starValue <= Math.floor(rating)) {
+                              return <span key={index} className="star"></span>;
+                            }
+                            if (starValue === Math.ceil(rating)) {
+                              return (
+                                <span key={index} className="star half"></span>
+                              );
+                            }
+                            return (
+                              <span key={index} className="star empty"></span>
+                            );
+                          })}
+                        </div>
                         <p className="text-muted mb-1">
                           <span className="text-primary"><Calendar color="currentColor" size={12} style={{verticalAlign: 'inherit'}} /></span>{" "}
                           {new Date(review.created_at).toLocaleString()}
@@ -161,7 +182,7 @@ const Index = () => {
 
                         <TextComponent text={review.review_description} />
                       </div>
-                      <div className="flex-shrink-0">
+                      <div className="flex-shrink-0 d-none d-sm-block">
                         {/* Star rating */}
                         <div
                           className="star-rating"
