@@ -53,7 +53,7 @@ const index = () => {
   const [selectedOption, setSelectedOption] = useState(
     translation?.sort_by || "Sort By"
   );
-  const { adsData, logAdClick } = useAdvertisement("listing-page", "right" ,defaultCity?.city_id, selectedPropertyType);
+  const { adsData, logAdClick } = useAdvertisement("listing-page", "right", defaultCity?.city_id, selectedPropertyType);
 
   const [localityData, setLocalityData] = useState(null);
   const [advanceFilter, setAdvanceFilter] = useState(false);
@@ -325,7 +325,7 @@ const index = () => {
     return str || "Residential";
   };
 
- 
+
 
   const displayBudget = () => {
     if (minBudget && maxBudget) return `$${minBudget} - $${maxBudget}`;
@@ -584,7 +584,7 @@ const index = () => {
 
   const handleViewProperty = () => {
     const existingParams = new URLSearchParams();
-  
+
     if (selectedPropertyType)
       existingParams.set("property_type", selectedPropertyType);
     if (selectedProeprtyFor)
@@ -596,18 +596,18 @@ const index = () => {
       existingParams.set("min_budget", minBudget);
       existingParams.set("max_budget", maxBudget);
     }
-  
+
     // ✅ Add these three lines:
     if (bedroom) existingParams.set("bedrooms", JSON.stringify(bedroom));
     if (bathroom) existingParams.set("bathroom", JSON.stringify(bathroom));
     if (kitchens) existingParams.set("kitchens", JSON.stringify(kitchens));
-  
+
     const stringifiedSearchData = JSON.stringify(SearchData);
     const url = `/property-listing?${existingParams?.toString()}&searchData=${stringifiedSearchData}`;
     router.push(url);
     setAdvanceFilter(false);
   };
-  
+
 
   const openBudgetDropDown = (e) => {
     if (e.currentTarget.getAttribute("data-id") === "parent") {
@@ -841,7 +841,7 @@ const index = () => {
     setKitchens([]);
   };
 
-  const applySelection = () => {};
+  const applySelection = () => { };
 
   const resetBudget = () => {
     setMinBudget("");
@@ -1259,7 +1259,7 @@ const index = () => {
                           display: "flex",
                         }}
                       >
-                        
+
                         <ListGroup
                           style={{ height: "350px", minWidth: "200px", overflowY: "auto" }}
                         >
@@ -1278,20 +1278,19 @@ const index = () => {
                                 }}
                               >
                                 {item?.name ||
-                                  `${
-                                    translation?.not_available ||
-                                    "Not available"
+                                  `${translation?.not_available ||
+                                  "Not available"
                                   }`}
                               </ListGroup.Item>
                             );
                           })}
                         </ListGroup>
-                        
+
                         <div className="flex-grow-1 p-3 scroll-part">
                           {selectedAdvanceFilter &&
-                          (selectedAdvanceFilter === "furnishing" ||
-                            selectedAdvanceFilter === "amenities" ||
-                            selectedAdvanceFilter === "possession_status") ? (
+                            (selectedAdvanceFilter === "furnishing" ||
+                              selectedAdvanceFilter === "amenities" ||
+                              selectedAdvanceFilter === "possession_status") ? (
                             <div>
                               <h5>
                                 {translation?.sub_filters_for ||
@@ -1305,22 +1304,22 @@ const index = () => {
                               <Row className="mb-3">
                                 {dynamicFieldLoading && (
                                   <>
-                                  <Col xs={12}>
-                                    <div
-                                      style={{
-                                        width: "40px",
-                                        height: "40px",
-                                        border: "4px solid #3498db",
-                                        borderTop: "4px solid transparent",
-                                        borderRadius: "50%",
-                                        animation: "spin 1s linear infinite",
-                                        marginLeft: "150px",
-                                        marginTop: "100px",
-                                      }}
-                                    ></div>
+                                    <Col xs={12}>
+                                      <div
+                                        style={{
+                                          width: "40px",
+                                          height: "40px",
+                                          border: "4px solid #3498db",
+                                          borderTop: "4px solid transparent",
+                                          borderRadius: "50%",
+                                          animation: "spin 1s linear infinite",
+                                          marginLeft: "150px",
+                                          marginTop: "100px",
+                                        }}
+                                      ></div>
 
-                                    <style>
-                                      {`
+                                      <style>
+                                        {`
                                         @keyframes spin {
                                             0% {
                                                 transform: rotate(0deg);
@@ -1330,7 +1329,7 @@ const index = () => {
                                             }
                                         }
                                       `}
-                                    </style>
+                                      </style>
                                     </Col>
                                   </>
                                 )}
@@ -1341,24 +1340,24 @@ const index = () => {
                                     ) {
                                       return (
                                         <>
-                                        <Col xs={6}>
-                                          <Form.Check
-                                            key={item?.furnish_id || i}
-                                            inline
-                                            type="checkbox"
-                                            label={item?.furnish_name}
-                                            id={item?.furnish_id}
-                                            onChange={() =>
-                                              handleDynamicValueChange(
-                                                selectedAdvanceFilter,
-                                                item?.furnish_id
-                                              )
-                                            }
-                                            checked={SearchData[
-                                              selectedAdvanceFilter
-                                            ]?.includes(item?.furnish_id)}
-                                          />
-                                        </Col>
+                                          <Col xs={6}>
+                                            <Form.Check
+                                              key={item?.furnish_id || i}
+                                              inline
+                                              type="checkbox"
+                                              label={item?.furnish_name}
+                                              id={item?.furnish_id}
+                                              onChange={() =>
+                                                handleDynamicValueChange(
+                                                  selectedAdvanceFilter,
+                                                  item?.furnish_id
+                                                )
+                                              }
+                                              checked={SearchData[
+                                                selectedAdvanceFilter
+                                              ]?.includes(item?.furnish_id)}
+                                            />
+                                          </Col>
                                         </>
                                       );
                                     } else if (
@@ -1366,24 +1365,24 @@ const index = () => {
                                     ) {
                                       return (
                                         <>
-                                        <Col xs={6}>
-                                          <Form.Check
-                                            key={item?.amenity_id}
-                                            inline
-                                            type="checkbox"
-                                            label={item?.amenity_name}
-                                            id={item?.amenity_id}
-                                            onChange={() =>
-                                              handleDynamicValueChange(
-                                                selectedAdvanceFilter,
-                                                item?.amenity_id
-                                              )
-                                            }
-                                            checked={SearchData[
-                                              selectedAdvanceFilter
-                                            ]?.includes(item?.amenity_id)}
-                                          />
-                                        </Col>
+                                          <Col xs={6}>
+                                            <Form.Check
+                                              key={item?.amenity_id}
+                                              inline
+                                              type="checkbox"
+                                              label={item?.amenity_name}
+                                              id={item?.amenity_id}
+                                              onChange={() =>
+                                                handleDynamicValueChange(
+                                                  selectedAdvanceFilter,
+                                                  item?.amenity_id
+                                                )
+                                              }
+                                              checked={SearchData[
+                                                selectedAdvanceFilter
+                                              ]?.includes(item?.amenity_id)}
+                                            />
+                                          </Col>
                                         </>
                                       );
                                     } else if (
@@ -1392,24 +1391,24 @@ const index = () => {
                                     ) {
                                       return (
                                         <>
-                                        <Col xs={6}>
-                                          <Form.Check
-                                            key={item?.status_id || i}
-                                            inline
-                                            type="checkbox"
-                                            label={item?.status_name}
-                                            id={item?.status_id}
-                                            onChange={() =>
-                                              handleDynamicValueChange(
-                                                selectedAdvanceFilter,
-                                                item?.status_id
-                                              )
-                                            }
-                                            checked={SearchData[
-                                              selectedAdvanceFilter
-                                            ]?.includes(item?.status_id)}
-                                          />
-                                        </Col>
+                                          <Col xs={6}>
+                                            <Form.Check
+                                              key={item?.status_id || i}
+                                              inline
+                                              type="checkbox"
+                                              label={item?.status_name}
+                                              id={item?.status_id}
+                                              onChange={() =>
+                                                handleDynamicValueChange(
+                                                  selectedAdvanceFilter,
+                                                  item?.status_id
+                                                )
+                                              }
+                                              checked={SearchData[
+                                                selectedAdvanceFilter
+                                              ]?.includes(item?.status_id)}
+                                            />
+                                          </Col>
                                         </>
                                       );
                                     }
@@ -1468,30 +1467,29 @@ const index = () => {
                                   (subFilter, i) => {
                                     return (
                                       <>
-                                      <Col xs={6}>
-                                        <Form.Check
-                                          key={subFilter.key}
-                                          inline
-                                          type="checkbox"
-                                          label={
-                                            ` ${subFilter.name}` ||
-                                            `${
-                                              translation?.not_available ||
+                                        <Col xs={6}>
+                                          <Form.Check
+                                            key={subFilter.key}
+                                            inline
+                                            type="checkbox"
+                                            label={
+                                              ` ${subFilter.name}` ||
+                                              `${translation?.not_available ||
                                               "Not available"
-                                            }`
-                                          }
-                                          id={subFilter.key}
-                                          onChange={() =>
-                                            handleSubFilterSelection(
-                                              selectedAdvanceFilter,
-                                              subFilter.key
-                                            )
-                                          }
-                                          checked={SearchData[
-                                            selectedAdvanceFilter
-                                          ]?.includes(subFilter?.key)}
-                                        />
-                                      </Col>
+                                              }`
+                                            }
+                                            id={subFilter.key}
+                                            onChange={() =>
+                                              handleSubFilterSelection(
+                                                selectedAdvanceFilter,
+                                                subFilter.key
+                                              )
+                                            }
+                                            checked={SearchData[
+                                              selectedAdvanceFilter
+                                            ]?.includes(subFilter?.key)}
+                                          />
+                                        </Col>
                                       </>
                                     );
                                   }
@@ -1501,14 +1499,14 @@ const index = () => {
                           ) : (
                             selectedAdvanceFilter === "price_range" && <></>
                           )}
-                        
+
                           <div className="text-end">
-                          <Button    
-                            variant="primary"                   
-                            onClick={() => handleViewProperty()}
-                          >
-                            {translation?.view_property || "View Property"}
-                          </Button>
+                            <Button
+                              variant="primary"
+                              onClick={() => handleViewProperty()}
+                            >
+                              {translation?.view_property || "View Property"}
+                            </Button>
                           </div>
                         </div>
                       </div>
@@ -1618,11 +1616,10 @@ const index = () => {
                             </h4>
                             <h5 className="mb-0">
                               {property?.price_currency && property?.exp_price
-                                ? `${
-                                    property.price_currency
-                                  } ${new Intl.NumberFormat("en-US").format(
-                                    property.exp_price
-                                  )} ${property?.price_per_sqft ? `(${property?.price_currency} ${property.price_per_sqft} sq/ft)`: ""}`
+                                ? `${property.price_currency
+                                } ${new Intl.NumberFormat("en-US").format(
+                                  property.exp_price
+                                )} ${property?.price_per_sqft ? `(${property?.price_currency} ${property.price_per_sqft} sq/ft)` : ""}`
                                 : "Price not available"}
                             </h5>
                             <p className="mb-1">
@@ -1656,43 +1653,42 @@ const index = () => {
                                 {property?.bathroom && " Bath"}
                               </li>
                               <li>
-                                <i
+                                {property?.area_in_sqft && (
+                                  <i
                                   className="icon-img-ratio"
                                   title="Carpet Area:"
                                 ></i>
+                                )}
                                 <span>
                                   {property?.area_in_sqft ? `${property?.area_in_sqft} sqft` : "Not Available"}{" "}
                                 </span>
                                 {property?.carpet_area && " Carpet Area"}
                               </li>
-                              <li>
-                                <i
-                                  className="icon-img-check"
-                                  title="Possession Status"
-                                ></i>
-                                <span>
-                                  {translation?.possession_status ||
-                                    "Possession Status: "}
-                                  {property?.possession_status ||
-                                    "Not Available"}
-                                </span>
-                              </li>
+                              {property?.possession_status && (
+                                <li>
+                                  <i
+                                    className="icon-img-check"
+                                    title="Possession Status"
+                                  ></i>
+                                  <span>{property.possession_status}</span>
+                                </li>
+                              )}
+
                             </ul>
                             <p>
                               <span className="text-primary">
                                 <GeoAlt color="currentColor" size={14} />
                               </span>{" "}
-                              {property.address}
+                              {property.address || "Not Available"}
                             </p>
                           </div>
                           <div className="card-footer d-flex justify-content-between align-items-center">
                             <div className="d-flex">
                               <img
                                 className="rounded-circle"
-                                src={`${
-                                  property?.user_image ||
+                                src={`${property?.user_image ||
                                   "/assets/images/user.jpg"
-                                }`}
+                                  }`}
                                 alt="Company"
                                 height={36}
                                 width={36}
@@ -1705,10 +1701,10 @@ const index = () => {
                                   {property?.user_type === "A"
                                     ? "Agent"
                                     : property?.user_type === "/"
-                                    ? "Builder"
-                                    : property?.user_type === "O"
-                                    ? "Owner"
-                                    : "Not Available"}
+                                      ? "Builder"
+                                      : property?.user_type === "O"
+                                        ? "Owner"
+                                        : "Not Available"}
                                 </p>
                               </div>
                             </div>
