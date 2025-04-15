@@ -2673,6 +2673,7 @@ ul.dashboard-box-list {
 		}
 	}
 }
+
 @media screen and (min-width: 992px){
 	.ul-table {
 		display: table;
@@ -2695,6 +2696,7 @@ ul.dashboard-box-list {
 	}
 	
 }
+
 @media screen and (max-width: 991.98px){
 	.ul-table {
 		&>ul {
@@ -2751,7 +2753,6 @@ ul.dashboard-box-list {
 		padding: 0.75rem 1rem;
 	}
 }
-
 
 .nav-tabs {
 	.nav-link {
@@ -5611,6 +5612,7 @@ fieldset{
 	height: calc(100% - 1.5rem);
 	margin-bottom: 1.5rem;
 }
+
 
 /* Media Start */
 @media (min-width: 576px) {

@@ -1,0 +1,18 @@
+.rbc-toolbar .rbc-toolbar-label {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+.rbc-event, .rbc-day-slot .rbc-background-event{
+	background-color: #1365CF;
+}
+.rbc-toolbar button:active:hover, .rbc-toolbar button:active:focus, .rbc-toolbar button.rbc-active:hover, .rbc-toolbar button.rbc-active:focus{
+	background-color: #1365cf;
+    border-color: #1365cf;
+	color: #ffffff;
+}
+.rbc-toolbar button:active, .rbc-toolbar button.rbc-active{
+	box-shadow: none;
+	background-color: #1365cf;
+    border-color: #1365cf;
+	color: #ffffff;
+}
