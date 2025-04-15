@@ -106,21 +106,22 @@ const Index = () => {
 
   return (
     <DashboardLayout>
-      <div style={{ padding: "20px" }}>
-        <h2>{translation?.calendar || "Calendar"}</h2>
-        <Calendar
-          localizer={localizer}
-          events={calenderData}
-          startAccessor="start"
-          endAccessor="end"
-          style={{ height: "500px" }}
-          // onSelectEvent={handleSelectEvent}
-          onSelectEvent={handleSelectEvent}
-          selectable
-          onRangeChange={handleRangeChange}
-        />
-      </div>
-
+      <aside className="col-lg col-12">
+        <div className="p-4">
+          <h1 className="h3 text-primary mb-4">{translation?.calendar || "Calendar"}</h1>
+          <Calendar
+            localizer={localizer}
+            events={calenderData}
+            startAccessor="start"
+            endAccessor="end"
+            style={{ height: "500px" }}
+            // onSelectEvent={handleSelectEvent}
+            onSelectEvent={handleSelectEvent}
+            selectable
+            onRangeChange={handleRangeChange}
+          />
+        </div>
+      </aside>
     </DashboardLayout>
   );
 };

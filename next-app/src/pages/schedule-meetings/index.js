@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
 import useTranslation from '@/hooks/useTranslation';
-import { Button } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 
 const index = () => {
     const { callApi, GetMemberId } = AuthUser()
@@ -116,45 +116,45 @@ const index = () => {
                     )}
                     {!loading && list?.length > 0 && list?.map((item, i) => {
                         return (
-                            <div className="card card-ads" key={i}>
-                                <div className="row g-0">
-                                    <div className="col-lg-9 col-sm-8 position-relative">
-                                        <div className="card-body">
-                                            <div className="d-flex align-items-center justify-content-between">
-                                                <h4>{item?.project_name || item?.property_name || "Not available"}</h4>
-                                                <h6>Customer Name: {item?.customer_name || "Not available"}</h6>
-                                                <div className="text-end">
-                                                    <span className={`badge ${statusClasses[item?.status]}`}>{item?.status == 0 ? "Pending" : "Completed"}</span>
-                                                    <br />
-                                                </div>
-                                            </div>
-                                            <p>
-                                                <span className="d-block">
-                                                    <i className="bi bi-telephone"></i> {item?.customer_phone || "Not available"}
-                                                </span>
-                                                <span className="d-block">
-                                                    <i className="bi bi-envelope"></i> {item?.customer_email || "Not available"}
-                                                </span>
-                                                <span className="d-block">
-                                                    <i className="bi bi-clock"></i> Schedule Time: {item?.schedule_date || "Not available"}
-                                                </span>
-                                            </p>
-                                            <p className="text-wrap mb-2">No message</p>
-                                            <div className="d-flex justify-content-end">
-                                                <Button>
-                                                    <Link href={`/lead-details/${item?.assign_id}`}>Lead Details</Link>
-                                                </Button>
-                                                <select className="form-select form-select-sm ms-2" aria-label="Select action" value={item?.status} onChange={(e) => handleStatusChange(e, i, item.id)}>
-                                                    <option value="">Select an option</option>
-                                                    <option value={0}>Pending</option>
-                                                    <option value={1}>Completed</option>
-                                                </select>
-                                            </div>
+                            <div className="card card-ads" key={i}>                                                                    
+                                <div className="card-body">
+                                    <div className="d-flex align-items-center justify-content-between">
+                                        <h4>{item?.project_name || item?.property_name || "Not available"}</h4>
+                                        
+                                        <div className="text-end">
+                                            <span className={`badge ${statusClasses[item?.status]}`}>{item?.status == 0 ? "Pending" : "Completed"}</span>
+                                            <br />
                                         </div>
                                     </div>
-                                </div>
+                                    <p className='mb-2'><span className='text-muted'>Customer Name:</span> <strong>{item?.customer_name || "Not available"}</strong></p>
+                                    <p className='d-flex flex-column flex-md-row mb-2'>
+                                        <span className="me-3">
+                                            <i className="bi bi-telephone"></i> {item?.customer_phone || "Not available"}
+                                        </span>
+                                        <span className="me-3">
+                                            <i className="bi bi-envelope"></i> {item?.customer_email || "Not available"}
+                                        </span>
+                                        <span className="me-3">
+                                            <i className="bi bi-clock"></i> Schedule Time: {item?.schedule_date || "Not available"}
+                                        </span>
+                                    </p>
+                                    <p className="text-wrap mb-2">No message</p>
+                                    <Row>
+                                        <Col sm>
+                                            <Button size='sm'>
+                                                <Link href={`/lead-details/${item?.assign_id}`}>Lead Details</Link>
+                                            </Button>
+                                        </Col>
+                                        <Col sm="auto">
+                                            <select className="form-select form-select-sm" aria-label="Select action" value={item?.status} onChange={(e) => handleStatusChange(e, i, item.id)}>
+                                                <option value="">Select an option</option>
+                                                <option value={0}>Pending</option>
+                                                <option value={1}>Completed</option>
+                                            </select>
+                                        </Col>
+                                    </Row>
+                                </div>                                    
                             </div>
-
                         )
                     })}
                 </div></aside>

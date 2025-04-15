@@ -33023,9 +33023,6 @@ ul.user-nav > li ul.nav-hide-menu {
 ul.user-nav > li ul.nav-hide-menu li a {
   padding: 0.5rem 2.5rem;
 }
-ul.user-nav > li ul.nav-hide-menu li a > i {
-  color: #fff;
-}
 ul.list-property-details {
   display: grid;
   gap: 1rem;

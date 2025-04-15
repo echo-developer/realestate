@@ -171,7 +171,7 @@ const Timeline = () => {
 
           <aside className="col-lg col-12">
             <div className="p-4">
-              <h1 className="h4 text-primary">{translation?.leads_management || "Leads Management"}</h1>
+              <h1 className="h3 text-primary mb-4">{translation?.leads_management || "Leads Management"}</h1>
 
               <ul className="nav mb-3 gap-4">
                 <li className="nav-item">
