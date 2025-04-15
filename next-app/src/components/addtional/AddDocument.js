@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button, Form, FloatingLabel } from "react-bootstrap";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 import useTranslation from "@/hooks/useTranslation";
@@ -136,11 +136,9 @@ const translation = useTranslation();
       </Modal.Header>
       <Modal.Body>
         {/* Display Previous Documents */}
-        <h6>{translation?.previous_documents || "Previous Documents"}
-        </h6>
+        <h5>{translation?.previous_documents || "Previous Documents"}</h5>
         {documents?.length === 0 ? (
-          <p>{translation?.no_documents_yet || "No documents added yet."}
-</p>
+          <p className="text-muted text-italic">{translation?.no_documents_yet || "No documents added yet."}</p>
         ) : (
           <ul className="list-unstyled">
             {documents?.map((doc, index) => (
@@ -178,22 +176,23 @@ const translation = useTranslation();
         <hr />
 
         {/* Form for New Upload */}
-        <h6>{translation?.upload_new_document || "Upload New Document"}
-        </h6>
-        <Form.Group className="mb-3">
-          <Form.Label>{translation?.registration_number || "Registration Number"}
-          </Form.Label>
+        <h5 className="mb-3">{translation?.upload_new_document || "Upload New Document"}</h5>
+        <FloatingLabel
+          label={translation?.registration_number || "Registration Number"} 
+          className="mb-3"
+        >
           <Form.Control
-            type="text"
+            type="text"            
             value={currentDoc.certificate_number}
             onChange={(e) => handleChange("certificate_number", e.target.value)}
             placeholder={translation?.enter_registration_number || "Enter Registration Number"}
 
           />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>{translation?.document_name || "Document Name"}
-          </Form.Label>
+        </FloatingLabel>
+        <FloatingLabel 
+          label={translation?.document_name || "Document Name"}
+          className="mb-3"
+        >
           <Form.Control
             type="text"
             value={currentDoc.certificate_name}
@@ -201,14 +200,18 @@ const translation = useTranslation();
             placeholder={translation?.enter_document_name || "Enter Document Name"}
 
           />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>{translation?.upload_file || "Upload File"}
-          </Form.Label>
+        </FloatingLabel>
+        <Form.Group 
+          label={translation?.upload_file || "Upload File"}
+          className="upload-area"
+        >
           <Form.Control
             type="file"
+            id="fileinput"
             onChange={(e) => handleFileChange(e.target.files[0])}
           />
+          <i class="bi bi-upload"></i>
+          <p>Drag &amp; Drag &amp; Drop files here or <span class="text-site">Click</span> Click to select files</p>
         </Form.Group>
 
         {/* File Preview */}

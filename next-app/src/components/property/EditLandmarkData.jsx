@@ -89,50 +89,50 @@ const PropertyLandmarkComponent = ({ value, onChange, propertyData }) => {
 
             {/* Render the fields for each item in the current tab */}
             {(formData[key] || []).map((item, index) => (
-              <Row key={`${key}_${index}`} className="gx-3">
-                <Col className="col-12 mb-3">
-                  <strong>{`${key.charAt(0).toUpperCase() + key.slice(1)} ${index + 1}`}</strong>
-                </Col>
-                <Col className="col-sm mb-3">
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label="Name"
-                    className="mb-3"
-                  >
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter Name"
-                      value={item.name}
-                      onChange={(e) => handleFieldChange(key, index, "name", e.target.value)}
-                    />
-                  </FloatingLabel>
-                </Col>
-                <Col className="col-sm mb-3">
-                  <div className="input-group">
+              <fieldset className="mb-3 rounded-2">
+                <legend className="mb-0">{`${key.charAt(0).toUpperCase() + key.slice(1)} ${index + 1}`}</legend>
+                <Row key={`${key}_${index}`} className="gx-3">                  
+                  <Col xs={12} sm>
                     <FloatingLabel
                       controlId="floatingInput"
-                      label="Distance"
+                      label="Name"
+                      className="mb-3 mb-sm-0"
                     >
                       <Form.Control
-                      type="text"
-                      placeholder="Enter Distance"
-                      value={item.distance}
-                      onChange={(e) => handleFieldChange(key, index, "distance", e.target.value)}
-                    />
+                        type="text"
+                        placeholder="Enter Name"
+                        value={item.name}
+                        onChange={(e) => handleFieldChange(key, index, "name", e.target.value)}
+                      />
                     </FloatingLabel>
-                    <span className="input-group-text">meter</span>
-                  </div>                  
-                </Col>
-                <Col xs="auto" className="col-sm-auto">
-                  <Button 
-                    className="btn btn-danger" 
-                    onClick={() => decrement(key)}
-                    title="Remove"
-                  >
-                    <i class="bi bi-x-lg"></i>
-                  </Button>
-                </Col>
-              </Row>
+                  </Col>
+                  <Col xs={12} sm>
+                    <div className="input-group mb-3 mb-sm-0">
+                      <FloatingLabel
+                        controlId="floatingInput"
+                        label="Distance"
+                      >
+                        <Form.Control
+                        type="text"
+                        placeholder="Enter Distance"
+                        value={item.distance}
+                        onChange={(e) => handleFieldChange(key, index, "distance", e.target.value)}
+                      />
+                      </FloatingLabel>
+                      <span className="input-group-text">meter</span>
+                    </div>                  
+                  </Col>
+                  <Col xs="auto" sm="auto">
+                    <Button 
+                      className="btn btn-danger" 
+                      onClick={() => decrement(key)}
+                      title="Remove"
+                    >
+                      <i class="bi bi-x-lg"></i>
+                    </Button>
+                  </Col>
+                </Row>
+              </fieldset>
             ))}
             
           </div>
