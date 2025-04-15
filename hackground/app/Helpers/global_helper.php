@@ -1581,3 +1581,17 @@ if (!function_exists('user_leads_availability')) {
         }
     }
 }
+
+if(!function_exists('blur_text')){
+
+    function blur_text($text,$is_blur=0){
+		$length=strlen($text);
+		if($length > 10){
+			$length=10;
+		}
+		if($is_blur){
+			return substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, $length);
+		}
+		return $text;
+    }
+}

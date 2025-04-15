@@ -533,14 +533,14 @@ class Enquery_CRM_Controller extends Controller
                         'customer_id' => $row->customer_id,
                         'enquery_id' => $row->enquery_id,
                         'property_id' => $row->property_id,
-                        'message' => $row->message,
+                        'message' => $is_blur ? blur_text($row->message,1) : $row->message,
                         'assign_to' => $row->assign_to,
                         'enquery_status' => $row->enquery_status,
                         'lead_status'=>$row->lead_status,
                         'created_at' => $row->created_at,
-                        'phone' => $row->Phone,
-                        'customer_name' => $row->Name,
-                        'email' => $row->Email,
+                        'phone' => $is_blur ? blur_text($row->Phone,1) : $row->Phone,
+                        'customer_name' => $is_blur ? blur_text($row->Name,1) : $row->Name,
+                        'email' => $is_blur ? blur_text($row->Email,1) : $row->Email,
                         'property_name' => $row->name,
                         'property_address' => $row->property_address,
                         'locality' => $row->locality,
@@ -668,21 +668,21 @@ class Enquery_CRM_Controller extends Controller
                     {
                         $is_blur = 0;
                     }
-                   // print_r($row);exit;
+                    //print_r($row);exit;
                     $customArray[] = [
                         'assign_id' => $row->assign_id,
                         'log_data' => $logData ?? [],
                         'customer_id' => $row->customer_id,
                         'enquery_id' => $row->enquery_id,
                         'project_id' => $row->project_id,
-                        'message' => $row->message,
+                        'message' => $is_blur ? blur_text($row->message,1) : $row->message,
                         'assign_to' => $row->assign_to,
                         'enquery_status' => $row->enquery_status,
                         'lead_status'=>$row->lead_status,
                         'created_at' => $row->created_at,
-                        'phone' => $row->customer_phone,
-                        'name' => $row->customer_name,
-                        'email' => $row->customer_email,
+                        'phone' => $is_blur ? blur_text($row->customer_phone,1) : $row->customer_phone,
+                        'name' => $is_blur ? blur_text($row->customer_name,1) : $row->customer_name,
+                        'email' => $is_blur ? blur_text($row->customer_email,1) : $row->customer_email,
                         'project_name' => $row->project_name,
                         'project_address' => $row->address,
                         'locality' => $row->locality,
@@ -795,9 +795,9 @@ class Enquery_CRM_Controller extends Controller
                     }
                     $customArray[] = [
                         'assign_id' => $row->assign_id,
-                        'name' => $row->name,
-                        'phone'=> $row->phone,
-                        'email'=> $row->email,
+                        'name' => $is_blur ? blur_text($row->name,1) : $row->name,
+                        'phone'=> $is_blur ? blur_text($row->phone,1) : $row->phone,
+                        'email'=> $is_blur ? blur_text($row->email,1) : $row->email,
                         'locality' => $row->locality,
                         'purchase_timeline' => $row->purchase_timeline,
                         'property_type' => $row->property_type,
