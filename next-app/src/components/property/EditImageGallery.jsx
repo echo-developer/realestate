@@ -3,6 +3,7 @@ import { useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import useTranslation from "@/hooks/useTranslation";
+import { Row, Col, Button} from "react-bootstrap";
 
 const EditImageGallery = ({
     flatImageTab,
@@ -366,28 +367,26 @@ const translation = useTranslation();
                                         onChange={(e) => setNewCaption(e.target.value)}
                                         className="form-control form-control-sm mb-2"
                                     />
-                                    <button
-                                        className="btn btn-success btn-sm me-2"
+                                    <Button variant="success" size="sm"
+                                        className="me-2"
                                         onClick={handleCaptionChange}
                                     >
                                         <i className="bi bi-check-circle"></i>
-                                    </button>
-                                    <button
-                                        className="btn btn-secondary btn-sm"
+                                    </Button>
+                                    <Button variant="danger" size="sm"
                                         onClick={handleCancelCaptionEdit}
                                     >
                                         <i className="bi bi-x-circle"></i>
-                                    </button>
+                                    </Button>
                                 </>
                             ) : (
                                 <>
-                                    <p>{fileData.caption || "No caption available"}</p>
-                                    <button
-                                        className="btn btn-primary btn-sm"
+                                    <p className="text-help mb-2">{fileData.caption || "No caption available"}</p>
+                                    <Button variant="primary" size="sm"
                                         onClick={() => handleAddCaption(fileData)}
                                     >
                                         {fileData.caption ? "Edit Caption" : "Add Caption"}
-                                    </button>
+                                    </Button>
                                 </>
                             )}
                         </div>
@@ -400,7 +399,7 @@ const translation = useTranslation();
                                 handleRemoveFile(fileData?.image_id);
                             }}
                         >
-                            <i className="icon-feather-trash"></i>
+                            <i className="bi bi-trash3-fill"></i>
                         </a>
                     </div>
                 ))}

@@ -3,6 +3,7 @@ import { useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import useTranslation from "@/hooks/useTranslation";
+import { Row, Col, Button} from "react-bootstrap";
 
 const EditImageGallery = ({
   flatImageTab,
@@ -290,26 +291,26 @@ const translation = useTranslation();
                       value={captionState?.caption}
                       onChange={handleCaptionChange}
                     />
-                    <button className="btn btn-success btn-sm me-2" onClick={handleSaveCaption}>
+                    <Button variant="success" size="sm" className="me-2" onClick={handleSaveCaption}>
                       <i className="bi bi-check-circle"></i>
-                    </button>
-                    <button className="btn btn-secondary btn-sm" onClick={handleCloseCaption}>
+                    </Button>
+                    <Button variant="danger" size="sm" onClick={handleCloseCaption}>
                       <i className="bi bi-x-circle"></i>
-                    </button>
+                    </Button>
                   </>
                 ) : (
                   <>
-                    <p>{item?.caption || "No caption available"}</p>
-                    <button className="btn btn-primary btn-sm" onClick={() => handleAddCaption(item)}>
+                    <p className="text-help mb-2">{item?.caption || "No caption available"}</p>
+                    <Button variant="primary" size="sm" onClick={() => handleAddCaption(item)}>
                       {item?.caption ? "Edit Caption" : "Add Caption"}
-                    </button>
+                    </Button>
                   </>
                 )}
 
               </div>
 
               <a role="button" className="btn-trash" onClick={() => handleDeleteImage(item?.id)}>
-                <i className="icon-feather-trash"></i>
+                <i className="bi bi-trash3-fill"></i>
               </a>
             </div>
 
