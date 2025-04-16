@@ -22,7 +22,7 @@ class PaymentController extends Controller
     {
         try {
             // Initialize Stripe Client with API key
-            $stripe = new StripeClient(config('services.stripe.secret'));
+            $stripe = new StripeClient(get_setting('stripe_secret'));
 
             $currency_code = 'USD';
             $payamount = $request->amount;
@@ -112,5 +112,4 @@ class PaymentController extends Controller
         }
     }
 
-  
 }

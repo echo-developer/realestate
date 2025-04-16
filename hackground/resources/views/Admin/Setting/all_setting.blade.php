@@ -343,7 +343,7 @@
 
             var id = $('#settingsId').val();
             var f_data = $('#settinngsformData').serialize();
-            var url = id ? `{{ url('/allSetting-update') }}` : `{{ url('/allSetting-update') }}`;
+            var url = id ? `{{ url('/allSetting-update') }}` : `{{ url('/addnewSetting') }}`;
 
 
             $('.invalid-feedback').text('').hide();
