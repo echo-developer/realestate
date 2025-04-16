@@ -80,7 +80,7 @@ const Footer = () => {
                   {/* <li><Link href="#">Careers</Link></li> */}
                   <li><Link href="/contact-us">{translation?.contact_us || "Contact Us"}</Link></li>
                   <li><Link href="feedback">{translation?.feedback || "Feedback"}</Link></li>
-                  <li><Link href="/help-center">{translation?.help_center || "Help Center"}</Link></li>
+                  {/* <li><Link href="/help-center">{translation?.help_center || "Help Center"}</Link></li> */}
                   <li><Link href="/privacy-policy">{translation?.privacy_policy || "Privacy Policy"}</Link></li>
                   <li><Link href="/faq">{translation?.faqs || "FAQs"}</Link></li>
                   <li><Link href="/term-conditions">{translation?.terms_condition || "Terms & Conditions"}</Link></li>
