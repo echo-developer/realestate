@@ -106,11 +106,21 @@
                                             data-off="Inactive" data-onstyle="success" data-offstyle="danger"
                                             data-size="mini" {{ $item->status ? 'checked' : '' }}>
                                     </td>
+                                    @php
+                                        $relativePath = 'user_upload/testimonial_image/' . $item->image;
+                                        $localPath = public_path($relativePath);
+
+                                        $imageToShow =
+                                            isset($item->image) && file_exists($localPath)
+                                                ? asset($relativePath)
+                                                : asset(config('constants.NO_IMAGE'));
+                                    @endphp
+
                                     <td>
-                                        <img src="{{ $item->image ? asset('user_upload/testimonial_image/' . $item->image) : asset(config('constants.NO_IMAGE')) }}"
-                                            alt="Testimonial Image" class="img-thumbnail"
-                                            style="height: 70px; width:70px ;">
+                                        <img src="{{ $imageToShow }}" alt="Testimonial Image" class="img-thumbnail"
+                                            style="height: 70px; width: 70px;">
                                     </td>
+
                                     <td class="text-right">
                                         <i class="fa fa-edit text-success fa-md cursor-pointer"
                                             onclick="Edit_prop_testimonial('{{ $item->id }}')">
