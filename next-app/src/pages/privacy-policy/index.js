@@ -49,7 +49,7 @@ const PrivacyPolicy = () => {
       </div>
 
       <section className="section">
-        <div className="container text-center">
+        <div className="container">
           {loading ? (
             <Spinner 
               animation="border" 
