@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use App\Models\UserMembership;
 use App\Models\MembershipPlans;
-use App\Services\Api\MembershipService;
 use App\Http\Controllers\Controller;
+use App\Models\MembershipPlanTypeNames;
+use App\Services\Api\MembershipService;
 
 class UserMembershipController extends Controller
 {
@@ -35,7 +37,7 @@ class UserMembershipController extends Controller
     public function getUserMembership(Request $request)
     {
         try {
-            $userId = 38;
+            $userId = auth_user_id();
             $membership = get_user_membership($userId);
 
             if ($membership) {
@@ -78,5 +80,26 @@ class UserMembershipController extends Controller
         } catch (\Throwable $e) {
             throw $e;
         }
+    }
+
+    public function getMembershipDetails(Request $request)
+    {
+        $lang = $request->input('lang', 'en');
+        $user_id =  auth_user_id();
+
+        // Fetch user membership data
+        $membershipData = UserMembership::select('plan_id', 'user_id', 'subcription_date', 'subcription_date', 'expire_date', 'relationship_manager', 'leads', 'listings_allowed', 'verified_badge', 'listing_visibility', 'social_media_promotion')->with('plan:id,plan_type_id')->where('user_id', $user_id)->first();
+
+        $planName = MembershipPlanTypeNames::where([
+            ['id', $membershipData->plan->plan_type_id],
+            ['lang', $lang]
+        ])->pluck('plan_name')->first();
+
+        $membershipData->plan_name = $planName;
+        $membershipData->makeHidden(['plan']);
+        return response()->json([
+            'status' => 1,
+            'data' => $membershipData
+        ]);
     }
 }

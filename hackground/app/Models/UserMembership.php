@@ -47,4 +47,5 @@ class UserMembership extends Model
     {
         return $this->belongsTo(MembershipPlans::class, 'plan_id');
     }
+    
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Api;
 
 use App\Models\MembershipPlans;
@@ -7,7 +8,7 @@ class MembershipService
 {
     public function getMembershipPlans($lang = 'en')
     {
-        return MembershipPlans::select('id','price', 'discounted_price', 'validity_days', 'discount', 'plan_type_id')
+        return MembershipPlans::select('id', 'price', 'discounted_price', 'validity_days', 'discount', 'plan_type_id')
             ->where([
                 ['status', config('constants.STATUS_ACTIVE')],
                 ['plan_type_id', '!=', 1],
@@ -41,4 +42,6 @@ class MembershipService
                 ];
             });
     }
+
+    
 }
