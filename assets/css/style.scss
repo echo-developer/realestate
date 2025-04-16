@@ -274,11 +274,9 @@ fieldset{
 	line-height: 1;
 }
 .accordion-button{
-	padding: 0.75rem 1.25rem;
 	background-color: transparent;
-	font-size: 1.125rem;
+	font-size: 1.067rem;
 	font-weight: 500;
-
 	&:not(.collapsed) {
 		color: var(--#{$prefix}accordion-active-color);
 		background-color: var(--#{$prefix}accordion-active-bg);
@@ -307,6 +305,14 @@ fieldset{
 	&>* {
 		padding-inline-end: calc(var(--#{$prefix}gutter-x) * 0.15);
 		padding-inline-start: calc(var(--#{$prefix}gutter-x) * 0.15);
+	}
+}
+.page-fluid-container{
+	.pageTitle{
+		h1{
+			font-size: 1.25rem;
+			margin-bottom: 1rem;
+		}
 	}
 }
 
@@ -5402,7 +5408,7 @@ fieldset{
 	.dropdown-menu{
 		max-height: 250px;
     	overflow-y: auto;
-		max-width: 100%;
+		/* max-width: 100%; */
 		.btn-group.column-2{
 			.btn{
 				width: calc(50% - 1rem);
@@ -5688,6 +5694,9 @@ fieldset{
 	.container-fluid {
 		--#{$prefix}gutter-x: 4rem;
 	}
+	.page-fluid-container{
+		padding: 1.5rem;
+	}
 	.banner-box-4{
 		margin-top: -100px;
 	}
@@ -5917,7 +5926,9 @@ fieldset{
 	.section {
 		padding: 2rem 0;
 	}
-	
+	.page-fluid-container{
+		padding: 1rem;
+	}
 	.footer-links {
 		ul {
 			margin-bottom: 1.5rem;

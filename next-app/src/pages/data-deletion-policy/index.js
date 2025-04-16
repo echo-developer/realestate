@@ -3,32 +3,41 @@ import React, { useState, useEffect } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import useTranslation from "@/hooks/useTranslation";
 import { Spinner } from "react-bootstrap";  // Import Spinner
+import AuthUser from "@/components/Authentication/AuthUser";
 
 const Index = () => {
+  const { callApi } = AuthUser();
   const translation = useTranslation();
-  const [contentView, setContentView] = useState("");
+  const [sanitizedHTML, setSanitizedHTML] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchDataDeletionPolicy = async () => {
+    const fetchAboutUsView = async () => {
       try {
-        const res = await fetch("/cms/data-deletion-policy");
-        const data = await res.json();
+        const res = await callApi({
+          api: "/cms/data-deletion-policy",
+          method: "GET",
+        });
 
-        if (res.ok && data?.status === 1) {
-          setContentView(data?.data?.content || '<p class="text-muted fst-italic">No content available</p>');
+        const DOMPurify = (await import("dompurify")).default;
+
+        if (res?.status === 1) {
+          setSanitizedHTML(
+            DOMPurify.sanitize(res?.data?.content || '<p class="text-muted">No content available</p>')
+          );
         } else {
-          setContentView('<p class="text-muted fst-italic">No content available</p>');
+          setSanitizedHTML(
+            DOMPurify.sanitize('<p class="text-muted">No content available</p>')
+          );
         }
       } catch (error) {
         console.error(error.message);
-        setContentView('<p class="text-muted fst-italic">No content available</p>');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDataDeletionPolicy();
+    fetchAboutUsView();
   }, []);
 
   return (
@@ -54,7 +63,7 @@ const Index = () => {
             </Spinner>
           </div>
         ) : (
-          <div dangerouslySetInnerHTML={{ __html: contentView }} />
+          <div dangerouslySetInnerHTML={{ __html: sanitizedHTML }} />
         )}
       </div>
     </MainLayout>

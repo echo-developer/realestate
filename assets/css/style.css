@@ -4499,7 +4499,7 @@ textarea.form-control-lg {
   --re-accordion-border-radius: var(--re-border-radius);
   --re-accordion-inner-border-radius: calc(var(--re-border-radius) - (var(--re-border-width)));
   --re-accordion-btn-padding-x: 1.25rem;
-  --re-accordion-btn-padding-y: 1rem;
+  --re-accordion-btn-padding-y: 0.75rem;
   --re-accordion-btn-color: var(--re-body-color);
   --re-accordion-btn-bg: var(--re-accordion-bg);
   --re-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23212529' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M2 5L8 11L14 5'/%3e%3c/svg%3e");
@@ -4509,7 +4509,7 @@ textarea.form-control-lg {
   --re-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23082853' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M2 5L8 11L14 5'/%3e%3c/svg%3e");
   --re-accordion-btn-focus-box-shadow: 0 0 0 0.25rem rgba(19, 101, 207, 0.25);
   --re-accordion-body-padding-x: 1.25rem;
-  --re-accordion-body-padding-y: 1rem;
+  --re-accordion-body-padding-y: 0.75rem;
   --re-accordion-active-color: var(--re-primary-text-emphasis);
   --re-accordion-active-bg: var(--re-primary-bg-subtle);
 }
@@ -32576,9 +32576,8 @@ fieldset legend {
 }
 
 .accordion-button {
-  padding: 0.75rem 1.25rem;
   background-color: transparent;
-  font-size: 1.125rem;
+  font-size: 1.067rem;
   font-weight: 500;
 }
 .accordion-button:not(.collapsed) {
@@ -32606,6 +32605,11 @@ fieldset legend {
 .row-1 > * {
   padding-inline-end: calc(var(--re-gutter-x) * 0.15);
   padding-inline-start: calc(var(--re-gutter-x) * 0.15);
+}
+
+.page-fluid-container .pageTitle h1, .page-fluid-container .pageTitle .h1 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
 }
 
 header {
@@ -37059,7 +37063,7 @@ fieldset .btn-delete {
 .select-dropdown .dropdown-menu {
   max-height: 250px;
   overflow-y: auto;
-  max-width: 100%;
+  /* max-width: 100%; */
 }
 .select-dropdown .dropdown-menu .btn-group.column-2 .btn {
   width: calc(50% - 1rem);
@@ -37314,6 +37318,9 @@ fieldset .btn-delete {
   .container-fluid, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
     --re-gutter-x: 4rem;
   }
+  .page-fluid-container {
+    padding: 1.5rem;
+  }
   .banner-box-4 {
     margin-top: -100px;
   }
@@ -37471,6 +37478,9 @@ fieldset .btn-delete {
   }
   .section {
     padding: 2rem 0;
+  }
+  .page-fluid-container {
+    padding: 1rem;
   }
   .footer-links ul {
     margin-bottom: 1.5rem;
