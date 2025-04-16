@@ -3,9 +3,10 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import React, { useState } from "react";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik,Form, Form as FormikForm, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import useTranslation from "@/hooks/useTranslation";
+import { Row, Col, Card, Form as BootstrapForm, FloatingLabel, Button } from "react-bootstrap";
 
 const Index = () => {
     const { callApi, GetMemberId } = AuthUser();
@@ -50,64 +51,94 @@ const Index = () => {
 
     return (
         <DashboardLayout>
-            <div className="col-xl-9 col-lg-9 col-12 p-3">
-                <h3>{translation?.update_password ||"Update Password"}</h3>
-                <Formik
-                    initialValues={{ oldpassword: "", newpassword: "", confirm_password: "" }}
-                    validationSchema={validationSchema}
-                    onSubmit={handleSubmit}
-                >
-                    {({ isSubmitting }) => (
-                        <Form className="authentication-form" autoComplete="off">
-                            <div className="row">
-                                <div className="col-md-12 col-12">
-                                    <div className="floating-label-group mb-3">
-                                        <label className="floating-label">
-                                            {translation?.old_password || "Old Password"}<span>*</span>
-                                        </label>
-                                        <Field type={showPassword ? "text" : "password"} name="oldpassword" className="form-control" />
-                                        <ErrorMessage name="oldpassword" component="div" className="text-danger" />
-                                    </div>
+            <aside className="col-lg col-12">
+                <div className="page-fluid-container">
+                    <div className="pageTitle">
+                        <h1>
+                            {translation?.update_password || "Update Password"}
+                        </h1>
+                    </div>
+                    <Row className="justify-content-center1">
+                        <Col xl={6}>
+                            <Card>
+                                <Card.Body>
+                                    <Formik
+                                        initialValues={{ oldpassword: "", newpassword: "", confirm_password: "", showPassword: false }}
+                                        validationSchema={validationSchema}
+                                        onSubmit={handleSubmit}
+                                    >
+                                        {({ isSubmitting }) => (
+                                            <Form className="authentication-form" autoComplete="off">
+                                                <div className="row">
+                                                    <div className="col-md-12 col-12">
+                                                        <FloatingLabel
+                                                            label={
+                                                                <>
+                                                                  {translation?.old_password || "Old Password"} <span>*</span>
+                                                                </>
+                                                            }
+                                                            className="mb-3"                                                            
+                                                        >
+                                                            <Field type={showPassword ? "text" : "password"} name="oldpassword" className="form-control" placeholder="" />
+                                                            <ErrorMessage name="oldpassword" component="div" className="text-danger small" />
+                                                        </FloatingLabel>
+                                                        
 
-                                    <div className="floating-label-group mb-3">
-                                        <label className="floating-label">
-                                            {translation?.new_password || "New Password"}<span>*</span>
-                                        </label>
-                                        <Field type={showPassword ? "text" : "password"} name="newpassword" className="form-control" />
-                                        <ErrorMessage name="newpassword" component="div" className="text-danger" />
-                                    </div>
+                                                        <FloatingLabel
+                                                            label={
+                                                                <>
+                                                                {translation?.new_password || "New Password"} <span>*</span>
+                                                                </>
+                                                            }
+                                                            className="mb-3"
+                                                        >                                                            
+                                                            <Field type={showPassword ? "text" : "password"} name="newpassword" className="form-control" placeholder="" />
+                                                            <ErrorMessage name="newpassword" component="div" className="text-danger small" />
+                                                        </FloatingLabel>
 
-                                    <div className="floating-label-group mb-3">
-                                        <label className="floating-label">
-                                            {translation?.confirm_password || "Confirm Password"}<span>*</span>
-                                        </label>
-                                        <Field type={showPassword ? "text" : "password"} name="confirm_password" className="form-control" />
-                                        <ErrorMessage name="confirm_password" component="div" className="text-danger" />
-                                    </div>
+                                                        <FloatingLabel
+                                                            label={
+                                                                <>
+                                                                {translation?.confirm_password || "Confirm Password"} <span>*</span>
+                                                                </>
+                                                            }
+                                                            className="mb-3"
+                                                        >                                                            
+                                                            <Field type={showPassword ? "text" : "password"} name="confirm_password" className="form-control" placeholder="" />
+                                                            <ErrorMessage name="confirm_password" component="div" className="text-danger small" />
+                                                        </FloatingLabel>
 
-                                    <div className="mb-3">
-                                        <input
-                                            type="checkbox"
-                                            id="showPassword"
-                                            checked={showPassword}
-                                            onChange={(e) => setShowPassword(e.target.checked)}
-                                        />
-                                        <label htmlFor="showPassword" className="ms-2">
-                                            {translation?.show_password || "Show Password"}
-                                        </label>
-                                    </div>
+                                                        <div className="mb-3">
+                                                            <FormikForm>
+                                                                <BootstrapForm.Check
+                                                                    inline
+                                                                    label={translation?.show_password || "Show Password"}
+                                                                    name="showPassword"
+                                                                    type="checkbox"
+                                                                    id="showPassword"
+                                                                    checked={showPassword}
+                                                                    onChange={(e) => setShowPassword(e.target.checked)}
+                                                                /> 
+                                                            </FormikForm>                                                                                                                        
+                                                        </div>
 
-                                    <div className="d-grid">
-                                        <button type="submit" className="btn btn-primary mb-2" disabled={isSubmitting}>
-                                            {isSubmitting ? "Updating..." : `${translation?.update_password ||"Update Password"}`}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </Form>
-                    )}
-                </Formik>
-            </div>
+                                                        <div className="d-grid">
+                                                            <Button type="submit" variant="primary" disabled={isSubmitting}>
+                                                                {isSubmitting ? "Updating..." : `${translation?.update_password || "Update Password"}`}
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Form>
+                                        )}
+                                    </Formik>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </Row>
+
+                </div>
+            </aside>
         </DashboardLayout>
     );
 };

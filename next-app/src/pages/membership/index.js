@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { Accordion } from "react-bootstrap";
+import {Row, Col, Accordion } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import withAuth from "@/utils/withAuth";
 import useTranslation from "@/hooks/useTranslation";
@@ -179,17 +179,21 @@ const Membership = () => {
     <DashboardLayout>
 
       <div className="col-lg col-12">
-        <div className="p-4">
-          <h3 className="text-primary mb-3">{translation?.membership || "Membership"}</h3>
+        <div className="page-fluid-container">
+          <div className="pageTitle">
+            <h1>
+              {translation?.membership || "Membership"}
+            </h1>
+          </div> 
           {loading && (<PlansLoadingSkeleton />)}
           {plans?.length > 0 && <MembershipBox data={plans} handleSelectPlan={handleSelectPlan} />}
 
 
           <section className="section banner-box-4 mt-0 pb-0">
-            <h3 className="text-primary mb-3"> {translation?.how_it_works || "How it works"}</h3>
-            <div className="row gx-3 -mb-3">
+            <h4 className="text-primary mb-3"> {translation?.how_it_works || "How it works"}</h4>
+            <Row className="gx-3 -mb-3">
               {steps?.map((step, index) => (
-                <article key={index} className="col-lg-3 col-sm-6 col-12">
+                <Col xl={3} sm={6} xs={12} key={index}>
                   <div className="card card-info">
                     <div className="card-body">
                       <img
@@ -202,19 +206,19 @@ const Membership = () => {
                       <p>{step.description}</p>
                     </div>
                   </div>
-                </article>
+                </Col>
               ))}
-            </div>
+            </Row>
           </section>
 
           <section className="section">
-            <h3 className="text-primary mb-3">{translation?.frequently_asked_questions || "Frequently Asked Questions"}</h3>
+            <h4 className="text-primary mb-3">{translation?.frequently_asked_questions || "Frequently Asked Questions"}</h4>
             <Accordion flush>
               {faqs.map((faq, index) => (
                 <Accordion.Item eventKey={index.toString()} key={index}>
                   <Accordion.Header>{faq.question}</Accordion.Header>
                   <Accordion.Body>
-                    <small>{faq.answer}</small>
+                    <p>{faq.answer}</p>
                   </Accordion.Body>
                 </Accordion.Item>
               ))}

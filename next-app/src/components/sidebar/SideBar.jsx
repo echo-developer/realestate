@@ -118,7 +118,7 @@ const SideBar = () => {
                 </p>
               )}
               <div className="d-grid columns-2 mb-3">
-                <Link href="/postproject" className="btn btn-outline-primary">
+                <Link href="/postproject" className="btn btn-primary">
                   {translation?.post_project || "Post Project"}
                 </Link>
                 <Link href="/my-profile" className="btn btn-outline-primary">
@@ -263,12 +263,12 @@ const SideBar = () => {
                 <span>{translation?.packages || "Packages"}</span>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link href="/enquiry-list">
                 <i className="bi bi-mic"></i>{" "}
                 <span>{translation?.enquiries || "Enquiries"}</span>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link href="/report">
                 <i className="bi bi-flag"></i>{" "}
