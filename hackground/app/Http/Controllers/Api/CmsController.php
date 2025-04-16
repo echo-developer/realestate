@@ -9,27 +9,42 @@ use Illuminate\Support\HtmlString;
 
 class CmsController extends Controller
 {
-    public function get_content(Request $req,$key)
+    public function get_content(Request $req, $key)
     {
-        $lang = $req->input('lang','en');
+        try {
+            $lang = $req->input('lang', 'en');
 
-        $cms = CmsModel::select('id', 'slug')
-            ->with(['names' => function ($query)use ($lang) {
-                $query->select('cms_id', 'content','title')  
-                    ->where('lang',  $lang);         
-            }])
-            ->where('slug', $key)
-            ->firstOrFail();
+            $cms = CmsModel::select('id', 'slug')
+                ->with(['names' => function ($query) use ($lang) {
+                    $query->select('cms_id', 'content', 'title')
+                        ->where('lang',  $lang);
+                }])
+                ->where('slug', $key)
+                ->firstOrFail();
 
-
-        return response()->json([
-            'status' => 1,
-            'data' => [
-                'id' => $cms->id,
-                'slug' => $cms->slug,
-                'content' => (optional($cms->names)->content),
-                'title' => optional($cms->names)->title,
-            ]
-        ]);
+            return response()->json([
+                'status' => 1,
+                'message' => 'Success',
+                'data' => [
+                    'id' => $cms->id,
+                    'slug' => $cms->slug,
+                    'content' => optional($cms->names)->content,
+                    'title' => optional($cms->names)->title,
+                ]
+            ]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Content not found',
+                'data' => []
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred',
+                'error' => $e->getMessage(),
+                'data' => []
+            ]);
+        }
     }
 }
