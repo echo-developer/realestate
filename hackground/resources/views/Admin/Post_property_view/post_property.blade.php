@@ -293,7 +293,7 @@
                                     </div>
                                 </div>
 
-                                <div id="step-5" style="display:none1;">
+                                <div id="step-5" style="display:none;">
 
                                     <div class="row gx-3">
                                         <!-- Bedroom -->
@@ -410,6 +410,21 @@
                                                 @endif
                                             </select>
                                             <span class="error total_floorsError text-danger"></span>
+                                        </div>
+                                        <div class="form-group col-lg-6 col-12">
+                                            <label class="form-label">Lifts in the Tower</label>
+                                            <select class="form-control" name="lifts_in_tower">
+                                                <option value="">--Select--</option>
+                                                @php  
+                                                    $lifts_in_tower = lifts_in_tower();
+                                                @endphp
+                                                @if($lifts_in_tower)
+                                                @foreach($lifts_in_tower as $f)
+                                                    <option value="{{$f}}" >{{$f}}</option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                            <span class="error floorsError text-danger"></span>
                                         </div>
                                     </div>
 
@@ -666,6 +681,40 @@
                                                 </select>
                                                 <span class="error parkingError text-danger"></span>
                                             </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row gx-3">
+                                        <div class="form-group col-lg-6 col-12">
+                                            <label class="form-label">Overlooking</label>
+                                            <select class="form-control select2" name="overlooking[]" multiple>
+                                                <option value="">Slect Overlooking</option>
+                                                @php  
+                                                    $overlooking_list = get_overlooking_list();
+                                                @endphp
+                                                @if($overlooking_list)
+                                                @foreach($overlooking_list as $k=>$f)
+                                                    <option value="{{ $k }}">{{ $f }}</option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                            <span class="error overlookingError text-danger"></span>
+                                        </div>
+                    
+                                        <div class="form-group col-lg-6 col-12">
+                                            <label class="form-label">Ownership Type</label>
+                                            <select class="form-control" name="ownership_type">
+                                                <option value="">Slect Ownership Type</option>
+                                                @php  
+                                                    $ownership_types = get_ownership_types();
+                                                @endphp
+                                                @if($ownership_types)
+                                                @foreach($ownership_types as $k=>$f)
+                                                    <option value="{{ $k }}" >{{ $f }}</option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                            <span class="error ownership_typeError text-danger"></span>
                                         </div>
                                     </div>
 

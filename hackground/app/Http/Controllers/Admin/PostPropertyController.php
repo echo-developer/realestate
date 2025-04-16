@@ -723,6 +723,7 @@ class PostPropertyController extends Controller
             'possession_status' => $request->possession_status,
             'property_furnish' => $request->property_furnish,
             'property_amenity' => is_array($request->amenities) ? implode(',', $request->amenities) : $request->amenities,
+            'overlooking' => is_array($request->overlooking) ? implode(',', $request->overlooking) : $request->overlooking,
             'is_personal_washroom' => $request->personal_washroom,
             'pantry_cafeteria_status' => $request->cafeteria,
             'is_corner_shop' => $request->corner_shop,

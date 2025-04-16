@@ -90,7 +90,7 @@
                         </li>
                         <li>
                             <b>Locality:</b>
-                            <span>{{$propertyData->location->locality}}</span>
+                            <span>{{ $propertyData->location->locality ? get_name_by_id('locality_names', 'locality_id', $propertyData->location->locality, 'en') : '' }}</span>
                         </li>
                         <li>
                             <b>Address:</b>
@@ -266,12 +266,13 @@
                             <span>
                                 @php
                                 $overlooking = $propertyData->additional->overlooking ?? '';
-                                $overlookingArray = !empty($overlooking) ? json_decode($overlooking, true) : [];
-                                echo $overlookingArray ? implode(', ', $overlookingArray) : 'N/A';
-                                if($overlookingArray)
-                                {
+                                $overlookingArray = !empty($overlooking) ? json_decode($overlooking, true) : '';
+                            
+                                // echo $overlookingArray ? implode(', ', $overlookingArray) : 'N/A';
+                                // if($overlookingArray)
+                                // {
 
-                                }
+                                // }
                                 @endphp
                             </span>
                         </li>
