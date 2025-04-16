@@ -1,5 +1,5 @@
 "use client"
-import React from "react";
+import React, { useState, useEffect} from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import useTranslation from "@/hooks/useTranslation";
@@ -210,7 +210,7 @@ const ContactUs = () => {
         </div>
       </div>
 
-      <div class="mt-5">  
+      {/* <div class="mt-5">  
         <iframe
           title="Google Map"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509374!2d144.95373531531662!3d-37.81627977975171!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d5df1f287f3%3A0x2b1b2076f5f3a5e3!2sReal+Estate+Office!5e0!3m2!1sen!2sus!4v1633326639282"
@@ -219,7 +219,7 @@ const ContactUs = () => {
           className="d-block"
           loading="lazy"
         ></iframe>
-      </div>
+      </div> */}
     </section>  
     </MainLayout>
   );

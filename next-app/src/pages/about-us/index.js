@@ -1,43 +1,75 @@
-"use client"
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import useTranslation from "@/hooks/useTranslation";
+import AuthUser from "@/components/Authentication/AuthUser";
+import { Spinner } from "react-bootstrap";
 
 const AboutUs = () => {
+  const { callApi } = AuthUser();
   const translation = useTranslation();
+  const [sanitizedHTML, setSanitizedHTML] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAboutUsView = async () => {
+      try {
+        const res = await callApi({
+          api: "/cms/about-us",
+          method: "GET",
+        });
+
+        const DOMPurify = (await import("dompurify")).default;
+
+        if (res?.status === 1) {
+          setSanitizedHTML(
+            DOMPurify.sanitize(res?.data?.content || '<p class="text-muted">No content available</p>')
+          );
+        } else {
+          setSanitizedHTML(
+            DOMPurify.sanitize('<p class="text-muted">No content available</p>')
+          );
+        }
+      } catch (error) {
+        console.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAboutUsView();
+  }, []);
+
   return (
     <MainLayout>
       <div className="short-banner">
         <div className="container">
-          <h1 className="mb-0 text-center fw-bold">{translation?.about_us || 'About Us'}</h1>
+          <h1 className="mb-0 text-center fw-bold">
+            {translation?.about_us || "About Us"}
+          </h1>
         </div>
       </div>
+
       <section className="section">
-        <div className="container">
-          
-          <h4 className="fw-bold">{translation?.who_we_are || 'Who We Are'}</h4>
-          <p>{translation?.welcome_to || 'Welcome to'} <strong>{translation?.company_name || 'Your Company Name'}</strong>{translation?.who_we_are_text || ', Your trusted partner in real estate. We specialize in helping individuals and families find their dream homes and investment properties.'}</p>
-
-          <h4 className="fw-bold">{translation?.our_mission || 'Our Mission'}</h4>
-          <p>{translation?.our_mission_text_1 || 'We provide exceptional real estate services with integrity, transparency, and customer satisfaction at the core of everything we do.'}</p>
-
-          <h4 className="fw-bold">{translation?.our_vision || "Our Vision"}</h4>
-          <p>{translation?.our_mission_text_2 || 'We aim to make finding a home a seamless, stress-free experience by leveraging technology and personalized services.'}</p>
-
-          <h4 className="fw-bold">{translation?.why_choose_us || 'Why Choose Us?'}</h4>
-          <ul className="list list-3">
-            <li>{translation?.why_choose_us_text_1 || 'Expert guidance through the buying and selling process.'}</li>
-            <li>{translation?.why_choose_us_text_2 || 'Access to a vast network of properties and market insights.'}</li>
-            <li>{translation?.why_choose_us_text_3 || 'Personalized service tailored to your needs.'}</li>
-            <li>{translation?.why_choose_us_text_4 || 'Commitment to honesty, trust, and professionalism.'}</li>
-          </ul>
-
-          <h4 className="fw-bold">{translation?.get_in_touch || 'Get in Touch'}</h4>
-          <p>{translation?.get_in_touch_text || 'Have questions? Contact us today and let’s find your perfect property together!'}</p>
-          <p><strong>{translation?.email || "Email:"}</strong> originatesoft@gmail.com</p>
-          <p><strong>{translation?.phone || "Phone:"}</strong>+913340016469 </p> 
+        <div className="container text-center">
+          {loading ? (
+            <Spinner
+              animation="border"
+              role="status"
+              style={{
+                width: "3rem",
+                height: "3rem",
+                borderColor: "rgba(0, 123, 255, 0.5)",      // blue transparent
+                borderRightColor: "transparent",
+                filter: "blur(0.3px)"
+              }}
+            >
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          ) : (
+            <div dangerouslySetInnerHTML={{ __html: sanitizedHTML }} />
+          )}
         </div>
-        
       </section>
     </MainLayout>
   );
