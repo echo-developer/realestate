@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\CmsController;
 use App\Http\Controllers\Api\OtpController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BankController;
@@ -11,8 +12,8 @@ use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\SeachController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PropertyController;
-use App\Http\Controllers\Api\DashboardController;
 
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\AgentDetailsController;
 use App\Http\Controllers\Api\Enquery_CRM_Controller;
 use App\Http\Controllers\Api\FloorPlaningController;
@@ -282,4 +283,7 @@ Route::controller(VerifyUserMailController::class)->group(function () {
 
     Route::post('send_otp_to_verify_email', 'SendOtpToVerifyEmail')->name('send.email.verification.otp');
     Route::post('verify_email', 'verifyOtpforEmail')->name('verify.email');
+});
+Route::controller(CmsController::class)->group(function () {
+    Route::get('cms/{key?}', 'get_content')->name('cms.get_content');
 });

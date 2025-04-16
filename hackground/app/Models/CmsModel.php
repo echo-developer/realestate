@@ -12,10 +12,15 @@ class CmsModel extends Model
 
     // Define table prefix constant
     const TABLE_PREFIX = '';
+    protected $table ='cms';
 
     // Define the tables with the prefix appended
     protected $cmsTable = self::TABLE_PREFIX . 'cms';
     protected $cmsNamesTable = self::TABLE_PREFIX . 'cms_names';
+
+    public function names(){
+        return $this->hasOne(CmsNamesModel::class, 'cms_id', 'id');
+    }
 
     public function createCms(array $data)
     {
