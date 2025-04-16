@@ -236,6 +236,7 @@ class UserController extends Controller
             );
         }
 
+        set_flash_message('update');
         return redirect()->back();
     }
 }

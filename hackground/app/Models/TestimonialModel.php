@@ -62,7 +62,7 @@ class TestimonialModel extends Model
         if ($term) {
             $query->where('testimonial_names.name', 'like', "%{$term}%");
         }
-        return $query->paginate($peginate);
+        return $query->orderBy('testimonial.created_at','desc')->paginate($peginate);
     }
     public function getTestimonialsDetails($id)
     {

@@ -134,7 +134,6 @@ class SubCategoryModel extends Model
             }
 
             DB::commit();
-            set_flash_message('update');
 
             return [
                 'message' => 'Category updated successfully.',
@@ -173,7 +172,6 @@ class SubCategoryModel extends Model
                 'updated_at' => now(),
             ]);
 
-        set_flash_message('delete');
         return [
             'message' => 'Subcategory deleted successfully.',
         ];

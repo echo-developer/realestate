@@ -40,6 +40,14 @@
 
         </div>
 
+        @if (session('success_msg'))
+            <div class="alert alert-{{ session('message_type') }}">
+                {{ session('success_msg') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
         <form method="POST" action="{{ route('save.user.details') }}" enctype="multipart/form-data" class="container mt-4">
             @csrf
             <h4><strong>Basic details</strong></h4>
@@ -50,8 +58,8 @@
                     <label for="name" class="form-label">Name</label>
                     <input type="text" name="name" id="name" class="form-control"
                         value="{{ old('name', $data?->name ?? '') }}">
-                        <input type="hidden" name="user_id" value="{{ $data?->id }}">
-                        <input type="hidden" name="user_type" value="{{ $data?->user_type }}">
+                    <input type="hidden" name="user_id" value="{{ $data?->id }}">
+                    <input type="hidden" name="user_type" value="{{ $data?->user_type }}">
                 </div>
                 <div class="col-md-6">
                     <label for="email" class="form-label">Email</label>

@@ -107,8 +107,9 @@
                                             data-size="mini" {{ $item->status ? 'checked' : '' }}>
                                     </td>
                                     <td>
-                                        <img src="{{ asset('user_upload/testimonial_image/' . $item->image) }}" alt="Testimonial Image"
-                                            class="img-thumbnail" style="height: 70px; width:70px ;">
+                                        <img src="{{ $item->image ? asset('user_upload/testimonial_image/' . $item->image) : asset(config('constants.NO_IMAGE')) }}"
+                                            alt="Testimonial Image" class="img-thumbnail"
+                                            style="height: 70px; width:70px ;">
                                     </td>
                                     <td class="text-right">
                                         <i class="fa fa-edit text-success fa-md cursor-pointer"
@@ -186,8 +187,8 @@
                     <h5 class="modal-title" id="prop_testimonialAddEditModalLabel"></h5>
 
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
 
@@ -296,7 +297,8 @@
                         $('#subname_' + testimonial.lang).val(testimonial.subname);
                         $('#description_' + testimonial.lang).val(testimonial.description);
                         if (testimonial.lang === 'en') {
-                            var imageSrc = `{{ asset('user_upload/testimonial_image') }}/${testimonial.image}`;
+                            var imageSrc =
+                                `{{ asset('user_upload/testimonial_image') }}/${testimonial.image}`;
                             if (testimonial.image) {
                                 $('#image_preview').attr('src', imageSrc).show();
                                 $('#delete_image_btn').show();
@@ -447,7 +449,8 @@
                     console.log('File uploaded successfully');
                     // Optionally store the file name or URL if necessary (e.g., in a hidden input field)
                     $('#prop_testimonialimage').val(response.fileName); // Set file name in hidden field
-                    $('#image_preview').attr('src', asset('user_upload/testimonial_image/') + response.fileName)
+                    $('#image_preview').attr('src', asset('user_upload/testimonial_image/') + response
+                            .fileName)
                         .show(); // Update image preview
                     $('#delete_image_btn').show();
                 },

@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="table-responsive" id="main_table">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="activity_table">
                         <thead>
                             <tr>
                                 <th>User</th>
@@ -80,19 +80,25 @@
                                         <br><small>{{ $act->user_phone ?? 'N/A' }}</small>
                                     </td>
                                     <td>
-                                        @if ($act->post_for)
-                                            <span
-                                                class="badge bg-info">{{ $act->post_for === 'Sale' ? 'Buy' : 'Rent' }}</span><br>
-                                        @endif
+                                        @if ($act->post_for || $act->property_type || $act->property_for)
+                                            @if ($act->post_for)
+                                                <span
+                                                    class="badge bg-info">{{ $act->post_for === 'Sale' ? 'Buy' : 'Rent' }}</span><br>
+                                            @endif
 
-                                        @if ($act->property_type)
-                                            <span class="badge bg-success">{{ $act->property_type }}</span><br>
-                                        @endif
+                                            @if ($act->property_type)
+                                                <span class="badge bg-success">{{ $act->property_type }}</span><br>
+                                            @endif
 
-                                        @if ($act->property_for)
-                                            <span class="badge bg-warning"><small>{{ $act->property_for }}</small></span>
+                                            @if ($act->property_for)
+                                                <span
+                                                    class="badge bg-warning"><small>{{ $act->property_for }}</small></span>
+                                            @endif
+                                        @else
+                                            <span class="text-muted"><em>N/A</em></span>
                                         @endif
                                     </td>
+
                                     <td>{{ $act->city_id ?? 'N/A' }}</td>
                                     <td>
                                         @if ($act->min_budget || $act->max_budget)
@@ -174,3 +180,28 @@
         </div>
     </div>
 @endsection
+
+@push('custom-js')
+    <script>
+        $(document).ready(function() {
+            var table = $('#activity_table').DataTable({
+                "paging": false,
+                "searching": false,
+                "info": false,
+                "ordering": true,
+                "order": [
+                    [5, 'desc']
+                ],
+                "columnDefs": [{
+                        "orderable": true,
+                        "targets": [0]
+                    },
+                    {
+                        "orderable": false,
+                        "targets": [1,2, 3, 4]
+                    }
+                ]
+            });
+        });
+    </script>
+@endpush

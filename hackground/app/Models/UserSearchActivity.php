@@ -129,7 +129,7 @@ class UserSearchActivity extends Model
     public function getActivityList($paginate)
     {
         try {
-            $data = self::paginate($paginate);
+            $data = self::orderBy('created_at', 'desc')->paginate($paginate);
             return $data;
         } catch (\Throwable $e) {
             throw $e;

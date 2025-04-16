@@ -551,3 +551,8 @@ CREATE TABLE `pref_user_activity` (`id` BIGINT NOT NULL AUTO_INCREMENT , `user_i
 
 10/04/2025
 ALTER TABLE `pref_menu_management` CHANGE `url` `url` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '#';
+
+
+16/04/2025
+
+ALTER TABLE `pref_transactions` ADD `paid_by` VARCHAR(155) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL AFTER `plan_id`;
