@@ -142,7 +142,6 @@ const index = () => {
     }
   };
 
-  console.log("isOverlayVisible", isOverlayVisible)
 
   const handleMinChange = (e) => {
     const value = e.target.value;
@@ -647,6 +646,7 @@ const index = () => {
         advanceFilter: false
       }
     })
+    setIsOverlayVisible(false);
   };
 
 
