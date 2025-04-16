@@ -17,7 +17,6 @@ import {
   Button,
 } from "react-bootstrap";
 
-const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const Banner = ({ translation }) => {
   const { callApi } = AuthUser();
@@ -48,6 +47,33 @@ const Banner = ({ translation }) => {
   const [bedroom, setBedroom] = useState([]);
   const [bathroom, setBathroom] = useState([]);
   const [kitchens, setKitchens] = useState([]);
+  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+  const [dropdownState, setDropdownState] = useState({});
+
+  const toggleDropdown = (key) => {
+    setDropdownState(prevState => {
+      const newState = { ...prevState };
+      if (!newState[key]) {
+        newState[key] = true;
+        setIsOverlayVisible(true); // Show overlay when dropdown is open
+      } else {
+        newState[key] = false;
+        setIsOverlayVisible(false); // Hide overlay when dropdown is closed
+      }
+
+      // Close other dropdowns when one is opened
+      Object.keys(newState).forEach(k => {
+        if (k !== key) newState[k] = false;
+      });
+
+      return newState;
+    });
+  };
+
+  const handleClickOutside = (e) => {
+      setDropdownState({});
+      setIsOverlayVisible(false);
+  };
 
   const handleBud1InputClick = (amount) => {
     setMinBudget(amount);
@@ -376,6 +402,13 @@ const Banner = ({ translation }) => {
 
   return (
     <React.Fragment>
+      {isOverlayVisible && (
+        <div
+          className="page-overlay"
+          style={{zIndex: 1}}
+          onClick={handleClickOutside}
+        ></div>
+      )}
       <div className="clearfix"></div>
       <section
         className="banner"
@@ -461,11 +494,13 @@ const Banner = ({ translation }) => {
                             <Col
                               className="col-lg-6 col-12"
                               data-id="parent"
-                              onClick={handlePropertyTypeDropDown}
+                              // onClick={handlePropertyTypeDropDown}
+                              onClick={() => toggleDropdown('property_type')}
                             >
                               <Dropdown
                                 className="select-dropdown d-grid mb-3"
-                                show={showDropdown}
+                                // show={showDropdown}
+                                show={dropdownState?.property_type}
                               >
                                 <Dropdown.Toggle
                                   className="btn-form-control"
@@ -540,13 +575,19 @@ const Banner = ({ translation }) => {
                                   <div className="d-flex justify-content-between mt-3">
                                     <Button
                                       variant="outline-secondary"
-                                      onClick={handleReset}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleReset();
+                                      }}
                                     >
                                       {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
                                       variant="primary"
-                                      onClick={handleDone}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleClickOutside();
+                                      }}
                                     >
                                       {translation?.done || "Done"}
                                     </Button>
@@ -559,11 +600,13 @@ const Banner = ({ translation }) => {
                             <Col
                               className="col-lg-4 col-sm-6 col-12"
                               data-id="parent"
-                              onClick={handleBudgetDropDown}
+                              // onClick={handleBudgetDropDown}
+                              onClick={() => toggleDropdown('budget')}
                             >
                               <Dropdown
                                 className="select-dropdown d-grid mb-3"
-                                show={BudgetDropdown}
+                                // show={BudgetDropdown}
+                                show={dropdownState?.budget}
                               >
                                 {/* Dropdown Button */}
                                 <Dropdown.Toggle
@@ -673,15 +716,20 @@ const Banner = ({ translation }) => {
                                   <div className="d-flex justify-content-between mt-3">
                                     <Button
                                       variant="outline-secondary"
-                                      onClick={resetBudget}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        resetBudget();
+                                      }}
                                     >
                                       {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
                                       variant="primary"
-                                      onClick={() => {
+                                      onClick={(e) => {
+                                        e.stopPropagation();
                                         applyBudget();
-                                        setBudgetDropdown(false); // Close the main dropdown when clicking Done
+                                        // setBudgetDropdown(false); // Close the main dropdown when clicking Done
+                                        handleClickOutside();
                                       }}
                                       disabled={!!error}
                                     >
@@ -693,9 +741,10 @@ const Banner = ({ translation }) => {
                             </Col>
 
                             {/* Size Dropdown */}
-                            <Col className="col-lg-4 col-sm-6 col-12">
+                            <Col className="col-lg-4 col-sm-6 col-12" onClick={() => toggleDropdown('area_size')}>
                               <Dropdown
-                                show={showSizeDropdown}
+                                // show={showSizeDropdown}
+                                show={dropdownState?.area_size}
                                 onToggle={toggleSizeDropdown}
                                 className="select-dropdown d-grid mb-3"
                               >
@@ -740,13 +789,20 @@ const Banner = ({ translation }) => {
                                   <div className="d-flex justify-content-between mt-3">
                                     <Button
                                       variant="outline-secondary"
-                                      onClick={resetSizes}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        resetSizes();
+                                      }}
                                     >
                                       {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
                                       variant="primary"
-                                      onClick={applySizes}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleClickOutside();
+                                        applySizes();
+                                      }}
                                     >
                                       {translation?.done || "Done"}
                                     </Button>
@@ -756,11 +812,12 @@ const Banner = ({ translation }) => {
                             </Col>
 
                             {/* Bedrooms Dropdown */}
-                            <Col className="col-lg-4 col-sm-6 col-12">
+                            <Col className="col-lg-4 col-sm-6 col-12" onClick={() => toggleDropdown('bed_bath')}>
                               {selectedPropertyType !== "2" && (
                                 <Dropdown
                                   className="select-dropdown d-grid mb-3"
-                                  show={BedDropdown}
+                                  // show={BedDropdown}
+                                  show={dropdownState?.bed_bath}
                                   onToggle={() => setBedDropdown(!BedDropdown)}
                                 >
                                   <Dropdown.Toggle className="btn-form-control">
@@ -871,13 +928,20 @@ const Banner = ({ translation }) => {
                                     <div className="d-flex justify-content-between mt-3">
                                       <Button
                                         variant="outline-secondary"
-                                        onClick={resetSelection}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          resetSelection();
+                                        }}
                                       >
                                         {translation?.reset || "Reset"}
                                       </Button>
                                       <Button
                                         variant="primary"
-                                        onClick={applySelection}
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          applySelection();
+                                          handleClickOutside();
+                                        }}
                                       >
                                         {translation?.done || "Done"}
                                       </Button>
@@ -919,11 +983,13 @@ const Banner = ({ translation }) => {
                             <Col
                               className="col-lg-6 col-12"
                               data-id="parent"
-                              onClick={handlePropertyTypeDropDown}
+                              // onClick={handlePropertyTypeDropDown}
+                              onClick={() => toggleDropdown('property_type')}
                             >
                               <Dropdown
                                 className="select-dropdown d-grid mb-3"
-                                show={showDropdown}
+                                // show={showDropdown}
+                                show={dropdownState?.property_type}
                               >
                                 <Dropdown.Toggle
                                   className="btn-form-control"
@@ -998,13 +1064,19 @@ const Banner = ({ translation }) => {
                                   <div className="d-flex justify-content-between mt-3">
                                     <Button
                                       variant="outline-secondary"
-                                      onClick={handleReset}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleReset();
+                                      }}
                                     >
                                       {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
                                       variant="primary"
-                                      onClick={handleDone}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleClickOutside();
+                                      }}
                                     >
                                       {translation?.done || "Done"}
                                     </Button>
@@ -1017,11 +1089,13 @@ const Banner = ({ translation }) => {
                             <Col
                               className="col-lg-4 col-sm-6 col-12"
                               data-id="parent"
-                              onClick={handleBudgetDropDown}
+                              // onClick={handleBudgetDropDown}
+                              onClick={() => toggleDropdown('budget')}
                             >
                               <Dropdown
                                 className="select-dropdown d-grid mb-3"
-                                show={BudgetDropdown}
+                                // show={BudgetDropdown}
+                                show={dropdownState?.budget}
                               >
                                 {/* Dropdown Button */}
                                 <Dropdown.Toggle
@@ -1124,15 +1198,20 @@ const Banner = ({ translation }) => {
                                   <div className="d-flex justify-content-between mt-3">
                                     <Button
                                       variant="outline-secondary"
-                                      onClick={resetBudget}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        resetBudget();
+                                      }}
                                     >
                                       {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
                                       variant="primary"
-                                      onClick={() => {
-                                        applyBudget();
-                                        setBudgetDropdown(false); // Close the main dropdown when clicking Done
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleClickOutside();
+                                        // applyBudget();
+                                        // setBudgetDropdown(false);
                                       }}
                                       disabled={!!error}
                                     >
@@ -1144,9 +1223,10 @@ const Banner = ({ translation }) => {
                             </Col>
 
                             {/* Size Dropdown */}
-                            <Col className="col-lg-4 col-sm-6 col-12">
+                            <Col className="col-lg-4 col-sm-6 col-12" onClick={() => toggleDropdown('area')}>
                               <Dropdown
-                                show={showSizeDropdown}
+                                // show={showSizeDropdown}
+                                show={dropdownState?.area}
                                 onToggle={toggleSizeDropdown}
                                 className="select-dropdown d-grid mb-3"
                               >
@@ -1172,6 +1252,7 @@ const Banner = ({ translation }) => {
                                       placeholder={
                                         translation?.min || "Min sqft"
                                       }
+                                      onClick={(e) => e.stopPropagation()}
                                       value={minSize}
                                       onChange={(e) =>
                                         setMinSize(e.target.value)
@@ -1183,6 +1264,7 @@ const Banner = ({ translation }) => {
                                       placeholder={
                                         translation?.max || "Max sqft"
                                       }
+                                      onClick={(e) => e.stopPropagation()}
                                       value={maxSize}
                                       onChange={(e) =>
                                         setMaxSize(e.target.value)
@@ -1194,13 +1276,19 @@ const Banner = ({ translation }) => {
                                   <div className="d-flex justify-content-between mt-3">
                                     <Button
                                       variant="outline-secondary"
-                                      onClick={resetSizes}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        resetSizes();
+                                      }}
                                     >
                                       {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
                                       variant="primary"
-                                      onClick={applySizes}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleClickOutside();
+                                      }}
                                     >
                                       {translation?.done || "Done"}
                                     </Button>
@@ -1210,11 +1298,11 @@ const Banner = ({ translation }) => {
                             </Col>
 
                             {/* Bedrooms Dropdown */}
-                            <Col className="col-lg-4 col-sm-6 col-12">
+                            <Col className="col-lg-4 col-sm-6 col-12" onClick={(e) => toggleDropdown('beds_bath')}>
                               {selectedPropertyType !== "2" && (
                                 <Dropdown
                                   className="select-dropdown d-grid mb-3"
-                                  show={BedDropdown}
+                                  show={dropdownState?.beds_bath}
                                   onToggle={() => setBedDropdown(!BedDropdown)}
                                 >
                                   <Dropdown.Toggle className="btn-form-control">
