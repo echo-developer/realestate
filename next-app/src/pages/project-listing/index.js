@@ -54,6 +54,38 @@ const Index = () => {
   const Size = searchParams.get("project_size");
   const sortKey = searchParams.get("sort_key");
   const sortOrder = searchParams.get("sort_order");
+  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+  const [dropdownState, setDropdownState] = useState({});
+
+
+  const toggleDropdown = (key) => {
+    setDropdownState(prevState => {
+      const newState = { ...prevState };
+      if (!newState[key]) {
+        newState[key] = true;
+        setIsOverlayVisible(true); 
+      } else {
+        newState[key] = false;
+        setIsOverlayVisible(false); // Hide overlay when dropdown is closed
+      }
+
+      // Close other dropdowns when one is opened
+      Object.keys(newState).forEach(k => {
+        if (k !== key) newState[k] = false;
+      });
+
+      return newState;
+    });
+  };
+
+  const handleClickOutside = (e) => {
+    // If clicked outside the dropdown and overlay, close all dropdowns
+    // if (!e.target.closest('.dropdown') && !e.target.closest('.overlay')) {
+      setDropdownState({});
+      setIsOverlayVisible(false);
+    // }
+  };
+
 
   const cleanJsonData = (jsonData) => {
     return Object.fromEntries(
@@ -194,145 +226,155 @@ const Index = () => {
   };
 
   return (
-    <MainLayout>
-      <Helmet>
-        <title>
-          {translation?.explore_property_listings ||
-            "Explore Property Listings | Buy, Rent, or Invest with RealEstate"}
-        </title>
-        <meta
-          name="description"
-          content="Browse the best real estate projects, including residential and commercial properties. Compare prices, amenities, and locations to find your perfect investment or dream home."
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Helmet>
-
-      {isMobile ? (
-        <>
-          <React.Fragment>
-            <div className="d-md-none bg-primary p-3">
-              <div className="position-relative">
-                <input
-                  type="text"
-                  placeholder={translation?.search_locality || "Search Locality"}
-                  className="form-control ps-5"
-                />
-                <Search
-                  size={18}
-                  className="position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"
-                />
-              </div>
-            </div>
-          </React.Fragment>
-
-          <ProjectMobileFilters
-            showDrop={showDrop}
-            setShowDrop={setShowDrop}
-            selectedOption={selectedOption}
-            handleSortSelection={handleSortSelection}
-          />
-        </>
-      ) : (
-        <div className="short-banner pt-4">
-          <div className="container-fluid">
-            <ProjectFilterPage setPerPage={setPerPage} />
-          </div>
-        </div>
+    <>
+      {isOverlayVisible && (
+        <div
+          className="page-overlay"
+          onClick={handleClickOutside}
+        ></div>
       )}
+      <MainLayout>
+        <Helmet>
+          <title>
+            {translation?.explore_property_listings ||
+              "Explore Property Listings | Buy, Rent, or Invest with RealEstate"}
+          </title>
+          <meta
+            name="description"
+            content="Browse the best real estate projects, including residential and commercial properties. Compare prices, amenities, and locations to find your perfect investment or dream home."
+          />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+        </Helmet>
 
-      <section className="section">
-        <div className="container-fluid">
-          <div className="row main-row">
-            <aside className="col-xl-9 col-lg-9 col-12">
-              <div className="d-sm-flex justify-content-between align-items-center mb-2">
-                <h4 className="mb-3 mb-sm-0">
-                  {translation?.total || "Total"}{" "}
-                  <span className="text-primary">{projectListData.length}</span>{" "}
-                  {translation?.projects_found || "Projects Found"}
-                </h4>
-                <div className="sort-by d-none d-md-block">
-                  <DropdownButton
-                    align="end"
-                    title={selectedOption}
-                    id="dropdown-menu-align-end"
-                    onClick={() => setShowDrop(!showDrop)}
-                    aria-expanded={showDrop ? "true" : "false"}
-                  >
-                    {[
-                      "Recent",
-                      "Price - Low to High",
-                      "Price - High to Low",
-                      "Size - Low to High",
-                      "Size - High to Low",
-                    ].map((option) => (
-                      <Dropdown.Item
-                        eventKey="1"
-                        key={option}
-                        onClick={() => handleSortSelection(option)}
-                      >
-                        {option}
-                      </Dropdown.Item>
-                    ))}
-                  </DropdownButton>
+        {isMobile ? (
+          <>
+            <React.Fragment>
+              <div className="d-md-none bg-primary p-3">
+                <div className="position-relative">
+                  <input
+                    type="text"
+                    placeholder={translation?.search_locality || "Search Locality"}
+                    className="form-control ps-5"
+                  />
+                  <Search
+                    size={18}
+                    className="position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"
+                  />
                 </div>
               </div>
+            </React.Fragment>
 
-              {loading ? (
-                <ShimmerContentBlock
-                  title
-                  text
-                  cta
-                  thumbnailWidth={350}
-                  thumbnailHeight={50}
-                />
-              ) : projectListData.length > 0 ? (
-                <ResidentialProjectList
-                  projectListData={projectListData}
-                  setProjectListData={setProjectListData}
-                />
-              ) : (
-                <div style={noRecordsStyle}>
-                  <h2>
-                    {" "}
-                    {translation?.no_records_found || "No Records Found"}
-                  </h2>
-                </div>
-              )}
-              {!loading && currentPages < totalPages && (
-                <button
-                  className="btn btn-primary d-block mx-auto mt-4"
-                  onClick={() => handleLoadMoreClick(perPage + 1)}
-                >
-                  {translation?.load_more || "Load More"}
-                </button>
-              )}
-            </aside>
-            <aside className="col-xl-3 col-lg-3 col-12">
-              {adsData.length > 0 ? (
-                adsData.map((ad) => (
-                  <a
-                    key={ad.advertisement_id}
-                    role="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      logAdClick(ad.advertisement_id, ad.ad_url);
-                    }}
-                  >
-                    <img src={ad.ad_image} alt="Ad" />
-                  </a>
-                ))
-              ) : (
-                <img
-                  alt="Advertisement"
-                  src="/assets/images/ads/real-estate-poster.jpg"
-                  className="img-fluid"
-                />
-              )}
-            </aside>
+            <ProjectMobileFilters
+              showDrop={showDrop}
+              setShowDrop={setShowDrop}
+              selectedOption={selectedOption}
+              handleSortSelection={handleSortSelection}
+              toggleDropdown={toggleDropdown}
+            />
+          </>
+        ) : (
+          <div className="short-banner pt-4">
+            <div className="container-fluid">
+              <ProjectFilterPage setPerPage={setPerPage} toggleDropdown={toggleDropdown} handleClickOutside={handleClickOutside} dropdownState={dropdownState} setIsOverlayVisible={setIsOverlayVisible} />
+            </div>
           </div>
-        </div>
-      </section>
-    </MainLayout>
+        )}
+
+        <section className="section">
+          <div className="container-fluid">
+            <div className="row main-row">
+              <aside className="col-xl-9 col-lg-9 col-12">
+                <div className="d-sm-flex justify-content-between align-items-center mb-2">
+                  <h4 className="mb-3 mb-sm-0">
+                    {translation?.total || "Total"}{" "}
+                    <span className="text-primary">{projectListData.length}</span>{" "}
+                    {translation?.projects_found || "Projects Found"}
+                  </h4>
+                  <div className="sort-by d-none d-md-block">
+                    <DropdownButton
+                      align="end"
+                      title={selectedOption}
+                      id="dropdown-menu-align-end"
+                      onClick={() => setShowDrop(!showDrop)}
+                      aria-expanded={showDrop ? "true" : "false"}
+                    >
+                      {[
+                        "Recent",
+                        "Price - Low to High",
+                        "Price - High to Low",
+                        "Size - Low to High",
+                        "Size - High to Low",
+                      ].map((option) => (
+                        <Dropdown.Item
+                          eventKey="1"
+                          key={option}
+                          onClick={() => handleSortSelection(option)}
+                        >
+                          {option}
+                        </Dropdown.Item>
+                      ))}
+                    </DropdownButton>
+                  </div>
+                </div>
+
+                {loading ? (
+                  <ShimmerContentBlock
+                    title
+                    text
+                    cta
+                    thumbnailWidth={350}
+                    thumbnailHeight={50}
+                  />
+                ) : projectListData.length > 0 ? (
+                  <ResidentialProjectList
+                    projectListData={projectListData}
+                    setProjectListData={setProjectListData}
+                  />
+                ) : (
+                  <div style={noRecordsStyle}>
+                    <h2>
+                      {" "}
+                      {translation?.no_records_found || "No Records Found"}
+                    </h2>
+                  </div>
+                )}
+                {!loading && currentPages < totalPages && (
+                  <button
+                    className="btn btn-primary d-block mx-auto mt-4"
+                    onClick={() => handleLoadMoreClick(perPage + 1)}
+                  >
+                    {translation?.load_more || "Load More"}
+                  </button>
+                )}
+              </aside>
+              <aside className="col-xl-3 col-lg-3 col-12">
+                {adsData.length > 0 ? (
+                  adsData.map((ad) => (
+                    <a
+                      key={ad.advertisement_id}
+                      role="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        logAdClick(ad.advertisement_id, ad.ad_url);
+                      }}
+                    >
+                      <img src={ad.ad_image} alt="Ad" />
+                    </a>
+                  ))
+                ) : (
+                  <img
+                    alt="Advertisement"
+                    src="/assets/images/ads/real-estate-poster.jpg"
+                    className="img-fluid"
+                  />
+                )}
+              </aside>
+            </div>
+          </div>
+        </section>
+      </MainLayout>
+    </>
+
   );
 };
 

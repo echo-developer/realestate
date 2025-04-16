@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 import useTranslation from "@/hooks/useTranslation";
 import LocalityOption from "@/components/MapData/LocalitySelector";
-import { Form, Row, Col, ListGroup, Dropdown, Button } from "react-bootstrap";
+import { Form, Row, Col, ListGroup, Dropdown, Button, ButtonGroup } from "react-bootstrap";
 import {
   ProjectResidentialFilterOption,
   ProjectCommercialFilterOption,
@@ -12,7 +12,7 @@ import {
   filterOptions,
 } from "../post/PropertyData";
 
-const ProjectFilterPage = ({ setPerPage }) => {
+const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dropdownState, setIsOverlayVisible }) => {
   const { callApi } = AuthUser();
   const router = useRouter();
   const subFilterRef = useRef({});
@@ -45,6 +45,10 @@ const ProjectFilterPage = ({ setPerPage }) => {
   const [subBudget1Dropdown, setSubBudget1Dropdown] = useState(false);
   const [subBudget2Dropdown, setSubBudget2Dropdown] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState();
+
+
+
+
 
   const handlePostForTabChange = (value) => {
     setSelectedOption(value);
@@ -82,7 +86,7 @@ const ProjectFilterPage = ({ setPerPage }) => {
     setMinBudget("");
     setMaxBudget("");
     setError("");
-    setBudgetDropdown(false);
+    // setBudgetDropdown(false);
   };
   const applyBudget = () => {
     if (!error) {
@@ -92,12 +96,12 @@ const ProjectFilterPage = ({ setPerPage }) => {
 
   const toggleBudgetDropdown = () => setBudgetDropdown((prev) => !prev);
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
+  const handleInputChange = (name, value) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
       [name]: value,
     }));
+    // toggleDropdown(null);
   };
 
 
@@ -257,20 +261,20 @@ const ProjectFilterPage = ({ setPerPage }) => {
       };
       const stateObject = queryStringToObject(router?.query);
       let maxPrice, minPrice;
-      if(router.query?.max_price) {
+      if (router.query?.max_price) {
         maxPrice = JSON.parse(router.query?.max_price)
       }
-      if(router.query?.min_price) {
+      if (router.query?.min_price) {
         minPrice = JSON.parse(router.query?.min_price)
       }
 
-      if(maxPrice) {
+      if (maxPrice) {
         setMaxBudget(maxPrice);
       }
-      if(minPrice) {
+      if (minPrice) {
         setMinBudget(minPrice);
       }
-      
+
       setFilters((prev) => {
         return {
           ...prev,
@@ -323,6 +327,16 @@ const ProjectFilterPage = ({ setPerPage }) => {
 
   };
 
+  const displayProjectType = (category_id) => {
+    if (propertyTypeData?.length > 0) {
+      const project = propertyTypeData.find((project, i) => project.category_id == category_id);
+      if (project) {
+        return project.category_name || "Not Available"
+      }
+    }
+    return 'Select a Project Type';
+  }
+
   // const advanceFilterOption =
   //   filters?.project_type == 1
   //     ? ProjectResidentialFilterOption
@@ -368,6 +382,7 @@ const ProjectFilterPage = ({ setPerPage }) => {
     if (queryString) {
       router.push(`/project-listing?${queryString}`);
     }
+    handleClickOutside();
   };
 
   const advanceFilterMinMaxDataChange = (e, type) => {
@@ -593,26 +608,61 @@ const ProjectFilterPage = ({ setPerPage }) => {
                   setLocalityData={setLocalityData}
                 />
               </Col>
-              <Col className="col-lg-2 col-sm-6 col-12">
-                <Form.Select
-                  name="project_type"
-                  value={filters.project_type}
-                  onChange={handleInputChange}
-                >
-                  <option value="">
-                    {translation?.select_property_type ||
-                      "Select Property Type"}
-                  </option>
-                  {propertyTypeData?.map((property, i) => (
-                    <option value={property?.category_id} key={i}>
-                      {property?.category_name ||
-                        `${translation?.not_available || "Not available"}`}
-                    </option>
-                  ))}
-                </Form.Select>
+              <Col className="col-lg-2 col-sm-6 col-12" onClick={() => toggleDropdown('project_type')}>
+                <Dropdown className="select-dropdown mb-3 d-grid" show={dropdownState?.project_type}>
+                  <Dropdown.Toggle className="btn-form-control">
+                    {/* Select Project Type */}
+                    {displayProjectType(filters.project_type)}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu className="p-3">
+                    <div className="mt-3">
+                      <div className="form-filed">
+                        <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                          {propertyTypeData?.map((project, i) => {
+                            return (
+                              <div className="me-2 mb-2">
+                                <input type="radio"
+                                  className="btn-check"
+                                  name="projectyForGroup"
+                                  id={`projectFor-${i}`}
+                                  value={project.category_id}
+                                  onChange={() => {
+                                    handleInputChange('project_type', project.category_id)
+                                  }}
+                                  checked={
+                                    filters.project_type == project.category_id
+                                  }
+                                />
+                                <label className="btn btn-outline-light btn-sm" htmlFor={`projectFor-${i}`}>
+                                  {project.category_name || "Not Available"}
+                                </label>
+                              </div>
+                            )
+                          })}
+
+                        </ButtonGroup>
+                      </div>
+                    </div>
+                    <div className="d-flex justify-content-between mt-3">
+                      <Button variant="outline-secondary" onClick={(e) => {
+                        e.stopPropagation();
+                        handleInputChange('project_type', "");
+                      }}>
+                        {translation?.reset || "Reset"}
+                      </Button>
+                      <Button variant="primary" onClick={(e) => {
+                        e.stopPropagation();
+                        handleClickOutside()
+                      }}>
+                        {translation?.done || "Done"}
+                      </Button>
+                    </div>
+
+                  </Dropdown.Menu>
+                </Dropdown>
               </Col>
-              <Col className="col-lg-2 col-sm-6 col-12">
-                <Form.Select
+              <Col className="col-lg-2 col-sm-6 col-12" onClick={() => toggleDropdown('possession_status')}>
+                {/* <Form.Select
                   className={`${errors.possession_status ? "is-invalid" : ""}`}
                   name="possession_status"
                   value={filters.possession_status}
@@ -627,18 +677,72 @@ const ProjectFilterPage = ({ setPerPage }) => {
                       {option.status_name}
                     </option>
                   ))}
-                </Form.Select>
+                </Form.Select> */}
+                <Dropdown className="select-dropdown mb-3 d-grid" show={dropdownState?.possession_status}>
+                  <Dropdown.Toggle className={`btn-form-control ${errors.possession_status ? "is-invalid" : ""}`}>
+                    {filters.possession_status
+                      ? possessionData.find(option => option.status_id == filters.possession_status)?.status_name
+                      : (translation?.select_possession_status || "Select Possession Status")}
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="p-3">
+                    <div className="mt-3">
+                      <div className="form-field">
+                        <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                          {possessionData.map((option, i) => (
+                            <div key={option.status_id} className="me-2 mb-2">
+                              <input
+                                type="radio"
+                                className="btn-check"
+                                name="possessionStatusGroup"
+                                id={`possessionStatus-${i}`}
+                                value={option.status_id}
+                                onChange={() => handleInputChange('possession_status', option.status_id)}
+                                checked={filters.possession_status == option.status_id}
+                              />
+                              <label className="btn btn-outline-light btn-sm" htmlFor={`possessionStatus-${i}`}>
+                                {option.status_name}
+                              </label>
+                            </div>
+                          ))}
+                        </ButtonGroup>
+                      </div>
+                    </div>
+
+                    <div className="d-flex justify-content-between mt-3">
+                      <Button
+                        variant="outline-secondary"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleInputChange('possession_status', ""); // Reset value
+                        }}
+                      >
+                        {translation?.reset || "Reset"}
+                      </Button>
+                      <Button
+                        variant="primary"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleClickOutside(); // Close dropdown
+                        }}
+                      >
+                        {translation?.done || "Done"}
+                      </Button>
+                    </div>
+                  </Dropdown.Menu>
+                </Dropdown>
+
               </Col>
-              <Col className="col-lg-2 col-sm-6 col-12">
+              <Col className="col-lg-2 col-sm-6 col-12" onClick={() => toggleDropdown("budget")}>
                 <Dropdown
                   className="select-dropdown d-grid mb-3"
-                  show={BudgetDropdown}
+                  show={dropdownState?.budget}
                   onToggle={toggleBudgetDropdown}
                 >
                   <Dropdown.Toggle
                     className="btn-form-control"
                     id="budget-dropdown"
-                    onClick={() => setBudgetDropdown((prev) => !prev)}
+                    // onClick={() => setBudgetDropdown((prev) => !prev)}
                   >
                     {getDisplayText()}
                   </Dropdown.Toggle>
@@ -655,7 +759,10 @@ const ProjectFilterPage = ({ setPerPage }) => {
                             placeholder="00"
                             value={minBudget}
                             onChange={handleMinChange}
-                            onClick={() => setSubBudget1Dropdown(true)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSubBudget1Dropdown(true);
+                            }}
                           />
                         </Form.Group>
                       </Col>
@@ -672,7 +779,10 @@ const ProjectFilterPage = ({ setPerPage }) => {
                             placeholder="00"
                             value={maxBudget}
                             onChange={handleMaxChange}
-                            onClick={() => setSubBudget2Dropdown(true)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSubBudget2Dropdown(true)
+                            }}
                           />
                         </Form.Group>
                       </Col>
@@ -683,13 +793,17 @@ const ProjectFilterPage = ({ setPerPage }) => {
 
                     {/* Buttons */}
                     <div className="d-flex justify-content-between mt-3">
-                      <Button variant="outline-secondary" onClick={resetBudget}>
+                      <Button variant="outline-secondary" onClick={(e) => {
+                        e.stopPropagation();
+                        resetBudget();
+                      }}>
                         {translation?.reset || "Reset"}
                       </Button>
                       <Button
                         variant="primary"
-                        onClick={() => {
-                          applyBudget();
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleClickOutside();
                         }}
                         disabled={!!error}
                       >
@@ -712,7 +826,10 @@ const ProjectFilterPage = ({ setPerPage }) => {
                 <div className="d-grid">
                   <Button
                     variant="primary"
-                    onClick={() => setAdvanceFilter(!advanceFilter)}
+                    onClick={() => {
+                      setAdvanceFilter(!advanceFilter)
+                      toggleDropdown('advance')
+                    }}
                   >
                     {translation?.advanced || "Advanced"}
                   </Button>
@@ -720,7 +837,7 @@ const ProjectFilterPage = ({ setPerPage }) => {
               </Col>
             </Row>
 
-            {advanceFilter && (
+            {dropdownState?.advance && (
               <>
                 <div className="more-filter-dropdown d-flex">
                   {/* Left Side: Filter List */}
