@@ -5402,7 +5402,7 @@ fieldset{
 	.dropdown-menu{
 		max-height: 250px;
     	overflow-y: auto;
-		max-width: 100%;
+		/* max-width: 100%; */
 		.btn-group.column-2{
 			.btn{
 				width: calc(50% - 1rem);

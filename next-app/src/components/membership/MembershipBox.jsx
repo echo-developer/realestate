@@ -30,9 +30,9 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
         return `AED${parseFloat(price).toFixed(2)}`;
     };
     const getPlanColumnClass = (planName, index) => {
-        if (planName === 'Gold') return 'bg-warning';
-        if (planName === 'Platinum') return 'bg-primary text-white';
-        return index % 2 === 0 ? 'bg-purple text-white' : 'bg-secondary text-white';
+        if (planName === 'Gold') return 'bg-warning-subtle';
+        if (planName === 'Platinum') return 'bg-primary-subtle';
+        return index % 2 === 0 ? 'bg-purple-subtle' : 'bg-secondary-subtle';
     };
 
     const shouldShowDiscount = (plan) => {
@@ -151,8 +151,11 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
                 <div className="ul-table">
                     {planGroupNames?.flatMap(planName =>
                         planGroups?.[planName]?.map((plan, index) => (
-                            <Card key={`${planName}-${plan?.validity_days}`} className="mb-4 border-0 shadow-sm">
-                                <Card.Header className={getPlanColumnClass(planName, index)} >
+                            <Card 
+                                key={`${planName}-${plan?.validity_days}`} 
+                                className={`mb-4 border-0 shadow-sm ${getPlanColumnClass(planName, index)}`}
+                            >
+                                <Card.Header>
                                     <ul className="head mb-0 list-unstyled text-center">
                                         <li>
                                             <h4>{planName}
@@ -219,7 +222,7 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
                                     <ul className="list-unstyled text-center mt-3 mb-0">
                                         <li>
                                             <a
-                                                className={`btn btn-success ${planName === 'Gold' ? 'btn-outline-gold' :
+                                                className={`btn btn-primary ${planName === 'Gold' ? 'btn-warning' :
                                                     planName === 'Platinum' ? 'btn-outline-platinum' : 'btn-outline-plan-name'} w-100 py-2 fw-semibold`}
                                                 role="button"
                                                 onClick={() => handleSelectPlan(plan)}
