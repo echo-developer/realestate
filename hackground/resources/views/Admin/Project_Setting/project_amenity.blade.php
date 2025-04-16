@@ -107,8 +107,16 @@
                                             data-size="mini" {{ $item->status ? 'checked' : '' }}>
                                     </td>
                                     <td>
-                                        <img src="{{ asset('user_upload/amenity_image/' . $item->image) }}" alt="N/A"
-                                            class="img-thumbnail" style="height: 50px; width: 70px;">
+                                        @php
+                                            $imagePath = 'user_upload/amenity_image/' . $item->image;
+                                            $fullImagePath = public_path($imagePath);
+                                            $imageToShow =
+                                                isset($item->image) && file_exists($fullImagePath)
+                                                    ? asset($imagePath)
+                                                    : asset(config('constants.NO_IMAGE'));
+                                        @endphp
+                                        <img src="{{ $imageToShow }}"
+                                            alt="N/A" class="img-thumbnail" style="height: 50px; width: 70px;">
                                     </td>
                                     <td class="text-right">
                                         <i class="fa fa-edit text-success fa-md cursor-pointer"
@@ -186,8 +194,8 @@
                     <h5 class="modal-title" id="prop_amenityAddEditModalLabel"></h5>
 
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
 
@@ -425,7 +433,7 @@
                 contentType: false,
                 success: function(response) {
                     $('#prop_amenityimage').val(response.fileName);
-                    $('#image_preview').attr('src', response.filePath ).show();
+                    $('#image_preview').attr('src', response.filePath).show();
                     $('#delete_image_btn').show();
                 },
                 error: function(xhr, status, error) {

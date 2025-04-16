@@ -205,9 +205,10 @@
                             <td>
                                 @if ($proj->gallery->count() > 0)
                                 <img src="{{ asset('user_upload/project_images/' . $proj->gallery->first()->images->first()->filename) }}"
-                                    alt="Project Photo" width="50" height="50" />
+                                    alt="Project Photo" width="65" height="50" />
                                 @else
-                                <span>No Photo</span>
+                                <img src="{{ asset(config('constants.NO_IMAGE')) }}"
+                                    alt="Project Photo" width="65" height="50" />
                                 @endif
                             </td>
 
