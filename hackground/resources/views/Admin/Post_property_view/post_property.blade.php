@@ -36,47 +36,6 @@
                                 <input type="hidden" name="step" value="2" id="step" />
                                 <input type="hidden" name="user_id" value="{{ $userData->id }}" id="user_id" />
                                 
-                                <div id="step-1" style="display:none;">
-                                    <label class="d-block mb-2">I'm a</label>
-                                
-                                    <div class="form-field mb-3">
-                                        <label for="name" class="form-label">Name</label>
-                                        <input type="text" class="form-control" name="name"
-                                            value="{{ $userData->name }}" placeholder="Enter Your Name">
-                                        <span class="error nameError text-danger"></span>
-                                    </div>
-
-                                    <div class="input-group mb-3">
-                                        <select class="" data-width="fit">
-                                            <option value="@php if($userData->phone_code == '91'){echo 'selected';} @endphp" >IND +91</option>
-                                            <option value="@php if($userData->phone_code == '81'){echo 'selected';} @endphp">+81</option>
-                                            <option value="@php if($userData->phone_code == '71'){echo 'selected';} @endphp">+71</option>
-                                            <option value="@php if($userData->phone_code == '61'){echo 'selected';} @endphp">+61</option>
-                                            <option value="@php if($userData->phone_code == '51'){echo 'selected';} @endphp">+51</option>
-                                        </select>
-                                        <input type="number" class="form-control" name="whatsapp" placeholder="WhatsApp No." value="{{ $userData->whatsapp_no }}" required />
-                                    </div>
-
-                                    {{-- <div class="alert alert-success d-flex align-items-center">
-                                        <img src="{{ asset('assets/icons/whatsapp.png') }}" alt="whatsapp" height="48"
-                                            width="48" />
-                                        <p class="ps-3">Enter your <span class="text-green">WhatsApp Number</span> to get
-                                            enqueries from buyer/tenant</p>
-                                    </div> --}}
-
-                                    <div class="form-field mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" name="email" class="form-control"
-                                        value="{{ $userData->email }}" placeholder="Enter Your Email I’d">
-                                        <span class="error emailError text-danger"></span>
-                                    </div>
-
-                                    <div class="d-grid">
-                                        <button type="button" class="btn btn-primary btn-next" data-step="1">Next <i
-                                                class="bi bi-arrow-right"></i></button>
-                                    </div>
-                                </div>
-                                 
                                 <div id="step-2" style="display:none1;">
                                     <label class="form-label">User Type</label>
                                     <div class="btn-group btn-group-light d-flex mb-3" role="group">
@@ -142,18 +101,6 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="buyer_message">Message to buyer</label>
-                                        <textarea class="form-control" name="buyer_message" id="buyer_message"></textarea>
-                                        <span class="text-danger" id="buyer_messageError"></span>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="form-label">Project Name</label>
-                                        <input class="form-control" name="project_name" id="project_name" value="" />
-                                        <span class="text-danger" id="project_nameError"></span>
-                                    </div>
-
                                     <div class="row gx-3">
                                         <div class="col-lg-6 col-12">
                                             <label class="form-label">Expected Price</label>
@@ -179,7 +126,7 @@
                                         </div>
                                     </div>
 
-                                    <div>
+                                    <div class="form-group">
                                         <div class="btn-group btn-group-light d-flex mb-3" role="group"
                                             aria-label="Property Type">
                                             <input type="radio" class="btn-check" name="property_category"
@@ -195,6 +142,17 @@
                                         <span class="error property_categoryError text-danger"></span>
                                     </div>
 
+                                    <div class="form-group project-name">
+                                        <label class="form-label">Project Name</label>
+                                        <input class="form-control" name="project_name" id="project_name" value="" />
+                                        <span class="text-danger" id="project_nameError"></span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="buyer_message">Message to buyer</label>
+                                        <textarea class="form-control" name="buyer_message" id="buyer_message"></textarea>
+                                        <span class="text-danger" id="buyer_messageError"></span>
+                                    </div>
 
                                     <div class="d-grid columns-2">
                                         <button type="button" class="btn btn-secondary btn-back-2"><i
@@ -209,7 +167,7 @@
                                         <div class="col-lg-6 col-12">
                                             <div class="form-field">
                                                 <label class="form-label">City</label>
-                                                <select id="city" name="city" class="form-control ">
+                                                <select id="city" name="city" class="form-control" onchange="loadLocality($(this))">
                                                     <option value="">Select City</option>
                                                     @if (!empty($cities) && is_array($cities))
                                                         @foreach ($cities as $city)
@@ -225,14 +183,21 @@
                                                 <span class="error cityError text-danger"></span>
                                             </div>
                                         </div>
+
+                                        <div class="col-lg-6 col-12">
+                                            <div class="form-field">
+                                                <label class="form-label">Locality</label>
+                                                <div class="mb-3">
+                                                    <select class="form-select" name="locality" id="locality">
+        
+                                                    </select>
+                                                    <span class="error localityError text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
                                         
                                     </div>
-                                    <div class="form-field">
-                                        <label class="form-label">Name of Project Or Locality</label>
-                                        <input type="text" name="locality" class="form-control"
-                                            placeholder="Enter Project Name Or Locality" />
-                                        <span class="error localityError text-danger"></span>
-                                    </div>
+                                    
                                     <div class="form-field">
                                         <label class="form-label">Address</label>
                                         <textarea rows="3" class="form-control mb-2" name='address' placeholder="Enter Your Address"></textarea>
@@ -328,7 +293,7 @@
                                     </div>
                                 </div>
 
-                                <div id="step-5" style="display:none;">
+                                <div id="step-5" style="display:none1;">
 
                                     <div class="row gx-3">
                                         <!-- Bedroom -->
@@ -430,26 +395,26 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="form-label">Total Floors</label>
-                                        <select class="form-control" name="total_floors">
-                                            <option value="">--Select--</option>
-                                            @php  
-                                                $total_floors = get_total_floors();
-                                            @endphp
-                                            @if($total_floors)
-                                            @foreach($total_floors as $k=>$f)
-                                                <option value="{{$k}}">{{$f}}</option>
-                                            @endforeach
-                                            @endif
-                                        </select>
-                                        <span class="error total_floorsError text-danger"></span>
+                                    <div class="row gx-3">
+                                        <div class="form-group col-lg-6 col-12">
+                                            <label class="form-label">Total Floors</label>
+                                            <select class="form-control" name="total_floors">
+                                                <option value="">--Select--</option>
+                                                @php  
+                                                    $total_floors = get_total_floors();
+                                                @endphp
+                                                @if($total_floors)
+                                                @foreach($total_floors as $k=>$f)
+                                                    <option value="{{$k}}">{{$f}}</option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                            <span class="error total_floorsError text-danger"></span>
+                                        </div>
                                     </div>
 
                                     <div id="residential_features">
-                                        
                                         <div class="form-group"><label class="form-label">Amenity Features : </label>
-
                                             @if (!empty($proepertyAmenities) && is_array($proepertyAmenities))
                                                 @foreach ($proepertyAmenities as $amenity)
                                                     <div class="form-check form-check-inline">
@@ -640,6 +605,7 @@
 
                                     <div class="row gx-3">
                                         <div class="form-field col-lg-6 col-12">
+                                            <label class="form-label">Water Availability</label>
                                             <select class="form-control" name="water_available">
                                                 <option value="">--Select Water Availability--</option>
                                                 @php  
@@ -655,6 +621,7 @@
                                         </div>
 
                                         <div class="form-field col-lg-6 col-12">
+                                            <label class="form-label">Status of Electricity</label>
                                             <select class="form-control" name="electric_available">
                                                 <option value="">Select status of electricity</option>
                                                 @php  
@@ -823,6 +790,34 @@
 @endsection
 @push('custom-js')
     <script>
+        function loadLocality(evt)
+        {
+            var city_id = $(evt).val();
+            var dropdown = $('#locality');
+            dropdown.empty();
+            $.ajax({
+                url: "{{ url('/api/get_locality') }}/" + city_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 1) {
+                        dropdown.append(
+                            '<option value="">Select Locality</option>');
+
+                        $.each(response.data, function(index, item) {
+                            dropdown.append('<option value="' + item.locality_id +
+                                '">' + item.locality_name + '</option>');
+                        });
+                    } else {
+                        console.error('Error: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                }
+            });
+        }
+
         $('#fileinput').on('change', function() {
             var activeTab = $(".image-tab-content .nav-link.active").attr("data-tab");
             let files = this.files;
@@ -860,6 +855,20 @@
                     console.error('AJAX Error:', error);
                 }
             });
+        });
+
+        function toggleProjectName() {
+            if ($('input[name="property_category"]:checked').val() === 'project') {
+                $('.project-name').show();
+            } else {
+                $('.project-name').hide();
+            }
+        }
+
+        toggleProjectName();
+
+        $('input[name="property_category"]').change(function () {
+            toggleProjectName();
         });
 
         $(function(){
@@ -1169,8 +1178,8 @@
 
     function removeForm(formContainer) {  
         formContainer.children().last().remove();  
-    }  
-
+    }
+    
 });
 </script>
 @endpush

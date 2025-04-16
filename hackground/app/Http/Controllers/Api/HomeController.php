@@ -118,6 +118,32 @@ class HomeController extends Controller
             throw $e;
         }
     }
+
+    public function getCityLocality(Request $request)
+    {
+        try {
+            $city_id = $request->id;
+            $lang = strtolower($request->input('lang', 'en'));
+            $data = $this->apiModel->getLocality($lang, $city_id);
+
+            if ($data->isEmpty()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'No Locality found.',
+                    'data' => [],
+                ]);
+            }
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Locality retrieved successfully.',
+                'data' => $data,
+            ], 200);
+        } catch (\Throwable $e) {
+            throw $e;
+        }
+    }
+
     public function get_properties(Request $request)
     {
         $recentPage = $request->input('recent_page', 1);

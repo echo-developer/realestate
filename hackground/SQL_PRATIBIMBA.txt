@@ -110,3 +110,5 @@ ALTER TABLE `pref_advertisement_category` CHANGE `property_category` `property_c
 ALTER TABLE `pref_locality` ADD `locality_key` VARCHAR(70) NULL AFTER `city`, ADD `latitude` FLOAT NULL AFTER `locality_key`, ADD `longitude` FLOAT NULL AFTER `latitude`;
 
 ALTER TABLE `pref_locality` CHANGE `order` `order` INT NULL;
+
+ALTER TABLE `pref_properties_location` CHANGE `locality` `locality` BIGINT NULL DEFAULT NULL;

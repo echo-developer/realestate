@@ -215,19 +215,8 @@ class PostPropertyController extends Controller
         if ($request) {
             $step = $request->step;
             $user_id = $request->user_id;
-            $prop_id = $request->prop_id; // Add prop_id from request if exists
+            $prop_id = $request->prop_id;
 
-            if ($step == '1') {
-                $request->validate([
-                    'name' => 'required',
-                    'email' => 'required',
-                ]);
-
-                return json_encode(array(
-                    'status' => 'OK',
-                    'nextStep' => '2'
-                ));
-            }
             if ($step == '2') {
                 $request->validate([
                     'postAs' => 'required',
@@ -671,7 +660,7 @@ class PostPropertyController extends Controller
         $data = [
             'pid' => $propertyId,
             'city' => $request->city,
-            'locality' => $request->landmark,
+            'locality' => $request->locality,
             'property_address' => $request->address,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
@@ -745,6 +734,7 @@ class PostPropertyController extends Controller
             'electric_available' => $request->electric_available,
             'water_available' => $request->water_available,
             'ownership_type' => $request->ownership_type,
+            'token_amount' => $request->token_amount,
         ];
         //print_r($data);exit;
         if ($additional) {
