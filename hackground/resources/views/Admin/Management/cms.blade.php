@@ -272,44 +272,6 @@
             CKEDITOR.replace(`content_${lang}`);
         });
 
-        // $(document).ready(function() {
-
-        //     $('#exportExcel').on('click', function() {
-
-
-        //         var table = document.querySelector('#email-table').cloneNode(true);
-
-
-        //         $(table).find('input.cms_prop_status').each(function() {
-        //             var state = $(this).is(':checked') ? 'Active' : 'Inactive';
-        //             $(this).parent().text(
-        //                 state);
-        //         });
-
-
-        //         var excludeColumnIndex = 5;
-
-
-        //         $(table).find('thead th').eq(excludeColumnIndex).remove();
-
-
-        //         $(table).find('tbody tr').each(function() {
-        //             $(this).find('td').eq(excludeColumnIndex)
-        //                 .remove();
-        //         });
-
-
-        //         var workbook = XLSX.utils.table_to_book(table, {
-        //             sheet: "Sheet1"
-        //         });
-
-
-        //         XLSX.writeFile(workbook, 'email-template.xlsx');
-        //     });
-        // });
-
-
-
 
         function add_prop_cms() {
             const langs = @json($langs); // Pass $langs from backend as JSON
@@ -418,8 +380,6 @@
 
             });
         }
-
-
 
         $('.cms_prop_status').change(function() {
 
