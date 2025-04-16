@@ -11,6 +11,7 @@ import withAuth from "@/utils/withAuth";
 import ProjectAmenities from "@/components/postproject/ProjectAmenities";
 import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
 import useTranslation from "@/hooks/useTranslation";
+import { Row, Col} from "react-bootstrap";
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -129,8 +130,12 @@ const translation = useTranslation();
   return (
     <DashboardLayout>
       <aside className="col-lg col-12">
-        <div className="p-4">
-          <h1 className="h4 text-primary">{translation?.my_project_favourite_list || "My Project Favourite List"}</h1>
+        <div className="page-fluid-container">
+          <div className="pageTitle">
+            <h1>
+              {translation?.my_project_favourite_list || "My Project Favourite List"}
+            </h1>
+          </div> 
           <div className="list-display">
             {isLoading ? (
               <div className="loading-spinner">
@@ -141,11 +146,11 @@ const translation = useTranslation();
             ) : favList.length > 0 ? (
               favList.map((project) => (
                 <div className="card card-ads" key={project.project_id}>
-                  <div className="row g-0">
-                    <div className="col-sm-4">
+                  <Row className="g-0">
+                    <Col xxl={3} sm={4} xs={12}>
                       <CardImageSlider data={project} keyword="gallery" icons={false} />
-                    </div>
-                    <div className="col-sm-8 position-relative">
+                    </Col>
+                    <Col xxl={9} sm={8} xs={12} className="position-relative">
                       <div className="card-body">
                         <h4>
                           <Link href={`/project-details/${project.slug}`}>
@@ -173,19 +178,19 @@ const translation = useTranslation();
                           <i className="bi bi-calendar4"></i>{" "}
                           {useDateFormat(project.created_at)}
                         </p>
-                        <div className="d-sm-flex">
-                          <button className="btn btn-sm btn-success me-2">
+                        <div className="d-flex gap-2">
+                          <button className="btn btn-sm btn-primary">
                           {translation?.view_enquiry || "View Enquiry"}
                           </button>
                           <button
                             onClick={() => handleShowModal(project.id)}
-                            className="btn btn-sm btn-warning me-2"
+                            className="btn btn-sm btn-warning"
                           >
                            {translation?.add_amenity || "Add Amenity"}
                           </button>
                           <Link
                             href={`/project-edit/${project.id}`}
-                            className="btn btn-sm btn-outline-primary me-2 ms-auto"
+                            className="btn btn-sm btn-outline-primary ms-auto"
                           >
                             <i className="bi bi-pencil-square"></i>
                           </Link>
@@ -197,8 +202,8 @@ const translation = useTranslation();
                           </button>
                         </div>
                       </div>
-                    </div>
-                  </div>
+                    </Col>
+                  </Row>
                 </div>
               ))
             ) : (

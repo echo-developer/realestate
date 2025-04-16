@@ -1694,7 +1694,7 @@ const index = () => {
                                   title="Bedrooms:"
                                 ></i>
                                 <span>
-                                  {property?.bedrooms || "Not Available"}
+                                  {property?.bedrooms ? property.bedrooms : <span className="text-muted">Not Available</span>}
                                 </span>
                                 {property?.bedrooms && " Beds"}
                               </li>
@@ -1704,7 +1704,7 @@ const index = () => {
                                   title="Bathrooms:"
                                 ></i>
                                 <span>
-                                  {property?.bathroom || "Not Available"}
+                                  {property?.bathroom ? property.bathroom : <span className="text-muted">Not Available</span>}
                                 </span>
                                 {property?.bathroom && " Bath"}
                               </li>

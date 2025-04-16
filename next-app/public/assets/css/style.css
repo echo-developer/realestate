@@ -32608,6 +32608,12 @@ fieldset legend {
   padding-inline-start: calc(var(--re-gutter-x) * 0.15);
 }
 
+.page-fluid-container .pageTitle h1, .page-fluid-container .pageTitle .h1 {
+  color: #1365CF;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
 header {
   position: relative;
   z-index: 1021;
@@ -37314,6 +37320,9 @@ fieldset .btn-delete {
   .container-fluid, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
     --re-gutter-x: 4rem;
   }
+  .page-fluid-container {
+    padding: 1.5rem;
+  }
   .banner-box-4 {
     margin-top: -100px;
   }
@@ -37471,6 +37480,9 @@ fieldset .btn-delete {
   }
   .section {
     padding: 2rem 0;
+  }
+  .page-fluid-container {
+    padding: 1rem;
   }
   .footer-links ul {
     margin-bottom: 1.5rem;
