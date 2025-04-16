@@ -23,13 +23,13 @@
                 <div class="page-title-icon">
                     <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
                 </div>
-                <div>Notification <div class="page-title-subheading">Admin Notification &gt; All Notification List
+                <div>Notification <div class="page-title-subheading">Notification &gt; All Notification List
                     </div>
                 </div>
             </div>
             <div class="page-title-actions">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href=""> Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
                     <li class="breadcrumb-item active">Notification</li>
                 </ol>
             </div>

@@ -21,13 +21,13 @@
                     <div class="page-title-icon">
                         <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
                     </div>
-                    <div>Property
-                        <div class="page-title-subheading">Property &gt; Property Recommended List</div>
+                    <div>Property Recommended
+                        <div class="page-title-subheading">Property Setting &gt; Property Recommended List</div>
                     </div>
                 </div>
                 <div class="page-title-actions">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href=""> Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
                         <li class="breadcrumb-item active">Property Recommended List</li>
                     </ol>
                 </div>

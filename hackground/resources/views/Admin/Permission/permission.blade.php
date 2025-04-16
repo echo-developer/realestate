@@ -23,14 +23,14 @@
                     <div class="page-title-icon">
                         <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
                     </div>
-                    <div>Admin User
-                        <div class="page-title-subheading">Admin User &gt; Admin User List</div>
+                    <div>Menu Permission
+                        <div class="page-title-subheading">Menu Permission &gt; Give Menu Permission</div>
                     </div>
                 </div>
                 <div class="page-title-actions">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href=""> Home</a></li>
-                        <li class="breadcrumb-item active">Admin User</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
+                        <li class="breadcrumb-item active">Menu Permission</li>
                     </ol>
                 </div>
             </div>

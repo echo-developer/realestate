@@ -22,13 +22,13 @@
                 <div class="page-title-icon">
                     <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
                 </div>
-                <div>Property
-                    <div class="page-title-subheading">Property &gt; Property Furnish List</div>
+                <div>Property Furnish
+                    <div class="page-title-subheading">Property Setting &gt; Property Furnish List</div>
                 </div>
             </div>
             <div class="page-title-actions">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href=""> Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
                     <li class="breadcrumb-item active">Property Furnish List</li>
                 </ol>
             </div>

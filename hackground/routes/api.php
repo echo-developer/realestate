@@ -287,3 +287,20 @@ Route::controller(VerifyUserMailController::class)->group(function () {
 Route::controller(CmsController::class)->group(function () {
     Route::get('cms/{key?}', 'get_content')->name('cms.get_content');
 });
+
+Route::get('/get-settings-value/{key?}', function ($key = null) {
+    if (!$key) {
+        return response()->json([
+            'status' => 0,
+            'message' => 'Key is required.',
+        ], 400);
+    }
+
+    $value = get_setting($key);
+
+    return response()->json([
+        'status' => 1,
+        'key' => $key,
+        'value' => $value
+    ]);
+});

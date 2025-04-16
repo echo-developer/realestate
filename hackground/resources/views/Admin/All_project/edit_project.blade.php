@@ -93,7 +93,7 @@
         <div class="page-title-icon">
           <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
         </div>
-        <div>Project Edit <div class="page-title-subheading">Project &gt;Project Edit
+        <div>Project Edit <div class="page-title-subheading">Project Setting &gt;Project Edit
           </div>
         </div>
       </div>
