@@ -28,7 +28,7 @@ class CmsController extends Controller
                 'data' => [
                     'id' => $cms->id,
                     'slug' => $cms->slug,
-                    'content' => optional($cms->names)->content,
+                    'content' => html_entity_decode(optional($cms->names)->content),
                     'title' => optional($cms->names)->title,
                 ]
             ]);
