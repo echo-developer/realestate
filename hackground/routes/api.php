@@ -274,6 +274,7 @@ Route::controller(UserMembershipController::class)->group(function () {
     Route::get('membership_pakages', 'membership_pakage_lists')->name('pakage.list');
     Route::get('user_membership', 'getUserMembership')->name('user.membership');
     Route::get('get_remaining_value', 'getRemainingValue')->name('user.remainingvalue');
+    Route::get('user_membership_details', 'getMembershipDetails')->name('user.membership_details');
 });
 
 Route::controller(BankController::class)->group(function () {
