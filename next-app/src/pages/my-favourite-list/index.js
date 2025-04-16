@@ -178,7 +178,7 @@ const Index = () => {
                           {useDateFormat(property.created_at)}
                         </p>
                         <div className="d-sm-flex">
-                          <button className="btn btn-sm btn-success me-2">
+                          <button className="btn btn-sm btn-primary me-2">
                             {translation?.view_enquiry || "View Enquiry"}
                           </button>
                           <button

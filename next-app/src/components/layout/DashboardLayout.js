@@ -2,6 +2,7 @@
 import React from 'react';
 import SideBar from '../sidebar/SideBar';
 import Header from '../header/Header';
+import MobileFooter from '../addtional/MobileFooter';
 
 const DashboardLayout = ({ children }) => {
   return (
@@ -12,9 +13,11 @@ const DashboardLayout = ({ children }) => {
           <div className="d-flex flex-wrap">
             <SideBar />
             <>{children}</>
+
           </div>
         </div>
       </div>
+      <MobileFooter />
     </React.Fragment>
   );
 };
