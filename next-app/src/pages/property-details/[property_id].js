@@ -36,7 +36,7 @@ import { CheckCircleFill, XCircleFill, Calendar2Check } from "react-bootstrap-ic
 const index = () => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const router = useRouter();
-  const { defaultCity } = useAuth();
+  const { defaultCity, currencyCode } = useAuth();
   const translation = useTranslation();
   const [showAll, setShowAll] = useState(false);
   const { property_id } = router.query;
@@ -252,7 +252,7 @@ const index = () => {
               <div className="row mb-3">
                 <div className="col-md mb-3 mb-md-0">
                   <h3>
-                    {propertyDetails?.currency}{" "}
+                    {currencyCode}{" "}
                     {propertyDetails?.price || "Not available"}
                   </h3>
                   {propertyDetails?.property_features?.bedrooms && (

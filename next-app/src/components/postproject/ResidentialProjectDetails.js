@@ -50,7 +50,7 @@ const ResidentialProjectDetails = ({
   displayNumber,
   viewNumber,
 }) => {
-  const { defaultCity } = useAuth();
+  const { defaultCity, currencyCode } = useAuth();
   const [visible, setVisible] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [projectId, setprojectId] = useState();
@@ -257,10 +257,11 @@ const ResidentialProjectDetails = ({
               <div className="row mb-3 mt-3">
                 <div className="col-md mb-3 mb-md-0">
                   <h3>
-                    {detailsData?.currency ||
+                    {/* {detailsData?.currency ||
                       `${translation?.not_available ||
                       `${translation?.not_available || "Not Available"}`
-                      }`}{" "}
+                      }`}{" "} */}
+                      {currencyCode || ""}
                     {detailsData?.expected_price ||
                       `${translation?.not_available || "Not Available"}`}
                   </h3>
