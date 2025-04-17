@@ -96,7 +96,6 @@ a {
 .hamburger {
   font-size: 24px;
 }
-
-.modal-open {
-  padding-right: 0 !important;
+.modal-open{
+  position: fixed;
 }
