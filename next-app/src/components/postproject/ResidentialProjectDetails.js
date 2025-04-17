@@ -46,7 +46,9 @@ const ResidentialProjectDetails = ({
   showCommunicationModal,
   setShowCommunicationModal,
   showPhoneNumber, 
-  setShowPhoneNumber
+  setShowPhoneNumber,
+  displayNumber,
+  viewNumber,
 }) => {
   const { defaultCity } = useAuth();
   const [visible, setVisible] = useState(false);
@@ -904,7 +906,7 @@ const ResidentialProjectDetails = ({
                   addRemoveFav={addFavOtherProjects}
                 />
               )}
-
+  
               <p className="small">
                 <b>{translation?.disclaimer || "Disclaimer"}</b>
                 {translation?.property_disclaimer ||
@@ -922,6 +924,8 @@ const ResidentialProjectDetails = ({
               setShowCommunicationModal={setShowCommunicationModal}
               showPhoneNumber={showPhoneNumber}
               setShowPhoneNumber={setShowPhoneNumber}
+              viewNumber={viewNumber}
+              displayNumber={displayNumber}
             />
           </div>
         </div>
@@ -950,7 +954,7 @@ const ResidentialProjectDetails = ({
           {translation?.contact_header || "Contact Header"}
         </Modal.Header>
         <Modal.Body show={showContactModal}>
-          <ProjectEnquiryForm closeModal={() => setShowCotactModal(false)} />
+          <ProjectEnquiryForm closeModal={() => setShowCotactModal(false)} showPhoneNumber={true} displayNumber={displayNumber} />
         </Modal.Body>
       </Modal>
     </>

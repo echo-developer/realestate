@@ -46,7 +46,9 @@ const CommercialProjectDetails = ({
   showCommunicationModal,
   setShowCommunicationModal,
   showPhoneNumber, 
-  setShowPhoneNumber
+  setShowPhoneNumber,
+  displayNumber,
+  viewNumber,
 }) => {
   const { defaultCity } = useAuth();
   const [visible, setVisible] = useState(false);
@@ -898,6 +900,9 @@ const CommercialProjectDetails = ({
               categoryId={detailsData?.project_type_id}
               showCommunicationModal={showCommunicationModal}
               setShowCommunicationModal={setShowCommunicationModal}
+              setShowPhoneNumber={setShowPhoneNumber}
+              viewNumber={viewNumber}
+              displayNumber={displayNumber}
               
             />
           </div>
@@ -927,7 +932,7 @@ const CommercialProjectDetails = ({
           {translation?.contact_header || "Contact Header"}
         </Modal.Header>
         <Modal.Body show={showContactModal}>
-          <ProjectEnquiryForm closeModal={() => setShowCotactModal(false)} />
+          <ProjectEnquiryForm closeModal={() => setShowCotactModal(false)} showPhoneNumber={showPhoneNumber} displayNumber={displayNumber} />
         </Modal.Body>
       </Modal>
     </>
