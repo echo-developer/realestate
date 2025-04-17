@@ -24,17 +24,21 @@ const PropertySidebar = ({
   addRemoveFav,
   setShowLoginErrorModal,
   showCommunicationModal,
-  setShowCommunicationModal
+  setShowCommunicationModal,
+  viewNumber,
+  displayPhoneNumber,
+  showPhoneNumber,
+  setShowPhoneNumber
 }) => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
-  const [showPhoneNumber, setShowPhoneNumber] = useState(false);
+
   const { defaultCity } = useAuth();
   const [showReportModal, setShowReportModal] = useState(false);
   const [showAgentModal, setShowAgentModal] = useState(false);
-  const [viewNumber, setViewNumber] = useState(false);
   const translation = useTranslation();
   const memberId = GetMemberId();
   const categoryId = propertyDetails?.property_type_id;
+  const [contactPhoneNumber, setContactPhoneNumber] = useState("");
   const { adsData, logAdClick } = useAdvertisement(
     "detail-page",
     "right",
@@ -124,6 +128,12 @@ const PropertySidebar = ({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleGetPhoneNumber = () => {
+    setShowCommunicationModal(true);
+    setShowPhoneNumber(true)
+  }
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -146,6 +156,9 @@ const PropertySidebar = ({
             propertyId: propertyId || "",
             countryCode: "IND +91",
           });
+          if(showPhoneNumber) {
+            displayPhoneNumber();
+          }
         } else {
           toast.error(response?.message || "Failed to submit enquiry.");
         }
@@ -297,14 +310,15 @@ const PropertySidebar = ({
                       {propertyDetails?.user_details?.phone && (
                         <button
                           className="btn btn-primary mb-2"
-                          onClick={() => setShowPhoneNumber(true)}
+                          onClick={() => handleGetPhoneNumber()}
                         >
-                          {showPhoneNumber
+                          {/* {showPhoneNumber
                             ? propertyDetails?.user_details?.phone_code +
                             propertyDetails?.user_details?.phone
                             : `${translation?.get_phone_number ||
                             "Get Phone Number"
-                            }`}
+                            }`} */}
+                            {viewNumber || "Get Phone Number"}
                         </button>
                       )}
                       <button
@@ -635,7 +649,7 @@ const PropertySidebar = ({
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <EnquiryForm propertyId={propertyId} handleClose={handleClose} />
+          <EnquiryForm propertyId={propertyId} handleClose={handleClose} showPhoneNumber={showPhoneNumber} displayPhoneNumber={displayPhoneNumber} />
         </Modal.Body>
       </Modal>
 

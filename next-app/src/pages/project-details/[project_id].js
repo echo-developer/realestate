@@ -24,6 +24,7 @@ const Index = () => {
   const [showCommunicationModal, setShowCommunicationModal] = useState(false);
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);
   const [userDetails, setUserDetails] = useState()
+  const [viewNumber, setViewNumber] = useState("");
   useEffect(() => {
     if (project_id) {
       FetchProjectDetails();
@@ -42,12 +43,15 @@ const Index = () => {
         setUserDetails(response?.data?.user_details)
       }
     } catch (error) {
-      console.error("response not found");
+      console.error(error?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
 
+  const displayNumber = () => {
+    setViewNumber(detailsData?.user_details?.phone ? `${detailsData?.user_details?.phone_code}-${detailsData?.user_details?.phone}` : "Not Available")
+  }
 
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
@@ -193,6 +197,8 @@ const Index = () => {
           setShowCommunicationModal={setShowCommunicationModal}
           showPhoneNumber={showPhoneNumber}
           setShowPhoneNumber={setShowPhoneNumber}
+          displayNumber={displayNumber}
+          viewNumber={viewNumber}
         />
       ) : (
         <CommercialProjectDetails
@@ -209,16 +215,21 @@ const Index = () => {
           setShowCommunicationModal={setShowCommunicationModal}
           showPhoneNumber={showPhoneNumber}
           setShowPhoneNumber={setShowPhoneNumber}
+          displayNumber={displayNumber}
+          viewNumber={viewNumber}
         />
       )}
-      {detailsData?.is_my_project ? (
+      {!detailsData?.is_my_project ? (
         <footer className="small-footer special-footer p-3">
           <div className="d-grid columns-2">
             <button
               className="btn btn-outline-primary"
-              onClick={() => setShowPhoneNumber(true)}
+              onClick={() => {
+                setShowPhoneNumber(true);
+                setShowCommunicationModal(true);
+              }}
             >
-              {showPhoneNumber ? `${projectDetails?.user_details?.phone_code + projectDetails?.user_details?.phone || "Not Available"}`: `${translation?.get_phone_number || "Get Phone Number"}`}
+              {viewNumber || "Get Phone Number"}
             </button>
             <button
               className="btn btn-primary"

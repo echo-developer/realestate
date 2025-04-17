@@ -8,7 +8,7 @@ import useTranslation from "@/hooks/useTranslation";
 import { Row, Col, FloatingLabel, Button } from "react-bootstrap";
 
 // Validation schema for the form
-const ProjectEnquiryForm = ({ projectId, handleClose }) => {
+const ProjectEnquiryForm = ({ projectId, handleClose, showPhoneNumber, displayNumber }) => {
   const { callApi, isLogin } = AuthUser();
   const [loading, setLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
@@ -24,6 +24,7 @@ const ProjectEnquiryForm = ({ projectId, handleClose }) => {
   const [showOTPField, setShowOTPField] = useState(false);
   
 
+  console.log("enquery show phoen number", showPhoneNumber)
   useEffect(() => {
     let interval = null;
 
@@ -192,9 +193,14 @@ const ProjectEnquiryForm = ({ projectId, handleClose }) => {
         data,
       });
 
+      console.log("enqery ran")
       if (response && response.status === 1) {
         handleClose();
         resetForm();
+        console.log("showPhoneNumber", showPhoneNumber)
+        if(showPhoneNumber) {
+          displayNumber();
+        }
         toast.success(response.message || "Enquiry sent successfully.");
       } else {
         toast.error(response.message || "Form submission failed.");

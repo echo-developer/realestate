@@ -39,7 +39,7 @@ import PropertyMobileFilters from "@/components/addtional/PropertyMobileFilter";
 import useIsMobile from "@/hooks/useIsMobile";
 
 const index = () => {
-  const { defaultCity } = useAuth();
+  const { defaultCity, currency, currencyCode } = useAuth();
   const translation = useTranslation();
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
@@ -362,9 +362,9 @@ const index = () => {
 
 
   const displayBudget = () => {
-    if (minBudget && maxBudget) return `$${minBudget} - $${maxBudget}`;
-    if (minBudget) return `Min: $${minBudget}`;
-    if (maxBudget) return `Max: $${maxBudget}`;
+    if (minBudget && maxBudget) return `${currency}${minBudget} - ${currency}${maxBudget}`;
+    if (minBudget) return `Min: ${currency}${minBudget}`;
+    if (maxBudget) return `Max: ${currency}${maxBudget}`;
     return `${translation?.select_budget || "Select Budget"}`;
   };
 
@@ -1691,12 +1691,13 @@ const index = () => {
                               </Link>
                             </h4>
                             <h5 className="mb-0">
-                              {property?.price_currency && property?.exp_price
+                              {property?.exp_price ? `${currencyCode || ""} ${property?.exp_price}` : "Price not Available"}
+                              {/* {property?.price_currency && property?.exp_price
                                 ? `${property.price_currency
                                 } ${new Intl.NumberFormat("en-US").format(
                                   property.exp_price
                                 )} ${property?.price_per_sqft ? `(${property?.price_currency} ${property.price_per_sqft} sq/ft)` : ""}`
-                                : "Price not available"}
+                                : "Price not available"} */}
                             </h5>
                             <p className="mb-1">
                               {/* <small>

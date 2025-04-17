@@ -7,7 +7,7 @@ import AuthUser from "../Authentication/AuthUser";
 import useTranslation from "@/hooks/useTranslation";
 import { Row, Col, FloatingLabel, Button } from "react-bootstrap";
 
-const EnquiryForm = ({ propertyId, handleClose }) => {
+const EnquiryForm = ({ propertyId, handleClose, showPhoneNumber, displayPhoneNumber }) => {
   const translation = useTranslation();
   const { callApi, isLogin } = AuthUser();
   const [loading, setLoading] = useState(false);
@@ -195,6 +195,9 @@ const EnquiryForm = ({ propertyId, handleClose }) => {
       if (response && response.status === 1) {
         handleClose();
         resetForm();
+        if(showPhoneNumber) {
+          displayPhoneNumber();
+        }
         toast.success(response.message || "Enquiry Send Success");
       } else {
         toast.error(response.message || "Form submission failed.");

@@ -56,6 +56,7 @@ const index = () => {
     "footer",
     defaultCity?.city_id
   );
+  const [viewNumber, setViewNumber] = useState("");
 
   useEffect(() => {
     if (property_id) {
@@ -91,6 +92,9 @@ const index = () => {
     }
   };
 
+  const displayPhoneNumber = () => {
+    setViewNumber(propertyDetails?.user_details?.phone ? `${propertyDetails?.user_details?.phone_code}-${propertyDetails?.user_details?.phone}` : 'Not Available')
+  }
   const amenitiesToShow = showAllAmenities
     ? propertyDetails?.property_amenities || []
     : propertyDetails?.property_amenities?.slice(0, 10) || [];
@@ -824,6 +828,10 @@ const index = () => {
               setShowLoginErrorModal={setShowLoginErrorModal}
               showCommunicationModal={showCommunicationModal}
               setShowCommunicationModal={setShowCommunicationModal}
+              viewNumber={viewNumber}
+              displayPhoneNumber={displayPhoneNumber}
+              showPhoneNumber={showPhoneNumber}
+              setShowPhoneNumber={setShowPhoneNumber}
 
             />
           </div>
@@ -835,14 +843,12 @@ const index = () => {
         <div className="d-grid columns-2">
           <button
             className="btn btn-outline-primary"
-            onClick={() => setShowPhoneNumber(true)}
+            onClick={() => {
+              setShowPhoneNumber(true);
+              setShowCommunicationModal(true);
+            }}
           >
-            {showPhoneNumber
-                            ? propertyDetails?.user_details?.phone_code +
-                            propertyDetails?.user_details?.phone
-                            : `${translation?.get_phone_number ||
-                            "Get Phone Number"
-                            }`}
+                            {viewNumber || "GET Phone Number"}
           </button>
           <button
             className="btn btn-primary"

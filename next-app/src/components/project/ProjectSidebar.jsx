@@ -23,7 +23,9 @@ const ProjectSidebar = ({
   showCommunicationModal, 
   setShowCommunicationModal,
   showPhoneNumber,
-  setShowPhoneNumber
+  setShowPhoneNumber,
+  viewNumber,
+  displayNumber,
 }) => {
   const [showAll, setShowAll] = useState(false);
   const { defaultCity } = useAuth();
@@ -121,6 +123,9 @@ const ProjectSidebar = ({
             message: "",
             countryCode: "IND +91",
           });
+          if(showPhoneNumber) {
+            displayNumber();
+          }
         } else {
           toast.error(response.message || "Enquiry Send Failed");
         }
@@ -246,9 +251,12 @@ const ProjectSidebar = ({
                       {projectDetails?.user_details?.phone && (
                         <button
                           className="btn btn-primary mb-1"
-                          onClick={() => setShowPhoneNumber(true)}
+                          onClick={() => {
+                            setShowPhoneNumber(true)
+                            setShowCommunicationModal(true);
+                          }}
                         >
-                          {showPhoneNumber ? `${projectDetails?.user_details?.phone_code + projectDetails?.user_details?.phone || "Not Available"}`: `${translation?.get_phone_number || "Get Phone Number"}`}
+                          {viewNumber || "Get Phone Number"}
                         </button>
                       )}
 
@@ -574,7 +582,7 @@ const ProjectSidebar = ({
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ProjectEnquiryForm projectId={projectId} handleClose={handleClose} />
+          <ProjectEnquiryForm projectId={projectId} handleClose={handleClose} showPhoneNumber={showPhoneNumber} displayNumber={displayNumber} />
         </Modal.Body>
       </Modal>
 

@@ -13,7 +13,7 @@ import MobileMenu from "../addtional/Mmenu";
 
 const Header = () => {
   const { callApi, isLogin, logout, GetMemberId } = AuthUser();
-  const { defaultCity, handleDefaultCityChange ,setGetAllCity } = useAuth();
+  const { defaultCity, handleDefaultCityChange ,setGetAllCity, currency } = useAuth();
   const [isDesktopLogoLoaded, setIsDesktopLogoLoaded] = useState(false);
   const [isMobileLogoLoaded, setIsMobileLogoLoaded] = useState(false);
   const [showLocationDrop, setShowLocationDrop] = useState(false);
@@ -34,6 +34,7 @@ const Header = () => {
   const [userData, setUserData] = useState();
   const memberId = GetMemberId();
   const [currentLang, setCurrentLang] = useState("en");
+  // const [currency, setCurrency] = useState("");
 
   useEffect(() => {
     const storedLang = localStorage.getItem("lang") || "en";
@@ -46,6 +47,20 @@ const Header = () => {
       setValidLogin(true);
     }
   }, []);
+
+  // const getCurrency = async () => {
+  //   try {
+  //     const res = await callApi({
+  //       api: `/get-settings-value/site-currency`,
+  //       method: "GET",
+  //     })
+  //     if(res && res?.status == 1) {
+  //       setCurrency(res?.value);
+  //     }
+  //   } catch (error) {
+  //     console.error(error?.message)
+  //   }
+  // }
 
   const FetchUserData = async (memberId) => {
     let response;
@@ -490,7 +505,7 @@ const Header = () => {
                               )
                             }
                           >
-                            {translation?.under_aed_399 || "Under AED 399.00"}
+                            Under {currency} 399.00
                           </a>
                         </li>
                         <li>
@@ -504,7 +519,7 @@ const Header = () => {
                               )
                             }
                           >
-                            AED400.00 - AED699.00
+                            {currency || ""}400.00 - {currency || ""}699.00
                           </a>
                         </li>
                         <li>
@@ -518,7 +533,7 @@ const Header = () => {
                               )
                             }
                           >
-                            AED700.00 - AED1199.00
+                            {currency || ""}700.00 - {currency || ""}1199.00
                           </a>
                         </li>
                         <li>
@@ -532,7 +547,7 @@ const Header = () => {
                               )
                             }
                           >
-                            AED1200.00 - AED1599.00
+                            {currency || ""}1200.00 - {currency || ""}1599.00
                           </a>
                         </li>
                         <li>
@@ -546,7 +561,7 @@ const Header = () => {
                               )
                             }
                           >
-                            {translation?.above_aed_1600 || "Above AED1600.00"}
+                            Above {currency}1600.00
                           </a>
                         </li>
                       </ul>
@@ -791,7 +806,7 @@ const Header = () => {
                               )
                             }
                           >
-                            {translation?.under_aed_399 || "Under AED 399.00"}
+                            Under {currency || ""} 399.00
                           </a>
                         </li>
                         <li>
@@ -805,7 +820,7 @@ const Header = () => {
                               )
                             }
                           >
-                            AED400.00 - AED699.00
+                            {currency || ""}400.00 - {currency || ""}699.00
                           </a>
                         </li>
                         <li>
@@ -819,7 +834,7 @@ const Header = () => {
                               )
                             }
                           >
-                            AED700.00 - AED1199.00
+                            {currency || ""}700.00 - {currency || ""}1199.00
                           </a>
                         </li>
                         <li>
@@ -833,7 +848,7 @@ const Header = () => {
                               )
                             }
                           >
-                            AED1200.00 - AED1599.00
+                            {currency || ""}1200.00 - {currency || ""}1599.00
                           </a>
                         </li>
                         <li>
@@ -847,7 +862,7 @@ const Header = () => {
                               )
                             }
                           >
-                            {translation?.above_aed_1600 || "Above AED1600.00"}
+                            Above ${currency || ""}1600.00
                           </a>
                         </li>
                       </ul>
@@ -872,6 +887,7 @@ const Header = () => {
                       </ul>
                     </div>
                   </li>
+
                   {/* for sale  */}
                   {/* <li className="nav-item mega-menu">
                     <a className="nav-link dropdown-toggle" role="button">
