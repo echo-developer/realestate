@@ -210,15 +210,21 @@ function get_setting($key = '')
     return $setting ?? ($defaults[$key] ?? null);
 }
 
-
 if (!function_exists('admin_default_lang')) {
     function admin_default_lang()
     {
-        $lang = get_setting('admin-default-lang'); // Fetch the language setting
+        $lang = get_setting('admin-default-lang');
         return $lang ? $lang : 'en';
     }
 }
 
+if (!function_exists('default_lang')) {
+    function default_lang()
+    {
+        $lang = get_setting('default-language');
+        return $lang ? $lang : 'en';
+    }
+}
 
 if (!function_exists('getFieldLang')) {
 
