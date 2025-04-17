@@ -50,7 +50,7 @@
                 <li class="nav-item"><a class="nav-link" href="{{ url('property/edit-photos/'.$property_id) }}"  aria-expanded="true">Property Photos</a> </li>
             </ul>
 
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Basic Details </h4>
                     <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('basic')"><i class="fa fa-edit"></i></a>
@@ -91,7 +91,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Location </h4>
                     <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('location')"><i class="fa fa-edit"></i></a>
@@ -115,7 +115,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Property Features </h4>
                     <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('features')"><i class="fa fa-edit"></i></a>
@@ -217,7 +217,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Additional Information </h4>
                     <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('additional')"><i class="fa fa-edit"></i></a>
@@ -296,7 +296,7 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Property Landmark </h4>
                     <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('landmark')"><i class="fa fa-edit"></i></a>

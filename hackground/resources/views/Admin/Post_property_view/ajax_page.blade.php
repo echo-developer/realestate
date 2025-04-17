@@ -1,8 +1,8 @@
 @if($page == 'basic')
     <div class="modal-header">
     <h4 class="modal-title"><?php echo $title;?></h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
         
     </div>
     <div class="modal-body">
@@ -231,13 +231,14 @@
         loadPropertyFor(propertyId);
     });
     </script>
+    
 @endif
 
 @if($page == 'location')
     <div class="modal-header">
     <h4 class="modal-title"><?php echo $title;?></h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
         
     </div>
     <div class="modal-body">
@@ -285,8 +286,8 @@
 @if($page == 'features')
     <div class="modal-header">
     <h4 class="modal-title"><?php echo $title;?></h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
         
     </div>
     <div class="modal-body">
@@ -607,14 +608,7 @@
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
     </div>
-    <script src="{{ asset('assets/dist/js/select2.js') }}"></script>
-    <script>
-        $(".form-select").select2({
-            theme: "bootstrap-5",
-            selectionCssClass: "select2--single",
-            dropdownCssClass: "select2--single",
-        });
-    </script>
+    
     <script>
         /* $(function(){
             $('.select2').select2();
@@ -663,8 +657,8 @@
 @if($page == 'additional')
     <div class="modal-header">
     <h4 class="modal-title"><?php echo $title;?></h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
         
     </div>
     <div class="modal-body">
@@ -843,7 +837,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Overlooking</label>
+                        <label class="form-label">Overlooking Overlooking</label>
                         <select class="form-select" name="overlooking[]" multiple>
                             <option value="">Slect Overlooking</option>
                             @php  
@@ -890,6 +884,8 @@
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
     </div>
+    
+    
 
     <script>
          $(document).ready(function() {
@@ -915,8 +911,8 @@
 @if($page == 'landmark')
     <div class="modal-header">
     <h4 class="modal-title"><?php echo $title;?></h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
         
     </div>
     <div class="modal-body">
@@ -1181,10 +1177,18 @@
     </script>
 @endif
 
+<script src="{{ asset('assets/dist/js/select2.js') }}"></script>
 <script>
-    $(function(){
-        $('.select2').select2();
+    $(".form-select").select2({
+        theme: "bootstrap-5",
+        selectionCssClass: "select2--single",
+        dropdownCssClass: "select2--single",
     });
+</script>
+<script>
+    /* $(function(){
+        $('.select2').select2();
+    }); */
 
     function submitForm(form, event){
         event.preventDefault();
