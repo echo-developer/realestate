@@ -1334,7 +1334,7 @@ if (!function_exists('assign_free_plan')) {
                 'verified_badge'        => $features->verified_badge ?? 'N',
                 'listing_visibility'    => $features->listing_visibility ?? null,
                 'social_media_promotion' => $features->social_media_promotion ?? 'N',
-                'leads_used' => 0,
+                'leads_used'             => 0,
                 'remaining_listings_allowed' => $features->listings_allowed,
                 'created_at'            => now(),
                 'updated_at'            => now(),
