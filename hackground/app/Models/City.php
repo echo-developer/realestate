@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class City extends Model
 {
@@ -161,5 +162,41 @@ class City extends Model
         return [
             'message' => 'City deleted successfully.',
         ];
+    }
+
+    public function cityAddfromExcel(array $data)
+    {
+        try {
+            log_anything($data);
+            $langs = explode(',', admin_default_lang());
+            // foreach ($data as $row) {
+
+            //     $newCityId =  DB::table($this->cityTable)->insertGetId([
+            //         'country' => $row[0],
+            //         'state' =>  $row[1],
+            //         'order'  => rand(1, 4),
+            //         'status' => config('constants.STATUS_ACTIVE'),
+            //     ]);
+
+            //     $nameByLang = [
+            //         'en' => $row[2] ?? null,
+            //         'ar' => $row[3] ?? null,
+            //     ];
+
+            //     foreach ($langs as $lang) {
+            //         DB::table($this->cityNamesTable)->insert([
+            //             'city_id' => $newCityId,
+            //             'lang'        => $lang,
+            //             'name'        => $nameByLang[$lang] ?? null,
+            //         ]);
+            //     }
+            // }
+
+            return [
+                'message' => 'City added successfully.',
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

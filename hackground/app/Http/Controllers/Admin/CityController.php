@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\City;
+use App\Traits\Imports\ExcelImportTrait;
 use Illuminate\Http\Request;
 
 class CityController extends Controller
 {
+    use ExcelImportTrait;
     protected $city;
 
 
@@ -180,5 +182,19 @@ class CityController extends Controller
         $states = isset($state_data) ? $state_data : [];
 
         return response()->json(['states' => $states]);
+    }
+
+    public function importCityExcel(Request $request)
+    {
+        try {
+            $rows = $this->parseUploadedExcel($request, 'xlsFileCity');
+
+            $response = $this->city->cityAddfromExcel($rows);
+
+            set_flash_message('add');
+            return redirect()->back();
+        } catch (\Throwable $e) {
+            return redirect()->back()->withErrors(['xlsFileCity' => $e->getMessage()]);
+        }
     }
 }

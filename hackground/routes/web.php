@@ -16,7 +16,6 @@ use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\BankLoanController;
 use App\Http\Controllers\Admin\LocalityController;
 use App\Http\Controllers\Admin\AdminUserController;
-use App\Http\Controllers\Admin\AreaPriceController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmailTempController;
 use App\Http\Controllers\Admin\FloorPlanController;
@@ -332,6 +331,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/city/status', 'CityStatus')->name('city.status');
         Route::post('/city/delete', 'CityDelete')->name('city.delete');
         Route::get('/getstate/{lang?}', 'getState')->name('state.getState');
+        // Route::post('/upoad-excel', 'importCityExcel')->name('city.importExcel');
     });
 
 

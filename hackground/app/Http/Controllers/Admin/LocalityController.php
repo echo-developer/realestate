@@ -218,7 +218,6 @@ class LocalityController extends Controller
             set_flash_message('add');
             return redirect()->back();
         } catch (\Throwable $e) {
-            // throw $e;
             return redirect()->back()->withErrors(['xlsFileLocality' => $e->getMessage()]);
         }
     }

@@ -2,35 +2,14 @@
 
 @section('content')
 
-<div class="body-page-loader d-none">
-    <div class="loader">
-        <div class="line-scale-pulse-out">
-            <div class="bg-warning"></div>
-            <div class="bg-warning"></div>
-            <div class="bg-warning"></div>
-            <div class="bg-warning"></div>
-            <div class="bg-warning"></div>
-        </div>
-    </div>
-</div>
-
-<div class="app-main__inner">
-
-    <div class="app-page-title">
-        <div class="page-title-wrapper">
-            <div class="page-title-heading">
-                <div class="page-title-icon">
-                    <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
-                </div>
-                <div>City
-                    <div class="page-title-subheading">City &gt; City List</div>
-                </div>
-            </div>
-            <div class="page-title-actions">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
-                    <li class="breadcrumb-item active">City List</li>
-                </ol>
+    <div class="body-page-loader d-none">
+        <div class="loader">
+            <div class="line-scale-pulse-out">
+                <div class="bg-warning"></div>
+                <div class="bg-warning"></div>
+                <div class="bg-warning"></div>
+                <div class="bg-warning"></div>
+                <div class="bg-warning"></div>
             </div>
         </div>
     </div>
@@ -49,12 +28,14 @@
                 </div>
                 <div class="page-title-actions">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href=""> Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
                         <li class="breadcrumb-item active">City List</li>
                     </ol>
                 </div>
             </div>
         </div>
+
+
         <div id="successMessageContainer"></div>
         <style>
             .advance-search-panel {
@@ -67,6 +48,14 @@
         @if (session('success_msg'))
             <div class="alert alert-{{ session('message_type') }}">
                 {{ session('success_msg') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+        @if ($errors->has('xlsFileCity'))
+            <div class="alert alert-danger mt-2">
+                {{ $errors->first('xlsFileCity') }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -93,9 +82,11 @@
         <div class="main-card mb-3 card">
             <div class="card-body">
                 <div class="card-header p-0">
-                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> city List
+                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> City List
 
                     <div class="btn-actions-pane-right">
+                        <button type="button" class="btn btn-sm btn-primary" id="upload_excel_btn">Upload
+                            Excel</button>
                         <button type="button" class="btn btn-sm btn-success" onclick="add()">Add city</button>
                     </div>
 
@@ -277,6 +268,47 @@
 
         </div>
     </div>
+
+    <div class="modal fade" id="excel_upload_modal" tabindex="-1" role="dialog" aria-labelledby="excel_upload_modal"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h5 class="modal-title" id="excel_upload_modal">Upload</h5>
+
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <form id="excel_upload_form" action="{{ route('city.importExcel') }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <input type="file" class="form-control" name="xlsFileCity">
+                        <i class="d-block text-danger mt-2">Allowed file types: xlsx | xls | csv</i>
+                        <div class="mt-3 p-3 bg-light border border-danger rounded">
+                            <strong class="text-danger d-block mb-2">
+
+                                Note: Download the file format below. Changing or re-ordering the column names can
+                                affect your data.
+                            </strong>
+                            <a href="{{ asset(config('constants.CITY_EXCEL_FORMAT')) }}"
+                                class="btn btn-sm btn-outline-primary">Download XLSX Format</a>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" id="button" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
 @endsection
 @push('custom-js')
     <script>
@@ -290,6 +322,13 @@
             var $order = $('#order');
             var $button = $('#button');
             var $modalLabel = $('#AddEditModalLabel');
+
+            let xlModal = $('#excel_upload_modal')
+            let uploadExcelButton = $('#upload_excel_btn')
+
+            uploadExcelButton.on('click', function() {
+                xlModal.modal('show') // Bootstrap modal way
+            })
 
 
             $.ajaxSetup({
@@ -340,7 +379,7 @@
                                 var selected = state.id == selectedStateId ? 'selected' : '';
                                 $stateId.append(
                                     `<option value="${state.id}" ${selected}>${state.name}</option>`
-                                    );
+                                );
                             });
                         } else {
                             $stateId.append('<option value="">No states available</option>');
