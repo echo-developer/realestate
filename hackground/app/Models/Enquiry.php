@@ -158,13 +158,15 @@ class Enquiry extends Model
                 ->leftJoin('properties_settings as p_s', 'p.id', '=', 'p_s.pid')
                 ->leftJoin('properties_location as p_l', 'p.id', '=', 'p_l.pid')
                 ->leftJoin('users as u', 'p.uid', '=', 'u.id')
-                ->select('u.id as user_id', 'u.name as member_name');
+                ->leftJoin('user_membership as u_m', 'p.uid', '=', 'u_m.user_id')
+                ->select('u.id as user_id', 'u.name as member_name','u_m.leads','u_m.leads_used');
         } elseif ($srch['enquiry_type'] == 'project') {
             $query = DB::table('project as p')
                 ->leftJoin('project_settings as p_s', 'p.id', '=', 'p_s.project_id')
                 ->leftJoin('project_location as p_l', 'p.id', '=', 'p_l.project_id')
                 ->leftJoin('users as u', 'p.uid', '=', 'u.id')
-                ->select('u.id as user_id', 'u.name as member_name');
+                ->leftJoin('user_membership as u_m', 'p.uid', '=', 'u_m.user_id')
+                ->select('u.id as user_id', 'u.name as member_name','u_m.leads','u_m.leads_used');
         }
 
         if (array_key_exists('city', $srch) && $srch['city']) {
@@ -195,7 +197,8 @@ class Enquiry extends Model
     {
         $query = DB::table('leads_assigned as l_a')
             ->leftJoin('users as u', 'l_a.user_id', '=', 'u.id')
-            ->select('l_a.assign_id', 'l_a.created_at', 'u.id as user_id', 'u.name as member_name')
+            ->leftJoin('user_membership as u_m', 'u.id', '=', 'u_m.user_id')
+            ->select('l_a.assign_id', 'l_a.created_at', 'u.id as user_id', 'u.name as member_name','u_m.leads','u_m.leads_used')
             ->where(['lead_type' => $srch['lead_type'], 'l_a.enquery_id' => $srch['enquery_id']]);
         return $query->paginate($paginate);
     }
@@ -203,6 +206,20 @@ class Enquiry extends Model
     public function save_assign_member($data)
     {
         DB::table('leads_assigned')->insert($data);
+        if($data)
+        {
+            foreach($data as $k=>$d)
+            {
+                $user_id = $d['user_id'];
+                $check_membership = DB::table('user_membership as u_m')->where('u_m.user_id',$user_id)->select('u_m.leads','u_m.leads_used')->first();
+                if($check_membership)
+                {
+                    $prev_leads_used = $check_membership->leads_used;
+                    $curr_leads_used = $prev_leads_used+1;
+                    DB::table('user_membership as u_m')->where('u_m.user_id',$user_id)->update(array('u_m.leads_used'=>$curr_leads_used));
+                }
+            }
+        }
         return true;
     }
 
@@ -242,7 +259,8 @@ class Enquiry extends Model
             ->leftJoin('properties_location as p_l', 'p.id', '=', 'p_l.pid')
             //->leftJoin('property_budget as p_b', 'p.id', '=', 'p_b.pid')
             ->leftJoin('users as u', 'p.uid', '=', 'u.id')
-            ->select('u.id as user_id', 'u.name as member_name');
+            ->leftJoin('user_membership as u_m', 'p.uid', '=', 'u_m.user_id')
+            ->select('u.id as user_id', 'u.name as member_name','u_m.leads','u_m.leads_used');
 
         if (array_key_exists('property_type_for', $srch) && $srch['property_type_for']) {
             $query->where('p_s.property_type_for', $srch['property_type_for']);

@@ -99,6 +99,7 @@
                                 @endif
                                 <th style="width:5%">User ID</th>
                                 <th style="width:10%">Member Name</th>
+                                <th style="width:10%">Leads Used</th>
                                 @if($assign_type == 'assigned')
                                     <th style="width:10%">Assigned Date</th>  
                                     <th style="width:10%">Action</th>
@@ -108,14 +109,23 @@
                         <tbody>
                                 @if($list)
                                 @foreach($list as $item)
+                                @php 
+                                    $is_clickable = 0;
+                                @endphp
+                                @if($item->leads > $item->leads_used)
+                                @php
+                                    $is_clickable = 1;
+                                @endphp
+                                @endif
                                 <tr>
                                     @if($assign_type == 'unassigned')
                                     <td>
-                                        <input name="userid[]" value="{{ $item->user_id }}" type="checkbox" class="user-selected" />
+                                        <input name="userid[]" value="{{ $item->user_id }}" type="checkbox" class="user-selected" {{ !$is_clickable ? 'disabled' : '' }} />
                                     </td>
                                     @endif
                                     <td>{{ $item->user_id }}</td>
                                     <td>{{ $item->member_name }}</td>
+                                    <td>{{ $item->leads ? $item->leads_used.'/'.$item->leads : '0/0'; }}</td>
                                     @if($assign_type == 'assigned')
                                     <td>{{ $item->created_at ? date('d-M-Y',strtotime($item->created_at)) : ''; }}</td>
                                     <td>  

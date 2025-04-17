@@ -140,6 +140,7 @@ class EnquiryController extends Controller
         $srch['enquery_id'] = $enquiry_id;
         $srch['lead_type'] = 'P';
         $list = $this->enquiry->get_assigned_member_list($srch, $paginate);
+        //print_r($list);exit;
         return view('Admin.Enquiry.assign_member_list', compact('main_title','second_title','title','list','enquiry','assign_type'));
     }
 
