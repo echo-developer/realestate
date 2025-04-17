@@ -1,52 +1,53 @@
 <?php
 
-use App\Http\Controllers\Admin\_Menu_Controller;
-use App\Http\Controllers\Admin\AdminUserController;
-use App\Http\Controllers\Admin\AdvertisementController;
-use App\Http\Controllers\Admin\AdvertisementPackagesController;
-use App\Http\Controllers\Admin\AllProjectController;
-use App\Http\Controllers\Admin\AllPropertyController;
-use App\Http\Controllers\Admin\AllSettingController;
-use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\Admin\BankLoanController;
-use App\Http\Controllers\Admin\CityController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Admin\CmsController;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\CityController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\StateController;
+use App\Http\Controllers\Admin\_Menu_Controller;
+use App\Http\Controllers\Admin\PropertyCategory;
 use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\EnquiryController;
+use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\BankLoanController;
+use App\Http\Controllers\Admin\LocalityController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AreaPriceController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmailTempController;
-use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\FloorPlanController;
-use App\Http\Controllers\Admin\GroupSettingController;
-use App\Http\Controllers\Admin\LoanEnqueryController;
-use App\Http\Controllers\Admin\LocalityController;
-use App\Http\Controllers\Admin\MembershipFeaturesController;
-use App\Http\Controllers\Admin\MembershipPlanController;
-use App\Http\Controllers\Admin\NotificationController;
-use App\Http\Controllers\Admin\NotificationTemplateController;
+use App\Http\Controllers\Admin\AllProjectController;
+use App\Http\Controllers\Admin\AllSettingController;
 use App\Http\Controllers\Admin\PermissionController;
-use App\Http\Controllers\Admin\PostPropertyController;
-use App\Http\Controllers\Admin\ProjectAmenityController;
-use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Api\FloorPlaningController;
+use App\Http\Controllers\Admin\AllPropertyController;
+use App\Http\Controllers\Admin\LoanEnqueryController;
 use App\Http\Controllers\Admin\ProjectEditController;
-use App\Http\Controllers\Admin\Property_SubCategoryController;
-use App\Http\Controllers\Admin\PropertyBudgetController;
-use App\Http\Controllers\Admin\PropertyCategory;
-use App\Http\Controllers\Admin\PropertyFurnishController;
-use App\Http\Controllers\Admin\PropertyLengthController;
-use App\Http\Controllers\Admin\PropertyRecommendController;
-use App\Http\Controllers\Admin\PropertyStatusController;
-use App\Http\Controllers\Admin\PropertyTransactionController;
-use App\Http\Controllers\Admin\ResetPasswordController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\StateController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\TransactionController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\UserSearchActivityController;
-use App\Http\Controllers\Api\FloorPlaningController;
+use App\Http\Controllers\Admin\GroupSettingController;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\PostPropertyController;
+use App\Http\Controllers\Admin\AdvertisementController;
+use App\Http\Controllers\Admin\ResetPasswordController;
+use App\Http\Controllers\Admin\MembershipPlanController;
+use App\Http\Controllers\Admin\ProjectAmenityController;
+use App\Http\Controllers\Admin\PropertyBudgetController;
+use App\Http\Controllers\Admin\PropertyLengthController;
+use App\Http\Controllers\Admin\PropertyStatusController;
+use App\Http\Controllers\Admin\PropertyFurnishController;
 use App\Http\Controllers\Api\Project\ProjectImageUploade;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\PropertyRecommendController;
+use App\Http\Controllers\Admin\MembershipFeaturesController;
+use App\Http\Controllers\Admin\UserSearchActivityController;
+use App\Http\Controllers\Admin\PropertyTransactionController;
+use App\Http\Controllers\Admin\NotificationTemplateController;
+use App\Http\Controllers\Admin\Property_SubCategoryController;
+use App\Http\Controllers\Admin\AdvertisementPackagesController;
 
 
 
@@ -544,3 +545,9 @@ Route::get('/artisan-run', function () {
 });
 
 
+Route::controller(AreaPriceController::class)->group(function () {
+    Route::get('area-price/{id?}', 'AreaPrice')->name('area-price.view');
+    Route::get('edit', 'Edit')->name('locality_price.edit');
+    Route::post('update', 'Update')->name('locality_price.update');
+  
+});
