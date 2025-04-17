@@ -222,7 +222,7 @@
                     <a href="#">
                         <img src="{{ $imageToShow }}" alt="no image" class="card-img" height="250" width="300">
                     </a>
-                    <span class="ads-type rent">{{ $property->post_for }}</span>
+                    <span class="ads-type {{ $property->post_for=== 'rent'?'rent':'sale' }}">{{ $property->post_for }}</span>
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between">

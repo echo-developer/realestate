@@ -1,7 +1,15 @@
 @extends('Admin.layouts.app')
 @push('custom-css')
-<link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.css')}}">
+
+<!-- <link rel="stylesheet" href="{{ asset('assets/js/scripts-init/select2/dist/css/select2.min.css') }}"> -->
+
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/select2.css')}}"> 
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/select2-bootstrap-5-theme.css')}}"> 
+
+<!-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/adminlte.css')}}"> -->
+
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/style.css') }}">
+
 
 @endpush
 @section('content')
@@ -17,6 +25,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="page-title-actions">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
@@ -25,6 +34,12 @@
             </div>
         </div>
     </div>
+
+<!-- <select class="form-select" multiple>   
+  <option value="1">One</option>
+  <option value="2">Two</option>
+  <option value="3">Three</option>
+</select> -->
 
     {{-- {{ $propertyData->settings }} --}}
     <section class="content">
@@ -310,7 +325,10 @@
 </div>
 
 @endsection
+
+
 @push('custom-js')
+
 <script>
     function edit(type){
         let property_id = "{{ $property_id }}";

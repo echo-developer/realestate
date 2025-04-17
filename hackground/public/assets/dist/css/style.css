@@ -4,9 +4,7 @@
 :root{
     --mo-border-color-translucent: rgba(0, 0, 0, 0.15);
 }
-.text-site{
-    color: #77206d;
-}
+
 .nav-custom .nav-link {
     color: #0056b3;
     font-weight: normal;
@@ -899,93 +897,6 @@ ul.list-info li span {
 .btn-del:hover{
     color: #fff;
     opacity: 1;
-}
-
-
-@media (min-width: 1400px) {
-    .col-xxl {
-      flex: 1 0 0%;
-    }
-    .row-cols-xxl-auto > * {
-      flex: 0 0 auto;
-      width: auto;
-    }
-    .row-cols-xxl-1 > * {
-      flex: 0 0 auto;
-      width: 100%;
-    }
-    .row-cols-xxl-2 > * {
-      flex: 0 0 auto;
-      width: 50%;
-    }
-    .row-cols-xxl-3 > * {
-      flex: 0 0 auto;
-      width: 33.33333333%;
-    }
-    .row-cols-xxl-4 > * {
-      flex: 0 0 auto;
-      width: 25%;
-    }
-    .row-cols-xxl-5 > * {
-      flex: 0 0 auto;
-      width: 20%;
-    }
-    .row-cols-xxl-6 > * {
-      flex: 0 0 auto;
-      width: 16.66666667%;
-    }
-    .col-xxl-auto {
-      flex: 0 0 auto;
-      width: auto;
-    }
-    .col-xxl-1 {
-      flex: 0 0 auto;
-      width: 8.33333333%;
-    }
-    .col-xxl-2 {
-      flex: 0 0 auto;
-      width: 16.66666667%;
-    }
-    .col-xxl-3 {
-      flex: 0 0 auto;
-      width: 25%;
-    }
-    .col-xxl-4 {
-      flex: 0 0 auto;
-      width: 33.33333333%;
-    }
-    .col-xxl-5 {
-      flex: 0 0 auto;
-      width: 41.66666667%;
-    }
-    .col-xxl-6 {
-      flex: 0 0 auto;
-      width: 50%;
-    }
-    .col-xxl-7 {
-      flex: 0 0 auto;
-      width: 58.33333333%;
-    }
-    .col-xxl-8 {
-      flex: 0 0 auto;
-      width: 66.66666667%;
-    }
-    .col-xxl-9 {
-      flex: 0 0 auto;
-      width: 75%;
-    }
-    .col-xxl-10 {
-      flex: 0 0 auto;
-      width: 83.33333333%;
-    }
-    .col-xxl-11 {
-      flex: 0 0 auto;
-      width: 91.66666667%;
-    }
-    .col-xxl-12 {
-      flex: 0 0 auto;
-      width: 100%;
-    }
 }
 
 @media only screen and (min-width: 1200px) {

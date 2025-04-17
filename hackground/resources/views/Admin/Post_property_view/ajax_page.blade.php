@@ -426,7 +426,7 @@
                         
                         <div class="form-group">
                             <label class="form-label">Floor Type</label>
-                            <select class="form-control select2" name="flooring_style[]" multiple>
+                            <select class="form-select" name="flooring_style[]" multiple>
                                 <option value="">Slect Floor Type</option>
                                 @php  
                                     $floor_types = get_floor_types();
@@ -607,9 +607,16 @@
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
     </div>
-
+    <script src="{{ asset('assets/dist/js/select2.js') }}"></script>
     <script>
-        $(function(){
+        $(".form-select").select2({
+            theme: "bootstrap-5",
+            selectionCssClass: "select2--single",
+            dropdownCssClass: "select2--single",
+        });
+    </script>
+    <script>
+        /* $(function(){
             $('.select2').select2();
         });
 
@@ -837,7 +844,7 @@
 
                     <div class="form-group">
                         <label class="form-label">Overlooking</label>
-                        <select class="form-control select2" name="overlooking[]" multiple>
+                        <select class="form-select" name="overlooking[]" multiple>
                             <option value="">Slect Overlooking</option>
                             @php  
                                 $overlooking_list = get_overlooking_list();

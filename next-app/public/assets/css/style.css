@@ -33901,6 +33901,7 @@ h4 .icon-img-check, .h4 .icon-img-check {
   border-color: var(--re-border-color-translucent);
   color: var(--re-body-color);
   position: relative;
+  z-index: inherit;
 }
 .btn-group.btn-group-light .btn::before {
   content: "\f26a";
@@ -33914,6 +33915,7 @@ h4 .icon-img-check, .h4 .icon-img-check {
   font-size: 1.125rem;
   line-height: 1;
   display: none;
+  z-index: 10;
 }
 .btn-group.btn-group-light .btn-check:checked + .btn-outline-light {
   background-color: #d0e0f5;

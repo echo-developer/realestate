@@ -18,7 +18,9 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/ltr.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/js/scripts-init/select2/dist/css/select2.min.css') }}">
+    <!-- <link rel="stylesheet" href="{{ asset('assets/js/scripts-init/select2/dist/css/select2.min.css') }}"> -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @stack('custom-css')
 </head>
@@ -42,8 +44,7 @@
     <!--SCRIPTS INCLUDES-->
 
     <!--CORE-->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js" crossorigin="anonymous">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/metismenu"></script>
@@ -57,7 +58,7 @@
     <!--Perfect Scrollbar -->
     <script src="{{ asset('assets/js/vendors/scrollbar.js') }}"></script>
     <script src="{{ asset('assets/js/scripts-init/scrollbar.js') }}"></script>
-    <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script>
+    <!-- <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script> -->
     <!--Toastr-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" crossorigin="anonymous"></script>
 
@@ -77,7 +78,7 @@
 
     <script src="{{ asset('assets/js/scripts-init/sweet-alerts.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
-    <script src="{{ asset('assets/js/scripts-init/select2/dist/js/select2.full.min.js') }}"></script>
+    <!-- <script src="{{ asset('assets/js/scripts-init/select2/dist/js/select2.full.min.js') }}"></script> -->
 
     @yield('modals')
     <script>
