@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
           setUserData(response?.data);
         }
       } catch (error) {
-        toast.error(error.message || "Failed to get User Data");
+        console.error(error.message || "Failed to get User Data");
       } finally {
         setUserLoading(false);
       }

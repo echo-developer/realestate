@@ -117,11 +117,9 @@ const Index = () => {
       if (response && response.status === 1) {
         setPropertyData(response.data);
         setOptions(response.options);
-      } else {
-        toast.error(response.message);
-      }
+      } 
     } catch (error) {
-      toast.error(response.message);
+      console.error(response.message);
     }
   };
 
@@ -250,13 +248,13 @@ const Index = () => {
         const msg = name
           ? `${name} updated successfully`
           : response?.message || `Property updated successfully`;
-        toast.success(msg);
+        // toast.success(msg);
       } else {
         const name = items?.find((item) => item?.key === selectedItem)?.name;
         const msg = name
           ? `${name} update failed`
           : response?.message || `Property update failed`;
-        toast.error(msg);
+        // toast.error(msg);
       }
 
       // Handle success

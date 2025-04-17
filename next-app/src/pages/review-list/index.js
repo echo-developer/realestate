@@ -53,14 +53,12 @@ const Index = () => {
           updateLoadMoreState(response);
         }
       } else {
-        toast.error(response.message);
         setPage(1);
         setCurrentPage(0);
         setTotalPage(0);
       }
     } catch (error) {
       console.error("Failed to fetch reviews", error);
-      toast.error("Failed to load reviews");
     } finally {
       setIsLoading(false);
     }
