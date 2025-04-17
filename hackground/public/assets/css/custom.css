@@ -3,4 +3,8 @@
 }
 .modal-dialog .modal-content {
   border: none;
+}
+
+.card-fact .d-flex {
+  align-items: center;
 }/*# sourceMappingURL=custom.css.map */

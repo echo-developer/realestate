@@ -36,16 +36,15 @@ $allmenus = AllmenusForSideBar();
     <div class="scrollbar-sidebar">
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
-                <li class="app-sidebar__heading">Menu</li>
+                <!-- <li class="app-sidebar__heading">Menu</li> -->
 
                 @foreach ($allmenus[0] ?? [] as $main_menu)
                 <!-- Loop through only parent menus (parent_id = 0) -->
                 <li class="{{ request()->is($main_menu->url) ? 'mm-active' : '' }}">
                     <a href="{{ isset($allmenus[$main_menu->id]) ? '#' : url($main_menu->url) }}">
-                        <i class="{{ $main_menu->icon_class }}"></i>
+                        <i class="metismenu-icon {{ $main_menu->icon_class }}"></i>
                         {{ $main_menu->name }}
-                        <i
-                            class="{{ isset($allmenus[$main_menu->id]) ? 'metismenu-state-icon pe-7s-angle-down caret-left' : '' }}"></i>
+                        <i class="{{ isset($allmenus[$main_menu->id]) ? 'metismenu-state-icon pe-7s-angle-down caret-left' : '' }}"></i>
                     </a>
 
                     <!-- Display submenus if they exist -->
