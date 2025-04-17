@@ -101,7 +101,7 @@ class PaymentController extends Controller
                     'verified_badge' => $features->verified_badge ?? 'N',
                     'listing_visibility' => $features->listing_visibility ?? 'null',
                     'social_media_promotion' => $features->social_media_promotion ?? 'N',
-                    'remaining_leads' => $features->leads?? 'null',
+                    'leads_used' => 0,
                     'remaining_listings_allowed' => $features->listings_allowed ?? null,
                     'created_at' => now(),
                     'updated_at' => now()
