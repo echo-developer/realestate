@@ -74,6 +74,8 @@
                     <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> locality List
 
                     <div class="btn-actions-pane-right">
+                        <button type="button" class="btn btn-sm btn-primary" id="upload_excel_btn">Upload
+                            Excel</button>
                         <button type="button" class="btn btn-sm btn-success" onclick="add()">Add locality</button>
                     </div>
 
@@ -98,7 +100,7 @@
                                         <td>{{ $item->locality_id }}</td>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->locality_key }}</td>
-                                        <td>{{ get_name_by_id('city_names','city_id',$item->city,'en') }}</td>
+                                        <td>{{ get_name_by_id('city_names', 'city_id', $item->city, 'en') }}</td>
                                         <td>
                                             <input data-id="{{ $item->locality_id }}" class="status d-none" type="checkbox"
                                                 data-toggle="toggle" data-on="Active" data-off="Inactive"
@@ -258,6 +260,35 @@
 
         </div>
     </div>
+
+    <div class="modal fade" id="excel_upload_modal" tabindex="-1" role="dialog" aria-labelledby="excel_upload_modal"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h5 class="modal-title" id="excel_upload_modal">Upload</h5>
+
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <form id="excel_upload_form" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="file" class="form-control" id="" name="xlsFileLocality">
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" id="button" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
 @endsection
 @push('custom-js')
     <script>
@@ -275,6 +306,13 @@
             var $button = $('#button');
             var $modalLabel = $('#AddEditModalLabel');
 
+
+            let xlModal = $('#excel_upload_modal')
+            let uploadExcelButton = $('#upload_excel_btn')
+
+            uploadExcelButton.on('click', function() {
+                xlModal.modal('show') // Bootstrap modal way
+            })
 
             $.ajaxSetup({
                 headers: {
