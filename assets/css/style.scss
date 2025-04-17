@@ -1838,6 +1838,7 @@ h4 {
 			border-color: var(--#{$prefix}border-color-translucent);
 			color: var(--#{$prefix}body-color);
 			position: relative;
+			z-index: inherit;
 			&::before{
 				content: '\f26a';
 				font-family: 'bootstrap-icons';
@@ -1850,6 +1851,7 @@ h4 {
 				font-size: 1.125rem;
 				line-height: 1;
 				display: none;
+				z-index: 10;
 			}
 		}
 		.btn-check {
