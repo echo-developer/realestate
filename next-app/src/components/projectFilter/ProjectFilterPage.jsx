@@ -11,8 +11,10 @@ import {
   projectSubFilters,
   filterOptions,
 } from "../post/PropertyData";
+import { useAuth } from "@/context/AuthProvider";
 
 const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dropdownState, setIsOverlayVisible }) => {
+  const {currency, currencyCode} = useAuth();
   const { callApi } = AuthUser();
   const router = useRouter();
   const subFilterRef = useRef({});
@@ -127,9 +129,9 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
   }, []);
 
   const getDisplayText = () => {
-    if (minBudget && maxBudget) return `$${minBudget} - $${maxBudget}`;
-    if (minBudget) return `Min: $${minBudget}`;
-    if (maxBudget) return `Max: $${maxBudget}`;
+    if (minBudget && maxBudget) return `${currency}${minBudget} - ${currency}${maxBudget}`;
+    if (minBudget) return `Min: ${currency}${minBudget}`;
+    if (maxBudget) return `Max: ${currency}${maxBudget}`;
     return `${translation?.select_budget || "Select Budget"}`;
   };
 
