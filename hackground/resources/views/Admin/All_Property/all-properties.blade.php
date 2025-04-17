@@ -12,7 +12,7 @@
     </div>
 </div>
 
-<div class="app-main__inner">
+<div class="app-main__inner mb-3">
 
     <div class="app-page-title">
         <div class="page-title-wrapper">
