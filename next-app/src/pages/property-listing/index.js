@@ -45,7 +45,7 @@ const index = () => {
   const memberId = GetMemberId();
   const [loading, setLoading] = useState(true);
   const [postFor, setPostFor] = useState("sale");
-  const [selectedPropertyType, setSelectedPropertyType] = useState("1");
+  const [selectedPropertyType, setSelectedPropertyType] = useState("");
   const [selectedProeprtyFor, setSelectedProeprtyFor] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -356,7 +356,7 @@ const index = () => {
         str += str ? ` - ${subCategory.sub_category_name}` : subCategory.sub_category_name;
       }
     }
-    return str || "Residential";
+    return str || "Select a Property Type";
   };
 
 
@@ -424,7 +424,7 @@ const index = () => {
               setDynamicList(res?.data);
             }
           } catch (error) {
-            console.log(error?.message || "Something went wrong");
+            console.error(error?.message || "Something went wrong");
           } finally {
             setDynamicFieldLoading(false);
           }
@@ -461,29 +461,50 @@ const index = () => {
     if (postFor) {
       queryObject.post_for = postFor;
     }
+
+
     if (selectedPropertyType) {
       queryObject.property_type = selectedPropertyType;
+    } else {
+      delete queryObject.property_type;
     }
     if (selectedProeprtyFor) {
       queryObject.property_for = selectedProeprtyFor;
+    } else {
+      delete queryObject.property_for;
     }
     if (localityData) {
       queryObject.location_data = JSON.stringify(localityData);
     }
 
+
     // Directly add minBudget and maxBudget
-    if (minBudget) queryObject.min_budget = minBudget;
-    if (maxBudget) queryObject.max_budget = maxBudget;
+    if (minBudget) {
+      queryObject.min_budget = minBudget;
+    } else {
+      delete queryObject.min_budget;
+    }
+    if (maxBudget) {
+      queryObject.max_budget = maxBudget;
+    } else {
+      delete queryObject.max_budget;
+    }
 
-    if (bedroom) {
+    if (bedroom?.length > 0) {
       queryObject.bedrooms = JSON.stringify(bedroom);
+    } else {
+      delete queryObject.bedrooms;
     }
-    if (bathroom) {
+    if (bathroom?.length > 0) {
       queryObject.bathroom = JSON.stringify(bathroom);
+    } else {
+      delete queryObject.bathroom;
     }
 
-    if (kitchens) {
+    if (kitchens?.length > 0) {
       queryObject.kitchens = JSON.stringify(kitchens);
+    } else {
+      delete queryObject.kitchens;
     }
 
     const searchParams = new URLSearchParams(queryObject).toString();
@@ -802,6 +823,7 @@ const index = () => {
   };
 
   const handlePropertyForReset = () => {
+    setSelectedPropertyType("");
     setSelectedProeprtyFor("");
   };
 
@@ -1296,9 +1318,7 @@ const index = () => {
                           onClick={() => toggleDropdown('advanceFilter')}
                           disabled={selectedPropertyType ? false : true}
                         >
-                          {dropdownState?.advanceFilter
-                            ? translation?.hide_advanced || "Less Filter"
-                            : translation?.advanced || "More Filter"}
+                            {translation?.advanced || "Advance"}
                         </Button>
                       </div>
                     </Col>

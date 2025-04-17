@@ -14,6 +14,7 @@ import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
 import { Modal, Button, Nav } from "react-bootstrap";
 import ContactModal from "@/components/property-crm/ContactModal";
 
+
 const ITEMS_PER_PAGE = 10;
 
 const Index = () => {
@@ -28,6 +29,7 @@ const Index = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPage, setTotalPage] = useState();
     const [activeModalData, setActiveModalData] = useState(null);
+    const [membershipModal, setMembershipModal] = useState(false);
 
 
 
@@ -132,15 +134,20 @@ const Index = () => {
         fetchLeadsData(activeTab, nextPage, true);
     }
 
-    const handleModalOpen = (phone = "", email = "", assign_id, enquery_id, lead_type) => {
-        setActiveModalData({
-            phone: phone,
-            email: email,
-            assign_id: assign_id,
-            enquery_id: enquery_id,
-            lead_type: lead_type
-        })
-        setShow(true);
+    const handleModalOpen = (phone = "", email = "", assign_id, enquery_id, lead_type, blur) => {
+        if (blur) {
+
+            handleOpenModal();
+        } else {
+            setActiveModalData({
+                phone: phone,
+                email: email,
+                assign_id: assign_id,
+                enquery_id: enquery_id,
+                lead_type: lead_type
+            })
+            setShow(true);
+        }
     }
 
     const handleClose = () => {
@@ -172,6 +179,13 @@ const Index = () => {
         }
     }
 
+    const handleOpenModal = () => {
+        setMembershipModal(true);
+    }
+    const handleCloseModal = () => {
+        setMembershipModal(false);
+    }
+
 
     return (
         <DashboardLayout>
@@ -190,7 +204,7 @@ const Index = () => {
                             <Nav.Link role="button" className={`${activeTab == 'general' ? 'active' : ''}`} onClick={() => handleActiveTabChange("general")}>{translation?.genral_leads || "General Leads"}</Nav.Link>
                         </Nav.Item>
                     </Nav>
-                
+
                     {loading && (
                         <div
                             style={{
@@ -248,48 +262,68 @@ const Index = () => {
                                                 <div className="card-body">
                                                     <div className="d-flex justify-content-between">
                                                         <h4>{lead?.property_name || lead?.project_name || "Not available"}</h4>
-                                                        
-                                                        <div className="text-end">
-                                                            <span className={`badge ${statusClasses[lead?.lead_status]}`}>{leadStatusList[lead?.lead_status || 0]}</span>
-                                                            <br />
-                                                            {/* <button className="btn btn-secondary btn-sm mt-1">Actions</button> */}
-                                                        </div>
+
+                                                        {!lead?.is_blur && (
+                                                            <div className="text-end">
+                                                                <span className={`badge ${statusClasses[lead?.lead_status]}`}>{leadStatusList[lead?.lead_status || 0]}</span>
+                                                                <br />
+                                                                {/* <button className="btn btn-secondary btn-sm mt-1">Actions</button> */}
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                    <p className="mb-2"><span className="text-muted">{translation?.customer_name || "Coustomer Name:"}</span> <strong>{lead?.customer_name || `${translation?.not_available}`}</strong></p>
+                                                    <p className="mb-2"><span className="text-muted">{translation?.customer_name || "Coustomer Name:"}</span> <strong className={lead?.is_blur ? 'text-blur' : ""}>{lead?.customer_name || `${translation?.not_available}`}</strong></p>
                                                     <p className="d-flex flex-column flex-md-row mb-2">
                                                         <span className="me-3">
-                                                            <i className="bi bi-telephone"></i> {lead?.phone}
+                                                            <i className={`bi bi-telephone ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead?.phone}
                                                         </span>
                                                         <span className="me-3">
-                                                            <i className="bi bi-envelope"></i> {lead?.email}
+                                                            <i className={`bi bi-envelope ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead?.email}
                                                         </span>
                                                         <span className="me-3">
-                                                            <i className="bi bi-clock"></i> {lead?.created_at}
+                                                            <i className={`bi bi-clock ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead?.created_at}
                                                         </span>
                                                     </p>
-                                                    <p className="text-wrap mb-2">{lead?.message}</p>
+                                                    <p className={`text-wrap mb-2 ${lead?.is_blur ? 'text-blur' : ''}`}>{lead?.message}</p>
                                                     <div class="row">
                                                         <div className="col-lg mb-2 mb-lg-0">
                                                             <div className="d-flex d-md-block gap-2">
-                                                                <button class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" onClick={() => handleModalOpen(lead?.phone, lead?.email, lead.assign_id, lead.enquery_id, lead.lead_type)}>{translation?.contact || "Contact"}
+                                                                <button class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" onClick={() => handleModalOpen(lead?.phone, lead?.email, lead.assign_id, lead.enquery_id, lead.lead_type, lead?.is_blur)}>{translation?.contact || "Contact"}
                                                                 </button>
-                                                                <Link class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" href={`/property-crm-timeline?assign_id=${lead?.assign_id}`}>{translation?.contact_history || "Contact History"}
-                                                                </Link>
-                                                                <Link class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" href={`/lead-details/${lead?.assign_id}`}>{translation?.lead_details || "Lead Details"}
-                                                                </Link>
+                                                                {!lead?.is_blur && (
+                                                                    <Link class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" href={`/property-crm-timeline?assign_id=${lead?.assign_id}`}>{translation?.contact_history || "Contact History"}
+                                                                    </Link>
+                                                                )}
+                                                                {lead?.is_blur ? (
+                                                                    <button
+                                                                        className="btn btn-sm btn-outline-primary flex-grow-1 me-md-2"
+                                                                        onClick={() => handleOpenModal()}
+                                                                    >
+                                                                        {translation?.lead_details || "Lead Details"}
+                                                                    </button>
+                                                                ) : (
+                                                                    <Link
+                                                                        className="btn btn-sm btn-outline-primary flex-grow-1 me-md-2"
+                                                                        href={`/lead-details/${lead?.assign_id}`}
+                                                                    >
+                                                                        {translation?.lead_details || "Lead Details"}
+                                                                    </Link>
+                                                                )}
+
                                                             </div>
                                                         </div>
-                                                        <div className="col-lg-auto">
-                                                        <select class="form-select form-select-sm" aria-label="Select action" value={lead?.lead_status} onChange={(e) => handleLeadStatusChange(e, i, lead.assign_id)}>
-                                                            <option value="">{translation?.select_an_option || "Select an option"}
-                                                            </option>
-                                                            {leadStatusList?.length > 0 && leadStatusList?.map((status, i) => {
-                                                                return (
-                                                                    <option key={i} value={i}>{status}</option>
-                                                                )
-                                                            })}
-                                                        </select>
-                                                        </div>
+                                                        {!lead?.is_blur && (
+                                                            <div className="col-lg-auto">
+                                                                <select class="form-select form-select-sm" aria-label="Select action" value={lead?.lead_status} onChange={(e) => handleLeadStatusChange(e, i, lead.assign_id)}>
+                                                                    <option value="">{translation?.select_an_option || "Select an option"}
+                                                                    </option>
+                                                                    {leadStatusList?.length > 0 && leadStatusList?.map((status, i) => {
+                                                                        return (
+                                                                            <option key={i} value={i}>{status}</option>
+                                                                        )
+                                                                    })}
+                                                                </select>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
 
@@ -317,48 +351,51 @@ const Index = () => {
                                             <div className="col-lg-9 col-sm-8 position-relative">
                                                 <div className="card-body">
                                                     <div className="d-flex justify-content-between">
-                                                        <h4>{lead?.name || "Not available"}</h4>
+                                                        <h4 className={lead?.is_blur ? 'text-blur' : ''}>{lead?.name || "Not available"}</h4>
                                                         {/* <h6>{translation?.customer_name || "Coustomer Name:"} {lead?.customer_name || `${translation?.not_available}`}</h6> */}
                                                         <div className="text-end">
                                                             <span className={`badge ${statusClasses[lead?.lead_status]}`}>{leadStatusList[lead?.lead_status || 0]}</span>
-                                                            
+
                                                             {/* <button className="btn btn-secondary btn-sm mt-1">Actions</button> */}
                                                         </div>
                                                     </div>
                                                     <p className="d-flex flex-column flex-md-row mb-2">
                                                         <span className="me-3">
-                                                            <i className="bi bi-telephone"></i> {lead?.phone}
+                                                            <i className={`bi bi-telephone ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead?.phone}
                                                         </span>
                                                         <span className="me-3">
-                                                            <i className="bi bi-envelope"></i> {lead?.email}
+                                                            <i className={`bi bi-envelope ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead?.email}
                                                         </span>
                                                         <span className="me-3">
-                                                            <i className="bi bi-clock"></i> {lead?.created_at}
+                                                            <i className={`bi bi-clock ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead?.created_at}
                                                         </span>
                                                     </p>
-                                                    <p className="text-wrap mb-2">{lead?.message}</p>
+                                                    <p className={`text-wrap mb-2 ${lead?.is_blur ? 'text-blur' : ''}`}>{lead?.message}</p>
                                                     <div class="row">
                                                         <div className="col-lg mb-2 mb-lg-0">
                                                             <div className="d-flex d-md-block gap-2">
-                                                                <button class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" onClick={() => handleModalOpen(lead?.Phone, lead?.Email, lead.assign_id, lead.enquery_id, lead.lead_type)}>{translation?.contact || "Contact"}
+                                                                <button class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" onClick={() => handleModalOpen(lead?.Phone, lead?.Email, lead.assign_id, lead.enquery_id, lead.lead_type, lead?.is_blur)}>{translation?.contact || "Contact"}
                                                                 </button>
-                                                                <Link class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" href={`/property-crm-timeline?assign_id=${lead?.assign_id}`}>{translation?.contact_history || "Contact History"}
-                                                                </Link>
-                                                                <Link class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" href={`/lead-details/${lead?.assign_id}`}>{translation?.lead_details || "Lead Details"}
-                                                                </Link>
+                                                                {!lead?.is_blur && (
+                                                                    <Link class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" href={`/property-crm-timeline?assign_id=${lead?.assign_id}`}>{translation?.contact_history || "Contact History"}
+                                                                    </Link>
+                                                                )}
+
                                                             </div>
                                                         </div>
-                                                        <div className="col-lg-auto">
-                                                            <select class="form-select form-select-sm" aria-label="Select action" value={lead?.lead_status} onChange={(e) => handleLeadStatusChange(e, i, lead.assign_id)}>
-                                                                <option value="">{translation?.select_an_option || "Select an option"}
-                                                                </option>
-                                                                {leadStatusList?.length > 0 && leadStatusList?.map((status, i) => {
-                                                                    return (
-                                                                        <option key={i} value={i}>{status}</option>
-                                                                    )
-                                                                })}
-                                                            </select>
-                                                        </div>
+                                                        {!lead?.is_blur && (
+                                                            <div className="col-lg-auto">
+                                                                <select class="form-select form-select-sm" aria-label="Select action" value={lead?.lead_status} onChange={(e) => handleLeadStatusChange(e, i, lead.assign_id)}>
+                                                                    <option value="">{translation?.select_an_option || "Select an option"}
+                                                                    </option>
+                                                                    {leadStatusList?.length > 0 && leadStatusList?.map((status, i) => {
+                                                                        return (
+                                                                            <option key={i} value={i}>{status}</option>
+                                                                        )
+                                                                    })}
+                                                                </select>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
 
@@ -383,6 +420,19 @@ const Index = () => {
             </aside>
 
             <ContactModal show={show} handleClose={handleClose} phone={activeModalData?.phone} email={activeModalData?.email} submitHandler={contactSave} />
+            <Modal show={membershipModal} onHide={handleCloseModal} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Lead Details</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="text-center">
+                    <p className="mb-4">Please upgrade your membership to view this lead.</p>
+                    <Link href="/membership" className="btn btn-warning">
+                        Go to Membership
+                    </Link>
+                </Modal.Body>
+            </Modal>
+
+
         </DashboardLayout>
     );
 };
