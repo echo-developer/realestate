@@ -14,66 +14,68 @@
     <meta name="msapplication-tap-highlight" content="no">
 
     <link rel="stylesheet" href="{{ asset('assets/css/base.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 
 </head>
 
 <body>
-    <div class="app-container app-theme-white body-tabs-shadow">
-        <div class="app-container">
-            <div class="h-100 bg-plum-plate bg-animation">
-                <div class="d-flex h-100 justify-content-center align-items-center">
-                    <div class="mx-auto app-login-box col-md-8">
-                        <div class="app-logo-inverse mx-auto mb-3"></div>
-                        <div class="modal-dialog w-100 mx-auto">
-                            <div class="modal-content">
-                                <div class="modal-body">
-                                    <div class="h5 modal-title text-center">
-                                        <h4 class="mt-2">
-                                            <div>Welcome back,</div>
-                                            <span>Please sign in to your account below.</span>
-                                        </h4>
+    <div class="app-container app-theme-white bg-light bg-animation body-tabs-shadow">
+        <div class="container">
+            <div class="vh-100">
+                <div class="row vh-100 justify-content-center align-items-center">
+                    <div class="app-login-box col-xxl-4 col-xl-5 col-lg-6 col-md-8 col-sm-10">
+                        <div class="card border-0 rounded-4">
+                            <div class="card-body">
+                                <div class="text-center mt-2 mb-4">
+                                    <div class="mb-3">
+                                        <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" height="56">
                                     </div>
-                                    <form id="loginForm">
-                                        @csrf
-                                        <div class="form-row">
-                                            <div class="col-md-12">
-                                                <div class="position-relative form-group">
-                                                    <input name="username" id="username" placeholder="Username here..."
-                                                        type="text" class="form-control">
-                                                    <p id="usernameError" style="color: red"></p>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="position-relative form-group">
-                                                    <input name="password" id="password" placeholder="Password here..."
-                                                        type="password" class="form-control">
-                                                    <p id="passwordError" style="color: red"></p>
-                                                    <!-- Placeholder for password error message -->
-                                                </div>
+                                    <p>Please sign in to your account below.</p>
+                                </div>
+                                <form id="loginForm">
+                                    @csrf
+
+                                    <div class="form-floating mb-4">
+                                        <input name="username" id="username" placeholder="Username here..." type="text" class="form-control">
+                                        <label for="username">Username</label>
+                                        <p id="usernameError" class="text-danger small"></p>
+                                    </div>
+
+                                    <div class="form-floating mb-4">
+                                        <input name="password" id="password" placeholder="Password here..." type="password" class="form-control">
+                                        <label for="password">Password</label>
+                                        <p id="passwordError" class="text-danger small"></p>
+                                    </div>                        
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="" name="check" id="exampleCheck">
+                                                <label class="form-check-label small text-muted" for="exampleCheck">
+                                                    Keep me logged in
+                                                </label>
                                             </div>
                                         </div>
-                                        <div class="position-relative form-check">
-                                            <input name="check" id="exampleCheck" type="checkbox"
-                                                class="form-check-input">
-                                            <label for="exampleCheck" class="form-check-label">Keep me logged in</label>
+                                        <div class="col-auto">
+                                            <a href="{{url('password_recover_form')}}" class="small">Recover Password</a>
                                         </div>
-                                        <p id="err" style="color: red"></p>
-
-
-                                </div>
-                                <div class="modal-footer clearfix">
-                                    <div class="float-left"><a href="{{url('password_recover_form')}}"
-                                            class="btn-lg btn btn-link">Recover Password</a></div>
-                                    <div class="float-right">
-                                        <button onclick="login()" class="btn btn-primary btn-lg">Login to
-                                            Dashboard</button>
                                     </div>
-                                </div>
+
+                                    <p id="err" class="text-danger small"></p>
+
+                                    <div class="d-grid">
+                                        <button onclick="login()" class="btn btn-primary">Login</button>
+                                    </div>
+
+                                </form>
                             </div>
-                            </form>
+
+
+
                         </div>
 
-                        <div class="text-center text-white opacity-8 mt-3">Copyright © ArchitectUI 2019</div>
+                        <div class="text-center text-muted small mt-3">Copyright © OriginateSoft Pvt. Ltd. 2025</div>
                     </div>
                 </div>
             </div>
@@ -99,7 +101,7 @@
                     type: "POST",
                     data: formData, // Send serialized data
                     success: function(response) {
-                        
+
                         window.location.href = response.redirect_url;
 
                     },

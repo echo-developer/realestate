@@ -18056,7 +18056,7 @@ a.avatar-icon-wrapper:hover .avatar-icon {
 }
 
 .card {
-    box-shadow: 0 .46875rem 2.1875rem rgba(4, 9, 20, .03), 0 .9375rem 1.40625rem rgba(4, 9, 20, .03), 0 .25rem .53125rem rgba(4, 9, 20, .05), 0 .125rem .1875rem rgba(4, 9, 20, .03);
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     border-width: 0;
     transition: all .2s
 }
@@ -21512,9 +21512,9 @@ legend {
     font-weight: 400
 }
 
-.app-login-box h4 div {
+/* .app-login-box h4 div {
     opacity: .6
-}
+} */
 
 .app-login-box h4 span {
     font-size: 1.1rem

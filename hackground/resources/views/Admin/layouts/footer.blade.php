@@ -5,7 +5,7 @@
 
             </div>
             <div class="app-footer-right">
-                <div class="text-center  opacity-8 mt-3">Copyright © New Admin 2024</div>
+                <div class="text-center  opacity-8 mt-3">Copyright © New Admin 2025</div>
             </div>
         </div>
 
