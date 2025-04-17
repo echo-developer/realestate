@@ -57,12 +57,11 @@ const translation = useTranslation();
         setTotalPages(response?.data?.pagination?.total_pages || 0);
         setCurrentPages(response?.data?.pagination?.current_page || 0);
       } else {
-        toast.error(response?.message || "Failed to fetch properties");
         setTotalPages(response?.data?.pagination?.total_pages || 0);
         setCurrentPages(response?.data?.pagination?.current_page || 0);
       }
     } catch (error) {
-      toast.error("An error occurred while fetching properties");
+      console.error("An error occurred while fetching properties");
     } finally {
       setIsLoading(false);
     }
@@ -95,7 +94,6 @@ const translation = useTranslation();
       }
     } catch (error) {
       console.error("Error while deleting project:", error);
-      toast.error("An error occurred while deleting the project");
     }
   };
 

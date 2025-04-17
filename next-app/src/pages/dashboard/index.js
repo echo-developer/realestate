@@ -6,7 +6,6 @@ import Image from "next/image";
 import withAuth from "@/utils/withAuth";
 import { Helmet } from "react-helmet-async";
 import AuthUser from "@/components/Authentication/AuthUser";
-import { toast } from "react-toastify";
 import moment from "moment";
 import Link from "next/link";
 import useTranslation from "@/hooks/useTranslation";
@@ -205,9 +204,7 @@ const Index = () => {
       });
       if (response && response.status === 1) {
         setDashboardList(response.data);
-      } else {
-        toast.error(response.message);
-      }
+      } 
     } catch (error) { }
   };
 

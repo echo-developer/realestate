@@ -5,7 +5,6 @@ import DraftComponent from "@/components/MyPropertyList/DraftComponent";
 import ExpiredComponent from "@/components/MyPropertyList/ExpiredComponent";
 import PendingComponent from "@/components/MyPropertyList/PendingComponent";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { toast } from "react-toastify";
 import { ShimmerContentBlock } from "react-shimmer-effects";
 import withAuth from "@/utils/withAuth";
 import useTranslation from '../../hooks/useTranslation'
@@ -84,11 +83,9 @@ const TabComponent = () => {
                 } else {
                     updateLoadMoreState(response?.data);
                 }
-            } else {
-                toast.error(response?.message || "Failed to fetch properties");
-            }
+            } 
         } catch (error) {
-            toast.error("An error occurred while loading data.");
+            console.error("An error occurred while loading data.");
         } finally {
             setLoading(false);
         }

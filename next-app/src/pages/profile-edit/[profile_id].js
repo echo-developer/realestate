@@ -138,9 +138,7 @@ const ProfileForm = () => {
         }
 
         setFormData(updatedFormData);
-      } else {
-        toast.error(response.message || "Failed to fetch user data.");
-      }
+      } 
     } catch (error) {
       toast.error("An error occurred while fetching user data.");
     }
@@ -218,11 +216,9 @@ const ProfileForm = () => {
 
       if (response?.status === 1) {
         toast.success("File uploaded successfully!");
-      } else {
-        // toast.error(response?.message || "Failed to upload file.");
-      }
+      } 
     } catch (error) {
-      toast.error("An error occurred while uploading the file.");
+      console.error("An error occurred while uploading the file.");
     }
 
     // Preview file
