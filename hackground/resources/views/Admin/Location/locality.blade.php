@@ -50,6 +50,15 @@
                 </button>
             </div>
         @endif
+
+        @if ($errors->has('xlsFileLocality'))
+            <div class="alert alert-danger mt-2">
+                {{ $errors->first('xlsFileLocality') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
         <form action="{{ url('locality') }}" method="get">
             <section class="content-header mb-2">
                 <div class="row">
@@ -67,7 +76,6 @@
                 </div>
             </section>
         </form>
-
         <div class="main-card mb-3 card">
             <div class="card-body">
                 <div class="card-header p-0">
@@ -275,15 +283,27 @@
                 </div>
                 <div class="modal-body">
 
-                    <form id="excel_upload_form" method="POST" enctype="multipart/form-data">
+                    <form id="excel_upload_form" action="{{ route('locality.importExcel') }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
-                        <input type="file" class="form-control" id="" name="xlsFileLocality">
+                        <input type="file" class="form-control" name="xlsFileLocality">
+                        <i class="d-block text-danger mt-2">Allowed file types: xlsx | xls | csv</i>
+                        <div class="mt-3 p-3 bg-light border border-danger rounded">
+                            <strong class="text-danger d-block mb-2">
+
+                                Note: Download the file format below. Changing or re-ordering the column names can
+                                affect your data.
+                            </strong>
+                            <a href="{{ asset(config('constants.LOCALITY_EXCEL_FORMAT')) }}"
+                                class="btn btn-sm btn-outline-primary">Download XLSX Format</a>
+                        </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" id="button" class="btn btn-primary">Save</button>
                         </div>
                     </form>
+
                 </div>
             </div>
 

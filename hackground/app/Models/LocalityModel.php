@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class LocalityModel extends Model
 {
@@ -166,5 +167,42 @@ class LocalityModel extends Model
         return [
             'message' => 'Locality deleted successfully.',
         ];
+    }
+
+    public function localityAddfromExcel(array $data)
+    {
+        try {
+            $langs = explode(',', admin_default_lang());
+            foreach ($data as $row) {
+
+                $newLocId =  DB::table($this->localityTable)->insertGetId([
+                    'city'         => $row[0],
+                    'locality_key' => Str::slug($row[3], '_'),
+                    'latitude'     => $row[1],
+                    'longitude'    => $row[2],
+                    'order'        => rand(1, 4),
+                    'status'       => config('constants.STATUS_ACTIVE'),
+                ]);
+                
+                $nameByLang = [
+                    'en' => $row[3] ?? null,
+                    'ar' => $row[4] ?? null,
+                ];
+
+                foreach ($langs as $lang) {
+                    DB::table($this->localityNamesTable)->insert([
+                        'locality_id' => $newLocId,
+                        'lang'        => $lang,
+                        'name'        => $nameByLang[$lang] ?? null,
+                    ]);
+                }
+            }
+
+            return [
+                'message' => 'Locality added successfully.',
+            ];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

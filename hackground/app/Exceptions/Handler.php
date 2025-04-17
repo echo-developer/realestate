@@ -8,6 +8,7 @@ use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -52,24 +53,28 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception): Response
     {
+        // Log the exception
         Log::error('ERROR ======>>>>: ' . $exception->getMessage(), [
             'file' => $exception->getFile(),
             'line' => $exception->getLine(),
         ]);
 
         if ($request->expectsJson()) {
+            if ($exception instanceof ValidationException) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Validation failed',
+                    'errors' => $exception->errors(),
+                ], 422);
+            }
+
             return response()->json([
                 'status' => 0,
                 'message' => 'An error occurred',
                 'error' => config('app.debug') ? $exception->getMessage() : null,
-            ]);
+            ], 500);
         }
 
-        // Web request fallback (for non-API routes)
-        return response()->json([
-            'status' => 0,
-            'message' => 'An error occurred',
-            'error' => config('app.debug') ? $exception->getMessage() : null,
-        ]);
+        return parent::render($request, $exception);
     }
 }

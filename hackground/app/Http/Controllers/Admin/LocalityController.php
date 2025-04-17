@@ -4,12 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\LocalityModel;
+use App\Traits\Imports\ExcelImportTrait;
 use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
+
 
 class LocalityController extends Controller
 {
+    
+    use ExcelImportTrait;
     protected $locality;
-
 
     public function __construct(LocalityModel $locality)
     {
@@ -50,9 +55,9 @@ class LocalityController extends Controller
 
         $rules = [
             'city_id' => 'required',
-            'key'=> 'required',
-            'latitude'=> 'required',
-            'longitude'=> 'required',
+            'key' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
             'status' => 'required|boolean',
         ];
 
@@ -99,9 +104,9 @@ class LocalityController extends Controller
 
         $rules = [
             'city_id' => 'required',
-            'key'=> 'required',
-            'latitude'=> 'required',
-            'longitude'=> 'required',
+            'key' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
             'status' => 'required|boolean',
         ];
 
@@ -177,5 +182,44 @@ class LocalityController extends Controller
         $states = isset($state_data) ? $state_data : [];
 
         return response()->json(['states' => $states]);
+    }
+
+
+    // public function importExcel(Request $request)
+    // {
+    //     $request->validate([
+    //         'xlsFileLocality' => 'required|file|mimes:xlsx,xls,csv',
+    //     ]);
+
+    //     $filePath = $request->file('xlsFileLocality')->getPathname();
+
+    //     $spreadsheet = IOFactory::load($filePath);
+    //     $sheet = $spreadsheet->getActiveSheet();
+    //     $rows = $sheet->toArray();
+
+    //     // Optionally skip headers (assume first row is header)
+    //     unset($rows[0]);
+
+    //     // log_anything($rows);
+    //     $response = $this->locality->localityAddfromExcel($rows);
+    //     set_flash_message('add');
+
+    //     return redirect()->back();
+    // }
+
+
+    public function importLocalityExcel(Request $request)
+    {
+        try {
+            $rows = $this->parseUploadedExcel($request, 'xlsFileLocality');
+
+            $response = $this->locality->localityAddfromExcel($rows);
+
+            set_flash_message('add');
+            return redirect()->back();
+        } catch (\Throwable $e) {
+            // throw $e;
+            return redirect()->back()->withErrors(['xlsFileLocality' => $e->getMessage()]);
+        }
     }
 }

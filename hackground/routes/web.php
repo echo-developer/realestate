@@ -342,6 +342,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/locality/status', 'LocalityStatus')->name('locality.status');
         Route::post('/locality/delete', 'LocalityDelete')->name('locality.delete');
         Route::get('/getstate/{lang?}', 'getState')->name('state.getState');
+        Route::post('/upload-excel', 'importLocalityExcel')->name('locality.importExcel');
     });
 
     /*
