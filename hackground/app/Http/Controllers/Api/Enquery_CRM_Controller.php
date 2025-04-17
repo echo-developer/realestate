@@ -523,7 +523,7 @@ class Enquery_CRM_Controller extends Controller
                         $logData->enquery_status = $row->enquery_status;
                     }
                     $is_blur = 1;
-                    if($row->leads > $row->remaining_leads)
+                    if($row->leads > $row->leads_used)
                     {
                         $is_blur = 0;
                     }
@@ -664,7 +664,7 @@ class Enquery_CRM_Controller extends Controller
                         $logData->enquery_status = $row->enquery_status;
                     }
                     $is_blur = 1;
-                    if($row->leads > $row->remaining_leads)
+                    if($row->leads > $row->leads_used)
                     {
                         $is_blur = 0;
                     }
@@ -789,7 +789,7 @@ class Enquery_CRM_Controller extends Controller
                 foreach ($leads as $row) {
                     $row = (object) $row;
                     $is_blur = 1;
-                    if($row->leads > $row->remaining_leads)
+                    if($row->leads > $row->leads_used)
                     {
                         $is_blur = 0;
                     }
