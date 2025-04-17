@@ -964,8 +964,8 @@ const index = () => {
               <div className="search-form">
                 <form id="searchfilter">
                   <div className="row gx-3">
-                    <Col className="col-lg-auto col-sm-2 col-auto">
-                      <Dropdown className="d-grid select-dropdown">
+                    <Col className="col-lg-auto col-sm-2 col-auto" onClick={() => toggleDropdown('buy_sell')}>
+                      <Dropdown className="d-grid select-dropdown" show={dropdownState?.buy_sell}>
                         <Dropdown.Toggle
                           variant="light"
                           className="btn-form-control"
