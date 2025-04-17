@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\BankLoanController;
 use App\Http\Controllers\Admin\LocalityController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AreaPriceController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmailTempController;
 use App\Http\Controllers\Admin\FloorPlanController;
