@@ -16,11 +16,13 @@ import {
   ButtonGroup,
   Button,
 } from "react-bootstrap";
+import { useAuth } from "@/context/AuthProvider";
 
 
 const Banner = ({ translation }) => {
   const { callApi } = AuthUser();
   const router = useRouter();
+  const { currency } = useAuth();
   const [locationData, setLocationData] = useState(null);
   const [PropertyTypeData, setPropertyTypeData] = useState([]);
   const [PropertyForData, setPropertyForData] = useState([]);
@@ -217,9 +219,9 @@ const Banner = ({ translation }) => {
   };
 
   const getDisplayText = () => {
-    if (minBudget && maxBudget) return `$${minBudget} - $${maxBudget}`;
-    if (minBudget) return `Min: $${minBudget}`;
-    if (maxBudget) return `Max: $${maxBudget}`;
+    if (minBudget && maxBudget) return `${currency}${minBudget} - ${currency}${maxBudget}`;
+    if (minBudget) return `Min: ${currency}${minBudget}`;
+    if (maxBudget) return `Max: ${currency}${maxBudget}`;
     return translation?.select_budget || "Select Budget";
   };
 

@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
   const [getAllCity, setGetAllCity] = useState([]);
   const [userLoading, setUserLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+  const [currency, setCurrency] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -27,11 +28,28 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+
+
   useEffect(() => {
     if(memberId) {
       fetchUserData();
+      getCurrency();
     }
   }, [memberId])
+
+  const getCurrency = async () => {
+    try {
+      const res = await callApi({
+        api: `/get-settings-value/site-currency`,
+        method: "GET",
+      })
+      if(res && res?.status == 1) {
+        setCurrency(res?.value);
+      }
+    } catch (error) {
+      console.error(error?.message)
+    }
+  }
 
     const fetchUserData = async () => {
       setUserLoading(true);
@@ -82,7 +100,8 @@ export const AuthProvider = ({ children }) => {
         userData,
         userLoading,
         setUserData,
-        uploadUserImage
+        uploadUserImage,
+        currency
       }}
     >
       {children}
