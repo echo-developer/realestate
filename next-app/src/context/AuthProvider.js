@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [userLoading, setUserLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [currency, setCurrency] = useState("");
+  const [currencyCode, setCurrencyCode] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -34,6 +35,7 @@ export const AuthProvider = ({ children }) => {
     if(memberId) {
       fetchUserData();
       getCurrency();
+      getCurrencyCode();
     }
   }, [memberId])
 
@@ -51,6 +53,20 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const getCurrencyCode = async () => {
+    try {
+      const res = await callApi({
+        api: `/get-settings-value/site-currency-code`,
+        method: "GET",
+      })
+      if(res && res?.status == 1) {
+        setCurrencyCode(res?.value);
+      }
+    } catch (error) {
+      console.error(error?.message)
+    }
+  }
+  // site-currency-code
     const fetchUserData = async () => {
       setUserLoading(true);
       try {
@@ -101,7 +117,8 @@ export const AuthProvider = ({ children }) => {
         userLoading,
         setUserData,
         uploadUserImage,
-        currency
+        currency,
+        currencyCode
       }}
     >
       {children}
