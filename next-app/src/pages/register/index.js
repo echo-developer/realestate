@@ -20,9 +20,11 @@ const Index = () => {
   const [passwordStrength, setPasswordStrength] = useState("");
   const [passwordColor, setPasswordColor] = useState("text-danger");
   const [emailTimer, setEmailTimer] = useState(0);
-  const [emailValue,setEmailValue] =useState()
+  const [emailValue, setEmailValue] = useState()
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [showOTPField, setShowOTPField] = useState(false);
+  const [emailOtpErr, setEmailOtpErr] = useState("");
+  const [invalidOtp, setInvalidOtp] = useState("");
   const { callApi } = AuthUser();
   const validationSchema = Yup.object({
     name: Yup.string().required(
@@ -36,14 +38,14 @@ const Index = () => {
       .min(
         6,
         translation?.password_min_length ||
-          "Password must be at least 6 characters"
+        "Password must be at least 6 characters"
       ),
     phone: Yup.string()
       .required(translation?.phone_number || "phone number is required")
       .matches(
         /^[0-9]{10}$/,
         translation?.phone_min_length ||
-          "Phone number must be exactly 10 digits"
+        "Phone number must be exactly 10 digits"
       ),
     phone_code: Yup.string().required(
       translation?.phone_code || "Phone code is required"
@@ -59,8 +61,12 @@ const Index = () => {
       }, 1000);
     } else if (interval) {
       clearInterval(interval);
+      
     }
-
+    if(emailTimer == 0) {
+      setShowOTPField(false);
+      setInvalidOtp("");
+    }
     return () => clearInterval(interval);
   }, [emailTimer]);
 
@@ -75,11 +81,20 @@ const Index = () => {
     window.location.reload();
   };
 
+
+
   const handleSendOTP = async (email) => {
     let response;
     if (!email) return;
-    setEmailTimer(60);
-    setEmailValue(email)
+    // setEmailTimer(60);
+    // setEmailValue(email)
+
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setEmailOtpErr("Invalid Email Format");
+      return;
+    } else {
+      setEmailOtpErr("")
+    }
     try {
       response = await callApi({
         api: `/send_otp_to_verify_email`,
@@ -88,36 +103,39 @@ const Index = () => {
           email: email,
         },
       });
-      if (response) {
+      if (response && response.status == 1) {
         setEmailValidate(true);
         setShowOTPField(true);
+        setEmailTimer(60);
+        setEmailValue(email)
         toast.success(response?.message || "OTP Send Successfully");
       } else {
-        toast.error(response?.message || "OTP Send Failed");
+        setEmailOtpErr(response?.message || "something went wrong");
       }
     } catch (error) {
-      toast.error(response?.message || "Data Not Found");
+      console.error(response?.message || "Data Not Found");
     }
   };
   const handleOtpChange = (e, index) => {
+    setInvalidOtp("");
     const value = e.target.value.replace(/\D/, ""); // Only digits
-  
+
     const newOtp = [...otp];
     newOtp[index] = value; // Even if value is empty, we want to allow it
     setOtp(newOtp);
-  
+
     // Move to next input if a digit is typed
     if (value && index < otp.length - 1) {
       const next = document.querySelector(`input[name='otp-${index + 1}']`);
       if (next) next.focus();
     }
-  
+
     // Auto verify only if all fields are filled
     if (newOtp.every((digit) => digit !== "")) {
       handleVerifyOTP(newOtp.join(""));
     }
   };
-  
+
 
   const handleVerifyOTP = async (values) => {
     let response;
@@ -126,18 +144,21 @@ const Index = () => {
         api: `/verify_email`,
         method: "UPLOAD",
         data: {
-          email:emailValue,
+          email: emailValue,
           otp: values,
         },
       });
       if (response && response?.status === 1) {
         setOtpValidate(true);
         toast.success(response?.message || "Verify OTP Successfully");
+        setShowOTPField(false);
+        setOtp(["", "", "", "", "", ""]);
       } else {
-        toast.error(response?.message || "Verify OTP Failed");
+        setInvalidOtp(response?.message || "Invalid Otp");
+        setOtp(["", "", "", "", "", ""]);
       }
     } catch (error) {
-      toast.error(response?.message || "Data Not Found");
+      console.error(response?.message || "Data Not Found");
     }
   };
 
@@ -155,7 +176,7 @@ const Index = () => {
         toast.error(response.message || "User Registration Failed");
       }
     } catch (error) {
-      toast.error(response.message || "Data Not Found");
+      console.error(response.message || "Data Not Found");
     }
   };
 
@@ -263,7 +284,7 @@ const Index = () => {
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                   >
-                    {({ isValid, dirty, handleChange, handleBlur, values, setFieldValue }) => (
+                    {({ isValid, dirty, handleChange, handleBlur, values, setFieldValue, errors, touched }) => (
                       <div className="card border-0 authentication-form">
                         <div className="card-body">
                           <Form autoComplete="off">
@@ -352,27 +373,37 @@ const Index = () => {
                               <ErrorMessage
                                 name="name"
                                 component="div"
-                                className="text-danger"
+                                className="text-danger small"
                               />
                             </div>
-
-                            <div className="form-floating mb-3 position-relative">
-                              <Field
+                            <div className="mb-3">
+                            <div className="form-floating position-relative">
+                              {/* <Field
                                 type="email"
                                 id="email"
                                 className="form-control"
                                 placeholder=""
                                 name="email"
-                              />
+                              /> */}
+                              <input
+                                type="email"
+                                id="email"
+                                className="form-control"
+                                placeholder=""
+                                name="email"
+                                value={values.email}
+                                onChange={(e) => {
+                                  setFieldValue('email', e.target.value)
+                                  setEmailOtpErr("")
+                                }}
+                                readOnly={otpvalidate} />
+
                               <label htmlFor="email" className="floating-label">
                                 {translation?.email || "Email"}
                               </label>
-                              <ErrorMessage
-                                name="email"
-                                component="div"
-                                className="text-danger"
-                              />
-                              {values?.email && (
+                              
+
+                              {!otpvalidate && values?.email && (
                                 <button
                                   type="button"
                                   className="btn btn-primary position-absolute end-0 top-50 translate-middle-y me-2"
@@ -384,32 +415,48 @@ const Index = () => {
                                     : translation?.send_otp || "Send OTP"}
                                 </button>
                               )}
+                              
                             </div>
+                            <ErrorMessage
+                                name="email"
+                                component="div"
+                                className="text-danger small"
+                              />
+                              {emailOtpErr && (
+                                <div className="text-danger small">{emailOtpErr}</div>
+                            )}  
+                            </div>                          
+                            
                             {showOTPField && (
+                              <>
                               <div className="d-flex gap-2 justify-content-between mb-3">
                                 {otp.map((digit, index) => (
                                   <input
-                                  key={index}
-                                  type="text"
-                                  inputMode="numeric"
-                                  maxLength={1}
-                                  name={`otp-${index}`}
-                                  value={digit}
-                                  onChange={(e) => handleOtpChange(e, index)}
-                                  onKeyDown={(e) => {
-                                    if (e.key === "Backspace" && !otp[index] && index > 0) {
-                                      const prev = document.querySelector(`input[name='otp-${index - 1}']`);
-                                      if (prev) prev.focus();
-                                    }
-                                  }}
-                                  className="form-control text-center"
-                                  style={{
-                                    height: "50px",
-                                    fontSize: "20px",
-                                  }}
-                                />
+                                    key={index}
+                                    type="text"
+                                    inputMode="numeric"
+                                    maxLength={1}
+                                    name={`otp-${index}`}
+                                    value={digit}
+                                    onChange={(e) => handleOtpChange(e, index)}
+                                    onKeyDown={(e) => {
+                                      if (e.key === "Backspace" && !otp[index] && index > 0) {
+                                        const prev = document.querySelector(`input[name='otp-${index - 1}']`);
+                                        if (prev) prev.focus();
+                                      }
+                                    }}
+                                    className="form-control text-center"
+                                    style={{
+                                      height: "50px",
+                                      fontSize: "20px",
+                                    }}
+                                  />
                                 ))}
                               </div>
+                              {invalidOtp && (
+                                <div className="text-danger small mb-3">{invalidOtp}</div>
+                              )}
+                              </>
                             )}
 
                             <div className="form-floating mb-3 with-icon-end">
@@ -434,7 +481,7 @@ const Index = () => {
                               <ErrorMessage
                                 name="password"
                                 component="div"
-                                className="text-danger"
+                                className="text-danger small"
                               />
 
                               {passwordStrength && (
@@ -445,8 +492,8 @@ const Index = () => {
                             </div>
 
                             <div className="form-field">
-                              <div className="input-group">
-                                <div className="input-group mb-3">
+                              <div className="mb-3">
+                                <div className="input-group">
                                   <div className="" style={{ width: "80px" }}>
                                     <select
                                       className="form-control"
@@ -469,12 +516,13 @@ const Index = () => {
                                     name="phone"
                                   />
                                 </div>
-                              </div>
-                              <ErrorMessage
+                                <ErrorMessage
                                 name="phone"
                                 component="div"
-                                className="text-danger"
+                                className="text-danger small"
                               />
+                              </div>
+                              
                             </div>
 
                             <div className="d-grid">
