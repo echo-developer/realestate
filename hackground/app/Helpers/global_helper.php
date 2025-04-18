@@ -261,7 +261,7 @@ if (!function_exists('AllmenusForSideBar')) {
         if ($role != 1) {
             $allmenus->where('pt.role_id', '=', $role);
         }
-
+        $allmenus->where('mmt.status', 1);
         $allmenus = $allmenus->orderBy('id', 'asc')->get()->groupBy('parent_id');
 
         if ($allmenus->isNotEmpty()) {
