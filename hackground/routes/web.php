@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\BankLoanController;
+use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\LocalityController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AreaPriceController;
@@ -534,6 +535,8 @@ Route::middleware('admin_auth')->group(function () {
 
         Route::get('enquery_list', 'loanEnquery')->name('delete');
     });
+
+    Route::get('feedback', [FeedbackController::class, 'getFeedbackList']);
 });
 
 Route::get('/artisan-run', function () {
@@ -541,6 +544,7 @@ Route::get('/artisan-run', function () {
     Artisan::call('route:clear');
     Artisan::call('cache:clear');
     Artisan::call('config:cache');
+    Artisan::call('queue:work');
 
     return response()->json(['message' => 'Cache cleared and config cached successfully']);
 });
@@ -550,5 +554,4 @@ Route::controller(AreaPriceController::class)->group(function () {
     Route::get('area-price/{id?}', 'AreaPrice')->name('area-price.view');
     Route::get('edit', 'Edit')->name('locality_price.edit');
     Route::post('update', 'Update')->name('locality_price.update');
-  
 });
