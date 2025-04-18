@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\BankLoanController;
+use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\LocalityController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AreaPriceController;
@@ -535,6 +536,8 @@ Route::middleware('admin_auth')->group(function () {
 
         Route::get('enquery_list', 'loanEnquery')->name('delete');
     });
+
+    Route::get('feedback', [FeedbackController::class, 'getFeedbackList']);
 });
 
 Route::get('/artisan-run', function () {
