@@ -2,8 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import useTranslation from "../../hooks/useTranslation";
+import OtpField from "../otp/OtpField";
+import AuthUser from "../Authentication/AuthUser";
+import { toast } from "react-toastify";
 
 const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
+  const { callApi } = AuthUser();
   const [formValues, setFormValues] = useState({
     user_type: userData?.user_type || "O",
     user_name: userData?.name || "",
@@ -22,6 +26,28 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
     user_email: "",
     user_password: "",
   });
+
+  const [emailTimer, setEmailTimer] = useState(0);
+  const [showOtpField, setShowOtpField] = useState(false);
+  const [isOtpValid, setOtpValid] = useState(false);
+
+
+    useEffect(() => {
+      let interval = null;
+  
+      if (emailTimer > 0) {
+        interval = setInterval(() => {
+          setEmailTimer((prev) => prev - 1);
+        }, 1000);
+      } else if (interval) {
+        clearInterval(interval);
+        
+      }
+      if(emailTimer == 0) {
+        setShowOtpField(false);
+      }
+      return () => clearInterval(interval);
+    }, [emailTimer]);
 
   // Effect to initialize the form with user data
   useEffect(() => {
@@ -55,51 +81,44 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
     switch (name) {
       case "user_name":
         if (!value.trim()) {
-          errorMessage = `${
-            translation?.name_is_required || "Name is required."
-          }`;
+          errorMessage = `${translation?.name_is_required || "Name is required."
+            }`;
         }
 
         break;
 
       case "w_no":
         if (!value.trim()) {
-          errorMessage = `${
-            translation?.whatsapp_number_is_required ||
+          errorMessage = `${translation?.whatsapp_number_is_required ||
             "WhatsApp number is required"
-          }`;
+            }`;
         } else if (!/^\d+$/.test(value)) {
-          errorMessage = `${
-            translation?.whatsapp_number_must_be_numeric ||
+          errorMessage = `${translation?.whatsapp_number_must_be_numeric ||
             "WhatsApp number must be nuWmeric."
-          }`;
+            }`;
         }
         break;
 
       case "user_email":
         if (!value.trim()) {
-          errorMessage = `${
-            translation?.email_is_required || "Email is required."
-          }`;
+          errorMessage = `${translation?.email_is_required || "Email is required."
+            }`;
         } else if (
           !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/.test(value)
         ) {
-          errorMessage = `${
-            translation?.invalid_email_address || "Invalid email address."
-          }`;
+          errorMessage = `${translation?.invalid_email_address || "Invalid email address."
+            }`;
         }
         break;
 
       case "user_password":
         if (!value.trim()) {
-          errorMessage = `${
-            translation?.password_is_required || "Password is required."
-          }`;
+          errorMessage = `${translation?.password_is_required || "Password is required."
+            }`;
         } else if (value.length < 6) {
-          errorMessage = `${
-            translation?.password_min_length ||
+          errorMessage = `${translation?.password_min_length ||
             "Password must be at least 6 characters long."
-          }`;
+            }`;
         }
         break;
 
@@ -131,6 +150,56 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
     return Object.values(newErrors).every((error) => !error);
   };
 
+
+    const handleSendOTP = async (email) => {
+      let response;
+      if (!email) return;
+
+  
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setErrors(prev => {
+          return {
+            ...prev,
+            user_email: "Invalid Email Format"
+          }
+        })
+        return;
+      } else {
+        setErrors(prev => {
+          return {
+            ...prev,
+            user_email: ""
+          }
+        })
+      }
+
+
+      try {
+        response = await callApi({
+          api: `/send_otp_to_verify_email`,
+          method: "UPLOAD",
+          data: {
+            email: email,
+          },
+        });
+        if (response && response.status == 1) {
+          setShowOtpField(true);
+          setEmailTimer(60);
+          toast.success(response?.message || "OTP Send Successfully");
+        } else {
+          // setEmailOtpErr(response?.message || "something went wrong");
+          setErrors(prev => {
+            return {
+              ...prev,
+              user_email: response.message || ""
+            }
+          })
+        }
+      } catch (error) {
+        console.error(response?.message || "Data Not Found");
+      }
+    };
+
   const handleSubmit = () => {
     if (validate()) {
       setFormData(formValues);
@@ -155,15 +224,13 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
               onBlur={handleBlur}
             />
             <label
-              className={`btn btn-outline-light ${
-                errors.user_type ? "border-danger" : ""
-              }`}
+              className={`btn btn-outline-light ${errors.user_type ? "border-danger" : ""
+                }`}
               htmlFor={type}
             >
               <img
-                src={`/assets/images/icons/${
-                  type === "O" ? "owner" : type === "A" ? "agent" : "builder"
-                }.png`}
+                src={`/assets/images/icons/${type === "O" ? "owner" : type === "A" ? "agent" : "builder"
+                  }.png`}
                 alt="Icon"
                 height="24"
                 width="24"
@@ -203,9 +270,8 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
         </label>
         <div className="input-group">
           <select
-            className={`form-select btn-group bootstrap-select input-group-btn fit-width ${
-              errors.country_code ? "border-danger" : ""
-            }`}
+            className={`form-select btn-group bootstrap-select input-group-btn fit-width ${errors.country_code ? "border-danger" : ""
+              }`}
             name="country_code"
             value={formValues.country_code}
             onChange={handleChange}
@@ -248,7 +314,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
       </div>
 
       {/* Email Field */}
-      <div className="form-field mb-3">
+      {/* <div className="form-field mb-3">
         <label htmlFor="user_email" className="form-label">
           {translation?.email || "Email"} <span className="text-danger">*</span>
         </label>
@@ -266,7 +332,55 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
         {errors.user_email && (
           <small className="text-danger">{errors.user_email}</small>
         )}
+
+        <button
+          type="button"
+          className="btn btn-primary position-absolute end-0 top-50 translate-middle-y me-2"
+        >
+        </button>
+      </div> */}
+      <div className="mb-3">
+        <div className="form-floating position-relative">
+          <input
+            type="email"
+            id="email"
+            className={`form-control ${errors.user_email ? "border-danger" : ""}`}
+            name="user_email"
+            value={formValues.user_email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder={
+              translation?.enter_your_email_id || "Enter Your Email I’d"
+            }
+            readOnly={isOtpValid}
+          />
+
+          <label htmlFor="email" className="floating-label">
+            {translation?.email || "Email"} <span className="text-danger">*</span>
+          </label>
+
+          {!isOtpValid && formValues.user_email && (
+            <button
+              type="button"
+              className="btn btn-primary position-absolute end-0 top-50 translate-middle-y me-2"
+              onClick={() => handleSendOTP(formValues.user_email)}
+              disabled={emailTimer > 0}
+            >
+              {emailTimer > 0
+                ? `Resend in ${emailTimer}s`
+                : translation?.send_otp || "Send OTP"}
+            </button>
+          )}
+        </div>
+        {errors.user_email && (
+          <div className="text-danger small">
+            {errors.user_email}
+          </div>
+        )}
       </div>
+        {showOtpField && (
+          <OtpField setOtpValid={setOtpValid} setShowOtpField={setShowOtpField} email={formValues.user_email} />
+        )}
 
       {/* Password Field (for new users only) */}
       {!userData && (
@@ -278,9 +392,8 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
           <input
             type="password"
             name="user_password"
-            className={`form-control ${
-              errors.user_password ? "border-danger" : ""
-            }`}
+            className={`form-control ${errors.user_password ? "border-danger" : ""
+              }`}
             placeholder={
               translation?.placeholder_enter_your_password ||
               "Enter Your Password"
@@ -301,6 +414,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
           type="button"
           className="btn btn-primary btn-next-2 btn-next-1"
           onClick={handleSubmit}
+          disabled={!isOtpValid}
         >
           {translation?.next || "Next"} <i className="bi bi-arrow-right"></i>
         </button>

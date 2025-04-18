@@ -9,9 +9,11 @@ import { Helmet } from "react-helmet-async";
 import Link from "next/link";
 import useTranslation from "../../hooks/useTranslation";
 import LoginHeader from "@/components/addtional/LoginHeader";
+import { useRef } from "react";
 
 const Index = () => {
   const router = useRouter();
+  const otpRef = useRef([])
   const translation = useTranslation();
   const [emailvalidate, setEmailValidate] = useState(false);
   const [otpvalidate, setOtpValidate] = useState(false);
@@ -156,6 +158,7 @@ const Index = () => {
       } else {
         setInvalidOtp(response?.message || "Invalid Otp");
         setOtp(["", "", "", "", "", ""]);
+        otpRef.current[0].focus();
       }
     } catch (error) {
       console.error(response?.message || "Data Not Found");
@@ -434,6 +437,7 @@ const Index = () => {
                                   <input
                                     key={index}
                                     type="text"
+                                    ref={(el) => otpRef.current[index] = el}
                                     inputMode="numeric"
                                     maxLength={1}
                                     name={`otp-${index}`}
