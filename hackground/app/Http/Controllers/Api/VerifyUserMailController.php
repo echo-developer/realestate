@@ -49,7 +49,7 @@ class VerifyUserMailController extends Controller
             dispatch(new \App\Jobs\SendEmailJob( $request->email, $mail_unique_title,  ['VERIFICATION_CODE' => $otp,]));
 
           
-            return response()->json(['message' => 'OTP sent successfully.'], 200);
+            return response()->json(['status' => 1, 'message' => 'OTP sent successfully.'], 200);
         }catch (\Throwable $e) {
             throw $e;
         }
