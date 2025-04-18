@@ -1,16 +1,20 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
-use App\Models\User;
-use Carbon\CarbonPeriod;
+use App\Models\Admin;
 use App\Models\PrefProperty;
-use Illuminate\Http\Request;
+use App\Models\PrefPropertySetting;
+use App\Models\User;
 use App\Models\UserTransaction;
 use App\Services\DashboardService;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+use function Laravel\Prompts\password;
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\PrefPropertySetting;
 
 class DashboardController extends Controller
 {
@@ -26,5 +30,26 @@ class DashboardController extends Controller
     {
         $data = $this->dashboardService->getDashboardData();
         return view('Admin.dashboard', compact('data'));
+    }
+
+    public function adminDetailsUpdate(Request $r)
+    {
+        log_anything($r->admin_id);
+
+        $data = [
+            "username" => $r->username,
+            "full_name" => $r->full_name,
+            "email" => $r->email,
+            "status" => $r->status,
+        ];
+        if (isset($r->password) && !empty($r->password)) {
+            $data['password'] = bcrypt($r->password);
+        }
+        Admin::where('id', $r->admin_id)->update($data);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Admin Updated',
+        ]);
     }
 }

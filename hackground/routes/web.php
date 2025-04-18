@@ -92,6 +92,7 @@ Route::middleware('admin_auth')->group(function () {
     // Dashboard routes
     Route::controller(DashboardController::class)->group(function () {
         Route::get('dashboard', 'index')->name('admin.dashboard');
+        Route::post('admin/update-details', 'adminDetailsUpdate')->name('admin.update.Details');
     });
 
     // Authentication (logout) routes
