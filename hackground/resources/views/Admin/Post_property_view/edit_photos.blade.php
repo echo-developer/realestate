@@ -36,14 +36,13 @@
 
             <div class="card">
                 <div class="card-header d-flex">
-                    <h4 class="card-title">Property Photos </h4>
+                    <h5 class="card-title">Property Photos </h5>
                     <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit()"><i class="fa fa-edit"></i></a>
                 </div>
                 <div class="card-body">
                     <div class="form-field">
                         <div class="image-tab-content">
-                            <ul class="nav nav-underline nav-custom">
-
+                            <ul class="nav nav-underline nav-custom mb-3">
                                 <li class="nav-item"><a class="nav-link active" data-tab='living'
                                         href="javascript:void(0)">Living room</a>
                                 </li>

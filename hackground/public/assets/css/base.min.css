@@ -768,12 +768,6 @@ hr {
     border-top: 1px solid rgba(0, 0, 0, .1)
 }
 
-.small,
-small {
-    font-size: 80%;
-    font-weight: 400
-}
-
 .mark,
 mark {
     padding: .2em;
@@ -5274,10 +5268,6 @@ input[type=submit].btn-block {
     padding: 1.25rem
 }
 
-.card-title {
-    margin-bottom: .75rem
-}
-
 .card-subtitle {
     margin-top: -.375rem;
     margin-bottom: 0
@@ -5295,26 +5285,12 @@ input[type=submit].btn-block {
     margin-left: 1.25rem
 }
 
-.card-header {
-    padding: .75rem 1.25rem;
-    margin-bottom: 0;
-    color: inherit;
-    background-color: #fff;
-    border-bottom: 1px solid rgba(26, 54, 126, .125)
-}
-
 .card-header:first-child {
     border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0
 }
 
 .card-header+.list-group .list-group-item:first-child {
     border-top: 0
-}
-
-.card-footer {
-    padding: .75rem 1.25rem;
-    background-color: #fff;
-    border-top: 1px solid rgba(26, 54, 126, .125)
 }
 
 .card-footer:last-child {
@@ -18125,19 +18101,6 @@ a.avatar-icon-wrapper:hover .avatar-icon {
 .card-header,
 .card-title {
     text-transform: uppercase;
-    color: rgba(13, 27, 62, .7);
-    font-weight: 700;
-    font-size: .88rem
-}
-
-.card-header {
-    display: flex;
-    align-items: center;
-    border-bottom-width: 1px;
-    padding-top: 0;
-    padding-bottom: 0;
-    padding-right: .625rem;
-    height: 3.5rem
 }
 
 .card-header.no-border {

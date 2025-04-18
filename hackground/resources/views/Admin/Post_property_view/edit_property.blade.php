@@ -43,283 +43,284 @@
 
     {{-- {{ $propertyData->settings }} --}}
     <section class="content">
-        <div class="container-fluid">
-            <ul id="myTab" class="nav nav-underline mb-3" role="tablist">
-                <li class="nav-item"><a class="nav-link active" href="{{ url('property/edit/'.$property_id) }}" aria-expanded="false">Property Details</a> </li>
+        <ul id="myTab" class="nav nav-underline mb-3" role="tablist">
+            <li class="nav-item"><a class="nav-link active" href="{{ url('property/edit/'.$property_id) }}" aria-expanded="false">Property Details</a> </li>
 
-                <li class="nav-item"><a class="nav-link" href="{{ url('property/edit-photos/'.$property_id) }}"  aria-expanded="true">Property Photos</a> </li>
-            </ul>
+            <li class="nav-item"><a class="nav-link" href="{{ url('property/edit-photos/'.$property_id) }}"  aria-expanded="true">Property Photos</a> </li>
+        </ul>
 
-            <div class="card mb-3">
-                <div class="card-header d-flex">
-                    <h4 class="card-title">Basic Details </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('basic')"><i class="fa fa-edit"></i></a>
-                </div>
-                <div class="card-body">
-                    <ul class="list-info">
-                        <li>
-                            <b>Name:</b>
-                            <span>{{ ucfirst($propertyData->name ?? 'N/A') }}</span>
-                        </li>
-                        <li>
-                            <b>Post For:</b>
-                            <span>{{ ucfirst(optional($propertyData->settings)->post_for ?? 'N/A') }}</span>
-                        </li>
-                        <li>
-                            <b>Property Type:</b>
-                            <span>{{get_name_by_id('property_category_names','category_id',$propertyData->settings->property_type,'en') ?? 'N/A'}}</span>
-                        </li>
-                        <li>
-                            <b>Property For:</b>
-                            <span>{{get_name_by_id('property_sub_category_names','sub_category_id',$propertyData->settings->property_type_for,'en') ?? 'N/A'}}</span>
-                        </li>
-
-                        <li>
-                            <b>Price:</b>
-                            <span>{{ $propertyData->settings->price_currency ?? 'N/A'}}{{ $propertyData->settings->expected_price ?? 'N/A'}}</span>
-                        </li>
-                        <li>
-                            <b>Message to Buyer:</b>
-                            <span>{{ $propertyData->additional->buyer_message ?? 'N/A'}}</span>
-                        </li>
-                       
-                        <li>
-                            <b>Project/Society Name:</b>
-                            <span>{{$propertyData->settings->project_name ?? 'N/A'}}</span>
-                        </li>
-                    </ul>
-                </div>
+        <div class="card mb-3">
+            <div class="card-header d-flex">
+                <h5 class="card-title">Basic Details</h5>
+                <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('basic')"><i class="fa fa-edit"></i></a>
             </div>
+            <div class="card-body">
+                <ul class="list-info mb-3">
+                    <li>
+                        <b>Name:</b>
+                        <span>{{ ucfirst($propertyData->name ?? 'N/A') }}</span>
+                    </li>
+                    <li>
+                        <b>Post For:</b>
+                        <span>{{ ucfirst(optional($propertyData->settings)->post_for ?? 'N/A') }}</span>
+                    </li>
+                    <li>
+                        <b>Property Type:</b>
+                        <span>{{get_name_by_id('property_category_names','category_id',$propertyData->settings->property_type,'en') ?? 'N/A'}}</span>
+                    </li>
+                    <li>
+                        <b>Property For:</b>
+                        <span>{{get_name_by_id('property_sub_category_names','sub_category_id',$propertyData->settings->property_type_for,'en') ?? 'N/A'}}</span>
+                    </li>
 
-            <div class="card mb-3">
-                <div class="card-header d-flex">
-                    <h4 class="card-title">Location </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('location')"><i class="fa fa-edit"></i></a>
-                </div>
-                <div class="card-body">
-                    <ul class="list-info">
-                        <li>
-                            <b>City:</b>
-                            {{ get_name_by_id('city_names', 'city_id', $propertyData->location->city, 'en') }}
-                            {{-- <span>{{ $propertyData->location->city ? get_name_by_id('city_names', 'name', $propertyData->location->city, 'en') : '' }}</span> --}}
-                        </li>
-                        <li>
-                            <b>Locality:</b>
-                            <span>{{ $propertyData->location->locality ? get_name_by_id('locality_names', 'locality_id', $propertyData->location->locality, 'en') : '' }}</span>
-                        </li>
-                        <li>
-                            <b>Address:</b>
-                            <span>{{$propertyData->location->property_address??'N/A'}}</span>
-                        </li>
-                    </ul>
-                </div>
+                    <li>
+                        <b>Price:</b>
+                        <span>{{ $propertyData->settings->price_currency ?? 'N/A'}}{{ $propertyData->settings->expected_price ?? 'N/A'}}</span>
+                    </li>
+                    
+                    
+                    <li>
+                        <b>Project/Society Name:</b>
+                        <span>{{$propertyData->settings->project_name ?? 'N/A'}}</span>
+                    </li>
+                    
+                </ul>
+                <h5>Message to Buyer:</h5>
+                <p >{{ $propertyData->additional->buyer_message ?? 'N/A'}}</p>
             </div>
+        </div>
 
-            <div class="card mb-3">
-                <div class="card-header d-flex">
-                    <h4 class="card-title">Property Features </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('features')"><i class="fa fa-edit"></i></a>
-                </div>
-                <div class="card-body">
-                    <h4>Configuration:</h4>
-                    <ul class="list-info">
-                        <li>
-                            <b>Bedrooms:</b>  
-                            <span>{{$propertyData->settings->bedrooms ?? 'N/A'}}
-                                @if($propertyData->dimensions)
-                                    @foreach($propertyData->dimensions as $k=>$d)
-                                    @if($d->room_type == 'bedroom')
-                                    @php
-                                        $size = json_decode($d->size);
-                                    @endphp
-                                    <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
-                                    @endif
-                                    @endforeach
-                                @endif
-                            </span>
-                        </li>
-                        <li>
-                            <b>Bathrooms:</b>  
-                            <span>{{$propertyData->settings->bathrooms ?? 'N/A'}}
-                                @if($propertyData->dimensions)
-                                    @foreach($propertyData->dimensions as $k=>$d)
-                                    @if($d->room_type == 'bathroom')
-                                    @php
-                                        $size = json_decode($d->size);
-                                    @endphp
-                                    <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
-                                    @endif
-                                    @endforeach
-                                @endif
-                            </span>
-                        </li>
-                        <li>
-                            <b>Balcony:</b>  
-                            <span>{{$propertyData->additional->balcony ?? 'N/A'}}
-                                @if($propertyData->dimensions)
-                                    @foreach($propertyData->dimensions as $k=>$d)
-                                    @if($d->room_type == 'balcony')
-                                    @php
-                                        $size = json_decode($d->size);
-                                    @endphp
-                                    <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
-                                    @endif
-                                    @endforeach
-                                @endif
-                            </span>
-                        </li>
-                    </ul>
-
-                    <h4>Floor Details:</h4>
-                    <ul class="list-info">
-                        <li>
-                            <b>Flooring Types:</b>
-                            <span>
-                                <?php 
-                                    $types = get_floor_types();
-                                    $style_arr = json_decode($propertyData->additional->flooring_style);
-                                    print_r($propertyData->additional->flooring_style);
-                                ?>
-                            </span>
-                        </li>
-                        <li>
-                            <b>Floor No:</b>
-                            <span>{{$propertyData->additional->floor ?? 'N/A'}}</span>
-                        </li>
-                        <li>
-                            <b>Total Floors:</b>
-                            <span>{{$propertyData->additional->total_floor ? get_total_floors($propertyData->additional->total_floor) : 'N/A'}}</span>
-                        </li>
-                        <li>
-                            <b>Flats on the Floor:</b>
-                            <span>{{$propertyData->additional->flat_each_floor ?? 'N/A'}}</span>
-                        </li>
-                        <li>
-                            <b>Lifts in the Tower:</b>
-                            <span>{{$propertyData->additional->lifts_in_tower ?? 'N/A'}}</span>
-                        </li>
-                        
-                        <li>
-                            <b>Carpet Area:</b>
-                            <span>{{$propertyData->settings->carpet_area??'N/A'}}</span>
-                        </li>
-                        <li>
-                            <b>Super Area:</b>
-                            <span>{{$propertyData->settings->super_area??'N/A'}}</span>
-                        </li>
-                        
-                        <li>
-                            <b>Furnished:</b>
-                            <span>{{get_name_by_id('property_furnish_names','furnish_id',$propertyData->additional->property_furnish,'en')??'N/A'}}</span>
-                        </li>
-                        
-                    </ul>
-                </div>
+        <div class="card mb-3">
+            <div class="card-header d-flex">
+                <h5 class="card-title">Location</h5>
+                <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('location')"><i class="fa fa-edit"></i></a>
             </div>
+            <div class="card-body">
+                <ul class="list-info">
+                    <li>
+                        <b>City:</b>
+                        <span>
+                        {{ get_name_by_id('city_names', 'city_id', $propertyData->location->city, 'en') }}
+                        {{-- <span>{{ $propertyData->location->city ? get_name_by_id('city_names', 'name', $propertyData->location->city, 'en') : '' }}</span> --}}
+                        </span>
+                    </li>
+                    <li>
+                        <b>Locality:</b>
+                        <span>{{ $propertyData->location->locality ? get_name_by_id('locality_names', 'locality_id', $propertyData->location->locality, 'en') : '' }}</span>
+                    </li>
+                    <li>
+                        <b>Address:</b>
+                        <span>{{$propertyData->location->property_address??'N/A'}}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-            <div class="card mb-3">
-                <div class="card-header d-flex">
-                    <h4 class="card-title">Additional Information </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('additional')"><i class="fa fa-edit"></i></a>
-                </div>
-                <div class="card-body">
-                    <ul class="list-info">
-                        <li>
-                            <b>Water Availability:</b>
-                            <span>{{ $propertyData->additional->water_available ? get_water_availability($propertyData->additional->water_available) : '' }}</span>
-                        </li>
-                        <li>
-                            <b>Status of Electricity:</b>
-                            <span>{{ $propertyData->additional->electric_available ? electricity_status($propertyData->additional->electric_available) : '' }}</span>
-                        </li>
-                        <li>
-                            <b>Type of Ownership:</b>
-                            <span>{{ $propertyData->additional->ownership_type ? get_ownership_types($propertyData->additional->ownership_type) : '' }}</span>
-                        </li>
-                        <li>
-                            <b>Possession Status:</b>
-                            <span> {{get_name_by_id('property_status_names','status_id',$propertyData->additional->possession_status,'en') ?? 'N/A'}}</span>
-                        </li>
-
-                        @if($propertyData->additional->possession_status == '1')
-                        <li>
-                            <b>Age Of Constraction:</b>
-                            <span> {{$propertyData->additional->construct_year ?? 'N/A'}}</span>
-                        </li>
-                        @endif
-                        @if($propertyData->additional->possession_status == '2')
-                        @php
-                            $month_arr = explode('-',$propertyData->additional->expected_possesion_month_year);
-                            $construction_month = $month_arr[0];
-                            $construction_year = $month_arr[1];
-                        @endphp
-                        <li>
-                            <b>Expected Possesion Month Year: </b>
-                            <span> {{ date('M',strtotime($construction_month)).', '.date('Y',strtotime($construction_year)), }}</span>
-                        </li>
-                        @endif
-
-                        <li>
-                            <b>Parking:</b>
-                            <span>
+        <div class="card mb-3">
+            <div class="card-header d-flex">
+                <h5 class="card-title">Property Features </h5>
+                <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('features')"><i class="fa fa-edit"></i></a>
+            </div>
+            <div class="card-body">
+                <h5>Configuration:</h5>
+                <ul class="list-info">
+                    <li>
+                        <b>Bedrooms:</b>  
+                        <span>{{$propertyData->settings->bedrooms ?? 'N/A'}}
+                            @if($propertyData->dimensions)
+                                @foreach($propertyData->dimensions as $k=>$d)
+                                @if($d->room_type == 'bedroom')
                                 @php
-                                $parkingStatus = [
-                                    'av' => 'Available',
-                                    'na' => 'Not Available',
-                                    'uc' => 'Under Construction'
-                                ];
+                                    $size = json_decode($d->size);
                                 @endphp
-                                {{ $parkingStatus[$propertyData->settings->parking_ability] ?? 'N/A' }}
-                            </span>
-                        </li>
-                        <li>
-                            <b>Facing:</b>
-                            <span>{{$propertyData->additional->facing_direction??'N/A'}}</span>
-                        </li>
-                        <li>
-                            <b>OverLooking:</b>
-                            <span>
-                                @php
-                                $overlooking = $propertyData->additional->overlooking ?? '';
-                                $overlookingArray = !empty($overlooking) ? json_decode($overlooking, true) : '';
-                            
-                                // echo $overlookingArray ? implode(', ', $overlookingArray) : 'N/A';
-                                // if($overlookingArray)
-                                // {
-
-                                // }
-                                @endphp
-                            </span>
-                        </li>
-
-                    </ul>
-                </div>
-            </div>
-
-            <div class="card mb-3">
-                <div class="card-header d-flex">
-                    <h4 class="card-title">Property Landmark </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('landmark')"><i class="fa fa-edit"></i></a>
-                </div>
-                <div class="card-body">
-
-                    <div class="list-container">
-                        @foreach ($landmark_categories as $category => $items)
-                        @if (!empty($items))
-                        <div class="list-category">
-                            <b>{{ ucfirst($category) }}:</b>
-                            <ul>
-                                @foreach ($items as $item)
-                                <li>{{ $item['name'] }} - {{ $item['distance'] }} meters</li>
+                                <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
+                                @endif
                                 @endforeach
-                            </ul>
-                        </div>
-                        @endif
-                        @endforeach
+                            @endif
+                        </span>
+                    </li>
+                    <li>
+                        <b>Bathrooms:</b>  
+                        <span>{{$propertyData->settings->bathrooms ?? 'N/A'}}
+                            @if($propertyData->dimensions)
+                                @foreach($propertyData->dimensions as $k=>$d)
+                                @if($d->room_type == 'bathroom')
+                                @php
+                                    $size = json_decode($d->size);
+                                @endphp
+                                <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
+                                @endif
+                                @endforeach
+                            @endif
+                        </span>
+                    </li>
+                    <li>
+                        <b>Balcony:</b>  
+                        <span>{{$propertyData->additional->balcony ?? 'N/A'}}
+                            @if($propertyData->dimensions)
+                                @foreach($propertyData->dimensions as $k=>$d)
+                                @if($d->room_type == 'balcony')
+                                @php
+                                    $size = json_decode($d->size);
+                                @endphp
+                                <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
+                                @endif
+                                @endforeach
+                            @endif
+                        </span>
+                    </li>
+                </ul>
+
+                <h5>Floor Details:</h5>
+                <ul class="list-info">
+                    <li>
+                        <b>Flooring Types:</b>
+                        <span>
+                            <?php 
+                                $types = get_floor_types();
+                                $style_arr = json_decode($propertyData->additional->flooring_style);
+                                //print_r($propertyData->additional->flooring_style);
+                                
+                            ?>
+                            Mosaic, Granite, Vitrified Normal Tiles
+                        </span>
+                    </li>
+                    <li>
+                        <b>Floor No:</b>
+                        <span>{{$propertyData->additional->floor ?? 'N/A'}}</span>
+                    </li>
+                    <li>
+                        <b>Total Floors:</b>
+                        <span>{{$propertyData->additional->total_floor ? get_total_floors($propertyData->additional->total_floor) : 'N/A'}}</span>
+                    </li>
+                    <li>
+                        <b>Flats on the Floor:</b>
+                        <span>{{$propertyData->additional->flat_each_floor ?? 'N/A'}}</span>
+                    </li>
+                    <li>
+                        <b>Lifts in the Tower:</b>
+                        <span>{{$propertyData->additional->lifts_in_tower ?? 'N/A'}}</span>
+                    </li>
+                    
+                    <li>
+                        <b>Carpet Area:</b>
+                        <span>{{$propertyData->settings->carpet_area??'N/A'}}</span>
+                    </li>
+                    <li>
+                        <b>Super Area:</b>
+                        <span>{{$propertyData->settings->super_area??'N/A'}}</span>
+                    </li>
+                    
+                    <li>
+                        <b>Furnished:</b>
+                        <span>{{get_name_by_id('property_furnish_names','furnish_id',$propertyData->additional->property_furnish,'en')??'N/A'}}</span>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header d-flex">
+                <h5 class="card-title">Additional Information </h5>
+                <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('additional')"><i class="fa fa-edit"></i></a>
+            </div>
+            <div class="card-body">
+                <ul class="list-info">
+                    <li>
+                        <b>Water Availability:</b>
+                        <span>{{ $propertyData->additional->water_available ? get_water_availability($propertyData->additional->water_available) : '' }}</span>
+                    </li>
+                    <li>
+                        <b>Status of Electricity:</b>
+                        <span>{{ $propertyData->additional->electric_available ? electricity_status($propertyData->additional->electric_available) : '' }}</span>
+                    </li>
+                    <li>
+                        <b>Type of Ownership:</b>
+                        <span>{{ $propertyData->additional->ownership_type ? get_ownership_types($propertyData->additional->ownership_type) : '' }}</span>
+                    </li>
+                    <li>
+                        <b>Possession Status:</b>
+                        <span> {{get_name_by_id('property_status_names','status_id',$propertyData->additional->possession_status,'en') ?? 'N/A'}}</span>
+                    </li>
+
+                    @if($propertyData->additional->possession_status == '1')
+                    <li>
+                        <b>Age Of Constraction:</b>
+                        <span> {{$propertyData->additional->construct_year ?? 'N/A'}}</span>
+                    </li>
+                    @endif
+                    @if($propertyData->additional->possession_status == '2')
+                    @php
+                        $month_arr = explode('-',$propertyData->additional->expected_possesion_month_year);
+                        $construction_month = $month_arr[0];
+                        $construction_year = $month_arr[1];
+                    @endphp
+                    <li>
+                        <b>Expected Possesion Month Year: </b>
+                        <span> {{ date('M',strtotime($construction_month)).', '.date('Y',strtotime($construction_year)), }}</span>
+                    </li>
+                    @endif
+
+                    <li>
+                        <b>Parking:</b>
+                        <span>
+                            @php
+                            $parkingStatus = [
+                                'av' => 'Available',
+                                'na' => 'Not Available',
+                                'uc' => 'Under Construction'
+                            ];
+                            @endphp
+                            {{ $parkingStatus[$propertyData->settings->parking_ability] ?? 'N/A' }}
+                        </span>
+                    </li>
+                    <li>
+                        <b>Facing:</b>
+                        <span>{{$propertyData->additional->facing_direction??'N/A'}}</span>
+                    </li>
+                    <li>
+                        <b>OverLooking:</b>
+                        <span>
+                            @php
+                            $overlooking = $propertyData->additional->overlooking ?? '';
+                            $overlookingArray = !empty($overlooking) ? json_decode($overlooking, true) : '';
+                        
+                            // echo $overlookingArray ? implode(', ', $overlookingArray) : 'N/A';
+                            // if($overlookingArray)
+                            // {
+
+                            // }
+                            @endphp
+                        </span>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header d-flex">
+                <h5 class="card-title">Property Landmark </h5>
+                <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('landmark')"><i class="fa fa-edit"></i></a>
+            </div>
+            <div class="card-body">
+
+                <div class="list-container row">
+                    @foreach ($landmark_categories as $category => $items)
+                    @if (!empty($items))
+                    <div class="list-category col-6">
+                        <b>{{ ucfirst($category) }}:</b>
+                        <ul class="list-info">
+                            @foreach ($items as $item)
+                            <li>{{ $item['name'] }} - {{ $item['distance'] }} meters</li>
+                            @endforeach
+                        </ul>
                     </div>
+                    @endif
+                    @endforeach
                 </div>
             </div>
-
         </div>
     </section>
 </div>
