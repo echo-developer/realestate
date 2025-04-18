@@ -332,7 +332,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/city/status', 'CityStatus')->name('city.status');
         Route::post('/city/delete', 'CityDelete')->name('city.delete');
         Route::get('/getstate/{lang?}', 'getState')->name('state.getState');
-        // Route::post('/upoad-excel', 'importCityExcel')->name('city.importExcel');
+        Route::post('/upoad-excel', 'importCityExcel')->name('city.importExcel');
     });
 
 

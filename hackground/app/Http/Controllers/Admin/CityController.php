@@ -19,10 +19,10 @@ class CityController extends Controller
         $this->middleware('view_permit:city');
     }
 
-    public function CityView(Request $req)
+    public function CityView(Request $req, $lang = 'en')
     {
         $peginate = 10;
-        $lang = strtolower($req->input('lang', 'en'));
+        $lang = strtolower($lang);
         $term = $req->input('term');
 
         $data = $this->city->getCity($term, $lang, $peginate);
@@ -40,8 +40,6 @@ class CityController extends Controller
             ['lang' => $lang],
             null
         );
-
-
 
         return view('Admin.Location.city', compact('country_data', 'data'));
     }
@@ -187,7 +185,7 @@ class CityController extends Controller
     public function importCityExcel(Request $request)
     {
         try {
-            $rows = $this->parseUploadedExcel($request, 'xlsFileCity');
+            $rows = $this->parseUploadedExcel($request, 'xlsFileCity', 4);
 
             $response = $this->city->cityAddfromExcel($rows);
 

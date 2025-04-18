@@ -172,6 +172,7 @@ class LocalityModel extends Model
     public function localityAddfromExcel(array $data)
     {
         try {
+            // log_anything($data);
             $langs = explode(',', admin_default_lang());
             foreach ($data as $row) {
 
@@ -183,7 +184,7 @@ class LocalityModel extends Model
                     'order'        => rand(1, 4),
                     'status'       => config('constants.STATUS_ACTIVE'),
                 ]);
-                
+
                 $nameByLang = [
                     'en' => $row[3] ?? null,
                     'ar' => $row[4] ?? null,

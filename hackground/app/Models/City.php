@@ -167,30 +167,30 @@ class City extends Model
     public function cityAddfromExcel(array $data)
     {
         try {
-            log_anything($data);
+            // log_anything($data);
             $langs = explode(',', admin_default_lang());
-            // foreach ($data as $row) {
+            foreach ($data as $row) {
 
-            //     $newCityId =  DB::table($this->cityTable)->insertGetId([
-            //         'country' => $row[0],
-            //         'state' =>  $row[1],
-            //         'order'  => rand(1, 4),
-            //         'status' => config('constants.STATUS_ACTIVE'),
-            //     ]);
+                $newCityId =  DB::table($this->cityTable)->insertGetId([
+                    'country' => $row[0],
+                    'state' =>  $row[1],
+                    'order'  => rand(1, 4),
+                    'status' => config('constants.STATUS_ACTIVE'),
+                ]);
 
-            //     $nameByLang = [
-            //         'en' => $row[2] ?? null,
-            //         'ar' => $row[3] ?? null,
-            //     ];
+                $nameByLang = [
+                    'en' => $row[2] ?? null,
+                    'ar' => $row[3] ?? null,
+                ];
 
-            //     foreach ($langs as $lang) {
-            //         DB::table($this->cityNamesTable)->insert([
-            //             'city_id' => $newCityId,
-            //             'lang'        => $lang,
-            //             'name'        => $nameByLang[$lang] ?? null,
-            //         ]);
-            //     }
-            // }
+                foreach ($langs as $lang) {
+                    DB::table($this->cityNamesTable)->insert([
+                        'city_id' => $newCityId,
+                        'lang'        => $lang,
+                        'name'        => $nameByLang[$lang] ?? null,
+                    ]);
+                }
+            }
 
             return [
                 'message' => 'City added successfully.',

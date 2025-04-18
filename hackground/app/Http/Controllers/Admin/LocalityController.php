@@ -12,7 +12,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class LocalityController extends Controller
 {
-    
+
     use ExcelImportTrait;
     protected $locality;
 
@@ -211,7 +211,7 @@ class LocalityController extends Controller
     public function importLocalityExcel(Request $request)
     {
         try {
-            $rows = $this->parseUploadedExcel($request, 'xlsFileLocality');
+            $rows = $this->parseUploadedExcel($request, 'xlsFileLocality', 5);
 
             $response = $this->locality->localityAddfromExcel($rows);
 

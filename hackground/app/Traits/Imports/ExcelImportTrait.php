@@ -16,8 +16,8 @@ trait ExcelImportTrait
      * @return array Returns the parsed data rows as an array.
      * @throws \Exception
      */
-    
-    public function parseUploadedExcel($request, $inputName = null, $skipHeader = true)
+
+    public function parseUploadedExcel($request, $inputName = null, $columns, $skipHeader = true)
     {
         if (!$inputName) {
             $inputName = collect($request->allFiles())->keys()->first();
@@ -48,6 +48,18 @@ trait ExcelImportTrait
             array_shift($rows);
         }
 
-        return $rows;
+        $filteredRows = [];
+
+        foreach ($rows as $row) {
+            $limitedRow = array_slice($row, 0, $columns);
+            $hasData = collect($limitedRow)->filter(function ($cell) {
+                return trim((string) $cell) !== '';
+            })->isNotEmpty();
+
+            if ($hasData) {
+                $filteredRows[] = $limitedRow;
+            }
+        }
+        return $filteredRows;
     }
 }
