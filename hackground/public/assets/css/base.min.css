@@ -12049,7 +12049,7 @@ button {
 }
 
 .app-theme-white.app-container {
-    background: #f1f4f6
+    background: #f8f9fa;
 }
 
 .app-theme-white .app-sidebar {
@@ -12074,7 +12074,7 @@ button {
 }
 
 .app-theme-gray .app-sidebar {
-    background: #fff;
+    background: #f1f4f6;
     border-right: #dee2e6 solid 1px
 }
 
@@ -18097,8 +18097,6 @@ a.avatar-icon-wrapper:hover .avatar-icon {
 .actions-icon-btn .btn-icon-only:hover {
     color: #3f6ad8
 }
-
-.card-header,
 .card-title {
     text-transform: uppercase;
 }
@@ -44518,11 +44516,10 @@ span.multiselect-native-select select {
 }
 .overview-card {
     background: #fff;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    margin-top: 30px;
-    margin-bottom: 30px;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    margin-bottom: 1.5rem;
 }
 
 .overview-card .header {
@@ -44533,8 +44530,6 @@ span.multiselect-native-select select {
 }
 
 .overview-card h3 {
-    font-size: 20px;
-    font-weight: 600;
     margin: 0;
 }
 

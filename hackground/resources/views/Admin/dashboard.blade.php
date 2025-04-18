@@ -2,15 +2,14 @@
 
 @push('custom-css')
     <style>
-        .widget-title {
+        .card-fact{
+            border-radius: 0.5rem;
             cursor: pointer;
-            transition: color 0.3s ease;
-            /* optional: smooth transition */
         }
-
-        .widget-title:hover {
-            color: blue;
-        }
+        /* .card-fact:hover {
+            background-color: var(--bs-primary);
+            color: #fff;
+        } */
     </style>
 @endpush
 
@@ -41,144 +40,129 @@
         </div>
 
         <div class="row">
-            <div class="col-md-6 col-lg-3">
-                <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-primary border-primary card"
-                    onclick="window.location.href='{{ url('allproperties/all-property-view') }}'">
-                    <div class="widget-chat-wrapper-outer">
-                        <div class="widget-chart-content">
-                            <div class="widget-title opacity-5 text-uppercase">Total Property</div>
-                            <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
-                                <div class="widget-chart-flex align-items-center">
-                                    <div>
-                                        {{ $data['total_properties'] }}
-                                    </div>
-                                </div>
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card card-fact border-0 shadow-sm mb-4" onclick="window.location.href='{{ url('allproperties/all-property-view') }}'">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">                                
+                                <h2>{{ $data['total_properties'] }}</h2>
+                                <p>Total Property</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('assets/icons/home-2.png') }}" alt="Property" height="48">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-danger border-success card"
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card card-fact border-0 shadow-sm mb-4"
                     onclick="location.href='{{ url('member/memberUser/Agent') }}'">
-                    <div class="widget-chat-wrapper-outer">
-                        <div class="widget-chart-content">
-                            <div class="widget-title opacity-5 text-uppercase">Total Agents</div>
-                            <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
-                                <div class="widget-chart-flex align-items-center">
-                                    <div>
-                                        {{ $data['total_agents'] }}
-                                    </div>
-                                </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <h2>{{ $data['total_agents'] }}</h2>
+                                <p>Total Agents</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('assets/icons/agent.png') }}" alt="Property" height="48">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-danger border-warning card"
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card card-fact border-0 shadow-sm mb-4"
                     onclick="location.href='{{ url('member/memberUser/Builder') }}'">
-                    <div class="widget-chat-wrapper-outer">
-                        <div class="widget-chart-content">
-                            <div class="widget-title opacity-5 text-uppercase">Total Builder</div>
-                            <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
-                                <div class="widget-chart-flex align-items-center">
-                                    <div>
-                                        {{ $data['total_builder'] }}
-                                    </div>
-                                </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <h2>{{ $data['total_builder'] }}</h2>
+                                <p>Total Builder</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('assets/icons/builder.png') }}" alt="Property" height="48">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-danger border-danger card"
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card card-fact border-0 shadow-sm mb-4"
                     onclick="location.href='{{ url('transaction/transaction_list') }}'">
-                    <div class="widget-chat-wrapper-outer">
-                        <div class="widget-chart-content">
-                            <div class="widget-title opacity-5 text-uppercase">Total Revenue</div>
-                            <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
-                                <div class="widget-chart-flex align-items-center">
-                                    <div>
-                                        {{ $data['total_revenue'] }}
-                                    </div>
-                                </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">                                
+                                <h2>{{ $data['total_revenue'] }}</h2>
+                                <p>Total Revenue</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('assets/icons/wallet.png') }}" alt="Property" height="48">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-warning border-info card"
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card card-fact border-0 shadow-sm mb-4"
                     onclick="location.href='{{ url('allproject/all-project-view') }}'">
-                    <div class="widget-chat-wrapper-outer">
-                        <div class="widget-chart-content">
-                            <div class="widget-title opacity-5 text-uppercase">Total Projects</div>
-                            <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
-                                <div class="widget-chart-flex align-items-center">
-                                    <div>
-                                        {{ $data['properties_for_sale'] }}
-                                    </div>
-
-                                </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <h2>{{ $data['properties_for_sale'] }}</h2>
+                                <p>Total Projects</p>                                
+                            </div>
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('assets/icons/project.png') }}" alt="Property" height="48">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-success border-alternate card"
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card card-fact border-0 shadow-sm mb-4"
                     onclick="location.href='{{ url('member/memberUser/Owner') }}'">
-                    <div class="widget-chat-wrapper-outer">
-                        <div class="widget-chart-content">
-                            <div class="widget-title opacity-5 text-uppercase">Total Owner</div>
-                            <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
-                                <div class="widget-chart-flex align-items-center">
-                                    <div>
-                                        {{ $data['total_owner'] }}
-
-                                    </div>
-
-                                </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <h2>{{ $data['total_owner'] }}</h2>
+                                <p>Total Owner</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('assets/icons/owner.png') }}" alt="Property" height="48">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-warning border-alternate card"
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card card-fact border-0 shadow-sm mb-4"
                     onclick="location.href='{{ url('admin_notifiaction') }}'">
-                    <div class="widget-chat-wrapper-outer">
-                        <div class="widget-chart-content">
-                            <div class="widget-title opacity-5 text-uppercase">Notification</div>
-                            <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
-                                <div class="widget-chart-flex align-items-center">
-                                    <div>
-                                        {{ $data['notification'] ?? 0 }}
-
-                                    </div>
-
-                                </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">                                
+                                <h2>{{ $data['notification'] ?? 0 }}</h2>
+                                <p>Notification</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('assets/icons/notification.png') }}" alt="Property" height="48">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-primary border-alternate card"
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card card-fact border-0 shadow-sm mb-4"
                     onclick="location.href='{{ url('enquiry/list') }}'">
-                    <div class="widget-chat-wrapper-outer">
-                        <div class="widget-chart-content">
-                            <div class="widget-title opacity-5 text-uppercase">All Enquires</div>
-                            <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
-                                <div class="widget-chart-flex align-items-center">
-                                    <div>
-                                        {{ $data['enquiry'] }}
-
-                                    </div>
-
-                                </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                
+                                <h2>{{ $data['enquiry'] }}</h2>
+                                <p>All Enquires</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('assets/icons/950299.png') }}" alt="Property" height="48">
                             </div>
                         </div>
                     </div>
@@ -186,8 +170,8 @@
             </div>
         </div>
         <div class="overview-card">
-            <div class="header">
-                <h3>Overview</h3>
+            <div class="header align-items-start">
+                <h4>Overview</h4>
                 <div class="metrics">
                     <div class="metric">
                         <div class="metric-icon">🏠</div>
@@ -210,9 +194,9 @@
                 <canvas id="overviewChart"></canvas>
             </div>
         </div>
-        <div class="main-card mb-3 card">
-            <div class="card-header">
-                <div class="card-header-title font-size-lg text-capitalize font-weight-normal">Property Overview</div>
+        <div class="mb-3 card border-0 shadow-sm">
+            <div class="card-header d-flex">
+                <h4>Property Overview</h4>
                 <div class="btn-actions-pane-right">
                     <a href=" class=" btn-icon btn-wide btn-outline-2x btn btn-outline-focus btn-sm d-flex">
                         See All Properties
@@ -228,33 +212,33 @@
                 <table class="align-middle text-truncate mb-0 table table-borderless table-hover">
                     <thead>
                         <tr>
-                            <th class="text-center">id</th>
-                            <th class="text-center">Name</th>
-                            <th class="text-center">Locality</th>
-                            <th class="text-center">Date</th>
-                            <th class="text-center">Type</th>
-                            <th class="text-center">Status</th>
+                            <th>id</th>
+                            <th>Name</th>
+                            <th>Locality</th>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th class="text-right">Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($data['properties_lists'] as $property)
                             <tr>
-                                <td class="text-center text-muted" style="width: 80px;">
+                                <td class="text-muted" style="width: 80px;">
                                     {{ UniquePropertyCode($property->id) }}</td>
-                                <td class="text-center"><a href="javascript:void(0)"></a>{{ $property->name }}</td>
-                                <td class="text-center"><a
+                                <td><a href="javascript:void(0)"></a>{{ $property->name }}</td>
+                                <td><a
                                         href="javascript:void(0)"></a>{{ $property->location->locality ?? 'N/A' }}</td>
-                                <td class="text-center"><a
+                                <td><a
                                         href="javascript:void(0)"></a>{{ date('d F Y', strtotime($property->created_at)) }}
                                 </td>
 
 
-                                <td class="text-center">
+                                <td>
                                     {{ get_name_by_id('property_category_names', 'category_id', $property->settings->property_type, 'en') ?? 'N/A' }}
 
                                 </td>
 
-                                <td class="text-center">
+                                <td class="text-right">
                                     <div role="group" class="btn-group-sm btn-group">
                                         <a class="btn-shadow btn btn-primary" href="#"> On
                                             {{ $property->settings->post_for }} </a>
@@ -270,71 +254,4 @@
 
 @endsection
 
-@push('custom-js')
-    <script>
-        const saleData = [<?php echo implode(
-            ',',
-            array_map(function ($sale) {
-                return '"' . $sale . '"';
-            }, $data['chart_sale']),
-        ); ?>].map(Number);
-        const rentData = [<?php echo implode(
-            ',',
-            array_map(function ($rent) {
-                return '"' . $rent . '"';
-            }, $data['chart_rent']),
-        ); ?>].map(Number);
 
-        const allData = saleData.concat(rentData);
-        const maxValue = Math.max(...allData);
-        const suggestedMax = Math.ceil(maxValue / 10) * 10;
-
-        const ctx = document.getElementById('overviewChart').getContext('2d');
-        const overviewChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [<?php echo implode(
-                    ',',
-                    array_map(function ($month) {
-                        return '"' . $month . '"';
-                    }, $data['chart_labels']),
-                ); ?>],
-                datasets: [{
-                        label: 'Total Sale',
-                        data: saleData,
-                        fill: true,
-                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
-                        borderColor: '#4f46e5',
-                        tension: 0.4
-                    },
-                    {
-                        label: 'Total Rent',
-                        data: rentData,
-                        fill: true,
-                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                        borderColor: '#22c55e',
-                        tension: 0.4
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        suggestedMax: suggestedMax,
-                        ticks: {
-                            callback: value => value
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
-        });
-    </script>
-@endpush

@@ -287,6 +287,35 @@
 
                 </table>
             </div>
+            <div class="row" id="main_table">
+            @if ($project->count() > 0)
+            @foreach ($project as $proj)
+            <article class="col-lg-4 col-sm-6">
+                <div class="card card-ads">
+                    <div class="card-image">
+                        @if ($proj->gallery->count() > 0)
+                        <img src="{{ asset('user_upload/project_images/' . $proj->gallery->first()->images->first()->filename) }}" alt="Project Photo" class="card-img" height="250" width="300" />
+                        @else
+                        <img src="{{ asset(config('constants.NO_IMAGE_PROPERTY')) }}" alt="no image" class="card-img" height="250" width="300" />
+                        @endif
+                    </div>
+                    <div class="card-body">
+                        <!-- Displaying Project Name (Assuming `name` exists) -->
+                        <h4><a href="{{ url('project/project_details') }}/{{ $proj->id }}">{{ $proj->project_name }}</a></h4>
+
+                        <!-- Displaying Address -->
+                        <p>{{ $proj->location->address }}</p>
+
+                        <!-- Displaying Post Date (Assuming `created_at` exists) -->
+                        <p>{{ $proj->created_at->format('d-M-Y') }}</p>
+                    </div>
+                </div>
+            </article>
+            @endforeach
+            @else
+            <article class="col-12"><i class="icon-feather-thumbs-down fa-md"></i> &nbsp; Sorry, No records !   </article>                     
+            @endif
+            </div>
 
             @if ($project->isNotEmpty())
             <div class="card-footer pagination-rounded clearfix justify-content-center">
