@@ -3,22 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 
-use App\Http\Controllers\Controller;
-use App\Models\Api\ApiModel;
+use App\Models\User;
 use App\Models\LoanEnquery;
 use App\Models\PrefProject;
+use App\Models\Api\ApiModel;
 use App\Models\PrefProperty;
-use App\Models\PrefPropertyLocation;
-use App\Models\ProjectPropertyMapping;
-use App\Models\TestimonialModel;
-use App\Models\User;
-use function Laravel\Prompts\select;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
+use App\Models\TestimonialModel;
+use App\Models\UserFeedbackModel;
 use Illuminate\Support\Facades\DB;
+
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Models\PrefPropertyLocation;
+use function Laravel\Prompts\select;
+use Illuminate\Support\Facades\Auth;
+use App\Models\ProjectPropertyMapping;
 
 class HomeController extends Controller
 {
@@ -745,6 +746,54 @@ class HomeController extends Controller
             ]);
         } catch (\Throwable $e) {
             throw $e;
+        }
+    }
+
+    public function fetchLocalities(Request $request)
+    {
+        try {
+            $lang = $request->input('lang', 'en');
+            $city_id = $request->input('city_id', 'en');
+            $localities = $this->apiModel->getLocality($lang, $city_id);
+            if (!empty($localities)) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Localities fetched successfully.',
+                    'data' => $localities,
+                ]);
+            }
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'No localities found for the selected city.',
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function saveFeedback(Request $request)
+    {
+        try {
+            $data = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone_code' => $request->phone_code,
+                'feedback' => $request->feedback,
+                'phone' => $request->phone,
+            ];
+            UserFeedbackModel::create($data);
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Feedback submitted successfully.',
+            ]);
+        } catch (\Throwable $th) {
+            log_anything($th);
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred while submitting feedback.',
+            ]);
         }
     }
 }

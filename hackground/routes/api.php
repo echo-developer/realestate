@@ -93,6 +93,8 @@ Route::controller(HomeController::class)->group(function () {
     Route::post('buyer_property_enquery', 'buyerEnquerytoAdmin');
     Route::get('verified_agents', 'VerifiedAgentList');
     Route::get('property_trending_rates', 'propertyInTrendsandRates');
+    Route::get('locality-list', 'fetchLocalities');
+    Route::post('save-feedback', 'saveFeedback');
     Route::post('save_loan_enquery', 'saveLoanEnquery');
 });
 
@@ -289,6 +291,8 @@ Route::controller(VerifyUserMailController::class)->group(function () {
 Route::controller(CmsController::class)->group(function () {
     Route::get('cms/{key?}', 'get_content')->name('cms.get_content');
 });
+
+
 
 Route::get('/get-settings-value/{key?}', function ($key = null) {
     if (!$key) {

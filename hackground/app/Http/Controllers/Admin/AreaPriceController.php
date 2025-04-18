@@ -13,6 +13,7 @@ class AreaPriceController extends Controller
 
     public function __construct(LocalityAreaPrice $locality_area_price)
     {
+        $this->middleware('view_permit:area-price');
         $this->locality_area_price = $locality_area_price;
     }
     public function AreaPrice()
