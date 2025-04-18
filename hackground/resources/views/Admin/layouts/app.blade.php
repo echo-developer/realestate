@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/ltr.css') }}">
     <!-- <link rel="stylesheet" href="{{ asset('assets/js/scripts-init/select2/dist/css/select2.min.css') }}"> -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @stack('custom-css')
 </head>
@@ -44,7 +44,7 @@
     <!--SCRIPTS INCLUDES-->
 
     <!--CORE-->
-    
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js" crossorigin="anonymous">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/metismenu"></script>
@@ -122,14 +122,25 @@
 
     @stack('custom-js')
 </body>
-<div class="modal fade" id="ajax_modal" tabindex="-1" role="dialog" aria-labelledby="ajax_modal" aria-hidden="true">
+<div class="modal fade" id="ajax_modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
+
+            <!-- Static Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="ajaxModalLabel"></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Dynamic Body will be loaded here -->
+            <div class="modal-body" id="ajax_modal_body">
+                <!-- AJAX response will be inserted here -->
+            </div>
 
         </div>
     </div>
 </div>
-
-
 
 </html>

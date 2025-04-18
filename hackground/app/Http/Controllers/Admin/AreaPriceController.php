@@ -20,15 +20,16 @@ class AreaPriceController extends Controller
 
         $projectData = $this->locality_area_price->getProjectLocationPrice();
         $propertyData = $this->locality_area_price->getProprtyLocationPrice();
-
+        // dd($propertyData);
         foreach ($propertyData as $item) {
             LocalityAreaPrice::updateOrInsert(
                 [
                     'locality' => $item->locality,
-                    'year' => $item->year,
-                    'price_for' => 'prop',
+                   
                 ],
                 [
+                    'year' => $item->year,
+                    'price_for' => 'prop',
                     'price_per_sqft' => round($item->avg_price_per_sqft, 2),
                 ]
             );
@@ -39,10 +40,10 @@ class AreaPriceController extends Controller
             LocalityAreaPrice::updateOrInsert(
                 [
                     'locality' => $item->locality,
-                    'year' => $item->year,
-                    'price_for' => 'proj',
                 ],
                 [
+                    'year' => $item->year,
+                    'price_for' => 'proj',
                     'price_per_sqft' => round($item->avg_price_per_sqft, 2),
                 ]
             );
