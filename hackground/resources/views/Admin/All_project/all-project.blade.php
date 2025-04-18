@@ -354,6 +354,201 @@
                     </div>
                 @endif
             </div>
+
+            <div class="table-responsive" id="main_table">
+                <table id='table' class="mb-0 table">
+                    <thead>
+                        <tr>
+                            <th style="width:10%">Photo</th>
+                            <th style="width:20%">Project</th>
+                            <th style="width:20%">Address</th>
+                            <th style="width:15%">Post Date</th>
+                            <th style="width:10%">Leads</th>
+                            <th style="width:10%">Action</th>
+                            <th style="min-width:5px;" class="text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if ($project->count() > 0)
+                            @foreach ($project as $proj)
+                                <tr>
+                                    <!-- Displaying Photo -->
+                                    <td>
+                                        @php
+                                            $defaultImage = asset(config('constants.NO_IMAGE'));
+                                            $imageToShow = $defaultImage;
+                                            if ($proj->gallery->count() > 0) {
+                                                $firstGallery = $proj->gallery->first();
+                                                $firstImage = $firstGallery->images->first();
+                                                if ($firstImage && isset($firstImage->filename)) {
+                                                    $relativePath =
+                                                        'user_upload/project_images/' . $firstImage->filename;
+                                                    $localPath = public_path($relativePath);
+                                                    if (file_exists($localPath)) {
+                                                        $imageToShow = asset($relativePath);
+                                                    }
+                                                }
+                                            }
+                                        @endphp
+                                        <img src="{{ $imageToShow }}" alt="Project Photo" width="65"
+                                            height="50" />
+                                    </td>
+
+                                    <!-- Displaying Project Name (Assuming `name` exists) -->
+                                    <td><a
+                                            href="{{ url('project/project_details') }}/{{ $proj->id }}">{{ $proj->project_name }}</a>
+                                    </td>
+
+                                    <!-- Displaying Address -->
+                                    <td>{{ $proj->location->address }}</td>
+
+                                    <!-- Displaying Post Date (Assuming `created_at` exists) -->
+                                    <td>{{ $proj->created_at->format('d-M-Y') }}</td>
+
+                                    <td>
+                                        {{ projectLeadsCount($proj->id) }}
+                                        <a href="{{ url('/enquiry/project-leads/' . $proj->id) }}" title="View Leads"><i
+                                                class="fa fa-eye"></i></a>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-warning"
+                                            onclick="addAmenity(`{{ $proj->id }}`)">Add Amenity</button>
+                                        <button type="button" onclick="addProperty(`{{ $proj->id }}`)"
+                                            class="btn btn-primary">Add Property</button>
+
+                                        <button onclick="addFloorConfig(`{{ $proj->id }}`)"
+                                            class="btn btn-sm btn-success">Add Floor Data</button>
+                                        <button class="btn btn-sm btn-primary"
+                                            onclick="AddCertificate(`{{ $proj->id }}`)">Add
+                                            Certificate</button>
+                                        <button class="btn btn-sm btn-danger"
+                                            onclick="openBrochureModal(`{{ $proj->id }}`)">
+                                            Upload Brochure
+                                        </button>
+                                    </td>
+                                    <!-- Displaying Status -->
+                                    <td>
+                                        <div class="col-auto  mb-2">
+
+                                            <select name="prop_status" id="prop_status"
+                                                data-property-id="{{ $proj->id }}"
+                                                class="prop_status form-control form-control-sm">
+                                                @foreach ($statusMapping as $key => $value)
+                                                    <option value="{{ $value }}"
+                                                        {{ $proj->status == $key ? 'selected' : '' }}>
+                                                        {{ strtoupper($value) }}
+                                                    </option>
+                                                @endforeach
+                                                <option value="delete">DELETE</option>
+                                                <option value="edit_view">Edit And View</option>
+                                            </select>
+
+                                        </div>
+                                        <div class="col-auto">
+
+                                            <input type="checkbox" class="prop_feature_status"
+                                                data-prop-id="{{ $proj->id }}"
+                                                {{ $proj->is_featured ? 'checked' : '' }}>Make Featured
+                                            <input type="checkbox" class="prop_top_status"
+                                                data-prop-id="{{ $proj->id }}"
+                                                {{ $proj->is_top ? 'checked' : '' }}>Make Top
+
+
+                                        </div>
+
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="10"><i class="icon-feather-thumbs-down fa-md"></i> &nbsp; Sorry, No records
+                                    !</td>
+                            </tr>
+                        @endif
+                    </tbody>
+
+
+                </table>
+            </div>
+            <div class="row" id="main_table">
+                @if ($project->count() > 0)
+                    @foreach ($project as $proj)
+                        <article class="col-lg-4 col-sm-6">
+                            <div class="card card-ads">
+                                <div class="card-image">
+                                    @if ($proj->gallery->count() > 0)
+                                        <img src="{{ asset('user_upload/project_images/' . $proj->gallery->first()->images->first()->filename) }}"
+                                            alt="Project Photo" class="card-img" height="250" width="300" />
+                                    @else
+                                        <img src="{{ asset(config('constants.NO_IMAGE_PROPERTY')) }}" alt="no image"
+                                            class="card-img" height="250" width="300" />
+                                    @endif
+                                </div>
+                                <div class="card-body">
+                                    <!-- Displaying Project Name (Assuming `name` exists) -->
+                                    <h4><a
+                                            href="{{ url('project/project_details') }}/{{ $proj->id }}">{{ $proj->project_name }}</a>
+                                    </h4>
+
+                                    <!-- Displaying Address -->
+                                    <p>{{ $proj->location->address }}</p>
+
+                                    <!-- Displaying Post Date (Assuming `created_at` exists) -->
+                                    <p>{{ $proj->created_at->format('d-M-Y') }}</p>
+                                </div>
+                            </div>
+                        </article>
+                    @endforeach
+                @else
+                    <article class="col-12"><i class="icon-feather-thumbs-down fa-md"></i> &nbsp; Sorry, No records !
+                    </article>
+                @endif
+            </div>
+
+            @if ($project->isNotEmpty())
+                <div class="card-footer pagination-rounded clearfix justify-content-center">
+                    <ul class="pagination small mb-0">
+                        @if ($project->currentPage() == $project->lastPage() && $project->currentPage() != 1)
+                            <li class="page-item">
+                                <a href="{{ $project->appends(['term' => request('term')])->url(1) }}" class="page-link"
+                                    rel="start">
+                                    <i class="fa fa-chevron-left"></i> First
+                                </a>
+                            </li>
+                        @endif
+
+                        <li class="page-item {{ $project->currentPage() == 1 ? 'disabled' : '' }}">
+                            <a href="{{ $project->appends(['term' => request('term')])->previousPageUrl() }}"
+                                class="page-link" rel="prev">
+                                <i class="fa fa-chevron-left"></i>
+                            </a>
+                        </li>
+
+                        @for ($i = max($project->currentPage() - 1, 1); $i <= min($project->currentPage() + 1, $project->lastPage()); $i++)
+                            <li class="page-item {{ $project->currentPage() == $i ? 'active' : '' }}">
+                                <a href="{{ $project->appends(['term' => request('term')])->url($i) }}"
+                                    class="page-link">{{ $i }}</a>
+                            </li>
+                        @endfor
+
+                        <li class="page-item {{ $project->currentPage() == $project->lastPage() ? 'disabled' : '' }}">
+                            <a href="{{ $project->appends(['term' => request('term')])->nextPageUrl() }}"
+                                class="page-link" rel="next">
+                                <i class="fa fa-chevron-right"></i>
+                            </a>
+                        </li>
+
+                        @if ($project->currentPage() != $project->lastPage())
+                            <li class="page-item">
+                                <a href="{{ $project->appends(['term' => request('term')])->url($project->lastPage()) }}"
+                                    class="page-link" rel="end">
+                                    Last <i class="fa fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
+            @endif
         </div>
     </div>
 @endsection
