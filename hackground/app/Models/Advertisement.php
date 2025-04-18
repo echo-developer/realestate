@@ -543,4 +543,24 @@ class Advertisement extends Model
         ];
     }
 
+	public function get_request_list($srch=array(),$paginate)
+    {
+        $query = DB::table('advertisement_request as a')->select('a.*');
+		$query->where('a.status', '!=', '-1');
+		if(!empty($srch['page'])) {
+            $query->where('a.page',$srch['page']);
+        }
+		if(!empty($srch['position'])) {
+            $query->where('a.position',$srch['position']);
+        }
+        $query->orderBy('a.request_id', 'desc');
+        return $query->paginate($paginate);
+    }
+
+	public function get_request_details($id)
+	{
+		$query = DB::table('advertisement_request as a')->where('request_id',$id)->select('a.*')->first();
+		return $query;
+	}
+
 }

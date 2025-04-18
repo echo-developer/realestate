@@ -1482,4 +1482,22 @@ class ApiModel extends Model
         $result = $query->first();
         return $result;
     }
+
+    public function addAdvertisementRequest($data = array())
+    {
+        $structure = array(
+            'advertiser_name' => $data['advertiser_name'] ? $data['advertiser_name'] : '',
+            'email'=> $data['email'] ? $data['email'] : '',
+            'phone_code'=> $data['phone_code'] ? $data['phone_code'] : '',
+            'phone'=> $data['phone'] ? $data['phone'] : '',
+            'city_id'=> $data['city_id'] ? $data['city_id'] : '',
+            'locality_id'=> $data['locality_id'] ? $data['locality_id'] : '',
+            'page'=> $data['page'] ? $data['page'] : '',
+            'position'=> $data['position'] ? $data['position'] : '',
+            'duration'=> $data['duration'] ? $data['duration'] : ''
+        );
+        $prev = DB::table('advertisement_request')->insert($structure);
+        return true;
+    }
+
 }
