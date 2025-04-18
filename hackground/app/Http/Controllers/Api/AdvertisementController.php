@@ -84,4 +84,38 @@ class AdvertisementController extends Controller
        
     }
 
+    public function saveAdvertisementRequest(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'advertiser_name' => 'required',
+            'email'=> 'required',
+            'phone_code'=>'required|integer',
+            'phone'=>'required|integer',
+            'city_id'=>'required|integer',
+            'locality_id'=>'required|integer',
+            'page'=>'required',
+            'position'=>'required',
+            'duration'=>'required'
+        ]);
+        //print_r($validator);exit;
+        if($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+        
+        $up = $this->apiModel->addAdvertisementRequest($request->all());
+        if($up)
+        {
+            return response()->json([
+                    'status' => 1,
+                    'message' => 'Request sent successfully.',
+                ], 200);  
+        }else{
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed to send request.',
+            ], 200);
+        }
+       
+    }
+
 }

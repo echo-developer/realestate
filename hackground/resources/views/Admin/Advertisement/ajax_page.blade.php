@@ -653,3 +653,43 @@
     }
 </script>
 @endif
+
+@if($page == 'view-request')
+<div class="modal-header">
+    <h4 class="modal-title"><?php echo $title; ?></h4>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+
+</div>
+<div class="modal-body">
+    <ul>
+        <li>Advertiser Name:</li>
+        <li>{{ $detail->advertiser_name }}</li>
+    </ul>
+    <ul>
+        <li>Email:</li>
+        <li>{{ $detail->email }}</li>
+    </ul>
+    <ul>
+        <li>Phone:</li>
+        <li>{{ $detail->phone }}</li>
+    </ul>
+    <ul>
+        <li>Page:</li>
+        <li>{{ $detail->page }}</li>
+    </ul>
+    <ul>
+        <li>Position:</li>
+        <li>{{ $detail->position }}</li>
+    </ul>
+    <ul>
+        <li>Duration in weeks:</li>
+        <li>{{ $detail->duration }}</li>
+    </ul>
+    <ul>
+        <li>Location:</li>
+        <li>{{ get_name_by_id('locality_names','locality_id',$detail->locality_id,'en').', '.get_name_by_id('city_names','city_id',$detail->city_id,'en') }}</li>
+    </ul>
+</div>
+@endif

@@ -1,6 +1,3 @@
-@php
-    //print_r($list);exit;
-@endphp
 @extends('Admin.layouts.app')
 
 @section('content')
@@ -50,17 +47,25 @@
     <form action="" method="get">
         <section class="content-header mb-2">
             <div class="row">
-                
                 <div class="col-md-3 col-sm-4">
-                    <label for="lead_type">Leads Date</label>
+                    <label for="lead_for">Page</label>
                     <div class="form-group">
-                        <input type="date" class="form-control" id="enquery_date" name="enquery_date" value="{{ request('enquery_date') }}" />
+                        <select class="form-control" name="page" id="page" onchange="get_position()">
+                            <option value="" >All</option>
+                            @if($pages)
+                                @foreach($pages as $k=>$p)
+                                <option value="{{ $p['slug'] }}" {{ request('page') == $p['slug'] ? 'selected' : '' }}>{{ $p['name'] }}</option>
+                                @endforeach
+                            @endif
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-4">
-                    <label for="lead_type">Member Name</label>
+                    <label for="category_key">Position </label>
                     <div class="input-group">
-                        <input class="form-control" id="member_name" placeholder="Search by member" name="member_name" value="{{ request('member_name') }}" />
+                        <select class="form-control" name="position" id="position" >
+                            <option value="">-Select-</option>
+                        </select>
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-search"></i>
@@ -78,7 +83,7 @@
                 <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> {{ $title }}
 
                 {{-- <div class="btn-actions-pane-right">
-                    <button type="button" class="btn btn-sm btn-success" onclick="add()">Add Country</button>
+                    <button type="button" class="btn btn-sm btn-success" onclick="add()">{{ $add_btn }}</button>
                 </div> --}}
 
             </div>
@@ -88,10 +93,14 @@
                     <thead>
                         <tr>
                             <th style="width:5%">ID</th>
-                            <th style="width:20%">Customer Name</th>
-                            <th style="width:45%">Message</th>
-                            <th style="width:20%">Date</th>
-                            {{-- <th style="width:20%">Status</th> --}}
+                            <th>Advertiser Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Page</th>
+                            <th>Position</th>
+                            <th>Duration(in weeks)</th>
+                            <th>location</th>
+                            <th>Status</th>
                             <th class="text-right">Action</th>
                         </tr>
                     </thead>
@@ -99,17 +108,23 @@
                         @if($list)
                         @foreach($list as $item)
                         <tr>
-                            <td>{{ $item->enquery_id }}</td>
-                            <td>{{ $item->customer }}</td>
-                            <td>{{ $item->message }}</td>
-                            <td>{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
-                            {{-- <td>
-                                <input data-id="{{$item->enquery_id}}" class="status d-none" type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ !$item->status ? 'checked' : '' }} onchange="change_status()">
-                            </td> --}}
+                            <td>{{ $item->request_id }}</td>
+                            <td>{{ $item->advertiser_name }}</td>
+                            <td>{{ $item->email }}</td>
+                            <td>{{ $item->phone_code.''.$item->phone }}</td>
+                            <td>{{ $item->page }}</td>
+                            <td>{{ $item->position }}</td>
+                            <td>{{ $item->duration }}</td>
+                            <td>
+                                {{ get_name_by_id('locality_names','locality_id',$item->locality_id,'en').', '.get_name_by_id('city_names','city_id',$item->city_id,'en') }}
+                            </td>
+                            <td> 
+                                <input data-id="{{$item->request_id}}" class="status d-none" type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ !$item->status ? 'checked' : '' }} onchange="change_status()">
+                            </td>
                             <td class="text-right">
-                                <a href="{{ url('/enquiry/assign-list/'.$item->enquery_id); }}" title="Assign Lead"><i class="fa fa-plus text-info fa-md"></i></a>
-                                <i class="fa fa-eye text-success fa-md" onclick="viewLead('{{ $item->enquery_id }}', 'P')"></i>
-                                {{-- <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->enquery_id }}')"></i> --}}
+                                {{-- <i class="fa fa-edit text-primary fa-md" onclick="edit('{{ $item->request_id }}')"></i> --}}
+                                <i class="fa fa-eye text-success fa-md" onclick="view('{{ $item->request_id }}')"></i>
+                                {{-- <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->request_id }}')"></i> --}}
                             </td>
                         </tr>
                         @endforeach
@@ -163,7 +178,7 @@
 </div>
 @endsection
 @section('modals')
-<div class="modal fade" id="modal_action" tabindex="-1" role="dialog" aria-labelledby="viewLeadModal" aria-hidden="true">
+<div class="modal fade" id="ajax_modal" tabindex="-1" role="dialog" aria-labelledby="ajax_modal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             
@@ -173,26 +188,56 @@
 @endsection
 @push('custom-js')
 <script>
-    function add() {
-        $('.form-control').removeClass('is-invalid');
-        $('.invalid-feedback').empty();
-        AddEdit('Add', 'Add');
+    function add(){
+        $.get(`{{ url('advertisement/ajax_page?page='.$add_command) }}`, function(data) {
+            $('#ajax_modal').modal('show');
+            $('#ajax_modal .modal-content').html(data);
+        });
     }
 
-    function view(id) {
-        $('.form-control').removeClass('is-invalid');
-        $('.invalid-feedback').empty();
-        viewLead('Lead Details', '', id);
+    function view(id){
+        let viewCommand = "{{ $view_command }}";
+        let url = `{{ url('advertisement/ajax_page') }}?page=${viewCommand}&id=${id}`;
+        $.get(url, function(data) {
+            $('#ajax_modal').modal('show');
+            $('#ajax_modal .modal-content').html(data);
+        });
     }
 
-    function viewLead(id,lead_type) {
-        if (id) {
-            $.get(`{{ url('/enquiry/details') }}/${id}/${lead_type}`, function(data) {
-                $('#modal_action').modal('show');
-                $('#modal_action .modal-content').html(data);
+    // function view(id) {
+    //     if (id) {
+    //         $.get(`{{ url('/advertisement/ajax_page') }}/${id}`, function(data) {
+    //             $('#modal_action').modal('show');
+    //             $('#modal_action .modal-content').html(data);
+    //         });
+    //     }
+        
+    // }
+
+    function get_position(){
+        reset_select([$('[name="position"]'), $('[name="ad_size"]')]);
+        var page = $('[name="page"] :selected').val();
+
+        $.get('<?php echo url('advertisement/options?option=page_position&page=')?>'+page, function(res){
+            $('[name="position"]').html(res);
+        });
+    }
+    
+    function get_size(){
+        reset_select([$('[name="ad_size"]')]);
+        var position = $('[name="position"] :selected').val();
+        var page = $('[name="page"] :selected').val();
+        $.get('<?php echo url('advertisement/options?option=ad_size&page=')?>'+page+'&position='+position, function(res){
+            $('[name="ad_size"]').html(res);
+        });
+    }
+
+    function reset_select(opt){
+        if(opt.length > 0 && opt instanceof Array){
+            opt.forEach(function(item, ind){
+                $(item).html('<option value="">-Select-</option>');
             });
         }
-        
     }
 
     function add_edit() {
@@ -241,10 +286,8 @@
 
 
 
-    $('.status').change(function() {
-
+    $('.ad_status').change(function() {
         toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
-
         var id = $(this).data('id');
         var status = this.checked ? 1 : 0;
         $.ajaxSetup({
@@ -254,7 +297,7 @@
         });
         $.ajax({
             type: 'POST',
-            url: `{{ url('/country/status') }}`,
+            url: `{{ url('/advertisement/change-status') }}`,
             data: {
                 'status': status,
                 'id': id
@@ -271,7 +314,6 @@
 
     function Delete(id) {
         var result = confirm('Are you sure you want to delete this?');
-        console.log(id);
         if (result) {
             $.ajaxSetup({
                 headers: {
@@ -280,7 +322,7 @@
             });
             $.ajax({
                 type: 'POST',
-                url: `{{ url('/country/delete') }}`,
+                url: `{{ url('/advertisement/delete') }}`,
                 data: {
                     'id': id
                 },

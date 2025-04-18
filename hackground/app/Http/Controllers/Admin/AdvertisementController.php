@@ -44,6 +44,35 @@ class AdvertisementController extends Controller
         ));
     }
 
+    public function ads_request(Request $request)
+    {
+        $add_command = 'add';
+		$edit_command = 'edit';
+        $view_command = 'view-request';
+		$add_btn = 'Advertisements Requests';
+        $srch = $request->query();
+        $paginate = 10;
+        $main_title = 'Advertisement Requests';
+		$second_title = 'All Advertisement Requests';
+		$title = 'Requests List';
+        $list = '';
+        $pages = $this->advertisement->get_pages();
+        $list = $this->advertisement->get_request_list($srch, $paginate);
+        // echo "<pre>";
+        // print_r($list);exit;
+        return view('Admin.Advertisement.request_list', 
+        compact(
+            'add_command',
+            'edit_command',
+            'view_command',
+            'list',
+            'main_title',
+            'second_title',
+            'title',
+            'pages'
+        ));
+    }
+
     public function load_ajax_page(Request $request)
     {
         $srch = $request->query();
@@ -78,6 +107,13 @@ class AdvertisementController extends Controller
 					$sizes = $this->advertisement->get_size($detail['page'], $detail['position']);
 				}
 			}
+        }elseif($page == 'view-request')
+        {
+            $id = $srch['id'];
+			$ID = $id;
+            $form_action = "";
+            $title = 'Request Details';
+            $detail = $this->advertisement->get_request_details($id);
         }
 
         return view('Admin.Advertisement.ajax_page', compact('page', 'title', 'form_action','pages','positions', 'sizes', 'ID', 'detail', 'city','property_category'));
