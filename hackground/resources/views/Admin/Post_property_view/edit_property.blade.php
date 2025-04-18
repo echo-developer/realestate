@@ -53,10 +53,10 @@
             <div class="card mb-3">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Basic Details </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('basic')"><i class="fa fa-edit"></i></a>
+                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('basic')"><i class="bi bi-pencil-square"></i></a>
                 </div>
                 <div class="card-body">
-                    <ul class="list-info">
+                    <ul class="list-info mb-3">
                         <li>
                             <b>Name:</b>
                             <span>{{ ucfirst($propertyData->name ?? 'N/A') }}</span>
@@ -78,23 +78,24 @@
                             <b>Price:</b>
                             <span>{{ $propertyData->settings->price_currency ?? 'N/A'}}{{ $propertyData->settings->expected_price ?? 'N/A'}}</span>
                         </li>
-                        <li>
-                            <b>Message to Buyer:</b>
-                            <span>{{ $propertyData->additional->buyer_message ?? 'N/A'}}</span>
-                        </li>
+                        
                        
                         <li>
                             <b>Project/Society Name:</b>
                             <span>{{$propertyData->settings->project_name ?? 'N/A'}}</span>
                         </li>
                     </ul>
+                    
+                    <h5>Message to Buyer:</h5>
+                    <p>{{ $propertyData->additional->buyer_message ?? 'N/A'}}</p>
+                    
                 </div>
             </div>
 
             <div class="card mb-3">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Location </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('location')"><i class="fa fa-edit"></i></a>
+                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('location')"><i class="bi bi-pencil-square"></i></a>
                 </div>
                 <div class="card-body">
                     <ul class="list-info">
@@ -118,7 +119,7 @@
             <div class="card mb-3">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Property Features </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('features')"><i class="fa fa-edit"></i></a>
+                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('features')"><i class="bi bi-pencil-square"></i></a>
                 </div>
                 <div class="card-body">
                     <h4>Configuration:</h4>
@@ -220,7 +221,7 @@
             <div class="card mb-3">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Additional Information </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('additional')"><i class="fa fa-edit"></i></a>
+                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('additional')"><i class="bi bi-pencil-square"></i></a>
                 </div>
                 <div class="card-body">
                     <ul class="list-info">
@@ -299,7 +300,7 @@
             <div class="card mb-3">
                 <div class="card-header d-flex">
                     <h4 class="card-title">Property Landmark </h4>
-                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('landmark')"><i class="fa fa-edit"></i></a>
+                    <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('landmark')"><i class="bi bi-pencil-square"></i></a>
                 </div>
                 <div class="card-body">
 

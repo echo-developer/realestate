@@ -132,7 +132,7 @@
           <div class="card">
             <div class="card-header d-flex">
               <h4 class="card-title">Basic Details </h4>
-              <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(1, <?php echo $projectData->id ?>,'Basic')"><i class="fa fa-edit"></i></a>
+              <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(1, <?php echo $projectData->id ?>,'Basic')"><i class="bi bi-pencil-square"></i></a>
             </div>
             <div class="card-body">
               <ul class="list-info">
@@ -188,7 +188,7 @@
           <div class="card">
             <div class="card-header d-flex">
               <h4 class="card-title">Project Features </h4>
-              <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(2, <?php echo $projectData->id ?>,'Features')"><i class="fa fa-edit"></i></a>
+              <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(2, <?php echo $projectData->id ?>,'Features')"><i class="bi bi-pencil-square"></i></a>
             </div>
             <div class="card-body">
               <ul class="list-info">
@@ -314,7 +314,7 @@
           <div class="card">
             <div class="card-header d-flex">
               <h4 class="card-title">Additional Information </h4>
-              <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(3, <?php echo $projectData->id ?>,'Additional')"><i class="fa fa-edit"></i></a>
+              <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(3, <?php echo $projectData->id ?>,'Additional')"><i class="bi bi-pencil-square"></i></a>
             </div>
             <div class="card-body">
               <ul class="list-info">
@@ -370,7 +370,7 @@
           <div class="card">
             <div class="card-header d-flex">
               <h4 class="card-title">Project Landmark </h4>
-              <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(4, <?php echo $projectData->id ?>,'Landmark')"><i class="fa fa-edit"></i></a>
+              <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(4, <?php echo $projectData->id ?>,'Landmark')"><i class="bi bi-pencil-square"></i></a>
             </div>
             <div class="card-body">
               <div class="list-container">
@@ -398,7 +398,7 @@
         <div class="card">
           <div class="card-header d-flex">
             <h4 class="card-title">Project Photos</h4>
-            <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(5, <?php echo $projectData->id ?>,'Photos')"><i class="fa fa-edit"></i></a>
+            <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(5, <?php echo $projectData->id ?>,'Photos')"><i class="bi bi-pencil-square"></i></a>
 
           </div>
           <div class="card-body">

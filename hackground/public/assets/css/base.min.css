@@ -11600,13 +11600,13 @@ button {
 }
 
 .vertical-nav-menu li a:hover {
-    background-color: rgba(var(--bs-primary-rgb), 0.1);
+    background-color: rgba(var(--re-primary-rgb), 0.1);
     text-decoration: none
 }
 
 .vertical-nav-menu li a:hover i.metismenu-icon,
 .vertical-nav-menu li.mm-active>a i.metismenu-icon{
-    background-color: var(--bs-primary);
+    background-color: var(--re-primary);
     color: var(--white);
 }
 

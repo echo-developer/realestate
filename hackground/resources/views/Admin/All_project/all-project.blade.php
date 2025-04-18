@@ -298,17 +298,32 @@
 
                 </table>
             </div>
-            <div class="row" id="main_table">
+            
+        </div>
+    </div>
+    <div class="row" id="main_table">
                 @if ($project->count() > 0)
                 @foreach ($project as $proj)
                 <article class="col-lg-4 col-sm-6">
                     <div class="card card-ads">
                         <div class="card-image">
-                            @if ($proj->gallery->count() > 0)
-                            <img src="{{ asset('user_upload/project_images/' . $proj->gallery->first()->images->first()->filename) }}" alt="Project Photo" class="card-img" height="250" width="300" />
-                            @else
-                            <img src="{{ asset(config('constants.NO_IMAGE_PROPERTY')) }}" alt="no image" class="card-img" height="250" width="300" />
-                            @endif
+                            @php
+                                $defaultImage = asset(config('constants.NO_IMAGE_PROPERTY'));
+                                $imageToShow = $defaultImage;
+                                if ($proj->gallery->count() > 0) {
+                                $firstGallery = $proj->gallery->first();
+                                $firstImage = $firstGallery->images->first();
+                                if ($firstImage && isset($firstImage->filename)) {
+                                $relativePath =
+                                'user_upload/project_images/' . $firstImage->filename;
+                                $localPath = public_path($relativePath);
+                                if (file_exists($localPath)) {
+                                $imageToShow = asset($relativePath);
+                                }
+                                }
+                                }
+                            @endphp
+                            <img src="{{ $imageToShow }}" alt="Project Photo" class="card-img" height="250" width="300" />                            
                         </div>
                         <div class="card-body">
                             <!-- Displaying Project Name (Assuming `name` exists) -->
@@ -329,7 +344,7 @@
             </div>
 
             @if ($project->isNotEmpty())
-            <div class="card-footer pagination-rounded clearfix justify-content-center">
+            <div class="d-flex justify-content-center mb-3">
                 <ul class="pagination small mb-0">
                     @if ($project->currentPage() == $project->lastPage() && $project->currentPage() != 1)
                     <li class="page-item">
@@ -372,8 +387,6 @@
                 </ul>
             </div>
             @endif
-        </div>
-    </div>
 </div>
 @endsection
 
