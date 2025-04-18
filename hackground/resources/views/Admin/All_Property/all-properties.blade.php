@@ -86,23 +86,24 @@
         </div>
 
 
-        <fieldset class="card mb-3" id="advanceFilter" style="display: none;">
-            <div class="card-body">
-                <div class="row">
+        <div class="card mb-3" id="advanceFilter" style="display: none;">
+            <div class="card-body pt-4">
+                <div class="row -mb-3">
                     <div class="col-xl-3 col-lg-4 col-sm-6">
-                        <div class="form-field">
-                            <label>Property Name</label>
+                        <div class="form-floating mb-4">                            
                             <input type="text" class="form-control" name="term" placeholder="Property Name"
                                 value="<?php echo !empty($srch['term']) ? $srch['term'] : ''; ?>">
+                                <label>Property Name</label>
                         </div>
                     </div>
 
                     @if (!$user_id)
                     <div class="col-xl-3 col-lg-4 col-sm-6">
-                        <div class="form-field">
-                            <label>User Name</label>
+                        <div class="form-floating mb-4">
+                            
                             <input type="text" class="form-control" name="username" placeholder="Name"
                                 value="<?php echo !empty($srch['username']) ? $srch['username'] : ''; ?>">
+                                <label>User Name</label>
                         </div>
                     </div>
                     @endif
@@ -111,9 +112,9 @@
                     $post_for = get_property_for_types();
                     @endphp
                     <div class="col-xl-3 col-lg-4 col-sm-6">
-                        <div class="form-field">
-                            <label>Post For</label>
-                            <select class="form-control" name="post_for">
+                        <div class="form-floating mb-4">
+                            
+                            <select class="form-select" name="post_for">
                                 <option value="">--Select--</option>
                                 @if ($post_for)
                                 @foreach ($post_for as $k => $t)
@@ -121,6 +122,7 @@
                                 @endforeach
                                 @endif
                             </select>
+                            <label>Post For</label>
                         </div>
                     </div>
 
@@ -128,9 +130,9 @@
                     $property_types = get_all_property_category();
                     @endphp
                     <div class="col-xl-3 col-lg-4 col-sm-6">
-                        <div class="form-field">
-                            <label>Property Type</label>
-                            <select class="form-control" name="property_type">
+                        <div class="form-floating mb-4">
+                            
+                            <select class="form-select" name="property_type">
                                 <option value="">--Select--</option>
                                 @if ($property_types)
                                 @foreach ($property_types as $k => $t)
@@ -138,6 +140,7 @@
                                 @endforeach
                                 @endif
                             </select>
+                            <label>Property Type</label>
                         </div>
                     </div>
 
@@ -145,9 +148,9 @@
                     $property_types_for = get_all_property_sub_category();
                     @endphp
                     <div class="col-xl-3 col-lg-4 col-sm-6">
-                        <div class="form-field">
-                            <label>Property For</label>
-                            <select class="form-control" name="property_for">
+                        <div class="form-floating mb-4">
+                            
+                            <select class="form-select" name="property_for">
                                 <option value="">--Select--</option>
                                 @if ($property_types_for)
                                 @foreach ($property_types_for as $k => $t)
@@ -155,6 +158,7 @@
                                 @endforeach
                                 @endif
                             </select>
+                            <label>Property For</label>
                         </div>
                     </div>
 
@@ -162,9 +166,9 @@
                     $cities = get_all_city();
                     @endphp
                     <div class="col-xl-3 col-lg-4 col-sm-6">
-                        <div class="form-field">
-                            <label>City</label>
-                            <select class="form-control" name="city">
+                        <div class="form-floating mb-4">
+                            
+                            <select class="form-select" name="city">
                                 <option value="">--Select--</option>
                                 @if ($cities)
                                 @foreach ($cities as $k => $c)
@@ -173,26 +177,27 @@
                                 @endforeach
                                 @endif
                             </select>
+                            <label>City</label>
                         </div>
                     </div>
 
                     <div class="col-xl-3 col-lg-4 col-sm-6">
-                        <div class="form-field">
-                            <label>Post Date</label>
+                        <div class="form-floating mb-4">
+                            
                             <input type="date" class="form-control" name="post_date" placeholder="Post Date"
                                 value="<?php echo !empty($srch['post_date']) ? $srch['post_date'] : ''; ?>" autocomplete="off">
+                                <label>Post Date</label>
                         </div>
                     </div>
 
                     <div class="col-xl-3 col-lg-4 col-sm-6">
                         <div class="form-field mb-0">
-                            <label class="d-none d-xl-block">&nbsp;</label>
                             <button class="btn btn-primary btn-block">Search</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </fieldset>
+        </div>
     </form>
 
     <div class="d-flex">     
@@ -229,30 +234,30 @@
                         <h3><small>{{ $property->price_currency }}</small>{{ $property->expected_price }}</h3>
 
                         <span>
-                            <a href="{{ url('/enquiry/property-leads/' . $property->id) }}" title="View Leads"><i class="fa fa-eye"></i></a>
+                            <a href="{{ url('/enquiry/property-leads/' . $property->id) }}" title="View Leads"><i class="ri-eye-fill"></i></a>
                             {{ propertyLeadsCount($property->id) }}
                         </span>
                     </div>
 
                     <h4><a href="http://localhost:3002/property-details/{{ $property->slug }}">{{ $property->name }}</a></h4>
-                    <p class="mb-2"><i class="fa fa-map-marker-alt"></i> {{ $property->property_address }}</p>
-                    <p><i class="fa fa-calendar"></i> {{ $property->created_at }}</p>
+                    <p class="mb-2"><i class="ri-map-pin-line"></i> {{ $property->property_address }}</p>
+                    <p><i class="ri-calendar-line"></i> {{ $property->created_at }}</p>
                     <div class="row">
-                        <div class="col">
-                            <div class="form-check-inline">
+                        <div class="col-xxl">
+                            <div class="form-check-inline small">
                                 <input type="checkbox" class="form-check-input prop_feature_status"
                                     data-prop-id="{{ $property->id }}" name="" id="featured"
                                     {{ $property->is_featured ? 'checked' : '' }}>
                                 <label class="form-check-label" for="featured">Featured</label>
                             </div>
-                            <div class="form-check-inline">
+                            <div class="form-check-inline small">
                                 <input class="form-check-input prop_top_status" data-prop-id="{{ $property->id }}"
                                     type="checkbox" name="" id="top"
                                     {{ $property->is_top ? 'checked' : '' }}>
                                 <label class="form-check-label" for="top">Top</label>
                             </div>
                         </div>
-                        <div class="col-auto">
+                        <div class="col-xxl-auto">
                             <select name="prop_status" id="prop_status"
                                 data-property-id="{{ $property->id }}"
                                 class="prop_status form-select form-select-sm">
