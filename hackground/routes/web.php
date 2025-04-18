@@ -490,6 +490,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('advertisement/edit', 'edit');
         Route::post('advertisement/delete', 'delete');
         Route::post('advertisement/change-status', 'change_status');
+        Route::get('advertisement/requests', 'ads_request');
     });
 
     Route::prefix('membership')->controller(MembershipPlanController::class)->group(function () {
