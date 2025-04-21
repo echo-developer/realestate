@@ -45,7 +45,7 @@
     @if (session('success_msg'))
     <div class="alert alert-{{ session('message_type') }}">
         {{ session('success_msg') }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <button type="button" class="btn-close" data-bs-dismiss="alert">
             
         </button>
     </div>
@@ -56,13 +56,13 @@
                 <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Membership Plan <div
                     class="btn-actions-pane-right">
                     <div class="btn-group" id="global_action_btn" style="display:none">
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title=""
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
                             onclick="deleteSelected()" data-original-title="Delete selected"><i
                                 class="fa fa-trash"></i></button>
-                        <button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" title=""
+                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
                             onclick="changeStatusAll(1)" data-original-title="Make active"><i
                                 class="fa fa-thumbs-up"></i></button>
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title=""
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
                             onclick="changeStatusAll(0)" data-original-title="Make inactive"><i
                                 class="fa  fa-thumbs-down"></i></button>
                     </div>

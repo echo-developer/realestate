@@ -36,159 +36,135 @@
         </div>
     </div>
 
-    <div class="app-main__inner">
-
-        <div class="app-page-title">
-            <div class="page-title-wrapper">
-                <div class="page-title-heading">
-                    <div class="page-title-icon">
-                        <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
-                    </div>
-                    <div>Property
-                        <div class="page-title-subheading">Property &gt; Property Subcategory List</div>
-                    </div>
-                </div>
-                <div class="page-title-actions">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href=""> Home</a></li>
-                        <li class="breadcrumb-item active">Property Subcategory List</li>
-                    </ol>
-                </div>
-            </div>
+    <div id="successMessageContainer"></div>
+    <style>
+        .advance-search-panel {
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+    </style>
+    @if (session('success_msg'))
+        <div class="alert alert-{{ session('message_type') }}">
+            {{ session('success_msg') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert">
+                
+            </button>
         </div>
-        <div id="successMessageContainer"></div>
-        <style>
-            .advance-search-panel {
-                background-color: #fff;
-                box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
-                padding: 1rem;
-                margin-top: 1rem;
-            }
-        </style>
-        @if (session('success_msg'))
-            <div class="alert alert-{{ session('message_type') }}">
-                {{ session('success_msg') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    
-                </button>
-            </div>
-        @endif
+    @endif
 
-        <form action="{{ url('property/subcategory') }}" method="get">
+    <form action="{{ url('property/subcategory') }}" method="get">
 
-            <section class="content-header mb-2">
-                <div class="row">
-                    <div class="offset-sm-8 col-sm-4">
-                        <div class="input-group">
-                            <input class="form-control" id="prop_subcategory_search" placeholder="Search..." name="term"
-                                value="{{ request('term') }}">
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-site btn-primary"><i
-                                        class="fa fa-search"></i></button>
-                            </div>
+        <section class="content-header mb-2">
+            <div class="row justify-content-end">
+                <div class="col-xl-4 col-lg-6">
+                    <div class="input-group">
+                        <input class="form-control" id="prop_subcategory_search" placeholder="Search..." name="term"
+                            value="{{ request('term') }}">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-site btn-primary"><i
+                                    class="bi bi-search"></i></button>
                         </div>
                     </div>
                 </div>
-            </section>
-        </form>
+            </div>
+        </section>
+    </form>
 
-        <div class="main-card mb-3 card">
-            <div class="card-body">
-                <div class="card-header p-0">
-                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Property Subcategory List
+    <div class="main-card mb-3 card">
+        <div class="card-header d-flex">
+        <h4>Property Subcategory List</h4>
 
-                    <div class="btn-actions-pane-right">
-                        <button type="button" class="btn btn-sm btn-success" onclick="add_prop_subcategory()">Add Property
-                            Subcategory</button>
-                    </div>
-
+                <div class="btn-actions-pane-right">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="add_prop_subcategory()">Add Property
+                        Subcategory</button>
                 </div>
 
-                <div class="table-responsive" id="main_table">
-                    <table class="mb-0 table">
-                        <thead>
-                            <tr>
-                                <th style="width:5%">ID</th>
-                                <th style="width:15%">Name</th>
-                                <th style="width:20%">Order</th>
-                                <th style="width:20%">Status</th>
-                                <th style="width:30%">Image</th>
-                                <th style="min-width:80px;" class="text-right">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="user">
-                            @if (!empty($subcategory_data))
-                                @foreach ($subcategory_data as $item)
-                                    <tr>
-                                        <td>{{ $item->id }}</td>
-                                        <td>{{ $item->name }}</td>
-                                        <td>{{ $item->order }}</td>
+            </div>
+        <div class="card-body">
+            
 
-                                        <td>
-                                            <input data-id="{{ $item->id }}" class="subcategory_prop_status d-none"
-                                                type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive"
-                                                data-onstyle="success" data-offstyle="danger" data-size="mini"
-                                                {{ $item->status ? 'checked' : '' }}>
+            <div class="table-responsive" id="main_table">
+                <table class="mb-0 table">
+                    <thead>
+                        <tr>
+                            <th style="width:32px">ID</th>
+                            <th style="min-width:120px">Name</th>
+                            <th>Order</th>
+                            <th>Status</th>
+                            <th>Image</th>
+                            <th style="min-width:60px;" class="text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="user">
+                        @if (!empty($subcategory_data))
+                            @foreach ($subcategory_data as $item)
+                                <tr>
+                                    <td>{{ $item->id }}</td>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->order }}</td>
+                                    <td>
+                                        <input data-id="{{ $item->id }}" class="subcategory_prop_status d-none"
+                                            type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive"
+                                            data-onstyle="success" data-offstyle="danger" data-size="mini"
+                                            {{ $item->status ? 'checked' : '' }}>
+                                    </td>
+                                    <td><img src="{{ $item->image ? asset('user_upload/subCategory_image/' . $item->image) : asset(config('constants.NO_IMAGE')) }}"
+                                            alt="Subcategory Image" class="img-fluid" height="36" width="36">
                                         </td>
-                                        <td><img src="{{ $item->image ? asset('user_upload/subCategory_image/' . $item->image) : asset(config('constants.NO_IMAGE')) }}"
-                                                alt="Subcategory Image" height="50px" width="70px"> </td>
-                                        <td class="text-right">
-
-                                            <i class="fa fa-edit text-success fa-md "
-                                                onclick="Edit_prop_subcategory('{{ $item->id }}')"></i>
-
-                                            <i class="fa fa-trash text-danger fa-md"
-                                                onclick="Delete_prop_subcategory('{{ $item->id }}')"></i>
-
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
-                        </tbody>
-                    </table>
-                </div>
-                <div class="card-footer pagination-rounded clearfix justify-content-center">
-                    <ul class="pagination small mb-0">
-                        @if (($subcategory_data->currentPage() == $subcategory_data->lastPage()) & ($subcategory_data->currentPage() != 1))
-                            <li class="page-item">
-                                <a href="{{ $subcategory_data->url(1) }}" class="page-link" rel="start">
-                                    <i class="fa fa-chevron-left"></i> First
-                                </a>
-                            </li>
+                                    <td class="text-right">
+                                        <a href="javascript:void(0)" onclick="Edit_prop_subcategory('{{ $item->id }}')" class="me-2"><i class="bi bi-pencil-square text-success fa-md "></i></a>
+                                        <a href="javascript:void(0)" onclick="Delete_prop_subcategory('{{ $item->id }}')"><i class="bi bi-trash3-fill text-danger fa-md"></i></a>
+                                    </td>
+                                </tr>
+                            @endforeach
                         @endif
-
-                        <li class="page-item {{ $subcategory_data->currentPage() == 1 ? 'disabled' : '' }}">
-                            <a href="{{ $subcategory_data->previousPageUrl() }}" class="page-link" rel="prev">
-                                <i class="fa fa-chevron-left"></i>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer pagination-rounded clearfix justify-content-center">
+                <ul class="pagination small mb-0">
+                    @if (($subcategory_data->currentPage() == $subcategory_data->lastPage()) & ($subcategory_data->currentPage() != 1))
+                        <li class="page-item">
+                            <a href="{{ $subcategory_data->url(1) }}" class="page-link" rel="start">
+                                <i class="fa fa-chevron-left"></i> First
                             </a>
                         </li>
+                    @endif
 
-                        @for ($i = max($subcategory_data->currentPage() - 1, 1); $i <= min($subcategory_data->currentPage() + 1, $subcategory_data->lastPage()); $i++)
-                            <li class="page-item {{ $subcategory_data->currentPage() == $i ? 'active' : '' }}">
-                                <a href="{{ $subcategory_data->url($i) }}" class="page-link">{{ $i }}</a>
-                            </li>
-                        @endfor
+                    <li class="page-item {{ $subcategory_data->currentPage() == 1 ? 'disabled' : '' }}">
+                        <a href="{{ $subcategory_data->previousPageUrl() }}" class="page-link" rel="prev">
+                            <i class="fa fa-chevron-left"></i>
+                        </a>
+                    </li>
 
-                        <li
-                            class="page-item {{ $subcategory_data->currentPage() == $subcategory_data->lastPage() ? 'disabled' : '' }}">
-                            <a href="{{ $subcategory_data->nextPageUrl() }}" class="page-link" rel="next">
-                                <i class="fa fa-chevron-right"></i>
+                    @for ($i = max($subcategory_data->currentPage() - 1, 1); $i <= min($subcategory_data->currentPage() + 1, $subcategory_data->lastPage()); $i++)
+                        <li class="page-item {{ $subcategory_data->currentPage() == $i ? 'active' : '' }}">
+                            <a href="{{ $subcategory_data->url($i) }}" class="page-link">{{ $i }}</a>
+                        </li>
+                    @endfor
+
+                    <li
+                        class="page-item {{ $subcategory_data->currentPage() == $subcategory_data->lastPage() ? 'disabled' : '' }}">
+                        <a href="{{ $subcategory_data->nextPageUrl() }}" class="page-link" rel="next">
+                            <i class="fa fa-chevron-right"></i>
+                        </a>
+                    </li>
+
+                    @if ($subcategory_data->currentPage() != $subcategory_data->lastPage())
+                        <li class="page-item">
+                            <a href="{{ $subcategory_data->url($subcategory_data->lastPage()) }}" class="page-link"
+                                rel="end">
+                                Last <i class="fa fa-chevron-right"></i>
                             </a>
                         </li>
-
-                        @if ($subcategory_data->currentPage() != $subcategory_data->lastPage())
-                            <li class="page-item">
-                                <a href="{{ $subcategory_data->url($subcategory_data->lastPage()) }}" class="page-link"
-                                    rel="end">
-                                    Last <i class="fa fa-chevron-right"></i>
-                                </a>
-                            </li>
-                        @endif
-                    </ul>
-                </div>
+                    @endif
+                </ul>
             </div>
         </div>
     </div>
+    
 @endsection
 @section('modals')
     <div class="modal fade" id="prop_subcategory" tabindex="-1" role="dialog"
@@ -209,77 +185,71 @@
                         <input type="hidden" class='d-none' id="prop_subcategoryimage" name="image">
                         <input type="text" class='d-none' id="prop_subcategoryId" name="prop_subcategoryId">
 
-                        <div class="form-group">
-                            <label for="ufile">Category Name</label>
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <select name="category_id" id="category_id" class="form-control">
-                                        <option value="">-select Category-</option>
-                                        @if (isset($category_data))
-                                            @foreach ($category_data as $items)
-                                                <option value="{{ $items->id }}">{{ $items->name }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                </div>
-                            </div>
+                        <div class="form-floating mb-3">                                                                                 
+                            <select name="category_id" id="category_id" class="form-control">
+                                <option value="">-select Category-</option>
+                                @if (isset($category_data))
+                                    @foreach ($category_data as $items)
+                                        <option value="{{ $items->id }}">{{ $items->name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>   
+                            <label for="ufile">Category Name</label>                                    
                         </div>
 
                         @php
                             $langs = explode(',', admin_default_lang());
                         @endphp
                         @foreach ($langs as $lang)
-                            <div class="form-group">
-                                <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
+                            <div class="form-floating mb-3">
+                                
                                 <input type="text" class="form-control reset_field" id="name_{{ $lang }}"
-                                    name="name[{{ $lang }}]" autocomplete="off">
+                                    name="name[{{ $lang }}]" autocomplete="off" placeholder="">
+                                <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
                                 <div class="invalid-feedback" id="name_{{ $lang }}_error"></div>
                             </div>
                         @endforeach
-                        <div class="form-group">
+                        <div class="form-floating mb-3">                            
+                            <input type="text" class="form-control" id="slug" name="slug" required placeholder="">
                             <label for="Name">Slug</label>
-                            <input type="text" class="form-control" id="slug" name="slug" required>
                             <div class="invalid-feedback" id="slug_error"></div>
                             <div id="addRoleErrorContainer"></div>
                             <div id="editRoleErrorContainer"></div>
 
                         </div>
                         <div class="form-group">
-                            <label for="ufile">Image Icon</label>
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <input type="file" name="file" id="fileUpload" class="custom-file-input">
-                                    <label class="custom-file-label" for="file">Choose file</label>
-                                </div>
-                            </div>
+                            <!-- <label for="ufile">Image Icon</label> -->
+                            <input type="file" name="file" id="fileUpload" class="form-control">
                         </div>
                         <div class="form-group">
-                            <img id="image_preview" src=" " style="display:none; width: 100px; height: auto;" />
+                            <img id="image_preview" src=" " style="display:none; width: 64px; height: 64px;" />
                             <button type="button" id="delete_image_btn" style="display:none;"
-                                class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
+                            class="btn btn-danger btn-sm" title="Delete Image" onclick="deleteUploadedImage()"><i class="bi bi-trash3-fill"></i></button>                                
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-floating mb-3">
+                            
+                            <input type="Order" class="form-control" id="order" name="order" placeholder="" required>
                             <label for="Order">Order</label>
-                            <input type="Order" class="form-control" id="order" name="order" required>
                             <div class="invalid-feedback" id="Order_error"></div>
                         </div>
 
 
-                        <div class="form-group">
-                            <label class="form-label">Status</label>
-                            <div class="radio-inline">
-                                <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked
+                        <div class="form-group mb-0">
+                            <label class="form-label d-block">Status</label>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="status" value=1 class="form-check-input" id="status_1" checked
                                     required>
-                                <label for="status_1">Active</label>
-                                <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
-                                <label for="status_2">Inactive</label>
+                                <label class="form-check-label" for="status_1">Active</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="status" value=0 class="form-check-input" id="status_2">
+                                <label class="form-check-label" for="status_2">Inactive</label>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" onclick="add_edit_prop_subcategorysave()" id="prop_subcategoryButton"
                         class="btn btn-primary">Save</button>
                 </div>

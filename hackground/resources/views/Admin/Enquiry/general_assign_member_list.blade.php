@@ -129,7 +129,7 @@
                                     @if($assign_type == 'assigned')
                                     <td>{{ $item->created_at ? date('d-M-Y',strtotime($item->created_at)) : ''; }}</td>
                                     <td>  
-                                        <a data-toggle="tooltip" title="" class="allUsersDeleteButton" data-placement="top" data-original-title="Remove from assigned list" user-id="{{ $item->user_id }}" onclick="remove_assigned('{{ $item->assign_id }}')"><i class="fa fa-trash text-danger fa-md"></i>
+                                        <a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Remove from assigned list" class="allUsersDeleteButton" user-id="{{ $item->user_id }}" onclick="remove_assigned('{{ $item->assign_id }}')"><i class="fa fa-trash text-danger fa-md"></i>
                                         </a>
                                     </td>
                                     @endif

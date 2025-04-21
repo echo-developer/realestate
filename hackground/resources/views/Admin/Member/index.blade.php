@@ -47,7 +47,7 @@
         @if (session('success_msg'))
             <div class="alert alert-{{ session('message_type') }}">
                 {{ session('success_msg') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <button type="button" class="btn-close" data-bs-dismiss="alert">
                     
                 </button>
             </div>
@@ -112,13 +112,13 @@
                     <div class="btn-actions-pane-right">
 
                         <div class="btn-group" id="global_action_btn" style="display:none">
-                            <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title=""
+                            <button type="button" class="btn btn-default btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
                                 onclick="deleteSelected()" data-original-title="Delete selected"><i
                                     class="fa fa-trash"></i></button>
-                            <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title=""
+                            <button type="button" class="btn btn-default btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
                                 onclick="changeStatusAll(1)" data-original-title="Make active"><i
                                     class="fa fa-thumbs-up"></i></button>
-                            <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title=""
+                            <button type="button" class="btn btn-default btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
                                 onclick="changeStatusAll(0)" data-original-title="Make inactive"><i
                                     class="fa  fa-thumbs-o-down"></i></button>
                         </div>
@@ -190,25 +190,21 @@
                                         <td class="text-right" style="padding-right:15px;">
 
                                             {{-- @if (in_array('MEN0051_LIST_Edit', $rolePermissions)) --}}
-                                            <a data-toggle="tooltip" title="" class="allUsersEditButton"
-                                                data-placement="top" data-original-title="Edit"
+                                            <a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" class="allUsersEditButton"                                                
                                                 user-id="{{ $items->id }}"><i
                                                     class="fa fa-edit text-success fa-md"></i></a>
                                             &nbsp;
                                             {{-- @endif --}}
                                             {{-- @if (in_array('MEN0051_LIST_Edit', $rolePermissions)) --}}
-                                            <a data-toggle="tooltip" title="" class="allUsersDeleteButton"
-                                                data-placement="top" data-original-title="Delete"
+                                            <a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete" class="allUsersDeleteButton"                                                
                                                 user-id="{{ $items->id }}"><i
                                                     class="fa fa-trash text-danger fa-md"></i></a>
                                             &nbsp;
-                                            <a href="{{ url('allproperties/all-property-view/' . $items->id) }}"
-                                                data-placement="top" data-original-title="Properties"
+                                            <a href="{{ url('allproperties/all-property-view/' . $items->id) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Properties"
                                                 user-id="{{ $items->id }}"><i
                                                     class="fa fa-building text-success fa-md"></i></a>
                                             &nbsp;
-                                            <a href="{{ url('allproject/all-project-view/' . $items->id) }}"
-                                                data-placement="top" data-original-title="Projects"
+                                            <a href="{{ url('allproject/all-project-view/' . $items->id) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Projects"
                                                 user-id="{{ $items->id }}"><i
                                                     class="fas fa-gopuram text-success fa-md"></i></a>
                                             {{-- @endif --}}

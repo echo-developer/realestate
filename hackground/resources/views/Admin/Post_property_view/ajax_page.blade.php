@@ -2,7 +2,8 @@
     <div class="modal-header">
     <h4 class="modal-title"><?php echo $title;?></h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-        </button>        
+          </button>
+        
     </div>
     <div class="modal-body">
             <form role="form" id="add_form" action="<?php echo $form_action;?>" onsubmit="submitForm(this, event)">
@@ -12,23 +13,23 @@
                     {{-- <div class="form-group">
                         <label class="form-label">Property Name</label>
                         <input class="form-control" name="property_name" id="project_name" value="{{ $propertyData->settings->project_name }}" />
-                        <span class="text-danger" id="project_nameError"></span>
+                        <span class="text-danger small" id="project_nameError"></span>
                     </div> --}}
 
-                    <div class="form-group">
-                      <label for="post_for">Post For </label>
-                      <select class="form-control" name="postFor" id="postFor">
+                    <div class="form-floating mb-4">                      
+                      <select class="form-select" name="postFor" id="postFor">
                         <option value="">-Select-</option>
                         <option value="rent" {{ $propertyData['settings']->post_for == 'rent' ? 'selected' : '' }}>Rent</option>
                         <option value="sale" {{ $propertyData['settings']->post_for == 'sale' ? 'selected' : '' }}>Sale</option>
                         <option value="pg" {{ $propertyData['settings']->post_for == 'pg' ? 'selected' : '' }}>PG/Hostel</option>
                       </select>
-                      <span class="text-danger" id="postForError"></span>
+                      <label for="post_for">Post For </label>
+                      <span class="text-danger small" id="postForError"></span>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="property_type">Property Type</label>
-                        <select class="form-control" name="property_type" id="property_type">
+                    <div class="form-floating mb-4">
+                        
+                        <select class="form-select" name="property_type" id="property_type">
                             <option value="">Select Property Type</option>
                             @isset($propertyTypes)
                                 @foreach ($propertyTypes as $propertyType)
@@ -39,46 +40,53 @@
                                 @endforeach
                             @endisset
                         </select>
-                        <span class="text-danger" id="property_typeError"></span>
+                        <label for="property_type">Property Type</label>
+                        <span class="text-danger small" id="property_typeError"></span>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Property For</label>
-                        <select class="form-control" name="property_for" id="property_for">
+                    <div class="form-floating mb-4">
+                        
+                        <select class="form-select" name="property_for" id="property_for">
 
                         </select>
-                        <span class="text-danger" id="property_forError"></span>
+                        <label class="form-label">Property For</label>
+                        <span class="text-danger small" id="property_forError"></span>
                     </div>
 
-                    {{-- <div class="form-group">
-                        <label for="price_currency">Currency </label>
-                        <select class="form-control" name="price_currency" id="price_currency">
+                    {{-- <div class="form-floating mb-4">
+                        
+                        <select class="form-select" name="price_currency" id="price_currency">
                             <option value="">-Select-</option>
                         </select>
-                        <span class="text-danger" id="price_currencyError"></span>
+                        <label for="price_currency">Currency </label>
+                        <span class="text-danger small" id="price_currencyError"></span>
                     </div> --}}
 
-                    <div class="form-group">
-                        <select class="" data-width="fit" title="Currency" name="currency">
+                    <div class="input-group mb-4">
+                        <select class="form-select" data-width="fit" title="Currency" name="currency">
                             <option disabled="disabled">Currency</option>
                             <option value="AED" {{ $propertyData->settings->price_currency == 'AED' ? 'selected' : '' }} >AED</option>
                             <option value="EURO" {{ $propertyData->settings->price_currency == 'EURO' ? 'selected' : '' }} >EURO</option>
                             <option value="POND" {{ $propertyData->settings->price_currency == 'POND' ? 'selected' : '' }} >POUND</option>
                             <option value="USD" {{ $propertyData->settings->price_currency == 'USD' ? 'selected' : '' }} >USD</option>
                         </select>
-                        <input type="text" class="form-control" name="expected_price" placeholder="Enter Amount" value="{{ $propertyData->settings->expected_price }}" />
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="expected_price" placeholder="Enter Amount" value="{{ $propertyData->settings->expected_price }}" />
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Project Name</label>
+                    <div class="form-floating mb-4">                        
                         <input class="form-control" name="project_name" id="project_name" value="{{ $propertyData->settings->project_name }}" />
-                        <span class="text-danger" id="project_nameError"></span>
+                        <label class="form-label">Project Name</label>
+                        <span class="text-danger small" id="project_nameError"></span>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-floating mb-4">
+                        
+                        <textarea class="form-control" name="buyer_message" id="buyer_message" style="min-height: 100px;">
+                            {{ $propertyData['additional']->buyer_message ? $propertyData['settings']->buyer_message : '' }}</textarea>
                         <label for="buyer_message">Message to buyer</label>
-                        <textarea class="form-control" name="buyer_message" id="buyer_message">{{ $propertyData['additional']->buyer_message ? $propertyData['settings']->buyer_message : '' }}</textarea>
-                        <span class="text-danger" id="buyer_messageError"></span>
+                        <span class="text-danger small" id="buyer_messageError"></span>
                     </div>
 
                     {{-- <div class="form-group">
@@ -100,6 +108,7 @@
     </div>
     
     <script>
+
     function checkAdType(){
         var selected_val = $('[name="ad_type"] :selected').val();
         if(selected_val == 'image'){
@@ -409,7 +418,7 @@
                                             placeholder="Type Carpet Area" type="number" value="{{ $propertyData['settings']->carpet_area }}"><span
                                             class="input-group-text">sqft</span>
                                     </div>
-                                    <span class="text-danger" id="carpet_areaError"></span>
+                                    <span class="text-danger small" id="carpet_areaError"></span>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-12">
@@ -444,7 +453,7 @@
                         <div class="row gx-3">
                             <div class="form-group col-lg-6 col-12">
                                 <label class="form-label">Flats on the Floor</label>
-                                <select class="form-control" name="flat_each_floor">
+                                <select class="form-select" name="flat_each_floor">
                                     <option value="">Slect Floor Type</option>
                                     @php  
                                         $flats_in_floor = flats_in_floor();
@@ -459,7 +468,7 @@
                             </div>
                             <div class="form-group col-lg-6 col-12">
                                 <label class="form-label">Lifts in the Tower</label>
-                                <select class="form-control" name="lifts_in_tower">
+                                <select class="form-select" name="lifts_in_tower">
                                     <option value="">--Select--</option>
                                     @php  
                                         $lifts_in_tower = lifts_in_tower();
@@ -477,7 +486,7 @@
                         <div class="row gx-3">
                             <div class="form-group col-lg-6 col-12">
                                 <label class="form-label">Floor No.</label>
-                                <select class="form-control" name="floors">
+                                <select class="form-select" name="floors">
                                     <option value="">--Select--</option>
                                     @php  
                                         $floor_numbers = get_floor_numbers();
@@ -495,7 +504,7 @@
                                 <label class="form-label">Total Floors</label>
                                 <div class="btn-group btn-group-light d-flex mb-3" role="group"
                                     aria-label="Total Floors">
-                                    <select class="form-control" name="total_floors">
+                                    <select class="form-select" name="total_floors">
                                         <option value="">--Select--</option>
                                         @php  
                                             $total_floors = get_total_floors();
@@ -591,7 +600,7 @@
                         <label class="form-label">Furnish Status</label>
                         <div class="btn-group btn-group-light d-flex mb-3" role="group"
                             aria-label="Property Status">
-                            <select class="form-control" name="property_furnish">
+                            <select class="form-select" name="property_furnish">
                                 <option value="">--Select--</option>
                                 @if($propertyFurnishes)
                                 @foreach($propertyFurnishes as $k=>$furnish)
@@ -752,7 +761,7 @@
                             </div>
                             <div class="col-lg-6 col-12"><label class="form-label">Expected Year of
                                     Possession</label>
-                                <select class="form-control" name="construction_year">
+                                <select class="form-select" name="construction_year">
                                     <option value="">Select Year</option>
                                     @php
                                         $currentYear = date('Y');
@@ -884,7 +893,14 @@
     </div>
     
     
-
+    <script src="{{ asset('assets/dist/js/select2.js') }}"></script>
+<script>
+    $(".form-select").select2({
+        theme: "bootstrap-5",
+        selectionCssClass: "select2--single",
+        dropdownCssClass: "select2--single",
+    });
+</script>
     <script>
          $(document).ready(function() {
             $(".property-status-radio").change(function() {
@@ -1175,14 +1191,7 @@
     </script>
 @endif
 
-<script src="{{ asset('assets/dist/js/select2.js') }}"></script>
-<script>
-    $(".form-select").select2({
-        theme: "bootstrap-5",
-        selectionCssClass: "select2--single",
-        dropdownCssClass: "select2--single",
-    });
-</script>
+
 <script>
     /* $(function(){
         $('.select2').select2();

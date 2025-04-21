@@ -39,15 +39,15 @@
     @if (session('success_msg'))
     <div class="alert alert-{{ session('message_type') }}">
         {{ session('success_msg') }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <button type="button" class="btn-close" data-bs-dismiss="alert">
             
         </button>
     </div>
     @endif
     <form action="{{ url('Settings/' . $group_key) }}" method="get">
         <section class="content-header mb-2">
-            <div class="row">
-                <div class="offset-sm-8 col-sm-4">
+            <div class="row justify-content-end">
+                <div class="col-xl-4 col-lg-6">
                     <div class="input-group">
                         <input class="form-control" id="prop_category_search" placeholder="Search..." name="term" value="{{ request('term') }}" />
                         <div class="input-group-append">
@@ -82,24 +82,24 @@
     </ul>
 
     <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i>
+        
+            <div class="card-header d-flex">
+                
                 @if (isset($group_key))
-                {{ $group_key }} Setting
+                <h4>{{ $group_key }} Setting</h4>
                 @else
-                Default Setting
+                <h4>Default Setting</h4>
                 @endif
                 <div class="btn-actions-pane-right">
 
                     <div class="btn-group" id="global_action_btn" style="display:none">
-                        <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title=""
+                        <button type="button" class="btn btn-default btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
                             onclick="deleteSelected()" data-original-title="Delete selected"><i
                                 class="fa fa-trash"></i></button>
-                        <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title=""
+                        <button type="button" class="btn btn-default btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
                             onclick="changeStatusAll(1)" data-original-title="Make active"><i
                                 class="fa fa-thumbs-up"></i></button>
-                        <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title=""
+                        <button type="button" class="btn btn-default btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
                             onclick="changeStatusAll(0)" data-original-title="Make inactive"><i
                                 class="fa  fa-thumbs-o-down"></i></button>
                     </div>
@@ -113,7 +113,7 @@
 
                 </div>
             </div>
-
+            <div class="card-body">
             <div class="table-responsive" id="main_table">
                 <table class="mb-0 table">
                     <thead>
@@ -131,23 +131,21 @@
                                 <td>{{ $items->setting_key }}</td>
                                 <td style="width:40%;word-break: break-all;">{{ $items->setting_value }}
                                 </td>
-                                <td class="text-right" style="padding-right:15px;">
+                                <td class="text-right">
 
                                     {{-- @if (in_array('MEN0051_LIST_Edit', $rolePermissions)) --}}
                                     @if ($items->editable != 0)
-                                    <a data-toggle="tooltip" title="" class="allSettingsEditButton"
-                                        data-placement="top" data-original-title="Edit"
+                                    <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" class="allSettingsEditButton"
                                         setting-id="{{ $items->id }}"><i
-                                            class="fa fa-edit text-success fa-md"></i></a>
+                                            class="bi bi-pencil-square text-success fa-md"></i></a>
                                     &nbsp;
                                     @endif
                                     {{-- @endif --}}
                                     {{-- @if (in_array('MEN0051_LIST_Edit', $rolePermissions)) --}}
                                     @if ($items->deletable != 0)
-                                    <a data-toggle="tooltip" title="" class="allSettingsDeleteButton"
-                                        data-placement="top" data-original-title="De"
+                                    <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete" class="allSettingsDeleteButton"
                                         setting-id="{{ $items->id }}"><i
-                                            class="fa fa-trash text-danger fa-md"></i></a>
+                                            class="bi bi-trash3-fill text-danger fa-md"></i></a>
                                     &nbsp;
                                     @endif
                                     {{-- @endif --}}

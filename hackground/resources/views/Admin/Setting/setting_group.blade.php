@@ -43,14 +43,14 @@
         @if (session('success_msg'))
             <div class="alert alert-{{ session('message_type') }}">
                 {{ session('success_msg') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <button type="button" class="btn-close" data-bs-dismiss="alert">
                     
                 </button>
             </div>
         @endif
         <div class="main-card mb-3 card ">
-            <div class="card-body">
-                <div class="card-header p-0">
+            
+                <div class="card-header d-flex">
                     <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i>
                     @if (isset($group_key))
                         {{ $group_key }} Setting
@@ -67,6 +67,7 @@
 
                     </div>
                 </div>
+                <div class="card-body">
                 <div class="table-responsive" id="main_table" class='d-none'>
                     <table class="mb-0 table">
                         <thead>
@@ -75,7 +76,7 @@
                                 <th style="width:60%">Name</th>
                                 <th style="width:60%">Key</th>
                                 <th style="width:10%">Status</th>
-                                <th class="text-right" style="padding-right:30px;">Action</th>
+                                <th class="text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody id="Settings">
@@ -96,11 +97,11 @@
 
                                     <td class="text-right">
                                         {{-- @if (in_array('MEN0006_Edit', $rolePermissions)) --}}
-                                        <i class="fa fa-edit text-success fa-md SettingEditButton"
+                                        <i class="bi bi-pencil-square text-success fa-md SettingEditButton"
                                             settingId="{{ $items->setting_group_id }}"></i>
                                         {{-- @endif --}}
                                         {{-- @if (in_array('MEN0006_Delete', $rolePermissions)) --}}
-                                        <i class="fa fa-trash text-danger fa-md SettingDeleteButton"
+                                        <i class="bi bi-trash3-fill text-danger fa-md SettingDeleteButton"
                                             settingId="{{ $items->setting_group_id }}"></i>
                                         {{-- @endif --}}
                                     </td>

@@ -5633,7 +5633,9 @@ fieldset{
 	height: calc(100% - 1.5rem);
 	margin-bottom: 1.5rem;
 }
-
+.toast {
+	color: $dark;
+}
 
 /* Media Start */
 @media (min-width: 576px) {
@@ -5694,7 +5696,6 @@ fieldset{
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 	}
 }
-
 @media (min-width: 992px) {
 	.container-fluid {
 		--#{$prefix}gutter-x: 4rem;
@@ -5775,7 +5776,6 @@ fieldset{
 	}
 	
 }
-
 @media (min-width: 1200px) {
 	.is-sticky{
 		.one-page-menu {
@@ -5851,7 +5851,6 @@ fieldset{
 	}
 	
 }
-
 @media (min-width: 1440px) {
 	.select-dropdown{
 		.dropdown-menu{
@@ -5882,7 +5881,6 @@ fieldset{
 		}
 	}
 }
-
 @media only screen and (max-width: 1199.98px) {
 	.post-req{
 		.post-info{
@@ -5903,8 +5901,6 @@ fieldset{
 		}
 	}
 }
-
-
 @media only screen and (max-width: 991.98px) {
 	html {
 		font-size: 15px;

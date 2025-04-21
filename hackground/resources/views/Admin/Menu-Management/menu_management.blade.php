@@ -45,7 +45,7 @@
         @if (session('success_msg'))
             <div class="alert alert-{{ session('message_type') }}">
                 {{ session('success_msg') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <button type="button" class="btn-close" data-bs-dismiss="alert">
                     
                 </button>
             </div>
@@ -96,17 +96,17 @@
                                         </td>
                                         <td class="text-right" style="padding-right:20px;">
                                             <a href="javascript:void(0)" onclick="Add_sub_menu('{{ $menu->id }}')"
-                                                data-toggle="tooltip" title="Add Sub Menu">
+                                                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add Sub Menu">
                                                 <i class="fa fa-plus-circle text-primary fa-md"></i>
                                             </a>
                                             &nbsp;
                                             <a href="javascript:void(0)" onclick="Edit_prop_menu('{{ $menu->id }}')"
-                                                data-toggle="tooltip" title="Edit">
+                                                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit">
                                                 <i class="fa fa-edit text-success fa-md"></i>
                                             </a>
                                             &nbsp;
                                             <a href="javascript:void(0)" onclick="Delete_prop_menu('{{ $menu->id }}')"
-                                                data-toggle="tooltip" title="Delete">
+                                                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete">
                                                 <i class="fa fa-trash text-danger fa-md"></i>
                                             </a>
                                         </td>
@@ -133,13 +133,13 @@
                                                 <td class="text-right" style="padding-right:20px;">
                                                     <a href="javascript:void(0)"
                                                         onclick="Edit_prop_menu('{{ $sub_menu->id }}')"
-                                                        data-toggle="tooltip" title="Edit">
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit">
                                                         <i class="fa fa-edit text-success fa-md"></i>
                                                     </a>
                                                     &nbsp;
                                                     <a href="javascript:void(0)"
                                                         onclick="Delete_prop_menu('{{ $sub_menu->id }}')"
-                                                        data-toggle="tooltip" title="Delete">
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete">
                                                         <i class="fa fa-trash text-danger fa-md"></i>
                                                     </a>
                                                 </td>

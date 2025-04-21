@@ -14,8 +14,6 @@
 </div>
 
 
-
-
 <div class="app-main__inner">
     <div class="app-page-title">
         <div class="page-title-wrapper">
@@ -47,17 +45,17 @@
     <div class="main-card mb-3 card">
         <div class="card-body">
             <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Notification <div
-                    class="btn-actions-pane-right">
+                <h4>Notification</h4> 
+                <div class="btn-actions-pane-right">
 
                     <div class="btn-group" id="global_action_btn" style="display:none">
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title=""
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
                             onclick="deleteSelected()" data-original-title="Delete selected"><i
                                 class="fa fa-trash"></i></button>
-                        <button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" title=""
+                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
                             onclick="changeStatusAll(1)" data-original-title="Mark as read"><i
                                 class="fa fa-thumbs-up"></i></button>
-                        <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title=""
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
                             onclick="changeStatusAll(0)" data-original-title="Mark as unread"><i
                                 class="fa  fa-thumbs-down"></i></button>
                     </div>
@@ -108,9 +106,8 @@
                             <td class="text-right">
                                 <a noti_id="{{ $notification->id }}" class="delete-notification" title=""
                                     data-original-title="Delete Permanently"><i
-                                        class="fa fa-trash text-danger fa-md"></i>
+                                        class="bi bi-trash3-fill text-danger fa-md"></i>
                                 </a>
-
 
                             </td>
                         </tr>

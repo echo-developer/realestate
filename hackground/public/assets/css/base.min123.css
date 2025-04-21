@@ -8,9 +8,9 @@
     border-color: #6c757d
 }
 
-    .vertical-nav-menu .mm-active > a {
-        color: #3f6ad8;
-    }
+.vertical-nav-menu .mm-active > a {
+    color: #3f6ad8;
+}
 
 .border-success {
     border-color: #3ac47d
@@ -766,6 +766,12 @@ hr {
     margin-bottom: 1rem;
     border: 0;
     border-top: 1px solid rgba(0, 0, 0, .1)
+}
+
+.small,
+small {
+    font-size: 80%;
+    font-weight: 400
 }
 
 .mark,
@@ -1917,6 +1923,27 @@ pre code {
     .offset-xl-11 {
         margin-left: 91.66667%
     }
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent
+}
+
+.table td,
+.table th {
+    padding: .55rem;
+    vertical-align: top;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #e9ecef
+}
+
+.table tbody+tbody {
+    border-top: 2px solid #e9ecef
 }
 
 .table .table {
@@ -5212,6 +5239,10 @@ input[type=submit].btn-block {
     padding: 1.25rem
 }
 
+.card-title {
+    margin-bottom: .75rem
+}
+
 .card-subtitle {
     margin-top: -.375rem;
     margin-bottom: 0
@@ -5229,12 +5260,26 @@ input[type=submit].btn-block {
     margin-left: 1.25rem
 }
 
+.card-header {
+    padding: .75rem 1.25rem;
+    margin-bottom: 0;
+    color: inherit;
+    background-color: #fff;
+    border-bottom: 1px solid rgba(26, 54, 126, .125)
+}
+
 .card-header:first-child {
     border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0
 }
 
 .card-header+.list-group .list-group-item:first-child {
     border-top: 0
+}
+
+.card-footer {
+    padding: .75rem 1.25rem;
+    background-color: #fff;
+    border-top: 1px solid rgba(26, 54, 126, .125)
 }
 
 .card-footer:last-child {
@@ -6243,7 +6288,7 @@ button.close {
 a.close.disabled {
     pointer-events: none
 }
-
+/*
 .toast {
     max-width: 350px;
     overflow: hidden;
@@ -6355,7 +6400,7 @@ a.close.disabled {
     border-radius: .3rem;
     outline: 0
 }
-
+*/
 .blockOverlay,
 .modal-backdrop {
     position: fixed;
@@ -10998,7 +11043,7 @@ button {
 }
 
 .app-header.header-shadow {
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    box-shadow: 0 .46875rem 2.1875rem rgba(4, 9, 20, .03), 0 .9375rem 1.40625rem rgba(4, 9, 20, .03), 0 .25rem .53125rem rgba(4, 9, 20, .05), 0 .125rem .1875rem rgba(4, 9, 20, .03)
 }
 
 .app-header .app-header__content {
@@ -11427,8 +11472,21 @@ button {
 .app-sidebar.sidebar-shadow {
     box-shadow: 7px 0 60px rgba(0, 0, 0, .05)
 }
+/* Remove borders from the entire table */
+.table {
+    border: none;
+}
+
+/* Remove borders from the table cells */
+.table th {
+    border: none !important;
+}
 
 /* Optionally, remove the border around the header */
+.table thead th {
+    border-bottom: none !important;
+}
+
 .app-sidebar__heading {
     text-transform: uppercase;
     font-size: .8rem;
@@ -12145,8 +12203,7 @@ button {
 .app-page-title {
     padding: 30px;
     margin: -30px -30px 30px;
-    position: relative;
-    display: none;
+    position: relative
 }
 
 .app-page-title+.body-tabs-layout {
@@ -18033,6 +18090,15 @@ a.avatar-icon-wrapper:hover .avatar-icon {
 .card-header,
 .card-title {
     text-transform: uppercase;
+    color: rgba(13, 27, 62, .7);
+    font-weight: 700;
+    font-size: .88rem
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    border-bottom-width: 1px;
 }
 
 .card-header.no-border {
@@ -31086,9 +31152,9 @@ legend {
     background: url(../images/flagkit-svg/BH.svg) no-repeat
 }
 
-/* .BI {
+.BI {
     background: url(../images/flagkit-svg/BI.svg) no-repeat
-} */
+}
 
 .BJ {
     background: url(../images/flagkit-svg/BJ.svg) no-repeat
@@ -35402,11 +35468,11 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
         position: initial !important
     }
 }
-
+/*
 .toast-title {
     font-weight: 700
 }
-
+*/
 .toast-message {
     -ms-word-wrap: break-word;
     word-wrap: break-word
@@ -35428,7 +35494,6 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
     top: -.3em;
     float: right;
     font-weight: 700;
-    color: #fff;
     opacity: .8
 }
 
@@ -35513,7 +35578,6 @@ button.toast-close-button {
     background-position: 15px center;
     background-repeat: no-repeat;
     box-shadow: 0 .46875rem 2.1875rem rgba(4, 9, 20, .03), 0 .9375rem 1.40625rem rgba(4, 9, 20, .03), 0 .25rem .53125rem rgba(4, 9, 20, .05), 0 .125rem .1875rem rgba(4, 9, 20, .03);
-    color: #fff;
     opacity: .9
 }
 
@@ -43846,11 +43910,11 @@ span.multiselect-native-select select {
 }
 
 .toggle-on.btn-xs {
-    padding-right: 12px
+    padding-right: 10px
 }
 
 .toggle-off.btn-xs {
-    padding-left: 12px
+    padding-left: 10px
 }
 
 @media only screen and (max-width:1320px) {
@@ -44449,11 +44513,10 @@ span.multiselect-native-select select {
     border: none !important;
 }
 .overview-card {
-    background: #fff;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    margin-top: 30px;
+    background-color: #fff;
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     margin-bottom: 30px;
 }
 

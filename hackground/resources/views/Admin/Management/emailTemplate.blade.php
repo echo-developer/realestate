@@ -45,7 +45,7 @@
         @if (session('success_msg'))
             <div class="alert alert-{{ session('message_type') }}">
                 {{ session('success_msg') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <button type="button" class="btn-close" data-bs-dismiss="alert">
                     
                 </button>
             </div>
