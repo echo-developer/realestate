@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Api\ApiModel;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+
 class AdvertisementController extends Controller
 {
     protected $apiModel;
@@ -88,6 +90,8 @@ class AdvertisementController extends Controller
 
     public function saveAdvertisementRequest(Request $request)
     {
+        $step = $request->step;
+        
         $validator = Validator::make($request->all(), [
             'advertiser_name' => 'required',
             'email'=> 'required',
@@ -97,13 +101,23 @@ class AdvertisementController extends Controller
             'locality_id'=>'required|integer',
             'page'=>'required',
             'position'=>'required',
-            'duration'=>'required'
+            'duration'=>'required',
+            'email_otp'=>'required|integer',
         ]);
-        //print_r($validator);exit;
         if($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
-        
+
+        $email = $request->email;
+        $otp=rand(111111,999999);
+        $token=md5($email.'_'.$otp);
+        $token_type='OTP_EMAIL';
+        $token_data = array(
+            'tokenable_type'=> $token_type,
+            'token'=>$token,
+            'last_used_at'=> date('Y-m-d H:i:s')
+        );
+        DB::table('personal_access_token')->where('token',$token)->delete();
         $up = $this->apiModel->addAdvertisementRequest($request->all());
         if($up)
         {
