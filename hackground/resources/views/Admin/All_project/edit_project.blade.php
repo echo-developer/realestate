@@ -37,28 +37,6 @@
     flex-direction: column;
   }
 
-  .dropdown label {
-    font-size: 12px;
-    color: gray;
-    margin-bottom: 4px;
-    position: absolute;
-    top: -10px;
-    left: 10px;
-    background: white;
-    padding: 0 5px;
-  }
-
-  .dropdown select {
-    width: 160px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    background-color: white;
-    appearance: none;
-    cursor: pointer;
-  }
-
   .image-box {
     display: flex;
     flex-direction: column;
@@ -93,7 +71,7 @@
         <div class="page-title-icon">
           <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
         </div>
-        <div>Project Edit <div class="page-title-subheading">Project Setting &gt;Project Edit
+        <div>Project Edit <div class="page-title-subheading">Project Setting <i class="bi bi-chevron-right"></i> Project Edit
           </div>
         </div>
       </div>

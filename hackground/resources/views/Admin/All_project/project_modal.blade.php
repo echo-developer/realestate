@@ -80,7 +80,7 @@
              <label for="locality">Locality</label>
      </div>
 
-     <div class="form-floating mb-4">         
+     <div class="form-floating">         
          <input placeholder="Edit Project Name" name="project_name" class="form-control" type="text"
              value="{{ $projectData->project_name }}">
              <label>Enter The Project Name</label>
@@ -101,20 +101,18 @@
      </div>
 
      <div class="form-group">
-         <label>Possession Status:</label>
-         <div>
-             @foreach ($propertyStatus as $status)
-             <label class="me-3">
-                 <input type="radio" name="possession_status" id="status" value="{{ $status['status_id'] }}"
-                     {{ isset($projectData->additional->possession_status) && $projectData->additional->possession_status == $status['status_id'] ? 'checked' : '' }}>
-                 {{ $status['status_name'] }}
-             </label>
-             @endforeach
-         </div>
+        <label class="d-block">Possession Status:</label>
+            @foreach ($propertyStatus as $status)
+            <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" name="possession_status" id="status_{{ $status['status_id'] }}" value="{{ $status['status_id'] }}"
+                    {{ isset($projectData->additional->possession_status) && $projectData->additional->possession_status == $status['status_id'] ? 'checked' : '' }}>
+                <label class="form-check-label" for="status_{{ $status['status_id'] }}">{{ $status['status_name'] }}</label>
+            </div>
+            @endforeach         
      </div>
 
-     <div class="form-group" id="age_of_const" style="display:none;">
-         <label>Age of Construction</label>
+     <div class="form-floating mb-4" id="age_of_const" style="display:none;">
+         
          <select class="form-control" name="age_of_construction">
              <option value="">Select Age</option>
              @php
@@ -134,9 +132,10 @@
              </option>
              @endforeach
          </select>
+         <label>Age of Construction</label>
      </div>
      <div id="month_year" style="display:none;">
-         <div class="dropdown-container d-flex gap-3">
+         
              @php
              $expectedDate = isset($projectData->additional->possesion_month_possesion_year)
              ? explode('-', $projectData->additional->possesion_month_possesion_year)
@@ -155,9 +154,9 @@
              $selectedMonth = $months[$monthNumber] ?? '';
              @endphp
 
-             <div class="dropdown-container d-flex gap-3">
-                 <div class="dropdown">
-                     <label for="month">Month</label>
+             <div class="row gx-3">
+                <div class="col">
+                 <div class="form-floating mb-4">                     
                      <select name="month" id="month" class="form-control">
                          <option disabled>Select Month</option>
                          @foreach ($months as $num => $month)
@@ -166,23 +165,28 @@
                          </option>
                          @endforeach
                      </select>
+                     <label for="month">Month</label>
                  </div>
+                </div>
 
-                 <div class="dropdown">
-                     <label for="year">Year</label>
+                 <div class="col">
+                 <div class="form-floating mb-4">
+                     
                      <select name="year" id="year" class="form-control">
                          <option disabled>Select Year</option>
                          @for ($i = date('Y'); $i <= date('Y') + 30; $i++)
                              <option value="{{ $i }}" {{ $selectedYear == $i ? 'selected' : '' }}>{{ $i }}</option>
                              @endfor
                      </select>
+                     <label for="year">Year</label>
                  </div>
+                </div>
              </div>
 
-         </div>
+        
      </div>
-     <div class="form-group">
-         <label class="form-label">Furnish Status</label>
+     <div class="form-floating mb-4">
+         
          <select class="form-control" name="project_furnish">
              <option value="">Select Furnish Status</option>
              @foreach ($projectFurnishes as $furnish)
@@ -192,9 +196,10 @@
              </option>
              @endforeach
          </select>
+         <label class="form-label">Furnish Status</label>
      </div>
 
-     <div class="form-group">
+     <div class="form-floating mb-4">
          @php
          $parking_availability = [
          'AV' => 'Available',
@@ -203,15 +208,16 @@
          ];
          @endphp
 
-         <label class="form-label">Parking Status</label>
+         
          <select class="form-control" name="parking">
              <option value="">Select Parking Option</option>
              @foreach ($parking_availability as $value => $label)
              <option value="{{ $value }}" {{ $projectData->settings->parking_availability === $value ? 'selected' : '' }}>{{ $label }}</option>
              @endforeach
          </select>
+         <label class="form-label">Parking Status</label>
      </div>
-     <div class="form-group">
+     <div class="form-floating mb-4">
          @php
          $floorOptions = [
          'east' => 'East',
@@ -224,14 +230,14 @@
          'west' => 'West',
          ];
          @endphp
-
-         <label class="form-label">Project Facing</label>
-         <select class="form-control" name="facing_direction">
+         
+        <select class="form-control" name="facing_direction">
              <option value="">Select Facing</option>
              @foreach ($floorOptions as $value => $label)
              <option value="{{ $value }}" {{ $projectData->settings->project_facing === $value ? 'selected' : '' }}>{{ $label }}</option>
              @endforeach
-         </select>
+        </select>
+        <label class="form-label">Project Facing</label>
      </div>
 
      <div>
@@ -257,7 +263,7 @@
      </div>
 
 
-     <div>
+     <div class="mb-3">
          <label class="form-label d-block form-label">Select Flooring Types:</label>
          @php
          $flooringStyles = json_decode($projectData->additional->flooring_style, true) ?? [];
@@ -304,25 +310,26 @@
          </div>
      </div>
 
-     <div class="form-group">
-         <label class="form-label">Total Tower</label>
+     <div class="form-floating mb-4">
+         
          <select class="form-control" name="total_tower">
              <option value="">Select Total Tower</option>
              @for ($i = 1; $i <= 15; $i++)
                  <option value="{{ $i }}" {{ ($projectData->settings->total_towers ?? '') == $i ? 'selected' : '' }}>{{ $i }}</option>
                  @endfor
          </select>
+         <label class="form-label">Total Tower</label>
      </div>
-     <div class="form-group">
-         <label>Total Units</label>
+     <div class="form-floating">         
          <input placeholder="Carpet Area" class="form-control" name="total_units" type="number"
              value="{{$projectData->settings->total_units}}">
+        <label>Total Units</label>
      </div>
      @endif
      @if($step == 3)
 
-     <div class="form-group">
-         <label for="floatingSelect">Select Water Availability:</label>
+     <div class="form-floating mb-4">
+         
          @php
          $waterAvailability = [
          '24_hours' => '24 Hours Available',
@@ -338,10 +345,11 @@
              </option>
              @endforeach
          </select>
+         <label for="floatingSelect">Select Water Availability:</label>
      </div>
 
-     <div class="form-group">
-         <label for="floatingSelect">Select Electricity Status:</label>
+     <div class="form-floating mb-4">
+         
          @php
          $electricityStatus = [
          'full_power_backup' => 'Full Power Backup',
@@ -357,10 +365,11 @@
              </option>
              @endforeach
          </select>
+         <label for="floatingSelect">Select Electricity Status:</label>
      </div>
 
-     <div class="form-group">
-         <label for="floatingSelect">Select Ownership Type:</label>
+     <div class="form-floating">
+        
          @php
          $ownershipType = [
          'freehold' => 'Freehold',
@@ -377,6 +386,7 @@
              </option>
              @endforeach
          </select>
+         <label for="floatingSelect">Select Ownership Type:</label>
      </div>
 
      @endif
@@ -412,9 +422,9 @@
             $groupedLandmarks[$frontendType][] = $details;
         }
         ?>
-     <div class="container mt-3">
+     <div class="mt-3">
          <!-- Navigation Tabs -->
-         <ul class="nav nav-tabs" id="ed-nav">
+         <ul class="nav nav-tabs mb-3" id="ed-nav">
              <?php foreach ($typeMappings as $backendType => $frontendType): ?>
                  <li class="nav-item">
                      <a class="nav-link <?= ($frontendType == "education") ? "active" : "" ?>"
@@ -427,12 +437,12 @@
          </ul>
 
          <!-- Tab Contents -->
-         <div class="tab-contents mt-3">
+         <div class="tab-contents">
              <?php foreach ($typeMappings as $backendType => $frontendType): ?>
                  <div id="tab-<?= $frontendType ?>" class="tab-content" style="display: <?= ($frontendType == "education") ? "block" : "none" ?>;">
                      <div class="mt-3">
                          <a href="javascript:void(0)">
-                             <button type="button" class="btn btn-success add-btn" data-type="<?= $frontendType ?>">
+                             <button type="button" class="btn btn-primary add-btn" data-type="<?= $frontendType ?>">
                                  + Add <?= ucfirst(str_replace('-', ' ', $frontendType)) ?>
                              </button>
                          </a>
@@ -440,42 +450,43 @@
                      <div class="items-container" data-type="<?= $frontendType ?>">
                          <?php if (!empty($groupedLandmarks[$frontendType])): ?>
                              <?php foreach ($groupedLandmarks[$frontendType] as $index => $landmark): ?>
-                                 <div class="item mt-3 p-3 border rounded">
+                                 <div class="item mt-3 p-3 pb-0 border rounded">
                                      <h6><?= htmlspecialchars($landmark["name"]) ?></h6>
-                                     <div class="row">
-                                         <div class="col-md-5">
+                                     <div class="row gx-3">
+                                         <div class="col-md mb-3">
                                              <input type="text" class="form-control"
                                                  value="<?= htmlspecialchars($landmark["name"]) ?>"
                                                  placeholder="Name"
                                                  name="<?= $frontendType ?>_name[]">
                                          </div>
-                                         <div class="col-md-5 d-flex">
-                                             <input type="text" class="form-control"
-                                                 value="<?= htmlspecialchars($landmark["distance"]) ?>"
-                                                 placeholder="Distance"
-                                                 name="<?= $frontendType ?>_distance[]">
-                                             <span class="ms-2 mt-2">meter</span>
+                                         <div class="col-md mb-3">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" value="<?= htmlspecialchars($landmark["distance"]) ?>" placeholder="Distance" name="<?= $frontendType ?>_distance[]">
+                                                <span class="input-group-text">m</span>
+                                            </div>
                                          </div>
-                                         <div class="col-md-2">
-                                             <button class="btn btn-danger remove-btn">✖</button>
+                                         <div class="col-md-auto mb-3">
+                                             <button class="btn btn-danger remove-btn"><i class="bi bi-x-lg"></i></button>
                                          </div>
                                      </div>
                                  </div>
                              <?php endforeach; ?>
                          <?php else: ?>
                              <!-- Show an empty input field if there are no landmarks -->
-                             <div class="item mt-3 p-3 border rounded">
+                             <div class="item mt-3 p-3 pb-0 border rounded">
                                  <h6><?= ucfirst(str_replace('-', ' ', $frontendType)) ?> 1</h6>
-                                 <div class="row">
-                                     <div class="col-md-5">
+                                 <div class="row gx-3">
+                                     <div class="col-md mb-3">
                                          <input type="text" class="form-control" placeholder="Name" name="<?= $frontendType ?>_name[]">
                                      </div>
-                                     <div class="col-md-5 d-flex">
-                                         <input type="text" class="form-control" placeholder="Distance" name="<?= $frontendType ?>_distance[]">
-                                         <span class="ms-2 mt-2">meter</span>
+                                     <div class="col-md mb-3">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Distance" name="<?= $frontendType ?>_distance[]">
+                                            <span class="input-group-text">m</span>
+                                        </div>
                                      </div>
-                                     <div class="col-md-2">
-                                         <button class="btn btn-danger remove-btn" disabled>✖</button>
+                                     <div class="col-md-auto mb-3">
+                                         <button class="btn btn-danger remove-btn" disabled><i class="bi bi-x-lg"></i></button>
                                      </div>
                                  </div>
                              </div>
@@ -625,18 +636,20 @@
              let count = $container.children().length + 1;
 
              const newItem = $(`
-            <div class="item mt-3 p-3 border rounded">
+            <div class="item mt-3 p-3 pb-0 border rounded">
                 <h6>${type.replace(/-/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} ${count}</h6>
-                <div class="row">
-                    <div class="col-md-5">
+                <div class="row gx-3">
+                    <div class="col-md mb-3">
                         <input type="text" class="form-control" placeholder="Name" name="${type}_name[]">
                     </div>
-                    <div class="col-md-5 d-flex">
-                        <input type="text" class="form-control" placeholder="Distance" name="${type}_distance[]">
-                        <span class="ms-2 mt-2">meter</span>
+                    <div class="col-md-5 mb-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Distance" name="${type}_distance[]">
+                            <span class="input-group-text">m</span>
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-danger remove-btn">✖</button>
+                    <div class="col-md-auto mb-3">
+                        <button class="btn btn-danger remove-btn"><i class="bi bi-x-lg"></i></button>
                     </div>
                 </div>
             </div>
