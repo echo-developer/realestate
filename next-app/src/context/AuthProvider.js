@@ -40,16 +40,16 @@ export const AuthProvider = ({ children }) => {
     switch (upperCurrency) {
   
       case "INR":
-        if (price >= 10000000) return `${upperCurrency} ${(price / 10000000).toFixed(2)} Cr`;
-        if (price >= 100000) return `${upperCurrency} ${(price / 100000).toFixed(2)} Lac`;
-        if (price >= 1000) return `${upperCurrency} ${(price / 1000).toFixed(2)}K`;
+        if (price >= 10000000) return `${upperCurrency} ${(price / 10000000).toFixed(1)} Cr`;
+        if (price >= 100000) return `${upperCurrency} ${(price / 100000).toFixed(1)} Lac`;
+        if (price >= 1000) return `${upperCurrency} ${(price / 1000).toFixed(1)}K`;
         return `${upperCurrency} ${price.toString()}`;
   
       case "JPY":
       case "CNY":
-        if (price >= 1000000000) return `${upperCurrency} ${(price / 1000000000).toFixed(2)}B`;
-        if (price >= 1000000) return `${upperCurrency} ${(price / 1000000).toFixed(2)}M`;
-        if (price >= 1000) return `${upperCurrency} ${(price / 1000).toFixed(2)}K`;
+        if (price >= 1000000000) return `${upperCurrency} ${(price / 1000000000).toFixed(1)}B`;
+        if (price >= 1000000) return `${upperCurrency} ${(price / 1000000).toFixed(1)}M`;
+        if (price >= 1000) return `${upperCurrency} ${(price / 1000).toFixed(1)}K`;
         return `${upperCurrency} ${price.toString()}`;
   
       case "USD":
@@ -59,15 +59,16 @@ export const AuthProvider = ({ children }) => {
       case "CAD":
       case "CHF":
       case "AED":
-        if (price >= 1000000000) return `${upperCurrency} ${(price / 1000000000).toFixed(2)}B`;
-        if (price >= 1000000) return `${upperCurrency} ${(price / 1000000).toFixed(2)}M`;
-        if (price >= 1000) return `${upperCurrency} ${(price / 1000).toFixed(2)}K`;
+        if (price >= 1000000000) return `${upperCurrency} ${(price / 1000000000).toFixed(1)}B`;
+        if (price >= 1000000) return `${upperCurrency} ${(price / 1000000).toFixed(1)}M`;
+        if (price >= 1000) return `${upperCurrency} ${(price / 1000).toFixed(1)}K`;
         return `${upperCurrency} ${price.toString()}`;
   
       default:
         return `${upperCurrency} ${price.toString()}`;
     }
-  }
+}
+
   
 
 
