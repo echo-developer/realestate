@@ -2,8 +2,7 @@
     <div class="modal-header">
     <h4 class="modal-title"><?php echo $title;?></h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-          </button>
-        
+        </button>        
     </div>
     <div class="modal-body">
             <form role="form" id="add_form" action="<?php echo $form_action;?>" onsubmit="submitForm(this, event)">
@@ -101,7 +100,6 @@
     </div>
     
     <script>
-
     function checkAdType(){
         var selected_val = $('[name="ad_type"] :selected').val();
         if(selected_val == 'image'){

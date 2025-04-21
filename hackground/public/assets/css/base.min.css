@@ -18088,22 +18088,8 @@ a.avatar-icon-wrapper:hover .avatar-icon {
     color: #3f6ad8
 }
 
-.card-header,
 .card-title {
     text-transform: uppercase;
-    color: rgba(13, 27, 62, .7);
-    font-weight: 700;
-    font-size: .88rem
-}
-
-.card-header {
-    display: flex;
-    align-items: center;
-    border-bottom-width: 1px;
-    padding-top: 0;
-    padding-bottom: 0;
-    padding-right: .625rem;
-    height: 3.5rem
 }
 
 .card-header.no-border {

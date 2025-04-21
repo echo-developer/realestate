@@ -108,7 +108,6 @@
 
 
   <section class="content">
-    <div class="container-fluid">
       <ul id="myTab" class="nav nav-underline mb-3" role="tablist">
         <li class="nav-item">
           <a class="nav-link {{ request('tab') == 'project-details' || !request('tab') ? 'active' : '' }}"
@@ -129,7 +128,7 @@
         <!-- Property Details Tab -->
         <div class="tab-pane fade {{ request('tab') == 'project-details' || !request('tab') ? 'show active' : '' }}"
           id="project-details" role="tabpanel">
-          <div class="card">
+          <div class="card mb-4">
             <div class="card-header d-flex">
               <h4 class="card-title">Basic Details </h4>
               <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(1, <?php echo $projectData->id ?>,'Basic')"><i class="bi bi-pencil-square"></i></a>
@@ -185,7 +184,7 @@
             </div>
           </div>
 
-          <div class="card">
+          <div class="card mb-4">
             <div class="card-header d-flex">
               <h4 class="card-title">Project Features </h4>
               <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(2, <?php echo $projectData->id ?>,'Features')"><i class="bi bi-pencil-square"></i></a>
@@ -311,7 +310,7 @@
             </div>
           </div>
 
-          <div class="card">
+          <div class="card mb-4">
             <div class="card-header d-flex">
               <h4 class="card-title">Additional Information </h4>
               <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(3, <?php echo $projectData->id ?>,'Additional')"><i class="bi bi-pencil-square"></i></a>
@@ -367,7 +366,7 @@
             </div>
           </div>
 
-          <div class="card">
+          <div class="card mb-4">
             <div class="card-header d-flex">
               <h4 class="card-title">Project Landmark </h4>
               <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(4, <?php echo $projectData->id ?>,'Landmark')"><i class="bi bi-pencil-square"></i></a>
@@ -395,7 +394,7 @@
 
       <div class="tab-pane fade{{ request('tab') == 'project-photos' || !request('tab') ? 'show active' : '' }} "
         id="project-photos" role="tabpanel" style="{{ request('tab') == '' ? 'display: none;' : 'display: block;' }}">
-        <div class="card">
+        <div class="card mb-4">
           <div class="card-header d-flex">
             <h4 class="card-title">Project Photos</h4>
             <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(5, <?php echo $projectData->id ?>,'Photos')"><i class="bi bi-pencil-square"></i></a>
@@ -434,6 +433,7 @@
           </div>
 
         </div>
+      </div>
   </section>
 </div>
 

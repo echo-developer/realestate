@@ -741,11 +741,11 @@ ul.list-info li span {
     width: 50%;
 }
 ul.list-info li span {
-    color: #77206d;
+    color: #444;
 }
 .file-with-border {
     background-color: #fff;
-    border: 2px dashed #77206d;
+    border: 2px dashed #777;
     border-image-source: url(../images/border-dashed.png);
     border-image-slice: 2;
     border-image-repeat: round;

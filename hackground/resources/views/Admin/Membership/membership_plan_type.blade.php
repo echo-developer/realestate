@@ -45,7 +45,7 @@
     <div class="alert alert-{{ session('message_type') }}">
         {{ session('success_msg') }}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+            
         </button>
     </div>
     @endif
@@ -127,8 +127,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="ModalLabel">Edit Plan Type </h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                    
                 </button>
             </div>
             <div class="modal-body">

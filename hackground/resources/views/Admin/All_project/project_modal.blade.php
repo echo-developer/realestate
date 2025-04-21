@@ -4,34 +4,31 @@
      <input type="hidden" name="step" value="{{ $step }}" />
 
      @if($step == 1)
-     <div class="form-group">
-         <label>Select Project Budget:</label>
+     <div class="form-floating mb-4">         
          <input placeholder="Enter Project Budget" class="form-control" name="project_price" type="number"
              value="{{ $projectData->additional->expected_price }}">
+            <label>Select Project Budget:</label>
      </div>
 
-     <div class="form-group">
-         <label>Enter Token Amount:</label>
+     <div class="form-floating mb-4">
          <input placeholder="Enter Token Amount" class="form-control" name="project_token" type="number"
              value="{{ $projectData->additional->token_amount }}">
+             <label>Enter Token Amount:</label>
      </div>
 
      <div class="form-group">
-         <label>Post For:</label>
-         <div>
-             <label>
-                 <input type="radio" name="post_for" value="rent"
-                     {{ $projectData->settings->post_for == 'rent' ? 'checked' : '' }}> Rent
-             </label>
-             <label class="ms-3">
-                 <input type="radio" name="post_for" value="sale"
-                     {{ $projectData->settings->post_for == 'sale' ? 'checked' : '' }}> Sale
-             </label>
+         <label class="d-block">Post For:</label>
+         <div class="form-check form-check-inline">             
+                <input type="radio" class="form-check-input" id="rent" name="post_for" value="rent" {{ $projectData->settings->post_for == 'rent' ? 'checked' : '' }}> 
+                <label class="form-check-label" for="rent">Rent</label>
+         </div>
+         <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="sale" name="post_for" value="sale" {{ $projectData->settings->post_for == 'sale' ? 'checked' : '' }}>
+                <label class="form-check-label" for="sale">Sale</label>
          </div>
      </div>
 
-     <div class="form-group">
-         <label>Property Type</label>
+     <div class="form-floating mb-4">         
          <select class="form-control" name="project_type">
              <option value="">Select Project Type</option>
              @foreach ($projectTypes as $projectType)
@@ -41,63 +38,66 @@
              </option>
              @endforeach
          </select>
+         <label>Property Type</label>
      </div>
 
-     <div class="form-group">
-         <label for="developer_name">Enter Developer Name</label>
+     <div class="form-floating mb-4">
+         
          <input placeholder="Enter Developer Name" name="developer_name" id="developer_name"
              class="form-control" value="{{ $projectData->additional->developer_name ?? '' }}" type="text">
+             <label for="developer_name">Enter Developer Name</label>
      </div>
 
-     <div class="form-group">
-         <label for="developer_details">Enter Developer Details</label>
+     <div class="form-floating mb-4">
+         
          <textarea placeholder="Enter Developer Details" name="developer_details" id="developer_details"
-             class="form-control" rows="4">{{ $projectData->additional->developer_details ?? '' }}</textarea>
+             class="form-control" rows="4" style="height: 100px;">{{ $projectData->additional->developer_details ?? '' }}</textarea>
+             <label for="developer_details">Enter Developer Details</label>
      </div>
 
-     <div class="form-group">
-         <label for="developer_experience">Enter Developer Experience (in years)</label>
+     <div class="form-floating mb-4">         
          <input placeholder="Enter Developer Experience" name="developer_experience" id="developer_experience"
              class="form-control" type="number" min="0"
              value="{{ $projectData->additional->developer_experience ?? '' }}">
+             <label for="developer_experience">Enter Developer Experience (in years)</label>
      </div>
 
-     <div class="form-group">
-         <label>Enter the value for instruction</label>
+     <div class="form-floating mb-4">         
          <input placeholder="Edit Instruction" class="form-control" name="instruction" type="text"
              value="{{ $projectData->additional->instruction }}">
+             <label>Enter the value for instruction</label>
      </div>
 
-     <div class="form-group">
-         <label>Enter the Address:</label>
+     <div class="form-floating mb-4">         
          <textarea placeholder="Enter the address here" rows="4" name="project_address" class="form-control"
              style="height: 100px;">{{ $projectData->location->address }}</textarea>
+             <label>Enter the Address:</label>
      </div>
 
-     <div class="form-group">
-         <label for="locality">Locality</label>
+     <div class="form-floating mb-4">         
          <input id="locality" class="form-control" type="text" name="project_locality" placeholder="Enter a location"
              value="{{ $projectData->location->locality }}">
+             <label for="locality">Locality</label>
      </div>
 
-     <div class="form-group">
-         <label>Enter The Project Name</label>
+     <div class="form-floating mb-4">         
          <input placeholder="Edit Project Name" name="project_name" class="form-control" type="text"
              value="{{ $projectData->project_name }}">
+             <label>Enter The Project Name</label>
      </div>
      @endif
 
      @if($step == 2)
-     <div class="form-group">
-         <label>Enter the Occupied Area:</label>
+     <div class="form-floating mb-4">         
          <input placeholder="Occupied Area" class="form-control" name="occupied_area" type="number"
              value="{{$projectData->settings->occupied_area}}">
+             <label>Enter the Occupied Area:</label>
      </div>
 
-     <div class="form-group">
-         <label>Enter the Total Area:</label>
+     <div class="form-floating mb-4">         
          <input placeholder="Total Area" class="form-control" name="total_area" type="number"
              value="{{$projectData->settings->total_area}}">
+             <label>Enter the Total Area:</label>
      </div>
 
      <div class="form-group">

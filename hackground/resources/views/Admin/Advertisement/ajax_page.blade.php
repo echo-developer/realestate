@@ -2,7 +2,7 @@
 <div class="modal-header">
     <h4 class="modal-title"><?php echo $title; ?></h4>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span></button>
+        </button>
 
 </div>
 <div class="modal-body">
@@ -313,8 +313,8 @@
 @if($page == 'edit')
 <div class="modal-header">
     <h4 class="modal-title"><?php echo $title; ?></h4>
-    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
+    <button type="button" class="btn-close" data-bs-dismiss="modal">
+        
     </button>
 
 </div>
@@ -657,8 +657,8 @@
 @if($page == 'view-request')
 <div class="modal-header">
     <h4 class="modal-title"><?php echo $title; ?></h4>
-    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
+    <button type="button" class="btn-close" data-bs-dismiss="modal">
+        
     </button>
 
 </div>
