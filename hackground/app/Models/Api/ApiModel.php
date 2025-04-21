@@ -926,6 +926,7 @@ class ApiModel extends Model
             ->update([
                 'name' => $data['name'],
                 'email' => $data['email'],
+                'image' => $data['image'],
                 'phone_code' => $data['phone_code'],
                 'phone' => $data['phone'],
                 'whatsapp_no' => $data['whatsapp_no'],
@@ -1409,7 +1410,7 @@ class ApiModel extends Model
     public function getGeneralLeadsList($user_id)
     {
         $query = DB::table('leads_assigned as l_a')
-            ->select('e.*', 'l_a.assign_id', 'l_a.lead_status','u_m.leads','u_m.leads_used')
+            ->select('e.*', 'l_a.assign_id', 'l_a.lead_status', 'u_m.leads', 'u_m.leads_used')
             ->leftJoin('buyer_property_enquery as e', 'e.id', '=', 'l_a.enquery_id')
             ->leftJoin('user_membership as u_m', 'u_m.user_id', '=', 'l_a.user_id')
             ->where([
@@ -1500,17 +1501,16 @@ class ApiModel extends Model
     {
         $structure = array(
             'advertiser_name' => $data['advertiser_name'] ? $data['advertiser_name'] : '',
-            'email'=> $data['email'] ? $data['email'] : '',
-            'phone_code'=> $data['phone_code'] ? $data['phone_code'] : '',
-            'phone'=> $data['phone'] ? $data['phone'] : '',
-            'city_id'=> $data['city_id'] ? $data['city_id'] : '',
-            'locality_id'=> $data['locality_id'] ? $data['locality_id'] : '',
-            'page'=> $data['page'] ? $data['page'] : '',
-            'position'=> $data['position'] ? $data['position'] : '',
-            'duration'=> $data['duration'] ? $data['duration'] : ''
+            'email' => $data['email'] ? $data['email'] : '',
+            'phone_code' => $data['phone_code'] ? $data['phone_code'] : '',
+            'phone' => $data['phone'] ? $data['phone'] : '',
+            'city_id' => $data['city_id'] ? $data['city_id'] : '',
+            'locality_id' => $data['locality_id'] ? $data['locality_id'] : '',
+            'page' => $data['page'] ? $data['page'] : '',
+            'position' => $data['position'] ? $data['position'] : '',
+            'duration' => $data['duration'] ? $data['duration'] : ''
         );
         $prev = DB::table('advertisement_request')->insert($structure);
         return true;
     }
-
 }

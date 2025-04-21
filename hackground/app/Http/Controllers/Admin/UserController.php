@@ -194,6 +194,7 @@ class UserController extends Controller
 
     public function SaveMemberDetails(Request $req)
     {
+        // dd($req->all());
         $user_id = $req->user_id;
         $user_type = $req->user_type;
 
@@ -202,6 +203,7 @@ class UserController extends Controller
             'email' => $req->email,
             'phone_code' => $req->phone_code,
             'phone' => $req->phone,
+            'image' => $req->uploaded_user_photo,
             'whatsapp_no' => $req->w_number,
             'address' => $req->address,
             'city' => $req->city,

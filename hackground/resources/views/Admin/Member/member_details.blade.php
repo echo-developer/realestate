@@ -36,7 +36,6 @@
                 </div>
                 <input type="file" name="photo" id="photo" class="form-control">
             </div>
-            <input type="hidden" id="uploaded_user_photo" name="uploaded_user_photo">
 
         </div>
 
@@ -61,6 +60,8 @@
                     <input type="hidden" name="user_id" value="{{ $data?->id }}">
                     <input type="hidden" name="user_type" value="{{ $data?->user_type }}">
                 </div>
+                <input type="hidden" id="uploaded_user_photo" name="uploaded_user_photo"
+                    value="{{ !empty($data->image) ? $data->image : null }}">
                 <div class="col-md-6">
                     <label for="email" class="form-label">Email</label>
                     <input type="text" name="email" id="email" class="form-control"
@@ -438,11 +439,8 @@
                         contentType: false,
                         success: function(response) {
                             console.log('File uploaded successfully');
-                            $('#user_image_preview').attr('src', asset(
-                                    'user_upload/profile_image/') + response
-                                .fileName).show();
                             $('#uploaded_user_photo').val(response
-                                .fileName); // store file name if needed later
+                                .fileName);
                         },
                         error: function(xhr, status, error) {
                             console.error('Error uploading file:', error);

@@ -153,8 +153,8 @@
                                 @forelse ($data  as $items)
                                     <tr>
                                         <td>{{ $items->id }}</td>
-                                        <td><a
-                                                href="{{ route('memberUser.allDetails', $items->id) }}">{{ $items->name }}</a>
+                                        <td><a href="{{ route('memberUser.allDetails', $items->id) }}"
+                                                target="_blank">{{ $items->name }}</a>
                                             <br><small>({{ $userTypes[$items->user_type] ?? 'Unknown' }})
                                         </td>
                                         <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
@@ -619,8 +619,9 @@
                         console.log('File uploaded successfully');
 
                         $('#prop_userimage').val(response.fileName);
-                        $('#image_preview').attr('src', asset('user_upload/profile_image/') + response
-                        .fileName).show();
+                        $('#image_preview').attr('src', asset('user_upload/profile_image/') +
+                            response
+                            .fileName).show();
                         $('#delete_image_btn').show();
                     },
                     error: function(xhr, status, error) {
