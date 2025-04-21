@@ -319,7 +319,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
           </label>{" "}
           <span className="text-danger">*</span>
           <div className="input-group mb-3">
-            <select
+            {/* <select
               className={`selectpicker form-control ${
                 errors.currency ? "is-invalid" : ""
               }`}
@@ -335,7 +335,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
               <option value="EURO">EURO</option>
               <option value="POND">POND</option>
               <option value="USD">USD</option>
-            </select>
+            </select> */}
             <input
               type="text"
               className={`form-control ${

@@ -8,6 +8,7 @@ import Slider from 'react-slick';
 import "./slick.css";
 import useDateFormat from '@/hooks/useDateFormat'
 import Image from 'next/image';
+import { useAuth } from '@/context/AuthProvider';
 
 const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemoveFav, mainType, listKey ,translation }) => {
 
@@ -61,7 +62,8 @@ export default MainSlider;
 
 
 const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveFav, mainType, listKey, translation }) => {
-    const [currentSlide, setCurrentSlide] = useState(0); // Add state for current slide
+    const [currentSlide, setCurrentSlide] = useState(0); 
+    const { currencyCode, formatPrice } = useAuth();
 
 
     // Slick carousel settings
@@ -143,6 +145,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                 {data?.length > 0 && data?.map((item, i) => {
                     const firstImage = item?.galleries?.[0]?.images?.[0]?.image_url || "/assets/images/uploads/d0d74748da69d1067d797427796723c5.jpg";
                     const id = mainType === "property" ? "property_id" : "project_id";
+                    const price = formatPrice(item?.price);
                     return (
                         <div className="owl-item" key={i}>
                             <article className="item">
@@ -188,7 +191,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                                             </p>
                                         )}
                                         <div className="d-flex align-items-center">
-                                            <h4 className="mb-0 flex-grow-1">{item?.price}</h4>
+                                            <h4 className="mb-0 flex-grow-1">{price ? price : ''}</h4>
                                             <a href={`${url}/${item?.slug}`} className='btn btn-primary' style={{ zIndex: '11'}} target="_blank">
                                                 {translation?.book_now || "Book Now"}
                                             </a>
@@ -315,6 +318,7 @@ const CardTypeComponent = ({ isMobile, data, url, addRemoveFav, mainType, listKe
 
 
 const ProjectCardComponent = ({ isMobile, data, url, addRemoveFav, mainType, listKey, translation }) => {
+    const { currencyCode, formatPrice } = useAuth();
     const responsive = {
         desktop: { breakpoint: { max: 3000, min: 1024 }, items: 4, slidesToSlide: 1 },
         tablet: { breakpoint: { max: 1024, min: 768 }, items: 2, slidesToSlide: 1 },
@@ -337,7 +341,7 @@ const ProjectCardComponent = ({ isMobile, data, url, addRemoveFav, mainType, lis
         >
             {data?.length > 0 && data?.map((project, i) => {
                 const id = mainType === "property" ? "property_id" : "id";
-                const price = formatToLacCr(project?.expected_price);
+                const price = formatPrice(project?.expected_price);
                 return (
                     <div className="card card-ads" key={i}>
                         <CardImageSlider data={project} keyword="gallery" id={id} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} />
@@ -347,9 +351,11 @@ const ProjectCardComponent = ({ isMobile, data, url, addRemoveFav, mainType, lis
                                     {project?.project_name || `${translation?.not_available ||"Not available"}`}
                                 </a>
                             </h4>
-                            <p className="mb-1">
+                            {project?.address && (
+                                <p className="mb-1">
                                 <i className="icon-feather-map-pin"></i> {project?.address}
                             </p>
+                            )}
                             <ul className="list-info mb-3">
                                 {project?.property_type_for && (
                                     <li><i className="icon-img-flat"></i> {project.property_type_for}</li>
@@ -414,9 +420,11 @@ const NewProjectGalary = ({ isMobile, data, url, addRemoveFav, mainType, listKey
                             <h4>
                                 <a href={`${url}/${item?.slug}`} target="_blank">{item?.project_name || `${translation?.not_available ||"Not available"}`}</a>
                             </h4>
-                            <p className="mb-1">
-                                <i className="icon-feather-map-pin"></i> Al Hamra Village, Ras Al Khaimah, UAE
+                            {item?.address && (
+                                <p className="mb-1">
+                                <i className="icon-feather-map-pin"></i> {item?.address}
                             </p>
+                            )}
                             <ul className="list-info">
                                 {item?.property_type_for && (
                                     <li><i className="icon-img-flat"></i> {item.property_type_for}</li>
@@ -448,34 +456,4 @@ const NewProjectGalary = ({ isMobile, data, url, addRemoveFav, mainType, listKey
 };
 
 
-function formatToLacCr(range) {
-    if (range === null || range === undefined) return "";
-
-    // Convert to string if it's a number
-    const rangeStr = typeof range === "number" ? range.toString() : range;
-
-    // Check if it's a range or a single value
-    const parts = rangeStr.split("-").map(Number);
-
-    if (parts.some(isNaN)) return "Invalid Input";
-
-    const formatNumber = (num) => {
-        if (num >= 10000000) {
-            return (num / 10000000).toFixed(1) + " Cr";
-        } else if (num >= 100000) {
-            return (num / 100000).toFixed(1) + " Lac";
-        } else {
-            return num.toLocaleString();
-        }
-    };
-
-    if (parts.length === 1) {
-        // Single value case
-        return formatNumber(parts[0]);
-    }
-
-    const [min, max] = parts;
-
-    return `${formatNumber(min)} - ${formatNumber(max)}`;
-}
 
