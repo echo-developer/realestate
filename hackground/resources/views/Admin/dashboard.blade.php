@@ -18,9 +18,9 @@
                     <div>
                         <div class="page-title-head center-elem">
                             <span class="d-inline-block pr-2">
-                                <i class="lnr-apartment opacity-6"></i>
+                                <i class="fa fa-rocket opacity-6"></i>
                             </span>
-                            <span class="d-inline-block">Minimal Dashboard</span>
+                            <span class="d-inline-block">Dashboard</span>
                         </div>
                         <div class="page-title-subheading opacity-10">
 

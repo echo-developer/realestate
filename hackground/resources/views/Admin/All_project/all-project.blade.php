@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="page-title-actions">
-                <ol class="breadcrumb float-sm-right">
+                <ol class="breadcrumb float-lg-end">
                     <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
                     <li class="breadcrumb-item active">Project List</li>
                 </ol>
@@ -88,8 +88,8 @@
         <section class="content-header mb-4">
             <!-- Basic Search Row -->
             <div class="row">
-                <div class="col-sm-4">
-                    <label for="prop_category_search" class="form-label">Project Name</label>
+                <div class="col-12">
+                    <!-- <label for="prop_category_search" class="form-label">Project Name</label> -->
                     <div class="input-group">
                         <input type="text" class="form-control" id="prop_category_search" name="term"
                             placeholder="Project Name" value="{{ request('term') }}">
@@ -257,11 +257,11 @@
                                 <div class="col-xxl">
                                     <div class="form-check-inline small">
                                         <input type="checkbox" class="form-check-input prop_feature_status" id="featured" data-prop-id="{{ $proj->id }}" {{ $proj->is_featured ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="featured">Make Featured</label>                                            
+                                        <label class="form-check-label" for="featured">Featured</label>                                            
                                     </div>
                                     <div class="form-check-inline small">
                                         <input type="checkbox" class="form-check-input prop_top_status" id="top" data-prop-id="{{ $proj->id }}" {{ $proj->is_top ? 'checked' :'' }}>
-                                        <label class="form-check-label" for="top">Make Top</label>
+                                        <label class="form-check-label" for="top">Top</label>
                                     </div>
                                 </div>
                                 <div class="col-xxl-auto">
