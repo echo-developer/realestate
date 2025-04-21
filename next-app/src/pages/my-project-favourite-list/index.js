@@ -11,7 +11,7 @@ import withAuth from "@/utils/withAuth";
 import ProjectAmenities from "@/components/postproject/ProjectAmenities";
 import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
 import useTranslation from "@/hooks/useTranslation";
-import { Row, Col} from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -25,7 +25,7 @@ const Index = () => {
   const [perPage, setPerPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPages, setCurrentPages] = useState(0);
-const translation = useTranslation();
+  const translation = useTranslation();
   useEffect(() => {
     if (memberId) FetchFavList(memberId);
   }, [memberId, projectId]);
@@ -83,7 +83,7 @@ const translation = useTranslation();
       });
 
       if (response && response.status === 1) {
-        toast.success("project deleted successfully");
+        // toast.success("project deleted successfully");
         setFavList((prevProperties) =>
           prevProperties.filter(
             (project) => project.id !== projectIdToDelete
@@ -133,7 +133,7 @@ const translation = useTranslation();
             <h1>
               {translation?.my_project_favourite_list || "My Project Favourite List"}
             </h1>
-          </div> 
+          </div>
           <div className="list-display">
             {isLoading ? (
               <div className="loading-spinner">
@@ -146,7 +146,7 @@ const translation = useTranslation();
                 <div className="card card-ads" key={project.project_id}>
                   <Row className="g-0">
                     <Col xxl={3} sm={4} xs={12}>
-                      <CardImageSlider data={project} keyword="gallery" icons={false} />
+                      <CardImageSlider data={project} keyword="gallery" icons={false} showFavIcon={false} />
                     </Col>
                     <Col xxl={9} sm={8} xs={12} className="position-relative">
                       <div className="card-body">
@@ -160,38 +160,39 @@ const translation = useTranslation();
                         </p>
                         <ul className="list-info mb-2">
                           <li>
-                            <i className="icon-img-flat"></i>{" "}
-                            {project.property_type_for}
+                            {project.property_type_for && <i className="icon-img-flat"></i>}{" "}
+                            {project.property_type_for || "Not Available"}
                           </li>
                           <li>
-                            <i className="icon-img-size"></i> {translation?.total_units || "Total Units:"}{" "}
-                            {project.total_units || "Not Available"}
+                            {project.total_units && <i className="icon-img-size"></i>}{" "}
+                            {translation?.total_units || "Total Units:"} {project.total_units || "Not Available"}
                           </li>
                           <li>
-                            <i className="icon-img-size"></i>  {translation?.occupied_area || "Occupied Area:"}{" "}
-                            {project.occupied_area || "Not Available"}
+                            {project.occupied_area && <i className="icon-img-size"></i>}{" "}
+                            {translation?.occupied_area || "Occupied Area:"} {project.occupied_area || "Not Available"}
                           </li>
                         </ul>
+
                         <p className="ad-post-date mb-2">
                           <i className="bi bi-calendar4"></i>{" "}
                           {useDateFormat(project.created_at)}
                         </p>
-                        <div className="d-flex gap-2">
-                          <button className="btn btn-sm btn-primary">
-                          {translation?.view_enquiry || "View Enquiry"}
+                        <div className="d-flex gap-2 justify-content-end">
+                          {/* <button className="btn btn-sm btn-primary">
+                            {translation?.view_enquiry || "View Enquiry"}
                           </button>
                           <button
                             onClick={() => handleShowModal(project.id)}
                             className="btn btn-sm btn-warning"
                           >
-                           {translation?.add_amenity || "Add Amenity"}
+                            {translation?.add_amenity || "Add Amenity"}
                           </button>
                           <Link
                             href={`/project-edit/${project.id}`}
                             className="btn btn-sm btn-outline-primary ms-auto"
                           >
                             <i className="bi bi-pencil-square"></i>
-                          </Link>
+                          </Link> */}
                           <button
                             onClick={() => handleDeleteClick(project.id)}
                             className="btn btn-sm btn-outline-danger"
@@ -206,20 +207,20 @@ const translation = useTranslation();
               ))
             ) : (
               <>
-              <div className="card border-0 text-center">
-                <div className="card-body">
-                  <img
-                    src="/assets/images/icons/9939447.png"
-                    alt="Icon"
-                    height={48}
-                    width={48}
-                    className="mb-2"
-                    loading="lazy"
-                  />
-                  <p className="text-muted">{translation?.no_record_founds || "No Record Founds"}</p>
+                <div className="card border-0 text-center">
+                  <div className="card-body">
+                    <img
+                      src="/assets/images/icons/9939447.png"
+                      alt="Icon"
+                      height={48}
+                      width={48}
+                      className="mb-2"
+                      loading="lazy"
+                    />
+                    <p className="text-muted">{translation?.no_record_founds || "No Record Founds"}</p>
+                  </div>
                 </div>
-              </div>
-            </>
+              </>
             )}
             {currentPages < totalPages && (
               <button
@@ -231,7 +232,7 @@ const translation = useTranslation();
             )}
           </div>
           <div className="text-center">
-           
+
           </div>
           {isModalOpen && (
             <ProjectAmenities
