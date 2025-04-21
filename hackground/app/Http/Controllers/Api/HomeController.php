@@ -239,7 +239,7 @@ class HomeController extends Controller
                     'property_type_for' => get_name_by_id('property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
                     'bedrooms' => $property->bedrooms,
                     'bathroom' => $property->bathrooms,
-                    'price' => $property->price_currency . " " . $property->expected_price,
+                    'price' => $property->expected_price,
                     'created_at' => $property->created_at,
                     'address' => $property->property_address,
                     'image_count' => getGalleriesCount($property->property_id, 'property'),
