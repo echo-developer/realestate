@@ -10,7 +10,7 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import withAuth from "@/utils/withAuth";
 import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
 import useTranslation from "@/hooks/useTranslation";
-import { Row, Col} from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
@@ -129,7 +129,7 @@ const Index = () => {
             <h1>
               {translation?.my_favourite_list || "My Favourite List"}{" "}
             </h1>
-          </div>          
+          </div>
           <div className="list-display">
             {isLoading ? (
               <div className="loading-spinner">
@@ -143,8 +143,8 @@ const Index = () => {
               favList.map((property) => (
                 <div className="card card-ads" key={property.property_id}>
                   <Row className="g-0">
-                    <Col xxl={3} sm={4} xs={12}>                     
-                      <CardImageSlider data={property} icons={false} />
+                    <Col xxl={3} sm={4} xs={12}>
+                      <CardImageSlider data={property} icons={false} showFavIcon={false}  />
                     </Col>
                     <Col xxl={9} sm={8} xs={12} className="position-relative">
                       <div className="card-body">
@@ -176,33 +176,43 @@ const Index = () => {
                           <i className="bi bi-calendar4"></i>{" "}
                           {useDateFormat(property.created_at)}
                         </p>
-                        <div className="d-flex gap-2">
-                          <button className="btn btn-sm btn-primary">
+                        {/* <div className="d-flex gap-2"> */}
+                        {/* <button className="btn btn-sm btn-primary">
                             {translation?.view_enquiry || "View Enquiry"}
-                          </button>
-                          <button
+                          </button> */}
+                        {/* <button
                             onClick={() =>
                               handleShowModal(property.property_id)
                             }
                             className="btn btn-sm btn-warning"
                           >
                             {translation?.add_amenity || "Add Amenity"}
-                          </button>
-                          <Link
+                          </button> */}
+                        {/* <Link
                             href={`/property-edit/${property.property_id}`}
                             className="btn btn-sm btn-outline-primary ms-auto"
                           >
                             <i className="bi bi-pencil-square"></i>
-                          </Link>
-                          <button
+                          </Link> */}
+                        {/* <button
                             onClick={() =>
                               handleDeleteClick(property.property_id)
                             }
                             className="btn btn-sm btn-outline-danger"
                           >
                             <i className="bi bi-trash3"></i>
+                          </button> */}
+                        {/* </div> */}
+                        <div className="d-flex gap-2 justify-content-end">
+                          <button
+                            onClick={() => handleDeleteClick(property.property_id)}
+                            className="btn btn-sm btn-outline-danger"
+                          >
+                            <i className="bi bi-trash3"></i>
                           </button>
                         </div>
+
+
                       </div>
                     </Col>
                   </Row>
