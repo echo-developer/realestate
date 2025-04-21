@@ -1435,6 +1435,19 @@ class ApiModel extends Model
         }
     }
 
+    public function addAdImpressions($advertisement_id)
+    {
+        $prev = DB::table('advertisements as a')->select('a.impressions')->where('a.advertisement_id', $advertisement_id)->first();
+        if ($prev) {
+            $prev_imp = $prev->impressions;
+            $curr_views = $prev_imp + 1;
+            DB::table('advertisements as a')->where('a.advertisement_id', $advertisement_id)->update(['a.impressions' => $curr_views]);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function getScheduleMeetingList($user_id, $schedule_date)
     {
         $schedule_date = Carbon::parse($schedule_date)->format('Y-m-d');

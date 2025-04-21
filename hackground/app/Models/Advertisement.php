@@ -530,6 +530,18 @@ class Advertisement extends Model
         ];
     }
 
+	public function requestChangeStatus($data=array(), $request_id)
+    {
+        DB::table('advertisement_request')
+            ->where('request_id', $request_id)
+            ->update([
+                'status' => $data['status'],
+            ]);
+        return [
+            'message' => 'Status updated successfully.',
+        ];
+    }
+
 	public function delete($id = '')
     {
         DB::table($this->table)

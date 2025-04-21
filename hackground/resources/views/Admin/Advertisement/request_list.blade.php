@@ -119,7 +119,7 @@
                                 {{ get_name_by_id('locality_names','locality_id',$item->locality_id,'en').', '.get_name_by_id('city_names','city_id',$item->city_id,'en') }}
                             </td>
                             <td> 
-                                <input data-id="{{$item->request_id}}" class="status d-none" type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ !$item->status ? 'checked' : '' }} onchange="change_status()">
+                                <input type="checkbox" class="ad_status d-none" data-id="{{ $item->request_id }}" data-toggle="toggle" data-on="Completed" data-off="Pending" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ $item->status ? 'checked' : '' }}>
                             </td>
                             <td class="text-right">
                                 {{-- <i class="fa fa-edit text-primary fa-md" onclick="edit('{{ $item->request_id }}')"></i> --}}
@@ -297,7 +297,7 @@
         });
         $.ajax({
             type: 'POST',
-            url: `{{ url('/advertisement/change-status') }}`,
+            url: `{{ url('/advertisement/request-change-status') }}`,
             data: {
                 'status': status,
                 'id': id

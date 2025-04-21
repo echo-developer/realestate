@@ -112,3 +112,5 @@ ALTER TABLE `pref_locality` ADD `locality_key` VARCHAR(70) NULL AFTER `city`, AD
 ALTER TABLE `pref_locality` CHANGE `order` `order` INT NULL;
 
 ALTER TABLE `pref_properties_location` CHANGE `locality` `locality` BIGINT NULL DEFAULT NULL;
+
+ALTER TABLE `pref_advertisements` ADD `impressions` INT NOT NULL DEFAULT '0' AFTER `views`;

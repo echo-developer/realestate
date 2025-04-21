@@ -203,6 +203,16 @@ class AdvertisementController extends Controller
         return response()->json($response);
     }
 
+    public function request_change_status(Request $req)
+    {
+        $request_id = $req->id;
+        $data = [
+            'status' => $req->status
+        ];
+        $response = $this->advertisement->requestChangeStatus($data, $request_id);
+        return response()->json($response);
+    }
+
     public function delete(Request $req)
     {
         $response = $this->advertisement->delete($req->id);

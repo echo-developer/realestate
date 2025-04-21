@@ -28,7 +28,7 @@ class AdvertisementController extends Controller
         }
     
         $ads = $this->apiModel->getPageAdvertisements($request->all());
-        
+       
         if($ads)
         {
             foreach($ads as $k=>$ad)
@@ -41,8 +41,10 @@ class AdvertisementController extends Controller
                 {
                     $ads[$k]->ad_image_mobile = asset('user_upload/advertisement/'.$ad->ad_image_mobile);
                 }
+                $ad_id = $ad->advertisement_id;
+                $this->apiModel->addAdImpressions($ad_id);
             }
-           
+
             return response()->json([
                     'status' => 1,
                     'message' => 'Advertisements fetched successfully.',

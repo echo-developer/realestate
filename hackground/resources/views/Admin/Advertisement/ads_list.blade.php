@@ -96,6 +96,7 @@
                             <th>Page</th>
                             <th>Position</th>
                             <th>Views</th>
+                            <th>Impressions</th>
                             <th>Type</th>
                             <th>Status</th>
                             <th class="text-right">Action</th>
@@ -108,7 +109,8 @@
                             <td>{{ $item->advertisement_id }}</td>
                             <td>{{ $item->page }}</td>
                             <td>{{ $item->position }}</td>
-                            <td>-</td>
+                            <td>{{ $item->views }}</td>
+                            <td>{{ $item->impressions }}</td>
                             <td>{{ $item->ad_type }}</td>
                             <td>
                                 <input type="checkbox" class="ad_status d-none" data-id="{{ $item->advertisement_id }}" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ $item->status ? 'checked' : '' }} >
