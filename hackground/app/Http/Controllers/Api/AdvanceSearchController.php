@@ -269,6 +269,7 @@ class AdvanceSearchController extends Controller
                     'unit_type' => $property->unit_type,
                     'price_currency' => $property->price_currency,
                     'exp_price' => $property->expected_price,
+                    'price_per_sqft' => ($property->area_in_sqft > 0) ? round($property->expected_price / $property->area_in_sqft, 2) : 0,
                     'property_size' => $property->super_area ?? 0,
                     'area_in_sqft' => $property->area_in_sqft ?? 0,
                     'created_at' => $property->created_at,

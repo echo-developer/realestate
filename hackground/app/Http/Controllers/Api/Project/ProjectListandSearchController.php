@@ -116,6 +116,7 @@ class ProjectListandSearchController extends Controller
                     'currency' => $project->additional->currency ?? null,
                     'token_amount' => $project->additional->token_amount ?? null,
                     'expected_price' => $project->additional->expected_price ?? null,
+                    'price_per_sqft' => ($project->settings->area_in_sqft > 0) ? round($project->additional->expected_price / $project->settings->area_in_sqft, 2) : 0,
                     'developer_details' => $project->additional->developer_details ?? null,
                     'developer_name' => $project->additional->developer_name ?? null,
                     'developer_experience' => $project->additional->developer_experience ?? null,
