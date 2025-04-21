@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="page-title-actions">
-                <ol class="breadcrumb float-sm-right">
+                <ol class="breadcrumb float-lg-end">
                     <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
                     <li class="breadcrumb-item active">Project List</li>
                 </ol>
@@ -85,11 +85,11 @@
     @endif
 
     <form action="{{ url('allproject/all-project-view') }}" method="get">
-        <section class="content-header mb-2">
+        <section class="content-header mb-4">
             <!-- Basic Search Row -->
             <div class="row">
-                <div class="col-sm-4">
-                    <label for="prop_category_search" class="form-label">Project Name</label>
+                <div class="col-12">
+                    <!-- <label for="prop_category_search" class="form-label">Project Name</label> -->
                     <div class="input-group">
                         <input type="text" class="form-control" id="prop_category_search" name="term"
                             placeholder="Project Name" value="{{ request('term') }}">
@@ -100,207 +100,102 @@
                 </div>
             </div>
 
-            <div class="mt-3" id="advanceFilter" style="display: none;">
-                <div class="d-flex flex-wrap gap-2 align-items-end">
-                    <!-- Project Type -->
-                    <div class="form-group ml-2">
-                        <label class="form-label">Project Type</label>
-                        <select class="form-control" name="project_type" style="min-width: 180px;">
-                            <option value="">Select</option>
-                            @foreach($project_type as $items)
-                            <option value="{{ $items->id }}"
-                                {{ request('project_type') == $items->id ? 'selected' : '' }}>
-                                {{ $items->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
+            <div class="card mt-3" id="advanceFilter" style="display: none;">
+                <div class="card-body pt-4">
+                    <div class="row -mb-3">
+                        <!-- Project Type -->
+                        <div class="col-xl-3 col-lg-4 col-sm-6">
+                        <div class="form-floating mb-4">
+                            
+                            <select class="form-select" name="project_type">
+                                <option value="">Select</option>
+                                @foreach($project_type as $items)
+                                <option value="{{ $items->id }}"
+                                    {{ request('project_type') == $items->id ? 'selected' : '' }}>
+                                    {{ $items->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                            <label>Project Type</label>
+                        </div>
+                        </div>
+                        
+                        <!-- Address -->
+                        <div class="col-xl-3 col-lg-4 col-sm-6">
+                        <div class="form-floating mb-4">
+                            
+                            <input type="text" value="{{ request('address') }}" class="form-control" name="address" placeholder="Enter Address">
+                            <label>Address</label>
+                        </div>
+                        </div>
 
-                    <!-- Address -->
-                    <div class="form-group ml-2">
-                        <label class="form-label">Address</label>
-                        <input type="text" value="{{ request('address') }}" class="form-control" name="address" placeholder="Enter Address" style="min-width: 180px;">
-                    </div>
+                        <!-- Occupied Area -->
+                        <div class="col-xl-3 col-lg-4 col-sm-6">
+                        <div class="form-floating mb-4">
+                            
+                            <input type="number" value="{{ request('occupied_area') }}" class="form-control" name="occupied_area" placeholder="Occupied Area">
+                            <label>Occupied Area (sq.ft)</label>
+                        </div>
+                        </div>
 
-                    <!-- Occupied Area -->
-                    <div class="form-group ml-2">
-                        <label class="form-label">Occupied Area (sq.ft)</label>
-                        <input type="number" value="{{ request('occupied_area') }}" class="form-control" name="occupied_area" placeholder="Occupied Area" style="min-width: 130px;">
-                    </div>
+                        <!-- Total Area -->
+                        <div class="col-xl-3 col-lg-4 col-sm-6">
+                        <div class="form-floating mb-4">
+                            
+                            <input type="number" value="{{ request('total_area') }}" class="form-control" name="total_area" placeholder="Total Area">
+                            <label>Total Area (sq.ft)</label>
+                        </div>
+                        </div>
 
-                    <!-- Total Area -->
-                    <div class="form-group ml-2">
-                        <label class="form-label">Total Area (sq.ft)</label>
-                        <input type="number" value="{{ request('total_area') }}" class="form-control" name="total_area" placeholder="Total Area" style="min-width: 130px;">
-                    </div>
+                        <!-- Possession Status -->
+                        <div class="col-xl-3 col-lg-4 col-sm-6">
+                        <div class="form-floating mb-4">
+                            
+                            <select class="form-select" name="possession_status">
+                                <option value="">Select</option>
+                                @foreach ($projectStatus as $status)
+                                <option value="{{ $status['status_id'] }}"
+                                    {{ request('possession_status') == $status['status_id'] ? 'selected' : '' }}>
+                                    {{ $status['status_name'] }}
+                                </option>
+                                @endforeach
 
-                    <!-- Possession Status -->
-                    <div class="form-group ml-2">
-                        <label class="form-label">Possession Status</label>
-                        <select class="form-control" name="possession_status" style="min-width: 180px;">
-                            <option value="">Select</option>
-                            @foreach ($projectStatus as $status)
-                            <option value="{{ $status['status_id'] }}"
-                                {{ request('possession_status') == $status['status_id'] ? 'selected' : '' }}>
-                                {{ $status['status_name'] }}
-                            </option>
-                            @endforeach
+                            </select>
+                            <label>Possession Status</label>
+                        </div>
+                        </div>
 
-                        </select>
-                    </div>
+                        <!-- Price -->
+                        <div class="col-xl-3 col-lg-4 col-sm-6">
+                            <div class="form-floating mb-4">
+                                
+                                <input type="number" value="{{ request('price') }}" class="form-control" name="price" placeholder="Enter Price">
+                                <label>Price</label>
+                            </div>
+                        </div>
 
-                    <!-- Price -->
-                    <div class="form-group ml-2">
-                        <label class="form-label">Price</label>
-                        <input type="number" value="{{ request('price') }}" class="form-control" name="price" placeholder="Enter Price" style="min-width: 120px;">
-                    </div>
-
-                    <!-- Search Button -->
-                    <div class="form-group ml-2">
-                        <button type="submit" class="btn btn-primary mt-4" style="min-width: 100px;">
-                            <i class="fa fa-search"></i> Search
-                        </button>
+                        <!-- Search Button -->
+                        <div class="col-xl-3 col-lg-4 col-sm-6">
+                        <div class="form-group mb-0">
+                            <button type="submit" class="btn btn-primary btn-block">Search</button>
+                        </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
-
         </section>
     </form>
 
 
 
-    <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Project List
-                @if ($user_id)
-                <div class="btn-actions-pane-right">
-                    <a href="{{ url('project/add_project?uid=' . $user_id) }}">
-                        <button type="button" class="btn btn-sm btn-success">Add Project</button>
-                    </a>
-                </div>
-                @endif
-            </div>
-
-            <div class="table-responsive" id="main_table">
-                <table id='table' class="mb-0 table">
-                    <thead>
-                        <tr>
-                            <th style="width:10%">Photo</th>
-                            <th style="width:20%">Project</th>
-                            <th style="width:20%">Address</th>
-                            <th style="width:15%">Post Date</th>
-                            <th style="width:10%">Leads</th>
-                            <th style="width:10%">Action</th>
-                            <th style="min-width:5px;" class="text-center">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if ($project->count() > 0)
-                        @foreach ($project as $proj)
-                        <tr>
-                            <!-- Displaying Photo -->
-                            <td>
-                                @php
-                                $defaultImage = asset(config('constants.NO_IMAGE'));
-                                $imageToShow = $defaultImage;
-                                if ($proj->gallery->count() > 0) {
-                                $firstGallery = $proj->gallery->first();
-                                $firstImage = $firstGallery->images->first();
-                                if ($firstImage && isset($firstImage->filename)) {
-                                $relativePath =
-                                'user_upload/project_images/' . $firstImage->filename;
-                                $localPath = public_path($relativePath);
-                                if (file_exists($localPath)) {
-                                $imageToShow = asset($relativePath);
-                                }
-                                }
-                                }
-                                @endphp
-                                <img src="{{ $imageToShow }}" alt="Project Photo" width="65"
-                                    height="50" />
-                            </td>
-
-                            <!-- Displaying Project Name (Assuming `name` exists) -->
-                            <td><a
-                                    href="{{ url('project/project_details') }}/{{ $proj->id }}">{{ $proj->project_name }}</a>
-                            </td>
-
-                            <!-- Displaying Address -->
-                            <td>{{ $proj->location->address }}</td>
-
-                            <!-- Displaying Post Date (Assuming `created_at` exists) -->
-                            <td>{{ $proj->created_at->format('d-M-Y') }}</td>
-
-                            <td>
-                                {{ projectLeadsCount($proj->id) }}
-                                <a href="{{ url('/enquiry/project-leads/' . $proj->id) }}" title="View Leads"><i
-                                        class="fa fa-eye"></i></a>
-                            </td>
-                            <td>
-                                <button class="btn btn-sm btn-warning"
-                                    onclick="addAmenity(`{{ $proj->id }}`)">Add Amenity</button>
-                                <button type="button" onclick="addProperty(`{{ $proj->id }}`)"
-                                    class="btn btn-primary">Add Property</button>
-
-                                <button onclick="addFloorConfig(`{{ $proj->id }}`)"
-                                    class="btn btn-sm btn-success">Add Floor Data</button>
-                                <button class="btn btn-sm btn-primary"
-                                    onclick="AddCertificate(`{{ $proj->id }}`)">Add
-                                    Certificate</button>
-                                <button class="btn btn-sm btn-danger"
-                                    onclick="openBrochureModal(`{{ $proj->id }}`)">
-                                    Upload Brochure
-                                </button>
-                            </td>
-                            <!-- Displaying Status -->
-                            <td>
-                                <div class="col-auto  mb-2">
-
-                                    <select name="prop_status" id="prop_status"
-                                        data-property-id="{{ $proj->id }}"
-                                        class="prop_status form-control form-control-sm">
-                                        @foreach ($statusMapping as $key => $value)
-                                        <option value="{{ $value }}"
-                                            {{ $proj->status == $key ? 'selected' : '' }}>
-                                            {{ strtoupper($value) }}
-                                        </option>
-                                        @endforeach
-                                        <option value="delete">DELETE</option>
-                                        <option value="edit_view">Edit And View</option>
-                                    </select>
-
-                                </div>
-                                <div class="col-auto">
-
-                                    <input type="checkbox" class="prop_feature_status"
-                                        data-prop-id="{{ $proj->id }}"
-                                        {{ $proj->is_featured ? 'checked' : '' }}>Make Featured
-                                    <input type="checkbox" class="prop_top_status"
-                                        data-prop-id="{{ $proj->id }}"
-                                        {{ $proj->is_top ? 'checked' : '' }}>Make Top
-
-
-                                </div>
-
-                            </td>
-                        </tr>
-                        @endforeach
-                        @else
-                        <tr>
-                            <td colspan="10"><i class="icon-feather-thumbs-down fa-md"></i> &nbsp; Sorry, No records !</td>
-                        </tr>
-                        @endif
-                    </tbody>
-
-
-                </table>
-            </div>
-            
-        </div>
+    @if ($user_id)
+    <div class="text-end mb-3">
+        <a href="{{ url('project/add_project?uid=' . $user_id) }}">
+            <button type="button" class="btn btn-sm btn-success">Add Project</button>
+        </a>
     </div>
+    @endif
+
     <div class="row" id="main_table">
                 @if ($project->count() > 0)
                 @foreach ($project as $proj)
@@ -326,20 +221,76 @@
                             <img src="{{ $imageToShow }}" alt="Project Photo" class="card-img" height="250" width="300" />                            
                         </div>
                         <div class="card-body">
-                            <!-- Displaying Project Name (Assuming `name` exists) -->
-                            <h4><a href="{{ url('project/project_details') }}/{{ $proj->id }}">{{ $proj->project_name }}</a></h4>
+                            <div class="d-flex justify-content-between">
+                                <!-- Displaying Project Name (Assuming `name` exists) -->
+                                <h4><a href="{{ url('project/project_details') }}/{{ $proj->id }}">{{ $proj->project_name }}</a></h4>
+
+                                <span>                                
+                                    <a href="{{ url('/enquiry/project-leads/' . $proj->id) }}" title="View Leads"><i class="ri-eye-fill"></i></a>
+                                    {{ projectLeadsCount($proj->id) }}
+                                </span>
+                            </div>
 
                             <!-- Displaying Address -->
-                            <p>{{ $proj->location->address }}</p>
+                            <p class="mb-2"><i class="ri-map-pin-line"></i> {{ $proj->location->address }}</p>
 
                             <!-- Displaying Post Date (Assuming `created_at` exists) -->
-                            <p>{{ $proj->created_at->format('d-M-Y') }}</p>
+                            <p class="mb-2"><i class="ri-calendar-line"></i> {{ $proj->created_at->format('d-M-Y') }}</p>
+
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <button class="btn btn-sm btn-outline-warning"
+                                    onclick="addAmenity(`{{ $proj->id }}`)"><i class="bi bi-plus-lg"></i> Amenity</button>
+                                <button type="button" onclick="addProperty(`{{ $proj->id }}`)"
+                                    class="btn btn-sm btn-outline-primary"><i class="bi bi-plus-lg"></i> Property</button>
+
+                                <button onclick="addFloorConfig(`{{ $proj->id }}`)"
+                                    class="btn btn-sm btn-outline-success"><i class="bi bi-plus-lg"></i> Floor Data</button>
+                                <button class="btn btn-sm btn-outline-primary"
+                                    onclick="AddCertificate(`{{ $proj->id }}`)"><i class="bi bi-plus-lg"></i>  Certificate</button>
+                                <button class="btn btn-sm btn-outline-danger"
+                                    onclick="openBrochureModal(`{{ $proj->id }}`)">
+                                    <i class="bi bi-upload"></i> Brochure
+                                </button>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xxl">
+                                    <div class="form-check-inline small">
+                                        <input type="checkbox" class="form-check-input prop_feature_status" id="featured" data-prop-id="{{ $proj->id }}" {{ $proj->is_featured ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="featured">Featured</label>                                            
+                                    </div>
+                                    <div class="form-check-inline small">
+                                        <input type="checkbox" class="form-check-input prop_top_status" id="top" data-prop-id="{{ $proj->id }}" {{ $proj->is_top ? 'checked' :'' }}>
+                                        <label class="form-check-label" for="top">Top</label>
+                                    </div>
+                                </div>
+                                <div class="col-xxl-auto">
+                                    <select name="prop_status" id="prop_status"
+                                        data-property-id="{{ $proj->id }}"
+                                        class="prop_status form-select form-select-sm">
+                                        @foreach ($statusMapping as $key => $value)
+                                        <option value="{{ $value }}"
+                                            {{ $proj->status == $key ? 'selected' : '' }}>
+                                            {{ strtoupper($value) }}
+                                        </option>
+                                        @endforeach
+                                        <option value="delete">DELETE</option>
+                                        <option value="edit_view">Edit And View</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </article>
                 @endforeach
                 @else
-                <article class="col-12"><i class="icon-feather-thumbs-down fa-md"></i> &nbsp; Sorry, No records ! </article>
+                <article class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <i class="icon-feather-thumbs-down fa-md"></i> &nbsp; Sorry, No records ! 
+                        </div>                        
+                    </div>
+                </article>
                 @endif
             </div>
 

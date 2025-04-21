@@ -39,7 +39,7 @@ import PropertyMobileFilters from "@/components/addtional/PropertyMobileFilter";
 import useIsMobile from "@/hooks/useIsMobile";
 
 const index = () => {
-  const { defaultCity, currency, currencyCode } = useAuth();
+  const { defaultCity, currency, currencyCode, formatPrice } = useAuth();
   const translation = useTranslation();
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
@@ -1691,7 +1691,8 @@ const index = () => {
                               </Link>
                             </h4>
                             <h5 className="mb-0">
-                              {property?.exp_price ? `${currencyCode || ""} ${property?.exp_price}` : "Price not Available"}
+                            {formatPrice(property?.exp_price) || "Price not Available"}
+                              {/* {property?.exp_price ? `${currencyCode || ""} ${property?.exp_price}` : "Price not Available"} */}
                               {/* {property?.price_currency && property?.exp_price
                                 ? `${property.price_currency
                                 } ${new Intl.NumberFormat("en-US").format(

@@ -30,6 +30,47 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
 
+  // const currencies = ["USD", "EUR", "GBP", "INR", "JPY", "AUD", "CAD", "CHF", "CNY", "AED"];
+
+  function formatPrice(price) {
+    if (!currencyCode) return price.toString();  
+  
+    const upperCurrency = currencyCode.toUpperCase();
+  
+    switch (upperCurrency) {
+  
+      case "INR":
+        if (price >= 10000000) return `${upperCurrency} ${(price / 10000000).toFixed(1)} Cr`;
+        if (price >= 100000) return `${upperCurrency} ${(price / 100000).toFixed(1)} Lac`;
+        if (price >= 1000) return `${upperCurrency} ${(price / 1000).toFixed(1)}K`;
+        return `${upperCurrency} ${price.toString()}`;
+  
+      case "JPY":
+      case "CNY":
+        if (price >= 1000000000) return `${upperCurrency} ${(price / 1000000000).toFixed(1)}B`;
+        if (price >= 1000000) return `${upperCurrency} ${(price / 1000000).toFixed(1)}M`;
+        if (price >= 1000) return `${upperCurrency} ${(price / 1000).toFixed(1)}K`;
+        return `${upperCurrency} ${price.toString()}`;
+  
+      case "USD":
+      case "EUR":
+      case "GBP":
+      case "AUD":
+      case "CAD":
+      case "CHF":
+      case "AED":
+        if (price >= 1000000000) return `${upperCurrency} ${(price / 1000000000).toFixed(1)}B`;
+        if (price >= 1000000) return `${upperCurrency} ${(price / 1000000).toFixed(1)}M`;
+        if (price >= 1000) return `${upperCurrency} ${(price / 1000).toFixed(1)}K`;
+        return `${upperCurrency} ${price.toString()}`;
+  
+      default:
+        return `${upperCurrency} ${price.toString()}`;
+    }
+}
+
+  
+
 
   useEffect(() => {
     if(memberId) {
@@ -118,7 +159,8 @@ export const AuthProvider = ({ children }) => {
         setUserData,
         uploadUserImage,
         currency,
-        currencyCode
+        currencyCode,
+        formatPrice
       }}
     >
       {children}

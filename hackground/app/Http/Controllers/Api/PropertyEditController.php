@@ -22,6 +22,12 @@ class PropertyEditController extends Controller
     {
 
         try {
+            if (!is_my_propertyOrProject($request->property_id, null)) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Unauthorized. Failed to get property',
+                ]);
+            }
 
             $lang = $request->input('lang', 'en');
 
@@ -34,6 +40,7 @@ class PropertyEditController extends Controller
             $landmarks = $this->EditPropertyLandmarks($propertyId) ?? [];
 
             $data = array_merge($address, $setting, $additional, $gallary, $landmarks);
+            $data['is_my_property'] = is_my_propertyOrProject($request->property_id, null);
             // Log::info("Request in AddmyFavoriteProperty:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
 

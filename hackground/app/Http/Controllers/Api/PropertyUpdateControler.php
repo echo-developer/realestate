@@ -25,7 +25,12 @@ class PropertyUpdateControler extends Controller
     {
 
         try {
-
+            if (!is_my_propertyOrProject($request->property_id, null)) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Unauthorized. Failed to Update',
+                ]);
+            }
             $this->Updateaddress($request);
             $this->UpdateAdditionalData($request);
             $this->UpdateSettingData($request);

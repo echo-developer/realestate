@@ -496,7 +496,7 @@ if (!function_exists('get_user_image')) {
             null
         );
 
-        return !empty($data) && isset($data[0]->image) ? asset('user_upload/profile_image/'.$data[0]->image) : null;
+        return !empty($data) && isset($data[0]->image) ? asset('user_upload/profile_image/' . $data[0]->image) : null;
         // $data = User::value("image")->where('id',$id)->first();
         // return !empty($data) ? asset('user_upload/profile_image/' . $data) : null;
     }
@@ -1588,16 +1588,51 @@ if (!function_exists('user_leads_availability')) {
     }
 }
 
-if(!function_exists('blur_text')){
+if (!function_exists('blur_text')) {
 
-    function blur_text($text,$is_blur=0){
-		$length=strlen($text);
-		if($length > 10){
-			$length=10;
-		}
-		if($is_blur){
-			return substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, $length);
-		}
-		return $text;
+    function blur_text($text, $is_blur = 0)
+    {
+        $length = strlen($text);
+        if ($length > 10) {
+            $length = 10;
+        }
+        if ($is_blur) {
+            return substr(str_shuffle("abcdefghijklmnopqrstuvwxyz"), 0, $length);
+        }
+        return $text;
+    }
+}
+
+if (!function_exists('is_my_propertyOrProject')) {
+
+    function is_my_propertyOrProject(?int $propertyId = null, ?int $projectId = null)
+    {
+        $userId = auth_user_id();
+
+        if (is_null($propertyId) && is_null($projectId)) {
+            return false;
+        }
+
+        if (!is_null($propertyId)) {
+            $isMyProperty = \App\Models\PrefProperty::where('id', $propertyId)
+                ->where('uid', $userId)
+                ->exists();
+
+            if ($isMyProperty) {
+                return true;
+            }
+        }
+
+        if (!is_null($projectId)) {
+            $isMyProject = \App\Models\PrefProject::where('id', $projectId)
+                ->where('uid', $userId)
+                ->exists();
+
+            if ($isMyProject) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

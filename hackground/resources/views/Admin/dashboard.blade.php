@@ -2,14 +2,8 @@
 
 @push('custom-css')
     <style>
-        .widget-title {
-            cursor: pointer;
-            transition: color 0.3s ease;
-            /* optional: smooth transition */
-        }
-
-        .widget-title:hover {
-            color: blue;
+        .card-fact{
+            border-radius: 0.5rem;
         }
     </style>
 @endpush
@@ -24,9 +18,9 @@
                     <div>
                         <div class="page-title-head center-elem">
                             <span class="d-inline-block pr-2">
-                                <i class="lnr-apartment opacity-6"></i>
+                                <i class="fa fa-rocket opacity-6"></i>
                             </span>
-                            <span class="d-inline-block">Minimal Dashboard</span>
+                            <span class="d-inline-block">Dashboard</span>
                         </div>
                         <div class="page-title-subheading opacity-10">
 
@@ -41,144 +35,128 @@
         </div>
 
         <div class="row">
-            <div class="col-md-6 col-lg-3">
-                <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-primary border-primary card"
-                    onclick="window.location.href='{{ url('allproperties/all-property-view') }}'">
-                    <div class="widget-chat-wrapper-outer">
-                        <div class="widget-chart-content">
-                            <div class="widget-title opacity-5 text-uppercase">Total Property</div>
-                            <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
-                                <div class="widget-chart-flex align-items-center">
-                                    <div>
-                                        {{ $data['total_properties'] }}
-                                    </div>
-                                </div>
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card card-fact border-0 shadow-sm mb-4" onclick="window.location.href='{{ url('allproperties/all-property-view') }}'">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">                                
+                                <h2>{{ $data['total_properties'] }}</h2>
+                                <p>Total Property</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('assets/icons/home-2.png') }}" alt="Property" height="48">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-danger border-success card"
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card card-fact border-0 shadow-sm mb-4"
                     onclick="location.href='{{ url('member/memberUser/Agent') }}'">
-                    <div class="widget-chat-wrapper-outer">
-                        <div class="widget-chart-content">
-                            <div class="widget-title opacity-5 text-uppercase">Total Agents</div>
-                            <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
-                                <div class="widget-chart-flex align-items-center">
-                                    <div>
-                                        {{ $data['total_agents'] }}
-                                    </div>
-                                </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <h2>{{ $data['total_agents'] }}</h2>
+                                <p>Total Agents</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('assets/icons/agent.png') }}" alt="Property" height="48">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-danger border-warning card"
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card card-fact border-0 shadow-sm mb-4"
                     onclick="location.href='{{ url('member/memberUser/Builder') }}'">
-                    <div class="widget-chat-wrapper-outer">
-                        <div class="widget-chart-content">
-                            <div class="widget-title opacity-5 text-uppercase">Total Builder</div>
-                            <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
-                                <div class="widget-chart-flex align-items-center">
-                                    <div>
-                                        {{ $data['total_builder'] }}
-                                    </div>
-                                </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <h2>{{ $data['total_builder'] }}</h2>
+                                <p>Total Builder</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('assets/icons/builder.png') }}" alt="Property" height="48">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-danger border-danger card"
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card card-fact border-0 shadow-sm mb-4"
                     onclick="location.href='{{ url('transaction/transaction_list') }}'">
-                    <div class="widget-chat-wrapper-outer">
-                        <div class="widget-chart-content">
-                            <div class="widget-title opacity-5 text-uppercase">Total Revenue</div>
-                            <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
-                                <div class="widget-chart-flex align-items-center">
-                                    <div>
-                                        {{ $data['total_revenue'] }}
-                                    </div>
-                                </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">                                
+                                <h2>{{ $data['total_revenue'] }}</h2>
+                                <p>Total Revenue</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('assets/icons/wallet.png') }}" alt="Property" height="48">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-warning border-info card"
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card card-fact border-0 shadow-sm mb-4"
                     onclick="location.href='{{ url('allproject/all-project-view') }}'">
-                    <div class="widget-chat-wrapper-outer">
-                        <div class="widget-chart-content">
-                            <div class="widget-title opacity-5 text-uppercase">Total Projects</div>
-                            <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
-                                <div class="widget-chart-flex align-items-center">
-                                    <div>
-                                        {{ $data['properties_for_sale'] }}
-                                    </div>
-
-                                </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <h2>{{ $data['properties_for_sale'] }}</h2>
+                                <p>Total Projects</p>                                
+                            </div>
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('assets/icons/project.png') }}" alt="Property" height="48">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-success border-alternate card"
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card card-fact border-0 shadow-sm mb-4"
                     onclick="location.href='{{ url('member/memberUser/Owner') }}'">
-                    <div class="widget-chat-wrapper-outer">
-                        <div class="widget-chart-content">
-                            <div class="widget-title opacity-5 text-uppercase">Total Owner</div>
-                            <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
-                                <div class="widget-chart-flex align-items-center">
-                                    <div>
-                                        {{ $data['total_owner'] }}
-
-                                    </div>
-
-                                </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <h2>{{ $data['total_owner'] }}</h2>
+                                <p>Total Owner</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('assets/icons/owner.png') }}" alt="Property" height="48">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-warning border-alternate card"
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card card-fact border-0 shadow-sm mb-4"
                     onclick="location.href='{{ url('admin_notifiaction') }}'">
-                    <div class="widget-chat-wrapper-outer">
-                        <div class="widget-chart-content">
-                            <div class="widget-title opacity-5 text-uppercase">Notification</div>
-                            <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
-                                <div class="widget-chart-flex align-items-center">
-                                    <div>
-                                        {{ $data['notification'] ?? 0 }}
-
-                                    </div>
-
-                                </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">                                
+                                <h2>{{ $data['notification'] ?? 0 }}</h2>
+                                <p>Notification</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('assets/icons/notification.png') }}" alt="Property" height="48">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="widget-chart widget-chart2 text-left mb-3 card-btm-border card-shadow-primary border-alternate card"
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="card card-fact border-0 shadow-sm mb-4"
                     onclick="location.href='{{ url('enquiry/list') }}'">
-                    <div class="widget-chat-wrapper-outer">
-                        <div class="widget-chart-content">
-                            <div class="widget-title opacity-5 text-uppercase">All Enquires</div>
-                            <div class="widget-numbers mt-2 fsize-4 mb-0 w-100">
-                                <div class="widget-chart-flex align-items-center">
-                                    <div>
-                                        {{ $data['enquiry'] }}
-
-                                    </div>
-
-                                </div>
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">                                
+                                <h2>{{ $data['enquiry'] }}</h2>
+                                <p>All Enquires</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('assets/icons/950299.png') }}" alt="Property" height="48">
                             </div>
                         </div>
                     </div>
@@ -186,7 +164,7 @@
             </div>
         </div>
         <div class="overview-card">
-            <div class="header">
+            <div class="header align-items-start">
                 <h3>Overview</h3>
                 <div class="metrics">
                     <div class="metric">
@@ -270,71 +248,4 @@
 
 @endsection
 
-@push('custom-js')
-    <script>
-        const saleData = [<?php echo implode(
-            ',',
-            array_map(function ($sale) {
-                return '"' . $sale . '"';
-            }, $data['chart_sale']),
-        ); ?>].map(Number);
-        const rentData = [<?php echo implode(
-            ',',
-            array_map(function ($rent) {
-                return '"' . $rent . '"';
-            }, $data['chart_rent']),
-        ); ?>].map(Number);
 
-        const allData = saleData.concat(rentData);
-        const maxValue = Math.max(...allData);
-        const suggestedMax = Math.ceil(maxValue / 10) * 10;
-
-        const ctx = document.getElementById('overviewChart').getContext('2d');
-        const overviewChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [<?php echo implode(
-                    ',',
-                    array_map(function ($month) {
-                        return '"' . $month . '"';
-                    }, $data['chart_labels']),
-                ); ?>],
-                datasets: [{
-                        label: 'Total Sale',
-                        data: saleData,
-                        fill: true,
-                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
-                        borderColor: '#4f46e5',
-                        tension: 0.4
-                    },
-                    {
-                        label: 'Total Rent',
-                        data: rentData,
-                        fill: true,
-                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                        borderColor: '#22c55e',
-                        tension: 0.4
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        suggestedMax: suggestedMax,
-                        ticks: {
-                            callback: value => value
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
-        });
-    </script>
-@endpush
