@@ -254,7 +254,7 @@ const index = () => {
                   <h3>
                     {/* {currencyCode}{" "}
                     {propertyDetails?.price || "Not available"} */}
-                    {formatPrice(propertyDetails?.price || "Not available")}
+                    {propertyDetails?.price ? formatPrice(propertyDetails?.price) : ""}
                   </h3>
                   {propertyDetails?.property_features?.bedrooms && (
                     <p>

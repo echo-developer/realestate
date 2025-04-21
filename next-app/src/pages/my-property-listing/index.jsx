@@ -107,6 +107,20 @@ const TabComponent = () => {
     }
 
     const handleTabChange = (tab) => {
+        if(activeTab !== tab) {
+            setLoading(true);
+            setPropertyData(prev => {
+                return {
+                    ...prev,
+                    [tab]: {
+                        ...prev[tab],
+                        data: [],
+                        current_page: 0,
+                        total_pages: 0,
+                    }
+                }
+            })
+        }
         setActiveTab(tab);
         setPostFor("");
     
@@ -122,6 +136,7 @@ const TabComponent = () => {
     const renderTabContent = () => {
         if (loading) {
             return (
+                <>
                 <ShimmerContentBlock
                     title
                     text
@@ -129,6 +144,14 @@ const TabComponent = () => {
                     thumbnailWidth={350}
                     thumbnailHeight={50}
                 />
+                <ShimmerContentBlock
+                    title
+                    text
+                    cta
+                    thumbnailWidth={350}
+                    thumbnailHeight={50}
+                />
+                </>
             );
         }
 

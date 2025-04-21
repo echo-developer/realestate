@@ -332,16 +332,14 @@ const PropertySidebar = ({
                 </div>
               </div>
             </div>
-            <div className="card border-0 shadow-1 mb-4">
+            {/* <div className="card border-0 shadow-1 mb-4">
               <div className="card-body">
                 <h4 className="mb-3 text-primary">
                   {translation?.looking_for_a_property ||
                     "Looking For A Property"}
                 </h4>
 
-                {/* Formik Form */}
                 <form onSubmit={handleSubmit}>
-                  {/* Name Field */}
                   <FloatingLabel
                     controlId="name"
                     label={translation?.name || "Name"}
@@ -360,7 +358,6 @@ const PropertySidebar = ({
                     )}
                   </FloatingLabel>
 
-                  {/* Email Field */}
                   <FloatingLabel
                     controlId="email"
                     label={translation?.email_address || "Email Address"}
@@ -379,7 +376,6 @@ const PropertySidebar = ({
                     )}
                   </FloatingLabel>
 
-                  {/* Phone Field */}
                   <div className="input-group mb-3">
                     <BootstrapForm.Select
                       value={formData.countryCode}
@@ -415,7 +411,6 @@ const PropertySidebar = ({
                     <div className="text-danger small">{errors.phone}</div>
                   )}
 
-                  {/* Message Field */}
                   <FloatingLabel
                     controlId="message"
                     label={translation?.message || "Message"}
@@ -434,13 +429,12 @@ const PropertySidebar = ({
                     )}
                   </FloatingLabel>
 
-                  {/* Submit Button */}
                   <Button variant="primary" type="submit" className="btn-block">
                     {translation?.contact_now || "Contact Now"}
                   </Button>
                 </form>
               </div>
-            </div>
+            </div> */}
           </>
         )}
 

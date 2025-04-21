@@ -264,7 +264,7 @@ const ResidentialProjectDetails = ({
                       {/* {currencyCode || ""}
                     {detailsData?.expected_price ||
                       `${translation?.not_available || "Price Not Available"}`} */}
-                      {formatPrice(detailsData?.expected_price) || "Price Not Available"}
+                      {detailsData?.expected_price ? formatPrice(detailsData?.expected_price) : ""}
                   </h3>
                   <p>
                     {detailsData?.available_bhk

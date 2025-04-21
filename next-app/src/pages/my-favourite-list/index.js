@@ -11,13 +11,14 @@ import withAuth from "@/utils/withAuth";
 import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
 import useTranslation from "@/hooks/useTranslation";
 import { Row, Col } from "react-bootstrap";
+import { ShimmerContentBlock } from "react-shimmer-effects"
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [favList, setFavList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const memberId = GetMemberId();
   const [propertyIdToDelete, setPropertyIdToDelete] = useState(null);
   const [propertyId, serPropertyId] = useState();
@@ -132,19 +133,35 @@ const Index = () => {
           </div>
           <div className="list-display">
             {isLoading ? (
-              <div className="loading-spinner">
-                <div className="spinner-border" role="status">
-                  <span className="visually-hidden">
-                    {translation?.loading || "Loading...."}
-                  </span>
-                </div>
-              </div>
+              // <div className="loading-spinner">
+              //   <div className="spinner-border" role="status">
+              //     <span className="visually-hidden">
+              //       {translation?.loading || "Loading...."}
+              //     </span>
+              //   </div>
+              // </div>
+              <>
+                <ShimmerContentBlock
+                  title
+                  text
+                  cta
+                  thumbnailWidth={350}
+                  thumbnailHeight={50}
+                />
+                <ShimmerContentBlock
+                  title
+                  text
+                  cta
+                  thumbnailWidth={350}
+                  thumbnailHeight={50}
+                />
+              </>
             ) : favList.length > 0 ? (
               favList.map((property) => (
                 <div className="card card-ads" key={property.property_id}>
                   <Row className="g-0">
                     <Col xxl={3} sm={4} xs={12}>
-                      <CardImageSlider data={property} icons={false} showFavIcon={false}  />
+                      <CardImageSlider data={property} icons={false} showFavIcon={false} />
                     </Col>
                     <Col xxl={9} sm={8} xs={12} className="position-relative">
                       <div className="card-body">
@@ -157,21 +174,25 @@ const Index = () => {
                           <i className="bi bi-geo-alt"></i> {property.address}
                         </p>
                         <ul className="list-info mb-2">
-                          <li>
-                            <i className="icon-img-flat"></i>{" "}
-                            {property.property_type_for}
-                          </li>
-                          <li>
-                            <i className="icon-img-bed"></i>{" "}
-                            {translation?.bedrooms || "Bedrooms"}{" "}
-                            {property.bedrooms || "N/A"}
-                          </li>
-                          <li>
-                            <i className="icon-img-tub"></i>{" "}
-                            {translation?.bathrooms || "Bathrooms"}{" "}
-                            {property.bathroom || "N/A"}
-                          </li>
+                          {property?.property_type_for && (
+                            <li>
+                              <i className="icon-img-flat"></i> {property.property_type_for}
+                            </li>
+                          )}
+
+                          {property?.bedrooms && (
+                            <li>
+                              <i className="icon-img-bed"></i> {translation?.bedrooms || "Bedrooms"} {property.bedrooms}
+                            </li>
+                          )}
+
+                          {property?.bathroom && (
+                            <li>
+                              <i className="icon-img-tub"></i> {translation?.bathrooms || "Bathrooms"} {property.bathroom}
+                            </li>
+                          )}
                         </ul>
+
                         <p className="ad-post-date mb-2">
                           <i className="bi bi-calendar4"></i>{" "}
                           {useDateFormat(property.created_at)}
@@ -267,7 +288,7 @@ const Index = () => {
       </aside>
 
       {/* Add CSS for the custom spinner */}
-      <style jsx>{`
+      {/* <style jsx>{`
         .loading-spinner {
           color: gray;
           display: flex;
@@ -281,7 +302,7 @@ const Index = () => {
           height: 3rem;
           border-width: 0.25em;
         }
-      `}</style>
+      `}</style> */}
     </DashboardLayout>
   );
 };

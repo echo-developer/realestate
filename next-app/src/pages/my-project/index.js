@@ -25,7 +25,7 @@ const TabComponent = () => {
         if (memberId) {
             fetchProjectData(activeTab);
         }
-    }, [activeTab ,memberId]);
+    }, [activeTab, memberId]);
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
@@ -35,9 +35,9 @@ const TabComponent = () => {
         setCurrentPages(0);
     };
 
-    const fetchProjectData = async (type, loadMore, page=1) => {
-        if(!loadMore) {
-            setLoading(true); 
+    const fetchProjectData = async (type, loadMore, page = 1) => {
+        if (!loadMore) {
+            setLoading(true);
         }
         try {
             const response = await callApi({
@@ -51,7 +51,7 @@ const TabComponent = () => {
             });
 
             if (response && response?.status === 1) {
-                if(!loadMore) {
+                if (!loadMore) {
                     setProjectData(response.data);
                     setCurrentPages(response?.pagination?.current_page);
                     setTotalPages(response?.pagination?.total_pages)
@@ -75,13 +75,22 @@ const TabComponent = () => {
     const renderTabContent = () => {
         if (loading) {
             return (
-                <ShimmerContentBlock
-                    title
-                    text
-                    cta
-                    thumbnailWidth={350}
-                    thumbnailHeight={50}
-                />
+                <>
+                    <ShimmerContentBlock
+                        title
+                        text
+                        cta
+                        thumbnailWidth={350}
+                        thumbnailHeight={50}
+                    />
+                    <ShimmerContentBlock
+                        title
+                        text
+                        cta
+                        thumbnailWidth={350}
+                        thumbnailHeight={50}
+                    />
+                </>
             );
         }
 
@@ -89,7 +98,7 @@ const TabComponent = () => {
             case "published":
                 return <ProjectPublishComponent projectData={projectData} />;
             case "pending":
-                return <ProjectPendingComponent projectData={projectData}/>;
+                return <ProjectPendingComponent projectData={projectData} />;
             case "expired":
                 return <ProjectExpiredComponent projectData={projectData} />;
             case "draft":
@@ -123,9 +132,8 @@ const TabComponent = () => {
                         <li className="nav-item">
                             <a
                                 role="button"
-                                className={`nav-link ${
-                                    activeTab === "published" ? "active" : ""
-                                }`}
+                                className={`nav-link ${activeTab === "published" ? "active" : ""
+                                    }`}
                                 onClick={() => handleTabChange("published")}
                             >
                                 {translation?.publish || "Publish"}
@@ -133,53 +141,62 @@ const TabComponent = () => {
                         </li>
                         <li className="nav-item">
                             <a
-                            role="button"
-                                className={`nav-link ${
-                                    activeTab === "pending" ? "active" : ""
-                                }`}
+                                role="button"
+                                className={`nav-link ${activeTab === "pending" ? "active" : ""
+                                    }`}
                                 onClick={() => handleTabChange("pending")}
                             >
-                               {translation?.pending || "Pending"} 
+                                {translation?.pending || "Pending"}
                             </a>
                         </li>
                         <li className="nav-item">
                             <a
-                            role="button"
-                                className={`nav-link ${
-                                    activeTab === "expired" ? "active" : ""
-                                }`}
+                                role="button"
+                                className={`nav-link ${activeTab === "expired" ? "active" : ""
+                                    }`}
                                 onClick={() => handleTabChange("expired")}
                             >
-                                 {translation?.expired || "Expired"} 
+                                {translation?.expired || "Expired"}
                             </a>
                         </li>
                         <li className="nav-item">
                             <a
-                            role="button"
-                                className={`nav-link ${
-                                    activeTab === "draft" ? "active" : ""
-                                }`}
+                                role="button"
+                                className={`nav-link ${activeTab === "draft" ? "active" : ""
+                                    }`}
                                 onClick={() => handleTabChange("draft")}
                             >
-                                  {translation?.draft || "Draft"} 
+                                {translation?.draft || "Draft"}
                             </a>
                         </li>
                     </ul>
                     {!loading && renderTabContent()}
                     {loading && (
-                        <div className="loading-spinner">
-                        <div className="spinner-border" role="status">
-                          <span className="visually-hidden"> {translation?.loading || "Loading...."} </span>
-                        </div>
-                      </div>
+                        <>
+                            <ShimmerContentBlock
+                                title
+                                text
+                                cta
+                                thumbnailWidth={350}
+                                thumbnailHeight={50}
+                            />
+                            <ShimmerContentBlock
+                                title
+                                text
+                                cta
+                                thumbnailWidth={350}
+                                thumbnailHeight={50}
+                            />
+                        </>
+
                     )}
                     {currentPages < totalPages && (
-                    <button
-                        className="btn btn-primary btn-lg d-block mx-auto mt-4"
-                        onClick={handleLoadMoreClick}>
-                            {translation?.load_more || "Load More"} 
-                    </button>
-                    )} 
+                        <button
+                            className="btn btn-primary btn-lg d-block mx-auto mt-4"
+                            onClick={handleLoadMoreClick}>
+                            {translation?.load_more || "Load More"}
+                        </button>
+                    )}
                 </div>
             </aside>
             <aside className="col-xl-auto col-12">

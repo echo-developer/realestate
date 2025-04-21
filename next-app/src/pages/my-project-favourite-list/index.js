@@ -12,13 +12,14 @@ import ProjectAmenities from "@/components/postproject/ProjectAmenities";
 import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
 import useTranslation from "@/hooks/useTranslation";
 import { Row, Col } from "react-bootstrap";
+import { ShimmerContentBlock } from "react-shimmer-effects"
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [favList, setFavList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const memberId = GetMemberId();
   const [projectIdToDelete, setProjectIdToDelete] = useState(null);
   const [projectId, setProjectId] = useState();
@@ -136,11 +137,27 @@ const Index = () => {
           </div>
           <div className="list-display">
             {isLoading ? (
-              <div className="loading-spinner">
-                <div className="spinner-border" role="status">
-                  <span className="visually-hidden"> {translation?.loading || "Loading...."} </span>
-                </div>
-              </div>
+              // <div className="loading-spinner">
+              //   <div className="spinner-border" role="status">
+              //     <span className="visually-hidden"> {translation?.loading || "Loading...."} </span>
+              //   </div>
+              // </div>
+              <>
+                <ShimmerContentBlock
+                  title
+                  text
+                  cta
+                  thumbnailWidth={350}
+                  thumbnailHeight={50}
+                />
+                <ShimmerContentBlock
+                  title
+                  text
+                  cta
+                  thumbnailWidth={350}
+                  thumbnailHeight={50}
+                />
+              </>
             ) : favList.length > 0 ? (
               favList.map((project) => (
                 <div className="card card-ads" key={project.project_id}>
@@ -160,18 +177,19 @@ const Index = () => {
                         </p>
                         <ul className="list-info mb-2">
                           <li>
-                            {project.property_type_for && <i className="icon-img-flat"></i>}{" "}
-                            {project.property_type_for || "Not Available"}
+                            {project.property_type_for ? <><i className="icon-img-flat"></i> </> : null}
+                            {project.property_type_for || ""}
                           </li>
                           <li>
-                            {project.total_units && <i className="icon-img-size"></i>}{" "}
-                            {translation?.total_units || "Total Units:"} {project.total_units || "Not Available"}
+                            {project.total_units ? <><i className="bi bi-building text-primary"></i> </> : null}
+                            {translation?.total_units || "Total Units:"} {project.total_units || ""}
                           </li>
                           <li>
-                            {project.occupied_area && <i className="icon-img-size"></i>}{" "}
-                            {translation?.occupied_area || "Occupied Area:"} {project.occupied_area || "Not Available"}
+                            {project.occupied_area ? <><i className="icon-img-ratio"></i> </> : null}
+                            {translation?.occupied_area || "Occupied Area:"} {project.occupied_area || ""}
                           </li>
                         </ul>
+
 
                         <p className="ad-post-date mb-2">
                           <i className="bi bi-calendar4"></i>{" "}
@@ -245,7 +263,7 @@ const Index = () => {
       </aside>
 
       {/* Add CSS for the custom spinner */}
-      <style jsx>{`
+      {/* <style jsx>{`
         .loading-spinner {
           color: gray;
           display: flex;
@@ -259,7 +277,7 @@ const Index = () => {
           height: 3rem;
           border-width: 0.25em;
         }
-      `}</style>
+      `}</style> */}
     </DashboardLayout>
   );
 };

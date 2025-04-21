@@ -256,7 +256,7 @@ const CommercialProjectDetails = ({
                       {/* {currencyCode}
                     {detailsData?.expected_price ||
                       `${translation?.not_available || "Price Not available"}`} */}
-                      {formatPrice(detailsData?.expected_price) || "Price Not available"}
+                      {detailsData?.expected_price ? formatPrice(detailsData?.expected_price) : ""}
                   </h3>
                 </div>
                 <div className="col-md-auto text-md-end">
