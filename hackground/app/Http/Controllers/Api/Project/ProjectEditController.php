@@ -31,6 +31,12 @@ class ProjectEditController extends Controller
     public function editProject(Request $request)
     {
         try {
+            if (!is_my_propertyOrProject(null, $request->project_id)) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Unauthorized. Failed to get Project',
+                ]);
+            }
             $lang = $request->input('lang', 'en');
 
 
@@ -107,6 +113,7 @@ class ProjectEditController extends Controller
             $flattened['main_road_facing'] = isset($flattened['main_road_facing']) && $flattened['main_road_facing'] === 'Y' ? 'Yes' : 'No';
             $flattened['city'] = get_name_by_id('city_names', 'city_id', $flattened['city'], 'en');
             $flattened['landmarks'] = $formattedLandmarks;
+            $flattened['is_my_project'] = is_my_propertyOrProject(null, $request->project_id);
 
             if (!empty($flattened['gallery'])) {
                 foreach ($flattened['gallery'] as &$gallery) {
@@ -136,7 +143,12 @@ class ProjectEditController extends Controller
     {
 
         try {
-
+            if (!is_my_propertyOrProject(null, $request->project_id)) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Unauthorized. Failed to Update',
+                ]);
+            }
             $this->Updateaddress($request);
             $this->UpdateAdditionalData($request);
             $this->UpdateSettingData($request);
