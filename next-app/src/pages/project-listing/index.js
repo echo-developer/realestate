@@ -63,7 +63,7 @@ const Index = () => {
       const newState = { ...prevState };
       if (!newState[key]) {
         newState[key] = true;
-        setIsOverlayVisible(true); 
+        setIsOverlayVisible(true);
       } else {
         newState[key] = false;
         setIsOverlayVisible(false); // Hide overlay when dropdown is closed
@@ -81,8 +81,8 @@ const Index = () => {
   const handleClickOutside = (e) => {
     // If clicked outside the dropdown and overlay, close all dropdowns
     // if (!e.target.closest('.dropdown') && !e.target.closest('.overlay')) {
-      setDropdownState({});
-      setIsOverlayVisible(false);
+    setDropdownState({});
+    setIsOverlayVisible(false);
     // }
   };
 
@@ -184,8 +184,9 @@ const Index = () => {
     );
   };
 
+
   useEffect(() => {
-    if (router?.isReady) {
+    if (router?.isReady && defaultCity) {
       FetchProjectListData();
     }
   }, [
@@ -318,13 +319,22 @@ const Index = () => {
                 </div>
 
                 {loading ? (
-                  <ShimmerContentBlock
-                    title
-                    text
-                    cta
-                    thumbnailWidth={350}
-                    thumbnailHeight={50}
-                  />
+                  <>
+                    <ShimmerContentBlock
+                      title
+                      text
+                      cta
+                      thumbnailWidth={350}
+                      thumbnailHeight={50}
+                    />
+                    <ShimmerContentBlock
+                      title
+                      text
+                      cta
+                      thumbnailWidth={350}
+                      thumbnailHeight={50}
+                    />
+                  </>
                 ) : projectListData.length > 0 ? (
                   <ResidentialProjectList
                     projectListData={projectListData}

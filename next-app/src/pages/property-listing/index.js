@@ -96,7 +96,7 @@ const index = () => {
   });
   const [minBudget, setMinBudget] = useState("");
   const [maxBudget, setMaxBudget] = useState("");
-  const [propertyList, setPropertyList] = useState(null);
+  const [propertyList, setPropertyList] = useState([]);
   const [propertyTypeList, setPropertyTypeList] = useState([]);
   const [subPropertyList, setSubPropertyList] = useState([]);
   const [page, setpage] = useState(1);
@@ -270,7 +270,7 @@ const index = () => {
   }, []);
 
   useEffect(() => {
-    if (router?.isReady) {
+    if (router?.isReady && defaultCity) {
       const queryObject = getSearchParamsData();
       // SET THE STATES
       if (queryObject?.post_for) {
@@ -690,7 +690,9 @@ const index = () => {
     if (router?.query?.post_for)
       existingParams.set("post_for", router?.query?.post_for || "sell");
 
-    existingParams.set("city_id", defaultCity?.city_id);
+    if(defaultCity?.city_id) {
+      existingParams.set("city_id", defaultCity.city_id);
+    }
 
     const payloadSearch = Object.fromEntries(existingParams.entries());
     const { sort_key, sort_order } = router?.query;
@@ -1645,6 +1647,7 @@ const index = () => {
               <div className="list-display">
                 {/* Show shimmer when loading */}
                 {loading ? (
+                  <>
                   <ShimmerContentBlock
                     title
                     text
@@ -1652,6 +1655,14 @@ const index = () => {
                     thumbnailWidth={350}
                     thumbnailHeight={50}
                   />
+                  <ShimmerContentBlock
+                    title
+                    text
+                    cta
+                    thumbnailWidth={350}
+                    thumbnailHeight={50}
+                  />
+                  </>
                 ) : !loading && propertyList?.length === 0 ? (
                   // Show No Result Found only when loading is false and no data is present
                   <div
