@@ -271,7 +271,7 @@ const ProjectSidebar = ({
                 </div>
               </div>
             </div>
-            <div className="card border-0 shadow-1 mb-4">
+            {/* <div className="card border-0 shadow-1 mb-4">
               <div className="card-body">
                 <h4 className="mb-3 text-primary">
                   {translation?.looking_for_a_project ||
@@ -360,7 +360,7 @@ const ProjectSidebar = ({
                   </Button>
                 </form>
               </div>
-            </div>
+            </div> */}
           </>
         )}
         <iframe

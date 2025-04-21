@@ -50,7 +50,7 @@ const ResidentialProjectDetails = ({
   displayNumber,
   viewNumber,
 }) => {
-  const { defaultCity, currencyCode } = useAuth();
+  const { defaultCity, currencyCode, formatPrice } = useAuth();
   const [visible, setVisible] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [projectId, setprojectId] = useState();
@@ -261,9 +261,10 @@ const ResidentialProjectDetails = ({
                       `${translation?.not_available ||
                       `${translation?.not_available || "Not Available"}`
                       }`}{" "} */}
-                      {currencyCode || ""}
+                      {/* {currencyCode || ""}
                     {detailsData?.expected_price ||
-                      `${translation?.not_available || "Not Available"}`}
+                      `${translation?.not_available || "Price Not Available"}`} */}
+                      {formatPrice(detailsData?.expected_price) || "Price Not Available"}
                   </h3>
                   <p>
                     {detailsData?.available_bhk

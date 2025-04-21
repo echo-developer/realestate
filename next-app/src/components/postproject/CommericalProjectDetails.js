@@ -50,7 +50,7 @@ const CommercialProjectDetails = ({
   displayNumber,
   viewNumber,
 }) => {
-  const { defaultCity, currencyCode } = useAuth();
+  const { defaultCity, currencyCode, formatPrice } = useAuth();
   const [visible, setVisible] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [projectId, setprojectId] = useState();
@@ -253,9 +253,10 @@ const CommercialProjectDetails = ({
                   <h3>
                     {/* {detailsData?.currency ||
                       `${translation?.not_available || "Not available"}`}{" "} */}
-                      {currencyCode}
+                      {/* {currencyCode}
                     {detailsData?.expected_price ||
-                      `${translation?.not_available || "Not available"}`}
+                      `${translation?.not_available || "Price Not available"}`} */}
+                      {formatPrice(detailsData?.expected_price) || "Price Not available"}
                   </h3>
                 </div>
                 <div className="col-md-auto text-md-end">
