@@ -30,7 +30,7 @@ const { callApi } = AuthUser();
   });
 
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, { setFieldError }) => {
     try {
       const response = await callApi({
         api: `/login`,
@@ -41,10 +41,11 @@ const { callApi } = AuthUser();
       if (response && response.status === 1) {
        
         saveToken(response?.authorisation?.token);
-        toast.success(response.message || "User Login Successfully"); 
+        // toast.success(response.message || "User Login Successfully"); 
         router.push("/dashboard");
       } else {
-        toast.error(response.message || "Invalid Credential");
+        // toast.error(response.message || "Invalid Credential");
+        setFieldError("password", response.message || "Invalid Credential");
       }
     } catch (error) {
       toast.error(response.message || "Data Not Found");
@@ -118,8 +119,8 @@ const { callApi } = AuthUser();
                   <Formik
                     initialValues={{ email: "", password: "" }}
                     validationSchema={validationSchema}
-                    onSubmit={(values) => {
-                      handleSubmit(values);
+                    onSubmit={(values, actions) => {
+                      handleSubmit(values, actions);
                     }}
                   >
                     {({ isValid, dirty }) => (

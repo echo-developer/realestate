@@ -273,17 +273,26 @@ const Index = () => {
                                                     </div>
                                                     <p className="mb-2"><span className="text-muted">{translation?.customer_name || "Coustomer Name:"}</span> <strong className={lead?.is_blur ? 'text-blur' : ""}>{lead?.customer_name || `${translation?.not_available}`}</strong></p>
                                                     <p className="d-flex flex-column flex-md-row mb-2">
-                                                        <span className="me-3">
-                                                            <i className={`bi bi-telephone ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead?.phone}
-                                                        </span>
-                                                        <span className="me-3">
-                                                            <i className={`bi bi-envelope ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead?.email}
-                                                        </span>
-                                                        <span className="me-3">
-                                                            <i className={`bi bi-clock ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead?.created_at}
-                                                        </span>
+                                                        {lead?.phone && (
+                                                            <span className="me-3">
+                                                                <i className={`bi bi-telephone ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead.phone}
+                                                            </span>
+                                                        )}
+                                                        {lead?.email && (
+                                                            <span className="me-3">
+                                                                <i className={`bi bi-envelope ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead.email}
+                                                            </span>
+                                                        )}
+                                                        {lead?.created_at && (
+                                                            <span className="me-3">
+                                                                <i className={`bi bi-clock ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead.created_at}
+                                                            </span>
+                                                        )}
                                                     </p>
-                                                    <p className={`text-wrap mb-2 ${lead?.is_blur ? 'text-blur' : ''}`}>{lead?.message}</p>
+                                                    
+                                                    {lead?.message && (
+                                                        <p className={`text-wrap mb-2 ${lead?.is_blur ? 'text-blur' : ''}`}>{lead?.message}</p>
+                                                    )}
                                                     <div class="row">
                                                         <div className="col-lg mb-2 mb-lg-0">
                                                             <div className="d-flex d-md-block gap-2">

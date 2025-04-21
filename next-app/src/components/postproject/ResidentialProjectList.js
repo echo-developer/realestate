@@ -123,7 +123,7 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                   <li>
                     <i className="icon-img-ratio" title="Carpet Area"></i>
                     <span>
-                      {translation?.occupied_area || "Occupied Area"}:{" "}
+                      {translation?.occupied_area || "Occupied"}:{" "}
                       {project?.occupied_area || "Not Available"}{" "}
                       {project?.occupied_area && project?.unit_type}
                     </span>
@@ -131,7 +131,7 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                   <li>
                     <i className="icon-img-ratio" title="Total Area"></i>
                     <span>
-                      {translation?.total_area || "Total Area"}:{" "}
+                      {translation?.total_area || "Total"}:{" "}
                       {project?.project_size || "Not Available"}{" "}
                       {project?.project_size && project?.unit_type}
                     </span>
@@ -139,7 +139,6 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                   <li>
                     <i className="icon-img-check" title="Possession Status"></i>
                     <span>
-                      {translation?.possession_status || "Possession Status"}:{" "}
                       {project?.possession_status || "Not Available"}
                     </span>
                   </li>

@@ -113,9 +113,11 @@ const CardImageSlider = ({
       </span>
         )
       }
-      <span className="total-ad-pic">
+      {data.image_count && (
+        <span className="total-ad-pic">
         <i className="bi bi-camera"></i>{data.image_count}
       </span>
+      )}
     </div>
   );
 };
