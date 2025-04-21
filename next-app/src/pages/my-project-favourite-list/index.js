@@ -176,19 +176,25 @@ const Index = () => {
                           <i className="bi bi-geo-alt"></i> {project.address}
                         </p>
                         <ul className="list-info mb-2">
-                          <li>
-                            {project.property_type_for ? <><i className="icon-img-flat"></i> </> : null}
-                            {project.property_type_for || ""}
-                          </li>
-                          <li>
-                            {project.total_units ? <><i className="bi bi-building text-primary"></i> </> : null}
-                            {translation?.total_units || "Total Units:"} {project.total_units || ""}
-                          </li>
-                          <li>
-                            {project.occupied_area ? <><i className="icon-img-ratio"></i> </> : null}
-                            {translation?.occupied_area || "Occupied Area:"} {project.occupied_area || ""}
-                          </li>
+                          {project.property_type_for && (
+                            <li>
+                              <i className="icon-img-flat"></i> {project.property_type_for}
+                            </li>
+                          )}
+
+                          {project.total_units && (
+                            <li>
+                              <i className="bi bi-building text-primary"></i> {translation?.total_units || "Total Units:"} {project.total_units}
+                            </li>
+                          )}
+
+                          {project.occupied_area && (
+                            <li>
+                              <i className="icon-img-ratio"></i> {translation?.occupied_area || "Occupied Area:"} {project.occupied_area}
+                            </li>
+                          )}
                         </ul>
+
 
 
                         <p className="ad-post-date mb-2">

@@ -1,5 +1,7 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
+import useTranslation from "@/hooks/useTranslation";
 import Link from "next/link";
 import "../../app/globals.css";
 import AuthUser from "../Authentication/AuthUser";
@@ -7,7 +9,8 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Collapse } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { useRouter, usePathname } from "next/navigation";
-import useTranslation from "@/hooks/useTranslation";
+// import useTranslation from "@/hooks/useTranslation";
+
 import { useAuth } from "@/context/AuthProvider";
 import MobileMenu from "../addtional/Mmenu";
 
