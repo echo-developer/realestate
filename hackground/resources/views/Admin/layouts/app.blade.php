@@ -123,7 +123,7 @@
     @stack('custom-js')
 </body>
 <div class="modal fade" id="ajax_modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
 
             <!-- Static Header -->
