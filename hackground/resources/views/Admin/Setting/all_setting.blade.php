@@ -79,6 +79,12 @@
         </li>
         @endif
         @endforeach
+        <li class="nav-item">
+            <a class="nav-link ajax-link {{ Request::is('Settings/default') || Request::is('Settings')  ? 'active' : '' }}"
+                href="{{ url('Settings/default') }}" data-url="{{ url('/Settings/default') }}">
+                <span>Default</span>
+            </a>
+        </li>
     </ul>
 
     <div class="main-card mb-3 card">

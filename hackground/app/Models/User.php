@@ -258,9 +258,14 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
             return response()->json(['status' => false, 'message' => 'User not found'], 404);
         }
 
-        if ($user) {
-            $user->image = !empty($user->image) ? asset('user_upload/profile_image/' . $user->image) : null;
-        }
+        $relativePath = 'user_upload/profile_image/' . $user->image;
+        $localPath = public_path($relativePath);
+
+        $imageToShow =
+            isset($user->image) && file_exists($localPath)
+            ? asset($relativePath)
+            : asset('user_upload/profile_image/user.jpg');
+        $user->image_url = $imageToShow;
 
         return $user;
     }

@@ -40,9 +40,14 @@ class UserController extends Controller
 
     public function MemberUserImage(Request $req)
     {
-        $req->validate([
-            'file' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
-        ]);
+        $req->validate(
+            [
+                'file' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+            ],
+            [
+                'file.max' => 'Image file must be within 2 MB'
+            ]
+        );
 
         if ($req->hasFile('file')) {
 
@@ -194,7 +199,6 @@ class UserController extends Controller
 
     public function SaveMemberDetails(Request $req)
     {
-        // dd($req->all());
         $user_id = $req->user_id;
         $user_type = $req->user_type;
 

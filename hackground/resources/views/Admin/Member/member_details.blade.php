@@ -31,10 +31,11 @@
             <div class="col-3">
                 <div class="mb-4 text-center">
                     <img id="user_image_preview"
-                        src="{{ !empty($data->image) ? $data->image : asset('user_upload/profile_image/user.jpg') }}"
+                        src="{{ !empty($data->image_url) ? $data->image_url : asset('user_upload/profile_image/user.jpg') }}"
                         alt="User Image" class="" height="150">
                 </div>
                 <input type="file" name="photo" id="photo" class="form-control">
+                <div class="text-danger mt-1" id="photo-error"></div>
             </div>
 
         </div>
@@ -42,9 +43,7 @@
         @if (session('success_msg'))
             <div class="alert alert-{{ session('message_type') }}">
                 {{ session('success_msg') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert">
-                    
-                </button>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">x</button>
             </div>
         @endif
         <form method="POST" action="{{ route('save.user.details') }}" enctype="multipart/form-data" class="container mt-4">
@@ -411,89 +410,96 @@
                 fieldCount--;
             });
 
+        });
 
-            $('#photo').change(function(event) {
-                var file = event.target.files[0];
 
-                if (file) {
-                    var reader = new FileReader();
-                    reader.onload = function(e) {
-                        $('#user_image_preview').attr('src', e.target.result).show();
-                    };
-                    reader.readAsDataURL(file);
+        $('#agent_doc').on('change', function() {
+            let fileInput = this.files[0];
+            if (!fileInput) return;
 
-                    var formData = new FormData();
-                    formData.append('file', file);
+            let formData = new FormData();
+            formData.append('file', fileInput);
+            formData.append('user_id', $('#agent_doc').data('id'));
 
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
+            $.ajax({
+                url: '{{ route('agent.doc.upload') }}',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(res) {
+                    if (res.success === 1 && res.doc_url) {
+                        toastr.success('Document Upload', 'Request Success', toastrOptions);
 
-                    $.ajax({
-                        url: `{{ url('/member/memberUSer-image') }}`, // same route
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function(response) {
-                            console.log('File uploaded successfully');
-                            $('#uploaded_user_photo').val(response
-                                .fileName);
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Error uploading file:', error);
-                        }
-                    });
-                }
-            });
+                        let $btn = $('#previewDocBtn');
 
-            $('#agent_doc').on('change', function() {
-                let fileInput = this.files[0];
-                if (!fileInput) return;
-
-                let formData = new FormData();
-                formData.append('file', fileInput);
-                formData.append('user_id', $('#agent_doc').data('id'));
-
-                $.ajax({
-                    url: '{{ route('agent.doc.upload') }}',
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(res) {
-                        if (res.success === 1 && res.doc_url) {
-                            toastr.success('Document Upload', 'Request Success', toastrOptions);
-
-                            let $btn = $('#previewDocBtn');
-
-                            if ($btn.is('a')) {
-                                $btn.attr('href', res.doc_url).removeClass('d-none');
-                            } else {
-                                let $newBtn = $('<a>', {
-                                    id: 'previewDocBtn',
-                                    href: res.doc_url,
-                                    target: '_blank',
-                                    class: 'btn btn-sm btn-primary mt-2',
-                                    text: 'View Doc'
-                                });
-
-                                $btn.replaceWith($newBtn);
-                            }
+                        if ($btn.is('a')) {
+                            $btn.attr('href', res.doc_url).removeClass('d-none');
                         } else {
-                            toastr.error('Something went wrong during upload', 'Request Failed',
-                                toastrOptions);
+                            let $newBtn = $('<a>', {
+                                id: 'previewDocBtn',
+                                href: res.doc_url,
+                                target: '_blank',
+                                class: 'btn btn-sm btn-primary mt-2',
+                                text: 'View Doc'
+                            });
+
+                            $btn.replaceWith($newBtn);
                         }
-                    },
-                    error: function() {
+                    } else {
                         toastr.error('Something went wrong during upload', 'Request Failed',
                             toastrOptions);
                     }
-                });
+                },
+                error: function() {
+                    toastr.error('Something went wrong during upload', 'Request Failed',
+                        toastrOptions);
+                }
             });
+        });
 
+
+        $('#photo').on('change', function(event) {
+            var file = event.target.files[0];
+
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#user_image_preview').attr('src', e.target.result).show();
+                };
+                reader.readAsDataURL(file);
+
+                var formData = new FormData();
+                formData.append('file', file);
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    url: `{{ url('/member/memberUSer-image') }}`, // same route
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        console.log('File uploaded successfully');
+                        $('#uploaded_user_photo').val(response
+                            .fileName);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error uploading file:', error);
+                        if (xhr.status === 422) {
+                            const response = xhr.responseJSON;
+                            if (response.errors && response.errors.file) {
+                                $('#photo-error').text(response.errors.file[0]);
+                            }
+                        }
+                    }
+                });
+            }
         });
     </script>
 @endpush
