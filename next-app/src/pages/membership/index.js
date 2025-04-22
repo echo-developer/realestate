@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import {Row, Col, Accordion } from "react-bootstrap";
+import { Row, Col, Accordion } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import withAuth from "@/utils/withAuth";
 import useTranslation from "@/hooks/useTranslation";
@@ -15,6 +15,8 @@ const Membership = () => {
   const [plans, setPlans] = useState([])
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [mDetailsLoader, setMDetailsLoader] = useState(true);
+  const [membershipDetails, setMembershipDetails] = useState(null);
 
   useEffect(() => {
     const getMembershipPlans = async () => {
@@ -36,7 +38,28 @@ const Membership = () => {
       }
     }
 
+    const getMembershipDetails = async () => {
+      setMDetailsLoader(true);
+      try {
+        const res = await callApi({
+          api: `/user_membership_details`,
+          method: "GET"
+        })
+
+        if (res && res?.status == 1) {
+          setMembershipDetails(res?.data || {});
+        } else {
+          setMembershipDetails(null);
+        }
+      } catch (error) {
+        console.log(error.message || "Something went wrong")
+      } finally {
+        setMDetailsLoader(false);
+      }
+    }
+
     getMembershipPlans();
+    getMembershipDetails();
   }, [])
   const faqs = [
     {
@@ -179,12 +202,200 @@ const Membership = () => {
     <DashboardLayout>
 
       <div className="col-lg col-12">
+
+        {mDetailsLoader && (
+          <>
+            <div className="container mt-4">
+              <div className="card shadow-sm">
+                <div className="card-header bg-white border-bottom">
+                  <h5 className="mb-0 placeholder-glow">
+                    <span className="placeholder col-6"></span>
+                  </h5>
+                </div>
+                <div className="card-body p-3">
+                  <div className="row mb-2">
+                    <div className="col-md-6">
+                      <strong className="placeholder-glow">
+                        <span className="placeholder col-4"></span>
+                      </strong>
+                      <span className="placeholder-glow ms-2">
+                        <span className="placeholder col-4"></span>
+                      </span>
+                    </div>
+                    <div className="col-md-6">
+                      <strong className="placeholder-glow">
+                        <span className="placeholder col-5"></span>
+                      </strong>
+                      <span className="placeholder-glow ms-2">
+                        <span className="placeholder col-5"></span>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="row mb-2">
+                    <div className="col-md-6">
+                      <strong className="placeholder-glow">
+                        <span className="placeholder col-5"></span>
+                      </strong>
+                      <span className="placeholder-glow ms-2">
+                        <span className="placeholder col-5"></span>
+                      </span>
+                    </div>
+                    <div className="col-md-6">
+                      <strong className="placeholder-glow">
+                        <span className="placeholder col-3"></span>
+                      </strong>
+                      <span className="placeholder-glow ms-2">
+                        <span className="placeholder col-3"></span>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="row mb-2">
+                    <div className="col-md-6">
+                      <strong className="placeholder-glow">
+                        <span className="placeholder col-4"></span>
+                      </strong>
+                      <span className="placeholder-glow ms-2">
+                        <span className="placeholder col-4"></span>
+                      </span>
+                    </div>
+                    <div className="col-md-6">
+                      <strong className="placeholder-glow">
+                        <span className="placeholder col-4"></span>
+                      </strong>
+                      <span className="placeholder-glow ms-2">
+                        <span className="placeholder col-4"></span>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="row mb-2">
+                    <div className="col-md-6">
+                      <strong className="placeholder-glow">
+                        <span className="placeholder col-2"></span>
+                      </strong>
+                      <span className="placeholder-glow ms-2">
+                        <span className="placeholder col-2"></span>
+                      </span>
+                    </div>
+                    <div className="col-md-6">
+                      <strong className="placeholder-glow">
+                        <span className="placeholder col-4"></span>
+                      </strong>
+                      <span className="placeholder-glow ms-2">
+                        <span className="placeholder col-4"></span>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6">
+                      <strong className="placeholder-glow">
+                        <span className="placeholder col-3"></span>
+                      </strong>
+                      <span className="placeholder-glow ms-2">
+                        <span className="placeholder col-3"></span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </>
+        )}
+
+        {membershipDetails && (
+          <>
+            <div className="container mt-4">
+              <div className="card shadow-sm">
+                <div className="card-header bg-white border-bottom">
+                  <h5 className="mb-0">Your Current Membership Plan</h5>
+                </div>
+                <div className="card-body p-3">
+                  <div className="row mb-2">
+                    <div className="col-md-6">
+                      <strong>Plan Name:</strong> <span className="text-muted">{membershipDetails?.plan_name}</span>
+                    </div>
+                    <div className="col-md-6">
+                      <strong>Subscription Date:</strong> <span className="text-muted">{membershipDetails?.subcription_date}</span>
+                    </div>
+                  </div>
+                  <div className="row mb-2">
+                    <div className="col-md-6">
+                      <strong>Expire Date:</strong> <span className="text-muted">{membershipDetails?.expire_date}</span>
+                    </div>
+                    <div className="col-md-6">
+                      <strong>Relationship Manager:</strong>
+                      {membershipDetails?.relationship_manager == "Y" ? (
+                        <span className="badge bg-success ms-2">Available</span>
+                      ) : (
+                        <span className="badge bg-danger ms-2">Not Available</span>
+                      )}
+
+                    </div>
+                  </div>
+                  <div className="row mb-2">
+                    <div className="col-md-6">
+                      <strong>Leads:</strong> <span className="text-muted">{membershipDetails?.leads}</span>
+                    </div>
+                    <div className="col-md-6">
+                      <strong>Listings Allowed:</strong> <span className="text-muted">{membershipDetails?.listings_allowed}</span>
+                    </div>
+                  </div>
+                  <div className="row mb-2">
+                    <div className="col-md-6">
+                      <strong>Verified Badge:</strong>
+                      {membershipDetails?.verified_badge == 'Y' ? (
+                        <span className="badge bg-success ms-2">Yes</span>
+                      ) : (
+                        <span className="badge bg-danger ms-2">No</span>
+                      )}
+                    </div>
+                    <div className="col-md-6">
+                      <strong>Listing Visibility:</strong> <span className="text-muted">{membershipDetails?.listing_visibility}</span>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <strong>Social Media Promotion:</strong>
+                      {membershipDetails?.social_media_promotion ? (
+                        <span className="badge bg-success ms-2">Enabled</span>
+                      ) : (
+                        <span className="badge bg-danger ms-2">Disabled</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {!mDetailsLoader && !membershipDetails && (
+          <>
+            <div className="container mt-4">
+              <div className="card shadow-sm ">
+                <div className="card-header bg-white border-bottom">
+                  <h5 className="mb-0 text-dark font-weight-bold">Your Current Membership Plan</h5>
+                </div>
+                <div className="card-body text-center p-5">
+                  <p className="mb-4 text-muted">
+                    You currently don't have any active membership plans.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </>
+        )}
         <div className="page-fluid-container">
           <div className="pageTitle">
             <h1>
               {translation?.membership || "Membership"}
             </h1>
-          </div> 
+          </div>
           {loading && (<PlansLoadingSkeleton />)}
           {plans?.length > 0 && <MembershipBox data={plans} handleSelectPlan={handleSelectPlan} />}
 
