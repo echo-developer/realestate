@@ -64,14 +64,14 @@
 
         <form action="{{ $search_url }}" method="get">
             <section class="content-header mb-2">
-                <div class="row">
-                    <div class="offset-sm-8 col-sm-4">
+                <div class="row justify-content-end">
+                    <div class="col-xl-4 col-lg-6">
                         <div class="input-group">
                             <input class="form-control" id="prop_category_search" placeholder="Search..." name="term"
                                 value="{{ request('term') }}" />
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-search"></i>
+                                    <i class="bi bi-search"></i>
                                 </button>
                             </div>
                         </div>
@@ -81,7 +81,7 @@
         </form>
 
         {{-- Dynamic Nav Item --}}
-        <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav ml-0">
+        <ul class="nav nav-underline mb-3 gap-4">
             <li class="nav-item">
                 <a class="nav-link ajax-link {{ Request::is('member/memberUser') ? 'active' : '' }}"
                     href="{{ url('member/memberUser') }}" data-url="{{ url('member/memberUser') }}">
@@ -100,15 +100,15 @@
         </ul>
 
 
-        <div class="main-card mb-3 card">
-            <div class="card-body">
-                <div class="card-header p-0">
-                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i>
-                    @if (isset($group_key))
+        <div class="main-card mb-3 card">            
+                <div class="card-header d-flex">
+                    <h4>
+                        @if (isset($group_key))
                         {{ $group_key }} User
-                    @else
-                        User
-                    @endif
+                        @else
+                            User
+                        @endif
+                    </h4>
                     <div class="btn-actions-pane-right">
 
                         <div class="btn-group" id="global_action_btn" style="display:none">
@@ -124,7 +124,7 @@
                         </div>
                         &nbsp;
                         {{-- @if (in_array('MEN0051_LIST_Add', $rolePermissions)) --}}
-                        <button type="button" class="btn btn-site btn-sm btn-success" id="allUsersaddButton">
+                        <button type="button" class="btn btn-site btn-sm btn-primary" id="allUsersaddButton">
                             <i class="fa fa-plus"></i>
                             Add new User
                         </button>
@@ -132,21 +132,20 @@
 
                     </div>
                 </div>
-
+                <div class="card-body">
                 <div class="table-responsive" id="main_table">
                     <table class="mb-0 table">
                         <thead>
                             <tr>
                                 <th style="width:5%">Id</th>
-                                <th style="width:13%">User Name</th>
-                                <th style="width:13%">Email</th>
-                                <th style="width:10%">Phone</th>
-                                <th style="width:14%">Created At</th>
-                                <th style="width:8%">Leads</th>
-                                <th style="width:8%">Verify</th>
-                                <th style="width:9%">Status</th>
-                                <th style="width:20%; text-align: right; padding-right: 15px;">Action</th>
-
+                                <th>User Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Created At</th>
+                                <th>Leads</th>
+                                <th>Verify</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Action</th>
                             </tr>
                             <thead>
                             <tbody id="allUserBody">
@@ -157,7 +156,7 @@
                                                 target="_blank">{{ $items->name }}</a>
                                             <br><small>({{ $userTypes[$items->user_type] ?? 'Unknown' }})
                                         </td>
-                                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width:150px;">
                                             {{ $items->email }}
                                         </td>
                                         <td>{{ $items->phone }}</td>
@@ -190,23 +189,23 @@
                                         <td class="text-right" style="padding-right:15px;">
 
                                             {{-- @if (in_array('MEN0051_LIST_Edit', $rolePermissions)) --}}
-                                            <a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" class="allUsersEditButton"                                                
+                                            <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" class="allUsersEditButton"                                                
                                                 user-id="{{ $items->id }}"><i
-                                                    class="fa fa-edit text-success fa-md"></i></a>
+                                                    class="bi bi-pencil-fill text-success fa-md"></i></a>
                                             &nbsp;
                                             {{-- @endif --}}
                                             {{-- @if (in_array('MEN0051_LIST_Edit', $rolePermissions)) --}}
-                                            <a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete" class="allUsersDeleteButton"                                                
+                                            <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete" class="allUsersDeleteButton"                                                
                                                 user-id="{{ $items->id }}"><i
-                                                    class="fa fa-trash text-danger fa-md"></i></a>
+                                                    class="bi bi-trash3-fill text-danger fa-md"></i></a>
                                             &nbsp;
                                             <a href="{{ url('allproperties/all-property-view/' . $items->id) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Properties"
                                                 user-id="{{ $items->id }}"><i
-                                                    class="fa fa-building text-success fa-md"></i></a>
+                                                    class="bi bi-building-fill text-success fa-md"></i></a>
                                             &nbsp;
                                             <a href="{{ url('allproject/all-project-view/' . $items->id) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Projects"
                                                 user-id="{{ $items->id }}"><i
-                                                    class="fas fa-gopuram text-success fa-md"></i></a>
+                                                    class="bi bi-pie-chart-fill text-success fa-md"></i></a>
                                             {{-- @endif --}}
                                         </td>
                                     @empty
@@ -301,69 +300,66 @@
                             </select>
 
                         </div> --}}
-                        <div class="form-group">
+                        <div class="form-floating mb-3">                            
+                            <input type="text" class="form-control" id="user_name" name="user_name" placeholder="" required>
                             <label for="user_name">User Name</label>
-                            <input type="text" class="form-control" id="user_name" name="user_name" required>
                             <div class="invalid-feedback" id="user_name_error"></div>
 
                         </div>
-                        <div class="form-group">
-                            <label for="user_type">User Type</label>
+                        <div class="form-floating mb-3">                            
                             <select name="user_type" id="user_type" class="form-control">
                                 <option value="">--select--</option>
                                 @foreach ($userTypes as $userType => $userTypeName)
                                     <option value="{{ $userType }}">{{ $userTypeName }}</option>
                                 @endforeach
                             </select>
+                            <label for="user_type">User Type</label>
                             <div class="invalid-feedback" id="user_type_error"></div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-floating mb-3">                            
+                            <input type="text" class="form-control" id="user_phone" name="user_phone" placeholder="" required>
                             <label for="user_phone">Phone No</label>
-                            <input type="text" class="form-control" id="user_phone" name="user_phone" required>
                             <div class="invalid-feedback" id="user_phone_error"></div>
                         </div>
 
 
-                        <div class="form-group">
+                        <div class="form-floating mb-3">                            
+                            <input type="text" class="form-control" id="wp_num" name="wp_num" placeholder="" required>
                             <label for="wp_num">Whatsapp No</label>
-                            <input type="text" class="form-control" id="wp_num" name="wp_num" required>
                             <div class="invalid-feedback" id="wp_num_error"></div>
-                            <div>
-                                <label for="wp_num_sync"><small>Same as Phone No</small>
-                                    <span><input type="checkbox" class="" id="wp_num_sync"
-                                            name="wp_num_sync"></span></label>
-                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="wp_num_sync" name="wp_num_sync">
+                                <label class="form-check-label" for="wp_num_sync">
+                                    <small>Same as Phone No</small>
+                                </label>
+                            </div>                            
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-floating mb-3">                            
+                            <input type="text" class="form-control" id="user_email" name="user_email" placeholder="" required>
                             <label for="user_email">Email</label>
-                            <input type="text" class="form-control" id="user_email" name="user_email" required>
                             <div class="invalid-feedback" id="user_email_error"></div>
                         </div>
 
-                        <div class="form-group password">
+                        <div class="form-floating mb-3 password">                            
+                            <input type="password" class="form-control" id="password" name="password" placeholder="" required>
                             <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
                             <div class="invalid-feedback" id="password_error"></div>
                         </div>
 
-                        <div class="form-group password">
+                        <div class="form-floating mb-3 password">
+                            
+                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="" required>
                             <label for="password_confirmation">Confirm Password</label>
-                            <input type="password" class="form-control" id="password_confirmation"
-                                name="password_confirmation" required>
                             <div class="invalid-feedback" id="password_confirmation_error"></div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="ufile">Photo</label>
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <input type="file" name="Userfile" id="UserfileUpload" class="custom-file-input"
-                                        onchange="updateUserFileName()">
-                                    <label class="custom-file-label" for="ufile">Choose file</label>
-                                </div>
-                            </div>
+                        <div class="form-group">                                                        
+                            
+                                <input type="file" name="Userfile" id="UserfileUpload" class="form-control" onchange="updateUserFileName()">
+                                <!-- <label for="ufile">Photo</label> -->
+                                                       
                         </div>
                         <div class="form-group">
                             <img id="image_preview" src=" " style="display:none; width: 50px; height: auto;" />
@@ -371,20 +367,21 @@
                                 class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Status</label>
-                            <div class="radio-inline">
-                                <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked
+                        <div class="form-group mb-0">
+                            <label class="form-label d-block">Status</label>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="status" value=1 class="form-check-input" id="status_1" checked
                                     required>
-                                <label for="status_1">Active</label>
-                                <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
-                                <label for="status_2">Inactive</label>
+                                <label class="form-check-label" for="status_1">Active</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="status" value=0 class="form-check-input" id="status_2">
+                                <label class="form-check-label" for="status_2">Inactive</label>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" id="UsersButton" class="btn btn-primary">Save</button>
                 </div>
             </div>

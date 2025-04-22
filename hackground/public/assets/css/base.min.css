@@ -43846,11 +43846,11 @@ span.multiselect-native-select select {
 }
 
 .toggle-on.btn-xs {
-    padding-right: 12px
+    padding-right: 10px;
 }
 
 .toggle-off.btn-xs {
-    padding-left: 12px
+    padding-left: 10px;
 }
 
 @media only screen and (max-width:1320px) {

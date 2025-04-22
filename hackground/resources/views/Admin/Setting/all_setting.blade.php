@@ -52,7 +52,7 @@
                         <input class="form-control" id="prop_category_search" placeholder="Search..." name="term" value="{{ request('term') }}" />
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-search"></i>
+                                <i class="bi bi-search"></i>
                             </button>
                         </div>
                     </div>
@@ -61,7 +61,7 @@
         </section>
     </form>
 
-    <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav ml-0">
+    <ul class="nav nav-underline mb-3 gap-4">
         <li class="nav-item">
             <a class="nav-link ajax-link {{ Request::is('Settings/default') || Request::is('Settings')  ? 'active' : '' }}"
                 href="{{ url('Settings/default') }}" data-url="{{ url('/Settings/default') }}">
@@ -105,7 +105,7 @@
                     </div>
                     &nbsp;
                     {{-- @if (in_array('MEN0051_LIST_Add', $rolePermissions)) --}}
-                    <button type="button" class="btn btn-site btn-sm btn-success" id="allSettingsaddButton">
+                    <button type="button" class="btn btn-site btn-sm btn-primary" id="allSettingsaddButton">
                         <i class="fa fa-plus"></i>
                         Add new Setting
                     </button>
@@ -118,10 +118,10 @@
                 <table class="mb-0 table">
                     <thead>
                         <tr>
-                            <th style="width:20%">Setting Name</th>
-                            <th style="width:30%">Key</th>
-                            <th style="width:40%">Value</th>
-                            <th class="text-right" style="padding-right:15px;">Action</th>
+                            <th>Setting Name</th>
+                            <th>Key</th>
+                            <th>Value</th>
+                            <th class="text-right">Action</th>
                         </tr>
                         <thead>
                         <tbody id="allSettingBody">
@@ -173,7 +173,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="settingsAddEditModalLabel"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
                     
                 </button>
             </div>

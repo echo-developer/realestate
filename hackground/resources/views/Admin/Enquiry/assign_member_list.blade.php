@@ -194,7 +194,7 @@
 
                 <h5 class="modal-title" id="AddEditModalLabel"></h5>
 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
                     
                 </button>
             </div>

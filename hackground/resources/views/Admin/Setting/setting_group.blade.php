@@ -59,7 +59,7 @@
                     @endif
                     <div class="btn-actions-pane-right">
                         {{-- @if (in_array('MEN0051_LIST_Add', $rolePermissions)) --}}
-                        <button type="button" class="btn btn-site btn-sm btn-success" id="groupSettingsaddButton">
+                        <button type="button" class="btn btn-site btn-sm btn-primary" id="groupSettingsaddButton">
                             <i class="fa fa-plus"></i>
                             Add new Setting
                         </button>
@@ -124,7 +124,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="groupSettingsAddEditModalLabel"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
                         
                     </button>
                 </div>

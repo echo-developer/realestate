@@ -51,16 +51,16 @@
     </div>
     @endif
     <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Bank Loan
-                {{-- @if (in_array('MEN0005_Add', $Permissions)) --}}
-                <div class="btn-actions-pane-right">
-                    <button type="button" class="btn btn-sm btn-success" id="addButton">Add</button>
-                </div>
-                {{-- @endif --}}
+        
+        <div class="card-header d-flex">
+            <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Bank Loan
+            {{-- @if (in_array('MEN0005_Add', $Permissions)) --}}
+            <div class="btn-actions-pane-right">
+                <button type="button" class="btn btn-sm btn-success" id="addButton">Add</button>
             </div>
-
+            {{-- @endif --}}
+        </div>
+        <div class="card-body">
             <div class="table-responsive" id="main_table">
                 <table id="myTable" class="mb-0 table">
                     <thead>
