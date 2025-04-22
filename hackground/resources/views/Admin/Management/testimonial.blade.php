@@ -54,14 +54,14 @@
 
         <form action="{{ url('management/testimonial') }}" method="get">
             <section class="content-header mb-2">
-                <div class="row">
-                    <div class="offset-sm-8 col-sm-4">
+                <div class="row justify-content-end">
+                    <div class="col-xl-4 col-lg-6">
                         <div class="input-group">
                             <input class="form-control" id="prop_testimonial_search" placeholder="Search..." name="term"
                                 value="{{ request('term') }}" />
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-search"></i>
+                                    <i class="bi bi-search"></i>
                                 </button>
                             </div>
                         </div>
@@ -71,27 +71,24 @@
         </form>
 
         <div class="main-card mb-3 card">
-            <div class="card-body">
-                <div class="card-header p-0">
-                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Testimonial List
-
-                    <div class="btn-actions-pane-right">
-                        <button type="button" class="btn btn-sm btn-success" onclick="add_prop_testimonial()">Add
-                            Testimonial</button>
-                    </div>
-
+            <div class="card-header d-flex">
+                <h4>Testimonial List</h4>
+                <div class="btn-actions-pane-right">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="add_prop_testimonial()">Add
+                        Testimonial</button>
                 </div>
-
+            </div>
+            <div class="card-body">                
                 <div class="table-responsive" id="main_table">
                     <table class="mb-0 table">
                         <thead>
                             <tr>
-                                <th style="width:5%">ID</th>
-                                <th style="width:15%">Name</th>
-                                <th style="width:20%">Order</th>
-                                <th style="width:20%">Status</th>
-                                <th style="width:30%">Image</th>
-                                <th style="min-width:80px;" class="text-right">Action</th>
+                                <th style="width:32px">ID</th>
+                                <th>Name</th>
+                                <th>Order</th>
+                                <th>Status</th>
+                                <th>Image</th>
+                                <th style="min-width:60px;" class="text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody id="user">
@@ -117,17 +114,16 @@
                                     @endphp
 
                                     <td>
-                                        <img src="{{ $imageToShow }}" alt="Testimonial Image" class="img-thumbnail"
-                                            style="height: 70px; width: 70px;">
+                                        <img src="{{ $imageToShow }}" alt="Testimonial Image" class="img-fluid" height="48" width="48">
                                     </td>
 
                                     <td class="text-right">
-                                        <i class="fa fa-edit text-success fa-md cursor-pointer"
+                                        <a href="javascript:void(0)" class="me-2"><i class="bi bi-pencil-fill text-success fa-md cursor-pointer"
                                             onclick="Edit_prop_testimonial('{{ $item->id }}')">
-                                        </i>
-                                        <i class="fa fa-trash text-danger fa-md cursor-pointer"
+                                        </i></a>
+                                        <a href="javascript:void(0)"><i class="bi bi-trash3-fill text-danger fa-md cursor-pointer"
                                             onclick="Delete_prop_testimonial('{{ $item->id }}')">
-                                        </i>
+                                        </i></a>
                                     </td>
                                 </tr>
                             @empty
@@ -190,7 +186,7 @@
 @section('modals')
     <div class="modal fade" id="prop_testimonial" tabindex="-1" role="dialog"
         aria-labelledby="prop_testimonialaddEditModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
 
@@ -209,67 +205,61 @@
                             $langs = explode(',', admin_default_lang());
                         @endphp
                         @foreach ($langs as $lang)
-                            <div class="form-group">
-                                <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
+                            <div class="form-floating mb-3">                                
                                 <input type="text" class="form-control reset_field" id="name_{{ $lang }}"
-                                    name="name[{{ $lang }}]" autocomplete="off">
+                                    name="name[{{ $lang }}]" placeholder="" autocomplete="off">
+                                    <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
                                 <div class="invalid-feedback" id="name_{{ $lang }}_error"></div>
                             </div>
                         @endforeach
                         @foreach ($langs as $lang)
-                            <div class="form-group">
-                                <label for="subname">{{ __('Subname') }} ({{ strtoupper($lang) }})</label>
+                            <div class="form-floating mb-3">                                
                                 <input type="text" class="form-control reset_field" id="subname_{{ $lang }}"
-                                    name="subname[{{ $lang }}]" autocomplete="off">
+                                    name="subname[{{ $lang }}]" placeholder="" autocomplete="off">
+                                    <label for="subname">{{ __('Subname') }} ({{ strtoupper($lang) }})</label>
                                 <div class="invalid-feedback" id="subname_{{ $lang }}_error"></div>
                             </div>
                         @endforeach
                         @foreach ($langs as $lang)
-                            <div class="form-group">
-                                <label for="description">{{ __('Description') }} ({{ strtoupper($lang) }})</label>
+                            <div class="form-floating mb-3">                                
                                 <textarea type="text" class="form-control reset_field" id="description_{{ $lang }}"
-                                    name="description[{{ $lang }}]" autocomplete="off"></textarea>
+                                    name="description[{{ $lang }}]" placeholder="" autocomplete="off" style="min-height: 100px;"></textarea>
+                                <label for="description">{{ __('Description') }} ({{ strtoupper($lang) }})</label>
                                 <div class="invalid-feedback" id="description_{{ $lang }}_error"></div>
                             </div>
                         @endforeach
 
                         <div class="form-group">
-                            <label for="ufile">Image Icon</label>
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <input type="file" name="Testimonialfile" id="TestimonialfileUpload"
-                                        class="custom-file-input">
-                                    <label class="custom-file-label" for="ufile">Choose file</label>
-                                </div>
-                            </div>
+                            <!-- <label for="ufile">Image Icon</label> -->
+                            <input type="file" name="Testimonialfile" id="TestimonialfileUpload" class="form-control">
                         </div>
                         <div class="form-group">
-                            <img id="image_preview" src=" " style="display:none; width: 100px; height: auto;" />
+                            <img id="image_preview" src=" " style="display:none; width: 64px; height: 64px;" />
                             <button type="button" id="delete_image_btn" style="display:none;"
-                                class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
+                                class="btn btn-danger btn-sm" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-floating mb-3">                            
+                            <input type="Order" class="form-control" id="order" name="order" placeholder="" required>
                             <label for="Order">Order</label>
-                            <input type="Order" class="form-control" id="order" name="order" required>
                             <div class="invalid-feedback" id="Order_error"></div>
                         </div>
 
 
-                        <div class="form-group">
-                            <label class="form-label">Status</label>
-                            <div class="radio-inline">
-                                <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked
-                                    required>
-                                <label for="status_1">Active</label>
-                                <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
-                                <label for="status_2">Inactive</label>
+                        <div class="form-group mb-0">
+                            <label class="form-label d-block">Status</label>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="status" value=1 class="form-check-input" id="status_1" checked required>
+                                <label class="form-check-label" for="status_1">Active</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="status" value=0 class="form-check-input" id="status_2">
+                                <label class="form-check-label" for="status_2">Inactive</label>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" onclick="add_edit_prop_testimonial()" id="prop_testimonialButton"
                         class="btn btn-primary">Save</button>
                 </div>

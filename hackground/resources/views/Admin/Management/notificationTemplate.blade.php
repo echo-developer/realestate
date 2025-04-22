@@ -53,14 +53,14 @@
 
     <form action="{{ url('management/notificationtemplate') }}" method="get">
         <section class="content-header mb-2">
-            <div class="row">
-                <div class="offset-sm-8 col-sm-4">
+            <div class="row justify-content-end">
+                <div class="col-xl-4 col-lg-6">
                     <div class="input-group">
                         <input class="form-control" id="prop_NotificationTemplate_search" placeholder="Search..."
                             name="term" value="{{ request('term') }}" />
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-search"></i>
+                                <i class="bi bi-search"></i>
                             </button>
                         </div>
                     </div>
@@ -70,31 +70,28 @@
     </form>
 
     <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Notification Template List
-
-                <div class="btn-actions-pane-right">
-                    <button type="button" id="exportExcel" class="btn btn-primary btn-sm mr-2">
-						<i class="fa fa-download"></i>
-						Export CSV
-					</button>
-                    <button type="button" class="btn btn-sm btn-success" onclick="add_prop_NotificationTemplate()">Add
-                     Template</button>
-                </div>
-
+        <div class="card-header d-flex">
+            <h4>Notification Template List</h4>
+            <div class="btn-actions-pane-right">
+                <button type="button" id="exportExcel" class="btn btn-primary btn-sm mr-2">
+                    <i class="fa fa-download"></i>
+                    Export CSV
+                </button>
+                <button type="button" class="btn btn-sm btn-success" onclick="add_prop_NotificationTemplate()">Add
+                    Template</button>
             </div>
-
+        </div>
+        <div class="card-body">            
             <div class="table-responsive" id="main_table">
                 <table class="mb-0 table" id="Notification-table">
                     <thead>
                         <tr>
-                            <th style="width:5%">ID</th>
-                            <th style="width:35%">Template for</th>
-                            <th style="width:30%">Template Key</th>
-                            <th style="width:20%">Order</th>
-                            <th style="width:20%">Status</th>
-                            <th style="min-width:80px;" class="text-right">Action</th>
+                            <th style="width:32px">ID</th>
+                            <th>Template for</th>
+                            <th>Template Key</th>
+                            <th>Order</th>
+                            <th>Status</th>
+                            <th style="min-width:60px;" class="text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody id="user">
@@ -111,17 +108,17 @@
                                     data-size="mini" {{ $item->status ? 'checked' : '' }}>
                             </td>
                             <td class="text-right">
-                                <i class="fa fa-edit text-success fa-md cursor-pointer"
+                                <a href="javascript:void(0)" class="me-2"><i class="bi bi-pencil-fill text-success fa-md cursor-pointer"
                                     onclick="Edit_prop_NotificationTemplate('{{ $item->id }}')">
-                                </i>
-                                <i class="fa fa-trash text-danger fa-md cursor-pointer"
+                                </i></a>
+                                <a href="javascript:void(0)"><i class="bi bi-trash3-fill text-danger fa-md cursor-pointer"
                                     onclick="Delete_prop_NotificationTemplate('{{ $item->id }}')">
-                                </i>
+                                </i></a>
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6">Sorry, no records found!</td>
+                            <td colspan="6" class="text-center text-muted">Sorry, no records found!</td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -179,7 +176,7 @@
 @section('modals')
 <div class="modal fade" id="prop_NotificationTemplate" tabindex="-1" role="dialog"
     aria-labelledby="prop_NotificationTemplateaddEditModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
 
@@ -197,16 +194,14 @@
                     @php
                     $langs = explode(',', admin_default_lang());;
                     @endphp
-                    <div class="form-group">
+                    <div class="form-floating mb-3">                        
+                        <input type="text" class="form-control reset_field" id="name" name="name" placeholder="" autocomplete="off">
                         <label for="name">Template For</label>
-                        <input type="text" class="form-control reset_field" id="name" name="name"
-                            autocomplete="off">
                         <div class="invalid-feedback" id="name_error"></div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-floating mb-3">                        
+                        <input type="text" class="form-control reset_field" id="template_key" name="template_key" placeholder="" autocomplete="off">
                         <label for="template_key">Template Key</label>
-                        <input type="text" class="form-control reset_field" id="template_key" name="template_key"
-                            autocomplete="off">
                         <div class="invalid-feedback" id="template_key_error"></div>
                     </div>
                     @foreach ($langs as $lang)
@@ -218,33 +213,32 @@
                         <div class="invalid-feedback" id="content_{{ $lang }}_error"></div>
                     </div>
                     @endforeach
-                    <div class="form-group">
+                    <div class="form-floating mb-3">                        
+                        <textarea type="text" class="form-control reset_field" id="all_template_keys" name="all_template_keys" placeholder="" autocomplete="off" style="min-height: 75px;"> </textarea>
                         <label for="all_template_keys">Template Keys</label>
-                        <textarea type="text" class="form-control reset_field" id="all_template_keys" name="all_template_keys"
-                            autocomplete="off"> </textarea>
                         <div class="invalid-feedback" id="all_template_keys_error"></div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-floating mb-3">                        
+                        <input type="Order" class="form-control" id="order" name="order" placeholder="" required>
                         <label for="Order">Order</label>
-                        <input type="Order" class="form-control" id="order" name="order" required>
                         <div class="invalid-feedback" id="order_error"></div>
                     </div>
 
 
-                    <div class="form-group">
-                        <label class="form-label">Status</label>
-                        <div class="radio-inline">
-                            <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked
-                                required>
-                            <label for="status_1">Active</label>
-                            <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
-                            <label for="status_2">Inactive</label>
+                    <div class="form-group mb-0">
+                        <label class="form-label d-block">Status</label>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="status" value=1 class="form-check-input" id="status_1" checked required>
+                            <label class="form-check-label" for="status_1">Active</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="status" value=0 class="form-check-input" id="status_2">
+                            <label class="form-check-label" for="status_2">Inactive</label>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" onclick="add_edit_prop_NotificationTemplate()" id="prop_NotificationTemplateButton"
                     class="btn btn-primary">Save</button>
             </div>

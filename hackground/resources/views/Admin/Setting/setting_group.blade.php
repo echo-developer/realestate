@@ -49,14 +49,14 @@
             </div>
         @endif
         <div class="main-card mb-3 card ">
-            
                 <div class="card-header d-flex">
-                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i>
+                    <h4>
                     @if (isset($group_key))
                         {{ $group_key }} Setting
                     @else
                         Setting Group
                     @endif
+                    </h4>
                     <div class="btn-actions-pane-right">
                         {{-- @if (in_array('MEN0051_LIST_Add', $rolePermissions)) --}}
                         <button type="button" class="btn btn-site btn-sm btn-primary" id="groupSettingsaddButton">
@@ -68,14 +68,14 @@
                     </div>
                 </div>
                 <div class="card-body">
-                <div class="table-responsive" id="main_table" class='d-none'>
+                <div class="table-responsive" id="main_table">
                     <table class="mb-0 table">
                         <thead>
                             <tr>
-                                <th style="width:10%">ID</th>
-                                <th style="width:60%">Name</th>
-                                <th style="width:60%">Key</th>
-                                <th style="width:10%">Status</th>
+                                <th style="width:32px">ID</th>
+                                <th>Name</th>
+                                <th>Key</th>
+                                <th>Status</th>
                                 <th class="text-right">Action</th>
                             </tr>
                         </thead>
@@ -97,12 +97,12 @@
 
                                     <td class="text-right">
                                         {{-- @if (in_array('MEN0006_Edit', $rolePermissions)) --}}
-                                        <i class="bi bi-pencil-square text-success fa-md SettingEditButton"
-                                            settingId="{{ $items->setting_group_id }}"></i>
+                                        <a href="javascript:void(0)" class="me-2"><i class="bi bi-pencil-square text-success fa-md SettingEditButton"
+                                            settingId="{{ $items->setting_group_id }}"></i></a>
                                         {{-- @endif --}}
                                         {{-- @if (in_array('MEN0006_Delete', $rolePermissions)) --}}
-                                        <i class="bi bi-trash3-fill text-danger fa-md SettingDeleteButton"
-                                            settingId="{{ $items->setting_group_id }}"></i>
+                                        <a href="javascript:void(0)"><i class="bi bi-trash3-fill text-danger fa-md SettingDeleteButton"
+                                            settingId="{{ $items->setting_group_id }}"></i></a>
                                         {{-- @endif --}}
                                     </td>
                                 </tr>
@@ -136,32 +136,35 @@
                         <input type="text" class='d-none' id="groupId" name="groupId">
 
 
-                        <div class="form-group">
+                        <div class="form-floating mb-3">
+                            
+                            <input type="text" class="form-control" id="group_name" name="group_name" placeholder="" required>
                             <label for="Name">Group Name</label>
-                            <input type="text" class="form-control" id="group_name" name="group_name" required>
                             <div class="invalid-feedback" id="group_name_error"></div>
 
                         </div>
-                        <div class="form-group">
+                        <div class="form-floating mb-3">
+                            
+                            <input type="text" class="form-control" id="group_Key" name="group_Key" placeholder="" required>
                             <label for="group_Key">Group Key</label>
-                            <input type="text" class="form-control" id="group_Key" name="group_Key" required>
                             <div class="invalid-feedback" id="group_Key_error"></div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Status</label>
-                            <div class="radio-inline">
-                                <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked
+                        <div class="form-group mb-0">
+                            <label class="form-label d-block">Status</label>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="status" value=1 class="form-check-input" id="status_1" checked
                                     required>
-                                <label for="status_1">Active</label>
-                                <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
-                                <label for="status_2">Inactive</label>
+                                <label class="form-check-label" for="status_1">Active</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="status" value=0 class="form-check-input" id="status_2">
+                                <label class="form-check-label" for="status_2">Inactive</label>
                             </div>
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <div class="modal-footer">                    
                     <button type="button" id="groupSettingsButton" class="btn btn-primary">Save</button>
                 </div>
             </div>

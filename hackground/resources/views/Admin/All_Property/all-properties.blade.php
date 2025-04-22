@@ -52,8 +52,8 @@
 
     {{-- <form action="{{ url('allproperties/all-property-view') }}" method="get">
     <section class="content-header mb-2">
-        <div class="row">
-            <div class="offset-sm-8 col-sm-4">
+        <div class="row justify-content-end">
+            <div class="col-xl-4 col-lg-6">
                 <div class="input-group">
                     <input class="form-control" id="prop_category_search" placeholder="Search..." name="term"
                         value="{{ request('term') }}" />

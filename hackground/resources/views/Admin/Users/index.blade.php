@@ -50,27 +50,26 @@
         </button>
     </div>
     @endif
-    <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Admin User
+    <div class="main-card mb-3 card">        
+            <div class="card-header d-flex">
+                <h4>Admin User</h4>
                 {{-- @if (in_array('MEN0005_Add', $Permissions)) --}}
                 <div class="btn-actions-pane-right">
                     <button type="button" class="btn btn-sm btn-success" id="addAdminButton">Add User</button>
                 </div>
                 {{-- @endif --}}
             </div>
-
+            <div class="card-body">
             <div class="table-responsive" id="main_table">
                 <table id="myTable" class="mb-0 table">
                     <thead>
                         <tr>
-                            <th style="width:5%">ID</th>
-                            <th style="width:15%">Username</th>
-                            <th style="width:20%">Name</th>
-                            <th style="width:15%">Role</th>
-                            <th style="min-width:110px; width:20%">Registered On</th>
-                            <th style="width:10%">Status</th>
+                            <th style="width:32px;">ID</th>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th style="min-width:110px;">Registered On</th>
+                            <th>Status</th>
                             <th style="min-width:80px;" class="text-right">Action</th>
                         </tr>
                     </thead>
@@ -93,12 +92,12 @@
 
                             <td class="text-right">
                                 {{-- @if (in_array('MEN0005_Edit', $Permissions)) --}}
-                                <i class="fa fa-edit text-success fa-md editButton"
-                                    data-userid="{{ $user->id }}"></i>
+                                <a href="javascript:void(0)" class="me-2"><i class="bi bi-pencil-fill text-success fa-md editButton"
+                                    data-userid="{{ $user->id }}"></i></a>
                                 {{-- @endif --}}
                                 {{-- @if (in_array('MEN0005_Delete', $Permissions)) --}}
-                                <i class="fa fa-trash text-danger fa-md UserDeleteButton"
-                                    data-userid="{{ $user->id }}"></i>
+                                <a href="javascript:void(0)"><i class="bi bi-trash3-fill text-danger fa-md UserDeleteButton"
+                                    data-userid="{{ $user->id }}"></i></a>
                                 {{-- @endif --}}
                             </td>
                         </tr>
@@ -132,29 +131,33 @@
                     @csrf
                     <!-- Hidden input for user ID -->
                     <input type="text" class='d-none' id="userId" name="id">
-                    <div class="form-group">
+                    <div class="form-floating mb-3">
+                        
+                        <input type="text" class="form-control" id="username" name="username" placeholder="" required>
                         <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
                         <div class="invalid-feedback" id="username_error"></div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-floating mb-3">
+                        
+                        <input type="text" class="form-control" id="name" name="name" placeholder="" required>
                         <label for="Name">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
                         <div class="invalid-feedback" id="name_error"></div>
 
                     </div>
-                    <div class="form-group">
+                    <div class="form-floating mb-3">
+                        
+                        <input type="email" class="form-control" id="email" name="email" placeholder="" required>
                         <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
                         <div class="invalid-feedback" id="email_error"></div>
                     </div>
-                    <div class="form-group pass-div">
+                    <div class="form-floating mb-3 pass-div">
+                        
+                        <input type="password" class="form-control" id="password" name="password" placeholder="" required>
                         <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
                         <div class="invalid-feedback" id="password_error"></div>
                     </div>
-                    <div class="form-group">
-                        <label for="role">Role</label>
+                    <div class="form-floating mb-3">
+                        
                         <select class="form-control" id="role" name="role" required>
                             <option value=" ">Select Option</option>
                             @foreach ($roles as $role)
@@ -163,22 +166,24 @@
                             @endif
                             @endforeach
                         </select>
+                        <label for="role">Role</label>
                         <div class="invalid-feedback" id="role_error"></div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Status</label>
-                        <div class="radio-inline">
-                            <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked
+                    <div class="form-group mb-0">
+                        <label class="form-label d-block">Status</label>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="status" value=1 class="form-check-input" id="status_1" checked
                                 required>
-                            <label for="status_1">Active</label>
-                            <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
-                            <label for="status_2">Inactive</label>
+                            <label class="form-check-label" for="status_1">Active</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="status" value=0 class="form-check-input" id="status_2">
+                            <label class="form-check-label" for="status_2">Inactive</label>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" id="saveChangesButton" class="btn btn-primary">Save</button>
             </div>
         </div>

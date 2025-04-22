@@ -51,27 +51,26 @@
             </div>
         @endif
         <div class="main-card mb-3 card">
-            <div class="card-body">
-                <div class="card-header p-0">
-                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Menu Management
-                    {{-- @if (in_array('MEN0005_Add', $Permissions)) --}}
-                    <div class="btn-actions-pane-right">
-                        <button type="button" class="btn btn-sm btn-success" id="addMenuButton"
-                            onclick="add_prop_menu()">Add Menu</button>
-                    </div>
-                    {{-- @endif --}}
+            <div class="card-header d-flex">
+                <h4>Menu Management</h4>
+                {{-- @if (in_array('MEN0005_Add', $Permissions)) --}}
+                <div class="btn-actions-pane-right">
+                    <button type="button" class="btn btn-sm btn-success" id="addMenuButton"
+                        onclick="add_prop_menu()">Add Menu</button>
                 </div>
-
+                {{-- @endif --}}
+            </div>
+            <div class="card-body">                
                 <div class="table-responsive" id="main_table">
                     <table class="mb-0 table">
                         <thead>
                             <tr>
-                                <th style="width:25%">Menu Name</th>
-                                <th style="width:25%">Sub Menu</th>
-                                <th style="width:25%">Menu Slug</th>
+                                <th>Menu Name</th>
+                                <th>Sub Menu</th>
+                                <th>Menu Slug</th>
                                 <th></th>
-                                <th style="width:15%">Status</th>
-                                <th style="min-width:20px;" class="text-right">Action</th>
+                                <th>Status</th>
+                                <th class="text-right">Action</th>
                             </tr>
                         </thead>
 
@@ -97,17 +96,17 @@
                                         <td class="text-right" style="padding-right:20px;">
                                             <a href="javascript:void(0)" onclick="Add_sub_menu('{{ $menu->id }}')"
                                                 data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add Sub Menu">
-                                                <i class="fa fa-plus-circle text-primary fa-md"></i>
+                                                <i class="bi bi-plus-circle-fill text-primary fa-md"></i>
                                             </a>
                                             &nbsp;
                                             <a href="javascript:void(0)" onclick="Edit_prop_menu('{{ $menu->id }}')"
                                                 data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit">
-                                                <i class="fa fa-edit text-success fa-md"></i>
+                                                <i class="bi bi-pencil-fill text-success fa-md"></i>
                                             </a>
                                             &nbsp;
                                             <a href="javascript:void(0)" onclick="Delete_prop_menu('{{ $menu->id }}')"
                                                 data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete">
-                                                <i class="fa fa-trash text-danger fa-md"></i>
+                                                <i class="bi bi-trash3-fill text-danger fa-md"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -134,13 +133,13 @@
                                                     <a href="javascript:void(0)"
                                                         onclick="Edit_prop_menu('{{ $sub_menu->id }}')"
                                                         data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit">
-                                                        <i class="fa fa-edit text-success fa-md"></i>
+                                                        <i class="bi bi-pencil-fill text-success fa-md"></i>
                                                     </a>
                                                     &nbsp;
                                                     <a href="javascript:void(0)"
                                                         onclick="Delete_prop_menu('{{ $sub_menu->id }}')"
                                                         data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete">
-                                                        <i class="fa fa-trash text-danger fa-md"></i>
+                                                        <i class="bi bi-trash3-fill text-danger fa-md"></i>
                                                     </a>
                                                 </td>
                                             </tr>
@@ -182,32 +181,34 @@
                         <input type="text" class='d-none' id="menuID" name="menuID">
                         <input type="text" class='d-none' id="parent_id" name="parent_id">
 
-                        <div class="d-none form-group parent_menu">
+                        <div class="form-floating mb-3 parent_menu">                            
+                            <input type="text" class="form-control" id="parent_menu" name="parent_menu" placeholder="" required>
                             <label for="parent_menu">Parent Menu</label>
-                            <input type="text" class="form-control" id="parent_menu" name="parent_menu" required>
                             <div class="invalid-feedback" id="parent_menu_error"></div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-floating mb-3">
+                            
+                            <input type="text" class="form-control" id="menu_name" name="menu_name" placeholder="" required>
                             <label for="menu_name">Menu Name</label>
-                            <input type="text" class="form-control" id="menu_name" name="menu_name" required>
                             <div class="invalid-feedback" id="menu_name_error"></div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-floating mb-3">
+                            
+                            <input type="text" class="form-control" id="menu_slug" name="menu_slug" placeholder="" required>
                             <label for="menu_slug">Slug</label>
-                            <input type="text" class="form-control" id="menu_slug" name="menu_slug" required>
                             <div class="invalid-feedback" id="menu_slug_error"></div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-floating mb-3">
+                            
+                            <input type="text" class="form-control" id="menu_desc" name="menu_desc" placeholder="" required>
                             <label for="menu_desc">Description</label>
-                            <input type="text" class="form-control" id="menu_desc" name="menu_desc" required>
                             <div class="invalid-feedback" id="menu_desc_error"></div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="menu_action">Action</label>
+                        <div class="form-floating mb-3">                            
                             <select type="text" class="form-control" id="menu_action" name="menu_action" required>
                                 <option value="">-- select --</option>
                                 <option value="add">ADD</option>
@@ -215,43 +216,48 @@
                                 <option value="delete">DELETE</option>
                                 <option value="list">LIST</option>
                             </select>
+                            <label for="menu_action">Action</label>
                             <div class="invalid-feedback" id="menu_action_error"></div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-floating mb-3">
+                            
+                            <input type="text" class="form-control" id="menu_url" name="menu_url" placeholder="" required>
                             <label for="menu_url">URL</label>
-                            <input type="text" class="form-control" id="menu_url" name="menu_url" required>
                             <div class="invalid-feedback" id="menu_url_error"></div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="menu_icon">Icon</label>
+                        <div class="form-floating mb-3">
+                            
                             <input type="text" class="form-control" placeholder='e.g:"metismenu-icon pe-7s-rocket"'
                                 id="menu_icon" name="menu_icon" required>
+                                <label for="menu_icon">Icon</label>
                             <div class="invalid-feedback" id="menu_icon_error"></div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-floating mb-3">
+                            
+                            <input type="number" class="form-control" id="menu_order" name="menu_order" placeholder="" required>
                             <label for="menu_order">Order</label>
-                            <input type="number" class="form-control" id="menu_order" name="menu_order" required>
                             <div class="invalid-feedback" id="menu_order_error"></div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Status</label>
-                            <div class="radio-inline">
-                                <input type="radio" name="menu_status" value=1 class="magic-radio" id="status_1"
+                        <div class="form-group mb-0">
+                            <label class="form-label d-block">Status</label>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="menu_status" value=1 class="form-check-input" id="status_1"
                                     checked required>
-                                <label for="status_1">Active</label>
-                                <input type="radio" name="menu_status" value=0 class="magic-radio" id="status_2">
-                                <label for="status_2">Inactive</label>
+                                <label class="form-check-label" for="status_1">Active</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="menu_status" value=0 class="form-check-input" id="status_2">
+                                <label class="form-check-label" for="status_2">Inactive</label>
                             </div>
                         </div>
 
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" id="saveChangesButton" onclick="add_edit_prop_menu()"
                         class="btn btn-primary">Save</button>
                 </div>

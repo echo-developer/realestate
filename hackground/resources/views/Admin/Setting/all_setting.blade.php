@@ -79,12 +79,6 @@
         </li>
         @endif
         @endforeach
-        <li class="nav-item">
-            <a class="nav-link ajax-link {{ Request::is('Settings/default') || Request::is('Settings')  ? 'active' : '' }}"
-                href="{{ url('Settings/default') }}" data-url="{{ url('/Settings/default') }}">
-                <span>Default</span>
-            </a>
-        </li>
     </ul>
 
     <div class="main-card mb-3 card">
@@ -191,8 +185,8 @@
                     <input type="text" class='d-none' id="settingsId" name="settingsId">
                     <input type="text" class='d-none' value="" id="group_key" name="group_key">
 
-                    <div class="form-group" id="Groups">
-                        <label for="Groups">Setting Groups</label>
+                    <div class="form-floating mb-3" id="Groups">
+                        
                         <select class="form-control" id="Groups_data" name="Groups" required>
                             <option value="default">Default</option>
 
@@ -202,57 +196,65 @@
                             </option>
                             @endforeach
                         </select>
+                        <label for="Groups">Setting Groups</label>
 
                     </div>
-                    <div class="form-group">
+                    <div class="form-floating mb-3">
+                        
+                        <input type="text" class="form-control" id="setting_name" name="setting_name" placeholder="" required>
                         <label for="setting_name">Setting Name</label>
-                        <input type="text" class="form-control" id="setting_name" name="setting_name" required>
                         <div class="invalid-feedback" id="setting_name_error"></div>
 
                     </div>
-                    <div class="form-group">
+                    <div class="form-floating mb-3">
+                        
+                        <input type="text" class="form-control" id="setting_Key" name="setting_Key" placeholder="" required>
                         <label for="setting_Key">Setting Key</label>
-                        <input type="text" class="form-control" id="setting_Key" name="setting_Key" required>
                         <div class="invalid-feedback" id="setting_Key_error"></div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-floating mb-3">
+                        
+                        <input type="text" class="form-control" id="setting_Value" name="setting_Value" placeholder="" required>
                         <label for="setting_Value">Setting Value</label>
-                        <input type="text" class="form-control" id="setting_Value" name="setting_Value" required>
                         <div class="invalid-feedback" id="setting_Value_error"></div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-floating mb-3">
+                        
+                        <input type="text" class="form-control" id="Display_Order" name="Display_Order" placeholder="" required>
                         <label for="Display_Order">Display Order</label>
-                        <input type="text" class="form-control" id="Display_Order" name="Display_Order" required>
                         <div class="invalid-feedback" id="Display_Order_error"></div>
                     </div>
 
                     <div class="form-group" id="Editable">
-                        <label class="form-label">Editable</label>
-                        <div class="radio-inline">
-                            <input type="radio" name="Editable" value=1 class="magic-radio" id="Editable_1"
+                        <label class="form-label d-block">Editable</label>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="Editable" value=1 class="form-check-input" id="Editable_1"
                                 checked required>
-                            <label for="Editable_1">Yes</label>
-                            <input type="radio" name="Editable" value=0 class="magic-radio" id="Editable_2">
-                            <label for="Editable_2">No</label>
+                            <label class="form-check-label" for="Editable_1">Yes</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="Editable" value=0 class="form-check-input" id="Editable_2">
+                            <label class="form-check-label" for="Editable_2">No</label>
                         </div>
                     </div>
 
-                    <div class="form-group" id="Deletable">
-                        <label class="form-label">Deletable</label>
-                        <div class="radio-inline">
-                            <input type="radio" name="Deletable" value=1 class="magic-radio" id="Deletable_1"
+                    <div class="form-group mb-0" id="Deletable">
+                        <label class="form-label d-block">Deletable</label>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="Deletable" value=1 class="form-check-input" id="Deletable_1"
                                 checked required>
-                            <label for="Deletable_1">Yes</label>
-                            <input type="radio" name="Deletable" value=0 class="magic-radio" id="Deletable_2">
-                            <label for="Deletable_2">No</label>
+                            <label class="form-check-label" for="Deletable_1">Yes</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="Deletable" value=0 class="form-check-input" id="Deletable_2">
+                            <label class="form-check-label" for="Deletable_2">No</label>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" id="SettingsButton" class="btn btn-primary">Save</button>
             </div>
         </div>

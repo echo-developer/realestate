@@ -53,16 +53,13 @@
 
         <form action="{{ url('management/cms') }}" method="get">
             <section class="content-header mb-2">
-                <div class="row">
-                    <div class="offset-sm-8 col-sm-4">
+                <div class="row justify-content-end">
+                    <div class="col-xl-4 col-lg-6">
                         <div class="input-group">
-                            <input class="form-control" id="prop_cms_search" placeholder="Search..." name="term"
-                                value="{{ request('term') }}" />
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </div>
+                            <input class="form-control" id="prop_cms_search" placeholder="Search..." name="term" value="{{ request('term') }}" />
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-search"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -70,28 +67,23 @@
         </form>
 
         <div class="main-card mb-3 card">
-            <div class="card-body">
-                <div class="card-header p-0">
-                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> CMS List
-
-                    <div class="btn-actions-pane-right">
-
-                        <button type="button" class="btn btn-sm btn-success" onclick="add_prop_cms()">Add
-                            CMS</button>
-                    </div>
-
+            <div class="card-header d-flex">
+                <h4>CMS List</h4>
+                <div class="btn-actions-pane-right">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="add_prop_cms()">Add CMS</button>
                 </div>
-
+            </div>
+            <div class="card-body">
                 <div class="table-responsive" id="main_table">
                     <table class="mb-0 table" id="email-table">
                         <thead>
                             <tr>
-                                <th style="width:5%">ID</th>
-                                <th style="width:15%">Title</th>
-                                <th style="width:30%">Key</th>
-                                <th style="width:20%">Order</th>
-                                <th style="width:20%">Status</th>
-                                <th style="min-width:80px;" class="text-right">Action</th>
+                                <th style="width: 32px;">ID</th>
+                                <th>Title</th>
+                                <th>Key</th>
+                                <th>Order</th>
+                                <th>Status</th>
+                                <th style="min-width:60px;" class="text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody id="user">
@@ -117,7 +109,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6">Sorry, no records found!</td>
+                                    <td colspan="6" class="text-center text-muted">Sorry, no records found!</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -175,7 +167,7 @@
 @section('modals')
     <div class="modal fade" id="prop_cms" tabindex="-1" role="dialog" aria-labelledby="prop_cmsaddEditModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
 
@@ -186,7 +178,6 @@
                 </button>
                 </div>
                 <div class="modal-body">
-
                     <form id="prop_cmsformData">
                         <input type="hidden" class='d-none' id="prop_cmsimage" name="image">
                         <input type="text" class='d-none' id="prop_cmsId" name="prop_cmsId">
@@ -194,17 +185,15 @@
                             $langs = explode(',', admin_default_lang());
                         @endphp
                         @foreach ($langs as $lang)
-                            <div class="form-group">
+                            <div class="form-floating mb-3">                                
+                                <input type="text" class="form-control reset_field" id="title_{{ $lang }}" name="title[{{ $lang }}]" placeholder="" autocomplete="off">
                                 <label for="subject">{{ __('Title') }} ({{ strtoupper($lang) }})</label>
-                                <input type="text" class="form-control reset_field" id="title_{{ $lang }}"
-                                    name="title[{{ $lang }}]" autocomplete="off">
                                 <div class="invalid-feedback" id="title_{{ $lang }}_error"></div>
                             </div>
                         @endforeach
-                        <div class="form-group">
+                        <div class="form-floating mb-3">                            
+                            <input type="text" class="form-control reset_field" id="slug" name="slug" placeholder="" autocomplete="off">
                             <label for="template_key">Slug</label>
-                            <input type="text" class="form-control reset_field" id="slug" name="slug"
-                                autocomplete="off">
                             <div class="invalid-feedback" id="slug_error"></div>
                         </div>
                         @foreach ($langs as $lang)
@@ -214,49 +203,44 @@
                                     name="content[{{ $lang }}]" autocomplete="off"></textarea>
                                 <div class="invalid-feedback" id="content_{{ $lang }}_error"></div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-floating mb-3">                                
+                                <input type="text" class="form-control reset_field" id="meta_title_{{ $lang }}" name="meta_title[{{ $lang }}]" placeholder="" autocomplete="off">
                                 <label for="subject">{{ __('Meta Title') }} ({{ strtoupper($lang) }})</label>
-                                <input type="text" class="form-control reset_field"
-                                    id="meta_title_{{ $lang }}" name="meta_title[{{ $lang }}]"
-                                    autocomplete="off">
                                 <div class="invalid-feedback" id="meta_title_{{ $lang }}_error"></div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-floating mb-3">                                
+                                <input type="text" class="form-control reset_field" id="meta_keys_{{ $lang }}" name="meta_keys[{{ $lang }}]" placeholder="" autocomplete="off">
                                 <label for="subject">{{ __('Meta Keys') }} ({{ strtoupper($lang) }})</label>
-                                <input type="text" class="form-control reset_field"
-                                    id="meta_keys_{{ $lang }}" name="meta_keys[{{ $lang }}]"
-                                    autocomplete="off">
                                 <div class="invalid-feedback" id="meta_keys_{{ $lang }}_error"></div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-floating mb-3">                                
+                                <textarea type="text" class="form-control reset_field" id="meta_desc_{{ $lang }}" name="meta_desc[{{ $lang }}]" placeholder="" autocomplete="off" style="min-height: 75px;"></textarea>
                                 <label for="subject">{{ __('Meta Description') }} ({{ strtoupper($lang) }})</label>
-                                <textarea type="text" class="form-control reset_field" id="meta_desc_{{ $lang }}"
-                                    name="meta_desc[{{ $lang }}]" autocomplete="off"></textarea>
                                 <div class="invalid-feedback" id="meta_desc_{{ $lang }}_error"></div>
                             </div>
                         @endforeach
 
-                        <div class="form-group">
+                        <div class="form-floating mb-3">                            
+                            <input type="Order" class="form-control" id="order" name="order" placeholder="" required>
                             <label for="Order">Order</label>
-                            <input type="Order" class="form-control" id="order" name="order" required>
                             <div class="invalid-feedback" id="order_error"></div>
                         </div>
 
 
-                        <div class="form-group">
-                            <label class="form-label">Status</label>
-                            <div class="radio-inline">
-                                <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked
-                                    required>
-                                <label for="status_1">Active</label>
-                                <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
-                                <label for="status_2">Inactive</label>
+                        <div class="form-group mb-0">
+                            <label class="form-label d-block">Status</label>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="status" value=1 class="form-check-input" id="status_1" checked required>
+                                <label class="form-check-label" for="status_1">Active</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="status" value=0 class="form-check-input" id="status_2">
+                                <label class="form-check-label" for="status_2">Inactive</label>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" onclick="add_edit_prop_cms()" id="prop_cmsButton"
                         class="btn btn-primary">Save</button>
                 </div>

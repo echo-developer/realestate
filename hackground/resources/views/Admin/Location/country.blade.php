@@ -46,15 +46,13 @@
 
     <form action="{{ url('country') }}" method="get">
         <section class="content-header mb-2">
-            <div class="row">
-                <div class="offset-sm-8 col-sm-4">
+            <div class="row justify-content-end">
+                <div class="col-xl-4 col-lg-6">
                     <div class="input-group">
                         <input class="form-control" id="prop_transaction_search" placeholder="Search..." name="term" value="{{ request('term') }}" />
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -62,25 +60,22 @@
     </form>
 
     <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Country List
-
-                <div class="btn-actions-pane-right">
-                    <button type="button" class="btn btn-sm btn-success" onclick="add()">Add Country</button>
-                </div>
-
+        <div class="card-header d-flex">
+            <h4>Country List</h4>
+            <div class="btn-actions-pane-right">
+                <button type="button" class="btn btn-sm btn-primary" onclick="add()">Add Country</button>
             </div>
-
+        </div>
+        <div class="card-body">
             <div class="table-responsive" id="main_table">
                 <table id="myTable" class="mb-0 table">
                     <thead>
                         <tr>
-                            <th style="width:5%">ID</th>
-                            <th style="width:25%">Name </th>
-                            <th style="width:40%">Order</th>
-                            <th style="width:20%">Status</th>
-                            <th style="min-width:80px;" class="text-right">Action</th>
+                            <th style="width:32px;">ID</th>
+                            <th>Name </th>
+                            <th>Order</th>
+                            <th>Status</th>
+                            <th style="min-width:60px;" class="text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody id="user">
@@ -95,16 +90,13 @@
                                 <input data-id="{{$item->id}}" class="status d-none" type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{$item->status ? 'checked' : '' }}>
                             </td>
                             <td class="text-right">
-
-                                <i class="fa fa-edit text-success fa-md " onclick="Edit('{{ $item->id }}')"></i>
-
-                                <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->id }}')"></i>
-
+                                <a href="javascript:void(0)" class="me-2"><i class="bi bi-pencil-fill text-success fa-md " onclick="Edit('{{ $item->id }}')"></i></a>
+                                <a href="javascript:void(0)"><i class="bi bi-trash3-fill text-danger fa-md" onclick="Delete('{{ $item->id }}')"></i></a>
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6">Sorry, no records found!</td>
+                            <td colspan="6" class="text-center text-muted">Sorry, no records found!</td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -176,33 +168,32 @@
                     $langs = explode(',', admin_default_lang());
                     @endphp
                     @foreach($langs as $lang)
-                    <div class="form-group">
+                    <div class="form-floating mb-3">                        
+                        <input type="text" class="form-control reset_field" id="name_{{ $lang }}" name="name[{{ $lang }}]" placeholder="" autocomplete="off">
                         <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
-                        <input type="text" class="form-control reset_field" id="name_{{ $lang }}" name="name[{{ $lang }}]" autocomplete="off">
                         <div class="invalid-feedback" id="name_{{ $lang }}_error"></div>
                     </div>
                     @endforeach
 
-                    <div class="form-group">
+                    <div class="form-floating mb-3">                        
+                        <input type="Order" class="form-control" id="order" name="order" placeholder="" required>
                         <label for="Order">Order</label>
-                        <input type="Order" class="form-control" id="order" name="order" required>
                         <div class="invalid-feedback" id="Order_error"></div>
                     </div>
-
-
-                    <div class="form-group">
-                        <label class="form-label">Status</label>
-                        <div class="radio-inline">
-                            <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked required>
-                            <label for="status_1">Active</label>
-                            <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
-                            <label for="status_2">Inactive</label>
+                    <div class="form-group mb-0">
+                        <label class="form-label d-block">Status</label>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="status" value=1 class="form-check-input" id="status_1" checked required>
+                            <label class="form-check-label" for="status_1">Active</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="status" value=0 class="form-check-input" id="status_2">
+                            <label class="form-check-label" for="status_2">Inactive</label>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" onclick="add_edit()" id="button" class="btn btn-primary">Save</button>
             </div>
         </div>

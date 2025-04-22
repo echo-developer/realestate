@@ -52,47 +52,47 @@
                 </button>
             </div>
         @endif
-        <div class="p-3 text-left">
-            <a href="{{ url('/menu_management-view') }}" class="btn btn-success">ADD MENU</a>
+        <div class="mb-3 text-left">
+            <a href="{{ url('/menu_management-view') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Menu</a>
         </div>
         <div class="main-card mb-3 card">
 
             <form action="{{ url('/permission-save') }}" method="POST">
                 @csrf
-                <div class="card-body">
-                    <div class="card-header p-0">
-                        <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Menu Permission &nbsp; &nbsp;
-                        <span class="badge badge-secondary" id="role-badge"></span>
-                        <div class="btn-actions-pane-right">
-                            <select class="form-control form-control-md" name="user_role" id="user_role">
-                                <option value="">Choose</option>
-                                @foreach ($roles as $role)
-                                    <option value="{{ $role->id }}" data-role-name="{{ $role->name }}"
-                                        {{ old('user_role') == $role->id ? 'selected' : '' }}>
-                                        {{ $role->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                
+                <div class="card-header d-flex">
+                    <h4>Menu Permission</h4>
+                    <span class="badge badge-secondary" id="role-badge"></span>
+                    <div class="btn-actions-pane-right">
+                        <select class="form-select form-select-sm" name="user_role" id="user_role">
+                            <option value="">Choose</option>
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->id }}" data-role-name="{{ $role->name }}"
+                                    {{ old('user_role') == $role->id ? 'selected' : '' }}>
+                                    {{ $role->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
+                </div>
+                <div class="card-body">
 
-                    <div class="select-user-first">
+                    <div class="select-user-first text-center text-muted">
                         <div>
-                            <h4 class="p-2">No Role Selected !</h4>
-                            <small class="p-2">Please select a role first</small>
+                            <p class="mb-0">No Role Selected !</p>
+                            <small>Please select a role first</small>
                         </div>
                     </div>
                     <div class="table-responsive d-none" id="main_table">
                         <table class="mb-0 table">
                             <thead>
                                 <tr>
-                                    <th style="width:15%">Menu Name</th>
-                                    <th style="width:15%">Sub Menu</th>
-                                    <th style="min-width:50px;" class="text-right">Action</th>
-                                    <th style="min-width:10px;" class="text-right"></th>
+                                    <th>Menu Name</th>
+                                    <th>Sub Menu</th>
+                                    <th class="text-right">Action</th>
+                                    <th class="text-right"></th>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 @foreach ($data[0] ?? [] as $menu)
                                     <!-- Parent Menu -->
@@ -106,7 +106,7 @@
                                             <td></td>
 
 
-                                            <td class="text-right" style="padding-right:20px;">
+                                            <td class="text-right">
 
                                                 <input type="checkbox" class="menu-checkbox checkbox"
                                                     id="menu-{{ $menu->id }}" name="{{ $menu->slug }}"

@@ -54,10 +54,10 @@
             </div>
         @endif
         <div class="main-card mb-3 card">
-            <div class="card-body">
-                <div class="card-header p-0">
-                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Role Management <div
-                        class="btn-actions-pane-right">
+            
+                <div class="card-header d-flex">
+                    <h4>Role Management</h4>
+                    <div class="btn-actions-pane-right">
                         <div class="btn-group" id="global_action_btn" style="display:none">
                             <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
                                 onclick="deleteSelected()" data-original-title="Delete selected"><i
@@ -75,14 +75,14 @@
                         {{-- @endif --}}
                     </div>
                 </div>
-
+                <div class="card-body">
                 <div class="table-responsive" id="main_table">
                     <table id="myTable" class="table">
                         <thead>
                             <tr>
-                                <th style="width:10%">ID</th>
-                                <th style="width:35%">Name</th>
-                                <th style="width:10%">Status</th>
+                                <th style="width:32px">ID</th>
+                                <th>Name</th>
+                                <th>Status</th>
                                 <th class="text-right">Action</th>
                             </tr>
                         </thead>
@@ -98,12 +98,12 @@
                                     </td>
                                     <td class="text-right">
                                         {{-- @if (in_array('MEN0006_Edit', $rolePermissions)) --}}
-                                        <i class="fa fa-edit text-success fa-md RoleEditButton"
-                                            roleId="{{ $items->id }}"></i>
+                                        <a href="javascript:void(0)" class="me-2"><i class="bi bi-pencil-fill text-success fa-md RoleEditButton"
+                                            roleId="{{ $items->id }}"></i></a>
                                         {{-- @endif --}}
                                         {{-- @if (in_array('MEN0006_Delete', $rolePermissions)) --}}
-                                        <i class="fa fa-trash text-danger fa-md RoleDeleteButton"
-                                            roleId="{{ $items->id }}"></i>
+                                        <a href="javascript:void(0)"><i class="bi bi-trash3-fill text-danger fa-md RoleDeleteButton"
+                                            roleId="{{ $items->id }}"></i></a>
                                         {{-- @endif --}}
                                     </td>
                                 </tr>
@@ -135,39 +135,40 @@
                         <!-- Hidden input for user ID -->
                         <input type="text" class='d-none' id="roleId" name="id">
 
-                        <div class="form-group">
+                        <div class="form-floating mb-3">
+                            
+                            <input type="text" class="form-control" id="name" name="name" placeholder="" required>
                             <label for="Name">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
                             <div class="invalid-feedback" id="name_error"></div>
                             <div id="addRoleErrorContainer"></div>
                             <div id="editRoleErrorContainer"></div>
 
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-floating mb-3">
+                            
+                            <input type="text" class="form-control" id="slug" name="slug" placeholder="" required>
                             <label for="Name">Slug</label>
-                            <input type="text" class="form-control" id="slug" name="slug" required>
                             <div class="invalid-feedback" id="slug_error"></div>
                             <div id="addRoleErrorContainer"></div>
                             <div id="editRoleErrorContainer"></div>
-
                         </div>
 
-
-                        <div class="form-group">
-                            <label class="form-label">Status</label>
-                            <div class="radio-inline">
-                                <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked
+                        <div class="form-group mb-0">
+                            <label class="form-label d-block">Status</label>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="status" value=1 class="form-check-input" id="status_1" checked
                                     required>
-                                <label for="status_1">Active</label>
-                                <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
-                                <label for="status_2">Inactive</label>
+                                <label class="form-check-label" for="status_1">Active</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" name="status" value=0 class="form-check-input" id="status_2">
+                                <label class="form-check-label" for="status_2">Inactive</label>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" id="RoleButton" class="btn btn-primary"></button>
                 </div>
             </div>
