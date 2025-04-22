@@ -134,6 +134,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('admin_notifiaction', 'Admin_notifiaction_Page')->name('Admin_notifiaction_Page');
         Route::get('/admin/fetch-notifications', 'fetchLatest')->name('admin.notifications.fetch');
         Route::post('/noti_stausUp', 'notification_stausUpdate')->name('notification.stausUpdate');
+        Route::get('/notification-count', 'getNotificationCount')->name('admin.notification.count');
         Route::post('/deleteNotification/{id}', 'deleteNotification')->name('deleteNotification');
     });
 

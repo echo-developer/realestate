@@ -142,7 +142,7 @@ class AuthController extends Controller
     {
         assign_free_plan(auth()->user()->id);
         notify_admins_with_template('new_user_registered', [
-            'user_name' => auth()->user()->name,
+            'FULL_NAME' => auth()->user()->name,
         ]);
         return response()->json([
             'status' => 1,

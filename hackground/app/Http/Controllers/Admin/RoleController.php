@@ -17,9 +17,6 @@ class RoleController extends Controller
 
         $roles = Admin_Role::where('status', '!=', config('constants.STATUS_DELETE'))
         ->where('id', '!=', config('constants.STATUS_ACTIVE'))->get();
-        notify_admins_with_template('new_user_registered', [
-            'user_name' => 'Somyadip',
-        ]);
         return view('Admin.Role.index')->with(['roles' => $roles]);
         // return view('Admin.Role.index');
     }

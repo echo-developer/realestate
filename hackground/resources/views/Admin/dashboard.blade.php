@@ -248,4 +248,71 @@
 
 @endsection
 
+@push('custom-js')
+    <script>
+        const saleData = [<?php echo implode(
+            ',',
+            array_map(function ($sale) {
+                return '"' . $sale . '"';
+            }, $data['chart_sale']),
+        ); ?>].map(Number);
+        const rentData = [<?php echo implode(
+            ',',
+            array_map(function ($rent) {
+                return '"' . $rent . '"';
+            }, $data['chart_rent']),
+        ); ?>].map(Number);
 
+        const allData = saleData.concat(rentData);
+        const maxValue = Math.max(...allData);
+        const suggestedMax = Math.ceil(maxValue / 10) * 10;
+
+        const ctx = document.getElementById('overviewChart').getContext('2d');
+        const overviewChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [<?php echo implode(
+                    ',',
+                    array_map(function ($month) {
+                        return '"' . $month . '"';
+                    }, $data['chart_labels']),
+                ); ?>],
+                datasets: [{
+                        label: 'Total Sale',
+                        data: saleData,
+                        fill: true,
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        borderColor: '#4f46e5',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Total Rent',
+                        data: rentData,
+                        fill: true,
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        borderColor: '#22c55e',
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        suggestedMax: suggestedMax,
+                        ticks: {
+                            callback: value => value
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    </script>
+@endpush

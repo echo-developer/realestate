@@ -44,15 +44,23 @@ $allmenus = AllmenusForSideBar();
                     <a href="{{ isset($allmenus[$main_menu->id]) ? '#' : url($main_menu->url) }}">
                         <i class="metismenu-icon {{ $main_menu->icon_class }}"></i>
                         {{ $main_menu->name }}
-                        <i class="{{ isset($allmenus[$main_menu->id]) ? 'metismenu-state-icon pe-7s-angle-down caret-left' : '' }}"></i>
+                        @if(isset($allmenus[$main_menu->id]))
+                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                        @endif
+
+                        @if($main_menu->url === 'admin_notifiaction')
+                        <span class="badge badge-pill badge-danger" id="notificationCount" style="display:none;"></span>
+                        @endif
                     </a>
+
+
 
                     <!-- Display submenus if they exist -->
                     @if (isset($allmenus[$main_menu->id]))
                     <ul>
                         @foreach ($allmenus[$main_menu->id] as $submenu)
                         <li class="{{ request()->is($submenu->url . '*') ? 'mm-active' : '' }}">
-                            
+
                             <a href="{{ url($submenu->url) }}">
                                 <i class="{{ $submenu->icon_class }}"></i>
                                 {{ $submenu->name }}
@@ -69,3 +77,27 @@ $allmenus = AllmenusForSideBar();
         </div>
     </div>
 </div>
+<script>
+    function fetchNotificationCount() {
+        $.ajax({
+            url: '{{ route("admin.notification.count") }}', 
+            method: 'GET',
+            success: function(response) {
+                const count = response.count;
+                const $badge = $('#notificationCount');
+
+                if (count > 0) {
+                    $badge.text(count).show();
+                } else {
+                    $badge.hide();
+                }
+            },
+            error: function() {
+                console.error('Failed to fetch notification count.');
+            }
+        });
+    }
+
+    fetchNotificationCount();
+    setInterval(fetchNotificationCount, 7000);
+</script>

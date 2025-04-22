@@ -19,7 +19,11 @@ class NotificationController extends Controller
         $notifications = Notification::where('read_status', '!=', config('constants.STATUS_DELETE'))->paginate($peginate);
         return view('Admin.Notification.index')->with(compact('notifications'));
     }
-
+    public function getNotificationCount()
+    {
+        $count = Notification::where('read_status', false)->count(); 
+        return response()->json(['count' => $count]);
+    }
     public function notification_stausUpdate(Request $req)
     {
 

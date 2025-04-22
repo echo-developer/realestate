@@ -82,16 +82,22 @@ if (!function_exists('SendMail')) {
 
             $subject = $mailContent->subject;
             $contents = html_entity_decode($mailContent->content);
+            $contents = preg_replace('/(<br\s*\/?>\s*){2,}/i', '<br>', $contents);
+            $contents = preg_replace('/<p[^>]*>\s*<\/p>/', '', $contents);
 
             foreach ($data_parse as $key => $val) {
                 $contents = str_replace('{' . $key . '}', $val, $contents);
             }
+
+            logger($contents);
+
             $mail->isHTML(true);
             $mail->CharSet = 'UTF-8';
             $mail->ContentType = 'text/html';
             $mail->Subject = $subject;
-            $mail->Body = nl2br($contents);
-            $mail->AltBody = strip_tags($contents);
+            $mail->Body = $contents; // Removed nl2br()
+            $mail->AltBody = strip_tags($contents); // This is fine for plain text fallback
+
             $send = $mail->send();
         } catch (Exception $e) {
             return response()->json([
@@ -103,6 +109,103 @@ if (!function_exists('SendMail')) {
         return $send;
     }
 }
+
+if (!function_exists('formatPrice')) {
+    function formatPrice($price)
+    {
+        if ($price >= 10000000) {
+            return round($price / 10000000, 2) . ' Cr';
+        } elseif ($price >= 100000) {
+            return round($price / 100000, 2) . ' Lac';
+        } elseif ($price >= 1000) {
+            return round($price / 1000, 2) . ' K';
+        } else {
+            return $price;
+        }
+    }
+}
+function getAvatarColor($input)
+{
+    $colors = [
+        '#e57373',
+        '#f06292',
+        '#ba68c8',
+        '#9575cd',
+        '#7986cb',
+        '#64b5f6',
+        '#4dd0e1',
+        '#4db6ac',
+        '#81c784',
+        '#dce775',
+        '#ffd54f',
+        '#ffb74d',
+        '#a1887f',
+        '#90a4ae'
+    ];
+
+    $hash = crc32(strtolower(trim($input)));
+    $index = $hash % count($colors);
+
+    return $colors[$index];
+}
+
+
+if (!function_exists('generatePropertyCardHTML')) {
+    function generatePropertyCardHTML($properties)
+    {
+        $html = '';
+        foreach ($properties as $property) {
+            $Price = get_setting('site-currency') . formatPrice($property->settings->expected_price);
+            $locality = get_name_by_id("locality_names", "locality_id", $property->location->locality, "en");
+            $possession = get_name_by_id("property_status_names", "status_id", $property->additional->possession_status, "en");
+            $parking = $property->settings->parking_ability
+                ? '&nbsp; | &nbsp;<strong>Parking:</strong> ' . $property->settings->parking_ability
+                : '';
+
+            $html .= '
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #ccc; border-radius:12px; margin-bottom:20px; font-family:Arial, sans-serif;">
+            <tr>
+                <td style="padding:16px;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td style="font-size:18px; font-weight:bold; color:#000;">
+                                ' . $Price . ' 
+                                <span style="font-weight:normal;font-size:16px;color:#606060;display:inline-block;padding-left:10px"> ' .  $property->additional->bhk_type  . ' Flat</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; color:#333; padding:6px 0;">
+                                ' . $locality . '
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:14px; color:#333; padding:6px 0;">
+                                <strong>Super Area:</strong> ' . $property->settings->area_in_sqft . ' Sq-ft &nbsp; | &nbsp;
+                                <strong>Possession:</strong> ' . $possession . '
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top:12px;">
+                                <a href="' . config('app.frontend_url') . '/' . 'property-details/' . $property->slug . '" style="display:inline-block; padding:10px 18px; background:#fff; color:#d0021b; border:1px solid #d0021b; border-radius:5px; text-decoration:none; font-weight:bold; margin-right:10px;">
+                                    View Details
+                                </a>
+                                <a href="' . $property->slug . '" style="display:inline-block; padding:10px 18px; background:#d0021b; color:#fff; border:1px solid #d0021b; border-radius:5px; text-decoration:none; font-weight:bold;">
+                                    Get Number
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    ';
+        }
+
+
+        return $html;
+    }
+}
+
 
 
 if (!function_exists('UniquePropertyCode')) {
@@ -239,6 +342,28 @@ if (!function_exists('getFieldLang')) {
             ->select($column)
             ->where($where, $id)
             ->where('lang', $lang)
+            ->first();
+
+        if ($data && property_exists($data, $column)) {
+            return $data->$column;
+        }
+
+        return '';
+    }
+}
+
+if (!function_exists('getField')) {
+
+
+    function getField($column = '', $table = '', $where = '', $id = '')
+    {
+        if (empty($column) || empty($table) || empty($where) || empty($id)) {
+            return '';
+        }
+
+        $data = DB::table($table)
+            ->select($column)
+            ->where($where, $id)
             ->first();
 
         if ($data && property_exists($data, $column)) {

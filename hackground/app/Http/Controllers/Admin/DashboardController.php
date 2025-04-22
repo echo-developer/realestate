@@ -28,6 +28,7 @@ class DashboardController extends Controller
 
     public function index()
     {
+
         $data = $this->dashboardService->getDashboardData();
         return view('Admin.dashboard', compact('data'));
     }
