@@ -79,6 +79,11 @@
         </li>
         @endif
         @endforeach
+        <li class="nav-item">
+            <a class="nav-link ajax-link" href="{{ route('set.payment.method') }}">
+                <span>Payment Method</span>
+            </a>
+        </li>
     </ul>
 
     <div class="main-card mb-3 card">
