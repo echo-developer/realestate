@@ -672,7 +672,7 @@
 @endpush
 
 <div class="modal fade" id="ajaxModal">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
 
         </div>

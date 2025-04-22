@@ -1941,6 +1941,7 @@ h4 {
 	}
 }
 .cart-plus-minus {
+	justify-content: center;
 	max-width: 120px;
 	position: relative;
 	.form-control {
@@ -1959,13 +1960,13 @@ h4 {
 	.qtybutton {
 		position: absolute;
 		left: 2px;
-		top: 2px;
-		width: 36px;
-		height: 36px;
+		top: 4px;
+		width: 32px;
+		height: 32px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		flex: 0 0 36px;
+		flex: 0 0 32px;
 		border-radius: 0.25rem;
 		background-color: $primary-bg-subtle;
 		border: 3px solid #fff;

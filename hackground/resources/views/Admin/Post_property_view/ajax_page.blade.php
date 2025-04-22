@@ -27,8 +27,7 @@
                       <span class="text-danger small" id="postForError"></span>
                     </div>
                     
-                    <div class="form-floating mb-4">
-                        
+                    <div class="form-floating mb-4">                        
                         <select class="form-select" name="property_type" id="property_type">
                             <option value="">Select Property Type</option>
                             @isset($propertyTypes)
@@ -53,8 +52,7 @@
                         <span class="text-danger small" id="property_forError"></span>
                     </div>
 
-                    {{-- <div class="form-floating mb-4">
-                        
+                    {{-- <div class="form-floating mb-4">                        
                         <select class="form-select" name="price_currency" id="price_currency">
                             <option value="">-Select-</option>
                         </select>
@@ -63,7 +61,7 @@
                     </div> --}}
 
                     <div class="input-group mb-4">
-                        <select class="form-select" data-width="fit" title="Currency" name="currency">
+                        <select class="form-select" data-width="fit" title="Currency" name="currency" style="max-width: 105px;">
                             <option disabled="disabled">Currency</option>
                             <option value="AED" {{ $propertyData->settings->price_currency == 'AED' ? 'selected' : '' }} >AED</option>
                             <option value="EURO" {{ $propertyData->settings->price_currency == 'EURO' ? 'selected' : '' }} >EURO</option>
@@ -72,6 +70,7 @@
                         </select>
                         <div class="form-floating">
                             <input type="text" class="form-control" name="expected_price" placeholder="Enter Amount" value="{{ $propertyData->settings->expected_price }}" />
+                            <label>Price</label>
                         </div>
                     </div>
 
@@ -81,10 +80,8 @@
                         <span class="text-danger small" id="project_nameError"></span>
                     </div>
 
-                    <div class="form-floating mb-4">
-                        
-                        <textarea class="form-control" name="buyer_message" id="buyer_message" style="min-height: 100px;">
-                            {{ $propertyData['additional']->buyer_message ? $propertyData['settings']->buyer_message : '' }}</textarea>
+                    <div class="form-floating mb-4">                        
+                        <textarea class="form-control" name="buyer_message" id="buyer_message" placeholder="" style="min-height: 100px;">{{ $propertyData['additional']->buyer_message ? $propertyData['settings']->buyer_message : '' }}</textarea>
                         <label for="buyer_message">Message to buyer</label>
                         <span class="text-danger small" id="buyer_messageError"></span>
                     </div>
@@ -253,8 +250,7 @@
                   <div class="box-body">
                       <input type="hidden" name="property_id" value="{{ $property_id }}" />
                       
-                    <div class="form-field">
-                        <label class="form-label">City</label>
+                    <div class="form-floating mb-3">                        
                         <select id="city" name="city" class="form-control ">
                             <option value="">Select City</option>
                             @if (!empty($cities) && is_array($cities))
@@ -268,17 +264,20 @@
                             @endif
 
                         </select>
+                        <label class="form-label">City</label>
                         <span class="error cityError text-danger"></span>
                     </div>
                     
-                    <div class="form-field">
-                        <label class="form-label">Locality</label>
+                    <div class="form-floating mb-3">                        
                         <input type="text" name="locality" class="form-control" placeholder="Enter Project Name Or Locality" value="{{ $propertyData['location']->locality }}" />
+                        <label class="form-label">Locality</label>
                         <span class="error localityError text-danger"></span>
                     </div>
-                    <div class="form-field">
+                    <div class="form-floating mb-3">                        
+                        <textarea rows="3" class="form-control mb-2" name='address' placeholder="Enter Your Address" style="min-height: 100px;">
+                            {{ $propertyData['location']->property_address }}
+                        </textarea>
                         <label class="form-label">Address</label>
-                        <textarea rows="3" class="form-control mb-2" name='address' placeholder="Enter Your Address">{{ $propertyData['location']->property_address }}</textarea>
                         <span class="error addressError text-danger"></span>
                         <p class="text-end text-help">Maximum 300 words are allowed</p>
                     </div>
@@ -308,10 +307,10 @@
                             <div class="col-12">
                                 <div class="form-field">
                                     <label class="form-label">Bedroom</label>
-                                    <div class="cart-plus-minus mb-4 d-flex align-items-center">
-                                        <button type="button" class="btn btn-danger minus qtybutton" amenity="bedroom">-</button>
+                                    <div class="cart-plus-minus mb-3 d-flex align-items-center">
+                                        <button type="button" class="btn btn-danger minus qtybutton" amenity="bedroom"><i class="bi bi-dash-lg"></i></button>
                                         <input class="form-control text-center mx-2 room-count" name="bedroom_count" type="text" readonly style="max-width: 80px;" value="{{ $propertyData->settings->bedrooms ? $propertyData->settings->bedrooms : '0' }}">
-                                        <button type="button" class="btn btn-success plus qtybutton" amenity="bedroom" >+</button>
+                                        <button type="button" class="btn btn-success plus qtybutton" amenity="bedroom" ><i class="bi bi-plus-lg"></i></button>
                                     </div>
                                     <span class="error bedroom_countError text-danger"></span>
                                     <div class="size-forms">
@@ -322,13 +321,17 @@
                                                 $size = json_decode($d->size);
                                             @endphp
                                             <div class="size-form mt-3 p-3 border rounded bg-light">  
-                                                <label class="fw-bold">Height & Width</label>  
-                                                <div class="row">  
+                                                <label class="form-label fw-medium">Height & Width</label>  
+                                                <div class="row gx-3">  
                                                     <div class="col-6">  
-                                                        <input type="text" class="form-control mb-2" name="bedroom[width][]" placeholder="Enter Height" value="{{ $size->width ?? '?' }}" autocomplete="off">  
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control" name="bedroom[width][]" placeholder="Enter Height" value="{{ $size->width ?? '?' }}" autocomplete="off">  
+                                                    </div>
                                                     </div>  
                                                     <div class="col-6">  
+                                                    <div class="form-floating">
                                                         <input type="text" class="form-control" name="bedroom[height][]" placeholder="Enter Width" value="{{ $size->height ?? '?' }}" autocomplete="off">  
+                                                    </div>
                                                     </div>  
                                                 </div>  
                                             </div>
@@ -343,10 +346,10 @@
                             <div class="col-12">
                                 <div class="form-field">
                                     <label class="form-label">Balcony</label>
-                                    <div class="cart-plus-minus mb-4 d-flex align-items-center">
-                                        <button type="button" class="btn btn-danger minus qtybutton" amenity="balcony">-</button>
+                                    <div class="cart-plus-minus mb-3 d-flex align-items-center">
+                                        <button type="button" class="btn btn-danger minus qtybutton" amenity="balcony"><i class="bi bi-dash-lg"></i></button>
                                         <input class="form-control text-center mx-2 room-count" name="balcony_count" type="text" value="{{ $propertyData->additional->balcony ? $propertyData->additional->balcony : '0' }}" readonly style="max-width: 80px;" >
-                                        <button type="button" class="btn btn-success plus qtybutton" amenity="balcony">+</button>
+                                        <button type="button" class="btn btn-success plus qtybutton" amenity="balcony"><i class="bi bi-plus-lg"></i></button>
                                     </div>
                                     <span class="error balcony_countError text-danger"></span>
                                     <div class="size-forms">
@@ -357,13 +360,17 @@
                                                 $size = json_decode($d->size);
                                             @endphp
                                             <div class="size-form mt-3 p-3 border rounded bg-light">  
-                                                <label class="fw-bold">Height & Width</label>  
-                                                <div class="row">  
-                                                    <div class="col-6">  
-                                                        <input type="text" class="form-control mb-2" name="balcony[width][]" placeholder="Enter Height" value="{{ $size->width ?? '?' }}" autocomplete="off">  
+                                                <label class="form-label fw-medium">Height & Width</label>  
+                                                <div class="row gx-3">  
+                                                    <div class="col-6"> 
+                                                    <div class="form-floating"> 
+                                                        <input type="text" class="form-control" name="balcony[width][]" placeholder="Enter Height" value="{{ $size->width ?? '?' }}" autocomplete="off">  
+                                                    </div>
                                                     </div>  
                                                     <div class="col-6">  
-                                                        <input type="text" class="form-control" name="balcony[height][]" placeholder="Enter Width" value="{{ $size->height ?? '?' }}" autocomplete="off">  
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control" name="balcony[height][]" placeholder="Enter Width" value="{{ $size->height ?? '?' }}" autocomplete="off">
+                                                    </div>  
                                                     </div>  
                                                 </div>  
                                             </div>
@@ -378,10 +385,10 @@
                             <div class="col-12">
                                 <div class="form-field">
                                     <label class="form-label">Bathroom</label>
-                                    <div class="cart-plus-minus mb-4 d-flex align-items-center">
-                                        <button type="button" class="btn btn-danger minus qtybutton" amenity="bathroom">-</button>
+                                    <div class="cart-plus-minus mb-3 d-flex align-items-center">
+                                        <button type="button" class="btn btn-danger minus qtybutton" amenity="bathroom"><i class="bi bi-dash-lg"></i></button>
                                         <input class="form-control text-center mx-2 room-count" name="bathroom_count" type="text" value="{{ $propertyData->settings->bathrooms ? $propertyData->settings->bathrooms : '0' }}" readonly style="max-width: 80px;">
-                                        <button type="button" class="btn btn-success plus qtybutton" amenity="bathroom">+</button>
+                                        <button type="button" class="btn btn-success plus qtybutton" amenity="bathroom"><i class="bi bi-plus-lg"></i></button>
                                     </div>
                                     <span class="error bathroom_countError text-danger"></span>
                                     <div class="size-forms">
@@ -392,13 +399,17 @@
                                                 $size = json_decode($d->size);
                                             @endphp
                                             <div class="size-form mt-3 p-3 border rounded bg-light">  
-                                                <label class="fw-bold">Height & Width</label>  
-                                                <div class="row">  
+                                                <label class="form-label fw-medium">Height & Width</label>  
+                                                <div class="row gx-3">  
                                                     <div class="col-6">  
-                                                        <input type="text" class="form-control mb-2" name="bathroom[width][]" placeholder="Enter Height" value="{{ $size->width ?? '?' }}" autocomplete="off">  
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control" name="bathroom[width][]" placeholder="Enter Height" value="{{ $size->width ?? '?' }}" autocomplete="off">  
+                                                    </div>
                                                     </div>  
                                                     <div class="col-6">  
+                                                    <div class="form-floating">
                                                         <input type="text" class="form-control" name="bathroom[height][]" placeholder="Enter Width" value="{{ $size->height ?? '?' }}" autocomplete="off">  
+                                                    </div>
                                                     </div>  
                                                 </div>  
                                             </div>
@@ -413,10 +424,11 @@
                         <h5>Floor Details :</h5>
                         <div class="row gx-3">
                             <div class="col-lg-6 col-12">
-                                <div class="form-field"><label class="form-label">Carpet Area</label>
-                                    <div class="input-group"><input class="form-control " name="carpet_area"
-                                            placeholder="Type Carpet Area" type="number" value="{{ $propertyData['settings']->carpet_area }}"><span
-                                            class="input-group-text">sqft</span>
+                                <div class="form-field">
+                                    <label class="form-label">Carpet Area</label>
+                                    <div class="input-group">
+                                        <input class="form-control" name="carpet_area" placeholder="Type Carpet Area" type="number" value="{{ $propertyData['settings']->carpet_area }}">
+                                        <span class="input-group-text">sqft</span>
                                     </div>
                                     <span class="text-danger small" id="carpet_areaError"></span>
                                 </div>
@@ -452,59 +464,64 @@
                         </div>
 
                         <div class="row gx-3">
-                            <div class="form-group col-lg-6 col-12">
-                                <label class="form-label">Flats on the Floor</label>
-                                <select class="form-select" name="flat_each_floor">
-                                    <option value="">Slect Floor Type</option>
-                                    @php  
-                                        $flats_in_floor = flats_in_floor();
-                                    @endphp
-                                    @if($flats_in_floor)
-                                    @foreach($flats_in_floor as $f)
-                                        <option value="{{$f}}" {{ $propertyData->additional->flat_each_floor == $f ? 'selected' : '' }}  >{{$f}}</option>
-                                    @endforeach
-                                    @endif
-                                </select>
-                                <span class="error floorsError text-danger"></span>
+                            <div class="col-lg-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" name="flat_each_floor">
+                                        <option value="">Slect Floor Type</option>
+                                        @php  
+                                            $flats_in_floor = flats_in_floor();
+                                        @endphp
+                                        @if($flats_in_floor)
+                                        @foreach($flats_in_floor as $f)
+                                            <option value="{{$f}}" {{ $propertyData->additional->flat_each_floor == $f ? 'selected' : '' }}  >{{$f}}</option>
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                    <label>Flats on the Floor</label>
+                                    <span class="error floorsError text-danger"></span>
+                                </div>
                             </div>
-                            <div class="form-group col-lg-6 col-12">
-                                <label class="form-label">Lifts in the Tower</label>
-                                <select class="form-select" name="lifts_in_tower">
-                                    <option value="">--Select--</option>
-                                    @php  
-                                        $lifts_in_tower = lifts_in_tower();
-                                    @endphp
-                                    @if($lifts_in_tower)
-                                    @foreach($lifts_in_tower as $f)
-                                        <option value="{{$f}}" {{ $propertyData->additional->lifts_in_tower == $f ? 'selected' : '' }}  >{{$f}}</option>
-                                    @endforeach
-                                    @endif
-                                </select>
-                                <span class="error floorsError text-danger"></span>
+                            <div class="col-lg-6 col-12">
+                                <div class="form-floating mb-3">                                    
+                                    <select class="form-select" name="lifts_in_tower">
+                                        <option value="">--Select--</option>
+                                        @php  
+                                            $lifts_in_tower = lifts_in_tower();
+                                        @endphp
+                                        @if($lifts_in_tower)
+                                        @foreach($lifts_in_tower as $f)
+                                            <option value="{{$f}}" {{ $propertyData->additional->lifts_in_tower == $f ? 'selected' : '' }}  >{{$f}}</option>
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                    <label>Lifts in the Tower</label>
+                                    <span class="error floorsError text-danger"></span>
+                                </div>
                             </div>
                         </div>
 
                         <div class="row gx-3">
-                            <div class="form-group col-lg-6 col-12">
-                                <label class="form-label">Floor No.</label>
-                                <select class="form-select" name="floors">
-                                    <option value="">--Select--</option>
-                                    @php  
-                                        $floor_numbers = get_floor_numbers();
-                                    @endphp
-                                    @if($floor_numbers)
-                                    @foreach($floor_numbers as $k=>$f)
-                                        <option value="{{$k}}" {{ $propertyData->additional->floor == $k ? 'selected' : '' }}  >{{$f}}</option>
-                                    @endforeach
-                                    @endif
-                                </select>
-                                <span class="error floorsError text-danger"></span>
+                            <div class="col-lg-6 col-12">
+                                <div class="form-floating mb-3">
+                                    
+                                    <select class="form-select" name="floors">
+                                        <option value="">--Select--</option>
+                                        @php  
+                                            $floor_numbers = get_floor_numbers();
+                                        @endphp
+                                        @if($floor_numbers)
+                                        @foreach($floor_numbers as $k=>$f)
+                                            <option value="{{$k}}" {{ $propertyData->additional->floor == $k ? 'selected' : '' }}  >{{$f}}</option>
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                    <label>Floor No.</label>
+                                    <span class="error floorsError text-danger"></span>
+                                </div>
                             </div>
                            
-                            <div class="form-group col-lg-6 col-12">
-                                <label class="form-label">Total Floors</label>
-                                <div class="btn-group btn-group-light d-flex mb-3" role="group"
-                                    aria-label="Total Floors">
+                            <div class="col-lg-6 col-12">
+                                <div class="form-floating mb-3">                                
                                     <select class="form-select" name="total_floors">
                                         <option value="">--Select--</option>
                                         @php  
@@ -516,6 +533,7 @@
                                         @endforeach
                                         @endif
                                     </select>
+                                    <label>Total Floors</label>
                                 </div>
                                 <span class="error total_floorsError text-danger"></span>
                             </div>
@@ -526,11 +544,13 @@
                             $amenity_arr = explode(',',$amenities);
                         @endphp
                         <div id="residential_features">
-                            <div class="form-group"><label class="form-label">Amenity Features : </label>
-
+                            <div class="form-group">
+                                <label class="form-label d-block">Amenity Features : </label>
+                                <div class="row">
                                 @if (!empty($proepertyAmenities) && is_array($proepertyAmenities))
                                     @foreach ($proepertyAmenities as $amenity)
-                                        <div class="form-check form-check-inline">
+                                    <div class="col-6">
+                                        <div class="form-check">
                                             <input class="form-check-input" name="amenities[]"
                                                 id="amenity-{{ $amenity['amenity_id'] }}"
                                                 value="{{ $amenity['amenity_id'] }}" type="checkbox" {{ in_array($amenity['amenity_id'],$amenity_arr) ? 'checked' : '' }}>
@@ -538,10 +558,12 @@
                                                 for="amenity-{{ $amenity['amenity_id'] }}">{{ $amenity['amenity_name'] }}
                                             </label>
                                         </div>
+                                    </div>
                                     @endforeach
                                 @else
-                                    <div> No amenity Found ! </div>
+                                <div class="col-12 text-muted">No amenity Found !</div>
                                 @endif
+                                </div>
                             </div>
 
                             <div class="mb-3"><label class="form-label">Is This A Corner Plot:</label>
@@ -617,10 +639,18 @@
             </form>
     </div>
     
+    <script src="{{ asset('assets/dist/js/select2.js') }}"></script>
+    <script>
+        $(".select-2").select2({
+            theme: "bootstrap-5",
+            selectionCssClass: "select2--single",
+            dropdownCssClass: "select2--single",
+        });
+    </script>
     <script>
         /* $(function(){
             $('.select2').select2();
-        });
+        }); */
 
         $(".qtybutton").off("click").on("click", function () {  
             let parent = $(this).closest(".form-field");  
@@ -642,13 +672,18 @@
 
     function addForm(formContainer,amenity,value) {  
         let formHtml = `<div class="size-form mt-3 p-3 border rounded bg-light">  
-                <label class="fw-bold">Height & Width</label>  
-                <div class="row">  
-                    <div class="col-6">  
-                        <input type="text" class="form-control mb-2" name="`+amenity+`[width][]" placeholder="Enter Height" value="" autocomplete="off">  
+                <div class="row gx-3">
+                    <div class="col-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="`+amenity+`[width][]" placeholder="Enter Height" value="" autocomplete="off"> 
+                            <label>Height</label>
+                        </div>
                     </div>  
                     <div class="col-6">  
-                        <input type="text" class="form-control" name="`+amenity+`[height][]" placeholder="Enter Width" value="" autocomplete="off">  
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="`+amenity+`[height][]" placeholder="Enter Width" value="" autocomplete="off"> 
+                            <label>Width</label> 
+                        </div>
                     </div>  
                 </div>  
             </div>`;  
@@ -902,8 +937,7 @@
             </form>
     </div>
     
-    
-    <script src="{{ asset('assets/dist/js/select2.js') }}"></script>
+<script src="{{ asset('assets/dist/js/select2.js') }}"></script>
 <script>
     $(".select-2").select2({
         theme: "bootstrap-5",

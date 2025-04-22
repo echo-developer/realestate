@@ -5,7 +5,7 @@
 
 </div>
 <div class="modal-body">
-    <form role="form" id="add_form" action="<?php echo $form_action; ?>" onsubmit="submitForm(this, event)">
+    <form role="form" id="add_form" class="mb-0" action="<?php echo $form_action; ?>" onsubmit="submitForm(this, event)">
         <div class="box-body">
 
             {{-- @php
@@ -120,7 +120,7 @@
             <label for="ad_url">Ad URL </label>
         </div>
 
-        <div class="form-group mb-0">
+        <div class="form-group">
             <label class="form-label d-block">Status</label>
             <div class="form-check form-check-inline">
                 <input type="radio" name="status" value="1" class="form-check-input" id="status_1" checked>

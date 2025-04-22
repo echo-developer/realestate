@@ -51,8 +51,7 @@
     <form action="" method="get">
         <section class="content-header mb-2">
             <div class="row">
-                <div class="col-xl-3 col-md-4 col-sm-6">
-                    
+                <div class="col-xl-3 col-md-4 col-sm-6">                    
                     <div class="form-floating mb-3">
                         <select class="form-select" name="page" id="page" onchange="get_position()">
                             <option value="" >All</option>
@@ -66,17 +65,15 @@
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-4 col-sm-6">
-                    <div class="input-group mb-3">
-                        <div class="form-floating">
-                            <select class="form-select" name="position" id="position" >
-                                <option value="">-Select-</option>
-                            </select>
-                            <label for="category_key">Position </label>
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-select" name="position" id="position" >
+                            <option value="">-Select-</option>
+                        </select>
+                        <label for="category_key">Position </label>
+                    </div>                                            
+                </div>
+                <div class="col-auto mb-3">
+                    <button type="submit" class="btn btn-primary">Search</button>
                 </div>
             </div>
         </section>

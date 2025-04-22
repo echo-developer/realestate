@@ -148,9 +148,9 @@
                                         <span class="text-danger" id="project_nameError"></span>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-floating mb-4">                                        
+                                        <textarea class="form-control" name="buyer_message" id="buyer_message" placeholder="" style="min-height: 100px;"></textarea>
                                         <label for="buyer_message">Message to buyer</label>
-                                        <textarea class="form-control" name="buyer_message" id="buyer_message"></textarea>
                                         <span class="text-danger" id="buyer_messageError"></span>
                                     </div>
 
