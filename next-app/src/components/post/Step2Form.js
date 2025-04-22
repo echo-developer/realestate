@@ -184,6 +184,7 @@ const Step2Form = ({
     { key: "sale", value: "Sale", icon: "/assets/images/icons/sale1.png" },
   ];
 
+
   return (
     <div id="step-2">
       {isLoading ? (
