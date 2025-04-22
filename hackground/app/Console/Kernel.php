@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
 
-        $schedule->command('app:send-weekly-property-suggestions')->dailyAt('15:11');
+        $schedule->command('app:send-weekly-property-suggestions')->everyTwoMinutes();
     }
 
     /**
