@@ -19,10 +19,10 @@
             <div class="page-title-wrapper">
                 <div class="page-title-heading">
                     <div class="page-title-icon">
-                        <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
+                        <i class="bi bi-list"></i>
                     </div>
                     <div>Menu Management
-                        <div class="page-title-subheading">Admin Menu &gt; Menu Management List</div>
+                        <div class="page-title-subheading">Admin Menu <i class="bi bi-chevron-right"></i> Menu Management List</div>
                     </div>
                 </div>
                 <div class="page-title-actions">
@@ -43,11 +43,9 @@
             }
         </style>
         @if (session('success_msg'))
-            <div class="alert alert-{{ session('message_type') }}">
+            <div class="alert alert-{{ session('message_type') }} alert-dismissible">
                 {{ session('success_msg') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert">
-                    
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
         <div class="main-card mb-3 card">

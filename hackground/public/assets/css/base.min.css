@@ -11975,7 +11975,7 @@ button {
 }
 
 .app-main .app-main__inner {
-    padding: 30px 30px 0;
+    padding: 25px;
     flex: 1
 }
 
@@ -11988,7 +11988,7 @@ button {
 }
 
 .app-theme-white .app-page-title {
-    background: rgba(255, 255, 255, .45)
+    background: rgba(255, 255, 255, 1)
 }
 
 .app-theme-white .app-footer .app-footer__inner,
@@ -12143,14 +12143,13 @@ button {
 }
 
 .app-page-title {
-    padding: 30px;
-    margin: -30px -30px 30px;
+    padding: 25px;
+    margin: -25px -25px 25px;
     position: relative;
-    display: none;
 }
 
 .app-page-title+.body-tabs-layout {
-    margin-top: -30px !important
+    margin-top: -25px !important
 }
 
 .app-page-title .page-title-wrapper {
@@ -12199,18 +12198,18 @@ button {
     font-size: 2rem;
     display: flex;
     align-items: center;
-    align-content: center;
     text-align: center;
-    padding: .83333rem;
-    margin: 0 30px 0 0;
-    background: #fff;
-    box-shadow: 0 .46875rem 2.1875rem rgba(4, 9, 20, .03), 0 .9375rem 1.40625rem rgba(4, 9, 20, .03), 0 .25rem .53125rem rgba(4, 9, 20, .05), 0 .125rem .1875rem rgba(4, 9, 20, .03);
+    padding: 0rem;
+    margin: 0 15px 0 0;
+    background-color: rgba(var(--re-primary-rgb), 0.1);
+    color: var(--re-primary);
     border-radius: .25rem;
-    width: 60px;
-    height: 60px
+    width: 50px;
+    height: 50px
 }
 
 .app-page-title .page-title-icon i {
+    line-height: 1;
     margin: auto
 }
 
@@ -17639,13 +17638,6 @@ a.badge-alternate:focus,
 a.badge-alternate:hover {
     color: #fff;
     background-color: #5c3a69
-}
-
-.badge {
-    font-weight: 700;
-    text-transform: uppercase;
-    padding: 5px 10px;
-    min-width: 19px
 }
 
 .badge-light {

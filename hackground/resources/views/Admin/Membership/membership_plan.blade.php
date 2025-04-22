@@ -46,41 +46,40 @@
     <div class="alert alert-{{ session('message_type') }}">
         {{ session('success_msg') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert">
-            
+
         </button>
     </div>
     @endif
     <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Membership Plan <div
-                    class="btn-actions-pane-right">
-                    <div class="btn-group" id="global_action_btn" style="display:none">
-                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
-                            onclick="deleteSelected()" data-original-title="Delete selected"><i
-                                class="fa fa-trash"></i></button>
-                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
-                            onclick="changeStatusAll(1)" data-original-title="Make active"><i
-                                class="fa fa-thumbs-up"></i></button>
-                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
-                            onclick="changeStatusAll(0)" data-original-title="Make inactive"><i
-                                class="fa  fa-thumbs-down"></i></button>
-                    </div>
-                    &nbsp;
-                    {{-- @if (in_array('MEN0006_Add', $rolePermissions)) --}}
-                    <button type="button" class="btn btn-site btn-sm btn-primary" id='addMembershipPlan'>Add Membership Plan </button>
-                    {{-- @endif --}}
+        <div class="card-header d-flex">
+            <h4>Membership Plan</h4>
+            <div class="btn-actions-pane-right">
+                <div class="btn-group" id="global_action_btn" style="display:none">
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
+                        onclick="deleteSelected()" data-original-title="Delete selected"><i
+                            class="fa fa-trash"></i></button>
+                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
+                        onclick="changeStatusAll(1)" data-original-title="Make active"><i
+                            class="fa fa-thumbs-up"></i></button>
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
+                        onclick="changeStatusAll(0)" data-original-title="Make inactive"><i
+                            class="fa  fa-thumbs-down"></i></button>
                 </div>
+                &nbsp;
+                {{-- @if (in_array('MEN0006_Add', $rolePermissions)) --}}
+                <button type="button" class="btn btn-site btn-sm btn-primary" id='addMembershipPlan'>Add Membership Plan </button>
+                {{-- @endif --}}
             </div>
-
+        </div>
+        <div class="card-body">
             <div class="table-responsive" id="main_table">
                 <table id="myTable" class="table">
                     <thead>
                         <tr>
-                            <th style="width:35%">Plan</th>
-                            <th style="width:20%">Price</th>
-                            <th style="width:20%">Duration</th>
-                            <th style="width:10%">Status</th>
+                            <th>Plan</th>
+                            <th>Price</th>
+                            <th>Duration</th>
+                            <th>Status</th>
                             <th class="text-right">Action</th>
                         </tr>
                     </thead>
@@ -97,10 +96,8 @@
                                     {{ $membershipPlan->status ? 'checked' : '' }}>
                             </td>
                             <td class="text-right">
-                                <i class="fa fa-edit text-success fa-md editButton"
-                                    data-membershipPlanId="{{ $membershipPlan->id }}"></i>
-                                <i class="fa fa-trash text-danger fa-md deleteButton"
-                                    data-membershipPlanId="{{ $membershipPlan->id }}"></i>
+                                <a href="javascript:void(0)" class="me-2"><i class="bi bi-pencil-fill text-success fa-md editButton" data-membershipPlanId="{{ $membershipPlan->id }}"></i></a>
+                                <a href="javascript:void(0)"><i class="bi bi-trash3-fill text-danger fa-md deleteButton" data-membershipPlanId="{{ $membershipPlan->id }}"></i></a>
                             </td>
                         </tr>
                         @endforeach
@@ -123,7 +120,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="MembershipPlanAddEditModalLabel"> </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    
+
                 </button>
             </div>
             <div class="modal-body">
@@ -131,66 +128,62 @@
                 <form id="MembershipPlanformData">
                     <!-- Hidden input for user ID -->
                     <input type="text" class='d-none' id="membershipPlanId" name="id">
-                    <div class="form-group">
+                    <div class="form-floating mb-3">
+                        <select name="plan_type" id="plan_type" class="form-select">
+                            <option value="">Select Plan Type</option>
+                            @if (isset($plan_type))
+                            @foreach ($plan_type as $items)
+                            <option value="{{ $items->id }}">{{ $items->plan_name }}</option>
+                            @endforeach
+                            @endif
+                        </select>
                         <label for="ufile">Plan Type</label>
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <select name="plan_type" id="plan_type" class="form-control">
-                                    <option value="">Select Plan Type</option>
-                                    @if (isset($plan_type))
-                                    @foreach ($plan_type as $items)
-                                    <option value="{{ $items->id }}">{{ $items->plan_name }}</option>
-                                    @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
                     </div>
                     @php
                     $langs = explode(',', admin_default_lang());
                     @endphp
                     @foreach($langs as $lang)
-                    <div class="form-group">
+                    <div class="form-floating mb-3">                        
+                        <input type="text" class="form-control" id="about_plan_{{ $lang }}" name="about_plan[{{ $lang }}]" placeholder="" required>
                         <label for="About_Plan">{{ __('About Plan') }} ({{ strtoupper($lang) }})</label>
-                        <input type="text" class="form-control" id="about_plan_{{ $lang }}" name="about_plan[{{ $lang }}]" required>
                         <div class="invalid-feedback" id="about_plan_{{ $lang }}_error"></div>
                     </div>
                     @endforeach
 
-
-
-                    <div class="form-group">
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="price" name="price" placeholder="" required min="0" step="0.01">
                         <label for="price">Price</label>
-                        <input type="number" class="form-control" id="price" name="price" required min="0" step="0.01">
                         <div class="invalid-feedback" id="price_error"></div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-floating mb-3">                        
+                        <input type="number" class="form-control" id="validity_days" name="validity_days" placeholder="" required min="1">
                         <label for="duration">Duration (Days)</label>
-                        <input type="number" class="form-control" id="validity_days" name="validity_days" required min="1">
                         <div class="invalid-feedback" id="validity_days_error"></div>
                     </div>
 
-                    <!-- <div class="form-group">
+                    <!-- <div class="form-floating mb-3">
+                        
+                        <input type="number" class="form-control" id="discount" name="discount" placeholder="" min="0" max="100" step="0.01">
                         <label for="discount">Discount (%)</label>
-                        <input type="number" class="form-control" id="discount" name="discount" min="0" max="100" step="0.01">
                         <div class="invalid-feedback" id="discount_error"></div>
                     </div> -->
 
-                    <div class="form-group">
+                    <div class="form-floating mb-3">                        
+                        <input type="number" class="form-control" id="discounted_price" name="discounted_price" placeholder="">
                         <label for="discounted_price">Discounted Price</label>
-                        <input type="number" class="form-control" id="discounted_price" name="discounted_price">
                         <div class="invalid-feedback" id="discounted_price_error"></div>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Status</label>
-                        <div class="radio-inline">
-                            <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked
-                                required>
-                            <label for="status_1">Active</label>
-                            <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
-                            <label for="status_2">Inactive</label>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="status" value=1 class="form-check-input" id="status_1" checked required>
+                            <label class="form-check-label" for="status_1">Active</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="status" value=0 class="form-check-input" id="status_2">
+                            <label class="form-check-label" for="status_2">Inactive</label>
                         </div>
                     </div>
                 </form>

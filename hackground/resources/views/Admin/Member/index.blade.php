@@ -152,9 +152,13 @@
                                 @forelse ($data  as $items)
                                     <tr>
                                         <td>{{ $items->id }}</td>
-                                        <td><a href="{{ route('memberUser.allDetails', $items->id) }}"
-                                                target="_blank">{{ $items->name }}</a>
-                                            <br><small>({{ $userTypes[$items->user_type] ?? 'Unknown' }})
+                                        <td>
+                                            <a href="{{ route('memberUser.allDetails', $items->id) }}" target="_blank" class="d-flex">
+                                                <span class="user-initial bg-primary rounded-circle me-2">AP</span>
+                                               <img src="{{ asset('assets/images/user-avatar.jpg') }}" alt="User" height="40" width="40" class="rounded-circle me-2" />
+                                               <div>{{ $items->name }}<br><span class="badge bg-info">{{ $userTypes[$items->user_type] ?? 'Unknown' }}</span></div>
+                                            </a>
+                                            
                                         </td>
                                         <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width:150px;">
                                             {{ $items->email }}

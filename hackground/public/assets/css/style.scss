@@ -1,5 +1,5 @@
 :root {
-	--siteColor: #1365CF;
+	--siteColor: #0d6efd;
 	--siteColorHover: #0b5ed7;
 	--rgbColor: 13, 110, 253;
 	--webColor: #00cf2c;
@@ -15,7 +15,7 @@
 	--fontSize: 16px;
 	--transition: 0.5s;
 }
-$primary: #1365CF;
+$primary: #0d6efd;
 $success: #198754;
 $danger: #dc3545;
 $warning: #F58F00;
@@ -425,7 +425,15 @@ ul#desk-nav {
 		}
 	}
 }
-
+.user-initial{
+	color: #fff;
+    font-size: 1.125rem;
+    font-weight: 700;
+    min-width: 40px;
+    height: 40px;
+    text-align: center;
+    padding: 7px;
+}
 .banner {
 	background-size: cover;
 	background-position: bottom center;
