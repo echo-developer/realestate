@@ -175,8 +175,8 @@
                         <div class="invalid-feedback" id="discounted_price_error"></div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Status</label>
+                    <div class="form-group mb-0">
+                        <label class="form-label d-block">Status</label>
                         <div class="form-check form-check-inline">
                             <input type="radio" name="status" value=1 class="form-check-input" id="status_1" checked required>
                             <label class="form-check-label" for="status_1">Active</label>

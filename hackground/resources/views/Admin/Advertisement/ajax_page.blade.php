@@ -1,8 +1,7 @@
 @if($page == 'add')
 <div class="modal-header">
     <h4 class="modal-title"><?php echo $title; ?></h4>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        </button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 
 </div>
 <div class="modal-body">
@@ -13,8 +12,8 @@
                         $langs = explode(',', admin_default_lang());
                     @endphp
                     @foreach ($langs as $lang)
-                        <div class="form-group">
-                            <label for="name">Name ({{ strtoupper($lang) }})</label>
+            <div class="form-group">
+            <label for="name">Name ({{ strtoupper($lang) }})</label>
             <input type="text" class="form-control reset_field" id="package_name{{ $lang }}"
                 name="lang[package_name][{{ $lang }}]" autocomplete="off">
             <div class="invalid-feedback" id="package_name{{ $lang }}_error"></div>
@@ -22,8 +21,8 @@
         @endforeach --}}
 
         <div class="form-group">
-            <label for="category_key">Category </label>
-            <select class="form-control select2" name="category[]" multiple>
+            <label class="form-label d-block" for="category_key">Category </label>
+            <select class="form-select select-2" name="category[]" multiple>
                 <option value="">-Select-</option>
                 <?php foreach ($property_category as $c) { ?>
                     <option value="<?php echo $c->id; ?>"><?php echo $c->name; ?></option>
@@ -32,8 +31,8 @@
         </div>
 
         <div class="form-group">
-            <label for="category_key">City </label>
-            <select class="form-control select2" name="city[]" multiple>
+            <label class="form-label d-block" for="category_key">City </label>
+            <select class="form-select select-2" name="city[]" multiple>
                 <option value="">-Select-</option>
                 <?php foreach ($city as $c) { ?>
                     <option value="<?php echo $c->city_id; ?>"><?php echo $c->name; ?></option>
@@ -41,36 +40,36 @@
             </select>
         </div>
 
-        <div class="form-group">
-            <label for="category_key">Page </label>
-            <select class="form-control" name="page" id="page" onchange="get_position()">
+        <div class="form-floating mb-3">
+            <select class="form-select" name="page" id="page" onchange="get_position()">
                 <option value="">-Select-</option>
                 <?php foreach ($pages as $page) { ?>
                     <option value="<?php echo $page['slug']; ?>"><?php echo $page['name']; ?></option>
                 <?php } ?>
             </select>
+            <label for="category_key">Page </label>
         </div>
 
-        <div class="form-group">
+        <div class="form-floating mb-3">
+            <select class="form-select" name="position" id="position" onchange="get_size($(this))">
+                <option value="">-Select-</option>
+            </select>
             <label for="category_key">Position </label>
-            <select class="form-control" name="position" id="position" onchange="get_size($(this))">
-                <option value="">-Select-</option>
-            </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-floating mb-3">
+            <select class="form-select" name="ad_size">
+                <option value="">-Select-</option>
+            </select>
             <label for="category_key">Size </label>
-            <select class="form-control" name="ad_size">
-                <option value="">-Select-</option>
-            </select>
         </div>
 
-        <div class="form-group">
-            <label for="category_key">Type </label>
-            <select class="form-control" name="ad_type" onchange="checkAdType()">
+        <div class="form-floating mb-3">
+            <select class="form-select" name="ad_type" onchange="checkAdType()">
                 <option value="image">Image</option>
                 <option value="script">Script</option>
             </select>
+            <label for="category_key">Type </label>
         </div>
 
         <div id="ad_image_wrapper">
@@ -116,20 +115,20 @@
             <textarea class="form-control" name="ad_code"></textarea>
         </div>
 
-        <div class="form-group">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control reset_field" id="ad_url" name="ad_url" placeholder="" autocomplete="off">
             <label for="ad_url">Ad URL </label>
-            <input type="text" class="form-control reset_field" id="ad_url" name="ad_url" autocomplete="off">
         </div>
 
-        <div class="form-group">
-            <p><b>Status</b></p>
-            <div class="radio-inline">
-                <input type="radio" name="status" value="1" class="magic-radio" id="status_1" checked>
-                <label for="status_1">Active</label>
+        <div class="form-group mb-0">
+            <label class="form-label d-block">Status</label>
+            <div class="form-check form-check-inline">
+                <input type="radio" name="status" value="1" class="form-check-input" id="status_1" checked>
+                <label class="form-check-label" for="status_1">Active</label>
             </div>
-            <div class="radio-inline">
-                <input type="radio" name="status" value="0" class="magic-radio" id="status_0">
-                <label for="status_0">Inactive</label>
+            <div class="form-check form-check-inline">
+                <input type="radio" name="status" value="0" class="form-check-input" id="status_0">
+                <label class="form-check-label" for="status_0">Inactive</label>
             </div>
         </div>
 
@@ -139,10 +138,18 @@
 </form>
 </div>
 
+<script src="{{ asset('assets/dist/js/select2.js') }}"></script>
 <script>
-    $(function() {
-        $('.select2').select2();
+    $(".select-2").select2({
+        theme: "bootstrap-5",
+        selectionCssClass: "select2--single",
+        dropdownCssClass: "select2--single",
     });
+</script>
+<script>    
+    /* $(function() {
+        $('.select2').select2();
+    }); */
 
     function submitForm(form, event) {
         event.preventDefault();
@@ -302,6 +309,7 @@
             }
         });
     });
+
     function deleteUploadedImage() {
         $(event.target).closest('button').siblings('img').first().attr('src', '');
         $(event.target).closest('button').siblings('.filename').first().val('');
@@ -314,7 +322,7 @@
 <div class="modal-header">
     <h4 class="modal-title"><?php echo $title; ?></h4>
     <button type="button" class="btn-close" data-bs-dismiss="modal">
-        
+
     </button>
 
 </div>
@@ -324,8 +332,8 @@
         <div class="box-body">
 
             <div class="form-group">
-                <label for="category_key">Category </label>
-                <select class="form-control select2" name="category[]" multiple>
+                <label class="form-label d-block" for="category_key">Category </label>
+                <select class="form-select select-2" name="category[]" multiple>
                     <option value="">-Select-</option>
                     <?php foreach ($property_category as $c) { ?>
                         <option value="<?php echo $c->id; ?>" <?php if (in_array($c->id, $detail['ad_cats'])) {
@@ -336,8 +344,8 @@
             </div>
 
             <div class="form-group">
-                <label for="category_key">City </label>
-                <select class="form-control select2" name="city[]" multiple>
+                <label class="form-label d-block" for="category_key">City </label>
+                <select class="form-select select-2" name="city[]" multiple>
                     <option value="">-Select-</option>
                     <?php foreach ($city as $c) { ?>
                         <option value="<?php echo $c->city_id; ?>" <?php if (in_array($c->city_id, $detail['ad_locations'])) {
@@ -347,21 +355,20 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="category_key">Page </label>
-                <select class="form-control" name="page" onchange="get_position()">
+            <div class="form-floating mb-3">                
+                <select class="form-select" name="page" onchange="get_position()">
                     <option value="">-Select-</option>
                     <?php foreach ($pages as $page) { ?>
                         <option value="<?php echo $page['slug']; ?>" <?php if ($page['slug'] == $detail['page']) {
-                                                                        echo "selected";
-                                                                    } ?>><?php echo $page['name']; ?></option>
+                                                                            echo "selected";
+                                                                        } ?>><?php echo $page['name']; ?></option>
                     <?php } ?>
                 </select>
+                <label for="category_key">Page </label>
             </div>
 
-            <div class="form-group">
-                <label for="category_key">Position </label>
-                <select class="form-control" name="position" id="position" onchange="get_size()">
+            <div class="form-floating mb-3">                
+                <select class="form-select" name="position" id="position" onchange="get_size()">
                     <option value="">-Select-</option>
                     @if($positions)
                     @foreach($positions as $p)
@@ -371,11 +378,12 @@
                     @endforeach
                     @endif
                 </select>
+                <label for="category_key">Position </label>
             </div>
 
-            <div class="form-group">
-                <label for="category_key">Size </label>
-                <select class="form-control" name="ad_size">
+            <div class="form-floating mb-3">
+                
+                <select class="form-select" name="ad_size">
                     <option value="">-Select-</option>
                     @if($sizes)
                     @foreach($sizes as $s)
@@ -385,11 +393,12 @@
                     @endforeach
                     @endif
                 </select>
+                <label for="category_key">Size </label>
             </div>
 
-            <div class="form-group">
-                <label for="category_key">Type </label>
-                <select class="form-control" name="ad_type" onchange="checkAdType()">
+            <div class="form-floating mb-3">
+                
+                <select class="form-select" name="ad_type" onchange="checkAdType()">
                     <option value="image" <?php if ($detail['ad_type'] == 'image') {
                                                 echo "selected";
                                             } ?>>Image</option>
@@ -397,6 +406,7 @@
                                                 echo "selected";
                                             } ?>>Script</option>
                 </select>
+                <label for="category_key">Type </label>
             </div>
 
             <div id="ad_image_wrapper">
@@ -414,14 +424,14 @@
                 <div class="form-group">
                     <img id="image_preview1" src="{{ asset('user_upload/advertisement/'.$detail['ad_image']) }}" style="width: 100px; height: auto;" />
                     <input type="hidden" class="filename" name="ad_image" id="ad_image" value="{{ !empty($detail['ad_image']) ? $detail['ad_image'] : '' }}" />
-                    <button type="button" id="delete_image_btn1" class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
+                    <button type="button" id="delete_image_btn1" class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>
                 </div>
                 @else
                 <div class="form-group">
                     <img id="image_preview1" style="display:none; width: 100px; height: auto;" />
                     <input type="hidden" class="filename" name="ad_image" id="ad_image" value="" />
                     <button type="button" id="delete_image_btn1" style="display:none;"
-                        class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
+                    class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>
                 </div>
                 @endif
             </div>
@@ -442,14 +452,14 @@
                     <img id="image_preview2" src="{{ asset('user_upload/advertisement/'.$detail['ad_image_mobile']) }}" style="width: 100px; height: auto;" />
                     <input type="hidden" class="filename" name="ad_image_mobile" id="ad_image_mobile" value="{{ !empty($detail['ad_image_mobile']) ? $detail['ad_image_mobile'] : '' }}" />
                     <button type="button" id="delete_image_btn2"
-                        class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
+                        class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>
                 </div>
                 @else
                 <div class="form-group">
                     <img id="image_preview2" src="" style="display:none; width: 100px; height: auto;" />
                     <input type="hidden" class="filename" name="ad_image_mobile" id="ad_image_mobile" value="" />
                     <button type="button" id="delete_image_btn2" style="display:none;"
-                        class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
+                        class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>
                 </div>
                 @endif
             </div>
@@ -459,20 +469,20 @@
                 <textarea class="form-control" name="ad_code">{{ !empty($detail['ad_code']) ? $detail['ad_code'] : '' }}</textarea>
             </div>
 
-            <div class="form-group">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control reset_field" id="ad_url" name="ad_url" placeholder="" autocomplete="off" value="{{ !empty($detail['ad_url']) ? $detail['ad_url'] : '' }}">
                 <label for="ad_url">Ad URL </label>
-                <input type="text" class="form-control reset_field" id="ad_url" name="ad_url" autocomplete="off" value="{{ !empty($detail['ad_url']) ? $detail['ad_url'] : '' }}">
             </div>
 
-            <div class="form-group">
-                <p><b>Status</b></p>
-                <div class="radio-inline">
-                    <input type="radio" name="status" value="1" class="magic-radio" id="status_1" checked>
-                    <label for="status_1">Active</label>
+            <div class="form-group mb-0">
+                <label class="form-label d-block">Status</label>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="status" value="1" class="form-check-input" id="status_1" checked>
+                    <label class="form-check-label" for="status_1">Active</label>
                 </div>
-                <div class="radio-inline">
-                    <input type="radio" name="status" value="0" class="magic-radio" id="status_0">
-                    <label for="status_0">Inactive</label>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="status" value="0" class="form-check-input" id="status_0">
+                    <label class="form-check-label" for="status_0">Inactive</label>
                 </div>
             </div>
 
@@ -482,10 +492,19 @@
     </form>
 </div>
 
+<script src="{{ asset('assets/dist/js/select2.js') }}"></script>
 <script>
-    $(function() {
-        $('.select2').select2();
+    $(".select-2").select2({
+        theme: "bootstrap-5",
+        selectionCssClass: "select2--single",
+        dropdownCssClass: "select2--single",
     });
+</script>
+
+<script>
+    /* $(function() {
+        $('.select2').select2();
+    });*/
 
     function submitForm(form, event) {
         event.preventDefault();
@@ -658,7 +677,7 @@
 <div class="modal-header">
     <h4 class="modal-title"><?php echo $title; ?></h4>
     <button type="button" class="btn-close" data-bs-dismiss="modal">
-        
+
     </button>
 
 </div>

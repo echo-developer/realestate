@@ -1,13 +1,8 @@
 @extends('Admin.layouts.app')
 @push('custom-css')
 
-<!-- <link rel="stylesheet" href="{{ asset('assets/js/scripts-init/select2/dist/css/select2.min.css') }}"> -->
-
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/select2.css')}}"> 
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/select2-bootstrap-5-theme.css')}}"> 
-
-<!-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/adminlte.css')}}"> -->
-
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/style.css') }}">
 
 
@@ -303,10 +298,10 @@
             </div>
             <div class="card-body">
 
-                <div class="list-container">
+                <div class="list-container row">
                     @foreach ($landmark_categories as $category => $items)
                     @if (!empty($items))
-                    <div class="list-category">
+                    <div class="list-category col-lg-6">
                         <b>{{ ucfirst($category) }}:</b>
                         <ul>
                             @foreach ($items as $item)

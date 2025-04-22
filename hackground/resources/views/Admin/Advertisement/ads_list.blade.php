@@ -1,5 +1,9 @@
 @extends('Admin.layouts.app')
 
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/select2.css')}}"> 
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/select2-bootstrap-5-theme.css')}}"> 
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/style.css') }}">
+
 @section('content')
 
 <div class="body-page-loader d-none">
