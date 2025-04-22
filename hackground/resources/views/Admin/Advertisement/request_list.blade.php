@@ -109,7 +109,7 @@
                         @foreach($list as $item)
                         <tr>
                             <td>{{ $item->request_id }}</td>
-                            <td>{{ $item->advertiser_name }}</td>
+                            <td>{{ $item->name }}</td>
                             <td>{{ $item->email }}</td>
                             <td>{{ $item->phone_code.''.$item->phone }}</td>
                             <td>{{ $item->page }}</td>

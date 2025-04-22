@@ -120,9 +120,11 @@ class AdvertisementController extends Controller
         if($otpRecord)
         {
             $user_id = auth_user_id();
-            if($user_id)
+            $email = $request->email;
+            $email_exists = DB::table('users as u')->where('u.email',$email)->first();
+            if($email_exists)
             {
-
+                $user_id = $email_exists->id;
             }else{
                 $user = User::create([
                     'name' => $request->name,
