@@ -20,7 +20,7 @@ import ProjectLandmarkData from "../project/ProjectLandmarkData";
 import DOMPurify from "dompurify";
 import useTranslation from "@/hooks/useTranslation";
 import { CheckCircleFill, XCircleFill } from "react-bootstrap-icons";
- import {
+import {
   facingOptions,
   featureList,
   waterAvailabilityOptions,
@@ -45,7 +45,7 @@ const ResidentialProjectDetails = ({
   userDetails,
   showCommunicationModal,
   setShowCommunicationModal,
-  showPhoneNumber, 
+  showPhoneNumber,
   setShowPhoneNumber,
   displayNumber,
   viewNumber,
@@ -120,7 +120,7 @@ const ResidentialProjectDetails = ({
                           `${translation?.not_available || "Not Available"}`
                           }`}
                       </h1>
-                      <p>
+                      <p className="mb-0">
                         <a role="button">
                           <i className="icon-feather-map-pin"></i>{" "}
                           {detailsData?.address ||
@@ -133,17 +133,20 @@ const ResidentialProjectDetails = ({
                             "(By Real Estate Limited)"}
                         </span>
                       </p>
+                      <p className="text-muted mb-0">
+                        {translation?.launched_in || "Launched On:"}{" "} {useDateFormat(detailsData?.created_at)}
+                      </p>
                     </div>
                     <div className="text-md-end" style={{ minWidth: "150px" }}>
-                      <p className="text-muted mb-0">
-                        {translation?.launched_in || "Launched In:"}{" "}
+                      <h3>
+                        {detailsData?.expected_price ? formatPrice(detailsData?.expected_price) : ""}
+                      </h3>
+                      {/* <p className="text-muted mb-0">
+                        {translation?.launched_in || "Launched In:"}{" "} {useDateFormat(detailsData?.created_at)}
                       </p>
                       <h5 className="mb-0">
                         {useDateFormat(detailsData?.created_at)}
-                      </h5>
-                      {/* <p>
-                        Possession In: <span className="text-muted">2030</span>
-                      </p> */}
+                      </h5> */}
                     </div>
                   </div>
 
@@ -256,16 +259,9 @@ const ResidentialProjectDetails = ({
 
               <div className="row mb-3 mt-3">
                 <div className="col-md mb-3 mb-md-0">
-                  <h3>
-                    {/* {detailsData?.currency ||
-                      `${translation?.not_available ||
-                      `${translation?.not_available || "Not Available"}`
-                      }`}{" "} */}
-                      {/* {currencyCode || ""}
-                    {detailsData?.expected_price ||
-                      `${translation?.not_available || "Price Not Available"}`} */}
+                  {/* <h3>
                       {detailsData?.expected_price ? formatPrice(detailsData?.expected_price) : ""}
-                  </h3>
+                  </h3> */}
                   <p>
                     {detailsData?.available_bhk
                       ? `${detailsData?.available_bhk} BHK Flats`
@@ -359,9 +355,6 @@ const ResidentialProjectDetails = ({
                   </ul>
                 </div>
               </div>
-              <ProjectedProperty
-                projectProperties={detailsData?.project_properties}
-              />
 
               <section id="overview">
                 <div className="card border-0 shadow-1 mb-4">
@@ -694,6 +687,14 @@ const ResidentialProjectDetails = ({
                   </div>
                 </div>
               </section>
+
+              {!Array.isArray(detailsData?.project_properties) && (
+                <ProjectedProperty
+                title={detailsData?.project_name}
+                projectProperties={detailsData?.project_properties}
+              />
+              )}
+
               <div className="card border-0 shadow-1 mb-4">
                 <div className="card-body">
                   <Row className="-mb-3">
@@ -908,7 +909,7 @@ const ResidentialProjectDetails = ({
                   addRemoveFav={addFavOtherProjects}
                 />
               )}
-  
+
               <p className="small">
                 <b>{translation?.disclaimer || "Disclaimer"}</b>
                 {translation?.property_disclaimer ||

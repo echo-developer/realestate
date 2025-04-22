@@ -45,7 +45,7 @@ const CommercialProjectDetails = ({
   userDetails,
   showCommunicationModal,
   setShowCommunicationModal,
-  showPhoneNumber, 
+  showPhoneNumber,
   setShowPhoneNumber,
   displayNumber,
   viewNumber,
@@ -69,6 +69,7 @@ const CommercialProjectDetails = ({
     setVisible(true);
     setprojectId(id);
   };
+
 
   const minPrice = minBudgetOptions?.find(
     (item) => item?.value == detailsData?.minBudget
@@ -116,7 +117,7 @@ const CommercialProjectDetails = ({
                         {detailsData?.project_name ||
                           `${translation?.not_available || "Not available"}`}
                       </h1>
-                      <p>
+                      <p className="mb-0">
                         <a role="button">
                           <i className="icon-feather-map-pin"></i>{" "}
                           {detailsData?.address ||
@@ -127,17 +128,20 @@ const CommercialProjectDetails = ({
                             "(By Real Estate Limited)"}
                         </span>
                       </p>
+                      <p className="text-muted mb-0">
+                        {translation?.launched_in || "Launched On:"}{" "} {useDateFormat(detailsData?.created_at)}
+                      </p>
                     </div>
                     <div className="text-md-end" style={{ minWidth: "150px" }}>
-                      <p className="text-muted mb-0">
+                      {/* <p className="text-muted mb-0">
                         {translation?.launched_in || "Launched In:"}{" "}
                       </p>
                       <h5 className="mb-0">
                         {useDateFormat(detailsData?.created_at)}
-                      </h5>
-                      {/* <p>
-                        Possession In: <span className="text-muted">2030</span>
-                      </p> */}
+                      </h5> */}
+                      <h3>
+                        {detailsData?.expected_price ? formatPrice(detailsData?.expected_price) : ""}
+                      </h3>
                     </div>
                   </div>
 
@@ -251,12 +255,7 @@ const CommercialProjectDetails = ({
               <div className="row mb-3 mt-3">
                 <div className="col-md mb-3 mb-md-0">
                   <h3>
-                    {/* {detailsData?.currency ||
-                      `${translation?.not_available || "Not available"}`}{" "} */}
-                      {/* {currencyCode}
-                    {detailsData?.expected_price ||
-                      `${translation?.not_available || "Price Not available"}`} */}
-                      {detailsData?.expected_price ? formatPrice(detailsData?.expected_price) : ""}
+                    {detailsData?.expected_price ? formatPrice(detailsData?.expected_price) : ""}
                   </h3>
                 </div>
                 <div className="col-md-auto text-md-end">
@@ -346,16 +345,14 @@ const CommercialProjectDetails = ({
                   </ul>
                 </div>
               </div>
-              <ProjectedProperty
-                projectProperties={detailsData?.project_properties}
-              />
+
 
               <section id="overview">
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
                       <h4 className="mb-3 text-primary">
-                        {translation?.more_details || "More Details"}
+                      {translation?.overview || "Overview"}
                       </h4>
                     </div>
                     <ul className="list list-property-details mb-4">
@@ -526,6 +523,7 @@ const CommercialProjectDetails = ({
                         </div>
                       </li>
                     </ul>
+                    <h4 className="mb-3 text-primary">{translation?.more_details || "More Details"}</h4>
                     <Row>
                       <Col className="col-xl-3 col-md-4 col-6 mb-4">
                         <p className="text-muted mb-2">
@@ -654,10 +652,9 @@ const CommercialProjectDetails = ({
                       className="mb-3"
                       onClick={() => setViewMore(!viewMore)}
                     >
-                      {viewMore ? `${
-                            translation?.view_less_details ||
-                            "View Less Details"
-                          }`: `${translation?.view_more_details ||
+                      {viewMore ? `${translation?.view_less_details ||
+                        "View Less Details"
+                        }` : `${translation?.view_more_details ||
                         "View More Details"
                         }`}{" "}
                       <i
@@ -676,6 +673,13 @@ const CommercialProjectDetails = ({
                   </div>
                 </div>
               </section>
+
+              {!Array.isArray(detailsData?.project_properties) && (
+                <ProjectedProperty
+                title={detailsData?.project_name}
+                  projectProperties={detailsData?.project_properties}
+                />
+              )}
               <div className="card border-0 shadow-1 mb-4">
                 <div className="card-body">
                   <Row className="-mb-3">
@@ -905,7 +909,7 @@ const CommercialProjectDetails = ({
               setShowPhoneNumber={setShowPhoneNumber}
               viewNumber={viewNumber}
               displayNumber={displayNumber}
-              
+
             />
           </div>
         </div>

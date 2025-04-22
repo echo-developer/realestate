@@ -7,8 +7,8 @@ import useTranslation from "@/hooks/useTranslation";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css"; // Import default styles
 
-const ProjectedProperty = ({ projectProperties }) => {
-  const [activeTab, setActiveTab] = useState("buy");
+const ProjectedProperty = ({ projectProperties, title }) => {
+  const [activeTab, setActiveTab] = useState("sale");
   const [selectedBHK, setSelectedBHK] = useState("All");
   const [showForm, setShowForm] = useState(false);
   const [currentPropertyId, setCurrentPropertyId] = useState(null);
@@ -33,6 +33,7 @@ const ProjectedProperty = ({ projectProperties }) => {
     setShowForm(true);
   };
 
+
   const handleCloseModal = () => {
     setShowForm(false);
     setCurrentPropertyId(null);
@@ -48,13 +49,14 @@ const ProjectedProperty = ({ projectProperties }) => {
   return (
     <section id="properties">
       <h4 className="text-primary mb-3">
-        {translation?.properties_in_real_estate || "Properties In Real Estate"}
+        {/* {translation?.properties_in_real_estate || "Properties In Real Estate"} */}
+        Properties In {title || 'Real Estate'} 
       </h4>
       <nav>
         <div className="nav nav-pills">
           <button
-            className={`nav-link ps-4 pe-4 ${activeTab === "buy" ? "active" : ""}`}
-            onClick={() => handleTabChange("buy")}
+            className={`nav-link ps-4 pe-4 ${activeTab === "sale" ? "active" : ""}`}
+            onClick={() => handleTabChange("sale")}
           >
             {translation?.buy || "Buy"}
           </button>
