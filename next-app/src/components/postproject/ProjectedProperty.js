@@ -5,9 +5,11 @@ import ProjectEnquiryForm from "./ProjectEnquiryForm";
 import { Modal } from "react-bootstrap";
 import useTranslation from "@/hooks/useTranslation";
 import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css"; // Import default styles
+import "react-multi-carousel/lib/styles.css"; 
+import { useAuth } from "@/context/AuthProvider";
 
 const ProjectedProperty = ({ projectProperties, title }) => {
+  const { formatPrice } = useAuth();
   const [activeTab, setActiveTab] = useState("sale");
   const [selectedBHK, setSelectedBHK] = useState("All");
   const [showForm, setShowForm] = useState(false);
@@ -123,7 +125,7 @@ const ProjectedProperty = ({ projectProperties, title }) => {
                   </div>
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
-                      <h5 className="text-primary">₹{property.expected_price}</h5>
+                      <h5 className="text-primary">{formatPrice(property.expected_price) || ""}</h5>
                       <p>
                         <span className="text-muted">
                           {property.super_area} {translation?.sq_ft || "Sq. Ft"}
