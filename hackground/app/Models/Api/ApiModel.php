@@ -1500,7 +1500,7 @@ class ApiModel extends Model
     public function addAdvertisementRequest($data = array())
     {
         $structure = array(
-            'advertiser_name' => $data['advertiser_name'] ? $data['advertiser_name'] : '',
+            'name' => $data['advertiser_name'] ? $data['advertiser_name'] : '',
             'email' => $data['email'] ? $data['email'] : '',
             'phone_code' => $data['phone_code'] ? $data['phone_code'] : '',
             'phone' => $data['phone'] ? $data['phone'] : '',

@@ -115,4 +115,4 @@ ALTER TABLE `pref_properties_location` CHANGE `locality` `locality` BIGINT NULL 
 
 ALTER TABLE `pref_advertisements` ADD `impressions` INT NOT NULL DEFAULT '0' AFTER `views`;
 
-ALTER TABLE `personal_access_tokens` CHANGE `tokenable_id` `tokenable_id` INT NULL;
+ALTER TABLE `pref_advertisement_request` CHANGE `advertiser_name` `name` VARCHAR(90) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL;

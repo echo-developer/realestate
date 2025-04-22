@@ -5,8 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Api\ApiModel;
+use App\Models\EmailVerifyOtpModel;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AdvertisementController extends Controller
 {
@@ -90,10 +95,9 @@ class AdvertisementController extends Controller
 
     public function saveAdvertisementRequest(Request $request)
     {
-        $step = $request->step;
-        
+    
         $validator = Validator::make($request->all(), [
-            'advertiser_name' => 'required',
+            'name' => 'required',
             'email'=> 'required',
             'phone_code'=>'required|integer',
             'phone'=>'required|integer',
@@ -102,33 +106,54 @@ class AdvertisementController extends Controller
             'page'=>'required',
             'position'=>'required',
             'duration'=>'required',
-            'email_otp'=>'required|integer',
+            'otp'=>'required|integer'
         ]);
         if($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $email = $request->email;
-        $otp=rand(111111,999999);
-        $token=md5($email.'_'.$otp);
-        $token_type='OTP_EMAIL';
-        $token_data = array(
-            'tokenable_type'=> $token_type,
-            'token'=>$token,
-            'last_used_at'=> date('Y-m-d H:i:s')
-        );
-        DB::table('personal_access_token')->where('token',$token)->delete();
-        $up = $this->apiModel->addAdvertisementRequest($request->all());
-        if($up)
+        $otpRecord = EmailVerifyOtpModel::where('email', $request->email)
+            ->where('otp', $request->otp)
+            ->where('expires_at', '>', Carbon::now())
+            ->first();
+        //print_r($otpRecord);exit;
+        if($otpRecord)
         {
-            return response()->json([
-                    'status' => 1,
-                    'message' => 'Request sent successfully.',
-                ], 200);  
+            $user_id = auth_user_id();
+            if($user_id)
+            {
+
+            }else{
+                $user = User::create([
+                    'name' => $request->name,
+                    'user_type' => $request->user_type,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'phone' => $request->phone,
+                    'phone_code' => $request->phone_code
+                ]);
+                $user_id = $user->id;
+                $token = JWTAuth::fromUser($user);
+            }
+            $post_data = $request->all();
+            $post_data['user_id'] = $user_id;
+            $up = $this->apiModel->addAdvertisementRequest($post_data);
+            if($up)
+            {
+                return response()->json([
+                        'status' => 1,
+                        'message' => 'Request sent successfully.',
+                    ], 200);  
+            }else{
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Failed to send request.',
+                ], 200);
+            }
         }else{
             return response()->json([
                 'status' => 0,
-                'message' => 'Failed to send request.',
+                'message' => 'Invalid OTP entered.',
             ], 200);
         }
        

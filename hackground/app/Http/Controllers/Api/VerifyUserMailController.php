@@ -35,7 +35,7 @@ class VerifyUserMailController extends Controller
 
             $otp = rand(100000, 999999);
             $expiresAt = Carbon::now()->addMinutes(10);
-
+            
             EmailVerifyOtpModel::where('email', $request->email)->delete();
 
             EmailVerifyOtpModel::create([
@@ -43,7 +43,6 @@ class VerifyUserMailController extends Controller
                 'otp' => $otp,
                 'expires_at' => $expiresAt,
             ]);
-
 
             $mail_unique_title = 'email-verification';
             dispatch(new \App\Jobs\SendEmailJob( $request->email, $mail_unique_title,  ['VERIFICATION_CODE' => $otp,]));
