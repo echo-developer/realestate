@@ -152,6 +152,8 @@ class ApiModel extends Model
             [
                 'locality_names.locality_id',
                 'locality_names.name as locality_name',
+                'locality.latitude',
+                'locality.longitude',
             ],
             [
                 [
