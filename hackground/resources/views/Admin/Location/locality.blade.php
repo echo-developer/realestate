@@ -116,6 +116,9 @@
                                                 {{ $item->status ? 'checked' : '' }}>
                                         </td>
                                         <td class="text-right">
+                                            <a href="{{ url('/edit-locality/' . $item->locality_id) }}">
+                                                <i class="fa fa-edit text-success fa-md"></i>
+                                            </a>                                            
                                             <i class="fa fa-edit text-success fa-md "
                                                 onclick="Edit('{{ $item->locality_id }}')"></i>
                                             <i class="fa fa-trash text-danger fa-md"

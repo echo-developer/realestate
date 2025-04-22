@@ -221,4 +221,15 @@ class LocalityController extends Controller
             return redirect()->back()->withErrors(['xlsFileLocality' => $e->getMessage()]);
         }
     }
+
+
+    /*
+
+    LOCALITY LANDMARKS BELOW
+    
+     */
+
+    public function landmarkListPage($localityId){
+        return view('Admin/Location/locality-landmarks');
+    }
 }

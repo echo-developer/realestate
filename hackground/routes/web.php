@@ -351,6 +351,8 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/locality/delete', 'LocalityDelete')->name('locality.delete');
         Route::get('/getstate/{lang?}', 'getState')->name('state.getState');
         Route::post('/upload-excel', 'importLocalityExcel')->name('locality.importExcel');
+
+        Route::get('/landmark-list/{locality_id?}', 'landmarkListPage')->name('locality.landmarks.page');
     });
 
     /*
@@ -438,8 +440,8 @@ Route::middleware('admin_auth')->group(function () {
     Route::post('/delete_floor_plan', [FloorPlanController::class, 'floorPlanDelete'])->name('floor.delete');
 
 
-    Route::get('/payment-methods',[PaymentMethodController::class, 'paymentMethodView'])->name('set.payment.method');
-    Route::post('/save-payment-methods',[PaymentMethodController::class, 'updatePaymentMethod'])->name('save.payment.method');
+    Route::get('/payment-methods', [PaymentMethodController::class, 'paymentMethodView'])->name('set.payment.method');
+    Route::post('/save-payment-methods', [PaymentMethodController::class, 'updatePaymentMethod'])->name('save.payment.method');
 
     /*
 |--------------------------------------------------------------------------
@@ -564,5 +566,4 @@ Route::controller(AreaPriceController::class)->group(function () {
     Route::get('area-price/{id?}', 'AreaPrice')->name('area-price.view');
     Route::get('edit', 'Edit')->name('locality_price.edit');
     Route::post('update', 'Update')->name('locality_price.update');
-  
 });
