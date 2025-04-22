@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PaymentMethodController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CmsController;
@@ -311,3 +312,5 @@ Route::get('/get-settings-value/{key?}', function ($key = null) {
         'value' => $value
     ]);
 });
+
+Route::get('payment-methods', [PaymentMethodController::class, 'fetchActivePaymentMethod']);

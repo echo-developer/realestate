@@ -34,11 +34,21 @@ class PaymentMethodController extends Controller
         return redirect()->back();
     }
 
-    public function fetchActivePaymentMethod() {
+    public function fetchActivePaymentMethod()
+    {
         try {
-            
-            
+            $data = DB::table('payment_methods')
+                ->where('is_active', config('constants.STATUS_ACTIVE'))
+                ->get()
+                ->map(function ($items) {
 
+                    $items->img_url = !empty($items->img) ? asset('assets/defaults/payment_methods_images/' . $items->img) : '';
+                    return $items;
+                });
+            return response()->json([
+                'status' => 1,
+                'data' => $data
+            ]);
         } catch (\Throwable $th) {
             throw $th;
         }

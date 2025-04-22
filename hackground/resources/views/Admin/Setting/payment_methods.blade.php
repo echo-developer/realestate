@@ -64,15 +64,15 @@
                         Setting</div>
                 </div>
                 @else --}}
-                    <div>Default Setting
-                        <div class="page-title-subheading">Settings &gt; Default Setting</div>
+                    <div>Payment Methods
+                        <div class="page-title-subheading">Settings &gt; Payment Methods</div>
                     </div>
                     {{-- @endif --}}
                 </div>
                 <div class="page-title-actions">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
-                        <li class="breadcrumb-item active">Settings</li>
+                        <li class="breadcrumb-item active">Payment Methods</li>
                     </ol>
                 </div>
             </div>
@@ -86,32 +86,16 @@
         @endif
         <div class="main-card mb-3 card">
             <div class="card-body">
-                <div class="card-header p-0">
-                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i>
-                    <div class="btn-actions-pane-right">
-
-                        <div class="btn-group" id="global_action_btn" style="display:none">
-                            <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title=""
-                                onclick="deleteSelected()" data-original-title="Delete selected"><i
-                                    class="fa fa-trash"></i></button>
-                            <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title=""
-                                onclick="changeStatusAll(1)" data-original-title="Make active"><i
-                                    class="fa fa-thumbs-up"></i></button>
-                            <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title=""
-                                onclick="changeStatusAll(0)" data-original-title="Make inactive"><i
-                                    class="fa  fa-thumbs-o-down"></i></button>
-                        </div>
-                        &nbsp;
-
-                    </div>
+                <div class="card-header d-flex">
+                    <h4>Payment Methods</h4>
                 </div>
                 <form action="{{ route('save.payment.method') }}" method="POST">
                     @csrf
                     <div class="container mt-2">
                         <div class="row">
-                            <div class="col d-flex align-items-center mb-2">
+                            <div class="col-auto d-flex align-items-center mb-2">
                                 <label for="" class="fw-bold fs-5 text-muted">Select Your Preferred Payment
-                                    Methods:</label>
+                                    Methods :</label>
                             </div>
 
                             <div class="col">
@@ -132,7 +116,7 @@
                             </div>
                         </div>
                         <div class="row mt-4">
-                            <div class="col text-end">
+                            <div class="col text-center">
                                 <button type="submit" class="btn btn-primary">Save Payment Methods</button>
                             </div>
                         </div>
