@@ -19,9 +19,9 @@
         <div class="page-title-wrapper">
             <div class="page-title-heading">
                 <div class="page-title-icon">
-                    <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
+                <i class="bi bi-bell"></i>
                 </div>
-                <div>Notification <div class="page-title-subheading">Notification &gt; All Notification List
+                <div>Notification <div class="page-title-subheading">Notification <i class="bi bi-chevron-right"></i> All Notification List
                     </div>
                 </div>
             </div>

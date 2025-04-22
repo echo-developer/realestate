@@ -11980,11 +11980,11 @@ button {
 }
 
 .app-theme-white.app-container {
-    background: #f1f4f6
+    background: #f8f9fa;
 }
 
 .app-theme-white .app-sidebar {
-    background: #fff
+    background: #fff;
 }
 
 .app-theme-white .app-page-title {

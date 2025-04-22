@@ -20,10 +20,10 @@
         <div class="page-title-wrapper">
             <div class="page-title-heading">
                 <div class="page-title-icon">
-                    <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
+                <i class="bi bi-badge-ad"></i>
                 </div>
                 <div>{{ $main_title }}
-                    <div class="page-title-subheading">{{ $second_title }} &gt; {{ $title }}</div>
+                    <div class="page-title-subheading">{{ $second_title }} <i class="bi bi-chevron-right"></i> {{ $title }}</div>
                 </div>
             </div>
             <div class="page-title-actions">
@@ -47,10 +47,10 @@
     <form action="" method="get">
         <section class="content-header mb-2">
             <div class="row">
-                <div class="col-md-3 col-sm-4">
-                    <label for="lead_for">Page</label>
-                    <div class="form-group">
-                        <select class="form-control" name="page" id="page" onchange="get_position()">
+                <div class="col-xl-3 col-md-4 col-sm-6">
+                    
+                    <div class="form-floating mb-3">
+                        <select class="form-select" name="page" id="page" onchange="get_position()">
                             <option value="" >All</option>
                             @if($pages)
                                 @foreach($pages as $k=>$p)
@@ -58,19 +58,20 @@
                                 @endforeach
                             @endif
                         </select>
+                        <label for="lead_for">Page</label>
                     </div>
                 </div>
-                <div class="col-md-3 col-sm-4">
-                    <label for="category_key">Position </label>
-                    <div class="input-group">
-                        <select class="form-control" name="position" id="position" >
-                            <option value="">-Select-</option>
-                        </select>
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-search"></i>
-                            </button>
+                <div class="col-xl-3 col-md-4 col-sm-6">
+                    <div class="input-group mb-3">
+                        <div class="form-floating">
+                            <select class="form-select" name="position" id="position" >
+                                <option value="">-Select-</option>
+                            </select>
+                            <label for="category_key">Position </label>
                         </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -78,18 +79,18 @@
     </form>
 
     <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> {{ $title }}
-
+    <div class="card-header d-flex">                
+                <h4>{{ $title }}</h4>
                 <div class="btn-actions-pane-right">
-                    <button type="button" class="btn btn-sm btn-success" onclick="add()">{{ $add_btn }}</button>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="add()">{{ $add_btn }}</button>
                 </div>
 
             </div>
+        <div class="card-body">
+            
 
             <div class="table-responsive" id="main_table">
-                <table id="myTable" class="mb-0 table">
+                <table id="myTable1" class="mb-0 table">
                     <thead>
                         <tr>
                             <th style="width:5%">ID</th>
@@ -116,9 +117,9 @@
                                 <input type="checkbox" class="ad_status d-none" data-id="{{ $item->advertisement_id }}" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ $item->status ? 'checked' : '' }} >
                             </td>
                             <td class="text-right">
-                                <i class="fa fa-edit text-primary fa-md" onclick="edit('{{ $item->advertisement_id }}')"></i>
-                                {{-- <i class="fa fa-eye text-success fa-md" onclick="view('{{ $item->package_id }}')"></i> --}}
-                                <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->advertisement_id }}')"></i>
+                                <a href="javascript:void(0)" class="me-2"><i class="bi bi-pencil-fill text-primary fa-md" onclick="edit('{{ $item->advertisement_id }}')"></i></a>
+                                {{-- <a href="javascript:void(0)"><i class="fa fa-eye text-success fa-md" onclick="view('{{ $item->package_id }}')"></i></a> --}}
+                                <a href="javascript:void(0)"><i class="bi bi-trash3-fill text-danger fa-md" onclick="Delete('{{ $item->advertisement_id }}')"></i></a>
                             </td>
                         </tr>
                         @endforeach
@@ -173,7 +174,7 @@
 @endsection
 @section('modals')
 <div class="modal fade" id="ajax_modal" tabindex="-1" role="dialog" aria-labelledby="ajax_modal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             
         </div>

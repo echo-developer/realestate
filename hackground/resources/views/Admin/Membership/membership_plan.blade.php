@@ -18,9 +18,9 @@
         <div class="page-title-wrapper">
             <div class="page-title-heading">
                 <div class="page-title-icon">
-                    <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
+                    <i class="bi bi-award"></i>
                 </div>
-                <div>Membership Plan <div class="page-title-subheading">Membership Plan &gt; All Membership Plan List</div>
+                <div>Membership Plan <div class="page-title-subheading">Membership Plan <i class="bi bi-chevron-right"></i> All Membership Plan List</div>
                 </div>
             </div>
             <div class="page-title-actions">

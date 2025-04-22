@@ -18,9 +18,9 @@
         <div class="page-title-wrapper">
             <div class="page-title-heading">
                 <div class="page-title-icon">
-                    <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
+                    <i class="bi bi-award"></i>
                 </div>
-                <div>Membership Plan Type <div class="page-title-subheading">Membership Plan Type &gt; All Membership Plan Types</div>
+                <div>Membership Plan Type <div class="page-title-subheading">Membership Plan Type <i class="bi bi-chevron-right"></i> All Membership Plan Types</div>
                 </div>
             </div>
             <div class="page-title-actions">
@@ -50,10 +50,9 @@
     </div>
     @endif
     <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Membership Plan Type <div
-                    class="btn-actions-pane-right">
+    <div class="card-header d-flex">
+                <h4>Membership Plan Type </h4>
+                <div class="btn-actions-pane-right">
                     <div class="btn-group" id="global_action_btn" style="display:none">
                         <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
                             onclick="deleteSelected()" data-original-title="Delete selected"><i
@@ -63,19 +62,20 @@
                                 class="fa fa-thumbs-up"></i></button>
                         <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
                             onclick="changeStatusAll(0)" data-original-title="Make inactive"><i
-                                class="fa  fa-thumbs-down"></i></button>
+                                class="fa fa-thumbs-down"></i></button>
                     </div>
-                    &nbsp;
                 </div>
             </div>
+        <div class="card-body">
+            
 
             <div class="table-responsive" id="main_table">
-                <table id="myTable" class="table">
+                <table id="myTable1" class="table table-bordered1">
                     <thead>
                         <tr>
-                            <th style="width:45%">Plan Type Name</th>
-                            <th style="width:35%">Access</th>
-                            <th style="width:10%">Status</th>
+                            <th>Plan Type Name</th>
+                            <th>Access</th>
+                            <th>Status</th>
                             <th class="text-right">Action</th>
                         </tr>
                     </thead>
@@ -84,17 +84,17 @@
                         <tr>
                             <td>{{$planType->english_name}}</td>
                             <td>
-                                Listings Allowed: {{$planType->listings_allowed}}
-                                <br>
-                                Contact Owners : {{$planType->leads}}
-                                <br>
-                                Listing Visibility : {{$planType->listing_visibility}}
-                                <br>
-                                Social Media Promotion : {{$planType->social_media_promotion}}
-                                <br>
-                                Verified Badge: {{$planType->verified_badge}}
-                                <br>
-                                Relationship Manager : {{$planType->relationship_manager}}
+                                <p class="mb-1"><span style="display:inline-block; min-width: 200px;">Listings Allowed:</span> <b>{{$planType->listings_allowed}}</b></p>
+                                
+                                <p class="mb-1"><span style="display:inline-block; min-width: 200px;">Contact Owners:</span> <b>{{$planType->leads}}</b></p>
+                                
+                                <p class="mb-1"><span style="display:inline-block; min-width: 200px;">Listing Visibility:</span> <b class="{{ $planType->listing_visibility == 'Y' ? 'text-success' : 'text-danger' }}">{{ $planType->listing_visibility == 'Y' ? 'Yes' : 'No' }}</b></p>
+
+                                <p class="mb-1"><span style="display:inline-block; min-width: 200px;">Social Media Promotion:</span> <b class="{{$planType->social_media_promotion == 'Y' ? 'text-success' : 'text-danger' }}">{{$planType->social_media_promotion == 'Y' ? 'Yes' : 'No' }}</b></p>
+                                
+                                <p class="mb-1"><span style="display:inline-block; min-width: 200px;">Verified Badge:</span> <b class="{{$planType->verified_badge == 'Y' ? 'text-success' : 'text-danger' }}">{{$planType->verified_badge == 'Y' ? 'Yes' : 'No' }}</b></p>
+                                
+                                <p class="mb-1"><span style="display:inline-block; min-width: 200px;">Relationship Manager:</span> <b class="{{$planType->relationship_manager == 'Y' ? 'text-success' : 'text-danger' }}">{{$planType->relationship_manager == 'Y' ? 'Yes' : 'No' }}</b></p>
 
                             </td>
                             <td>
@@ -104,10 +104,8 @@
                                     {{ $planType->status ? 'checked' : '' }}>
                             </td>
                             <td class="text-right">
-                                <i class="fa fa-edit text-success fa-md editButton" data-planTypeId="{{ $planType->id }}"></i>
-
-                                <i class="fa fa-trash text-danger fa-md deleteButton"
-                                    data-planTypeId="{{ $planType->id }}"></i>
+                                <a href="javascript:void(0)" class="me-2"><i class="bi bi-pencil-fill text-success fa-md editButton" data-planTypeId="{{ $planType->id }}"></i></a>
+                                <a href="javascript:void(0)"><i class="bi bi-trash3-fill text-danger fa-md deleteButton" data-planTypeId="{{ $planType->id }}"></i></a>
                             </td>
                         </tr>
                         @endforeach
@@ -123,7 +121,7 @@
 @section('modals')
 <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="ModalLabel">Edit Plan Type </h5>
@@ -138,76 +136,83 @@
                     $langs = explode(',', admin_default_lang());
                     @endphp
                     @foreach($langs as $lang)
-                    <div class="form-group">
+                    <div class="form-floating mb-3">                        
+                        <input type="text" class="form-control" id="type_name_{{ $lang }}" name="type_name[{{ $lang }}]" placeholder="" required>
                         <label for="type_name">{{ __('Plan Type Name') }} ({{ strtoupper($lang) }})</label>
-                        <input type="text" class="form-control" id="type_name_{{ $lang }}" name="type_name[{{ $lang }}]" required>
                         <div class="invalid-feedback" id="type_name_{{ $lang }}_error"></div>
                     </div>
                     @endforeach
 
-                    <div class="form-group">
+                    <div class="form-floating mb-3">                        
+                        <input type="text" class="form-control" id="leads" name="leads" placeholder="">
                         <label for="leads">Leads:</label>
-                        <input type="text" class="form-control" id="leads" name="leads">
                         <div class="invalid-feedback" id="contact_owners_error"></div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-floating mb-3">                        
+                        <input type="text" class="form-control" id="listing_visibility" name="listing_visibility" placeholder="">
                         <label for="listing_visibility">Listing Visibility</label>
-                        <input type="text" class="form-control" id="listing_visibility" name="listing_visibility">
                         <div class="invalid-feedback" id="listing_visibility_error"></div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-floating mb-3">                        
+                        <input type="text" class="form-control" id="listings_allowed" name="listings_allowed" placeholder="">
                         <label for="listings_allowed">Listings Allowed</label>
-                        <input type="text" class="form-control" id="listings_allowed" name="listings_allowed">
                         <div class="invalid-feedback" id="listings_allowed_error"></div>
                     </div>
 
                     <div class="form-group">
-                        <label>Social Media Promotion</label>
-                        <div class="radio-inline">
-                            <input type="radio" name="social_media_promotion" value="Y" class="magic-radio" id="social_media_promotion_y">
-                            <label for="social_media_promotion_y">Yes</label>
-                            <input type="radio" name="social_media_promotion" value="N" class="magic-radio" id="social_media_promotion_n" checked>
-                            <label for="social_media_promotion_n">No</label>
+                        <label class="form-label d-block">Social Media Promotion</label>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="social_media_promotion" value="Y" class="form-check-input" id="social_media_promotion_y">
+                            <label class="form-check-label" for="social_media_promotion_y">Yes</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="social_media_promotion" value="N" class="form-check-input" id="social_media_promotion_n" checked>
+                            <label class="form-check-label" for="social_media_promotion_n">No</label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label>Verified Badge</label>
-                        <div class="radio-inline">
-                            <input type="radio" name="verified_badge" value="Y" class="magic-radio" id="verified_badge_y">
-                            <label for="verified_badge_y">Yes</label>
-                            <input type="radio" name="verified_badge" value="N" class="magic-radio" id="verified_badge_n" checked>
-                            <label for="verified_badge_n">No</label>
+                        <label class="form-label d-block">Verified Badge</label>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="verified_badge" value="Y" class="form-check-input" id="verified_badge_y">
+                            <label class="form-check-label" for="verified_badge_y">Yes</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="verified_badge" value="N" class="form-check-input" id="verified_badge_n" checked>
+                            <label class="form-check-label" for="verified_badge_n">No</label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label>Relationship Manager</label>
-                        <div class="radio-inline">
-                            <input type="radio" name="relationship_manager" value="Y" class="magic-radio" id="relationship_manager_y">
-                            <label for="relationship_manager_y">Yes</label>
-                            <input type="radio" name="relationship_manager" value="N" class="magic-radio" id="relationship_manager_n" checked>
-                            <label for="relationship_manager_n">No</label>
+                        <label class="form-label d-block">Relationship Manager</label>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="relationship_manager" value="Y" class="form-check-input" id="relationship_manager_y">
+                            <label class="form-check-label" for="relationship_manager_y">Yes</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="relationship_manager" value="N" class="form-check-input" id="relationship_manager_n" checked>
+                            <label class="form-check-label" for="relationship_manager_n">No</label>
                         </div>
                     </div>
 
 
 
-                    <div class="form-group">
-                        <label class="form-label">Status</label>
-                        <div class="radio-inline">
-                            <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked required>
-                            <label for="status_1">Active</label>
-                            <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
-                            <label for="status_2">Inactive</label>
+                    <div class="form-group mb-0">
+                        <label class="form-label d-block">Status</label>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="status" value=1 class="form-check-input" id="status_1" checked required>
+                            <label class="form-check-label" for="status_1">Active</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" name="status" value=0 class="form-check-input" id="status_2">
+                            <label class="form-check-label" for="status_2">Inactive</label>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" id="SaveButton" class="btn btn-primary">Update</button>
             </div>
         </div>
