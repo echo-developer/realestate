@@ -277,8 +277,8 @@ class AdvanceSearchController extends Controller
                     'area_in_sqft' => $property->area_in_sqft ?? 0,
                     'created_at' => $property->created_at,
                     'address' => $property->property_address,
-                    'address_lan' => $property->latitude,
-                    'address_lat' => $property->longitude,
+                    'address_lan' => $property->longitude,
+                    'address_lat' => $property->latitude,
                     'galleries' => $transformedData,
                 ];
             });
