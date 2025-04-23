@@ -39,7 +39,8 @@ import PropertyMobileFilters from "@/components/addtional/PropertyMobileFilter";
 import useIsMobile from "@/hooks/useIsMobile";
 
 const index = () => {
-  const { defaultCity, currency, currencyCode, formatPrice } = useAuth();
+  const [showMapView, setShowMapView] = useState(false);
+  const { defaultCity, currency, currencyCode, formatPrice, localityList } = useAuth();
   const translation = useTranslation();
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
@@ -106,7 +107,7 @@ const index = () => {
   const [showContactModal, setShowContactModal] = useState(false);
   const [BudgetDropdown, setBudgetDropdown] = useState(false);
   const [error, setError] = useState("");
-  const [propertyForLoading, setPropertyForLoading] = useState(true);
+  const [propertyForLoading, setPropertyForLoading] = useState(false);
   const toggleBudgetDropdown = () => setBudgetDropdown((prev) => !prev);
   const [propertyTypeDropDown, setPropertyTypeDropDown] = useState(false);
   const [bedBathDropDown, setBedBathDropDown] = useState(false);
@@ -294,6 +295,9 @@ const index = () => {
       if (queryObject?.sort_key && queryObject?.sort_order) {
         setSelectedSort(queryObject.sort_key, queryObject.sort_order);
       }
+      if(queryObject?.locality) {
+        setLocalityData(queryObject.locality)
+      }
 
       let data = {};
       if (router?.query?.searchData) {
@@ -474,7 +478,8 @@ const index = () => {
       delete queryObject.property_for;
     }
     if (localityData) {
-      queryObject.location_data = JSON.stringify(localityData);
+      // queryObject.location_data = JSON.stringify(localityData);
+      queryObject.locality = localityData;
     }
 
 
@@ -532,7 +537,7 @@ const index = () => {
       queryObject.min_budget = router.query.min_budget;
     if (router?.query?.max_budget)
       queryObject.max_budget = router.query.max_budget;
-
+    if(router?.query?.locality) queryObject.locality = router?.query?.locality;
     return queryObject;
   };
 
@@ -637,6 +642,10 @@ const index = () => {
     });
   };
 
+  const handleLocalityDataChange = (locality_id) => {
+      setLocalityData(locality_id)
+  }
+
   const handleViewProperty = () => {
     const existingParams = new URLSearchParams();
 
@@ -650,6 +659,9 @@ const index = () => {
     if (minBudget && maxBudget) {
       existingParams.set("min_budget", minBudget);
       existingParams.set("max_budget", maxBudget);
+    } 
+    if(localityData) {
+      existingParams.set('locality', localityData)
     }
 
     // ✅ Add these three lines:
@@ -690,10 +702,10 @@ const index = () => {
     if (router?.query?.post_for)
       existingParams.set("post_for", router?.query?.post_for || "sell");
 
-    if(defaultCity?.city_id) {
+    if (defaultCity?.city_id) {
       existingParams.set("city_id", defaultCity.city_id);
     }
-
+    console.log("advance serarch router query", router.query);
     const payloadSearch = Object.fromEntries(existingParams.entries());
     const { sort_key, sort_order } = router?.query;
     let queryParams = `recent_page=${recent_page || 1}&user_id=${memberId}`;
@@ -701,9 +713,9 @@ const index = () => {
     if (sort_key) queryParams += `&sort_key=${sort_key}`;
     if (sort_order) queryParams += `&sort_order=${sort_order}`;
 
-    if (router?.query?.location_data) {
-      const localityObj = JSON.parse(router?.query?.location_data);
-      payloadSearch.locality = localityObj?.locality;
+    if (router?.query?.locality) {
+      // const localityObj = JSON.parse(router?.query?.location_data);
+      payloadSearch.locality = router?.query?.locality;
     }
 
     if (router?.query?.min_budget) {
@@ -923,301 +935,189 @@ const index = () => {
 
   return (
     <>
-        {isOverlayVisible && (
+      {isOverlayVisible && (
         <div
           className="page-overlay"
           onClick={handleClickOutside}
         ></div>
       )}
       <MainLayout>
-      <Helmet>
-        <title>
-          {translation?.explore_property_listings ||
-            "Explore Property Listings | Buy, Rent, or Invest with RealEstate"}
-        </title>
-        <meta
-          name="description"
-          content="Browse thousands of properties for sale or rent, including houses, apartments, and commercial spaces. Find the perfect property that matches your needs and budget."
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Helmet>
+        <Helmet>
+          <title>
+            {translation?.explore_property_listings ||
+              "Explore Property Listings | Buy, Rent, or Invest with RealEstate"}
+          </title>
+          <meta
+            name="description"
+            content="Browse thousands of properties for sale or rent, including houses, apartments, and commercial spaces. Find the perfect property that matches your needs and budget."
+          />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+        </Helmet>
 
-      {isMobile ? (
-        <React.Fragment>
-          <div className="d-md-none bg-primary p-3">
-            <div className="position-relative">
-              <input
-                type="text"
-                placeholder={translation?.search_locality || "Search Locality"}
-                className="form-control ps-5"
-              />
-              <Search
-                size={18}
-                className="position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"
-              />
+        {isMobile ? (
+          <React.Fragment>
+            <div className="d-md-none bg-primary p-3">
+              <div className="position-relative">
+                <input
+                  type="text"
+                  placeholder={translation?.search_locality || "Search Locality"}
+                  className="form-control ps-5"
+                />
+                <Search
+                  size={18}
+                  className="position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"
+                />
+              </div>
             </div>
-          </div>
-        </React.Fragment>
-      ) : (
-        <React.Fragment>
-          {/* SEARCH SECTION  */}
-          <div className="short-banner pt-4">
-            <div className="container-fluid">
-              <div className="search-form">
-                <form id="searchfilter">
-                  <div className="row gx-3">
-                    <Col className="col-lg-auto col-sm-2 col-auto" onClick={() => toggleDropdown('buy_sell')}>
-                      <Dropdown className="d-grid select-dropdown" show={dropdownState?.buy_sell}>
-                        <Dropdown.Toggle
-                          variant="light"
-                          className="btn-form-control"
-                        >
-                          {postFor === "sale"
-                            ? translation?.buy || "Buy"
-                            : translation?.rent || "Rent"}
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu>
-                          <Dropdown.Item
-                            onClick={() => handlePostForTabChange("sale")}
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            {/* SEARCH SECTION  */}
+            <div className="short-banner pt-4">
+              <div className="container-fluid">
+                <div className="search-form">
+                  <form id="searchfilter">
+                    <div className="row gx-3">
+                      <Col className="col-lg-auto col-sm-2 col-auto" onClick={() => toggleDropdown('buy_sell')}>
+                        <Dropdown className="d-grid select-dropdown" show={dropdownState?.buy_sell}>
+                          <Dropdown.Toggle
+                            variant="light"
+                            className="btn-form-control"
                           >
-                            {translation?.buy || "Buy"}
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => handlePostForTabChange("rent")}
-                          >
-                            {translation?.rent || "Rent"}
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </Col>
-                    <Col className="col-lg col-sm-10">
-                      <LocalityOption setLocationData={setLocalityData} />
-                    </Col>
-                    {/* {postFor === "sell" ||
-                  postFor === "rent" && ( */}
-                    <>
-                      <Col
-                        className="col-lg col-sm-4 col-12"
-                        data-id="parent"
-                        // onClick={handlePropertyTypeDropDown}
-                        onClick={() => toggleDropdown('property_type')}
-                      >
-                        <Dropdown
-                          className="select-dropdown mb-3 d-grid"
-                          show={dropdownState?.property_type}
-                        >
-                          <Dropdown.Toggle className="btn-form-control">
-                            {displayPropertyTyep()}
+                            {postFor === "sale"
+                              ? translation?.buy || "Buy"
+                              : translation?.rent || "Rent"}
                           </Dropdown.Toggle>
-                          <Dropdown.Menu className="p-3">
-                            <div className="form-field">
-                              <Nav
-                                variant="underline"
-                                activeKey={selectedPropertyType}
-                                onSelect={handlePropertyTypeChange}
-                              >
-                                {/* onClick={() => handlePropertyTypeTabChange(type?.category_id)} */}
-                                {propertyTypeList.map((type) => (
-                                  <Nav.Item key={type.category_id}>
-                                    <Nav.Link
-                                      role="button"
-                                      eventKey={type.category_id}
-                                    >
-                                      {type.category_name}
-                                    </Nav.Link>
-                                  </Nav.Item>
-                                ))}
-                              </Nav>
-                            </div>
-
-                            <div className=" mt-3">
-                              <div className="form-field">
-                                <ButtonGroup className="btn-group-light d-flex flex-wrap">
-                                  {subPropertyList?.length === 0 &&
-                                    propertyForLoading && (
-                                      <div
-                                        style={{
-                                          display: "flex",
-                                          justifyContent: "center",
-                                          alignItems: "center",
-                                          height: "200px",
-                                          width: "100%", // Ensure full width
-                                        }}
-                                        className="d-flex justify-content-center align-items-center w-100"
-                                      >
-                                        <div
-                                          className="spinner-border text-primary"
-                                          role="status"
-                                        >
-                                          <span className="visually-hidden">
-                                            {translation?.loading ||
-                                              "Loading...."}{" "}
-                                          </span>
-                                        </div>
-                                      </div>
-                                    )}
-                                  {subPropertyList.map((property, index) => (
-                                    <div
-                                      key={property.sub_category_id}
-                                      className="me-2 mb-2"
-                                    >
-                                      <input
-                                        type="radio"
-                                        className="btn-check"
-                                        name="propertyForGroup"
-                                        id={`propertyFor-${index}`}
-                                        value={property.sub_category_id}
-                                        checked={
-                                          selectedProeprtyFor ==
-                                          property.sub_category_id
-                                        }
-                                        // checked={property.sub_category_id === 1}
-                                        onChange={handlePropertyForChange}
-                                      />
-                                      <label
-                                        className="btn btn-outline-light btn-sm"
-                                        htmlFor={`propertyFor-${index}`}
-                                      >
-                                        {property.sub_category_name}
-                                      </label>
-                                    </div>
-                                  ))}
-                                </ButtonGroup>
-                              </div>
-                            </div>
-                            <div className="d-flex justify-content-between mt-3">
-                              <Button
-                                variant="outline-secondary"
-                                onClick={handlePropertyForReset}
-                              >
-                                {translation?.reset || "Reset"}
-                              </Button>
-                              <Button
-                                variant="primary"
-                                onClick={handlePropertyForDone}
-                              >
-                                {translation?.done || "Done"}
-                              </Button>
-                            </div>
+                          <Dropdown.Menu>
+                            <Dropdown.Item
+                              onClick={() => handlePostForTabChange("sale")}
+                            >
+                              {translation?.buy || "Buy"}
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                              onClick={() => handlePostForTabChange("rent")}
+                            >
+                              {translation?.rent || "Rent"}
+                            </Dropdown.Item>
                           </Dropdown.Menu>
                         </Dropdown>
                       </Col>
-                      {selectedPropertyType !== "2" && (
+                      <Col className="col-lg col-sm-10">
+                        {/* <LocalityOption setLocationData={setLocalityData} /> */}
+                          <select className="form-select" id="exampleSelect" value={localityData} onChange={(e) => handleLocalityDataChange(e.target.value)} >
+                            <option value="">Select a locality</option>
+                            {localityList?.length > 0 && localityList.map((locality, i) => {
+                              return (
+                                <option key={i} value={locality?.locality_id}>{locality?.locality_name || "Not Abailable"}</option>
+                              )
+                            })}
+                          </select>
+                      </Col>
+                      {/* {postFor === "sell" ||
+                  postFor === "rent" && ( */}
+                      <>
                         <Col
                           className="col-lg col-sm-4 col-12"
                           data-id="parent"
-                          // onClick={handleBedDropDown}
-                          onClick={() => toggleDropdown('bath_beds')}
+                          // onClick={handlePropertyTypeDropDown}
+                          onClick={() => toggleDropdown('property_type')}
                         >
                           <Dropdown
-                            className="select-dropdown d-grid mb-3"
-                            // show={bedBathDropDown}
-                            show={dropdownState?.bath_beds}
+                            className="select-dropdown mb-3 d-grid"
+                            show={dropdownState?.property_type}
                           >
                             <Dropdown.Toggle className="btn-form-control">
-                              {displayBedsBathKitchen()}
+                              {displayPropertyTyep()}
                             </Dropdown.Toggle>
-
-                            <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                              {/* Bedrooms Selection */}
-                              <div>
-                                <label className="fw-bold mb-2">
-                                  {translation?.beds || "Beds"}
-                                </label>
-                                <ButtonGroup className="btn-group-light d-flex gap-2">
-                                  {bedrooms.map((bedroomItem, index) => (
-                                    <div key={`bedroom-${index}`}>
-                                      <input
-                                        type="checkbox"
-                                        id={`bedroom-${index}`}
-                                        className="btn-check"
-                                        value={bedroomItem}
-                                        onChange={() =>
-                                          handleBedRoomChange(bedroomItem)
-                                        }
-                                        checked={bedroom.includes(bedroomItem)}
-                                      />
-                                      <label
-                                        className="btn btn-outline-light btn-sm"
-                                        htmlFor={`bedroom-${index}`}
+                            <Dropdown.Menu className="p-3">
+                              <div className="form-field">
+                                <Nav
+                                  variant="underline"
+                                  activeKey={selectedPropertyType}
+                                  onSelect={handlePropertyTypeChange}
+                                >
+                                  {/* onClick={() => handlePropertyTypeTabChange(type?.category_id)} */}
+                                  {propertyTypeList.map((type) => (
+                                    <Nav.Item key={type.category_id}>
+                                      <Nav.Link
+                                        role="button"
+                                        eventKey={type.category_id}
                                       >
-                                        {bedroomItem}
-                                      </label>
-                                    </div>
+                                        {type.category_name}
+                                      </Nav.Link>
+                                    </Nav.Item>
                                   ))}
-                                </ButtonGroup>
+                                </Nav>
                               </div>
 
-                              {/* Bathrooms Selection */}
-                              <div className="mt-3">
-                                <label className="fw-bold mb-2">
-                                  {translation?.baths || "Baths"}
-                                </label>
-                                <ButtonGroup className="btn-group-light d-flex gap-2">
-                                  {[1, 2, 3, 4, 5, 6, 7, "8+"].map(
-                                    (bath, index) => (
-                                      <div key={`bathroom-${index}`}>
+                              <div className=" mt-3">
+                                <div className="form-field">
+                                  <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                                    {subPropertyList?.length === 0 &&
+                                      propertyForLoading && (
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            height: "200px",
+                                            width: "100%", // Ensure full width
+                                          }}
+                                          className="d-flex justify-content-center align-items-center w-100"
+                                        >
+                                          <div
+                                            className="spinner-border text-primary"
+                                            role="status"
+                                          >
+                                            <span className="visually-hidden">
+                                              {translation?.loading ||
+                                                "Loading...."}{" "}
+                                            </span>
+                                          </div>
+                                        </div>
+                                      )}
+                                    {subPropertyList.map((property, index) => (
+                                      <div
+                                        key={property.sub_category_id}
+                                        className="me-2 mb-2"
+                                      >
                                         <input
-                                          type="checkbox"
-                                          id={`bathroom-${index}`}
+                                          type="radio"
                                           className="btn-check"
-                                          value={bath}
-                                          onChange={() =>
-                                            handleBathChange(bath)
+                                          name="propertyForGroup"
+                                          id={`propertyFor-${index}`}
+                                          value={property.sub_category_id}
+                                          checked={
+                                            selectedProeprtyFor ==
+                                            property.sub_category_id
                                           }
-                                          checked={bathroom?.includes(bath)}
+                                          // checked={property.sub_category_id === 1}
+                                          onChange={handlePropertyForChange}
                                         />
                                         <label
                                           className="btn btn-outline-light btn-sm"
-                                          htmlFor={`bathroom-${index}`}
+                                          htmlFor={`propertyFor-${index}`}
                                         >
-                                          {bath}
+                                          {property.sub_category_name}
                                         </label>
                                       </div>
-                                    )
-                                  )}
-                                </ButtonGroup>
+                                    ))}
+                                    {subPropertyList?.length == 0 && !propertyForLoading && (
+                                      <div>Choose a property Type</div>
+                                    )}
+                                  </ButtonGroup>
+                                </div>
                               </div>
-
-                              {/* Kitchens Selection */}
-                              <div className="mt-3">
-                                <label className="fw-bold mb-2">
-                                  {translation?.kitchens || "Kitchens"}
-                                </label>
-                                <ButtonGroup className="btn-group-light d-flex gap-2">
-                                  {[1, 2, 3, 4, 5].map((kitchen, index) => (
-                                    <div key={`kitchen-${index}`}>
-                                      <input
-                                        type="checkbox"
-                                        id={`kitchen-${index}`}
-                                        className="btn-check"
-                                        value={kitchen}
-                                        onChange={() =>
-                                          handleKitchenChange(kitchen)
-                                        }
-                                        checked={kitchens?.includes(kitchen)}
-                                      />
-                                      <label
-                                        className="btn btn-outline-light btn-sm"
-                                        htmlFor={`kitchen-${index}`}
-                                      >
-                                        {kitchen}
-                                      </label>
-                                    </div>
-                                  ))}
-                                </ButtonGroup>
-                              </div>
-
                               <div className="d-flex justify-content-between mt-3">
                                 <Button
                                   variant="outline-secondary"
-                                  onClick={resetSelection}
+                                  onClick={handlePropertyForReset}
                                 >
                                   {translation?.reset || "Reset"}
                                 </Button>
                                 <Button
                                   variant="primary"
-                                  onClick={applySelection}
+                                  onClick={handlePropertyForDone}
                                 >
                                   {translation?.done || "Done"}
                                 </Button>
@@ -1225,177 +1125,305 @@ const index = () => {
                             </Dropdown.Menu>
                           </Dropdown>
                         </Col>
-                      )}
-                      <Col
-                        className="col-lg col-sm-4 col-12"
-                        data-id="parent"
-                        // onClick={openBudgetDropDown}
-                        onClick={() => toggleDropdown('budget')}
-                      >
-                        <Dropdown
-                          className="select-dropdown d-grid mb-3"
-                          // show={BudgetDropdown}
-                          show={dropdownState?.budget}
-                        >
-                          <Dropdown.Toggle
-                            className="btn-form-control"
-                            id="budget-dropdown"
+                        {selectedPropertyType !== "2" && (
+                          <Col
+                            className="col-lg col-sm-4 col-12"
+                            data-id="parent"
+                            // onClick={handleBedDropDown}
+                            onClick={() => toggleDropdown('bath_beds')}
                           >
-                            {displayBudget()}
-                          </Dropdown.Toggle>
+                            <Dropdown
+                              className="select-dropdown d-grid mb-3"
+                              // show={bedBathDropDown}
+                              show={dropdownState?.bath_beds}
+                            >
+                              <Dropdown.Toggle className="btn-form-control">
+                                {displayBedsBathKitchen()}
+                              </Dropdown.Toggle>
 
-                          <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                            <Row className="gx-2">
-                              <Col className="col-6">
-                                <Form.Group className="dropdown minMax">
-                                  <Form.Label>
-                                    {translation?.min || "Min"}
-                                  </Form.Label>
-                                  <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="00"
-                                    value={minBudget}
-                                    onChange={handleMinChange}
-                                    onClick={(e) => e.stopPropagation()} // Prevents parent click event
-                                  />
-                                </Form.Group>
-                              </Col>
-                              <Col className="col-6">
-                                <Form.Group className="dropdown minMax">
-                                  <Form.Label>
-                                    {translation?.max || "Max"}
-                                  </Form.Label>
-                                  <input
-                                    type="number"
-                                    className="form-control"
-                                    placeholder="00"
-                                    value={maxBudget}
-                                    onChange={handleMaxBudgetChange}
-                                    onClick={(e) => e.stopPropagation()} // Prevents parent click event
-                                  />
-                                </Form.Group>
-                              </Col>
-                            </Row>
+                              <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                                {/* Bedrooms Selection */}
+                                <div>
+                                  <label className="fw-bold mb-2">
+                                    {translation?.beds || "Beds"}
+                                  </label>
+                                  <ButtonGroup className="btn-group-light d-flex gap-2">
+                                    {bedrooms.map((bedroomItem, index) => (
+                                      <div key={`bedroom-${index}`}>
+                                        <input
+                                          type="checkbox"
+                                          id={`bedroom-${index}`}
+                                          className="btn-check"
+                                          value={bedroomItem}
+                                          onChange={() =>
+                                            handleBedRoomChange(bedroomItem)
+                                          }
+                                          checked={bedroom.includes(bedroomItem)}
+                                        />
+                                        <label
+                                          className="btn btn-outline-light btn-sm"
+                                          htmlFor={`bedroom-${index}`}
+                                        >
+                                          {bedroomItem}
+                                        </label>
+                                      </div>
+                                    ))}
+                                  </ButtonGroup>
+                                </div>
 
-                            {error && (
-                              <div className="text-danger mt-2">{error}</div>
-                            )}
+                                {/* Bathrooms Selection */}
+                                <div className="mt-3">
+                                  <label className="fw-bold mb-2">
+                                    {translation?.baths || "Baths"}
+                                  </label>
+                                  <ButtonGroup className="btn-group-light d-flex gap-2">
+                                    {[1, 2, 3, 4, 5, 6, 7, "8+"].map(
+                                      (bath, index) => (
+                                        <div key={`bathroom-${index}`}>
+                                          <input
+                                            type="checkbox"
+                                            id={`bathroom-${index}`}
+                                            className="btn-check"
+                                            value={bath}
+                                            onChange={() =>
+                                              handleBathChange(bath)
+                                            }
+                                            checked={bathroom?.includes(bath)}
+                                          />
+                                          <label
+                                            className="btn btn-outline-light btn-sm"
+                                            htmlFor={`bathroom-${index}`}
+                                          >
+                                            {bath}
+                                          </label>
+                                        </div>
+                                      )
+                                    )}
+                                  </ButtonGroup>
+                                </div>
 
-                            <div className="d-flex justify-content-between mt-3">
-                              <Button
-                                variant="outline-secondary"
-                                onClick={resetBudget}
-                              >
-                                {translation?.reset || "Reset"}
-                              </Button>
-                              <Button
-                                variant="primary"
-                                onClick={() => {
-                                  applyBudget();
-                                  setBudgetDropdown(false);
-                                }}
-                                disabled={!!error}
-                              >
-                                {translation?.done || "Done"}
-                              </Button>
-                            </div>
-                          </Dropdown.Menu>
-                        </Dropdown>
+                                {/* Kitchens Selection */}
+                                <div className="mt-3">
+                                  <label className="fw-bold mb-2">
+                                    {translation?.kitchens || "Kitchens"}
+                                  </label>
+                                  <ButtonGroup className="btn-group-light d-flex gap-2">
+                                    {[1, 2, 3, 4, 5].map((kitchen, index) => (
+                                      <div key={`kitchen-${index}`}>
+                                        <input
+                                          type="checkbox"
+                                          id={`kitchen-${index}`}
+                                          className="btn-check"
+                                          value={kitchen}
+                                          onChange={() =>
+                                            handleKitchenChange(kitchen)
+                                          }
+                                          checked={kitchens?.includes(kitchen)}
+                                        />
+                                        <label
+                                          className="btn btn-outline-light btn-sm"
+                                          htmlFor={`kitchen-${index}`}
+                                        >
+                                          {kitchen}
+                                        </label>
+                                      </div>
+                                    ))}
+                                  </ButtonGroup>
+                                </div>
+
+                                <div className="d-flex justify-content-between mt-3">
+                                  <Button
+                                    variant="outline-secondary"
+                                    onClick={resetSelection}
+                                  >
+                                    {translation?.reset || "Reset"}
+                                  </Button>
+                                  <Button
+                                    variant="primary"
+                                    onClick={applySelection}
+                                  >
+                                    {translation?.done || "Done"}
+                                  </Button>
+                                </div>
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          </Col>
+                        )}
+                        <Col
+                          className="col-lg col-sm-4 col-12"
+                          data-id="parent"
+                          // onClick={openBudgetDropDown}
+                          onClick={() => toggleDropdown('budget')}
+                        >
+                          <Dropdown
+                            className="select-dropdown d-grid mb-3"
+                            // show={BudgetDropdown}
+                            show={dropdownState?.budget}
+                          >
+                            <Dropdown.Toggle
+                              className="btn-form-control"
+                              id="budget-dropdown"
+                            >
+                              {displayBudget()}
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                              <Row className="gx-2">
+                                <Col className="col-6">
+                                  <Form.Group className="dropdown minMax">
+                                    <Form.Label>
+                                      {translation?.min || "Min"}
+                                    </Form.Label>
+                                    <input
+                                      type="number"
+                                      className="form-control"
+                                      placeholder="00"
+                                      value={minBudget}
+                                      onChange={handleMinChange}
+                                      onClick={(e) => e.stopPropagation()} // Prevents parent click event
+                                    />
+                                  </Form.Group>
+                                </Col>
+                                <Col className="col-6">
+                                  <Form.Group className="dropdown minMax">
+                                    <Form.Label>
+                                      {translation?.max || "Max"}
+                                    </Form.Label>
+                                    <input
+                                      type="number"
+                                      className="form-control"
+                                      placeholder="00"
+                                      value={maxBudget}
+                                      onChange={handleMaxBudgetChange}
+                                      onClick={(e) => e.stopPropagation()} // Prevents parent click event
+                                    />
+                                  </Form.Group>
+                                </Col>
+                              </Row>
+
+                              {error && (
+                                <div className="text-danger mt-2">{error}</div>
+                              )}
+
+                              <div className="d-flex justify-content-between mt-3">
+                                <Button
+                                  variant="outline-secondary"
+                                  onClick={resetBudget}
+                                >
+                                  {translation?.reset || "Reset"}
+                                </Button>
+                                <Button
+                                  variant="primary"
+                                  onClick={() => {
+                                    applyBudget();
+                                    setBudgetDropdown(false);
+                                  }}
+                                  disabled={!!error}
+                                >
+                                  {translation?.done || "Done"}
+                                </Button>
+                              </div>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </Col>
+                      </>
+                      {/* )} */}
+                      <Col className="col-lg-auto col-sm-2 col-auto">
+                        <Button style={{ backgroundColor: '#fff', color: '#007bff', border: '1px solid #007bff' }}>
+                          View In Map
+                        </Button>
                       </Col>
-                    </>
-                    {/* )} */}
-                    <Col className="col-lg-auto col-6 mb-3">
-                      <div className="d-grid">
-                        <Button variant="primary" onClick={handleSearchClick}>
-                          {translation?.search || "Search"}
-                        </Button>
-                      </div>
-                    </Col>
-                    <Col className="col-lg-auto col-6 mb-3">
-                      <div className="d-grid">
-                        <Button
-                          variant="primary"
-                          // onClick={() => setAdvanceFilter((prev) => !prev)}
-                          onClick={() => toggleDropdown('advanceFilter')}
-                          disabled={selectedPropertyType ? false : true}
-                        >
+                      <Col className="col-lg-auto col-6 mb-3">
+                        <div className="d-grid">
+                          <Button variant="primary" onClick={handleSearchClick}>
+                            {translation?.search || "Search"}
+                          </Button>
+                        </div>
+                      </Col>
+                      <Col className="col-lg-auto col-6 mb-3">
+                        <div className="d-grid">
+                          <Button
+                            variant="primary"
+                            // onClick={() => setAdvanceFilter((prev) => !prev)}
+                            onClick={() => toggleDropdown('advanceFilter')}
+                            disabled={selectedPropertyType ? false : true}
+                          >
                             {translation?.advanced || "Advance"}
-                        </Button>
-                      </div>
-                    </Col>
-                  </div>
+                          </Button>
+                        </div>
+                      </Col>
+                    </div>
 
-                  {selectedPropertyType &&
-                    postFor !== "pg_hostel" &&
-                    dropdownState?.advanceFilter && (
-                      <div
-                        className="more-filter-dropdown"
-                        style={{
-                          display: "flex",
-                        }}
-                      >
-
-                        <ListGroup
-                          style={{ height: "350px", minWidth: "200px", overflowY: "auto" }}
+                    {selectedPropertyType &&
+                      postFor !== "pg_hostel" &&
+                      dropdownState?.advanceFilter && (
+                        <div
+                          className="more-filter-dropdown"
+                          style={{
+                            display: "flex",
+                          }}
                         >
-                          {advanceFilters?.map((item, i) => {
-                            return (
-                              <ListGroup.Item
-                                role="button"
-                                className={
-                                  selectedAdvanceFilter === item?.key
-                                    ? "active"
-                                    : ""
-                                }
-                                onClick={() => {
-                                  setSelectedAdvanceFilter(item?.key);
-                                  setSelectedSubFilters([]);
-                                }}
-                              >
-                                {item?.name ||
-                                  `${translation?.not_available ||
-                                  "Not available"
-                                  }`}
-                              </ListGroup.Item>
-                            );
-                          })}
-                        </ListGroup>
 
-                        <div className="flex-grow-1 p-3 scroll-part">
-                          {selectedAdvanceFilter &&
-                            (selectedAdvanceFilter === "furnishing" ||
-                              selectedAdvanceFilter === "amenities" ||
-                              selectedAdvanceFilter === "possession_status") ? (
-                            <div>
-                              <h5>
-                                {translation?.sub_filters_for ||
-                                  "Sub Filters for"}{" "}
-                                {
-                                  filterOptions.find(
-                                    (f) => f.key === selectedAdvanceFilter
-                                  ).name
-                                }
-                              </h5>
-                              <Row className="mb-3">
-                                {dynamicFieldLoading && (
-                                  <>
-                                    <Col xs={12}>
-                                      <div
-                                        style={{
-                                          width: "40px",
-                                          height: "40px",
-                                          border: "4px solid #3498db",
-                                          borderTop: "4px solid transparent",
-                                          borderRadius: "50%",
-                                          animation: "spin 1s linear infinite",
-                                          marginLeft: "150px",
-                                          marginTop: "100px",
-                                        }}
-                                      ></div>
+                          <ListGroup
+                            style={{ height: "350px", minWidth: "200px", overflowY: "auto" }}
+                          >
+                            {advanceFilters?.map((item, i) => {
+                              return (
+                                <ListGroup.Item
+                                  role="button"
+                                  className={
+                                    selectedAdvanceFilter === item?.key
+                                      ? "active"
+                                      : ""
+                                  }
+                                  onClick={() => {
+                                    setSelectedAdvanceFilter(item?.key);
+                                    setSelectedSubFilters([]);
+                                  }}
+                                >
+                                  {item?.name ||
+                                    `${translation?.not_available ||
+                                    "Not available"
+                                    }`}
+                                </ListGroup.Item>
+                              );
+                            })}
+                          </ListGroup>
 
-                                      <style>
-                                        {`
+                          <div className="flex-grow-1 p-3 scroll-part">
+                            {selectedAdvanceFilter &&
+                              (selectedAdvanceFilter === "furnishing" ||
+                                selectedAdvanceFilter === "amenities" ||
+                                selectedAdvanceFilter === "possession_status") ? (
+                              <div>
+                                <h5>
+                                  {translation?.sub_filters_for ||
+                                    "Sub Filters for"}{" "}
+                                  {
+                                    filterOptions.find(
+                                      (f) => f.key === selectedAdvanceFilter
+                                    ).name
+                                  }
+                                </h5>
+                                <Row className="mb-3">
+                                  {dynamicFieldLoading && (
+                                    <>
+                                      <Col xs={12}>
+                                        <div
+                                          style={{
+                                            width: "40px",
+                                            height: "40px",
+                                            border: "4px solid #3498db",
+                                            borderTop: "4px solid transparent",
+                                            borderRadius: "50%",
+                                            animation: "spin 1s linear infinite",
+                                            marginLeft: "150px",
+                                            marginTop: "100px",
+                                          }}
+                                        ></div>
+
+                                        <style>
+                                          {`
                                         @keyframes spin {
                                             0% {
                                                 transform: rotate(0deg);
@@ -1405,499 +1433,502 @@ const index = () => {
                                             }
                                         }
                                       `}
-                                      </style>
-                                    </Col>
-                                  </>
-                                )}
-                                {!dynamicFieldLoading &&
-                                  dynamicList?.map((item, i) => {
-                                    if (
-                                      selectedAdvanceFilter === "furnishing"
-                                    ) {
+                                        </style>
+                                      </Col>
+                                    </>
+                                  )}
+                                  {!dynamicFieldLoading &&
+                                    dynamicList?.map((item, i) => {
+                                      if (
+                                        selectedAdvanceFilter === "furnishing"
+                                      ) {
+                                        return (
+                                          <>
+                                            <Col xs={6}>
+                                              <Form.Check
+                                                key={item?.furnish_id || i}
+                                                inline
+                                                type="checkbox"
+                                                label={item?.furnish_name}
+                                                id={item?.furnish_id}
+                                                onChange={() =>
+                                                  handleDynamicValueChange(
+                                                    selectedAdvanceFilter,
+                                                    item?.furnish_id
+                                                  )
+                                                }
+                                                checked={SearchData[
+                                                  selectedAdvanceFilter
+                                                ]?.includes(item?.furnish_id)}
+                                              />
+                                            </Col>
+                                          </>
+                                        );
+                                      } else if (
+                                        selectedAdvanceFilter === "amenities"
+                                      ) {
+                                        return (
+                                          <>
+                                            <Col xs={6}>
+                                              <Form.Check
+                                                key={item?.amenity_id}
+                                                inline
+                                                type="checkbox"
+                                                label={item?.amenity_name}
+                                                id={item?.amenity_id}
+                                                onChange={() =>
+                                                  handleDynamicValueChange(
+                                                    selectedAdvanceFilter,
+                                                    item?.amenity_id
+                                                  )
+                                                }
+                                                checked={SearchData[
+                                                  selectedAdvanceFilter
+                                                ]?.includes(item?.amenity_id)}
+                                              />
+                                            </Col>
+                                          </>
+                                        );
+                                      } else if (
+                                        selectedAdvanceFilter ===
+                                        "possession_status"
+                                      ) {
+                                        return (
+                                          <>
+                                            <Col xs={6}>
+                                              <Form.Check
+                                                key={item?.status_id || i}
+                                                inline
+                                                type="checkbox"
+                                                label={item?.status_name}
+                                                id={item?.status_id}
+                                                onChange={() =>
+                                                  handleDynamicValueChange(
+                                                    selectedAdvanceFilter,
+                                                    item?.status_id
+                                                  )
+                                                }
+                                                checked={SearchData[
+                                                  selectedAdvanceFilter
+                                                ]?.includes(item?.status_id)}
+                                              />
+                                            </Col>
+                                          </>
+                                        );
+                                      }
+                                    })}
+                                </Row>
+                              </div>
+                            ) : selectedAdvanceFilter === "carpet_area" ? (
+                              <>
+                                <Row className="gx-3">
+                                  <Col>
+                                    <Form.Group className="mb-3">
+                                      <Form.Label htmlFor="">
+                                        {translation?.min || "Min"}
+                                      </Form.Label>
+                                      <Form.Control
+                                        type="number"
+                                        name="min_carpet"
+                                        placeholder={translation?.min || "Min"}
+                                        value={SearchData?.min_carpet}
+                                        onChange={handleCarpetSizeChange}
+                                      />
+                                    </Form.Group>
+                                  </Col>
+                                  <Col>
+                                    <Form.Group className="mb-3">
+                                      <Form.Label htmlFor="">
+                                        {translation?.max || "Max"}
+                                      </Form.Label>
+                                      <Form.Control
+                                        type="number"
+                                        name="max_carpet"
+                                        placeholder={translation?.max || "Max"}
+                                        value={SearchData?.max_carpet}
+                                        onChange={handleCarpetSizeChange}
+                                      />
+                                    </Form.Group>
+                                  </Col>
+                                </Row>
+
+                                <div className="select-box d-grid mb-3 p-3 bg-white rounded"></div>
+                              </>
+                            ) : subfilterOptions[selectedAdvanceFilter] ? (
+                              <div>
+                                <h5>
+                                  {translation?.sub_filters_for ||
+                                    "sub filters for"}{" "}
+                                  {
+                                    advanceFilters?.find(
+                                      (item) =>
+                                        item?.key === selectedAdvanceFilter
+                                    )?.name
+                                  }
+                                </h5>
+                                <Row className="mb-3">
+                                  {subfilterOptions[selectedAdvanceFilter]?.map(
+                                    (subFilter, i) => {
                                       return (
                                         <>
                                           <Col xs={6}>
                                             <Form.Check
-                                              key={item?.furnish_id || i}
+                                              key={subFilter.key}
                                               inline
                                               type="checkbox"
-                                              label={item?.furnish_name}
-                                              id={item?.furnish_id}
+                                              label={
+                                                ` ${subFilter.name}` ||
+                                                `${translation?.not_available ||
+                                                "Not available"
+                                                }`
+                                              }
+                                              id={subFilter.key}
                                               onChange={() =>
-                                                handleDynamicValueChange(
+                                                handleSubFilterSelection(
                                                   selectedAdvanceFilter,
-                                                  item?.furnish_id
+                                                  subFilter.key
                                                 )
                                               }
                                               checked={SearchData[
                                                 selectedAdvanceFilter
-                                              ]?.includes(item?.furnish_id)}
-                                            />
-                                          </Col>
-                                        </>
-                                      );
-                                    } else if (
-                                      selectedAdvanceFilter === "amenities"
-                                    ) {
-                                      return (
-                                        <>
-                                          <Col xs={6}>
-                                            <Form.Check
-                                              key={item?.amenity_id}
-                                              inline
-                                              type="checkbox"
-                                              label={item?.amenity_name}
-                                              id={item?.amenity_id}
-                                              onChange={() =>
-                                                handleDynamicValueChange(
-                                                  selectedAdvanceFilter,
-                                                  item?.amenity_id
-                                                )
-                                              }
-                                              checked={SearchData[
-                                                selectedAdvanceFilter
-                                              ]?.includes(item?.amenity_id)}
-                                            />
-                                          </Col>
-                                        </>
-                                      );
-                                    } else if (
-                                      selectedAdvanceFilter ===
-                                      "possession_status"
-                                    ) {
-                                      return (
-                                        <>
-                                          <Col xs={6}>
-                                            <Form.Check
-                                              key={item?.status_id || i}
-                                              inline
-                                              type="checkbox"
-                                              label={item?.status_name}
-                                              id={item?.status_id}
-                                              onChange={() =>
-                                                handleDynamicValueChange(
-                                                  selectedAdvanceFilter,
-                                                  item?.status_id
-                                                )
-                                              }
-                                              checked={SearchData[
-                                                selectedAdvanceFilter
-                                              ]?.includes(item?.status_id)}
+                                              ]?.includes(subFilter?.key)}
                                             />
                                           </Col>
                                         </>
                                       );
                                     }
-                                  })}
-                              </Row>
-                            </div>
-                          ) : selectedAdvanceFilter === "carpet_area" ? (
-                            <>
-                              <Row className="gx-3">
-                                <Col>
-                                  <Form.Group className="mb-3">
-                                    <Form.Label htmlFor="">
-                                      {translation?.min || "Min"}
-                                    </Form.Label>
-                                    <Form.Control
-                                      type="number"
-                                      name="min_carpet"
-                                      placeholder={translation?.min || "Min"}
-                                      value={SearchData?.min_carpet}
-                                      onChange={handleCarpetSizeChange}
-                                    />
-                                  </Form.Group>
-                                </Col>
-                                <Col>
-                                  <Form.Group className="mb-3">
-                                    <Form.Label htmlFor="">
-                                      {translation?.max || "Max"}
-                                    </Form.Label>
-                                    <Form.Control
-                                      type="number"
-                                      name="max_carpet"
-                                      placeholder={translation?.max || "Max"}
-                                      value={SearchData?.max_carpet}
-                                      onChange={handleCarpetSizeChange}
-                                    />
-                                  </Form.Group>
-                                </Col>
-                              </Row>
+                                  )}
+                                </Row>
+                              </div>
+                            ) : (
+                              selectedAdvanceFilter === "price_range" && <></>
+                            )}
 
-                              <div className="select-box d-grid mb-3 p-3 bg-white rounded"></div>
-                            </>
-                          ) : subfilterOptions[selectedAdvanceFilter] ? (
-                            <div>
-                              <h5>
-                                {translation?.sub_filters_for ||
-                                  "sub filters for"}{" "}
-                                {
-                                  advanceFilters?.find(
-                                    (item) =>
-                                      item?.key === selectedAdvanceFilter
-                                  )?.name
-                                }
-                              </h5>
-                              <Row className="mb-3">
-                                {subfilterOptions[selectedAdvanceFilter]?.map(
-                                  (subFilter, i) => {
-                                    return (
-                                      <>
-                                        <Col xs={6}>
-                                          <Form.Check
-                                            key={subFilter.key}
-                                            inline
-                                            type="checkbox"
-                                            label={
-                                              ` ${subFilter.name}` ||
-                                              `${translation?.not_available ||
-                                              "Not available"
-                                              }`
-                                            }
-                                            id={subFilter.key}
-                                            onChange={() =>
-                                              handleSubFilterSelection(
-                                                selectedAdvanceFilter,
-                                                subFilter.key
-                                              )
-                                            }
-                                            checked={SearchData[
-                                              selectedAdvanceFilter
-                                            ]?.includes(subFilter?.key)}
-                                          />
-                                        </Col>
-                                      </>
-                                    );
-                                  }
-                                )}
-                              </Row>
+                            <div className="text-end">
+                              <Button
+                                variant="primary"
+                                onClick={() => handleViewProperty()}
+                              >
+                                {translation?.view_property || "View Property"}
+                              </Button>
                             </div>
-                          ) : (
-                            selectedAdvanceFilter === "price_range" && <></>
-                          )}
-
-                          <div className="text-end">
-                            <Button
-                              variant="primary"
-                              onClick={() => handleViewProperty()}
-                            >
-                              {translation?.view_property || "View Property"}
-                            </Button>
                           </div>
                         </div>
-                      </div>
-                    )}
-                </form>
-              </div>
-            </div>
-          </div>
-        </React.Fragment>
-      )}
-
-  
-
-      <div className="d-md-none mb-4">
-        <PropertyMobileFilters
-          showDrop={showDrop}
-          setShowDrop={setShowDrop}
-          selectedOption={selectedOption}
-          handleSortSelection={handleSortSelection}
-          propertyTypeList={propertyTypeList}
-          subPropertyList={subPropertyList}
-        />
-      </div>
-
-      <section className="section">
-        <div className="container-fluid">
-          <div className="row main-row">
-            <aside className="col-xl-9 col-lg-9 col-12">
-              <div className="d-sm-flex justify-content-between align-items-center mb-2">
-                <h4 className="mb-3 mb-sm-0">
-                  {translation?.total || "Total"}{" "}
-                  <span className="text-primary">{totalPropertyCount}</span>{" "}
-                  {translation?.properties_in || "Properties in"}{" "}
-                  {defaultCity?.name || "Kolkata"}
-                </h4>
-                <div className="sort-by d-none d-md-block">
-                  <DropdownButton
-                    align="end"
-                    title={selectedOption}
-                    id="dropdown-menu-align-end"
-                    onClick={() => setShowDrop(!showDrop)}
-                    aria-expanded={showDrop ? "true" : "false"}
-                  >
-                    {[
-                      "Recent",
-                      "Price - Low to High",
-                      "Price - High to Low",
-                      "Size - Low to High",
-                      "Size - High to Low",
-                    ].map((option) => (
-                      <Dropdown.Item
-                        eventKey="1"
-                        key={option}
-                        onClick={() => handleSortSelection(option)}
-                      >
-                        {option}
-                      </Dropdown.Item>
-                    ))}
-                  </DropdownButton>
+                      )}
+                  </form>
                 </div>
               </div>
-              <div className="list-display">
-                {/* Show shimmer when loading */}
-                {loading ? (
-                  <>
-                  <ShimmerContentBlock
-                    title
-                    text
-                    cta
-                    thumbnailWidth={350}
-                    thumbnailHeight={50}
-                  />
-                  <ShimmerContentBlock
-                    title
-                    text
-                    cta
-                    thumbnailWidth={350}
-                    thumbnailHeight={50}
-                  />
-                  </>
-                ) : !loading && propertyList?.length === 0 ? (
-                  // Show No Result Found only when loading is false and no data is present
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: "50vh",
-                      textAlign: "center",
-                      fontSize: "28px",
-                      fontWeight: "bold",
-                      color: "#555",
-                    }}
-                  >
-                    <p>{translation?.no_result_found || "No result found"}</p>
+            </div>
+          </React.Fragment>
+        )}
+
+
+
+        <div className="d-md-none mb-4">
+          <PropertyMobileFilters
+            showDrop={showDrop}
+            setShowDrop={setShowDrop}
+            selectedOption={selectedOption}
+            handleSortSelection={handleSortSelection}
+            propertyTypeList={propertyTypeList}
+            subPropertyList={subPropertyList}
+            localityData={localityData}
+            localityList={localityList}
+            handleLocalityDataChange={handleLocalityDataChange}
+          />
+        </div>
+
+        <section className="section">
+          <div className="container-fluid">
+            <div className="row main-row">
+              <aside className="col-xl-9 col-lg-9 col-12">
+                <div className="d-sm-flex justify-content-between align-items-center mb-2">
+                  <h4 className="mb-3 mb-sm-0">
+                    {translation?.total || "Total"}{" "}
+                    <span className="text-primary">{totalPropertyCount}</span>{" "}
+                    {translation?.properties_in || "Properties in"}{" "}
+                    {defaultCity?.name || "Kolkata"}
+                  </h4>
+                  <div className="sort-by d-none d-md-block">
+                    <DropdownButton
+                      align="end"
+                      title={selectedOption}
+                      id="dropdown-menu-align-end"
+                      onClick={() => setShowDrop(!showDrop)}
+                      aria-expanded={showDrop ? "true" : "false"}
+                    >
+                      {[
+                        "Recent",
+                        "Price - Low to High",
+                        "Price - High to Low",
+                        "Size - Low to High",
+                        "Size - High to Low",
+                      ].map((option) => (
+                        <Dropdown.Item
+                          eventKey="1"
+                          key={option}
+                          onClick={() => handleSortSelection(option)}
+                        >
+                          {option}
+                        </Dropdown.Item>
+                      ))}
+                    </DropdownButton>
                   </div>
-                ) : (
-                  // Render Property Cards
-                  propertyList?.map((property, i) => (
-                    <div key={property.property_id} className="card card-ads">
-                      <div className="row g-0">
-                        <div className="col-lg-3 col-sm-3">
-                          <CardImageSlider
-                            data={property}
-                            showSq={true}
-                            icons={true}
-                            addRemoveFav={() =>
-                              SaveFavouriteProperty(property.property_id)
-                            }
-                          />
-                        </div>
-                        <div className="col-lg-9 col-sm-9 position-relative">
-                          <div className="card-body">
-                            <h4 className="mb-1">
-                              <Link href={`/property-details/${property.slug}`}>
-                                {property.property_name}
-                              </Link>
-                            </h4>
-                            <h5 className="mb-0">
-                            {formatPrice(property?.exp_price) || "Price not Available"}
-                              {/* {property?.exp_price ? `${currencyCode || ""} ${property?.exp_price}` : "Price not Available"} */}
-                              {/* {property?.price_currency && property?.exp_price
+                </div>
+                <div className="list-display">
+                  {/* Show shimmer when loading */}
+                  {loading ? (
+                    <>
+                      <ShimmerContentBlock
+                        title
+                        text
+                        cta
+                        thumbnailWidth={350}
+                        thumbnailHeight={50}
+                      />
+                      <ShimmerContentBlock
+                        title
+                        text
+                        cta
+                        thumbnailWidth={350}
+                        thumbnailHeight={50}
+                      />
+                    </>
+                  ) : !loading && propertyList?.length === 0 ? (
+                    // Show No Result Found only when loading is false and no data is present
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "50vh",
+                        textAlign: "center",
+                        fontSize: "28px",
+                        fontWeight: "bold",
+                        color: "#555",
+                      }}
+                    >
+                      <p>{translation?.no_result_found || "No result found"}</p>
+                    </div>
+                  ) : (
+                    // Render Property Cards
+                    propertyList?.map((property, i) => (
+                      <div key={property.property_id} className="card card-ads">
+                        <div className="row g-0">
+                          <div className="col-lg-3 col-sm-3">
+                            <CardImageSlider
+                              data={property}
+                              showSq={true}
+                              icons={true}
+                              addRemoveFav={() =>
+                                SaveFavouriteProperty(property.property_id)
+                              }
+                            />
+                          </div>
+                          <div className="col-lg-9 col-sm-9 position-relative">
+                            <div className="card-body">
+                              <h4 className="mb-1">
+                                <Link href={`/property-details/${property.slug}`}>
+                                  {property.property_name}
+                                </Link>
+                              </h4>
+                              <h5 className="mb-0">
+                                {formatPrice(property?.exp_price) || "Price not Available"}
+                                {/* {property?.exp_price ? `${currencyCode || ""} ${property?.exp_price}` : "Price not Available"} */}
+                                {/* {property?.price_currency && property?.exp_price
                                 ? `${property.price_currency
                                 } ${new Intl.NumberFormat("en-US").format(
                                   property.exp_price
                                 )} ${property?.price_per_sqft ? `(${property?.price_currency} ${property.price_per_sqft} sq/ft)` : ""}`
                                 : "Price not available"} */}
-                            </h5>
-                            <p className="mb-1">
-                              {/* <small>
+                              </h5>
+                              <p className="mb-1">
+                                {/* <small>
                                 {translation?.average_price || "Average Price:"}{" "}
                                 {property?.price_currency ||
                                   property?.currency ||
                                   ""}{" "}
                                 {property?.area_in_sqft || ""} {" sq/ft"}
                               </small> */}
-                            </p>
-                            <ul className="list-info mb-2">
-                              <li>
-                                <i
-                                  className="icon-img-bed"
-                                  title="Bedrooms:"
-                                ></i>
-                                <span>
-                                  {property?.bedrooms ? property.bedrooms : <span className="text-muted">Not Available</span>}
-                                </span>
-                                {property?.bedrooms && " Beds"}
-                              </li>
-                              <li>
-                                <i
-                                  className="icon-img-tub"
-                                  title="Bathrooms:"
-                                ></i>
-                                <span>
-                                  {property?.bathroom ? property.bathroom : <span className="text-muted">Not Available</span>}
-                                </span>
-                                {property?.bathroom && " Bath"}
-                              </li>
-                              <li>
-                                {property?.area_in_sqft && (
-                                  <i
-                                    className="icon-img-ratio"
-                                    title="Carpet Area:"
-                                  ></i>
-                                )}
-                                <span>
-                                  {property?.area_in_sqft ? `${property?.area_in_sqft} sqft` : "Not Available"}{" "}
-                                </span>
-                                {property?.carpet_area && " Carpet Area"}
-                              </li>
-                              {property?.possession_status && (
+                              </p>
+                              <ul className="list-info mb-2">
                                 <li>
                                   <i
-                                    className="icon-img-check"
-                                    title="Possession Status"
+                                    className="icon-img-bed"
+                                    title="Bedrooms:"
                                   ></i>
-                                  <span>{property.possession_status}</span>
+                                  <span>
+                                    {property?.bedrooms ? property.bedrooms : <span className="text-muted">Not Available</span>}
+                                  </span>
+                                  {property?.bedrooms && " Beds"}
                                 </li>
-                              )}
+                                <li>
+                                  <i
+                                    className="icon-img-tub"
+                                    title="Bathrooms:"
+                                  ></i>
+                                  <span>
+                                    {property?.bathroom ? property.bathroom : <span className="text-muted">Not Available</span>}
+                                  </span>
+                                  {property?.bathroom && " Bath"}
+                                </li>
+                                <li>
+                                  {property?.area_in_sqft && (
+                                    <i
+                                      className="icon-img-ratio"
+                                      title="Carpet Area:"
+                                    ></i>
+                                  )}
+                                  <span>
+                                    {property?.area_in_sqft ? `${property?.area_in_sqft} sqft` : "Not Available"}{" "}
+                                  </span>
+                                  {property?.carpet_area && " Carpet Area"}
+                                </li>
+                                {property?.possession_status && (
+                                  <li>
+                                    <i
+                                      className="icon-img-check"
+                                      title="Possession Status"
+                                    ></i>
+                                    <span>{property.possession_status}</span>
+                                  </li>
+                                )}
 
-                            </ul>
-                            <p>
-                              <span className="text-primary">
-                                <GeoAlt color="currentColor" size={14} />
-                              </span>{" "}
-                              {property.address || "Not Available"}
-                            </p>
-                          </div>
-                          <div className="card-footer d-flex justify-content-between align-items-center">
-                            <div className="d-flex">
-                              <img
-                                className="rounded-circle"
-                                src={`${property?.user_image ||
-                                  "/assets/images/user.jpg"
-                                  }`}
-                                alt="Company"
-                                height={36}
-                                width={36}
-                              />
-                              <div className="ps-2">
-                                <h6 className="mb-0">
-                                  {property?.user_name || "User"}
-                                </h6>
-                                <p className="small text-muted">
-                                  {property?.user_type === "A"
-                                    ? "Agent"
-                                    : property?.user_type === "/"
-                                      ? "Builder"
-                                      : property?.user_type === "O"
-                                        ? "Owner"
-                                        : "Not Available"}
-                                </p>
-                              </div>
+                              </ul>
+                              <p>
+                                <span className="text-primary">
+                                  <GeoAlt color="currentColor" size={14} />
+                                </span>{" "}
+                                {property.address || "Not Available"}
+                              </p>
                             </div>
-                            <button
-                              className="btn btn-primary btn-sm"
-                              onClick={() => handleClick(property.property_id)}
-                            >
-                              {translation?.contact_now || "Contact Now"}
-                            </button>
+                            <div className="card-footer d-flex justify-content-between align-items-center">
+                              <div className="d-flex">
+                                <img
+                                  className="rounded-circle"
+                                  src={`${property?.user_image ||
+                                    "/assets/images/user.jpg"
+                                    }`}
+                                  alt="Company"
+                                  height={36}
+                                  width={36}
+                                />
+                                <div className="ps-2">
+                                  <h6 className="mb-0">
+                                    {property?.user_name || "User"}
+                                  </h6>
+                                  <p className="small text-muted">
+                                    {property?.user_type === "A"
+                                      ? "Agent"
+                                      : property?.user_type === "/"
+                                        ? "Builder"
+                                        : property?.user_type === "O"
+                                          ? "Owner"
+                                          : "Not Available"}
+                                  </p>
+                                </div>
+                              </div>
+                              <button
+                                className="btn btn-primary btn-sm"
+                                onClick={() => handleClick(property.property_id)}
+                              >
+                                {translation?.contact_now || "Contact Now"}
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))
-                )}
-              </div>
+                    ))
+                  )}
+                </div>
 
-              {/* LOAD MORE  */}
-              {!loading && currentPage < totalPage && (
-                <button
-                  className="btn btn-primary d-block mx-auto mt-4"
-                  onClick={() => handleLoadMoreClick(page + 1)}
-                >
-                  {translation?.load_more || "Load More"}
-                </button>
-              )}
-            </aside>
-            <aside className="col-xl-3 col-lg-3 col-12 mt-3 mt-lg-0">
-              {adsData.length > 0 ? (
-                adsData.map((ad) => (
-                  <a
-                    key={ad.advertisement_id}
-                    role="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      logAdClick(ad.advertisement_id, ad.ad_url);
-                    }}
+                {/* LOAD MORE  */}
+                {!loading && currentPage < totalPage && (
+                  <button
+                    className="btn btn-primary d-block mx-auto mt-4"
+                    onClick={() => handleLoadMoreClick(page + 1)}
                   >
-                    <img src={ad.ad_image} alt="Ad" />
-                  </a>
-                ))
-              ) : (
-                <img
-                  alt="Advertisement"
-                  src="/assets/images/ads/real-estate-poster.jpg"
-                  className="img-fluid"
-                />
-              )}
-            </aside>
+                    {translation?.load_more || "Load More"}
+                  </button>
+                )}
+              </aside>
+              <aside className="col-xl-3 col-lg-3 col-12 mt-3 mt-lg-0">
+                {adsData.length > 0 ? (
+                  adsData.map((ad) => (
+                    <a
+                      key={ad.advertisement_id}
+                      role="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        logAdClick(ad.advertisement_id, ad.ad_url);
+                      }}
+                    >
+                      <img src={ad.ad_image} alt="Ad" />
+                    </a>
+                  ))
+                ) : (
+                  <img
+                    alt="Advertisement"
+                    src="/assets/images/ads/real-estate-poster.jpg"
+                    className="img-fluid"
+                  />
+                )}
+              </aside>
+            </div>
           </div>
-        </div>
-        <Modal show={showContactModal} onHide={handleContactClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>
-              {translation?.contact_owner || "Contact Owner"}
+          <Modal show={showContactModal} onHide={handleContactClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>
+                {translation?.contact_owner || "Contact Owner"}
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <EnquiryForm
+                propertyId={propertyId}
+                handleClose={handleContactClose}
+              />
+            </Modal.Body>
+          </Modal>
+        </section>
+
+        {/* Modal for login error */}
+        <Modal
+          show={showLoginErrorModal}
+          onHide={handleLoginErrorClose}
+          centered
+          size="lg"
+        >
+          <Modal.Header>
+            <button
+              className="btn btn-secondary"
+              onClick={handleLoginErrorClose}
+              style={{ position: "absolute", left: "15px" }}
+            >
+              {translation?.cancel || "Cancel"}
+            </button>
+            <Modal.Title className="mx-auto">
+              {" "}
+              {translation?.login_required || "Login Required"}
             </Modal.Title>
+            <button
+              className="btn btn-danger"
+              onClick={() => {
+                handleLoginErrorClose();
+                router?.push("/login");
+              }}
+              style={{ position: "absolute", right: "15px" }}
+            >
+              {translation?.login || "Login"}
+            </button>
           </Modal.Header>
           <Modal.Body>
-            <EnquiryForm
-              propertyId={propertyId}
-              handleClose={handleContactClose}
-            />
+            <p className="text-center">
+              {translation?.please_log_in_to_perform_this_action ||
+                "Please log in to perform this action."}
+            </p>
           </Modal.Body>
         </Modal>
-      </section>
-
-      {/* Modal for login error */}
-      <Modal
-        show={showLoginErrorModal}
-        onHide={handleLoginErrorClose}
-        centered
-        size="lg"
-      >
-        <Modal.Header>
-          <button
-            className="btn btn-secondary"
-            onClick={handleLoginErrorClose}
-            style={{ position: "absolute", left: "15px" }}
-          >
-            {translation?.cancel || "Cancel"}
-          </button>
-          <Modal.Title className="mx-auto">
-            {" "}
-            {translation?.login_required || "Login Required"}
-          </Modal.Title>
-          <button
-            className="btn btn-danger"
-            onClick={() => {
-              handleLoginErrorClose();
-              router?.push("/login");
-            }}
-            style={{ position: "absolute", right: "15px" }}
-          >
-            {translation?.login || "Login"}
-          </button>
-        </Modal.Header>
-        <Modal.Body>
-          <p className="text-center">
-            {translation?.please_log_in_to_perform_this_action ||
-              "Please log in to perform this action."}
-          </p>
-        </Modal.Body>
-      </Modal>
-    </MainLayout>
+      </MainLayout>
     </>
   );
 };

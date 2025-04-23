@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, Plus, X } from "lucide-react";
-import { useRouter,useSearchParams  } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { FaFilter } from "react-icons/fa6";
 import { CiFilter } from "react-icons/ci";
@@ -24,6 +24,9 @@ export function PropertyMobileFilters({
   selectedOption,
   handleSortSelection,
   propertyTypeList,
+  localityList,
+  localityData,
+  handleLocalityDataChange
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -47,7 +50,7 @@ export function PropertyMobileFilters({
   const bhkOptions = subfilterOptions.bedrooms || [];
   const bathOptions = subfilterOptions.bathroom || [];
   const kitchenOptions = subfilterOptions.kitchen || [];
-  
+
 
   const tabs = [
     { key: "sale", value: "Buy" },
@@ -67,28 +70,28 @@ export function PropertyMobileFilters({
     const searchData = searchParams.get("searchData")
       ? JSON.parse(decodeURIComponent(searchParams.get("searchData")))
       : {};
-      setActiveTab(postFor);
-      setSelectedPropertyTypes(propertyType);
+    setActiveTab(postFor);
+    setSelectedPropertyTypes(propertyType);
 
     let filterObject = {
       ...propertyFor,
     };
-    if(propertyType) {
+    if (propertyType) {
       filterObject.property_type = propertyType;
     };
-    if(propertyFor) {
+    if (propertyFor) {
       filterObject.property_for = propertyFor;
     };
-    if(bedrooms) {
+    if (bedrooms) {
       filterObject.bedrooms = JSON.parse(bedrooms)
-    } 
-    if(bathroom) {
+    }
+    if (bathroom) {
       filterObject.bathroom = JSON.parse(bathroom);
     }
-    if(kitchens) {
+    if (kitchens) {
       filterObject.kitchens = JSON.parse(kitchens);
     }
-    if(minBudget || maxBudget) {
+    if (minBudget || maxBudget) {
       setBudgetRange({
         min_budget: minBudget || null,
         max_budget: maxBudget || null,
@@ -102,7 +105,7 @@ export function PropertyMobileFilters({
       ...searchData
     }
 
-    if(filterObject.hasOwnProperty(0)) {
+    if (filterObject.hasOwnProperty(0)) {
       delete filterObject[0];
     }
     setSelectedFilters(filterObject);
@@ -117,7 +120,7 @@ export function PropertyMobileFilters({
   }, [searchParams]);
 
 
-  
+
 
   useEffect(() => {
     const apiUrls = {
@@ -211,20 +214,23 @@ export function PropertyMobileFilters({
     queryParams.append("property_type", selectedFilters.property_type || "");
     queryParams.append("post_for", activeTab.toLowerCase());
     queryParams.append("property_for", selectedFilters.property_for || "");
-    if(selectedFilters?.bedrooms) {
+    if (selectedFilters?.bedrooms) {
       queryParams.append("bedrooms", JSON.stringify(selectedFilters?.bedrooms));
     }
-    if(selectedFilters?.bathroom) {
+    if (selectedFilters?.bathroom) {
       queryParams.append("bathroom", JSON.stringify(selectedFilters?.bathroom));
-    } 
-    if(selectedFilters?.kitchens) {
+    }
+    if (selectedFilters?.kitchens) {
       queryParams.append("kitchens", JSON.stringify(selectedFilters?.kitchens))
     }
-    if(budgetRange.min_budget) {
+    if (budgetRange.min_budget) {
       queryParams.append("min_budget", budgetRange?.min_budget)
     }
-    if(budgetRange.max_budget) {
+    if (budgetRange.max_budget) {
       queryParams.append("max_budget", budgetRange?.max_budget);
+    }
+    if(localityData) {
+      queryParams.append('locality', localityData);
     }
     queryParams.append("searchData", JSON.stringify(searchData));
     // console.log("params url", queryParams.toString())
@@ -253,10 +259,10 @@ export function PropertyMobileFilters({
     });
 
     // Update selectedPropertyTypes for UI reflection
-    if(filterKey === "property_type") {
+    if (filterKey === "property_type") {
       setSelectedPropertyTypes([subfilterKey]);
     }
-    if(filterKey === "property_for") {
+    if (filterKey === "property_for") {
       setSelectedPropertyFor([subfilterKey]);
     }
   };
@@ -324,7 +330,7 @@ export function PropertyMobileFilters({
                 console.log("handle reset ran")
                 setSelectedPropertyTypes([]);
                 setSelectedPropertyFor([])
-                setBudgetRange({ min_budget: null, max_budget:  null });
+                setBudgetRange({ min_budget: null, max_budget: null });
                 setAreaRange({ min_carpet: null, max_carpet: null });
                 setSelectedFilters({});
               }}
@@ -355,6 +361,28 @@ export function PropertyMobileFilters({
         </Nav>
 
         <Offcanvas.Body>
+          <h6>Locality</h6>
+          <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
+            {/* <select className="form-select" id="exampleSelect" value={localityData} onChange={(e) => handleLocalityDataChange(e.target.value)} >
+                            <option value="">Select a locality</option>
+                            {localityList?.length > 0 && localityList.map((locality, i) => {
+                              return (
+                                <option key={i} value={locality?.locality_id}>{locality?.locality_name || "Not Abailable"}</option>
+                              )
+                            })}
+                          </select> */}
+            <div className="col-lg-6 col-12">
+              <select className="form-select" id="exampleSelect" value={localityData} onChange={(e) => handleLocalityDataChange(e.target.value)}>
+                <option value="">Select...</option>
+                {localityList?.length > 0 && localityList?.map((locality, i) => {
+                  return (
+                    <option key={i} value={locality?.locality_id}>{locality?.locality_name}</option>
+                  )
+                })}
+              </select>
+            </div>
+
+          </ButtonGroup>
           {/* Property Types */}
           <h6>Property Type</h6>
           <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
@@ -370,11 +398,10 @@ export function PropertyMobileFilters({
                   }
                 />
                 <label
-                  className={`btn btn-sm ${
-                    selectedPropertyTypes.includes(type.category_id)
+                  className={`btn btn-sm ${selectedPropertyTypes.includes(type.category_id)
                       ? "btn-outline-light"
                       : "btn-success"
-                  }`}
+                    }`}
                   // btn-outline-light
                   htmlFor={`property_${type.category_id}`}
                 >
@@ -398,11 +425,10 @@ export function PropertyMobileFilters({
                   }
                 />
                 <label
-                  className={`btn btn-sm ${
-                    selectedPropertyFor.includes(type.sub_category_id)
+                  className={`btn btn-sm ${selectedPropertyFor.includes(type.sub_category_id)
                       ? "btn-outline-light"
                       : "btn-success"
-                  }`}
+                    }`}
                   htmlFor={`property_for_data_${type.sub_category_id}`}
                 >
                   {type.sub_category_name}
@@ -624,9 +650,8 @@ export function PropertyMobileFilters({
             <div key={filter.id} className="mb-3">
               <h6>{filter.name}</h6>
               <ButtonGroup
-                className={`btn-group-light d-flex gap-2 ${
-                  filter.key === "carpet_area" ? "d-none d-md-flex" : ""
-                }`}
+                className={`btn-group-light d-flex gap-2 ${filter.key === "carpet_area" ? "d-none d-md-flex" : ""
+                  }`}
               >
                 {subfilterOptions[filter.key]?.map((subfilter) => (
                   <React.Fragment key={`data_${filter.key}_${subfilter.id}`}>
