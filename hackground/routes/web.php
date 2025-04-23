@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmailTempController;
 use App\Http\Controllers\Admin\EnquiryController;
+use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\FaqListController;
 use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\FloorPlanController;
 use App\Http\Controllers\Admin\GroupSettingController;
@@ -50,6 +52,8 @@ use App\Http\Controllers\Api\FloorPlaningController;
 use App\Http\Controllers\Api\Project\ProjectImageUploade;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
+
+
 
 
 
@@ -567,3 +571,17 @@ Route::controller(AreaPriceController::class)->group(function () {
     Route::get('edit', 'Edit')->name('locality_price.edit');
     Route::post('update', 'Update')->name('locality_price.update');
 });
+Route::get('/faq-category/{lang?}', [FaqController::class, 'category_view'])->name('category_view');
+Route::post('/add/faq/category', [FaqController::class, 'submit_Category'])->name('submit_Category');
+Route::get('/category/faq/details/{id?}', [FaqController::class, 'category_details'])->name('category_details');
+Route::post('/edit/faq/category', [FaqController::class, 'update_faqcategory'])->name('update_faqcategory');
+Route::post('/status/faq/category', [FaqController::class, 'faqcategory_status'])->name('faqcategory_status');
+Route::post('/delete-faqcategory', [FaqController::class, 'categoryDelete'])->name('categoryDelete');
+
+
+Route::get('/faq-list-category/{lang?}', [FaqListController::class, 'list_view'])->name('list_view');
+Route::post('/faq/list/category', [FaqListController::class, 'list_submit'])->name('list_submit');
+Route::post('/update/list/category', [FaqListController::class, 'update_list'])->name('update_list');
+Route::get('/faq/list/details/{id}', [FaqListController::class, 'list_category'])->name('list_category');
+Route::post('/faq/list/status', [FaqListController::class, 'list_status'])->name('list_status');
+Route::post('/faq/list/delete', [FaqListController::class, 'list_delete'])->name('list_delete');
