@@ -6,6 +6,10 @@
 <link href="{{ asset('assets/css/style.css') }}" type="text/css" rel="stylesheet">
 <link href="{{ asset('assets/css/ltr.css') }}" type="text/css" rel="stylesheet">
 <link href="{{ asset('assets/css/responsive.css') }}" type="text/css" rel="stylesheet">
+
+<link href="{{ asset('assets/dist/css/bootstrap-select.css') }}" type="text/css" rel="stylesheet">
+<script src="{{ asset('assets/dist/js/bootstrap-select.min.js') }}"></script>
+
 @endpush
 
 @section('content')
@@ -47,10 +51,7 @@
     </li>
   </ul>
   <div class="card border-0 post-form">
-    <div class="card-header pb-0">
-      
-
-    </div>
+    <!-- <div class="card-header"></div> -->
     <div class="card-body">
       <form method="post" id="project_post_form">
 
@@ -61,18 +62,21 @@
           <div class="btn-group btn-group-light d-flex mb-3" role="group" aria-label="Basic radio toggle button group">
             @foreach($project_type as $items)
             <input type="radio" class="btn-check" value="{{$items->id}}" name="project_type" id="project_{{$items->id}}" autocomplete="off" checked>
-            <label class="btn btn-outline-light" for="project_{{$items->id}}">
-              
+            <label class="btn btn-outline-light flex-column" for="project_{{$items->id}}">
+              <img src="{{ asset('assets/icons/home-2.png') }}" alt="Property" height="48" class="mb-1">
               {{$items->name}}
             </label>
             @endforeach
           </div>
-          <label class="form-label">Developer Name</label>
-          <input class="form-control " type="text" value="" name="developer_name">
+          <div class="form-floating mb-3">
+            <input class="form-control" type="text" value="" name="developer_name" placeholder="">
+            <label>Developer Name</label>
+          </div>
 
-          <label class="form-label">Developer Details</label>
-          <textarea class="form-control  mb-2" name="developer_details"></textarea>
-
+          <div class="form-floating mb-3">
+            <textarea class="form-control" name="developer_details" placeholder="" style="min-height: 100px;"></textarea>
+            <label>Developer Details</label>
+          </div>
 
           <div id="step-2">
             <button type="button" class="btn btn-primary btn-next" data-step="2">Next <i class="bi bi-arrow-right"></i></button>
@@ -83,19 +87,17 @@
         <div id="step-3" style="display:none;">
           <div class="row gx-3">
             <div class="col-lg-6 col-12">
-              <div class="form-field">
-                <label class="form-label">City</label>
+              <div class="form-floating mb-3">                
                 <select class="selectpicker hide-tick" name="city" data-width="fit" data-size="7" title="Choose City">
                   @foreach($cities as $items)
                   <option value="{{$items['city_id']}}">{{$items['name']}}</option>
-
                   @endforeach
                 </select>
+                <label>City</label>
               </div>
             </div>
             <div class="col-lg-6 col-12">
-              <div class="form-field">
-                <label class="form-label">Locality</label>
+              <div class="form-floating mb-3">                
                 <select class="selectpicker hide-tick" data-width="fit" data-size="7" title="Choose Locality">
                   <option>Abu Dhabi</option>
                   <option>Ajman</option>
@@ -105,25 +107,25 @@
                   <option>Sharjah</option>
                   <option>Umm Al-Quwain</option>
                 </select>
+                <label>Locality</label>
               </div>
             </div>
           </div>
-          <div class="form-field">
-            <label class="form-label">Name of Project</label>
+          <div class="form-floating mb-3">            
             <input type="text" class="form-control" name="project_name" placeholder="Enter Project Name Or Locality" />
+            <label>Name of Project</label>
           </div>
-          <div class="form-field">
-            <label class="form-label">Address</label>
-            <textarea rows="3" name="project_address" class="form-control mb-2" placeholder="Enter Your Address"></textarea>
+          <div class="form-floating mb-3">            
+            <textarea rows="3" name="project_address" class="form-control mb-2" placeholder="Enter Your Address" style="min-height: 100px;"></textarea>
+            <label>Address</label>
             <p class="text-end text-help">Maximum 300 words are allowed</p>
           </div>
-          <div class="form-field">
+          <div class="form-floating mb-3">            
+            <textarea id="description" name="description" rows="3" class="form-control " placeholder="Enter Project Description" style="min-height: 100px;"></textarea>
             <label for="description">Project Description</label>
-            <textarea id="description" name="description" rows="3" class="form-control " placeholder="Enter Project Description"> </textarea>
           </div>
-
-          <div id="step-3" style="display: none;" class="d-grid columns-2">
-            <button type="button" class="btn btn-secondary btn-back">Back</button>
+          <div id="step-3" style="display: none;">
+            <button type="button" class="btn btn-secondary btn-back me-2">Back</button>
             <button type="button" class="btn btn-primary btn-next" data-step="3">Next <i class="bi bi-arrow-right"></i></button>
           </div>
 
@@ -131,43 +133,49 @@
 
         <div id="step-4" style="display:none;">
           <div class="row gx-3">
-            <div class="col-lg-6 col-12">
-              <div class="form-field"><label class="form-label">Occupied Area</label>
-                <div class="input-group"><input class="form-control" name="occupied_area" placeholder="Type Occupied Area"
-                    type="text"><span class="input-group-text">sqft</span></div>
+            <div class="col-md-6 col-12">
+              <div class="input-group mb-3">
+                <div class="form-floating">   
+                  <input type="text" class="form-control" name="occupied_area" placeholder="Type Occupied Area">
+                  <label>Occupied Area</label>
+                </div>
+                <span class="input-group-text">sqft</span>
               </div>
             </div>
-            <div class="col-lg-6 col-12">
-              <div class="form-field">
-                <label class="form-label">Total Area</label>
-                <div class="input-group">
+            <div class="col-md-6 col-12">
+              <div class="input-group mb-3">
+                <div class="form-floating">
                   <input class="form-control" placeholder="Type Total Area" name="total_area" type="number" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-                  <span class="input-group-text">sqft</span>
+                  <label>Total Area</label>
                 </div>
+                <span class="input-group-text">sqft</span>
               </div>
             </div>
           </div>
-          <div class="form-group row align-items-center">
-            <div class="col-md-6">
-              <label class="form-label">No. of Total Towers</label>
-              <select class="form-select "
-                name="total_towers" style="max-height: 150px; overflow-y: auto;">
-                <option value="">Select Total Towers</option>
-                @for ($i = 1; $i <= 15; $i++)
-                  <option value="{{ $i }}">{{ $i }}</option>
-                  @endfor
-              </select>
+          <div class="row gx-3">
+            <div class="col-md-6 col-12">
+              <div class="form-floating mb-3">
+                <select class="form-select" name="total_towers" style="max-height: 150px; overflow-y: auto;">
+                  <option value="">Select Total Towers</option>
+                  @for ($i = 1; $i <= 15; $i++)
+                    <option value="{{ $i }}">{{ $i }}</option>
+                    @endfor
+                </select>
+                <label>No. of Total Towers</label>
+              </div>
             </div>
-            <div class="col-md-6">
-              <label class="form-label">Total Units</label>
-              <input class="form-control "
-                placeholder="Enter total units" min="1" type="number" name="total_units">
+            <div class="col-md-6 col-12">
+              <div class="form-floating mb-3">              
+                <input class="form-control" placeholder="Enter total units" min="1" type="number" name="total_units">
+                <label>Total Units</label>
+              </div>
             </div>
           </div>
 
           <div class="row gx-3">
-            <div class="col-lg-6 col-12"><label class="form-label">Facing</label>
-              <div class="form-field"><select name="project_facing" class="form-control">
+            <div class="col-md-6 col-12">
+              <div class="form-floating mb-3">
+                <select name="project_facing" class="form-select">
                   <option value="">Select Facing</option>
                   <option value="east">East</option>
                   <option value="north">North</option>
@@ -177,19 +185,25 @@
                   <option value="south_east">South - East</option>
                   <option value="south_west">South - West</option>
                   <option value="west">West</option>
-                </select></div>
+                </select>
+                <label>Facing</label>
+              </div>
             </div>
-            <div class="col-lg-6 col-12"><label class="form-label">Parking</label>
-              <div class="form-field"><select name="parking" class="form-control">
+            <div class="col-md-6 col-12">
+              <div class="form-floating mb-3">
+                <select name="parking" class="form-select">
                   <option value="">Select Parking Option</option>
                   <option value="AV">Available</option>
                   <option value="NA">Not Available</option>
                   <option value="UC">Under Construction</option>
-                </select></div>
+                </select>
+                <label>Parking</label>
+              </div>
             </div>
           </div>
 
-          <div class="mb-3"><label class="form-label">Is Main Road Facing:</label>
+          <div class="mb-3">
+            <label class="form-label d-block">Is Main Road Facing:</label>
             <div class="form-check form-check-inline"><input class="form-check-input" id="main_road_facing_1"
                 type="radio" value="Yes" checked="" name="main_road_facing"><label class="form-check-label"
                 for="main_road_facing_1">Yes</label></div>
@@ -197,32 +211,31 @@
                 type="radio" value="No" name="main_road_facing"><label class="form-check-label"
                 for="main_road_facing_2">No</label></div>
           </div>
-          <div class="form-group"><label class="form-label">Amenity Features:</label>
+          <div class="form-group">
+            <label class="form-label d-block">Amenity Features:</label>
+            <div class="row">
             @foreach($projectAmenities as $items)
-            <div class="form-check form-check-inline">
-              <input name="amenities[]" value="{{ $items['amenity_id'] }}" class="form-check-input" id="feature-{{ $items['amenity_id'] }}" type="checkbox"><label class="form-check-label" for="feature-{{ $items['amenity_id'] }}">{{$items['amenity_name']}}</label>
+            <div class="col-md-4 col-sm-6">
+              <div class="form-check">
+                <input name="amenities[]" value="{{ $items['amenity_id'] }}" class="form-check-input" id="feature-{{ $items['amenity_id'] }}" type="checkbox"><label class="form-check-label" for="feature-{{ $items['amenity_id'] }}">{{$items['amenity_name']}}</label>
+              </div>
             </div>
             @endforeach
+            </div>
           </div>
           <div class="btn-group btn-group-light d-flex mb-3 mt-3" role="group" aria-label="Property Status">
 
-
-
             @foreach($propertyFurnishes as $items)
-            <input class="btn-check" id="project_furnish{{ $items['furnish_id']}}" value="{{ $items['furnish_id']}}" autocomplete="off" type="radio" checked=""
-              name="project_furnish"><label class="btn btn-outline-light" for="project_furnish{{ $items['furnish_id']}}">{{ $items['furnish_name']}}</label>
+            <input class="btn-check" id="project_furnish{{ $items['furnish_id']}}" value="{{ $items['furnish_id']}}" autocomplete="off" type="radio" checked="" name="project_furnish">
+            <label class="btn btn-outline-light flex-column" for="project_furnish{{ $items['furnish_id']}}">
+              <img src="{{ asset('assets/icons/furnish.png') }}" alt="Property" height="48" class="mb-1">
+              {{ $items['furnish_name']}}
+            </label>
             @endforeach
-
-
-
-
           </div>
 
-
-
-
-          <div id="step-4" style="display: none;" class="d-grid columns-2">
-            <button type="button" class="btn btn-secondary btn-back">Back</button>
+          <div id="step-4" style="display: none;">
+            <button type="button" class="btn btn-secondary btn-back me-2">Back</button>
             <button type="button" class="btn btn-primary btn-next" data-step="4">Next <i class="bi bi-arrow-right"></i></button>
           </div>
 
@@ -230,7 +243,7 @@
 
         <div id="step-5" style="display:none;">
           <div class="mb-3">
-            <label class="form-label">Possession Status :</label>
+            <label class="form-label d-block">Possession Status :</label>
             @foreach($propertyStatus as $items)
             <div class="form-check form-check-inline">
               <input class="form-check-input"
@@ -239,7 +252,7 @@
                 value="{{ $items['status_id'] }}"
                 id="pstatus{{ $items['status_id']}}"
                 {{ $loop->first ? 'checked' : '' }}> <!-- Automatically check first item -->
-              <label class="form-check-label" for="pstatus{{ $items['status_id']}}">
+              <label class="form-check-label" for="pstatus{{ $items['status_id']}}">                
                 {{ $items['status_name'] }}
               </label>
             </div>
@@ -247,7 +260,7 @@
           </div>
 
 
-          <label class="form-label">Age Of Construction :</label>
+          <label class="form-label d-block">Age Of Construction :</label>
           <div class="btn-group btn-group-light d-flex mb-3" role="group" aria-label="Floors">
             <input type="radio" class="btn-check" value="new" name="age" id="age_1" autocomplete="off" checked>
             <label class="btn btn-outline-light" for="age_1">New</label>
@@ -268,7 +281,7 @@
             <div class="col-lg-6 col-12">
               <label class="form-label">Expected Price</label>
               <div class="input-group mb-3">
-                <select class="selectpicker" data-width="fit" title="Currency">
+                <select class="selectpicker hide-tick" data-width="fit" data-size="7" title="Currency">
                   <option disabled="disabled">Currency</option>
                   <option>AED</option>
                   <option>EURO</option>
@@ -279,21 +292,22 @@
               </div>
             </div>
             <div class="col-lg-6 col-12">
-              <div class="form-field">
-                <label class="form-label">Booking/Token Amount (optional)</label>
+              <div class="form-floating mb-3">
+                
                 <input type="text" name="token_amount" class="form-control" placeholder="Enter Token Amount" />
+                <label>Booking/Token Amount (optional)</label>
               </div>
             </div>
           </div>
 
-          <div id="step-5" style="display: none;" class="d-grid columns-2">
-            <button type="button" class="btn btn-secondary btn-back">Back</button>
+          <div id="step-5" style="display: none;">
+            <button type="button" class="btn btn-secondary btn-back me-2">Back</button>
             <button type="button" class="btn btn-primary btn-next" data-step="5">Next <i class="bi bi-arrow-right"></i></button>
           </div>
         </div>
 
         <div id="step-6" style="display:none;">
-          <ul class="nav nav-tabs" id="imageTypeTabs">
+          <ul class="nav nav-underline mb-3" id="imageTypeTabs">
             <li class="nav-item">
               <a class="nav-link active" data-tab="interior" href="#">Interior View</a>
             </li>
@@ -324,39 +338,39 @@
 
           <div class="img-content" id="tab-content-interior">
             <div class="upload-gallery" id="preview-interior"></div>
-            <div class="form-field">
-              <label class="form-label">Description</label>
-              <textarea rows="3" class="form-control" name="image_desc[interior]" placeholder="Write something..."></textarea>
+            <div class="form-floating mb-3">              
+              <textarea rows="3" class="form-control" name="image_desc[interior]" placeholder="Write something..." style="min-height: 75px;"></textarea>
+              <label>Description</label>
             </div>
           </div>
 
           <div class="img-content" id="tab-content-exterior" style="display:none">
             <div class="upload-gallery" id="preview-exterior"></div>
-            <div class="form-field">
-              <label class="form-label">Description</label>
-              <textarea rows="3" class="form-control" name="image_desc[exterior]" placeholder="Write something..."></textarea>
+            <div class="form-floating mb-3">              
+              <textarea rows="3" class="form-control" name="image_desc[exterior]" placeholder="Write something..." style="min-height: 75px;"></textarea>
+              <label>Description</label>
             </div>
           </div>
 
           <div class="img-content" id="tab-content-location" style="display:none">
             <div class="upload-gallery" id="preview-location"></div>
-            <div class="form-field">
-              <label class="form-label">Description</label>
-              <textarea rows="3" class="form-control" name="image_desc[location]" placeholder="Write something..."></textarea>
+            <div class="form-floating mb-3">              
+              <textarea rows="3" class="form-control" name="image_desc[location]" placeholder="Write something..." style="min-height: 75px;"></textarea>
+              <label>Description</label>
             </div>
           </div>
 
           <div class="img-content" id="tab-content-other" style="display:none">
             <div class="upload-gallery" id="preview-other"></div>
-            <div class="form-field">
-              <label class="form-label">Description</label>
-              <textarea rows="3" class="form-control" name="image_desc[other]" placeholder="Write something..."></textarea>
+            <div class="form-floating mb-3">              
+              <textarea rows="3" class="form-control" name="image_desc[other]" placeholder="Write something..." style="min-height: 75px;"></textarea>
+              <label>Description</label>
             </div>
           </div>
 
 
-          <div id="step-6" style="display: none;" class="d-grid columns-2">
-            <button type="button" class="btn btn-secondary btn-back">Back</button>
+          <div id="step-6" style="display: none;">
+            <button type="button" class="btn btn-secondary btn-back me-2">Back</button>
             <button type="submit" class="btn btn-primary btn-next">Submit Project</button>
           </div>
 

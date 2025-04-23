@@ -15588,18 +15588,18 @@ body {
     }
 }
 
-.form-control {
+/* .form-control {
     transition: all .2s
-}
+} */
 
 .btn-outline-2x {
     border-width: 2px
 }
 
-.btn-group .btn {
-    font-size: .8rem;
-    font-weight: 500
-}
+/* .btn-group .btn {
+    font-size: .938rem;
+    font-weight: 400;
+} */
 
 .btn-group .btn-outline-2x+.btn-outline-2x {
     margin-left: -2px
@@ -15609,10 +15609,10 @@ body {
     border-radius: 0
 }
 
-.btn {
+/* .btn {
     font-size: .8rem;
     font-weight: 500
-}
+} */
 
 .btn.btn-pill,
 .btn.btn-pill.btn-wide {
