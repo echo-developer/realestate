@@ -175,28 +175,63 @@ class LocalityModel extends Model
             // log_anything($data);
             $langs = explode(',', admin_default_lang());
             foreach ($data as $row) {
+                $slug = Str::slug($row[3], '_');
 
-                $newLocId =  DB::table($this->localityTable)->insertGetId([
-                    'city'         => $row[0],
-                    'locality_key' => Str::slug($row[3], '_'),
-                    'latitude'     => $row[1],
-                    'longitude'    => $row[2],
-                    'order'        => rand(1, 4),
-                    'status'       => config('constants.STATUS_ACTIVE'),
-                ]);
+                $existingLocality = DB::table($this->localityTable)
+                    ->where('locality_key', $slug)
+                    ->first();
 
                 $nameByLang = [
                     'en' => $row[3] ?? null,
                     'ar' => $row[4] ?? null,
                 ];
 
-                foreach ($langs as $lang) {
-                    DB::table($this->localityNamesTable)->insert([
-                        'locality_id' => $newLocId,
-                        'lang'        => $lang,
-                        'name'        => $nameByLang[$lang] ?? null,
+                if ($existingLocality) {
+                    DB::table($this->localityTable)
+                        ->where('locality_id', $existingLocality->locality_id)
+                        ->update([
+                            'city'         => $row[0],
+                            'latitude'     => $row[1],
+                            'longitude'    => $row[2],
+                            'order'        => rand(1, 4),
+                            'status'       => config('constants.STATUS_ACTIVE'),
+                        ]);
+
+                    $localityId = $existingLocality->locality_id;
+
+                    foreach ($langs as $lang) {
+                        DB::table($this->localityNamesTable)
+                            ->updateOrInsert(
+                                ['locality_id' => $localityId, 'lang' => $lang],
+                                ['name' => $nameByLang[$lang] ?? null]
+                            );
+                    }
+                } else {
+                    $localityId = DB::table($this->localityTable)->insertGetId([
+                        'city'         => $row[0],
+                        'locality_key' => $slug,
+                        'latitude'     => $row[1],
+                        'longitude'    => $row[2],
+                        'order'        => rand(1, 4),
+                        'status'       => config('constants.STATUS_ACTIVE'),
                     ]);
+
+                    foreach ($langs as $lang) {
+                        DB::table($this->localityNamesTable)->insert([
+                            'locality_id' => $localityId,
+                            'lang'        => $lang,
+                            'name'        => $nameByLang[$lang] ?? null,
+                        ]);
+                    }
                 }
+
+                DB::table('locality_landmarks')->insert([
+                    'locality_id' => $localityId,
+                    'type' => $row[5],
+                    'name_en' => $row[6],
+                    'name_ar' => $row[7],
+                    'distance_km' => $row[8],
+                ]);
             }
 
             return [

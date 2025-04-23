@@ -46,7 +46,7 @@
             <div class="alert alert-{{ session('message_type') }}">
                 {{ session('success_msg') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert">
-                    
+
                 </button>
             </div>
         @endif
@@ -55,7 +55,7 @@
             <div class="alert alert-danger mt-2">
                 {{ $errors->first('xlsFileLocality') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert">
-                    
+
                 </button>
             </div>
         @endif
@@ -79,7 +79,7 @@
         <div class="main-card mb-3 card">
             <div class="card-body">
                 <div class="card-header p-0">
-                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> locality List
+                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Locality List
 
                     <div class="btn-actions-pane-right">
                         <button type="button" class="btn btn-sm btn-primary" id="upload_excel_btn">Upload
@@ -116,9 +116,10 @@
                                                 {{ $item->status ? 'checked' : '' }}>
                                         </td>
                                         <td class="text-right">
-                                            <a href="{{ url('/edit-locality/' . $item->locality_id) }}">
-                                                <i class="fa fa-edit text-success fa-md"></i>
-                                            </a>                                            
+                                            <a
+                                                href="{{ route('locality.landmarks.page', ['locality_id' => $item->locality_id]) }}">
+                                                <i class="fa fa-list text-success fa-md"></i>
+                                            </a>
                                             <i class="fa fa-edit text-success fa-md "
                                                 onclick="Edit('{{ $item->locality_id }}')"></i>
                                             <i class="fa fa-trash text-danger fa-md"
@@ -196,7 +197,7 @@
                     <h5 class="modal-title" id="AddEditModalLabel"></h5>
 
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        
+
                     </button>
                 </div>
                 <div class="modal-body">
@@ -281,7 +282,7 @@
                     <h5 class="modal-title" id="excel_upload_modal">Upload</h5>
 
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        
+
                     </button>
                 </div>
                 <div class="modal-body">

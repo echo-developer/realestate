@@ -211,11 +211,10 @@ class LocalityController extends Controller
     public function importLocalityExcel(Request $request)
     {
         try {
-            $rows = $this->parseUploadedExcel($request, 'xlsFileLocality', 5);
-
+            $rows = $this->parseUploadedExcelforLocality($request, 'xlsFileLocality', 9);
             $response = $this->locality->localityAddfromExcel($rows);
-
-            set_flash_message('add');
+            // log_anything($rows);
+            // set_flash_message('add');
             return redirect()->back();
         } catch (\Throwable $e) {
             return redirect()->back()->withErrors(['xlsFileLocality' => $e->getMessage()]);
@@ -229,7 +228,10 @@ class LocalityController extends Controller
     
      */
 
-    public function landmarkListPage($localityId){
+    public function landmarkListPage(Request $request)
+    {
+
+        $localityId = $request->route('locality_id');
         return view('Admin/Location/locality-landmarks');
     }
 }
