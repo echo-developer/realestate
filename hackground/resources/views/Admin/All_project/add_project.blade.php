@@ -27,7 +27,7 @@
       </div>
     </div>
   </div>
-<section class="section post-page">
+<section class="">
   <ul class="nav nav-underline mb-3 gap-5 d-flex">
     <li class="nav-item">
       <a class="nav-link active" href="#">Project Details</a>

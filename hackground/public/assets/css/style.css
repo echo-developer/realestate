@@ -32616,6 +32616,10 @@ fieldset legend {
   margin-bottom: 1rem;
 }
 
+.nav-custom {
+  margin-bottom: 1rem;
+}
+
 header {
   position: relative;
   z-index: 1021;
@@ -34036,8 +34040,8 @@ h4 .icon-img-check, .h4 .icon-img-check {
   justify-content: center;
   flex: 0 0 32px;
   border-radius: 0.25rem;
-  background-color: #cfe2ff;
-  border: 3px solid #fff;
+  /* background-color: $primary-bg-subtle; */
+  border: 2px solid #fff;
   cursor: pointer;
   z-index: 1;
   user-select: none;
