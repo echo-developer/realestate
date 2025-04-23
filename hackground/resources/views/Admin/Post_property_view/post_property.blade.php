@@ -514,34 +514,33 @@
                             </div>
                         </div>
 
-                        <label class="form-label">Furnish Status</label>
-                        <div class="btn-group btn-group-light d-flex mb-3" role="group"
-                            aria-label="Property Status">
-                            @if (!empty($propertyFurnishes) && is_array($propertyFurnishes))
-                            @foreach ($propertyFurnishes as $furnish)
-                            <input type="radio" class="btn-check" name="property_furnish"
-                                value="{{ $furnish['furnish_id'] }}"
-                                id="property_status_{{ $furnish['furnish_id'] }}" autocomplete="off"
-                                {{ $loop->first ? 'checked' : '' }}>
-                            <label class="btn btn-outline-light"
-                                for="property_status_{{ $furnish['furnish_id'] }}">{{ $furnish['furnish_name'] }}</label>
-                            @endforeach
-                            @else
-                            No Furnish Found !
-                            @endif
-                        </div>
+                        
+                            
+                            <div class="mb-3">
+                                <label class="form-label d-block">Furnish Status</label>
+                                @if (!empty($propertyFurnishes) && is_array($propertyFurnishes))
+                                @foreach ($propertyFurnishes as $furnish)
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="property_furnish" value="{{ $furnish['furnish_id'] }}" id="property_status_{{ $furnish['furnish_id'] }}" autocomplete="off" {{ $loop->first ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="property_status_{{ $furnish['furnish_id'] }}">{{ $furnish['furnish_name'] }}</label>
+                                </div>
+                                @endforeach
+                                @else
+                                No Furnish Found !
+                                @endif
+                            </div>
+
+                        
 
                         <div class="">
-                            <button type="button" class="btn btn-secondary btn-back-5"><i
-                                    class="bi bi-arrow-left"></i> Back</button>
-                            <button type="button" class="btn btn-primary btn-next" data-step="5">Next <i
-                                    class="bi bi-arrow-right"></i></button>
+                            <button type="button" class="btn btn-secondary btn-back-5 me-2"><i class="bi bi-arrow-left"></i> Back</button>
+                            <button type="button" class="btn btn-primary btn-next" data-step="5">Next <i class="bi bi-arrow-right"></i></button>
                         </div>
                     </div>
 
                     <div id="step-6" style="display:none;">
                         <div class="mb-3">
-                            <label class="form-label">Possession Status :</label>
+                            <label class="form-label d-block">Possession Status :</label>
                             @if (!empty($propertyStatus) && is_array($propertyStatus))
                             @foreach ($propertyStatus as $status)
                             <div class="form-check form-check-inline">
@@ -556,38 +555,40 @@
                             No staus Found !
                             @endif
                         </div>
-                        <div class="available_features" style="display: none;">
-                            <label class="form-label">Age Of Construction :</label>
-                            <div class="btn-group btn-group-light d-flex mb-3" role="group"
-                                aria-label="Floors">
-                                <input type="radio" class="btn-check" name="age" value="new"
+                        <div class="mb-3 available_features" style="display: none;">
+                            <label class="form-label d-block">Age Of Construction :</label>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="age" value="new"
                                     id="age_1" autocomplete="off" checked>
-                                <label class="btn btn-outline-light" for="age_1">New</label>
-
-                                <input type="radio" class="btn-check" name="age"
+                                <label class="form-check-label" for="age_1">New</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="age"
                                     value="less_than_5_years" id="age_2" autocomplete="off">
-                                <label class="btn btn-outline-light" for="age_2">Less Than 5
-                                    Years</label>
-
-                                <input type="radio" class="btn-check" name="age" value="5_10_years"
+                                <label class="form-check-label" for="age_2">Less Than 5 Years</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="age" value="5_10_years"
                                     id="age_3" autocomplete="off">
-                                <label class="btn btn-outline-light" for="age_3">5-10 Years</label>
-
-                                <input type="radio" class="btn-check" name="age" value="10_15_years"
+                                <label class="form-check-label" for="age_3">5-10 Years</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="age" value="10_15_years"
                                     id="age_4" autocomplete="off">
-                                <label class="btn btn-outline-light" for="age_4">10-15 Years</label>
-
-                                <input type="radio" class="btn-check" name="age" value="15_20_years"
+                                <label class="form-check-label" for="age_4">10-15 Years</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="age" value="15_20_years"
                                     id="age_5" autocomplete="off">
-                                <label class="btn btn-outline-light" for="age_5">15-20 Years</label>
+                                <label class="form-check-label" for="age_5">15-20 Years</label>
                             </div>
                         </div>
 
                         <div class="underConstruction_features" style="display: none;">
                             <div class="row gx-3">
-                                <div class="col-lg-6 col-12"><label class="form-label">Expected Month of
-                                        Possession</label><select class="form-control "
-                                        name="construction_month">
+                                <div class="col-lg-6 col-12">
+                                    <div class="form-floating mb-3">
+                                    <select class="form-select" name="construction_month">
                                         <option value="">Select Month</option>
                                         <option value="01">January</option>
                                         <option value="02">February</option>
@@ -601,10 +602,13 @@
                                         <option value="10">October</option>
                                         <option value="11">November</option>
                                         <option value="12">December</option>
-                                    </select></div>
-                                <div class="col-lg-6 col-12"><label class="form-label">Expected Year of
-                                        Possession</label><select class="form-control "
-                                        name="construction_year">
+                                    </select>
+                                    <label>Expected Month of Possession</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12">  
+                                    <div class="form-floating mb-3">                                  
+                                    <select class="form-select" name="construction_year">
                                         <option value="">Select Year</option>
                                         <option value="2025">2025</option>
                                         <option value="2026">2026</option>
@@ -627,48 +631,55 @@
                                         <option value="2043">2043</option>
                                         <option value="2044">2044</option>
                                         <option value="2045">2045</option>
-                                    </select></div>
-                            </div>
-                        </div>
-
-                        <div class="row gx-3">
-                            <div class="form-field col-lg-6 col-12">
-                                <label class="form-label">Water Availability</label>
-                                <select class="form-select" name="water_available">
-                                    <option value="">--Select Water Availability--</option>
-                                    @php
-                                    $water_availability = get_water_availability();
-                                    @endphp
-                                    @if($water_availability)
-                                    @foreach($water_availability as $k=>$a)
-                                    <option value="{{ $k }}">{{ $a }}</option>
-                                    @endforeach
-                                    @endif
-                                </select>
-                                <span class="error water_availableError text-danger"></span>
-                            </div>
-
-                            <div class="form-field col-lg-6 col-12">
-                                <label class="form-label">Status of Electricity</label>
-                                <select class="form-select" name="electric_available">
-                                    <option value="">Select status of electricity</option>
-                                    @php
-                                    $electricity_status = electricity_status();
-                                    @endphp
-                                    @if($electricity_status)
-                                    @foreach($electricity_status as $k=>$a)
-                                    <option value="{{ $k }}">{{ $a }}</option>
-                                    @endforeach
-                                    @endif
-                                </select>
-                                <span class="error electric_availableError text-danger"></span>
+                                    </select>
+                                    <label>Expected Year of Possession</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <div class="row gx-3">
                             <div class="col-lg-6 col-12">
-                                <label class="form-label">Facing</label>
-                                <div class="form-field">
+                                <div class="form-floating mb-3">   
+                                    <select class="form-select" name="water_available">
+                                        <option value="">--Select Water Availability--</option>
+                                        @php
+                                        $water_availability = get_water_availability();
+                                        @endphp
+                                        @if($water_availability)
+                                        @foreach($water_availability as $k=>$a)
+                                        <option value="{{ $k }}">{{ $a }}</option>
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                    <label>Water Availability</label>
+                                    <span class="error water_availableError text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-12">
+                                <div class="form-floating mb-3">   
+                                    <select class="form-select" name="electric_available">
+                                        <option value="">Select status of electricity</option>
+                                        @php
+                                        $electricity_status = electricity_status();
+                                        @endphp
+                                        @if($electricity_status)
+                                        @foreach($electricity_status as $k=>$a)
+                                        <option value="{{ $k }}">{{ $a }}</option>
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                    <label>Status of Electricity</label>
+                                    <span class="error electric_availableError text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row gx-3">
+                            <div class="col-lg-6 col-12">
+                                
+                                <div class="form-floating mb-3">  
                                     <select class="form-select"
                                         name="facing_direction">
                                         <option value="">Select Facing</option>
@@ -681,17 +692,19 @@
                                         <option value="south_west">South - West</option>
                                         <option value="west">West</option>
                                     </select>
+                                    <label>Facing</label>
                                     <span class="error facing_directionError text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-12"><label class="form-label">Parking</label>
-                                <div class="form-field">
+                            <div class="col-lg-6 col-12">
+                                <div class="form-floating mb-3">  
                                     <select class="form-select" name="parking">
                                         <option value="">Select Parking Option</option>
                                         <option value="av">Available</option>
                                         <option value="na">Not Available</option>
                                         <option value="uc">Under Construction</option>
                                     </select>
+                                    <label>Parking</label>
                                     <span class="error parkingError text-danger"></span>
                                 </div>
                             </div>
@@ -700,7 +713,7 @@
                         <div class="row gx-3">
                             <div class="form-group col-lg-6 col-12">
                                 <label class="form-label">Overlooking</label>
-                                <select class="form-control select2" name="overlooking[]" multiple>
+                                <select class="form-control select-2" name="overlooking[]" multiple>
                                     <option value="">Slect Overlooking</option>
                                     @php
                                     $overlooking_list = get_overlooking_list();
@@ -732,7 +745,7 @@
                         </div>
 
                         <div class="">
-                            <button type="button" class="btn btn-secondary btn-back-6"><i
+                            <button type="button" class="btn btn-secondary btn-back-6 me-2"><i
                                     class="bi bi-arrow-left"></i> Back</button>
                             <button type="button" class="btn btn-primary btn-next" data-step="6">Next <i
                                     class="bi bi-arrow-right"></i></button>
@@ -781,62 +794,62 @@
 
                         <div class="img-content" id="tab-content-living">
                             <div class="upload-gallery" id="preview-living"></div>
-                            <div class="form-field">
-                                <label class="form-label">Description</label>
-                                <textarea rows="3" class="form-control" name="image_desc[living]" placeholder="Write something..."></textarea>
+                            <div class="form-floating mb-3">                                
+                                <textarea rows="3" class="form-control" name="image_desc[living]" placeholder="Write something..." style="min-height:75px;"></textarea>
+                                <label>Description</label>
                             </div>
                         </div>
 
                         <div class="img-content" id="tab-content-bathroom" style="display:none">
                             <div class="upload-gallery" id="preview-bathroom"></div>
-                            <div class="form-field">
-                                <label class="form-label">Description</label>
-                                <textarea rows="3" class="form-control" name="image_desc[bathroom]" placeholder="Write something..."></textarea>
+                            <div class="form-floating mb-3">                                
+                                <textarea rows="3" class="form-control" name="image_desc[bathroom]" placeholder="Write something..." style="min-height:75px;"></textarea>
+                                <label>Description</label>
                             </div>
                         </div>
 
                         <div class="img-content" id="tab-content-balcony" style="display:none">
                             <div class="upload-gallery" id="preview-balcony"></div>
-                            <div class="form-field">
-                                <label class="form-label">Description</label>
-                                <textarea rows="3" class="form-control" name="image_desc[balcony]" placeholder="Write something..."></textarea>
+                            <div class="form-floating mb-3">                                
+                                <textarea rows="3" class="form-control" name="image_desc[balcony]" placeholder="Write something..." style="min-height:75px;"></textarea>
+                                <label>Description</label>
                             </div>
                         </div>
 
                         <div class="img-content" id="tab-content-floor" style="display:none">
                             <div class="upload-gallery" id="preview-floor"></div>
-                            <div class="form-field">
-                                <label class="form-label">Description</label>
-                                <textarea rows="3" class="form-control" name="image_desc[floor]" placeholder="Write something..."></textarea>
+                            <div class="form-floating mb-3">                                
+                                <textarea rows="3" class="form-control" name="image_desc[floor]" placeholder="Write something..." style="min-height:75px;"></textarea>
+                                <label>Description</label>
                             </div>
                         </div>
 
                         <div class="img-content" id="tab-content-master" style="display:none">
                             <div class="upload-gallery" id="preview-master"></div>
-                            <div class="form-field">
-                                <label class="form-label">Description</label>
-                                <textarea rows="3" class="form-control" name="image_desc[master]" placeholder="Write something..."></textarea>
+                            <div class="form-floating mb-3">                                
+                                <textarea rows="3" class="form-control" name="image_desc[master]" placeholder="Write something..." style="min-height:75px;"></textarea>
+                                <label>Description</label>
                             </div>
                         </div>
 
                         <div class="img-content" id="tab-content-exterior" style="display:none">
                             <div class="upload-gallery" id="preview-exterior"></div>
-                            <div class="form-field">
-                                <label class="form-label">Description</label>
-                                <textarea rows="3" class="form-control" name="image_desc[exterior]" placeholder="Write something..."></textarea>
+                            <div class="form-floating mb-3">                                
+                                <textarea rows="3" class="form-control" name="image_desc[exterior]" placeholder="Write something..." style="min-height:75px;"></textarea>
+                                <label>Description</label>
                             </div>
                         </div>
 
                         <div class="img-content" id="tab-content-other" style="display:none">
                             <div class="upload-gallery" id="preview-other"></div>
-                            <div class="form-field">
-                                <label class="form-label">Description</label>
-                                <textarea rows="3" class="form-control" name="image_desc[other]" placeholder="Write something..."></textarea>
+                            <div class="form-floating mb-3">                                
+                                <textarea rows="3" class="form-control" name="image_desc[other]" placeholder="Write something..." style="min-height:75px;"></textarea>
+                                <label>Description</label>
                             </div>
                         </div>
 
                         <div class="">
-                            <button type="button" class="btn btn-secondary btn-back-7"><i
+                            <button type="button" class="btn btn-secondary btn-back-7 me-2"><i
                                     class="bi bi-arrow-left"></i> Back</button>
                             <button type="button" class="btn btn-primary btn-next" data-step="7" id="submit-btn">Post
                                 Property</button>
