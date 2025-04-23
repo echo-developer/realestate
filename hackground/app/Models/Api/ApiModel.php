@@ -1534,6 +1534,8 @@ class ApiModel extends Model
                             ->leftJoin('advertisement_category as a_c', 'a.advertisement_id', '=', 'a_c.advertisement_id')
                             ->leftJoin('advertisement_locations as a_l', 'a.advertisement_id', '=', 'a_l.advertisement_id')
                             ->where(['a.member_id'=>$user_id,'status'=>'1'])
+                            ->whereDate('a.start_date', '<=', now())
+                            ->whereDate('a.expire_date', '>=', now())
                             ->groupBy('a.advertisement_id')
                             ->get();
         return $result;
