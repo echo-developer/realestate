@@ -40,7 +40,7 @@
 
           </div>
           <div class="card-body">
-            <form method="post">
+            <form method="post" id="project_post_form">
 
               <input type="hidden" id="user_id" name="uid" value="{{$uid}}">
 
@@ -547,7 +547,7 @@
     button.addEventListener("click", function(e) {
       e.preventDefault();
 
-      let form = document.querySelector("form");
+      let form = document.getElementById("project_post_form");
       let formData = new FormData(form);
       formData.append('step', currentStep); // Add current step
 
@@ -559,7 +559,7 @@
           body: formData,
           headers: {
             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-          }
+          } 
         })
         .then(response => response.json())
         .then(data => {
