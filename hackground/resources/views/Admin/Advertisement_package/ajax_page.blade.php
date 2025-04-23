@@ -23,7 +23,7 @@
                     
                     <div class="form-group">
                       <label for="category_key">Page </label>
-                      <select class="form-control" name="page" onchange="get_position()">
+                      <select class="form-select" name="page" onchange="get_position()">
                         <option value="">-Select-</option>
                         <?php foreach($pages as $page){ ?>
                         <option value="<?php echo $page['slug'];?>"><?php echo $page['name'];?></option>
@@ -33,14 +33,14 @@
                     
                     <div class="form-group">
                       <label for="category_key">Position </label>
-                      <select class="form-control" name="position" onchange="get_size()">
+                      <select class="form-select" name="position" onchange="get_size()">
                         <option value="">-Select-</option>
                       </select>
                     </div>
                     
                     <div class="form-group">
                       <label for="category_key">Size </label>
-                      <select class="form-control" name="ad_size">
+                      <select class="form-select" name="ad_size">
                         <option value="">-Select-</option>
                       </select>
                     </div>
@@ -310,7 +310,7 @@
                     
                     <div class="form-group">
                       <label for="category_key">Page </label>
-                      <select class="form-control" name="page" onchange="get_position()">
+                      <select class="form-select" name="page" onchange="get_position()">
                         <option value="">-Select-</option>
                         <?php foreach($pages as $page){ ?>
                         <option value="<?php echo $page['slug'];?>" <?php if($page['slug'] == $detail['page']){echo "selected";} ?> ><?php echo $page['name'];?></option>
@@ -320,7 +320,7 @@
                     
                     <div class="form-group">
                       <label for="category_key">Position </label>
-                      <select class="form-control" name="position" onchange="get_size()">
+                      <select class="form-select" name="position" onchange="get_size()">
                         <option value="">-Select-</option>
                         @if($positions) 
                             @foreach($positions as $p)
@@ -332,7 +332,7 @@
                     
                     <div class="form-group">
                       <label for="category_key">Size </label>
-                      <select class="form-control" name="ad_size">
+                      <select class="form-select" name="ad_size">
                         <option value="">-Select-</option>
                         @if($sizes) 
                             @foreach($sizes as $s)

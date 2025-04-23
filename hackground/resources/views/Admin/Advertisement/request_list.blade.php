@@ -53,7 +53,7 @@
                 <div class="col-md-3 col-sm-4">
                     <label for="lead_for">Page</label>
                     <div class="form-group">
-                        <select class="form-control" name="page" id="page" onchange="get_position()">
+                        <select class="form-select" name="page" id="page" onchange="get_position()">
                             <option value="" >All</option>
                             @if($pages)
                                 @foreach($pages as $k=>$p)
@@ -66,7 +66,7 @@
                 <div class="col-md-3 col-sm-4">
                     <label for="category_key">Position </label>
                     <div class="input-group">
-                        <select class="form-control" name="position" id="position" >
+                        <select class="form-select" name="position" id="position" >
                             <option value="">-Select-</option>
                         </select>
                         <div class="input-group-append">

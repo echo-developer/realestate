@@ -173,7 +173,7 @@
                 <form id="formData">
                     <input type="text" class='d-none' id="StateId" name="StateId">
                     <div class="form-floating mb-3">                        
-                        <select name="country_id" id="country_id" class="form-control">
+                        <select name="country_id" id="country_id" class="form-select">
                             <option value="">Select Country</option>
                             @if (isset($country_data))
                             @foreach ($country_data as $items)

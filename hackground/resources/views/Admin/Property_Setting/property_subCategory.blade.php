@@ -186,7 +186,7 @@
                         <input type="text" class='d-none' id="prop_subcategoryId" name="prop_subcategoryId">
 
                         <div class="form-floating mb-3">                                                                                 
-                            <select name="category_id" id="category_id" class="form-control">
+                            <select name="category_id" id="category_id" class="form-select">
                                 <option value="">-select Category-</option>
                                 @if (isset($category_data))
                                     @foreach ($category_data as $items)

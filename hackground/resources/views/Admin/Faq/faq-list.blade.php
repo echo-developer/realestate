@@ -128,7 +128,7 @@
                         <input type="hidden" id="id" name="id">
                         <div class="form-group">
                             <label for="category_id">Faq Category</label>
-                            <select name="faq_category_id" id="faq_category_id" class="form-control" required>
+                            <select name="faq_category_id" id="faq_category_id" class="form-select" required>
                                 <option value="">Select Category</option>
                                 @foreach ($categories ?? [] as $category)
                                     <option value="{{ $category->category_id }}">{{ $category->name }}</option>

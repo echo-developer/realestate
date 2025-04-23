@@ -713,7 +713,7 @@
                         <div class="row gx-3">
                             <div class="form-group col-lg-6 col-12">
                                 <label class="form-label">Overlooking</label>
-                                <select class="form-control select-2" name="overlooking[]" multiple>
+                                <select class="form-select select-2" name="overlooking[]" multiple>
                                     <option value="">Slect Overlooking</option>
                                     @php
                                     $overlooking_list = get_overlooking_list();

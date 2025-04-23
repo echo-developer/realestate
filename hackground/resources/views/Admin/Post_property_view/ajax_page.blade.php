@@ -778,7 +778,7 @@
                         <div class="row gx-3">
                             <div class="col-lg-6 col-12">
                                 <div class="form-floating mb-3">
-                                    <select class="form-control "
+                                    <select class="form-select"
                                         name="construction_month">
                                         <option value="">Select Month</option>
                                         @php
@@ -822,7 +822,7 @@
                     <div class="row gx-3">
                         <div class="col-lg-6 col-12">
                             <div class="form-floating mb-3">
-                                <select class="form-control" name="facing_direction">
+                                <select class="form-select" name="facing_direction">
                                     <option value="">Select Facing</option>
                                     <option value="east" {{ $propertyData['additional']->facing_direction == 'east' ? 'selected' : '' }} >East</option>
                                     <option value="north" {{ $propertyData['additional']->facing_direction == 'north' ? 'selected' : '' }}>North</option>
@@ -839,7 +839,7 @@
                         </div>
                         <div class="col-lg-6 col-12">
                             <div class="form-floating mb-3">
-                                <select class="form-control" name="parking">
+                                <select class="form-select" name="parking">
                                     <option value="">Select Parking Option</option>
                                     <option value="av" {{ $propertyData->additional->parking_ability == 'av' ? 'selected' : '' }}>Available</option>
                                     <option value="na" {{ $propertyData->additional->parking_ability == 'na' ? 'selected' : '' }}>Not Available</option>
@@ -854,7 +854,7 @@
                     <div class="row gx-3">
                         <div class="col-lg-6 col-12">
                             <div class="form-floating mb-3">
-                                <select class="form-control" name="water_available">
+                                <select class="form-select" name="water_available">
                                     <option value="">--Select Water Availability--</option>
                                     @php  
                                         $water_availability = get_water_availability();
@@ -871,7 +871,7 @@
                         </div>
                         <div class="col-lg-6 col-12">                            
                             <div class="form-floating mb-3">
-                                <select class="form-control" name="electric_available">
+                                <select class="form-select" name="electric_available">
                                     <option value="">Select status of electricity</option>
                                     @php  
                                         $electricity_status = electricity_status();

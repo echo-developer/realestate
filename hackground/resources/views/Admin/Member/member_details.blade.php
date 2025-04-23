@@ -239,7 +239,7 @@
                 <div id="business-address-wrapper">
                     {{-- <div class="row mb-3 address-field" id="field-1" data-field-id="">
                         <div class="col">
-                            <select name="service_area[city_id][]" class="form-control me-2">
+                            <select name="service_area[city_id][]" class="form-select">
                                 <option value="">Select City</option>
                                 @foreach ($cities as $city)
                                     <option value="{{ $city->city_id }}">{{ $city->name }}</option>
@@ -247,7 +247,7 @@
                             </select>
                         </div>
                         <div class="col">
-                            <select name="service_area[locality_id][]" class="form-control me-2">
+                            <select name="service_area[locality_id][]" class="form-select">
                                 <option value="">Locality</option>
                                 <option value="1">Kasba</option>
                             </select>
@@ -337,13 +337,13 @@
 
                 div.innerHTML = `
             <div class="col">
-                <select name="service_area[city_id][]" class="form-control me-2">
+                <select name="service_area[city_id][]" class="form-select">
                     <option value="">Select City</option>
                     ${cityOptions}
                 </select>
             </div>
             <div class="col">
-                 <input type="text" name="service_area[locality_id][]" class="form-control me-2" placeholder="Locality" value="${locality}">
+                 <input type="text" name="service_area[locality_id][]" class="form-control" placeholder="Locality" value="${locality}">
             </div>
             <div class="col-auto">
                 <input type="hidden" name="service_area[field_unique_key][]" value="${locKey}">

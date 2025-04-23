@@ -53,7 +53,7 @@
                 <div class="col-md-3 col-sm-4">
                     <label for="lead_for">Page</label>
                     <div class="form-group">
-                        <select class="form-control" name="lead_for" id="lead_for">
+                        <select class="form-select" name="lead_for" id="lead_for">
                             <option value="" >All</option>
                             {{-- <option value="property" {{ request('lead_for') == 'property' ? 'selected' : ''; }}>Property</option> --}}
                             @if($pages)
@@ -67,7 +67,7 @@
                 <div class="col-md-3 col-sm-4">
                     <label for="category_key">Position </label>
                     <div class="form-group">
-                        <select class="form-control" name="position">
+                        <select class="form-select" name="position">
                             <option value="">-Select-</option>
                         </select>
                     </div>

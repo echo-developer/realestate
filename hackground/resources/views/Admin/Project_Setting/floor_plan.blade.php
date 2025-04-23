@@ -150,7 +150,7 @@
                         <label for="ufile">Type</label>
                         <div class="input-group">
                             <div class="custom-file">
-                                <select name="type" id="type" class="form-control">
+                                <select name="type" id="type" class="form-select">
                                     <option value="">Select Type</option>
                                     @if (isset($floorPlanTypes))
                                     @foreach ($floorPlanTypes as $item)

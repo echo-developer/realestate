@@ -192,7 +192,7 @@
 
                     <div class="form-floating mb-3" id="Groups">
                         
-                        <select class="form-control" id="Groups_data" name="Groups" required>
+                        <select class="form-select" id="Groups_data" name="Groups" required>
                             <option value="default">Default</option>
 
                             @foreach ($Settings as $setting)

@@ -207,7 +207,7 @@
                         </div>
 
                         <div class="form-floating mb-3">                            
-                            <select type="text" class="form-control" id="menu_action" name="menu_action" required>
+                            <select class="form-select" id="menu_action" name="menu_action" required>
                                 <option value="">-- select --</option>
                                 <option value="add">ADD</option>
                                 <option value="edit">EDIT</option>

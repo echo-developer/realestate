@@ -68,7 +68,7 @@
                 <div class="col-md-3 col-sm-4">
                     <label for="lead_for">Type</label>
                     <div class="form-group">
-                        <select class="form-control" name="lead_for" id="lead_for">
+                        <select class="form-select" name="lead_for" id="lead_for">
                             <option value="" >All</option>
                             <option value="property" {{ request('lead_for') == 'property' ? 'selected' : ''; }}>Property</option>
                             <option value="project" {{ request('lead_for') == 'project' ? 'selected' : ''; }}>Project</option>

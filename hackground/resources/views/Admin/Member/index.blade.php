@@ -301,7 +301,7 @@ $userTypes = [
 
                     {{-- <div class="form-group" id="Groups">
                             <label for="Groups">User</label>
-                            <select class="form-control" id="Groups_data" name="Groups" required>
+                            <select class="form-select" id="Groups_data" name="Groups" required>
                                 <option value="default"></option>
 
                                 @foreach ($Users as $user)
@@ -319,7 +319,7 @@ $userTypes = [
 
             </div>
             <div class="form-floating mb-3">
-                <select name="user_type" id="user_type" class="form-control">
+                <select name="user_type" id="user_type" class="form-select">
                     <option value="">--select--</option>
                     @foreach ($userTypes as $userType => $userTypeName)
                     <option value="{{ $userType }}">{{ $userTypeName }}</option>

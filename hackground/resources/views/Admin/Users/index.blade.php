@@ -158,7 +158,7 @@
                     </div>
                     <div class="form-floating mb-3">
                         
-                        <select class="form-control" id="role" name="role" required>
+                        <select class="form-select" id="role" name="role" required>
                             <option value=" ">Select Option</option>
                             @foreach ($roles as $role)
                             @if ($role->name !== 'superadmin' && $role->status != config('constants.STATUS_DELETED'))

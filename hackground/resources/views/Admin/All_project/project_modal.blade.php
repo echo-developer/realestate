@@ -29,7 +29,7 @@
      </div>
 
      <div class="form-floating mb-4">         
-         <select class="form-control" name="project_type">
+         <select class="form-select" name="project_type">
              <option value="">Select Project Type</option>
              @foreach ($projectTypes as $projectType)
              <option value="{{ $projectType->id }}"
@@ -113,7 +113,7 @@
 
      <div class="form-floating mb-4" id="age_of_const" style="display:none;">
          
-         <select class="form-control" name="age_of_construction">
+         <select class="form-select" name="age_of_construction">
              <option value="">Select Age</option>
              @php
              $ageOptions = [
@@ -157,7 +157,7 @@
              <div class="row gx-3">
                 <div class="col">
                  <div class="form-floating mb-4">                     
-                     <select name="month" id="month" class="form-control">
+                     <select name="month" id="month" class="form-select">
                          <option disabled>Select Month</option>
                          @foreach ($months as $num => $month)
                          <option value="{{ $num }}" {{ str_pad($monthNumber, 2, '0', STR_PAD_LEFT) == $num ? 'selected' : '' }}>
@@ -172,7 +172,7 @@
                  <div class="col">
                  <div class="form-floating mb-4">
                      
-                     <select name="year" id="year" class="form-control">
+                     <select name="year" id="year" class="form-select">
                          <option disabled>Select Year</option>
                          @for ($i = date('Y'); $i <= date('Y') + 30; $i++)
                              <option value="{{ $i }}" {{ $selectedYear == $i ? 'selected' : '' }}>{{ $i }}</option>
@@ -187,7 +187,7 @@
      </div>
      <div class="form-floating mb-4">
          
-         <select class="form-control" name="project_furnish">
+         <select class="form-select" name="project_furnish">
              <option value="">Select Furnish Status</option>
              @foreach ($projectFurnishes as $furnish)
              <option value="{{ $furnish['furnish_id'] }}"
@@ -209,7 +209,7 @@
          @endphp
 
          
-         <select class="form-control" name="parking">
+         <select class="form-select" name="parking">
              <option value="">Select Parking Option</option>
              @foreach ($parking_availability as $value => $label)
              <option value="{{ $value }}" {{ $projectData->settings->parking_availability === $value ? 'selected' : '' }}>{{ $label }}</option>
@@ -231,7 +231,7 @@
          ];
          @endphp
          
-        <select class="form-control" name="facing_direction">
+        <select class="form-select" name="facing_direction">
              <option value="">Select Facing</option>
              @foreach ($floorOptions as $value => $label)
              <option value="{{ $value }}" {{ $projectData->settings->project_facing === $value ? 'selected' : '' }}>{{ $label }}</option>
@@ -312,7 +312,7 @@
 
      <div class="form-floating mb-4">
          
-         <select class="form-control" name="total_tower">
+         <select class="form-select" name="total_tower">
              <option value="">Select Total Tower</option>
              @for ($i = 1; $i <= 15; $i++)
                  <option value="{{ $i }}" {{ ($projectData->settings->total_towers ?? '') == $i ? 'selected' : '' }}>{{ $i }}</option>
@@ -337,7 +337,7 @@
          'not_available' => 'Not Available',
          ];
          @endphp
-         <select class="form-control" id="floatingSelect" name="water_availability">
+         <select class="form-select" id="floatingSelect" name="water_availability">
              <option value="">Select Water Availability</option>
              @foreach ($waterAvailability as $value => $label)
              <option value="{{ $value }}" {{ ($projectData->additional->water_availability ?? '') == $value ? 'selected' : '' }}>
@@ -357,7 +357,7 @@
          'no_power_backup' => 'No Power Backup',
          ];
          @endphp
-         <select class="form-control" id="" name="electricity_status">
+         <select class="form-select" id="" name="electricity_status">
              <option value="">Select Water Availability</option>
              @foreach ($electricityStatus as $value => $label)
              <option value="{{ $value }}" {{ ($projectData->additional->electric_availability ?? '') == $value ? 'selected' : '' }}>
@@ -378,7 +378,7 @@
          'power_of_attorney' => 'Power of Attorney'
          ];
          @endphp
-         <select class="form-control" id="" name="ownership_type">
+         <select class="form-select" id="" name="ownership_type">
              <option value="">Select Ownership Type:</option>
              @foreach ($ownershipType as $value => $label)
              <option value="{{ $value }}" {{ ($projectData->additional->type_of_ownership ?? '') == $value ? 'selected' : '' }}>

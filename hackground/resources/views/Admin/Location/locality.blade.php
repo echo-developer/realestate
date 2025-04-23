@@ -209,7 +209,7 @@
                             <label for="ufile">Select City</label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <select name="city_id" id="city_id" class="form-control">
+                                    <select name="city_id" id="city_id" class="form-select">
                                         <option value="">Select City</option>
                                         @if (isset($city_data))
                                             @foreach ($city_data as $items)
