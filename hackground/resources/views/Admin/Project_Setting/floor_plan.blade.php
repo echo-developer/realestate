@@ -72,7 +72,7 @@
 
     <div class="main-card mb-3 card">
         <div class="card-body">
-            <div class="card-header p-0">
+        <div class="card-header d-flex">
                 <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Property floor plan
 
                 <div class="btn-actions-pane-right">

@@ -386,8 +386,14 @@ if (!function_exists('AllmenusForSideBar')) {
         if ($role != 1) {
             $allmenus->where('pt.role_id', '=', $role);
         }
-        $allmenus->where('mmt.status', 1);
-        $allmenus = $allmenus->orderBy('id', 'asc')->get()->groupBy('parent_id');
+
+        $allmenus = $allmenus->where('mmt.status', 1)
+            ->orderBy('order', 'asc')     
+            ->get()
+            ->groupBy('parent_id')
+            ->map(function ($group) {
+                return $group->sortBy('order')->values();
+            });
 
         if ($allmenus->isNotEmpty()) {
             return $allmenus;
