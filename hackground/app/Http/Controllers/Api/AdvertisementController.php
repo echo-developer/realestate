@@ -171,18 +171,9 @@ class AdvertisementController extends Controller
             foreach($list as $k=>$l)
             {
                 $status = '';
-                if($l->status == '1')
-                {
-                    $status = 'Completed';
-                }
-                elseif($l->status == '0')
-                {
-                    $status = 'Pending';
-                }
-                elseif($l->status == '2')
-                {
-                    $status == 'Rejected';
-                }
+                if($l->status == '1'){$status = 'Completed';}
+                elseif($l->status == '0'){$status = 'Pending';}
+                elseif($l->status == '2'){$status == 'Rejected';}
                 $customArr[] = array(
                     'id'=> $l->request_id,
                     'name'=> $l->name,
@@ -196,6 +187,50 @@ class AdvertisementController extends Controller
                     'duration'=> $l->duration ? $l->duration.' Weeks' : '',
                     'status'=> $status,
                     'created_date'=>date('d-M-Y', strtotime($l->created_at))
+                );
+            }
+            
+            return response()->json([
+                'status' => 1,
+                'message' => 'Data retrieved successfully.',
+                'data' => $customArr
+            ], 200);  
+        }else{
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed to retrieve data.',
+                'data' => [],
+            ], 200); 
+        }
+    }
+
+    public function userAdvertisementsList(Request $request)
+    {
+        $user_id = $request->user_id;
+        $list = $this->apiModel->getUserAdvertisementsList($user_id);
+        $customArr = [];
+        if($list)
+        {
+            foreach($list as $k=>$l)
+            {
+                $status = '';
+                if($l->status == '1'){$status = 'Completed';}
+                elseif($l->status == '0'){$status = 'Pending';}
+                elseif($l->status == '2'){$status == 'Rejected';}
+                $customArr[] = array(
+                    'id'=> $l->advertisement_id,
+                    'ad_image'=> $l->ad_image,
+                    'ad_type'=> $l->ad_type,
+                    'views'=> $l->views,
+                    'impressions'=> $l->impressions,
+                    'page'=> $l->page,
+                    'position'=> $l->position,
+                    'start_date'=> date('d-M-Y',strtotime($l->start_date)),
+                    'expire_date'=> date('d-M-Y',strtotime($l->expire_date)),
+                    'locality'=> $l->location_id ? get_name_by_id("locality_names", "locality_id", $l->location_id, "en") : '',
+                    'city'=> $l->city_id ? get_name_by_id("city_names", "city_id", $l->city_id, "en") : '',
+                    'property_type'=> $l->property_category,
+                    'status'=> $status
                 );
             }
             

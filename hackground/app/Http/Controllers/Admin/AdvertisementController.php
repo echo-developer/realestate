@@ -83,8 +83,15 @@ class AdvertisementController extends Controller
         $ID = "";
         $detail = "";
         $city = get_all_city();
+        $user_id = '';
         $property_category = get_all_property_category();
+        $request_id = '';
         if($page == 'add'){
+            if(isset($srch['request_id']))
+            {
+                $request_id = $srch['request_id'];
+                $user_id = getField('user_id','advertisement_request','request_id',$request_id);
+            }
 			$pages = $this->advertisement->get_pages();
 			$title = 'Add Advertisement';
 			$form_action = url('advertisement/add');
@@ -116,7 +123,7 @@ class AdvertisementController extends Controller
             $detail = $this->advertisement->get_request_details($id);
         }
 
-        return view('Admin.Advertisement.ajax_page', compact('page', 'title', 'form_action','pages','positions', 'sizes', 'ID', 'detail', 'city','property_category'));
+        return view('Admin.Advertisement.ajax_page', compact('page', 'title', 'form_action','pages','positions', 'sizes', 'ID', 'detail', 'city','property_category','srch','user_id'));
     }
 
     public function add(Request $request)

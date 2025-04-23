@@ -49,6 +49,7 @@ class Advertisement extends Model
     public function addRecord($data)
     {
         $ins_data = array(
+			'member_id'=> $data['user_id'] ? $data['user_id'] : '',
 			'page' => $data['page'] ? $data['page'] : '',
 			'position' => $data['position'] ? $data['position'] : '',
 			'ad_size' => $data['ad_size'] ? $data['ad_size'] : '',
@@ -57,6 +58,8 @@ class Advertisement extends Model
 			'ad_image_mobile' => $data['ad_image_mobile'] ? $data['ad_image_mobile'] : '',
 			'ad_code' => $data['ad_code'] ? $data['ad_code'] : '',
 			'ad_url' => $data['ad_url'] ? $data['ad_url'] : '',
+			'start_date' => $data['start_date'] ? $data['start_date'] : '',
+			'expire_date' => $data['expire_date'] ? $data['expire_date'] : '',
 			'status' => $data['status'] ? $data['status'] : ''
 		);
         // echo "<pre>";
@@ -118,6 +121,8 @@ class Advertisement extends Model
 			'ad_image_mobile' => $data['ad_image_mobile'] ? $data['ad_image_mobile'] : '',
 			'ad_code' => $data['ad_code'] ? $data['ad_code'] : '',
 			'ad_url' => $data['ad_url'] ? $data['ad_url'] : '',
+			'start_date' => $data['start_date'] ? $data['start_date'] : NULL,
+			'expire_date' => $data['expire_date'] ? $data['expire_date'] : NULL,
 			'status' => $data['status'] ? $data['status'] : ''
 		);
 

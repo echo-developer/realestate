@@ -6,20 +6,9 @@
 </div>
 <div class="modal-body">
     <form role="form" id="add_form" class="mb-0" action="<?php echo $form_action; ?>" onsubmit="submitForm(this, event)">
+        <input type="hidden" name="user_id" value="{{ $user_id }}" />
         <div class="box-body">
-
-            {{-- @php
-                        $langs = explode(',', admin_default_lang());
-                    @endphp
-                    @foreach ($langs as $lang)
-            <div class="form-group">
-            <label for="name">Name ({{ strtoupper($lang) }})</label>
-            <input type="text" class="form-control reset_field" id="package_name{{ $lang }}"
-                name="lang[package_name][{{ $lang }}]" autocomplete="off">
-            <div class="invalid-feedback" id="package_name{{ $lang }}_error"></div>
-        </div>
-        @endforeach --}}
-
+            
         <div class="form-group">
             <label class="form-label d-block" for="category_key">Category </label>
             <select class="form-select select-2" name="category[]" multiple>
@@ -118,6 +107,16 @@
         <div class="form-floating mb-3">
             <input type="text" class="form-control reset_field" id="ad_url" name="ad_url" placeholder="" autocomplete="off">
             <label for="ad_url">Ad URL </label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="date" class="form-control reset_field" id="start_date" name="start_date" placeholder="" autocomplete="off">
+            <label for="start_date">Start Date </label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="date" class="form-control reset_field" id="expire_date" name="expire_date" placeholder="" autocomplete="off">
+            <label for="expire_date">Expire Date </label>
         </div>
 
         <div class="form-group">
@@ -382,7 +381,6 @@
             </div>
 
             <div class="form-floating mb-3">
-                
                 <select class="form-select" name="ad_size">
                     <option value="">-Select-</option>
                     @if($sizes)
@@ -397,7 +395,6 @@
             </div>
 
             <div class="form-floating mb-3">
-                
                 <select class="form-select" name="ad_type" onchange="checkAdType()">
                     <option value="image" <?php if ($detail['ad_type'] == 'image') {
                                                 echo "selected";
@@ -472,6 +469,16 @@
             <div class="form-floating mb-3">
                 <input type="text" class="form-control reset_field" id="ad_url" name="ad_url" placeholder="" autocomplete="off" value="{{ !empty($detail['ad_url']) ? $detail['ad_url'] : '' }}">
                 <label for="ad_url">Ad URL </label>
+            </div>
+            
+            <div class="form-floating mb-3">
+                <input type="date" class="form-control reset_field" id="start_date" name="start_date" placeholder="" autocomplete="off" value="{{ !empty($detail['start_date']) ? date('Y-m-d', strtotime($detail['start_date'])) : '' }}">
+                <label for="start_date">Start Date </label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="date" class="form-control reset_field" id="expire_date" name="expire_date" placeholder="" autocomplete="off" value="{{ !empty($detail['expire_date']) ? date('Y-m-d', strtotime($detail['expire_date'])) : '' }}">
+                <label for="expire_date">Expire Date </label>
             </div>
 
             <div class="form-group mb-0">
@@ -684,7 +691,7 @@
 <div class="modal-body">
     <ul>
         <li>Advertiser Name:</li>
-        <li>{{ $detail->advertiser_name }}</li>
+        <li>{{ $detail->name }}</li>
     </ul>
     <ul>
         <li>Email:</li>

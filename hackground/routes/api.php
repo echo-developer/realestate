@@ -261,6 +261,7 @@ Route::post('get-advertisements', [AdvertisementController::class, 'getAdvertise
 Route::post('add-advertisement-view', [AdvertisementController::class, 'add_view']);
 Route::post('save-advertisement-request', [AdvertisementController::class, 'saveAdvertisementRequest']);
 Route::post('user-advertisement-requests', [AdvertisementController::class, 'userAdvertisementRequests']);
+Route::post('user-advertisements-list', [AdvertisementController::class, 'userAdvertisementsList']);
 
 Route::controller(FloorPlaningController::class)->group(function () {
 

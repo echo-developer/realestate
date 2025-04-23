@@ -291,6 +291,20 @@ if (!function_exists('getTableData')) {
     }
 }
 
+if (!function_exists('getField')) {
+    
+    function getField($column = '', $table = '', $where = '', $val = '') {
+        $res = DB::table($table)
+                ->select($column)
+                ->where($where, $val)
+                ->get()
+                ->first();
+        return $res->$column;
+    }
+
+}
+
+
 function get_setting($key = '')
 {
     $defaults = [

@@ -95,11 +95,13 @@
                     <thead>
                         <tr>
                             <th style="width:5%">ID</th>
+                            <th>User</th>
                             <th>Page</th>
                             <th>Position</th>
                             <th>Views</th>
                             <th>Impressions</th>
                             <th>Type</th>
+                            <th>Duration</th>
                             <th>Status</th>
                             <th class="text-right">Action</th>
                         </tr>
@@ -109,11 +111,13 @@
                         @foreach($list as $item)
                         <tr>
                             <td>{{ $item->advertisement_id }}</td>
+                            <td>{{ $item->member_id ? getField('name','users','id',$item->member_id) : '-' }}</td>
                             <td>{{ $item->page }}</td>
                             <td>{{ $item->position }}</td>
                             <td>{{ $item->views }}</td>
                             <td>{{ $item->impressions }}</td>
                             <td>{{ $item->ad_type }}</td>
+                            <td>{{ (!empty($item->start_date) && !empty($item->expire_date)) ? date('d-M-Y', strtotime($item->start_date)).' to '.date('d-M-Y', strtotime($item->expire_date)) : '' }}</td>
                             <td>
                                 <input type="checkbox" class="ad_status d-none" data-id="{{ $item->advertisement_id }}" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ $item->status ? 'checked' : '' }} >
                             </td>

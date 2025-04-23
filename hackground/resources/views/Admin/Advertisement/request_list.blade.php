@@ -1,4 +1,7 @@
 @extends('Admin.layouts.app')
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/select2.css')}}"> 
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/select2-bootstrap-5-theme.css')}}"> 
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/style.css') }}">
 
 @section('content')
 
@@ -123,8 +126,9 @@
                             </td>
                             <td class="text-right">
                                 {{-- <i class="fa fa-edit text-primary fa-md" onclick="edit('{{ $item->request_id }}')"></i> --}}
+                                <i class="fa fa-plus text-primary fa-md" onclick="approve('{{ $item->request_id }}')"></i>
                                 <i class="fa fa-eye text-success fa-md" onclick="view('{{ $item->request_id }}')"></i>
-                                {{-- <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->request_id }}')"></i> --}}
+                                {{-- <i class="fa fa-trash text-danger fa-md" onclick="reject('{{ $item->request_id }}')"></i> --}}
                             </td>
                         </tr>
                         @endforeach
@@ -188,8 +192,10 @@
 @endsection
 @push('custom-js')
 <script>
-    function add(){
-        $.get(`{{ url('advertisement/ajax_page?page='.$add_command) }}`, function(data) {
+    function approve(request_id){
+        let addCommand = "{{ $add_command }}";
+        let url = `{{ url('advertisement/ajax_page') }}?page=${addCommand}&request_id=${request_id}`;
+        $.get(url, function(data) {
             $('#ajax_modal').modal('show');
             $('#ajax_modal .modal-content').html(data);
         });
