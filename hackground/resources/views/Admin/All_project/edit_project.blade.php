@@ -69,7 +69,7 @@
     <div class="page-title-wrapper">
       <div class="page-title-heading">
         <div class="page-title-icon">
-          <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
+        <i class="bi bi-buildings"></i>
         </div>
         <div>Project Edit <div class="page-title-subheading">Project Setting <i class="bi bi-chevron-right"></i> Project Edit
           </div>

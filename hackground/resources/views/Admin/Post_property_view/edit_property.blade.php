@@ -14,9 +14,9 @@
         <div class="page-title-wrapper">
             <div class="page-title-heading">
                 <div class="page-title-icon">
-                    <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
+                <i class="bi bi-house-gear"></i>
                 </div>
-                <div>Property Edit <div class="page-title-subheading">Property &gt;Property Edit
+                <div>Property Edit <div class="page-title-subheading">Property <i class="bi bi-chevron-right"></i> Property Edit
                     </div>
                 </div>
             </div>

@@ -18,7 +18,7 @@
         <div class="page-title-wrapper">
             <div class="page-title-heading">
                 <div class="page-title-icon">
-                    <i class="bi bi-building"></i>
+                    <i class="bi bi-buildings"></i>
                 </div>
                 <div>Project
                     <div class="page-title-subheading">Project Setting <i class="bi bi-chevron-right"></i> Project List</div>

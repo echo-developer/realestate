@@ -34212,6 +34212,13 @@ h4 .icon-img-check, .h4 .icon-img-check {
   line-height: 20px;
   margin-bottom: 0;
 }
+.upload-area i {
+  font-size: 30px;
+  color: #0056b3;
+  line-height: 1;
+  margin-bottom: 10px;
+  display: block;
+}
 
 #fileinput,
 .fileinput {

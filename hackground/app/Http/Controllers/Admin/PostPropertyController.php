@@ -778,7 +778,7 @@ class PostPropertyController extends Controller
     {
         $galleries = $request->image;
         $description = $request->image_desc;
-    
+        
         $prevGallary = DB::table('property_gallary as g')->select('g.*')->where('g.pid',$propertyId)->get();
         
         if($prevGallary)
@@ -788,8 +788,12 @@ class PostPropertyController extends Controller
             {
                 $gallary_id[] = $g->id;
             }
-            DB::table('property_gallary_images as i')->whereIn('i.gallary_id',$gallary_id)->delete();
-            DB::table('property_gallary as g')->where('g.pid',$propertyId)->delete();
+            if($gallary_id)
+            {
+                DB::table('property_gallary_images as i')->whereIn('i.gallary_id',$gallary_id)->delete();
+                DB::table('property_gallary as g')->where('g.pid',$propertyId)->delete();
+            }
+            
         }
         
         if ($description) {
