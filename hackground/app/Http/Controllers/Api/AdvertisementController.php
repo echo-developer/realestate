@@ -116,7 +116,6 @@ class AdvertisementController extends Controller
             ->where('otp', $request->otp)
             ->where('expires_at', '>', Carbon::now())
             ->first();
-        //print_r($otpRecord);exit;
         if($otpRecord)
         {
             $user_id = auth_user_id();
@@ -130,7 +129,7 @@ class AdvertisementController extends Controller
                     'name' => $request->name,
                     'user_type' => $request->user_type,
                     'email' => $request->email,
-                    'password' => Hash::make($request->password),
+                    'password' => Hash::make('123456'),
                     'phone' => $request->phone,
                     'phone_code' => $request->phone_code
                 ]);

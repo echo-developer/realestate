@@ -115,4 +115,19 @@ ALTER TABLE `pref_properties_location` CHANGE `locality` `locality` BIGINT NULL 
 
 ALTER TABLE `pref_advertisements` ADD `impressions` INT NOT NULL DEFAULT '0' AFTER `views`;
 
-ALTER TABLE `pref_advertisement_request` CHANGE `advertiser_name` `name` VARCHAR(90) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL;
+CREATE TABLE IF NOT EXISTS `pref_advertisement_request` (
+  `request_id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `name` varchar(90) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `email` varchar(90) DEFAULT NULL,
+  `phone_code` int DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `city_id` int DEFAULT NULL,
+  `locality_id` int DEFAULT NULL,
+  `page` varchar(50) DEFAULT NULL,
+  `position` varchar(50) DEFAULT NULL,
+  `duration` int DEFAULT NULL COMMENT 'In Weeks',
+  `status` tinyint NOT NULL DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`request_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
