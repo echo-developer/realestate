@@ -18,10 +18,10 @@
         <div class="page-title-wrapper">
             <div class="page-title-heading">
                 <div class="page-title-icon">
-                    <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
+                    <i class="bi bi-building"></i>
                 </div>
                 <div>Project
-                    <div class="page-title-subheading">Project Setting &gt; Project List</div>
+                    <div class="page-title-subheading">Project Setting <i class="bi bi-chevron-right"></i> Project List</div>
                 </div>
             </div>
             <div class="page-title-actions">
@@ -86,88 +86,85 @@
     <form action="{{ url('allproject/all-project-view') }}" method="get">
         <section class="content-header mb-4">
             <!-- Basic Search Row -->
-            <div class="row">
-                <div class="col-12">
-                    <!-- <label for="prop_category_search" class="form-label">Project Name</label> -->
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="prop_category_search" name="term"
-                            placeholder="Project Name" value="{{ request('term') }}">
-                        <button type="button" onclick="$('#advanceFilter').slideToggle();" class="btn btn-primary ml-2">
-                            Advanced Search
-                        </button>
-                    </div>
+            <div class="row gx-3">
+                <div class="col-lg col-12">
+                    <!-- <label for="prop_category_search" class="form-label">Project Name</label> -->                    
+                    <input type="text" class="form-control" id="prop_category_search" name="term" placeholder="Project Name" value="{{ request('term') }}">                                        
+                </div>
+                <div class="col-lg-auto col-12">
+                    <button type="submit" class="btn btn-primary btn-block">Search</button>
+                </div>
+                <div class="col-lg-auto col-12">
+                    <button type="button" onclick="$('#advanceFilter').slideToggle();" class="btn btn-outline-primary">
+                    <i class="bi bi-funnel"></i> Advanced
+                    </button>
                 </div>
             </div>
 
             <div class="card mt-3" id="advanceFilter" style="display: none;">
                 <div class="card-body pt-4">
-                    <div class="row -mb-3">
+                    <div class="row gx-3 -mb-3">
                         <!-- Project Type -->
                         <div class="col-xl-3 col-lg-4 col-sm-6">
-                        <div class="form-floating mb-4">
-                            
-                            <select class="form-select" name="project_type">
-                                <option value="">Select</option>
-                                @foreach($project_type as $items)
-                                <option value="{{ $items->id }}"
-                                    {{ request('project_type') == $items->id ? 'selected' : '' }}>
-                                    {{ $items->name }}
-                                </option>
-                                @endforeach
-                            </select>
-                            <label>Project Type</label>
-                        </div>
+                            <div class="form-floating mb-4">
+                                
+                                <select class="form-select" name="project_type">
+                                    <option value="">Select</option>
+                                    @foreach($project_type as $items)
+                                    <option value="{{ $items->id }}"
+                                        {{ request('project_type') == $items->id ? 'selected' : '' }}>
+                                        {{ $items->name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                                <label>Project Type</label>
+                            </div>
                         </div>
                         
                         <!-- Address -->
                         <div class="col-xl-3 col-lg-4 col-sm-6">
-                        <div class="form-floating mb-4">
-                            
-                            <input type="text" value="{{ request('address') }}" class="form-control" name="address" placeholder="Enter Address">
-                            <label>Address</label>
-                        </div>
+                            <div class="form-floating mb-4">                            
+                                <input type="text" value="{{ request('address') }}" class="form-control" name="address" placeholder="Enter Address">
+                                <label>Address</label>
+                            </div>
                         </div>
 
                         <!-- Occupied Area -->
                         <div class="col-xl-3 col-lg-4 col-sm-6">
-                        <div class="form-floating mb-4">
-                            
-                            <input type="number" value="{{ request('occupied_area') }}" class="form-control" name="occupied_area" placeholder="Occupied Area">
-                            <label>Occupied Area (sq.ft)</label>
-                        </div>
+                            <div class="form-floating mb-4">                            
+                                <input type="number" value="{{ request('occupied_area') }}" class="form-control" name="occupied_area" placeholder="Occupied Area">
+                                <label>Occupied Area (sq.ft)</label>
+                            </div>
                         </div>
 
                         <!-- Total Area -->
                         <div class="col-xl-3 col-lg-4 col-sm-6">
-                        <div class="form-floating mb-4">
-                            
-                            <input type="number" value="{{ request('total_area') }}" class="form-control" name="total_area" placeholder="Total Area">
-                            <label>Total Area (sq.ft)</label>
-                        </div>
+                            <div class="form-floating mb-4">                            
+                                <input type="number" value="{{ request('total_area') }}" class="form-control" name="total_area" placeholder="Total Area">
+                                <label>Total Area (sq.ft)</label>
+                            </div>
                         </div>
 
                         <!-- Possession Status -->
                         <div class="col-xl-3 col-lg-4 col-sm-6">
-                        <div class="form-floating mb-4">
-                            
-                            <select class="form-select" name="possession_status">
-                                <option value="">Select</option>
-                                @foreach ($projectStatus as $status)
-                                <option value="{{ $status['status_id'] }}"
-                                    {{ request('possession_status') == $status['status_id'] ? 'selected' : '' }}>
-                                    {{ $status['status_name'] }}
-                                </option>
-                                @endforeach
+                            <div class="form-floating mb-4">                            
+                                <select class="form-select" name="possession_status">
+                                    <option value="">Select</option>
+                                    @foreach ($projectStatus as $status)
+                                    <option value="{{ $status['status_id'] }}"
+                                        {{ request('possession_status') == $status['status_id'] ? 'selected' : '' }}>
+                                        {{ $status['status_name'] }}
+                                    </option>
+                                    @endforeach
 
-                            </select>
-                            <label>Possession Status</label>
-                        </div>
+                                </select>
+                                <label>Possession Status</label>
+                            </div>
                         </div>
 
                         <!-- Price -->
                         <div class="col-xl-3 col-lg-4 col-sm-6">
-                            <div class="form-floating mb-4">
-                                
+                            <div class="form-floating mb-4">                                
                                 <input type="number" value="{{ request('price') }}" class="form-control" name="price" placeholder="Enter Price">
                                 <label>Price</label>
                             </div>
@@ -175,9 +172,9 @@
 
                         <!-- Search Button -->
                         <div class="col-xl-3 col-lg-4 col-sm-6">
-                        <div class="form-group mb-0">
-                            <button type="submit" class="btn btn-primary btn-block">Search</button>
-                        </div>
+                            <div class="form-group mb-0">
+                                <button type="submit" class="btn btn-primary btn-block">Search</button>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -19,10 +19,10 @@
         <div class="page-title-wrapper">
             <div class="page-title-heading">
                 <div class="page-title-icon">
-                    <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
+                    <i class="bi bi-bank"></i>
                 </div>
                 <div>Bank Loan
-                    <div class="page-title-subheading">Bank Loan &gt; Bank Loan List</div>
+                    <div class="page-title-subheading">Bank Loan <i class="bi bi-chevron-right"></i> Bank Loan List</div>
                 </div>
             </div>
             <div class="page-title-actions">
@@ -53,10 +53,10 @@
     <div class="main-card mb-3 card">
         
         <div class="card-header d-flex">
-            <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Bank Loan
+            Bank Loan
             {{-- @if (in_array('MEN0005_Add', $Permissions)) --}}
             <div class="btn-actions-pane-right">
-                <button type="button" class="btn btn-sm btn-success" id="addButton">Add</button>
+                <button type="button" class="btn btn-sm btn-primary" id="addButton"><i class="bi bi-plus-lg"></i> Add</button>
             </div>
             {{-- @endif --}}
         </div>
@@ -74,7 +74,6 @@
                             <th style="min-width:80px;" class="text-right">Action</th>
                         </tr>
                     </thead>
-
                     <tbody>
                         @foreach($data as $item)
                         <tr>
@@ -90,15 +89,11 @@
                                     data-toggle="toggle" data-on="Active" data-off="Inactive"
                                     data-onstyle="success" data-offstyle="danger" data-size="mini" {{$item->status == 1  ? 'checked':''}}>
                             </td>
-
                             <td class="text-right">
-
-                                <i class="fa fa-edit text-success fa-md editButton"
-                                    data-id="{{$item->id}}"></i>
-
-                                <i class="fa fa-trash text-danger fa-md deleteButton"
-                                    data-id="{{$item->id}}"></i>
-
+                                <a href="javascript:void(0)" class="me-2"><i class="bi bi-pencil-fill text-success fa-md editButton"
+                                    data-id="{{$item->id}}"></i></a>
+                                <a href="javascript:void(0)"><i class="bi bi-trash3-fill text-danger fa-md deleteButton"
+                                    data-id="{{$item->id}}"></i></a>
                             </td>
                         </tr>
                         @endforeach
@@ -128,21 +123,21 @@
                     <input type="hidden" name="filename" id="file">
                     <input type="hidden" name="id" id="id">
 
-                    <div class="mb-3">
+                    <div class="form-floating mb-3">                        
+                        <input type="text" class="form-control" id="name" name="name" placeholder="" required>
                         <label for="name" class="form-label">Bank Name</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
                         <div class="invalid-feedback" id="name_error"></div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="form-floating mb-3">                        
+                        <input type="number" step="0.01" class="form-control" id="interest_rate" name="interest_rate" placeholder="" required>
                         <label for="interest_rate" class="form-label">Interest Rate (%)</label>
-                        <input type="number" step="0.01" class="form-control" id="interest_rate" name="interest_rate" required>
                         <div class="invalid-feedback" id="interest_rate_error"></div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="form-floating mb-3">                        
+                        <input type="number" step="0.01" class="form-control" id="processing_fees" name="processing_fees" placeholder="" required>
                         <label for="processing_fees" class="form-label">Processing Fees</label>
-                        <input type="number" step="0.01" class="form-control" id="processing_fees" name="processing_fees" required>
                         <div class="invalid-feedback" id="processing_fees_error"></div>
                     </div>
 
@@ -154,24 +149,21 @@
                     </div>
 
 
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <div>
-                            <div class="form-check form-check-inline">
-                                <input type="radio" class="form-check-input" name="status" id="status_1" value="1" checked>
-                                <label class="form-check-label" for="status_1">Active</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input type="radio" class="form-check-input" name="status" id="status_2" value="0">
-                                <label class="form-check-label" for="status_2">Inactive</label>
-                            </div>
+                    <div class="mb-0">
+                        <label class="form-label d-block">Status</label>                        
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" name="status" id="status_1" value="1" checked>
+                            <label class="form-check-label" for="status_1">Active</label>
                         </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" name="status" id="status_2" value="0">
+                            <label class="form-check-label" for="status_2">Inactive</label>
+                        </div>                        
                     </div>
                 </form>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" id="saveButton" class="btn btn-primary">Save</button>
             </div>
         </div>

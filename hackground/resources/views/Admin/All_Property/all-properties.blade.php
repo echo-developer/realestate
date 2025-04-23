@@ -18,10 +18,10 @@
         <div class="page-title-wrapper">
             <div class="page-title-heading">
                 <div class="page-title-icon">
-                    <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
+                    <i class="bi bi-houses"></i>
                 </div>
                 <div>Property
-                    <div class="page-title-subheading">Property Setting &gt; Property List</div>
+                    <div class="page-title-subheading">Property Setting <i class="bi bi-chevron-right"></i> Property List</div>
                 </div>
             </div>
             <div class="page-title-actions">
@@ -45,7 +45,7 @@
     <div class="alert alert-{{ session('message_type') }}">
         {{ session('success_msg') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-            
+
         </button>
     </div>
     @endif
@@ -80,30 +80,32 @@
                 </div>
             </div>
             </div> --}}
-        <div class="d-flex align-items-center justify-content-between mb-3">
-            <h4 class="mb-0">Filter</h4>
-            <a href="javascript:void(0)" class="fa fa-filter"></a>
+        <div class="row gx-3 mb-4">
+            <div class="col-lg col-12">
+                <input type="text" class="form-control" name="term" placeholder="Property Name" value="<?php echo !empty($srch['term']) ? $srch['term'] : ''; ?>">
+            </div>
+            <div class="col-lg-auto col-12">
+                <button type="submit" class="btn btn-primary btn-block">Search</button>
+            </div>
+            <div class="col-lg-auto col-12">
+                <button type="button" onclick="$('#advanceFilter').slideToggle();" class="btn btn-outline-primary">
+                <i class="bi bi-funnel"></i> Advanced
+                </button>
+            </div>
         </div>
 
 
         <div class="card mb-3" id="advanceFilter" style="display: none;">
             <div class="card-body pt-4">
-                <div class="row -mb-3">
-                    <div class="col-xl-3 col-lg-4 col-sm-6">
-                        <div class="form-floating mb-4">                            
-                            <input type="text" class="form-control" name="term" placeholder="Property Name"
-                                value="<?php echo !empty($srch['term']) ? $srch['term'] : ''; ?>">
-                                <label>Property Name</label>
-                        </div>
-                    </div>
+                <div class="row gx-3 -mb-3">
 
                     @if (!$user_id)
                     <div class="col-xl-3 col-lg-4 col-sm-6">
                         <div class="form-floating mb-4">
-                            
+
                             <input type="text" class="form-control" name="username" placeholder="Name"
                                 value="<?php echo !empty($srch['username']) ? $srch['username'] : ''; ?>">
-                                <label>User Name</label>
+                            <label>User Name</label>
                         </div>
                     </div>
                     @endif
@@ -113,7 +115,7 @@
                     @endphp
                     <div class="col-xl-3 col-lg-4 col-sm-6">
                         <div class="form-floating mb-4">
-                            
+
                             <select class="form-select" name="post_for">
                                 <option value="">--Select--</option>
                                 @if ($post_for)
@@ -131,7 +133,6 @@
                     @endphp
                     <div class="col-xl-3 col-lg-4 col-sm-6">
                         <div class="form-floating mb-4">
-                            
                             <select class="form-select" name="property_type">
                                 <option value="">--Select--</option>
                                 @if ($property_types)
@@ -149,7 +150,6 @@
                     @endphp
                     <div class="col-xl-3 col-lg-4 col-sm-6">
                         <div class="form-floating mb-4">
-                            
                             <select class="form-select" name="property_for">
                                 <option value="">--Select--</option>
                                 @if ($property_types_for)
@@ -167,7 +167,7 @@
                     @endphp
                     <div class="col-xl-3 col-lg-4 col-sm-6">
                         <div class="form-floating mb-4">
-                            
+
                             <select class="form-select" name="city">
                                 <option value="">--Select--</option>
                                 @if ($cities)
@@ -183,10 +183,9 @@
 
                     <div class="col-xl-3 col-lg-4 col-sm-6">
                         <div class="form-floating mb-4">
-                            
                             <input type="date" class="form-control" name="post_date" placeholder="Post Date"
                                 value="<?php echo !empty($srch['post_date']) ? $srch['post_date'] : ''; ?>" autocomplete="off">
-                                <label>Post Date</label>
+                            <label>Post Date</label>
                         </div>
                     </div>
 
@@ -200,8 +199,8 @@
         </div>
     </form>
 
-    <div class="d-flex">     
-        <p></p>   
+    <div class="d-flex">
+        <p></p>
         @if ($srch['user_id'])
         <div class="btn-actions-pane-right">
             <a href="{{ url('post-property?uid=' . $srch['user_id']) }}" class="btn btn-sm btn-success">Add
@@ -216,13 +215,13 @@
             <div class="card card-ads">
                 <div class="card-image">
                     @php
-                        $relativePath = 'user_upload/property_images/' . $property->filename;
-                        $localPath = public_path($relativePath);
+                    $relativePath = 'user_upload/property_images/' . $property->filename;
+                    $localPath = public_path($relativePath);
 
-                        $imageToShow =
-                        isset($property->filename) && file_exists($localPath)
-                        ? asset($relativePath)
-                        : asset(config('constants.NO_IMAGE_PROPERTY'));
+                    $imageToShow =
+                    isset($property->filename) && file_exists($localPath)
+                    ? asset($relativePath)
+                    : asset(config('constants.NO_IMAGE_PROPERTY'));
                     @endphp
                     <a href="#">
                         <img src="{{ $imageToShow }}" alt="no image" class="card-img" height="250" width="300">
@@ -288,9 +287,6 @@
 @push('custom-js')
 <script>
     $(document).ready(function() {
-        $('.fa-filter').click(function() {
-            $('#advanceFilter').slideToggle();
-        });
 
         $('.prop_feature_status').change(function() {
 
