@@ -100,7 +100,7 @@ export const AuthProvider = ({ children }) => {
         }
 
       }
-      
+
       getLocalityList();
     }
   }, [defaultCity?.city_id])
@@ -185,7 +185,8 @@ export const AuthProvider = ({ children }) => {
         uploadUserImage,
         currency,
         currencyCode,
-        formatPrice
+        formatPrice,
+        localityList
       }}
     >
       {children}
