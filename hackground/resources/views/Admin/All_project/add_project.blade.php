@@ -1,14 +1,9 @@
 @extends('Admin.layouts.app')
 @push('custom-css')
-<link href="{{ asset('assets/css/icons.css') }}" type="text/css" rel="stylesheet">
-<link href="{{ asset('assets/css/google-material-icons.css') }}" type="text/css" rel="stylesheet">
-<link href="{{ asset('assets/css/mmenu.css') }}" type="text/css" rel="stylesheet">
-<link href="{{ asset('assets/css/style.css') }}" type="text/css" rel="stylesheet">
-<link href="{{ asset('assets/css/ltr.css') }}" type="text/css" rel="stylesheet">
-<link href="{{ asset('assets/css/responsive.css') }}" type="text/css" rel="stylesheet">
 
 <link href="{{ asset('assets/dist/css/bootstrap-select.css') }}" type="text/css" rel="stylesheet">
 <script src="{{ asset('assets/dist/js/bootstrap-select.min.js') }}"></script>
+
 
 @endpush
 
@@ -18,14 +13,14 @@
     <div class="page-title-wrapper">
       <div class="page-title-heading">
         <div class="page-title-icon">
-        <i class="bi bi-buildings"></i>
+          <i class="bi bi-buildings"></i>
         </div>
-        <div>Add Project <div class="page-title-subheading">Project <i class="bi bi-chevron-right"></i> Sell Or Rent Your project
+        <div>Add Project <div class="page-title-subheading">Project <i class="bi bi-chevron-right"></i> Sell Or Rent Your Project
           </div>
         </div>
       </div>
       <div class="page-title-actions">
-        <ol class="breadcrumb float-lg-right">
+        <ol class="breadcrumb float-lg-end">
           <li class="breadcrumb-item"><a href=""> Home</a></li>
           <li class="breadcrumb-item active">Add Project</li>
         </ol>
