@@ -539,10 +539,10 @@
              @php
              $imageFiles[] = $image->filename;
              @endphp
-             <div class="image-box" data-filename="{{ $image->filename }}">
+             <div class="image-box pic" data-filename="{{ $image->filename }}">
                  <img src="{{ asset('user_upload/project_images/' . $image->filename) }}" alt="Image">
                  <p class="image-caption">{{ $image->caption }}</p>
-                 <button class="remove-image" data-filename="{{ $image->filename }}">×</button>
+                 <button class="btn btn-trash remove-image" data-filename="{{ $image->filename }}"><i class="bi bi-trash3-fill"></i></button>
              </div>
              @endforeach
              @endforeach
@@ -751,9 +751,9 @@
          function previewImage(imageUrl, filename, tab) {
              let previewContainer = $("#preview-upload-" + tab);
              let imageHtml = `
-        <div class="image-box" data-filename="${filename}">
+        <div class="image-box pic" data-filename="${filename}">
             <img src="${imageUrl}" alt="Preview">
-            <button class="remove-image" data-filename="${filename}">×</button>
+            <button class="btn btn-trash remove-image" data-filename="${filename}"><i class="bi bi-trash3-fill"></i></button>
         </div>
     `;
              previewContainer.append(imageHtml);

@@ -103,8 +103,8 @@
                             if($i->image_type == 'living')
                             { 
                                 if ($filename && file_exists(public_path('user_upload/property_images/'.$filename))) {
-                                    $living_images .= '<div class="preview-item"><img src="'.$imageUrl.'" alt="Uploaded Image" style="width: 150px; height: auto;">
-                                    <button type="button" class="remove-btn" data-type="'.$type.'" data-filename="'.$filename.'" onclick="removeImage($(this))">X</button>
+                                    $living_images .= '<div class="preview-item pic"><img src="'.$imageUrl.'" alt="Uploaded Image" class="img-fluid">
+                                    <button type="button" class="btn btn-trash" data-type="'.$type.'" data-filename="'.$filename.'" onclick="removeImage($(this))"><i class="bi bi-trash3-fill"></i></button>
                                     <input type="hidden" name="image['.$type.'][]" value="'.$filename.'" /></div>';
                                 }
                                 $living_desc = $i->description;
@@ -112,8 +112,8 @@
                             if($i->image_type == 'bathroom')
                             { 
                                 if ($filename && file_exists(public_path('user_upload/property_images/'.$filename))) {
-                                    $bathroom_images .= '<div class="preview-item"><img src="'.$imageUrl.'" alt="Uploaded Image" style="width: 150px; height: auto;">
-                                    <button type="button" class="remove-btn" data-type="'.$type.'" data-filename="'.$filename.'" onclick="removeImage($(this))">X</button>
+                                    $bathroom_images .= '<div class="preview-item pic"><img src="'.$imageUrl.'" alt="Uploaded Image" class="img-fluid">
+                                    <button type="button" class="btn btn-trash" data-type="'.$type.'" data-filename="'.$filename.'" onclick="removeImage($(this))"><i class="bi bi-trash3-fill"></i></button>
                                     <input type="hidden" name="image['.$type.'][]" value="'.$filename.'" /></div>';
                                 }
                                 $bathroom_desc = $i->description;
@@ -121,8 +121,8 @@
                             if($i->image_type == 'balcony')
                             { 
                                 if ($filename && file_exists(public_path('user_upload/property_images/'.$filename))) {
-                                    $balcony_images .= '<div class="preview-item"><img src="'.$imageUrl.'" alt="Uploaded Image" style="width: 150px; height: auto;">
-                                    <button class="remove-btn" data-type="'.$type.'" data-filename="'.$filename.'" onclick="removeImage($(this))">X</button>
+                                    $balcony_images .= '<div class="preview-item pic"><img src="'.$imageUrl.'" alt="Uploaded Image" class="img-fluid">
+                                    <button type="button" class="btn btn-trash" data-type="'.$type.'" data-filename="'.$filename.'" onclick="removeImage($(this))"><i class="bi bi-trash3-fill"></i></button>
                                     <input type="hidden" name="image['.$type.'][]" value="'.$filename.'" /></div>';
                                 }
                                 $balcony_desc = $i->description;

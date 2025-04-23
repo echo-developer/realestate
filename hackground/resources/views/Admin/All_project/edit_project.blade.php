@@ -4,26 +4,10 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/style.css') }}">
 
 <style>
-  .upload-gallery img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 5px;
-    margin: 5px;
-
-  }
-
   #ed-nav {
     white-space: nowrap;
     overflow-x: auto;
     flex-wrap: nowrap;
-  }
-
-
-  .upload-gallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
   }
 
   .dropdown-container {
@@ -35,21 +19,6 @@
     position: relative;
     display: flex;
     flex-direction: column;
-  }
-
-  .image-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 150px;
-    text-align: center;
-  }
-
-  .image-box img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 5px;
   }
 
   .image-caption {
@@ -398,8 +367,8 @@
               <div class="upload-gallery" id="preview-{{ $type }}">
                 @foreach($images as $galleryItem)
                 @foreach($galleryItem->images as $image)
-                <div class="image-box">
-                  <img src="{{ asset('user_upload/project_images/' . $image->filename) }}" alt="Image">
+                <div class="image-box pic">
+                  <img src="{{ asset('user_upload/project_images/' . $image->filename) }}" alt="Image" class="img-fluid">
                   <p class="image-caption">{{ $image->caption ?? 'No caption available' }}</p>
                 </div>
                 @endforeach
