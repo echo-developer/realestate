@@ -704,7 +704,6 @@ class ProjectDetailsController extends Controller
 
     public function getReportListofProject(Request $request)
     {
-
         try {
             $user_id = $request->input('user_id');
             $current_page = $request->input('current_page');

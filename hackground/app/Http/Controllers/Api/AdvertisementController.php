@@ -161,4 +161,56 @@ class AdvertisementController extends Controller
        
     }
 
+    public function userAdvertisementRequests(Request $request)
+    {
+        $user_id = $request->user_id;
+        $list = $this->apiModel->getUserAdvertisementRequests($user_id);
+        $customArr = [];
+        if($list)
+        {
+            foreach($list as $k=>$l)
+            {
+                $status = '';
+                if($l->status == '1')
+                {
+                    $status = 'Completed';
+                }
+                elseif($l->status == '0')
+                {
+                    $status = 'Pending';
+                }
+                elseif($l->status == '2')
+                {
+                    $status == 'Rejected';
+                }
+                $customArr[] = array(
+                    'id'=> $l->request_id,
+                    'name'=> $l->name,
+                    'email'=> $l->email,
+                    'phone_code'=> $l->phone_code,
+                    'phone'=> $l->phone,
+                    'city'=> $l->city_id ? get_name_by_id("city_names", "city_id", $l->city_id, "en") : '',
+                    'locality'=> $l->locality_id ? get_name_by_id("locality_names", "locality_id", $l->locality_id, "en") : '',
+                    'page'=> $l->page,
+                    'position'=> $l->position,
+                    'duration'=> $l->duration ? $l->duration.' Weeks' : '',
+                    'status'=> $status,
+                    'created_date'=>date('d-M-Y', strtotime($l->created_at))
+                );
+            }
+            
+            return response()->json([
+                'status' => 1,
+                'message' => 'Data retrieved successfully.',
+                'data' => $customArr
+            ], 200);  
+        }else{
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed to retrieve data.',
+                'data' => [],
+            ], 200); 
+        }
+    }
+
 }

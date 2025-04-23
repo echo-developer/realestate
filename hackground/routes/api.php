@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\PaymentMethodController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CmsController;
@@ -259,6 +258,7 @@ Route::post('edit-project-caption', [ImageEditController::class, 'captionImage']
 Route::post('get-advertisements', [AdvertisementController::class, 'getAdvertisements']);
 Route::post('add-advertisement-view', [AdvertisementController::class, 'add_view']);
 Route::post('save-advertisement-request', [AdvertisementController::class, 'saveAdvertisementRequest']);
+Route::post('user-advertisement-requests', [AdvertisementController::class, 'userAdvertisementRequests']);
 
 Route::controller(FloorPlaningController::class)->group(function () {
 
@@ -312,5 +312,3 @@ Route::get('/get-settings-value/{key?}', function ($key = null) {
         'value' => $value
     ]);
 });
-
-Route::get('payment-methods', [PaymentMethodController::class, 'fetchActivePaymentMethod']);

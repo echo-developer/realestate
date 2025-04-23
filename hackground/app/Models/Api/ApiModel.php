@@ -599,8 +599,6 @@ class ApiModel extends Model
             'properties_settings.plot_area',
             'properties_settings.super_area',
             'properties_settings.property_type',
-            'properties_location.latitude',
-            'properties_location.longitude',
             'properties_settings.property_budget as budget_id',
             'properties_settings.expected_price as exp_price',
         )
@@ -612,8 +610,6 @@ class ApiModel extends Model
                 'properties_settings.super_area',
                 'properties_settings.expected_price',
                 'properties_settings.property_budget',
-                'properties_location.latitude',
-                'properties_location.longitude',
             );
 
         $filterConditions = [
@@ -1520,4 +1516,15 @@ class ApiModel extends Model
         $prev = DB::table('advertisement_request')->insert($structure);
         return true;
     }
+
+    public function getUserAdvertisementRequests($user_id)
+    {
+        $result = DB::table('advertisement_request as r')
+                            ->select('r.*')
+                            ->where('r.user_id',$user_id)
+                            ->orderBy('r.created_at','desc')
+                            ->get();
+        return $result;
+    }
+
 }
