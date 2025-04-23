@@ -140,7 +140,16 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
   const handleOpenMap = () => {
     if(selectedLocality) {
-      setShowMap(true);
+      if(selectedLocality?.latitude && selectedLocality?.longitude) {
+        setShowMap(true);
+      } else {
+        setErrors(prev => {
+          return {
+            ...prev,
+            locality: 'Choose a locality that has latitude & longitude'
+          }
+        })
+      }
     } else {
       setErrors(prev => {
         return {

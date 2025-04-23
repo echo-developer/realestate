@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [currency, setCurrency] = useState("");
   const [currencyCode, setCurrencyCode] = useState("");
+  const [localityList, setLocalityList] = useState([]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -79,6 +80,30 @@ export const AuthProvider = ({ children }) => {
       getCurrencyCode();
     }
   }, [memberId])
+
+  useEffect(() => {
+    if(defaultCity?.city_id) {
+      const getLocalityList = async () => {
+        try {
+          const res = await callApi({
+            api: `/locality-list`,
+            method: "GET",
+            data: {
+              city_id: defaultCity.city_id
+            }
+          })
+          if(res && res?.status == 1) {
+            setLocalityList(res?.data || []);
+          } 
+        } catch (error) {
+          console.error(error.message || 'Something went wrong')
+        }
+
+      }
+      
+      getLocalityList();
+    }
+  }, [defaultCity?.city_id])
 
   const getCurrency = async () => {
     try {
