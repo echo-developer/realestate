@@ -45,7 +45,7 @@
         </div>
       </div>
       <div class="page-title-actions">
-        <ol class="breadcrumb float-sm-right">
+        <ol class="breadcrumb float-lg-end">
           <li class="breadcrumb-item"><a href=""> Home</a></li>
           <li class="breadcrumb-item active">Project Edit</li>
         </ol>

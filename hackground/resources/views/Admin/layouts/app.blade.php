@@ -13,11 +13,16 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Disable tap highlight on IE -->
     <meta name="msapplication-tap-highlight" content="no">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css">
-    <link rel="stylesheet" href="{{ asset('assets/css/base.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/ltr.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" type="text/css" rel="stylesheet">
+    <link href="{{ asset('assets/css/base.min.css') }}" type="text/css" rel="stylesheet">
+    <link href="{{ asset('assets/css/icons.css') }}" type="text/css" rel="stylesheet">
+    <link href="{{ asset('assets/css/google-material-icons.css') }}" type="text/css" rel="stylesheet">
+    <link href="{{ asset('assets/css/mmenu.css') }}" type="text/css" rel="stylesheet">
+
+    <link href="{{ asset('assets/css/style.css') }}" type="text/css" rel="stylesheet">
+    <link href="{{ asset('assets/css/custom.css') }}" type="text/css" rel="stylesheet">
+    <link href="{{ asset('assets/css/responsive.css') }}" type="text/css" rel="stylesheet">
+    <link href="{{ asset('assets/css/ltr.css') }}" type="text/css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="{{ asset('assets/js/scripts-init/select2/dist/css/select2.min.css') }}"> -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
