@@ -118,6 +118,8 @@ class SeachController extends Controller
                     'property_size' => ($property->carpet_area ?? 0) + ($property->super_area ?? 0) + ($property->plot_area ?? 0),
                     'created_at' => $property->created_at,
                     'address' => $property->property_address,
+                    'address_lan' => $property->latitude,
+                    'address_lat' => $property->longitude,
                     'galleries' => $transformedData,
                 ];
             });

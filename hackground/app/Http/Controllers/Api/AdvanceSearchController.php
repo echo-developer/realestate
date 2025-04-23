@@ -42,7 +42,8 @@ class AdvanceSearchController extends Controller
 
                 'properties_location.locality',
                 'properties_location.city',
-
+                'properties_location.latitude',
+                'properties_location.longitude',
                 'users.user_type',
                 'property_additional.possession_status',
                 'property_additional.kitchen',
@@ -81,6 +82,8 @@ class AdvanceSearchController extends Controller
                 'property_additional.pantry_cafeteria_status',
                 'property_additional.is_corner_shop',
                 'property_additional.faces_main_road',
+                'properties_location.latitude',
+                'properties_location.longitude',
                 'property_additional.washroom',
                 'property_additional.flooring_style',
                 'property_additional.expected_possesion_month_year',
@@ -274,6 +277,8 @@ class AdvanceSearchController extends Controller
                     'area_in_sqft' => $property->area_in_sqft ?? 0,
                     'created_at' => $property->created_at,
                     'address' => $property->property_address,
+                    'address_lan' => $property->latitude,
+                    'address_lat' => $property->longitude,
                     'galleries' => $transformedData,
                 ];
             });

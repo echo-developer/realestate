@@ -599,6 +599,8 @@ class ApiModel extends Model
             'properties_settings.plot_area',
             'properties_settings.super_area',
             'properties_settings.property_type',
+            'properties_location.latitude',
+            'properties_location.longitude',
             'properties_settings.property_budget as budget_id',
             'properties_settings.expected_price as exp_price',
         )
@@ -610,6 +612,8 @@ class ApiModel extends Model
                 'properties_settings.super_area',
                 'properties_settings.expected_price',
                 'properties_settings.property_budget',
+                'properties_location.latitude',
+                'properties_location.longitude',
             );
 
         $filterConditions = [

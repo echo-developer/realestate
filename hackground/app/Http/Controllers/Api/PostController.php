@@ -198,8 +198,8 @@ class PostController extends Controller
             'city' => $request->city,
             'locality' => $request->locality,
             'property_address' => $request->address,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude,
+            'latitude' => $request->address_lat,
+            'longitude' => $request->address_lon,
         ]);
     }
 
