@@ -92,3 +92,65 @@ ALTER TABLE `pref_property_additional` ADD `slug` VARCHAR(255) NOT NULL AFTER `b
 ALTER TABLE `pref_user_membership` CHANGE `remaining_leads` `leads_used` INT(13) NULL DEFAULT '0';
 ALTER TABLE `pref_area_locality_price` ADD `price_for` VARCHAR(155) NULL AFTER `new_price`;
 
+---------------------------04/24/2025---------------
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Apr 24, 2025 at 12:21 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+--
+-- Database: `realestate`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pref_area_locality_price`
+--
+
+CREATE TABLE `pref_area_locality_price` (
+  `id` int(11) NOT NULL,
+  `locality` int(11) DEFAULT NULL,
+  `year` varchar(155) DEFAULT NULL,
+  `price_per_sqft` decimal(12,2) DEFAULT NULL,
+  `new_price` decimal(12,2) DEFAULT NULL,
+  `price_for` varchar(155) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pref_area_locality_price`
+--
+
+INSERT INTO `pref_area_locality_price` (`id`, `locality`, `year`, `price_per_sqft`, `new_price`, `price_for`) VALUES
+(1, 3, '2025', 6164.78, NULL, 'prop'),
+(2, 2, '2025', 216.49, NULL, 'proj'),
+(3, 1, '2025', 6.12, NULL, 'proj');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `pref_area_locality_price`
+--
+ALTER TABLE `pref_area_locality_price`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `pref_area_locality_price`
+--
+ALTER TABLE `pref_area_locality_price`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+COMMIT;
