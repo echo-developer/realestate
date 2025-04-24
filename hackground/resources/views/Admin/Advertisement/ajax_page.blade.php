@@ -7,6 +7,7 @@
 <div class="modal-body">
     <form role="form" id="add_form" class="mb-0" action="<?php echo $form_action; ?>" onsubmit="submitForm(this, event)">
         <input type="hidden" name="user_id" value="{{ $user_id }}" />
+        <input type="hidden" name="request_id" value="{{ $request_id }}" />
         <div class="box-body">
             
         <div class="form-group">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Advertisement;
+use Illuminate\Support\Facades\DB;
 
 class AdvertisementController extends Controller
 {
@@ -123,7 +124,7 @@ class AdvertisementController extends Controller
             $detail = $this->advertisement->get_request_details($id);
         }
 
-        return view('Admin.Advertisement.ajax_page', compact('page', 'title', 'form_action','pages','positions', 'sizes', 'ID', 'detail', 'city','property_category','srch','user_id'));
+        return view('Admin.Advertisement.ajax_page', compact('page', 'title', 'form_action','pages','positions', 'sizes', 'ID', 'detail', 'city','property_category','srch','user_id','request_id'));
     }
 
     public function add(Request $request)
@@ -133,6 +134,26 @@ class AdvertisementController extends Controller
         $ins_id = $this->advertisement->addRecord($postData);
         if($ins_id)
         {
+            if($postData['request_id'])
+            {
+                DB::table('advertisement_request')->where('request_id',$postData['request_id'])->update(['status'=>'1']);
+            }
+            $user_id = $postData['user_id'];
+            if($user_id)
+            {
+                $username = getField('name','users','id',$user_id);
+                $email = getField('email','users','id',$user_id);
+                $data_parse = array(
+                    'USERNAME'=> $username,
+                    'PAGE'=> $postData['page'],
+                    'POSITION'=> $postData['position'],
+                    'STARTDATE'=> $postData['start_date'],
+                    'EXPIREDATE'=> $postData['expire_date'],
+                );
+                $template = 'ads-confirmed';
+                SendMail($email, $template, $data_parse);
+            }
+           
             $msg['status'] = 'OK';
             $msg['message'] = 'Advertisement added successfully !';
         }else{
