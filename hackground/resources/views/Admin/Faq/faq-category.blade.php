@@ -244,7 +244,6 @@
                 }
             });
         }
-
         $('.status').change(function () {
             toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
 
@@ -270,7 +269,6 @@
                 }
             });
         });
-
         function Delete(id) {
             if (confirm('Are you sure you want to delete this category?')) {
                 $.ajax({

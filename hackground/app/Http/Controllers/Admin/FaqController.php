@@ -16,7 +16,7 @@ class FaqController extends Controller
     public function __construct(CategoryName $categoryname)
     {
         $this->categoryname = $categoryname;
-        $this->middleware('view_permit:faq-category');
+        $this->middleware('view_permit:country');
     }
     public function category_view(Request $request)
     {
@@ -27,50 +27,56 @@ class FaqController extends Controller
         return view('Admin.Faq.faq-category', compact('data'));
     }
     public function submit_Category(Request $request)
-    {
-        $langs = array_keys($request->input('name', []));
-        $rules = [
-            'order' => 'required|integer',
-            'status' => 'required|boolean',
-            'slug' => 'nullable|string|unique:faq_categories,slug,' . ($request->categoryID ?? 'NULL') . ',id',
-        ];
-        foreach ($langs as $lang) {
-            $rules["name.$lang"] = 'required|string|max:250';
-        }
+{
+    $langs = array_keys($request->input('name', []));
 
-        $validated = $request->validate($rules);
+    $rules = [
 
-        if (empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($request->input('name.en'));
-        }
-        $validated['category_id'] = $request->input('categoryID');
+        'status' => 'required|boolean',
+        'slug' => 'nullable|string|unique:faq_categories,slug,' . ($request->categoryID ?? 'NULL') . ',id',
+    ];
 
-        try {
-            if ($validated['category_id']) {
-                $response = $this->categoryname->updateCategory($validated);
-            } else {
-                $response = $this->categoryname->createCategory($validated);
-            }
 
-            return response()->json([
-                'success' => true,
-                'message' => $response['message'] ?? 'Category saved successfully!',
-                'category_id' => $response['category_id'] ?? null,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'error' => 'Something went wrong! Please try again later.',
-                'details' => $e->getMessage(),
-            ], 500);
-        }
+    foreach ($langs as $lang) {
+        $rules["name.$lang"] = 'required|string|max:250';
     }
+
+     $validated = $request->validate($rules);
+
+     if (empty($validated['slug'])) {
+        $validated['slug'] = Str::slug($request->input('name.en'));
+    }
+
+     $validated['category_id'] = $request->input('categoryID');
+    $validated['order'] = $request->input('order', null);
+
+    try {
+        if ($validated['category_id']) {
+            $response = $this->categoryname->updateCategory($validated);
+        } else {
+            $response = $this->categoryname->createCategory($validated);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => $response['message'] ?? 'Category saved successfully!',
+            'category_id' => $response['category_id'] ?? null,
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'error' => 'Something went wrong! Please try again later.',
+            'details' => $e->getMessage(),
+        ], 500);
+    }
+}
+
     public function update_faqcategory(Request $req)
     {
         $langs = array_keys($req->input('name', []));
 
         $rules = [
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
 
         ];
@@ -78,8 +84,6 @@ class FaqController extends Controller
             $rules["name.$lang"] = 'required|string|max:255';
         }
         $messages = [
-            'order.required' => 'The Order field is required.',
-            'order.integer' => 'The Order must be a number.',
             'status.required' => 'The Status field is required.',
             'status.boolean' => 'The Status must be true or false.',
         ];
@@ -87,6 +91,7 @@ class FaqController extends Controller
             $messages["name.$lang.required"] = "The Name ($lang) field is required.";
         }
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
 
         if (empty($validated['slug'])) {
