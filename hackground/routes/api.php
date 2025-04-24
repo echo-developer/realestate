@@ -263,6 +263,8 @@ Route::post('save-advertisement-request', [AdvertisementController::class, 'save
 Route::post('user-advertisement-requests', [AdvertisementController::class, 'userAdvertisementRequests']);
 Route::post('user-advertisements-list', [AdvertisementController::class, 'userAdvertisementsList']);
 Route::post('upload-advertisement-banner', [AdvertisementController::class, 'upload_file']);
+Route::get('get-ads-pages', [AdvertisementController::class, 'get_ads_pages']);
+Route::get('get-ads-position/{page}', [AdvertisementController::class, 'get_ads_position']);
 
 Route::controller(FloorPlaningController::class)->group(function () {
 

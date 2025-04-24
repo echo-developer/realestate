@@ -486,7 +486,7 @@ class Advertisement extends Model
 		return $attr;
 	}
 	
-	public function get_pages(){
+	function get_pages(){
 		$attr = $this->_adAttributes();
 		return $attr['pages'];
 	}

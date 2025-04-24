@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Api\ApiModel;
 use App\Models\EmailVerifyOtpModel;
 use App\Models\User;
+use App\Models\Advertisement;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -16,11 +17,13 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class AdvertisementController extends Controller
 {
     protected $apiModel;
-
+    protected $advertisement;
     public function __construct()
     {
         $apiModel = new ApiModel;
         $this->apiModel = $apiModel;
+        $advertisement = new Advertisement;
+        $this->advertisement = $advertisement;
     }
 
     public function getAdvertisements(Request $request)
@@ -170,7 +173,7 @@ class AdvertisementController extends Controller
        
     }
 
-    function generatePassword($length) {
+    public function generatePassword($length) {
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $password = '';
         for ($i = 0; $i < $length; $i++) {
@@ -179,10 +182,35 @@ class AdvertisementController extends Controller
         return $password;
     }
 
+    public function get_ads_pages()
+    {
+        $pages = $this->advertisement->get_pages();
+        return response()->json([
+            'status' => 1,
+            'message' => 'Data retrieved successfully.',
+            'data' => $pages,
+        ], 200);
+    }
+
+    public function get_ads_position($page)
+    {
+        $position = $this->advertisement->get_position($page);
+        return response()->json([
+            'status' => 1,
+            'message' => 'Data retrieved successfully.',
+            'data' => $position,
+        ], 200);
+    }
+
     public function userAdvertisementRequests(Request $request)
     {
+        $recentPage = $request->input('current_page', 1);
+        $limit = $request->input('limit', 10);
+        $offset = ($recentPage - 1) * $limit;
+
         $user_id = $request->user_id;
-        $list = $this->apiModel->getUserAdvertisementRequests($user_id);
+        $list = $this->apiModel->getUserAdvertisementRequests($user_id, $limit, $offset);
+        $total_count = $this->apiModel->getUserAdvertisementRequests($user_id, '', '', FALSE);
         $customArr = [];
         if($list)
         {
@@ -211,7 +239,12 @@ class AdvertisementController extends Controller
             return response()->json([
                 'status' => 1,
                 'message' => 'Data retrieved successfully.',
-                'data' => $customArr
+                'data' => $customArr,
+                'pagination' => [
+                            'current_page' => $recentPage,
+                            'per_page' => $limit,
+                            'total_pages' => ceil($total_count / $limit),
+                        ],
             ], 200);  
         }else{
             return response()->json([

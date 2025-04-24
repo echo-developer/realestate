@@ -1520,13 +1520,20 @@ class ApiModel extends Model
         return true;
     }
 
-    public function getUserAdvertisementRequests($user_id)
+    public function getUserAdvertisementRequests($user_id, $limit='', $offset='', $for_list=TRUE)
     {
-        $result = DB::table('advertisement_request as r')
+        $query = DB::table('advertisement_request as r')
                             ->select('r.*')
-                            ->where('r.user_id',$user_id)
-                            ->orderBy('r.created_at','desc')
-                            ->get();
+                            ->where('r.user_id',$user_id);
+        if($for_list)
+        {
+            $query->limit($limit);
+            $query->offset($offset);
+            $result = $query->orderBy('r.created_at','desc')->get();
+        }else{
+            $result = $query->count();
+        }
+        
         return $result;
     }
 
