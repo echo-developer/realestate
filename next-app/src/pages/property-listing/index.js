@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import MainLayout from "@/components/layout/MainLayout";
 import { Helmet } from "react-helmet-async";
 import { toast } from "react-toastify";
@@ -15,6 +16,8 @@ import useTranslation from "@/hooks/useTranslation";
 import LocalityOption from "@/components/MapData/LocalitySelector";
 import { ShimmerContentBlock } from "react-shimmer-effects";
 import useAdvertisement from "@/hooks/useAdvertisement";
+
+// import ListingMapView from "@/components/MapData/ListingMapView";
 import {
   filterOptions,
   CommercialFilterOptions,
@@ -37,6 +40,22 @@ import {
 import { GeoAlt, Search } from "react-bootstrap-icons";
 import PropertyMobileFilters from "@/components/addtional/PropertyMobileFilter";
 import useIsMobile from "@/hooks/useIsMobile";
+const ListingMapView = dynamic(() => import('../../components/MapData/ListingMapView'), { ssr: false, loading: () => <>
+  <ShimmerContentBlock
+    title
+    text
+    cta
+    thumbnailWidth={350}
+    thumbnailHeight={50}
+  />
+  <ShimmerContentBlock
+    title
+    text
+    cta
+    thumbnailWidth={350}
+    thumbnailHeight={50}
+  />
+</> })
 
 const index = () => {
   const [showMapView, setShowMapView] = useState(false);
@@ -295,7 +314,7 @@ const index = () => {
       if (queryObject?.sort_key && queryObject?.sort_order) {
         setSelectedSort(queryObject.sort_key, queryObject.sort_order);
       }
-      if(queryObject?.locality) {
+      if (queryObject?.locality) {
         setLocalityData(queryObject.locality)
       }
 
@@ -537,7 +556,7 @@ const index = () => {
       queryObject.min_budget = router.query.min_budget;
     if (router?.query?.max_budget)
       queryObject.max_budget = router.query.max_budget;
-    if(router?.query?.locality) queryObject.locality = router?.query?.locality;
+    if (router?.query?.locality) queryObject.locality = router?.query?.locality;
     return queryObject;
   };
 
@@ -643,7 +662,7 @@ const index = () => {
   };
 
   const handleLocalityDataChange = (locality_id) => {
-      setLocalityData(locality_id)
+    setLocalityData(locality_id)
   }
 
   const handleViewProperty = () => {
@@ -659,8 +678,8 @@ const index = () => {
     if (minBudget && maxBudget) {
       existingParams.set("min_budget", minBudget);
       existingParams.set("max_budget", maxBudget);
-    } 
-    if(localityData) {
+    }
+    if (localityData) {
       existingParams.set('locality', localityData)
     }
 
@@ -705,7 +724,6 @@ const index = () => {
     if (defaultCity?.city_id) {
       existingParams.set("city_id", defaultCity.city_id);
     }
-    console.log("advance serarch router query", router.query);
     const payloadSearch = Object.fromEntries(existingParams.entries());
     const { sort_key, sort_order } = router?.query;
     let queryParams = `recent_page=${recent_page || 1}&user_id=${memberId}`;
@@ -1004,14 +1022,14 @@ const index = () => {
                       </Col>
                       <Col className="col-lg col-sm-10">
                         {/* <LocalityOption setLocationData={setLocalityData} /> */}
-                          <select className="form-select" id="exampleSelect" value={localityData} onChange={(e) => handleLocalityDataChange(e.target.value)} >
-                            <option value="">Select a locality</option>
-                            {localityList?.length > 0 && localityList.map((locality, i) => {
-                              return (
-                                <option key={i} value={locality?.locality_id}>{locality?.locality_name || "Not Abailable"}</option>
-                              )
-                            })}
-                          </select>
+                        <select className="form-select" id="exampleSelect" value={localityData} onChange={(e) => handleLocalityDataChange(e.target.value)} >
+                          <option value="">Select a locality</option>
+                          {localityList?.length > 0 && localityList.map((locality, i) => {
+                            return (
+                              <option key={i} value={locality?.locality_id}>{locality?.locality_name || "Not Abailable"}</option>
+                            )
+                          })}
+                        </select>
                       </Col>
                       {/* {postFor === "sell" ||
                   postFor === "rent" && ( */}
@@ -1329,8 +1347,8 @@ const index = () => {
                       </>
                       {/* )} */}
                       <Col className="col-lg-auto col-sm-2 col-auto">
-                        <Button style={{ backgroundColor: '#fff', color: '#007bff', border: '1px solid #007bff' }}>
-                          View In Map
+                        <Button style={{ backgroundColor: '#fff', color: '#007bff', border: '1px solid #007bff' }} onClick={() => setShowMapView(!showMapView)}>
+                          {showMapView ? 'Hide Map View' : 'View In Map'}
                         </Button>
                       </Col>
                       <Col className="col-lg-auto col-6 mb-3">
@@ -1617,6 +1635,7 @@ const index = () => {
                       )}
                   </form>
                 </div>
+
               </div>
             </div>
           </React.Fragment>
@@ -1640,241 +1659,249 @@ const index = () => {
 
         <section className="section">
           <div className="container-fluid">
-            <div className="row main-row">
-              <aside className="col-xl-9 col-lg-9 col-12">
-                <div className="d-sm-flex justify-content-between align-items-center mb-2">
-                  <h4 className="mb-3 mb-sm-0">
-                    {translation?.total || "Total"}{" "}
-                    <span className="text-primary">{totalPropertyCount}</span>{" "}
-                    {translation?.properties_in || "Properties in"}{" "}
-                    {defaultCity?.name || "Kolkata"}
-                  </h4>
-                  <div className="sort-by d-none d-md-block">
-                    <DropdownButton
-                      align="end"
-                      title={selectedOption}
-                      id="dropdown-menu-align-end"
-                      onClick={() => setShowDrop(!showDrop)}
-                      aria-expanded={showDrop ? "true" : "false"}
-                    >
-                      {[
-                        "Recent",
-                        "Price - Low to High",
-                        "Price - High to Low",
-                        "Size - Low to High",
-                        "Size - High to Low",
-                      ].map((option) => (
-                        <Dropdown.Item
-                          eventKey="1"
-                          key={option}
-                          onClick={() => handleSortSelection(option)}
+            {showMapView ? (
+              <>
+                <ListingMapView propertyList={propertyList} loading={loading}  />
+              </>
+            ) : (
+              <>
+                <div className="row main-row">
+                  <aside className="col-xl-9 col-lg-9 col-12">
+                    <div className="d-sm-flex justify-content-between align-items-center mb-2">
+                      <h4 className="mb-3 mb-sm-0">
+                        {translation?.total || "Total"}{" "}
+                        <span className="text-primary">{totalPropertyCount}</span>{" "}
+                        {translation?.properties_in || "Properties in"}{" "}
+                        {defaultCity?.name || "Kolkata"}
+                      </h4>
+                      <div className="sort-by d-none d-md-block">
+                        <DropdownButton
+                          align="end"
+                          title={selectedOption}
+                          id="dropdown-menu-align-end"
+                          onClick={() => setShowDrop(!showDrop)}
+                          aria-expanded={showDrop ? "true" : "false"}
                         >
-                          {option}
-                        </Dropdown.Item>
-                      ))}
-                    </DropdownButton>
-                  </div>
-                </div>
-                <div className="list-display">
-                  {/* Show shimmer when loading */}
-                  {loading ? (
-                    <>
-                      <ShimmerContentBlock
-                        title
-                        text
-                        cta
-                        thumbnailWidth={350}
-                        thumbnailHeight={50}
-                      />
-                      <ShimmerContentBlock
-                        title
-                        text
-                        cta
-                        thumbnailWidth={350}
-                        thumbnailHeight={50}
-                      />
-                    </>
-                  ) : !loading && propertyList?.length === 0 ? (
-                    // Show No Result Found only when loading is false and no data is present
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: "50vh",
-                        textAlign: "center",
-                        fontSize: "28px",
-                        fontWeight: "bold",
-                        color: "#555",
-                      }}
-                    >
-                      <p>{translation?.no_result_found || "No result found"}</p>
+                          {[
+                            "Recent",
+                            "Price - Low to High",
+                            "Price - High to Low",
+                            "Size - Low to High",
+                            "Size - High to Low",
+                          ].map((option) => (
+                            <Dropdown.Item
+                              eventKey="1"
+                              key={option}
+                              onClick={() => handleSortSelection(option)}
+                            >
+                              {option}
+                            </Dropdown.Item>
+                          ))}
+                        </DropdownButton>
+                      </div>
                     </div>
-                  ) : (
-                    // Render Property Cards
-                    propertyList?.map((property, i) => (
-                      <div key={property.property_id} className="card card-ads">
-                        <div className="row g-0">
-                          <div className="col-lg-3 col-sm-3">
-                            <CardImageSlider
-                              data={property}
-                              showSq={true}
-                              icons={true}
-                              addRemoveFav={() =>
-                                SaveFavouriteProperty(property.property_id)
-                              }
-                            />
-                          </div>
-                          <div className="col-lg-9 col-sm-9 position-relative">
-                            <div className="card-body">
-                              <h4 className="mb-1">
-                                <Link href={`/property-details/${property.slug}`}>
-                                  {property.property_name}
-                                </Link>
-                              </h4>
-                              <h5 className="mb-0">
-                                {formatPrice(property?.exp_price) || "Price not Available"}
-                                {/* {property?.exp_price ? `${currencyCode || ""} ${property?.exp_price}` : "Price not Available"} */}
-                                {/* {property?.price_currency && property?.exp_price
+                    <div className="list-display">
+                      {/* Show shimmer when loading */}
+                      {loading ? (
+                        <>
+                          <ShimmerContentBlock
+                            title
+                            text
+                            cta
+                            thumbnailWidth={350}
+                            thumbnailHeight={50}
+                          />
+                          <ShimmerContentBlock
+                            title
+                            text
+                            cta
+                            thumbnailWidth={350}
+                            thumbnailHeight={50}
+                          />
+                        </>
+                      ) : !loading && propertyList?.length === 0 ? (
+                        // Show No Result Found only when loading is false and no data is present
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            height: "50vh",
+                            textAlign: "center",
+                            fontSize: "28px",
+                            fontWeight: "bold",
+                            color: "#555",
+                          }}
+                        >
+                          <p>{translation?.no_result_found || "No result found"}</p>
+                        </div>
+                      ) : (
+                        // Render Property Cards
+                        propertyList?.map((property, i) => (
+                          <div key={property.property_id} className="card card-ads">
+                            <div className="row g-0">
+                              <div className="col-lg-3 col-sm-3">
+                                <CardImageSlider
+                                  data={property}
+                                  showSq={true}
+                                  icons={true}
+                                  addRemoveFav={() =>
+                                    SaveFavouriteProperty(property.property_id)
+                                  }
+                                />
+                              </div>
+                              <div className="col-lg-9 col-sm-9 position-relative">
+                                <div className="card-body">
+                                  <h4 className="mb-1">
+                                    <Link href={`/property-details/${property.slug}`}>
+                                      {property.property_name}
+                                    </Link>
+                                  </h4>
+                                  <h5 className="mb-0">
+                                    {formatPrice(property?.exp_price) || "Price not Available"}
+                                    {/* {property?.exp_price ? `${currencyCode || ""} ${property?.exp_price}` : "Price not Available"} */}
+                                    {/* {property?.price_currency && property?.exp_price
                                 ? `${property.price_currency
                                 } ${new Intl.NumberFormat("en-US").format(
                                   property.exp_price
                                 )} ${property?.price_per_sqft ? `(${property?.price_currency} ${property.price_per_sqft} sq/ft)` : ""}`
                                 : "Price not available"} */}
-                              </h5>
-                              <p className="mb-1">
-                                {/* <small>
+                                  </h5>
+                                  <p className="mb-1">
+                                    {/* <small>
                                 {translation?.average_price || "Average Price:"}{" "}
                                 {property?.price_currency ||
                                   property?.currency ||
                                   ""}{" "}
                                 {property?.area_in_sqft || ""} {" sq/ft"}
                               </small> */}
-                              </p>
-                              <ul className="list-info mb-2">
-                                <li>
-                                  <i
-                                    className="icon-img-bed"
-                                    title="Bedrooms:"
-                                  ></i>
-                                  <span>
-                                    {property?.bedrooms ? property.bedrooms : <span className="text-muted">Not Available</span>}
-                                  </span>
-                                  {property?.bedrooms && " Beds"}
-                                </li>
-                                <li>
-                                  <i
-                                    className="icon-img-tub"
-                                    title="Bathrooms:"
-                                  ></i>
-                                  <span>
-                                    {property?.bathroom ? property.bathroom : <span className="text-muted">Not Available</span>}
-                                  </span>
-                                  {property?.bathroom && " Bath"}
-                                </li>
-                                <li>
-                                  {property?.area_in_sqft && (
-                                    <i
-                                      className="icon-img-ratio"
-                                      title="Carpet Area:"
-                                    ></i>
-                                  )}
-                                  <span>
-                                    {property?.area_in_sqft ? `${property?.area_in_sqft} sqft` : "Not Available"}{" "}
-                                  </span>
-                                  {property?.carpet_area && " Carpet Area"}
-                                </li>
-                                {property?.possession_status && (
-                                  <li>
-                                    <i
-                                      className="icon-img-check"
-                                      title="Possession Status"
-                                    ></i>
-                                    <span>{property.possession_status}</span>
-                                  </li>
-                                )}
+                                  </p>
+                                  <ul className="list-info mb-2">
+                                    <li>
+                                      <i
+                                        className="icon-img-bed"
+                                        title="Bedrooms:"
+                                      ></i>
+                                      <span>
+                                        {property?.bedrooms ? property.bedrooms : <span className="text-muted">Not Available</span>}
+                                      </span>
+                                      {property?.bedrooms && " Beds"}
+                                    </li>
+                                    <li>
+                                      <i
+                                        className="icon-img-tub"
+                                        title="Bathrooms:"
+                                      ></i>
+                                      <span>
+                                        {property?.bathroom ? property.bathroom : <span className="text-muted">Not Available</span>}
+                                      </span>
+                                      {property?.bathroom && " Bath"}
+                                    </li>
+                                    <li>
+                                      {property?.area_in_sqft && (
+                                        <i
+                                          className="icon-img-ratio"
+                                          title="Carpet Area:"
+                                        ></i>
+                                      )}
+                                      <span>
+                                        {property?.area_in_sqft ? `${property?.area_in_sqft} sqft` : "Not Available"}{" "}
+                                      </span>
+                                      {property?.carpet_area && " Carpet Area"}
+                                    </li>
+                                    {property?.possession_status && (
+                                      <li>
+                                        <i
+                                          className="icon-img-check"
+                                          title="Possession Status"
+                                        ></i>
+                                        <span>{property.possession_status}</span>
+                                      </li>
+                                    )}
 
-                              </ul>
-                              <p>
-                                <span className="text-primary">
-                                  <GeoAlt color="currentColor" size={14} />
-                                </span>{" "}
-                                {property.address || "Not Available"}
-                              </p>
-                            </div>
-                            <div className="card-footer d-flex justify-content-between align-items-center">
-                              <div className="d-flex">
-                                <img
-                                  className="rounded-circle"
-                                  src={`${property?.user_image ||
-                                    "/assets/images/user.jpg"
-                                    }`}
-                                  alt="Company"
-                                  height={36}
-                                  width={36}
-                                />
-                                <div className="ps-2">
-                                  <h6 className="mb-0">
-                                    {property?.user_name || "User"}
-                                  </h6>
-                                  <p className="small text-muted">
-                                    {property?.user_type === "A"
-                                      ? "Agent"
-                                      : property?.user_type === "/"
-                                        ? "Builder"
-                                        : property?.user_type === "O"
-                                          ? "Owner"
-                                          : "Not Available"}
+                                  </ul>
+                                  <p>
+                                    <span className="text-primary">
+                                      <GeoAlt color="currentColor" size={14} />
+                                    </span>{" "}
+                                    {property.address || "Not Available"}
                                   </p>
                                 </div>
+                                <div className="card-footer d-flex justify-content-between align-items-center">
+                                  <div className="d-flex">
+                                    <img
+                                      className="rounded-circle"
+                                      src={`${property?.user_image ||
+                                        "/assets/images/user.jpg"
+                                        }`}
+                                      alt="Company"
+                                      height={36}
+                                      width={36}
+                                    />
+                                    <div className="ps-2">
+                                      <h6 className="mb-0">
+                                        {property?.user_name || "User"}
+                                      </h6>
+                                      <p className="small text-muted">
+                                        {property?.user_type === "A"
+                                          ? "Agent"
+                                          : property?.user_type === "/"
+                                            ? "Builder"
+                                            : property?.user_type === "O"
+                                              ? "Owner"
+                                              : "Not Available"}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <button
+                                    className="btn btn-primary btn-sm"
+                                    onClick={() => handleClick(property.property_id)}
+                                  >
+                                    {translation?.contact_now || "Contact Now"}
+                                  </button>
+                                </div>
                               </div>
-                              <button
-                                className="btn btn-primary btn-sm"
-                                onClick={() => handleClick(property.property_id)}
-                              >
-                                {translation?.contact_now || "Contact Now"}
-                              </button>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
+                        ))
+                      )}
+                    </div>
 
-                {/* LOAD MORE  */}
-                {!loading && currentPage < totalPage && (
-                  <button
-                    className="btn btn-primary d-block mx-auto mt-4"
-                    onClick={() => handleLoadMoreClick(page + 1)}
-                  >
-                    {translation?.load_more || "Load More"}
-                  </button>
-                )}
-              </aside>
-              <aside className="col-xl-3 col-lg-3 col-12 mt-3 mt-lg-0">
-                {adsData.length > 0 ? (
-                  adsData.map((ad) => (
-                    <a
-                      key={ad.advertisement_id}
-                      role="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        logAdClick(ad.advertisement_id, ad.ad_url);
-                      }}
-                    >
-                      <img src={ad.ad_image} alt="Ad" />
-                    </a>
-                  ))
-                ) : (
-                  <img
-                    alt="Advertisement"
-                    src="/assets/images/ads/real-estate-poster.jpg"
-                    className="img-fluid"
-                  />
-                )}
-              </aside>
-            </div>
+                    {/* LOAD MORE  */}
+                    {!loading && currentPage < totalPage && (
+                      <button
+                        className="btn btn-primary d-block mx-auto mt-4"
+                        onClick={() => handleLoadMoreClick(page + 1)}
+                      >
+                        {translation?.load_more || "Load More"}
+                      </button>
+                    )}
+                  </aside>
+                  <aside className="col-xl-3 col-lg-3 col-12 mt-3 mt-lg-0">
+                    {adsData.length > 0 ? (
+                      adsData.map((ad) => (
+                        <a
+                          key={ad.advertisement_id}
+                          role="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            logAdClick(ad.advertisement_id, ad.ad_url);
+                          }}
+                        >
+                          <img src={ad.ad_image} alt="Ad" />
+                        </a>
+                      ))
+                    ) : (
+                      <img
+                        alt="Advertisement"
+                        src="/assets/images/ads/real-estate-poster.jpg"
+                        className="img-fluid"
+                      />
+                    )}
+                  </aside>
+                </div>
+              </>
+            )}
           </div>
           <Modal show={showContactModal} onHide={handleContactClose}>
             <Modal.Header closeButton>
