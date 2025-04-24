@@ -33,76 +33,78 @@ class FaqListController extends Controller
         return view('Admin.Faq.faq-list', compact('data', 'categories'));
     }
     public function list_submit(Request $request)
-    {
-        $langs = array_keys($request->input('question', []));
+{
+    $langs = array_keys($request->input('question', []));
 
-        $rules = [
-            'faq_category_id' => 'required|integer|exists:faq_categories,id',
-            'order' => 'required|integer',
-            'status' => 'required|boolean',
-        ];
+    $rules = [
+        'faq_category_id' => 'required|integer|exists:faq_categories,id',
+         'status' => 'required|boolean',
+    ];
 
-        foreach ($langs as $lang) {
-            $rules["question.$lang"] = 'required|string|max:1000';
-            $rules["answer.$lang"] = 'required|string|max:2000';
-        }
-
-        $validated = $request->validate($rules);
-
-        $faqId = $request->input('faq_id');
-
-        try {
-            DB::beginTransaction();
-
-            if ($faqId) {
-                DB::table('faq_list')->where('id', $faqId)->update([
-                    'faq_category_id' => $validated['faq_category_id'],
-                    'order' => $validated['order'],
-                    'status' => $validated['status'],
-                    'updated_at' => now(),
-                ]);
-            } else {
-                $faqId = DB::table('faq_list')->insertGetId([
-                    'faq_category_id' => $validated['faq_category_id'],
-                    'order' => $validated['order'],
-                    'status' => $validated['status'],
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
-
-            DB::table('faq_list_names')->where('faq_id', $faqId)->delete();
-
-            $insertData = [];
-            foreach ($langs as $lang) {
-                $insertData[] = [
-                    'faq_id' => $faqId,
-                    'lang' => $lang,
-                    'question' => $request->input("question.$lang"),
-                    'answer' => $request->input("answer.$lang"),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-            }
-
-            DB::table('faq_list_names')->insert($insertData);
-
-            DB::commit();
-
-            return response()->json([
-                'success' => true,
-                'message' => $faqId ? 'FAQ updated successfully!' : 'FAQ created successfully!',
-                'faq_id' => $faqId,
-            ]);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'Something went wrong while saving FAQ.',
-                'error' => $e->getMessage(),
-            ], 500);
-        }
+    foreach ($langs as $lang) {
+        $rules["question.$lang"] = 'required|string|max:1000';
+        $rules["answer.$lang"] = 'required|string|max:2000';
     }
+
+    $validated = $request->validate($rules);
+
+     $order = $request->input('order', null); 
+
+    $faqId = $request->input('faq_id');
+
+    try {
+        DB::beginTransaction();
+
+        if ($faqId) {
+            DB::table('faq_list')->where('id', $faqId)->update([
+                'faq_category_id' => $validated['faq_category_id'],
+                'order' => $order,
+                'status' => $validated['status'],
+                'updated_at' => now(),
+            ]);
+        } else {
+            $faqId = DB::table('faq_list')->insertGetId([
+                'faq_category_id' => $validated['faq_category_id'],
+                'order' => $order,
+                'status' => $validated['status'],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        DB::table('faq_list_names')->where('faq_id', $faqId)->delete();
+
+        $insertData = [];
+        foreach ($langs as $lang) {
+            $insertData[] = [
+                'faq_id' => $faqId,
+                'lang' => $lang,
+                'question' => $request->input("question.$lang"),
+                'answer' => $request->input("answer.$lang"),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        DB::table('faq_list_names')->insert($insertData);
+
+        DB::commit();
+
+        return response()->json([
+            'success' => true,
+            'message' => $faqId ? 'FAQ updated successfully!' : 'FAQ created successfully!',
+            'faq_id' => $faqId,
+        ]);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return response()->json([
+            'success' => false,
+            'message' => 'Something went wrong while saving FAQ.',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
+
 
     public function list_category($id)
     {
