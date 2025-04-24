@@ -257,8 +257,13 @@ class AdvertisementController extends Controller
 
     public function userAdvertisementsList(Request $request)
     {
+        $recentPage = $request->input('current_page', 1);
+        $limit = $request->input('limit', 10);
+        $offset = ($recentPage - 1) * $limit;
+
         $user_id = $request->user_id;
-        $list = $this->apiModel->getUserAdvertisementsList($user_id);
+        $list = $this->apiModel->getUserAdvertisementsList($user_id, $limit, $offset);
+        $total_count = $this->apiModel->getUserAdvertisementsList($user_id, '', '', FALSE);
         $customArr = [];
         if($list)
         {
@@ -288,7 +293,12 @@ class AdvertisementController extends Controller
             return response()->json([
                 'status' => 1,
                 'message' => 'Data retrieved successfully.',
-                'data' => $customArr
+                'data' => $customArr,
+                'pagination' => [
+                            'current_page' => $recentPage,
+                            'per_page' => $limit,
+                            'total_pages' => ceil($total_count / $limit),
+                        ],
             ], 200);  
         }else{
             return response()->json([

@@ -1537,17 +1537,24 @@ class ApiModel extends Model
         return $result;
     }
 
-    public function getUserAdvertisementsList($user_id)
+    public function getUserAdvertisementsList($user_id, $limit='', $offset='', $for_list=TRUE)
     {
-        $result = DB::table('advertisements as a')
+        $query = DB::table('advertisements as a')
                             ->select('a.*','a_l.location_id','a_l.city_id','a_l.country_id','a_c.property_category')
                             ->leftJoin('advertisement_category as a_c', 'a.advertisement_id', '=', 'a_c.advertisement_id')
                             ->leftJoin('advertisement_locations as a_l', 'a.advertisement_id', '=', 'a_l.advertisement_id')
                             ->where(['a.member_id'=>$user_id,'status'=>'1'])
                             ->whereDate('a.start_date', '<=', now())
-                            ->whereDate('a.expire_date', '>=', now())
-                            ->groupBy('a.advertisement_id')
-                            ->get();
+                            ->whereDate('a.expire_date', '>=', now());
+        if($for_list)
+        {
+            $query->limit($limit);
+            $query->offset($offset);
+            $result = $query->groupBy('a.advertisement_id')->get();
+        }else{
+            $result = $query->count();
+        }
+        
         return $result;
     }
 
