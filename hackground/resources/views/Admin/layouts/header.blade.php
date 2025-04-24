@@ -35,17 +35,15 @@
                     <div class="widget-content p-0">
                         <div class="widget-content-wrapper">
                             <div class="widget-content-left">
-                                <div class="btn-group open-profile-modal">
-                                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                <div class="btn-group">
+                                    <a data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                         class="p-0 btn">
                                         <img src="{{ asset(config('constants.ADMIN_PHOTO')) }}" alt="User"
                                             width="40" height="40" class="rounded-circle object-fit-cover" />
-
                                         <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                     </a>
 
-                                    <div tabindex="-1" role="menu" aria-hidden="true"
-                                        class="rm-pointers dropdown-menu-lg dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                                         <div class="dropdown-menu-header">
                                             <div class="dropdown-menu-header-inner bg-info">
                                                 <div class="menu-header-image opacity-2"></div>
@@ -56,7 +54,6 @@
                                                                 <img src="{{ asset(config('constants.ADMIN_PHOTO')) }}"
                                                                     alt="User" width="60" height="60"
                                                                     class="rounded-circle object-fit-cover" />
-
                                                             </div>
                                                             <div class="widget-content-left">
                                                                 <div class="widget-heading">
@@ -67,9 +64,10 @@
                                                                 </div>
                                                             </div>
                                                             <div class="widget-content-right mr-2">
-                                                                <a href={{ url('logout') }}><button
-                                                                        class="btn-pill btn-shadow btn-shine btn btn-focus">Logout
-                                                                    </button></a>
+                                                                <a href="{{ url('logout') }}">
+                                                                    <button
+                                                                        class="btn-pill btn-shadow btn-shine btn btn-focus">Logout</button>
+                                                                </a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -80,19 +78,17 @@
                                             <div class="mb-2">
                                                 <strong class="text-muted small">MY ACCOUNT</strong>
                                             </div>
-                                            <a href="#" class="d-block text-primary mb-3" data-toggle="modal"
-                                                data-target="#editProfileModal" onclick="moveFocusAndCloseDropdown()">
+                                            <a href="#" class="d-block text-primary mb-3 open-profile-modal"
+                                                data-bs-toggle="modal" data-bs-target="#editProfileModal"
+                                                onclick="moveFocusAndCloseDropdown()">
                                                 Edit Profile
                                             </a>
-
                                             <div class="text-center">
                                                 <a href="{{ config('app.frontend_url') }}"
                                                     class="btn btn-sm btn-primary">View Site</a>
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </div>
                             </div>
                             <div class="widget-content-left  ml-3 header-user-info">
@@ -121,10 +117,9 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="editProfileModalLabel">Edit Admin User</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        <span>&times;</span>
+                        <span></span>
                     </button>
                 </div>
-
                 <div class="modal-body">
                     <form id="adminUserForm">
                         <div class="form-group">
@@ -145,15 +140,13 @@
                         <div class="form-group">
                             <label>Status</label><br>
                             <div class="form-check form-check-inline">
-                                <input type="radio" name="status" name="status" value="1"
-                                    class="form-check-input" id="active"
-                                    {{ $admin?->status === '1' ? 'checked' : '' }}>
+                                <input type="radio" name="status" value="1" class="form-check-input"
+                                    id="active" {{ $admin?->status === '1' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="active">Active</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input type="radio" name="status" name="status" value="0"
-                                    class="form-check-input" id="inactive"
-                                    {{ $admin?->status === '0' ? 'checked' : '' }}>
+                                <input type="radio" name="status" value="0" class="form-check-input"
+                                    id="inactive" {{ $admin?->status === '0' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="inactive">Inactive</label>
                             </div>
                         </div>
@@ -167,7 +160,6 @@
                         </div>
                     </form>
                 </div>
-
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="adminUserUpdateBtn"
                         onclick='updateAdminDetails({{ $admin?->id }})'>Save</button>
@@ -182,7 +174,6 @@
             $('#editProfileModal').on('shown.bs.modal', function() {
                 $(this).find('.close').focus();
             });
-
             $('.dropdown-menu').removeClass('show');
         }
 
