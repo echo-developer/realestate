@@ -1503,7 +1503,7 @@ class ApiModel extends Model
     {
         $structure = array(
             'user_id'=> $data['user_id'] ? $data['user_id'] : '',
-            'name' => $data['advertiser_name'] ? $data['advertiser_name'] : '',
+            'name' => $data['name'] ? $data['name'] : '',
             'email' => $data['email'] ? $data['email'] : '',
             'phone_code' => $data['phone_code'] ? $data['phone_code'] : '',
             'phone' => $data['phone'] ? $data['phone'] : '',

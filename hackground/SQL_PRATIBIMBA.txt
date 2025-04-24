@@ -131,3 +131,5 @@ CREATE TABLE IF NOT EXISTS `pref_advertisement_request` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`request_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+ALTER TABLE `pref_email_verify_otp` ADD `status` TINYINT NOT NULL DEFAULT '0' AFTER `expires_at`;

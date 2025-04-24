@@ -115,16 +115,18 @@ class AdvertisementController extends Controller
         $otpRecord = EmailVerifyOtpModel::where('email', $request->email)
             ->where('otp', $request->otp)
             ->where('expires_at', '>', Carbon::now())
+            ->where('status','!=','1')
             ->first();
         if($otpRecord)
         {
-            $user_id = auth_user_id();
+            $user_id = "";
             $email = $request->email;
             $email_exists = DB::table('users as u')->where('u.email',$email)->first();
             if($email_exists)
             {
                 $user_id = $email_exists->id;
             }else{
+                $password = $this->generatePassword('6');
                 $user = User::create([
                     'name' => $request->name,
                     'user_type' => $request->user_type,
@@ -134,6 +136,12 @@ class AdvertisementController extends Controller
                     'phone_code' => $request->phone_code
                 ]);
                 $user_id = $user->id;
+                $template = 'user-password';
+                $data_parse=array(
+                    'USERNAME'=> $request->name,
+                    'PASSWORD'=> $password
+                );
+                SendMail($request->email, $template, $data_parse);
                 $token = JWTAuth::fromUser($user);
             }
             $post_data = $request->all();
@@ -141,6 +149,7 @@ class AdvertisementController extends Controller
             $up = $this->apiModel->addAdvertisementRequest($post_data);
             if($up)
             {
+                $otpRecord = EmailVerifyOtpModel::where('email', $request->email)->update(['status'=>1]);
                 return response()->json([
                         'status' => 1,
                         'message' => 'Request sent successfully.',
@@ -158,6 +167,15 @@ class AdvertisementController extends Controller
             ], 200);
         }
        
+    }
+
+    function generatePassword($length) {
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $password = '';
+        for ($i = 0; $i < $length; $i++) {
+            $password .= $chars[rand(0, strlen($chars) - 1)];
+        }
+        return $password;
     }
 
     public function userAdvertisementRequests(Request $request)
