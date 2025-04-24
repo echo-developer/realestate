@@ -35,7 +35,7 @@
                     <div class="widget-content p-0">
                         <div class="widget-content-wrapper">
                             <div class="widget-content-left">
-                                <div class="btn-group">
+                                <div class="btn-group open-profile-modal">
                                     <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                         class="p-0 btn">
                                         <img src="{{ asset(config('constants.ADMIN_PHOTO')) }}" alt="User"
@@ -212,11 +212,16 @@
                 }
             });
         }
+
         $(document).ready(function() {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
+            });
+
+            $('.open-profile-modal').click(function() {
+                $('#editProfileModal').modal('show');
             });
 
             $('#editProfileModal').on('shown.bs.modal', function() {
