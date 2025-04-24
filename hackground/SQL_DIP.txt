@@ -91,3 +91,4 @@ ALTER TABLE `pref_project_properties` CHANGE `bhk_id` `slug` VARCHAR(255) CHARAC
 ALTER TABLE `pref_property_additional` ADD `slug` VARCHAR(255) NOT NULL AFTER `bhk_type`;
 ALTER TABLE `pref_user_membership` CHANGE `remaining_leads` `leads_used` INT(13) NULL DEFAULT '0';
 ALTER TABLE `pref_area_locality_price` ADD `price_for` VARCHAR(155) NULL AFTER `new_price`;
+
