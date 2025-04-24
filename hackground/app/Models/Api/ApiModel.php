@@ -1511,7 +1511,10 @@ class ApiModel extends Model
             'locality_id' => $data['locality_id'] ? $data['locality_id'] : '',
             'page' => $data['page'] ? $data['page'] : '',
             'position' => $data['position'] ? $data['position'] : '',
-            'duration' => $data['duration'] ? $data['duration'] : ''
+            'duration' => $data['duration'] ? $data['duration'] : '',
+            'has_banner' => $data['has_banner'] ? $data['has_banner'] : '',
+            'ad_image' => $data['ad_image'] ? $data['ad_image'] : '',
+            'ad_image_mobile' => $data['ad_image_mobile'] ? $data['ad_image_mobile'] : '',
         );
         $prev = DB::table('advertisement_request')->insert($structure);
         return true;

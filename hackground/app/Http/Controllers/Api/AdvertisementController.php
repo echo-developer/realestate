@@ -106,6 +106,7 @@ class AdvertisementController extends Controller
             'page'=>'required',
             'position'=>'required',
             'duration'=>'required',
+            'has_banner'=>'required',
             'otp'=>'required|integer'
         ]);
         if($validator->fails()) {
@@ -264,5 +265,37 @@ class AdvertisementController extends Controller
             ], 200); 
         }
     }
+
+    public function upload_file(Request $req)
+    {
+        $req->validate([
+            'images' => 'required',
+            'images.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
+        ]);
+
+        $uploadedFiles = [];
+
+        if ($req->hasFile('images')) {
+            $images = $req->file('images');
+
+            $images = is_array($images) ? $images : [$images];
+
+            foreach ($images as $file) {
+                $fileName = time() . '-' . $file->getClientOriginalName();
+                $file->move(public_path('user_upload/advertisement'), $fileName);
+                $uploadedFiles[] = $fileName;
+                $fileUrls[] = asset('user_upload/advertisement/' . $fileName);
+            }
+            return response()->json([
+                'status' => 1,
+                'message' => 'File successfully uploaded',
+                'files' => $uploadedFiles,
+                'image_url' => $fileUrls
+            ]);
+        }
+
+        return response()->json(['error' => 'No files uploaded'], 400);
+    }
+
 
 }

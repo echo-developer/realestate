@@ -133,3 +133,5 @@ CREATE TABLE IF NOT EXISTS `pref_advertisement_request` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 ALTER TABLE `pref_email_verify_otp` ADD `status` TINYINT NOT NULL DEFAULT '0' AFTER `expires_at`;
+
+ALTER TABLE `pref_advertisement_request` ADD `has_banner` TINYINT NOT NULL DEFAULT '0' AFTER `duration`, ADD `ad_image` VARCHAR(155) NULL AFTER `has_banner`, ADD `ad_image_mobile` INT NULL AFTER `ad_image`;
