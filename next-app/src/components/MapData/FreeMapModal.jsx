@@ -12,33 +12,46 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png'
 });
 
-function ClickHandler({setPosition }) {
+function ClickHandler({ setPosition }) {
   useMapEvent('click', (e) => {
     setPosition([e.latlng.lat, e.latlng.lng]);
   });
   return null;
 }
 
-const FreeMapModal = ({  lat, lon, onLocationSelect }) => {
-  const [position, setPosition] = useState([lat, lon]); 
+const FreeMapModal = ({ lat, lon, onLocationSelect }) => {
+  // Validate initial coordinates
+  const initialLat = Math.max(-90, Math.min(90, lat));
+  const initialLon = Math.max(-180, Math.min(180, lon));
+  const [position, setPosition] = useState([initialLat, initialLon]);
 
   const fetchLocationDetails = async (lat, lon) => {
     try {
       const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
-      // You can pass this to your parent:
+      
+      if (data.error) {
+        console.error("Nominatim error:", data.error);
+        return;
+      }
+
       onLocationSelect({
         latitude: lat,
         longitude: lon,
         address: data.display_name,
-        postcode: data.address.postcode,
-        locality: data.address.suburb || data.address.neighbourhood || data.address.village,
-        city: data.address.city,
-        state: data.address.state,
-        country: data.address.country
+        postcode: data.address?.postcode || '',
+        locality: data.address?.suburb || data.address?.neighbourhood || data.address?.village || '',
+        city: data.address?.city || '',
+        state: data.address?.state || '',
+        country: data.address?.country || ''
       });
+      
     } catch (error) {
       console.error("Error fetching location info:", error);
+      alert("Failed to get location details. Please try again.");
     }
   };
 
@@ -54,7 +67,16 @@ const FreeMapModal = ({  lat, lon, onLocationSelect }) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        <Marker position={position} draggable>
+        <Marker 
+          position={position} 
+          draggable
+          eventHandlers={{
+            dragend: (e) => {
+              const newPos = e.target.getLatLng();
+              setPosition([newPos.lat, newPos.lng]);
+            }
+          }}
+        >
           <Popup>Drag me to adjust!</Popup>
         </Marker>
 

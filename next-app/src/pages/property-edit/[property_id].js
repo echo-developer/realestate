@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import dynamic from "next/dynamic";
 import "./property_edit.css";
 import withAuth from "@/utils/withAuth";
+import { useAuth } from "@/context/AuthProvider";
 import useTranslation from "@/hooks/useTranslation";
 import {
   flat_image_tab,
@@ -25,6 +27,7 @@ import { toast } from "react-toastify";
 import EditImageGallery from "@/components/property/EditImageGallery";
 import Locality from "@/components/project/Locality";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+const FreeMapModal = dynamic(() => import("../../components/MapData/FreeMapModal"), { ssr: false });
 import {
   Form,
   Row,
@@ -60,7 +63,9 @@ ChartJS.register(
 
 const Index = () => {
   const router = useRouter();
+  const { localityList } = useAuth();
   const { callApi } = AuthUser();
+  const [showMap, setShowMap] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
   const [activeTab, setActiveTab] = useState("");
@@ -117,7 +122,7 @@ const Index = () => {
       if (response && response.status === 1) {
         setPropertyData(response.data);
         setOptions(response.options);
-      } 
+      }
     } catch (error) {
       console.error(response.message);
     }
@@ -146,6 +151,7 @@ const Index = () => {
   }, [propertyData]);
 
   const openModal = (item) => {
+
     if (item?.key === "possession_status") {
       const getList = async () => {
         setDynamicFieldLoading(true);
@@ -223,6 +229,12 @@ const Index = () => {
       };
       formData.galleries = updatedGalleries;
     }
+
+    if(inputValue?.address_lat  && inputValue?.address_lon) {
+      formData.address_lat = inputValue.address_lat;
+      formData.address_lon = inputValue.address_lon;
+    }
+
 
     // Append the formData to FormData object
     Object.entries(formData).forEach(([key, value]) => {
@@ -332,6 +344,19 @@ const Index = () => {
     ),
   };
 
+  const handleLocationSelect = (locationData) => {
+    setInputValue(prev => {
+      return {
+        ...prev,
+          address: locationData?.address || "",
+          address_lat: locationData.latitude,
+          address_lon: locationData.longitude
+      }
+    })
+    setShowMap(false);
+  }
+
+
   const renderModalContent = () => {
     switch (selectedItem) {
       case "buyer_message":
@@ -358,10 +383,18 @@ const Index = () => {
         );
       case "locality":
         return (
-          <Locality
-            locality={inputValue?.locality || ""}
-            setLocality={setLocality}
-          />
+          // <Locality
+          //   locality={inputValue?.locality || ""}
+          //   setLocality={setLocality}
+          // />
+          <select className="form-select" id="exampleSelect" value={inputValue?.locality || ""} onChange={(e) => setLocality(e.target.value)}>
+            <option value="">Select a locality</option>
+            {localityList?.length > 0 && localityList?.map((locality, i) => {
+              return (
+                <option key={i} value={locality?.locality_id}>{locality?.locality_name || "Not Available"}</option>
+              )
+            })}
+          </select>
         );
       case "expected_price":
         return (
@@ -387,7 +420,7 @@ const Index = () => {
       case "address":
         return (
           <>
-            <FloatingLabel controlId="address-input" label="Enter the address:">
+            {/* <FloatingLabel controlId="address-input" label="Enter the address:">
               <Form.Control
                 as="textarea"
                 id="address-input"
@@ -402,7 +435,19 @@ const Index = () => {
                 }
                 style={{ height: "100px" }}
               />
-            </FloatingLabel>
+            </FloatingLabel> */}
+            <Form.Group controlId="address-input">
+              {/* <Form.Label>Enter the address:</Form.Label> */}
+              <Form.Control
+                type="text"
+                id="address-input"
+                placeholder={translation?.enter_the_address_here || "Enter the address here"}
+                value={inputValue?.address || ""}
+                onClick={() => setShowMap(true)}
+                readOnly
+                plaintext
+              />
+            </Form.Group>
           </>
         );
       case "configuration":
@@ -567,7 +612,7 @@ const Index = () => {
           <>
             <Form.Group>
               <Form.Label className="form-label d-block">
-              {translation?.select_overlooking_features || "Select Overlooking Features:"}
+                {translation?.select_overlooking_features || "Select Overlooking Features:"}
 
               </Form.Label>
               <div className="checkbox-group">
@@ -586,8 +631,8 @@ const Index = () => {
                         [selectedItem]: e.target.checked
                           ? [...(prevState[selectedItem] || []), item.key]
                           : (prevState[selectedItem] || []).filter(
-                              (key) => key !== item.key
-                            ),
+                            (key) => key !== item.key
+                          ),
                       }))
                     }
                   />
@@ -602,7 +647,7 @@ const Index = () => {
           <>
             <Form.Group>
               <Form.Label className="form-label d-block">
-              {translation?.select_flooring_types || "Select Flooring Types:"}
+                {translation?.select_flooring_types || "Select Flooring Types:"}
 
               </Form.Label>
               <div className="checkbox-group">
@@ -660,7 +705,7 @@ const Index = () => {
                 }
               >
                 <option value="" disabled>
-                {translation?.select_water_availability || "Select Water Availability"}
+                  {translation?.select_water_availability || "Select Water Availability"}
 
                 </option>
                 {waterAvailabilityOptions.map((option) => (
@@ -690,7 +735,7 @@ const Index = () => {
                 }
               >
                 <option value="" disabled>
-                {translation?.select_electricity_status || "Select Electricity Status"}
+                  {translation?.select_electricity_status || "Select Electricity Status"}
 
                 </option>
                 {electricityStatusOptions.map((option) => (
@@ -720,7 +765,7 @@ const Index = () => {
                 }
               >
                 <option value="" disabled>
-                {translation?.select_ownership_type || "Select Ownership Type"}
+                  {translation?.select_ownership_type || "Select Ownership Type"}
 
                 </option>
                 {ownershipTypeOptions.map((option) => (
@@ -747,7 +792,7 @@ const Index = () => {
                 }
               >
                 <option value="" disabled>
-                {translation?.select_anyone || "Select Anyone"}
+                  {translation?.select_anyone || "Select Anyone"}
 
                 </option>
                 {propertyApprovedByOptions.map((option) => (
@@ -792,7 +837,7 @@ const Index = () => {
 
   if (!propertyData) {
     return <div hidden>{translation?.no_property_data || "No property data available"}
-</div>;
+    </div>;
   }
 
   const completionPercentage = 41;
@@ -821,7 +866,7 @@ const Index = () => {
           <h3>{translation?.edit_preview_property_ad || "Edit & Preview Your Property Ad"}
           </h3>
           <p>
-          {translation?.edit_preview_note || "Modify your ad by clicking the appropriate Edit or Add link. Changes may take up to 24 hours to appear online."}
+            {translation?.edit_preview_note || "Modify your ad by clicking the appropriate Edit or Add link. Changes may take up to 24 hours to appear online."}
 
           </p>
 
@@ -884,7 +929,7 @@ const Index = () => {
               </div>
             </Col>
             <Col className="col-lg-4 col-12">
-            <PropertyCompletionStatus propertyData={propertyData}/>
+              <PropertyCompletionStatus propertyData={propertyData} />
             </Col>
           </Row>
         </div>
@@ -908,12 +953,12 @@ const Index = () => {
         {selectedItem !== "galleries" ? (
           <Modal.Footer>
             <Button variant="secondary" onClick={closeModal}>
-            {translation?.cancel || "Cancel"}
+              {translation?.cancel || "Cancel"}
 
             </Button>
 
             <Button variant="primary" onClick={handleSave}>
-            {translation?.save || "Save"}
+              {translation?.save || "Save"}
 
             </Button>
           </Modal.Footer>
@@ -921,6 +966,17 @@ const Index = () => {
           ""
         )}
       </Modal>
+
+      {/* MAP modal  */}
+      <Modal show={showMap} centered onHide={() => setShowMap(false)} size="lg">
+        <Modal.Header>
+          <h5 className="text-center">Choose Address Location</h5>
+        </Modal.Header>
+        <Modal.Body>
+        <FreeMapModal lat={inputValue?.latitude || 0} lon={inputValue?.longitude || 0} onLocationSelect={handleLocationSelect} />
+        </Modal.Body>
+      </Modal>
+
     </DashboardLayout>
   );
 };
