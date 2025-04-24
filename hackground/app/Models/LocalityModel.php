@@ -242,7 +242,7 @@ class LocalityModel extends Model
         }
     }
 
-    public function fetchLocalityLandmarks($locality_id, array $landmarkType = [] , $paginate)
+    public function fetchLocalityLandmarks($locality_id, array $landmarkType = [], $paginate)
     {
 
         if (empty($locality_id)) {
@@ -250,10 +250,8 @@ class LocalityModel extends Model
         }
         $query = DB::table('locality_landmarks')
             ->select('*')
-            ->where([
-                'status' => config('constants.STATUS_ACTIVE'),
-                'locality_id' => $locality_id,
-            ]);
+            ->where('status', '!=', config('constants.STATUS_DELETE'))
+            ->where('locality_id', $locality_id);
 
         if (!empty($landmarkType)) {
             $query->whereIn('type',  $landmarkType);

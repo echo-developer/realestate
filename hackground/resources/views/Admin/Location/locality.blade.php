@@ -253,10 +253,10 @@
                         <div class="form-group">
                             <label class="form-label">Status</label>
                             <div class="radio-inline">
-                                <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked
-                                    required>
+                                <input type="radio" name="status" value=1 class="magic-radio status" id="status_1"
+                                    checked required>
                                 <label for="status_1">Active</label>
-                                <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
+                                <input type="radio" name="status" value=0 class="magic-radio status" id="status_2">
                                 <label for="status_2">Inactive</label>
                             </div>
                         </div>
@@ -469,6 +469,7 @@
             $('.status').change(function() {
                 toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
                 var id = $(this).data('id');
+                // console.log(id)
                 var status = this.checked ? 1 : 0;
                 $.ajax({
                     type: 'POST',

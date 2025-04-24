@@ -80,9 +80,12 @@
         </form>
         <div class="main-card mb-3 card">
             <div class="card-body">
+                @php
+                    $localityName = get_name_by_id('locality_names', 'locality_id', $localityId, 'en');
+                @endphp
                 <div class="card-header d-flex">
                     <h4>Landmarks List of
-                        {{ strToUpper(get_name_by_id('locality_names', 'locality_id', $localityId, 'en')) }}</h4>
+                        {{ strToUpper($localityName) }}</h4>
 
                     {{-- <div class="btn-actions-pane-right">
                         <button type="button" class="btn btn-sm btn-success" onclick="add()">Add More Landmarks</button>
@@ -193,25 +196,7 @@
                 <div class="modal-body">
 
                     <form id="formData">
-                        <input type="text" class='d-none' id="localityId" name="localityId">
-
-                        <div class="form-group">
-                            <label for="ufile">Select Locality</label>
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <select name="locality_id" id="locality_id" class="form-control">
-                                        <option value="">Select City</option>
-                                        @if (isset($city_data))
-                                            @foreach ($city_data as $items)
-                                                <option value="{{ $items->city_id }}">{{ $items->name }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="invalid-feedback" id="city_id_error"></div>
-
+                        <input type="text" class='d-none' id="landmarkId" name="landmarkId">
                         @php
                             $langs = explode(',', admin_default_lang());
                         @endphp
@@ -223,18 +208,6 @@
                                 <div class="invalid-feedback" id="name_{{ $lang }}_error"></div>
                             </div>
                         @endforeach
-{{-- 
-                        <div class="form-group">
-                            <label for="key">Key</label>
-                            <input type="text" class="form-control" id="key" name="key" required>
-                            <div class="invalid-feedback" id="key_error"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="latitude">Latitude</label>
-                            <input type="number" class="form-control" id="latitude" name="latitude" required>
-                            <div class="invalid-feedback" id="latitude_error"></div>
-                        </div> --}}
 
                         <div class="form-group">
                             <label for="distance">Distance</label>
@@ -245,8 +218,7 @@
                         <div class="form-group">
                             <label class="form-label">Status</label>
                             <div class="radio-inline">
-                                <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked
-                                    required>
+                                <input type="radio" name="status" value=1 class="magic-radio" id="status_1">
                                 <label for="status_1">Active</label>
                                 <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
                                 <label for="status_2">Inactive</label>
@@ -255,8 +227,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" onclick="add_edit()" id="button" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" onclick="update()" id="button" class="btn btn-primary">Save</button>
                 </div>
             </div>
 
@@ -304,37 +276,32 @@
         </div>
     </div> --}}
 @endsection
-{{-- @push('custom-js')
+@push('custom-js')
     <script>
-        var $modalAction = $('#modal_action');
-        var $modalLabel = $('#AddEditModalLabel');
-        var $button = $('#button');
-        var $formData = $('#formData');
+        let modalAction = $('#modal_action');
+        let modalLabel = $('#AddEditModalLabel');
+        let button = $('#button');
+        let formData = $('#formData');
+        let landmarkId = $('#landmarkId');
+        let name_en = $('#name_en');
+        let name_ar = $('#name_ar');
+        let distance = $('#distance');
+        const status = $('.status')
 
         function AddEdit(title, buttonText, id = null) {
-            $modalLabel.text(title);
-            $button.text(buttonText);
-            $formData[0].reset();
-            // if (id) {
-            //     $.get(`{{ url('/locality/details') }}/${id}`, function(data) {
-            //         console.log(data);
-            //         $localityId.val(data[0].locality_id);
-            //         $cityid.val(data[0].city);
-            //         $latitude.val(data[0].latitude);
-            //         $longitude.val(data[0].longitude);
-            //         $localityKey.val(data[0].locality_key);
-            //         // fetchStates(data[0].country, data[0].state);
-            //         data.forEach(function(locality) {
-            //             $(`#name_${locality.lang}`).val(locality.name);
-            //             if (locality.lang === 'en') {
-            //                 $order.val(locality.order);
-            //                 $(`input[name="status"][value="${locality.status}"]`).prop(
-            //                     'checked', true);
-            //             }
-            //         });
-            //     });
-            // }
-            $modalAction.modal('show');
+            modalLabel.text(title);
+            button.text(buttonText);
+            formData[0].reset();
+            if (id) {
+                $.get(`{{ url('/landmark-edit') }}/${id}`, function(data) {
+                    $(`input[name="status"][value="${data.status}"]`).prop('checked', true)
+                    name_en.val(data.name_en)
+                    name_ar.val(data.name_ar)
+                    distance.val(data.distance_km)
+                    landmarkId.val(data.id)
+                });
+            }
+            modalAction.modal('show');
         }
 
         function Edit(id) {
@@ -342,5 +309,60 @@
             $('.invalid-feedback').empty();
             AddEdit('Edit', 'Update', id);
         }
+
+        function update() {
+            let data = formData.serializeArray();
+            console.log(data)
+            return
+            // let lanmark_id = landmarkId.val()
+            let url = `{{ url('/update-landmark') }}`
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                success: function(response) {
+                    localStorage.setItem('successMessage', response.message);
+                    window.location.reload(true);
+                    $modalAction.modal('hide');
+                    $formData[0].reset();
+                },
+                error: function(response) {
+                    var errors = response.responseJSON.errors;
+                    $('.invalid-feedback').text('').hide();
+                    $('.form-control').removeClass('is-invalid');
+                    $.each(errors, function(field, messages) {
+                        const fieldId = field.replace('.', '_');
+                        const inputSelector = `#${fieldId}`;
+                        const errorSelector = `#${fieldId}_error`;
+                        $(inputSelector).addClass('is-invalid');
+                        $(errorSelector).text(messages[0]).show();
+                    });
+                }
+            });
+        }
+
+        $(document).ready(function() {
+
+            status.change(function() {
+                toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
+                var id = $(this).data('id');
+                var status = this.checked ? 1 : 0;
+                $.ajax({
+                    type: 'POST',
+                    url: `{{ url('/landmark-status') }}`,
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        status: status,
+                        id: id
+                    },
+                    success: function(data) {},
+                    error: function(msg) {
+                        console.log(msg);
+                    }
+                });
+
+            });
+        })
     </script>
-@endpush --}}
+@endpush

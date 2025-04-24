@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\LocalityModel;
 use App\Traits\Imports\ExcelImportTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 
@@ -210,8 +211,22 @@ class LocalityController extends Controller
 
         $localityId = $request->route('locality_id');
         $paginate = 10;
-        
-        $data = $this->locality->fetchLocalityLandmarks($localityId, [] , $paginate);
-        return view('Admin/Location/locality-landmarks', compact('data','localityId'));
+
+        $data = $this->locality->fetchLocalityLandmarks($localityId, [], $paginate);
+        return view('Admin/Location/locality-landmarks', compact('data', 'localityId'));
+    }
+
+    public function landmarkDetails(Request $request)
+    {
+        $landmarkId = $request->route('id');
+        $data = DB::table('locality_landmarks')->where('id', $landmarkId)->first();
+        return $data;
+    }
+
+    public function landmarkStatus(Request $request)
+    {
+        log_anything($request->all());
+        $response = DB::table('locality_landmarks')->where('id', $request->id)->update(['status' => $request->status]);
+        return response()->json($response);
     }
 }

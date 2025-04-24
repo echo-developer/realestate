@@ -582,3 +582,6 @@ ALTER TABLE `pref_locality` CHANGE `created_at` `created_at` TIMESTAMP NULL DEFA
 24/04/2025
 
 ALTER TABLE `pref_locality_landmarks` ADD `status` TINYINT NOT NULL DEFAULT '1' AFTER `distance_km`;
+
+ALTER TABLE `pref_faq_categories` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `pref_faq_categories` CHANGE `status` `status` INT(11) NOT NULL DEFAULT '1';
