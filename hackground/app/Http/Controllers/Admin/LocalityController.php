@@ -185,36 +185,13 @@ class LocalityController extends Controller
     }
 
 
-    // public function importExcel(Request $request)
-    // {
-    //     $request->validate([
-    //         'xlsFileLocality' => 'required|file|mimes:xlsx,xls,csv',
-    //     ]);
-
-    //     $filePath = $request->file('xlsFileLocality')->getPathname();
-
-    //     $spreadsheet = IOFactory::load($filePath);
-    //     $sheet = $spreadsheet->getActiveSheet();
-    //     $rows = $sheet->toArray();
-
-    //     // Optionally skip headers (assume first row is header)
-    //     unset($rows[0]);
-
-    //     // log_anything($rows);
-    //     $response = $this->locality->localityAddfromExcel($rows);
-    //     set_flash_message('add');
-
-    //     return redirect()->back();
-    // }
-
 
     public function importLocalityExcel(Request $request)
     {
         try {
             $rows = $this->parseUploadedExcelforLocality($request, 'xlsFileLocality', 9);
             $response = $this->locality->localityAddfromExcel($rows);
-            // log_anything($rows);
-            // set_flash_message('add');
+            set_flash_message('add');
             return redirect()->back();
         } catch (\Throwable $e) {
             return redirect()->back()->withErrors(['xlsFileLocality' => $e->getMessage()]);
@@ -232,6 +209,9 @@ class LocalityController extends Controller
     {
 
         $localityId = $request->route('locality_id');
-        return view('Admin/Location/locality-landmarks');
+        $paginate = 10;
+        
+        $data = $this->locality->fetchLocalityLandmarks($localityId, [] , $paginate);
+        return view('Admin/Location/locality-landmarks', compact('data','localityId'));
     }
 }

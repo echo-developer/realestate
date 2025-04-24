@@ -16,7 +16,7 @@ class FaqController extends Controller
     public function __construct(CategoryName $categoryname)
     {
         $this->categoryname = $categoryname;
-        $this->middleware('view_permit:country');
+        $this->middleware('view_permit:faq-category');
     }
     public function category_view(Request $request)
     {

@@ -578,3 +578,7 @@ CREATE TABLE pref_locality_landmarks (
 );
 
 ALTER TABLE `pref_locality` CHANGE `created_at` `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP, CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;
+
+24/04/2025
+
+ALTER TABLE `pref_locality_landmarks` ADD `status` TINYINT NOT NULL DEFAULT '1' AFTER `distance_km`;

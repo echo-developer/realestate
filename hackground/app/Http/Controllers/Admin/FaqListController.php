@@ -16,7 +16,7 @@ class FaqListController extends Controller
     public function __construct(faqlistname $listname)
     {
         $this->listname = $listname;
-        $this->middleware('view_permit:faq_list');
+        $this->middleware('view_permit:faq-list');
     }
     public function list_view(Request $request)
     {

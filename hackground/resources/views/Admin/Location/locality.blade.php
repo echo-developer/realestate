@@ -78,17 +78,15 @@
         </form>
         <div class="main-card mb-3 card">
             <div class="card-body">
-                <div class="card-header p-0">
-                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Locality List
+                <div class="card-header d-flex">
+                    <h4>Locality List</h4>
 
                     <div class="btn-actions-pane-right">
-                        <button type="button" class="btn btn-sm btn-primary" id="upload_excel_btn">Upload
-                            Excel</button>
+                        <button type="button" class="btn btn-sm btn-primary" id="upload_excel_btn">Upload Excel</button>
                         <button type="button" class="btn btn-sm btn-success" onclick="add()">Add locality</button>
                     </div>
 
                 </div>
-
                 <div class="table-responsive" id="main_table">
                     <table id="myTable" class="mb-0 table">
                         <thead>
@@ -116,7 +114,7 @@
                                                 {{ $item->status ? 'checked' : '' }}>
                                         </td>
                                         <td class="text-right">
-                                            <a
+                                            <a title="Landmark List"
                                                 href="{{ route('locality.landmarks.page', ['locality_id' => $item->locality_id]) }}">
                                                 <i class="fa fa-list text-success fa-md"></i>
                                             </a>
@@ -344,25 +342,23 @@
                 }
             });
 
-            $(document).ready(function() {
-                var table = $('#myTable').DataTable({
-                    "paging": false,
-                    "searching": false,
-                    "info": false,
-                    "ordering": true,
-                    "order": [
-                        [0, 'desc']
-                    ],
-                    "columnDefs": [{
-                            "orderable": true,
-                            "targets": [0]
-                        },
-                        {
-                            "orderable": false,
-                            "targets": [2, 3, 4]
-                        }
-                    ]
-                });
+            var table = $('#myTable').DataTable({
+                "paging": false,
+                "searching": false,
+                "info": false,
+                "ordering": true,
+                "order": [
+                    [0, 'desc']
+                ],
+                "columnDefs": [{
+                        "orderable": true,
+                        "targets": [0]
+                    },
+                    {
+                        "orderable": false,
+                        "targets": [2, 3, 4]
+                    }
+                ]
             });
 
 

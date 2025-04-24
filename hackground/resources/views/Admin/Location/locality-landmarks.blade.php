@@ -1,5 +1,7 @@
 @extends('Admin.layouts.app')
-
+@php
+    // log_anything($landmarks);
+@endphp
 @section('content')
     <div class="body-page-loader d-none">
         <div class="loader">
@@ -46,7 +48,7 @@
             <div class="alert alert-{{ session('message_type') }}">
                 {{ session('success_msg') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert">
-                    
+
                 </button>
             </div>
         @endif
@@ -78,14 +80,13 @@
         </form>
         <div class="main-card mb-3 card">
             <div class="card-body">
-                <div class="card-header p-0">
-                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> locality List
+                <div class="card-header d-flex">
+                    <h4>Landmarks List of
+                        {{ strToUpper(get_name_by_id('locality_names', 'locality_id', $localityId, 'en')) }}</h4>
 
-                    <div class="btn-actions-pane-right">
-                        {{-- <button type="button" class="btn btn-sm btn-primary" id="upload_excel_btn">Upload
-                            Excel</button> --}}
-                        <button type="button" class="btn btn-sm btn-success" onclick="add()">Add locality</button>
-                    </div>
+                    {{-- <div class="btn-actions-pane-right">
+                        <button type="button" class="btn btn-sm btn-success" onclick="add()">Add More Landmarks</button>
+                    </div> --}}
 
                 </div>
 
@@ -93,36 +94,29 @@
                     <table id="myTable" class="mb-0 table">
                         <thead>
                             <tr>
-                                <th style="width:5%">ID</th>
-                                <th style="width:25%"> Name</th>
-                                <th style="width:15%">Key</th>
-                                <th style="width:15%">City</th>
-                                <th style="width:20%">Status</th>
-                                <th style="min-width:80px;" class="text-right">Action</th>
+                                <th style="width:35%;">Name</th>
+                                <th style="width:20%;">Distance (KM)</th>
+                                <th style="width:20%;">Status</th>
+                                <th style="width:20%;" class="text-right">Action</th>
                             </tr>
                         </thead>
-                        {{-- <tbody>
+                        <tbody>
                             @if (isset($data))
                                 @foreach ($data as $item)
                                     <tr>
-                                        <td>{{ $item->locality_id }}</td>
-                                        <td>{{ $item->name }}</td>
-                                        <td>{{ $item->locality_key }}</td>
-                                        <td>{{ get_name_by_id('city_names', 'city_id', $item->city, 'en') }}</td>
+                                        <td>{{ $item->name_en }}</td>
+                                        <td>{{ $item->distance_km }}</td>
                                         <td>
-                                            <input data-id="{{ $item->locality_id }}" class="status d-none" type="checkbox"
+                                            <input data-id="{{ $item->id }}" class="status d-none" type="checkbox"
                                                 data-toggle="toggle" data-on="Active" data-off="Inactive"
                                                 data-onstyle="success" data-offstyle="danger" data-size="mini"
                                                 {{ $item->status ? 'checked' : '' }}>
                                         </td>
                                         <td class="text-right">
-                                            <a href="{{ url('/edit-locality/' . $item->locality_id) }}">
-                                                <i class="fa fa-list text-success fa-md"></i>
-                                            </a>                                            
                                             <i class="fa fa-edit text-success fa-md "
-                                                onclick="Edit('{{ $item->locality_id }}')"></i>
+                                                onclick="Edit('{{ $item->id }}')"></i>
                                             <i class="fa fa-trash text-danger fa-md"
-                                                onclick="Delete('{{ $item->locality_id }}')"></i>
+                                                onclick="Delete('{{ $item->id }}')"></i>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -131,12 +125,9 @@
                                     <td colspan="5">Sorry, no records found!</td>
                                 </tr>
                             @endif
-                        </tbody> --}}
+                        </tbody>
                     </table>
                 </div>
-
-
-
                 @if (isset($data))
                     <div class="card-footer pagination-rounded clearfix justify-content-center">
                         <ul class="pagination small mb-0">
@@ -187,7 +178,7 @@
     </div>
 @endsection
 @section('modals')
-    {{-- <div class="modal fade" id="modal_action" tabindex="-1" role="dialog" aria-labelledby="addEditModalLabel"
+    <div class="modal fade" id="modal_action" tabindex="-1" role="dialog" aria-labelledby="addEditModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -196,7 +187,7 @@
                     <h5 class="modal-title" id="AddEditModalLabel"></h5>
 
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        
+
                     </button>
                 </div>
                 <div class="modal-body">
@@ -205,10 +196,10 @@
                         <input type="text" class='d-none' id="localityId" name="localityId">
 
                         <div class="form-group">
-                            <label for="ufile">Select City</label>
+                            <label for="ufile">Select Locality</label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <select name="city_id" id="city_id" class="form-control">
+                                    <select name="locality_id" id="locality_id" class="form-control">
                                         <option value="">Select City</option>
                                         @if (isset($city_data))
                                             @foreach ($city_data as $items)
@@ -232,7 +223,7 @@
                                 <div class="invalid-feedback" id="name_{{ $lang }}_error"></div>
                             </div>
                         @endforeach
-
+{{-- 
                         <div class="form-group">
                             <label for="key">Key</label>
                             <input type="text" class="form-control" id="key" name="key" required>
@@ -243,12 +234,12 @@
                             <label for="latitude">Latitude</label>
                             <input type="number" class="form-control" id="latitude" name="latitude" required>
                             <div class="invalid-feedback" id="latitude_error"></div>
-                        </div>
+                        </div> --}}
 
                         <div class="form-group">
-                            <label for="longitude">Longitude</label>
-                            <input type="number" class="form-control" id="longitude" name="longitude" required>
-                            <div class="invalid-feedback" id="longitude_error"></div>
+                            <label for="distance">Distance</label>
+                            <input type="number" class="form-control" id="distance" name="distance" required>
+                            <div class="invalid-feedback" id="distance_error"></div>
                         </div>
 
                         <div class="form-group">
@@ -270,7 +261,7 @@
             </div>
 
         </div>
-    </div> --}}
+    </div>
 
     {{-- <div class="modal fade" id="excel_upload_modal" tabindex="-1" role="dialog" aria-labelledby="excel_upload_modal"
         aria-hidden="true">
@@ -313,7 +304,43 @@
         </div>
     </div> --}}
 @endsection
-@push('custom-js')
+{{-- @push('custom-js')
     <script>
+        var $modalAction = $('#modal_action');
+        var $modalLabel = $('#AddEditModalLabel');
+        var $button = $('#button');
+        var $formData = $('#formData');
+
+        function AddEdit(title, buttonText, id = null) {
+            $modalLabel.text(title);
+            $button.text(buttonText);
+            $formData[0].reset();
+            // if (id) {
+            //     $.get(`{{ url('/locality/details') }}/${id}`, function(data) {
+            //         console.log(data);
+            //         $localityId.val(data[0].locality_id);
+            //         $cityid.val(data[0].city);
+            //         $latitude.val(data[0].latitude);
+            //         $longitude.val(data[0].longitude);
+            //         $localityKey.val(data[0].locality_key);
+            //         // fetchStates(data[0].country, data[0].state);
+            //         data.forEach(function(locality) {
+            //             $(`#name_${locality.lang}`).val(locality.name);
+            //             if (locality.lang === 'en') {
+            //                 $order.val(locality.order);
+            //                 $(`input[name="status"][value="${locality.status}"]`).prop(
+            //                     'checked', true);
+            //             }
+            //         });
+            //     });
+            // }
+            $modalAction.modal('show');
+        }
+
+        function Edit(id) {
+            $('.form-control').removeClass('is-invalid');
+            $('.invalid-feedback').empty();
+            AddEdit('Edit', 'Update', id);
+        }
     </script>
-@endpush
+@endpush --}}

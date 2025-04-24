@@ -241,4 +241,25 @@ class LocalityModel extends Model
             throw $th;
         }
     }
+
+    public function fetchLocalityLandmarks($locality_id, array $landmarkType = [] , $paginate)
+    {
+
+        if (empty($locality_id)) {
+            return [];
+        }
+        $query = DB::table('locality_landmarks')
+            ->select('*')
+            ->where([
+                'status' => config('constants.STATUS_ACTIVE'),
+                'locality_id' => $locality_id,
+            ]);
+
+        if (!empty($landmarkType)) {
+            $query->whereIn('type',  $landmarkType);
+            return $query->paginate($paginate);
+        }
+
+        return $query->paginate($paginate);
+    }
 }
