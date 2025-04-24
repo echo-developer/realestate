@@ -126,7 +126,10 @@
                             </td>
                             <td class="text-right">
                                 {{-- <i class="fa fa-edit text-primary fa-md" onclick="edit('{{ $item->request_id }}')"></i> --}}
-                                <i class="fa fa-plus text-primary fa-md" onclick="approve('{{ $item->request_id }}')"></i>
+                                @if($item->status == '0')
+                                    <i class="fa fa-plus text-primary fa-md" onclick="approve('{{ $item->request_id }}')"></i>
+                                @endif
+                                
                                 <i class="fa fa-eye text-success fa-md" onclick="view('{{ $item->request_id }}')"></i>
                                 {{-- <i class="fa fa-trash text-danger fa-md" onclick="reject('{{ $item->request_id }}')"></i> --}}
                             </td>
