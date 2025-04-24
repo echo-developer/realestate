@@ -9,7 +9,7 @@
 
 4. ALTER TABLE `pref_faq_categories_names` CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;
 
-5. ALTER TABLE `pref_faq_list` CHANGE `order` `order` INT(11) NULL DEFAULT '1';
+5.ALTER TABLE `pref_faq_list` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;
 
 6. ALTER TABLE `pref_faq_list` CHANGE `created_at` `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;
 
@@ -18,4 +18,6 @@
 8. ALTER TABLE `pref_faq_list_names` CHANGE `created_at` `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;
 
 9. ALTER TABLE `pref_faq_list_names` CHANGE `updated_at` `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;
+
+10. ALTER TABLE `pref_faq_list` CHANGE `status` `status` INT(11) NULL DEFAULT '1';
 
