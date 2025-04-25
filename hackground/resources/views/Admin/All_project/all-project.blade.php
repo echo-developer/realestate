@@ -326,7 +326,7 @@
 @section('modals')
 <!-- Modal for Property Amenity Configuration -->
 <div class="modal fade" id="amenityModal" tabindex="-1" aria-labelledby="amenityModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog modal-xl modal-fullscreen-lg-down" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="amenityModalLabel">Add Amenity Data</h5>
@@ -350,9 +350,7 @@
                 @endforeach                
                 </div>
             </div>
-
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary" id="saveAmenityBtn">Save</button>
             </div>
         </div>
@@ -362,7 +360,7 @@
 
 <!-- Modal for Property Configuration -->
 <div class="modal fade" id="propertyModal" tabindex="-1" aria-labelledby="propertyModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl modal-fullscreen-lg-down" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Property Configuration</h5>
@@ -372,8 +370,7 @@
                 <!-- Tower Container (dynamic content) -->
                 <div id="tower-container-modal"></div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <div class="modal-footer">                
                 <button type="button" class="btn btn-primary" id="saveButton">Save</button>
             </div>
         </div>
@@ -391,14 +388,10 @@
             <div class="modal-body">
                 <!-- Nav Tabs -->
                 <ul class="nav nav-tabs" id="propertyTabs" role="tablist"></ul>
-
                 <!-- Tab Content -->
                 <div class="tab-content mt-3" id="propertyTabsContent"></div>
             </div>
-
-
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" id="saveAllButton" class="btn btn-primary">Save All</button>
             </div>
         </div>
@@ -412,37 +405,36 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Upload Documents</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <h6>Previous Documents</h6>
                 <ul class="list-unstyled certificate-list" id="certificate-list"></ul>
                 <hr>
-                <h6>Upload New Document</h6>
+                <h6 class="mb-3">Upload New Document</h6>
                 <form action="" id='saveCertificate'>
-                    <div class="mb-3">
-                        <label class="form-label">Registration Number</label>
+                    <div class="form-floating mb-3">                        
                         <input type="text" class="form-control" name="certificate_number"
                             placeholder="Enter Registration Number">
+                        <label class="form-label">Registration Number</label>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Document Name</label>
+                    <div class="form-floating mb-3">                        
                         <input type="text" class="form-control" name="certificate_name"
                             placeholder="Enter Document Name">
+                        <label class="form-label">Document Name</label>
                     </div>
-                    <div class="mb-3">
+                    <div>
                         <label class="form-label">Upload File</label>
-                        <input type="file" id="file" name="file" class="form-control">
+                        <input type="file" id="file" name="file" class="form-control mb-2">
                         <input type="hidden" id="fileName" name="fileName" class="form-control">
-                        <div id="fileUploadContainer" style="display: none; margin-top: 10px;">
-                            <a id="uploadedFileLink" href="#" target="_blank">View Uploaded File</a>
+                        <div id="fileUploadContainer" style="display: none;">
+                            <a id="uploadedFileLink" href="#" target="_blank" class="small">View Uploaded File</a>
                         </div>
                     </div>
 
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="saveDocumentBtn">Save Document</button>
             </div>
         </div>
@@ -457,7 +449,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title h4">Upload Project Brochure</div>
-                <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal">X</button>
+                <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body">
@@ -470,7 +462,6 @@
                 <div id="previewContainer" class="mt-3"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="saveBrochureModal">Upload</button>
             </div>
         </div>
@@ -671,23 +662,31 @@
         tower.innerHTML = `
         <input class="form-control" name="project_id" type="hidden" value="${project_id}">
         <h5>${'tower'+towerIndex}</h5>
-        <div class="row gx-2">
-            <div class="col-md-3">
-                <input class="form-control" name="tower_name" type="text" value="${towerData.tower_name??''}">
-                <label>Tower Name</label>
+        <div class="row gx-3">
+            <div class="col-lg-3 col-sm-6">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="tower_name" placeholder="" value="${towerData.tower_name??''}">
+                    <label>Tower Name</label>
+                </div>
             </div>
             <input class="form-control" name="slug" type="hidden" value="${slug}">
-            <div class="col-md-3">
-                <input class="form-control" name="lift_no" type="number" value="${towerData.lift_no}">
-                <label>Lift Number</label>
+            <div class="col-lg-3 col-sm-6">
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" name="lift_no" placeholder="" value="${towerData.lift_no}">
+                    <label>Lift Number</label>
+                </div>
             </div>
-            <div class="col-md-3">
-                <input class="form-control" name="stair_no" type="number" value="${towerData.stair_no}">
-                <label>Stair Number</label>
+            <div class="col-lg-3 col-sm-6">
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" name="stair_no" placeholder="" value="${towerData.stair_no}">
+                    <label>Stair Number</label>
+                </div>
             </div>
-            <div class="col-md-3">
-                <input class="form-control" name="fire_safety" type="number" value="${towerData.fire_safety}">
-                <label>Fire Safety</label>
+            <div class="col-lg-3 col-sm-6">
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" name="fire_safety" placeholder="" value="${towerData.fire_safety}">
+                    <label>Fire Safety</label>
+                </div>
             </div>
         </div>
         <div class="floor-container"></div>
@@ -717,15 +716,19 @@
 
         floor.innerHTML =
             `<legend>Floor ${floorIndex}</legend>
-        <button type="button" class="btn btn-danger btn-sm remove-floor">Remove Floor</button>
-        <div class="row gx-2">
-            <div class="col-md-4">
-                <input class="form-control" name="floor_no" type="number" value="${floorData ? floorData.floor_no : ''}">
-                <label>Floor Number</label>
+        <button type="button" title="Remove Floor" class="btn btn-danger btn-delete btn-sm remove-floor mb-3"><i class="bi bi-x-lg"></i></button>
+        <div class="row gx-3">
+            <div class="col-sm-6">
+                <div class="form-floating mb-3">
+                    <input class="form-control" name="floor_no" type="number" placeholder="" value="${floorData ? floorData.floor_no : ''}">
+                    <label>Floor Number</label>
+                </div>
             </div>
-            <div class="col-md-4">
-                <input class="form-control" name="flat_no" type="number" value="${floorData ? floorData.flat_no : ''}">
-                <label>Flat Number</label>
+            <div class="col-sm-6">
+                <div class="form-floating mb-3">
+                    <input class="form-control" name="flat_no" type="number" placeholder="" value="${floorData ? floorData.flat_no : ''}">
+                    <label>Flat Number</label>
+                </div>
             </div>
         </div>
         <div class="bhk-container"></div>
@@ -755,11 +758,11 @@
         const bhk = document.createElement("div");
         bhk.classList.add("mb-3");
         bhk.innerHTML =
-            `<legend>Flats ${bhkIndex}</legend>
-            <button type="button" class="btn btn-danger btn-delete btn-sm remove-bhk"><i class="bi bi-x-lg"></i></button>
-            <div class="row gx-2">
-                <div class="col-md-4 col-sm-6 mb-3">
-                    <div class="form-floating">
+            `<fieldset class="position-relative"><legend>Flats ${bhkIndex}</legend>
+            <button type="button" class="btn btn-danger btn-delete btn-sm remove-bhk mb-3"><i class="bi bi-x-lg"></i></button>
+            <div class="row gx-3 -mb-3">
+                <div class="col-lg-4 col-sm-6">
+                    <div class="form-floating mb-3">
                         <select class="form-select">
                             <option value="1BHK" ${bhkData && bhkData.bhk_type === '1BHK' ? 'selected' : ''}>1BHK</option>
                             <option value="2BHK" ${bhkData && bhkData.bhk_type === '2BHK' ? 'selected' : ''}>2BHK</option>
@@ -770,27 +773,27 @@
                         <label>BHK Type</label>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6 mb-3">
-                    <div class="form-floating">
+                <div class="col-lg-4 col-sm-6">
+                    <div class="form-floating mb-3">
                         <input class="form-control" type="number" placeholder="" value="${bhkData ? bhkData.carpet_area : ''}">
                         <label>Carpet Area</label>
                     </div>
                 </div>
                  <input class="form-control floor_plan_image_name" type="hidden" value="${bhkData ? bhkData.floor_plan_image : ''}" name="floor_plan_image_name">
-                <div class="col-md-4 col-sm-6 mb-3">
-                    <div class="form-floating">
+                <div class="col-lg-4 col-sm-6">
+                    <div class="form-floating mb-3">
                         <input class="form-control" type="number" placeholder="" value="${bhkData ? bhkData.super_area : ''}">
                         <label>Super Area</label>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6 mb-3">
-                    <div class="form-floating">
+                <div class="col-lg-4 col-sm-6">
+                    <div class="form-floating mb-3">
                         <input class="form-control" type="number" placeholder="" value="${bhkData ? bhkData.property_price : ''}">
                         <label>Price</label>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6 mb-3">
-                    <div class="form-floating">
+                <div class="col-lg-4 col-sm-6">
+                    <div class="form-floating mb-3">
                         <select class="form-select">
                             <option value="east" ${bhkData && bhkData.property_facing === 'east' ? 'selected' : ''}>East</option>
                             <option value="north" ${bhkData && bhkData.property_facing === 'north' ? 'selected' : ''}>North</option>
@@ -804,8 +807,8 @@
                         <label>Facing</label>
                     </div>
                 </div>
-            <div class="col-md-4 col-sm-6 mb-3">
-                <div class="form-floating">
+            <div class="col-lg-4 col-sm-6">
+                <div class="form-floating mb-3">
                     <input class="form-control floor-plan-input" type="file" accept="image/*">
                     <label>Upload Floor Image</label>
                 </div>
@@ -815,10 +818,7 @@
                         style="display: ${bhkData && bhkData.image_url ? 'block' : 'none'}; margin-top: 5px;">
                     Delete
                 </button>
-            </div>
-
-            </div>
-           `;
+            </div></div></fieldset>`;
 
         bhkContainer.appendChild(bhk);
         const fileInput = bhk.querySelector(".floor-plan-input");
@@ -993,14 +993,13 @@
                     let items = response.data.floor_plans.filter(item => item.type_id === type.id);
                     let itemsHtml = items.map(item => `
                                                     <li>
-                                                        <div class="form-floating mb-3">
-                                                        <label>${item.item}:</label>
+                                                        <div class="form-floating mb-3">                                                        
                                                            <input type="text" class="form-control item-input" 
                                                                 placeholder="Enter description for ${item.item}" 
                                                                 value="${item.description ? item.description : ''}" 
                                                                 data-item-id="${item.item_id}" 
                                                                 data-type-id="${type.id}">
-
+                                                            <label>${item.item}:</label>
                                                         </div>
                                                     </li>
                                                 `).join("");
@@ -1254,7 +1253,7 @@
         container.innerHTML = "";
 
         if (certificates.length === 0) {
-            container.innerHTML = "<li>No documents found.</li>";
+            container.innerHTML = "<li class='text-muted fst-italic'>No documents found.</li>";
             return;
         }
 
