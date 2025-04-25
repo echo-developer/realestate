@@ -41,21 +41,6 @@
             margin-top: 1rem;
         }
 
-        .amenity-container {
-            display: flex;
-            flex-wrap: wrap;
-            /* Allows items to move to the next row */
-            gap: 10px;
-            /* Adds spacing between items */
-        }
-
-        .amenity-item {
-            display: flex;
-            align-items: center;
-            width: 45%;
-            /* Adjust for two items per row */
-        }
-
         #certificate {
             display: none;
             position: fixed;
@@ -341,7 +326,7 @@
 @section('modals')
 <!-- Modal for Property Amenity Configuration -->
 <div class="modal fade" id="amenityModal" tabindex="-1" aria-labelledby="amenityModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="amenityModalLabel">Add Amenity Data</h5>
@@ -350,9 +335,10 @@
             <div class="modal-body amenity-container">
                 <input type="hidden" name="project_id" id="project_id">
 
-
+                <div class="row">
                 @foreach ($projectAmenities as $projectAmenitie)
-                <div class="form-check amenity-item">
+                <article class="col-xxl-3 col-xl-4 col-sm-6">
+                <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="{{ $projectAmenitie->id }}">
                     <label class="form-check-label d-flex align-items-center ms-2">
                         <img alt="Parking" height="24" width="24" class="me-2"
@@ -360,8 +346,9 @@
                         {{ $projectAmenitie->name }}
                     </label>
                 </div>
-                @endforeach
-
+                </article>
+                @endforeach                
+                </div>
             </div>
 
             <div class="modal-footer">
