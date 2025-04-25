@@ -7,9 +7,11 @@ import { useAuth } from '@/context/AuthProvider';
 import OtpField from '@/components/otp/OtpField'
 import { toast } from "react-toastify";
 import useTranslation from '@/hooks/useTranslation'
+import MainLayout from '@/components/layout/MainLayout'
 
 const CreateAdvertisement = () => {
   const { callApi } = AuthUser();
+  const { userData } = useAuth();
   const translation = useTranslation();
   const [cityList, setCityList] = useState([])
   const [localityList, setLocalityList] = useState([]);
@@ -127,10 +129,10 @@ const CreateAdvertisement = () => {
 
   // Initial form values
   const initialValues = {
-    name: '',
-    email: '',
-    phone_code: '+1', // default value
-    phone: '',
+    name: userData?.name || '',
+    email: userData?.email || '',
+    phone_code: userData?.phone_code || '', // default value
+    phone: userData?.phone || '',
     city_id: '',
     locality_id: '',
     page: '',
@@ -138,7 +140,8 @@ const CreateAdvertisement = () => {
     duration: '',
     has_banner: false,
     banner_image: null,
-    otp: ''
+    otp: '',
+    user_type: userData?.user_type || '',
   }
 
   // Validation schema
@@ -232,10 +235,13 @@ const CreateAdvertisement = () => {
         api: `/save-advertisement-request`,
         method: "UPLOAD",
         data: {
-          ...values
+          ...values,
+          // user_type: 'O',
+          // ad_image : '',
+          // ad_image_mobile : ''
         }
       })
-      if(res && res?.status == 1) {
+      if (res && res?.status == 1) {
         resetForm();
         toast.success('Your Request For Advertisement submitted successfully');
       }
@@ -249,17 +255,17 @@ const CreateAdvertisement = () => {
 
   // Mock data
   const phoneCodes = [
-    { code: '+91', country: 'India' },
-    { code: '+1', country: 'USA' },
-    { code: '+44', country: 'UK' },
-    { code: '+971', country: 'UAE' }
+    { code: '91', country: 'India' },
+    { code: '1', country: 'USA' },
+    { code: '44', country: 'UK' },
+    { code: '971', country: 'UAE' }
   ]
   const durations = [7, 15, 30, 60]
 
 
 
   return (
-    <DashboardLayout>
+    <MainLayout>
       <div className="container py-4">
         <h3 className="mb-4">Create Advertisement</h3>
 
@@ -271,17 +277,31 @@ const CreateAdvertisement = () => {
               onSubmit={handleSubmit}
             >
               {({ isSubmitting, values, setFieldValue, errors, setFieldError, isValid, dirty }) => {
+                console.log("errors", errors)
                 useEffect(() => {
                   if (values?.city_id) {
                     fetchLocalityData(values.city_id)
                   }
                 }, [values?.city_id])
 
-                // useEffect(() => {
-                //   if (values?.banner_image) {
-                //     uploadImage(values.banner_image, setFieldValue);
-                //   }
-                // }, [values?.banner_image])
+                useEffect(() => {
+                  if (userData) {
+                    // setFieldValue(prev => {
+                    //   return {
+                    //     ...prev,
+                    //     name: userData.name,
+                    //     email: userData.email,
+                    //     phone: userData?.phone,
+                    //     phone_code: userData?.phone_code
+                    //   }
+                    // })
+                    setFieldValue('name', userData.name);
+                    setFieldValue('email', userData.email);
+                    setFieldValue('phone_code', extractPhoneCode(userData.phone_code));
+                    setFieldValue('phone', userData.phone);
+                  }
+                }, [userData])
+
 
                 useEffect(() => {
                   if (values?.page) {
@@ -290,12 +310,12 @@ const CreateAdvertisement = () => {
                 }, [values?.page])
 
                 useEffect(() => {
-                  if(validatedOtp) {
+                  if (validatedOtp) {
                     setFieldValue('otp', validatedOtp)
                   }
                 }, [validatedOtp])
                 useEffect(() => {
-                  if(values?.has_banner == 'false') {
+                  if (values?.has_banner == 'false') {
                     setFieldValue('banner_image', "")
                   }
                 }, [values?.has_banner])
@@ -306,75 +326,136 @@ const CreateAdvertisement = () => {
                       <div className="col-md-6">
                         <h5 className="mb-3">Personal Information</h5>
 
-                        <div className="mb-3">
-                          <label htmlFor="name" className="form-label">Full Name</label>
-                          <Field
-                            type="text"
-                            name="name"
-                            className="form-control"
-                            placeholder="John Doe"
-                          />
-                          <ErrorMessage name="name" component="div" className="text-danger small" />
-                        </div>
-
-                        <div className="mb-3 position-relative">
-                          <label htmlFor="email" className="form-label">Email</label>
-                          <div className="position-relative">
-                            <Field
-                              type="email"
-                              name="email"
-                              className="form-control pe-5"
-                              placeholder="john@example.com"
-                              readOnly={isOtpValid}
-
-                            />
-                            {!isOtpValid && values?.email && (
-                              <button
-                                type="button"
-                                className="btn btn-primary position-absolute end-0 top-50 translate-middle-y me-2"
-                                style={{ transform: 'translateY(-50%)' }}
-                                onClick={() => handleSendOTP(values?.email, setFieldError)}
-                                disabled={emailTimer > 0}
-                              >
-                                {emailTimer > 0
-                                  ? `Resend in ${emailTimer}s`
-                                  : translation?.send_otp || "Send OTP"}
-                              </button>
-                            )}
-                          </div>
-                          <ErrorMessage name="email" component="div" className="text-danger small" />
-                        </div>
-                        {showOtpField && (
-                          <OtpField setOtpValid={setOtpValid} setShowOtpField={setShowOtpField} email={values?.email} setValidatedOtp={setValidatedOtp} />
-                        )}
-
-                        <div className="row">
-                          <div className="col-4">
+                        {!userData && (
+                          <>
                             <div className="mb-3">
-                              <label htmlFor="phone_code" className="form-label">Country Code</label>
-                              <Field as="select" name="phone_code" className="form-select">
-                                {phoneCodes.map(({ code, country }) => (
-                                  <option key={code} value={code}>
-                                    {code} ({country})
-                                  </option>
-                                ))}
-                              </Field>
-                              <ErrorMessage name="phone_code" component="div" className="text-danger small" />
-                            </div>
-                          </div>
-                          <div className="col-8">
-                            <div className="mb-3">
-                              <label htmlFor="phone" className="form-label">Phone Number</label>
+                              <label htmlFor="name" className="form-label">Full Name</label>
                               <Field
-                                type="number"
-                                name="phone"
+                                type="text"
+                                name="name"
                                 className="form-control"
-                                placeholder="1234567890"
+                                placeholder="John Doe"
                               />
-                              <ErrorMessage name="phone" component="div" className="text-danger small" />
+                              <ErrorMessage name="name" component="div" className="text-danger small" />
                             </div>
-                          </div>
-                        </div>
+
+                            <div className="mb-3 position-relative">
+                              <label htmlFor="email" className="form-label">Email</label>
+                              <div className="position-relative">
+                                <Field
+                                  type="email"
+                                  name="email"
+                                  className="form-control pe-5"
+                                  placeholder="john@example.com"
+                                  readOnly={isOtpValid}
+
+                                />
+                                {!isOtpValid && values?.email && (
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary position-absolute end-0 top-50 translate-middle-y me-2"
+                                    style={{ transform: 'translateY(-50%)' }}
+                                    onClick={() => handleSendOTP(values?.email, setFieldError)}
+                                    disabled={emailTimer > 0}
+                                  >
+                                    {emailTimer > 0
+                                      ? `Resend in ${emailTimer}s`
+                                      : translation?.send_otp || "Send OTP"}
+                                  </button>
+                                )}
+                              </div>
+                              <ErrorMessage name="email" component="div" className="text-danger small" />
+                            </div>
+                            {showOtpField && (
+                              <OtpField setOtpValid={setOtpValid} setShowOtpField={setShowOtpField} email={values?.email} setValidatedOtp={setValidatedOtp} />
+                            )}
+
+                            <div className="row">
+                              <div className="col-4">
+                                <div className="mb-3">
+                                  <label htmlFor="phone_code" className="form-label">Country Code</label>
+                                  <Field as="select" name="phone_code" className="form-select">
+                                    {phoneCodes.map(({ code, country }) => (
+                                      <option key={code} value={code}>
+                                        +{code} ({country})
+                                      </option>
+                                    ))}
+                                  </Field>
+                                  <ErrorMessage name="phone_code" component="div" className="text-danger small" />
+                                </div>
+                              </div>
+                              <div className="col-8">
+                                <div className="mb-3">
+                                  <label htmlFor="phone" className="form-label">Phone Number</label>
+                                  <Field
+                                    type="number"
+                                    name="phone"
+                                    className="form-control"
+                                    placeholder="1234567890"
+                                  />
+                                  <ErrorMessage name="phone" component="div" className="text-danger small" />
+                                </div>
+                              </div>
+                            </div>
+                          </>
+                        )}
+                        {userData && (
+                          <>
+                            <div className="mb-3">
+                              <label htmlFor="name" className="form-label">Full Name</label>
+                              <Field
+                                type="text"
+                                name="name"
+                                className="form-control"
+                                placeholder="John Doe"
+                                value={userData?.name}
+                                readOnly={true}
+                              />
+                              <ErrorMessage name="name" component="div" className="text-danger small" />
+                            </div>
+
+                            <div className="mb-3 position-relative">
+                              <label htmlFor="email" className="form-label">Email</label>
+                              <div className="position-relative">
+                                <Field
+                                  type="email"
+                                  name="email"
+                                  className="form-control"
+                                  placeholder="john@example.com"
+                                  value={userData?.email}
+                                  readOnly={true}
+                                />
+                              </div>
+                              <ErrorMessage name="email" component="div" className="text-danger small" />
+                            </div>
+
+                            <div className="row">
+                              <div className="col-4">
+                                <div className="mb-3">
+                                  <label htmlFor="phone_code" className="form-label">phone Code</label>
+                                  <Field as="select" value={userData?.phone_code} name="phone_code" className="form-select">
+                                    <option value={userData?.phone_code}>{userData?.phone_code}</option>
+                                  </Field>
+                                  <ErrorMessage name="phone_code" component="div" className="text-danger small" />
+                                </div>
+                              </div>
+                              <div className="col-8">
+                                <div className="mb-3">
+                                  <label htmlFor="phone" className="form-label">Phone Number</label>
+                                  <Field
+                                    type="number"
+                                    name="phone"
+                                    className="form-control"
+                                    placeholder="1234567890"
+                                    value={userData?.phone}
+                                    readOnly={true}
+                                  />
+                                  <ErrorMessage name="phone" component="div" className="text-danger small" />
+                                </div>
+                              </div>
+                            </div>
+                          </>
+                        )}
                       </div>
 
                       {/* Advertisement Details */}
@@ -533,8 +614,29 @@ const CreateAdvertisement = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
+    </MainLayout>
   )
 }
 
-export default CreateAdvertisement
+export default CreateAdvertisement;
+
+function extractPhoneCode(input) {
+  if (!input) return '';
+  
+  // Handle string inputs
+  if (typeof input === 'string') {
+    // Case 1: Already just numbers (e.g., "91")
+    if (/^\d+$/.test(input)) return input;
+    
+    // Case 2: Extract numbers after + (e.g., "+91" or "IND +91")
+    const match = input.match(/\+?(\d+)/);
+    return match ? match[1] : '';
+  }
+  
+  // Handle number inputs (e.g., 91)
+  if (typeof input === 'number') {
+    return Math.abs(input).toString();
+  }
+  
+  return '';
+}

@@ -303,9 +303,7 @@ const Banner = ({ translation }) => {
       });
       if (response && response.data) {
         setPropertyForData(response.data);
-      } else {
-        toast.error(response.message);
-      }
+      } 
     } catch (error) {
       toast.error(error.message);
     }

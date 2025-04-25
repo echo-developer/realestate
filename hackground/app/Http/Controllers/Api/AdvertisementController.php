@@ -121,6 +121,7 @@ class AdvertisementController extends Controller
             ->where('expires_at', '>', Carbon::now())
             ->where('status','!=','1')
             ->first();
+        
         if($otpRecord)
         {
             $user_id = "";
