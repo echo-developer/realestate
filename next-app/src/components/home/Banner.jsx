@@ -767,6 +767,7 @@ const Banner = ({ translation }) => {
                                         onChange={(e) =>
                                           setMinSize(e.target.value)
                                         }
+                                        onClick={(e) => e.stopPropagation()}
                                       />
                                     </Col>
                                     <Col>
@@ -781,6 +782,7 @@ const Banner = ({ translation }) => {
                                         onChange={(e) =>
                                           setMaxSize(e.target.value)
                                         }
+                                        onClick={(e) => e.stopPropagation()}
                                       />
                                     </Col>
                                   </Row>

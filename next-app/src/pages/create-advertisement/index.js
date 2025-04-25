@@ -106,7 +106,7 @@ const CreateAdvertisement = () => {
     }
   }
 
-  const uploadImage = async (e, setFieldValue) => {
+  const uploadImage = async (e, setFieldValue, key) => {
     const file = e.target?.files[0];
     setUploadedImageUrl("");
     try {
@@ -119,8 +119,8 @@ const CreateAdvertisement = () => {
       })
 
       if (res && res?.status == 1) {
-        setFieldValue('banner_image', res?.files?.[0]);
-        setUploadedImageUrl(res?.image_url?.[0])
+        setFieldValue(key, res?.files?.[0]);
+        // setUploadedImageUrl(res?.image_url?.[0])
       }
     } catch (error) {
       console.error(error?.message || "Something went wrong")
@@ -131,17 +131,19 @@ const CreateAdvertisement = () => {
   const initialValues = {
     name: userData?.name || '',
     email: userData?.email || '',
-    phone_code: userData?.phone_code || '', // default value
+    phone_code: userData?.phone_code || '', 
     phone: userData?.phone || '',
     city_id: '',
     locality_id: '',
     page: '',
     position: '',
     duration: '',
-    has_banner: false,
+    has_banner: 0,
     banner_image: null,
     otp: '',
     user_type: userData?.user_type || '',
+    ad_image: '',
+    ad_image_mobile: ''
   }
 
   // Validation schema
@@ -158,7 +160,7 @@ const CreateAdvertisement = () => {
     page: Yup.string().required('Page is required'),
     position: Yup.string().required('Position is required'),
     duration: Yup.string().required('Duration is required'),
-    has_banner: Yup.boolean(),
+    has_banner: Yup.number(),
     // banner_image: Yup.mixed()
     //   .when('has_banner', {
     //     is: true,
@@ -184,20 +186,10 @@ const CreateAdvertisement = () => {
 
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setFieldError(prev => {
-        return {
-          ...prev,
-          email: "Invalid Email Format"
-        }
-      })
+      setFieldError('email', 'Invalid email Format')
       return;
     } else {
-      setFieldError(prev => {
-        return {
-          ...prev,
-          email: ""
-        }
-      })
+      setFieldError('email', '')
     }
 
 
@@ -214,12 +206,7 @@ const CreateAdvertisement = () => {
         setEmailTimer(60);
         toast.success(response?.message || "OTP Send Successfully");
       } else {
-        setFieldError(prev => {
-          return {
-            ...prev,
-            email: response.message || ""
-          }
-        })
+        setFieldError('email', response?.message)
       }
     } catch (error) {
       console.error(response?.message || "Data Not Found");
@@ -228,8 +215,6 @@ const CreateAdvertisement = () => {
 
   // Form submission handler
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-
-
     try {
       const res = await callApi({
         api: `/save-advertisement-request`,
@@ -260,7 +245,7 @@ const CreateAdvertisement = () => {
     { code: '44', country: 'UK' },
     { code: '971', country: 'UAE' }
   ]
-  const durations = [7, 15, 30, 60]
+  const durations = [2, 4, 8, 12]
 
 
 
@@ -278,6 +263,7 @@ const CreateAdvertisement = () => {
             >
               {({ isSubmitting, values, setFieldValue, errors, setFieldError, isValid, dirty }) => {
                 console.log("errors", errors)
+                // console.log("values", values);
                 useEffect(() => {
                   if (values?.city_id) {
                     fetchLocalityData(values.city_id)
@@ -286,19 +272,11 @@ const CreateAdvertisement = () => {
 
                 useEffect(() => {
                   if (userData) {
-                    // setFieldValue(prev => {
-                    //   return {
-                    //     ...prev,
-                    //     name: userData.name,
-                    //     email: userData.email,
-                    //     phone: userData?.phone,
-                    //     phone_code: userData?.phone_code
-                    //   }
-                    // })
                     setFieldValue('name', userData.name);
                     setFieldValue('email', userData.email);
                     setFieldValue('phone_code', extractPhoneCode(userData.phone_code));
                     setFieldValue('phone', userData.phone);
+                    setFieldValue('user_type', userData?.user_type);
                   }
                 }, [userData])
 
@@ -328,6 +306,54 @@ const CreateAdvertisement = () => {
 
                         {!userData && (
                           <>
+                            <div className="btn-group btn-group-light d-flex mb-3" role="group">
+                              <Field name="user_type">
+                                {({ field }) => (
+                                  <>
+                                    <input
+                                      {...field}
+                                      className="btn-check"
+                                      id="O"
+                                      type="radio"
+                                      value="O"
+                                      checked={field.value === 'O'}
+                                    />
+                                    <label className="btn btn-outline-light" htmlFor="O">
+                                      <img alt="Icon" height="24" width="24" src="/assets/images/icons/owner.png" />
+                                      Owner
+                                    </label>
+
+                                    <input
+                                      {...field}
+                                      className="btn-check"
+                                      id="A"
+                                      type="radio"
+                                      value="A"
+                                      checked={field.value === 'A'}
+                                    />
+                                    <label className="btn btn-outline-light" htmlFor="A">
+                                      <img alt="Icon" height="24" width="24" src="/assets/images/icons/agent.png" />
+                                      Agent
+                                    </label>
+
+                                    <input
+                                      {...field}
+                                      className="btn-check"
+                                      id="B"
+                                      type="radio"
+                                      value="B"
+                                      checked={field.value === 'B'}
+                                    />
+                                    <label className="btn btn-outline-light" htmlFor="B">
+                                      <img alt="Icon" height="24" width="24" src="/assets/images/icons/builder.png" />
+                                      Builder
+                                    </label>
+                                  </>
+                                )}
+                              </Field>
+                            </div>
+
+
                             <div className="mb-3">
                               <label htmlFor="name" className="form-label">Full Name</label>
                               <Field
@@ -367,7 +393,7 @@ const CreateAdvertisement = () => {
                               <ErrorMessage name="email" component="div" className="text-danger small" />
                             </div>
                             {showOtpField && (
-                              <OtpField setOtpValid={setOtpValid} setShowOtpField={setShowOtpField} email={values?.email} setValidatedOtp={setValidatedOtp} />
+                              <OtpField setOtpValid={setOtpValid} setShowOtpField={setShowOtpField} email={values?.email} setValidatedOtp={setValidatedOtp} setFieldError={setFieldError} />
                             )}
 
                             <div className="row">
@@ -532,7 +558,7 @@ const CreateAdvertisement = () => {
                         </div>
 
                         <div className="mb-3">
-                          <label htmlFor="duration" className="form-label">Duration</label>
+                          <label htmlFor="duration" className="form-label">Duration (weeks)</label>
                           <Field as="select" name="duration" className="form-select">
                             <option value="">Select duration</option>
                             {durations.map(duration => (
@@ -549,7 +575,7 @@ const CreateAdvertisement = () => {
                               type="radio"
                               name="has_banner"
                               id="has_banner_yes"
-                              value="true"
+                              value="1"
                               className="form-check-input"
                             />
                             <label htmlFor="has_banner_yes" className="form-check-label">Yes</label>
@@ -559,7 +585,7 @@ const CreateAdvertisement = () => {
                               type="radio"
                               name="has_banner"
                               id="has_banner_no"
-                              value="false"
+                              value="0"
                               className="form-check-input"
                             />
                             <label htmlFor="has_banner_no" className="form-check-label">No</label>
@@ -567,21 +593,37 @@ const CreateAdvertisement = () => {
                           <ErrorMessage name="has_banner" component="div" className="text-danger small" />
                         </div>
 
-                        {values?.has_banner == "true" && (
+                        {values?.has_banner == "1" && (
+                          <>
                           <div className="mb-3">
-                            <label htmlFor="image" className="form-label">Banner Image</label>
+                            <label htmlFor="image" className="form-label">Desktop Banner Image</label>
                             <input
                               type="file"
                               name="image"
                               className="form-control"
                               // accept="image/jpeg, image/png"
                               onChange={(e) => {
-                                uploadImage(e, setFieldValue)
+                                uploadImage(e, setFieldValue, "ad_image")
                               }}
                             />
                             <ErrorMessage name="banner_image" component="div" className="text-danger small" />
                             <div className="form-text">Accepted formats: JPEG, PNG (Max 2MB)</div>
                           </div>
+                           <div className="mb-3">
+                           <label htmlFor="mobile_image" className="form-label">mobile Banner Image</label>
+                           <input
+                             type="file"
+                             name="mobile_image"
+                             className="form-control"
+                             // accept="image/jpeg, image/png"
+                             onChange={(e) => {
+                               uploadImage(e, setFieldValue, "ad_image_mobile")
+                             }}
+                           />
+                           {/* <ErrorMessage name="banner_image" component="div" className="text-danger small" /> */}
+                           <div className="form-text">Accepted formats: JPEG, PNG (Max 2MB)</div>
+                         </div>
+                          </>
                         )}
 
                         {/* <div className="mb-3">
@@ -622,21 +664,21 @@ export default CreateAdvertisement;
 
 function extractPhoneCode(input) {
   if (!input) return '';
-  
+
   // Handle string inputs
   if (typeof input === 'string') {
     // Case 1: Already just numbers (e.g., "91")
     if (/^\d+$/.test(input)) return input;
-    
+
     // Case 2: Extract numbers after + (e.g., "+91" or "IND +91")
     const match = input.match(/\+?(\d+)/);
     return match ? match[1] : '';
   }
-  
+
   // Handle number inputs (e.g., 91)
   if (typeof input === 'number') {
     return Math.abs(input).toString();
   }
-  
+
   return '';
 }
