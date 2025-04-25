@@ -44,7 +44,7 @@
         }
     </style>
 
-    <form action="" method="get">
+    {{-- <form action="" method="get">
         <section class="content-header mb-2">
             <div class="row">
                 <div class="offset-sm-8 col-sm-4">
@@ -59,7 +59,39 @@
                 </div>
             </div>
         </section>
-    </form>
+    </form> --}}
+
+    <div class="main-card mb-3 card">
+        <div class="card-body">
+            <div class="card-header p-0">
+                <h4>Lead Details</h4>
+                <ul>
+                    <li>
+                        @if($enquiry->property_id)
+                          Property Name: {{ $enquiry->property_name }}
+                          @elseif($enquiry->project_id)
+                          Project Name: {{ $enquiry->project_name }}
+                        @endif
+                        
+                    </li>
+                    <li>Owner Name: {{ $enquiry->owner }}</li>
+                </ul>
+                <ul>
+                    <li>Customer Name: {{ $enquiry->customer }}</li>
+                    <li>Customer Phone: {{ $enquiry->customer_phone }}</li>
+                </ul>
+                <ul>
+                    <li>Customer Email: {{ $enquiry->customer_email }}</li>
+                </ul>
+                
+                <ul>
+                    <li>Posted On: {{ date('d-M-Y', strtotime($enquiry->created_at)) }}</li>
+                    <li>Message: {{ $enquiry->message }}</li>
+                </ul>
+                
+            </div>
+        </div>
+    </div>
 
     <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav ml-0">
         <li class="nav-item">
@@ -108,8 +140,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                                @if($list)
-                                @foreach($list as $item)
+                            @forelse($list as $item)
                                 @php 
                                     $is_clickable = 0;
                                 @endphp
@@ -135,14 +166,17 @@
                                     </td>
                                     @endif
                                 </tr>
-                                @endforeach
-                                @endif
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="text-center" >Sorry, no records found!</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </form>
             </div>
-
-            @if(isset($list))
+            
+            @if($list->isNotEmpty())
             <div class="card-footer pagination-rounded clearfix justify-content-center">
                 <ul class="pagination small mb-0">
                     @if ($list->currentPage() == $list->lastPage() && $list->currentPage() != 1)
@@ -180,6 +214,8 @@
                         @endif
                 </ul>
             </div>
+            @else
+
             @endif
 
         </div>

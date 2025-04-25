@@ -18,7 +18,7 @@ class Enquiry extends Model
             ->leftJoin('users as u', 'u.id', '=', 'e.assign_to')
             ->leftJoin('customer as c', 'c.cid', '=', 'e.cid')
             ->leftJoin('leads_assigned as l_a', 'l_a.enquery_id', '=', 'e.enquery_id')
-            ->select('e.*', 'u.name as owner', 'c.name as customer', 'p.name as property_name', 'pj.project_name', DB::raw('COUNT(DISTINCT pref_l_a.assign_id) AS assigned_count'));
+            ->select('e.*', 'u.name as owner', 'c.name as customer', 'c.Phone as customer_phone', 'c.Email as customer_email' ,'p.name as property_name', 'pj.project_name', DB::raw('COUNT(DISTINCT pref_l_a.assign_id) AS assigned_count'));
 
         $query->groupBy('e.enquery_id');
         if (!empty($srch['lead_for']) && $srch['lead_for'] == 'project') {
@@ -130,7 +130,7 @@ class Enquiry extends Model
             ->leftJoin('project as pj', 'pj.id', '=', 'e.project_id')
             ->leftJoin('users as u', 'u.id', '=', 'e.assign_to')
             ->leftJoin('customer as c', 'c.cid', '=', 'e.cid')
-            ->select('e.*', 'u.name as owner', 'c.name as customer', 'p.name as property_name', 'pj.project_name')
+            ->select('e.*', 'u.name as owner', 'c.name as customer', 'c.Email as customer_email', 'c.Phone as customer_phone', 'p.name as property_name', 'pj.project_name')
             ->where('e.enquery_id', $enquiry_id)->first();
         return $query;
     }
@@ -245,6 +245,7 @@ class Enquiry extends Model
 
     public function general_unassign_member_list($srch = array(), $paginate)
     {
+
         $assigned_users = array();
         if ($srch['id']) {
             $assigned = DB::table('leads_assigned as l_a')->where(['enquery_id' => $srch['id'], 'lead_type' => 'G'])->get();

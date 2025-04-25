@@ -27,6 +27,14 @@
             <td>{{ $enquiry->customer }}</td>
         </tr>
         <tr>
+            <td><b>Customer Phone : </b></td>
+            <td>{{ $enquiry->customer_phone }}</td>
+        </tr>
+        <tr>
+            <td><b>Customer Email : </b></td>
+            <td>{{ $enquiry->customer_email }}</td>
+        </tr>
+        <tr>
             <td><b>Owner : </b></td>
             <td>{{ $enquiry->owner }}</td>
         </tr>

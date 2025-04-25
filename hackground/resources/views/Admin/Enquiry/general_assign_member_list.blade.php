@@ -44,7 +44,7 @@
         }
     </style>
 
-    <form action="" method="get">
+    {{-- <form action="" method="get">
         <section class="content-header mb-2">
             <div class="row">
                 <div class="offset-sm-8 col-sm-4">
@@ -59,7 +59,42 @@
                 </div>
             </div>
         </section>
-    </form>
+    </form> --}}
+
+    <div class="main-card mb-3 card">
+        <div class="card-body">
+            <div class="card-header p-0">
+                <h4>Lead Details</h4>
+                <ul>
+                    <li>Name: {{ $enquiry->name }}</li>
+                    <li>Phone: {{ $enquiry->phone }}</li>
+                </ul>
+                <ul>
+                    <li>Email: {{ $enquiry->email }}</li>
+                    <li>Location: {{ $enquiry->locality }}</li>
+                </ul>
+                <ul>
+                    <li>Property Type: {{ $enquiry->property_type ? get_property_category_name($enquiry->property_type) : '' }}</li>
+                    <li>Property For: {{ $enquiry->property_for ? get_property_sub_category_name($enquiry->property_for) : '' }}</li>
+                </ul>
+                <ul>
+                    <li>Size: {{ $enquiry->min_size.'-'.$enquiry->max_size }}</li>
+                    <li>Budget: {{ $enquiry->min_budget.'-'.$enquiry->min_budget }}</li>
+                </ul>
+                <ul>
+                    <li>
+                        Purchase Timeline: 
+                        @php 
+                            $time_arr = explode('_', $enquiry->purchase_timeline); 
+                            echo $time_arr[0].' '.$time_arr[1];
+                        @endphp
+                    </li>
+                    <li>Posted On: {{ date('d-M-Y', strtotime($enquiry->created_at)) }}</li>
+                </ul>
+                
+            </div>
+        </div>
+    </div>
 
     <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav ml-0">
         <li class="nav-item">
@@ -107,8 +142,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                                @if($list)
-                                @foreach($list as $item)
+                            @forelse($list as $item)
                                 @php 
                                     $is_clickable = 0;
                                 @endphp
@@ -134,14 +168,17 @@
                                     </td>
                                     @endif
                                 </tr>
-                                @endforeach
-                                @endif
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="text-center" >Sorry, no records found!</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </form>
             </div>
 
-            @if(isset($list))
+            @if($list->isNotEmpty())
             <div class="card-footer pagination-rounded clearfix justify-content-center">
                 <ul class="pagination small mb-0">
                     @if ($list->currentPage() == $list->lastPage() && $list->currentPage() != 1)

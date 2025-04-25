@@ -110,8 +110,9 @@
                         <tr>
                             <th style="width:5%">ID</th>
                             <th style="width:35%">Property Name</th>
-                            <th style="width:15%">Member Name</th>
                             <th style="width:15%">Customer Name</th>
+                            <th style="width:15%">Email</th>
+                            <th style="width:15%">Phone</th>
                             <th style="width:15%">Date</th>
                             <th style="width:15%" class="text-center">Lead Assigned</th>
                             <th class="text-right">Action</th>
@@ -129,8 +130,9 @@
                                  <b>Project:</b><br/>{{ $item->project_name }}
                                 @endif
                             </td>
-                            <td>{{ $item->owner }}</td>
                             <td>{{ $item->customer }}</td>
+                            <td>{{ $item->customer_email }}</td>
+                            <td>{{ $item->customer_phone }}</td>
                             <td>{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
                             <td class="text-center">
                                 {{ $item->assigned_count }}

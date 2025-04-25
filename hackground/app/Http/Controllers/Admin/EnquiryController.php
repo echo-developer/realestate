@@ -124,7 +124,6 @@ class EnquiryController extends Controller
         }
         
         $list = $this->enquiry->get_unassign_member_list($srch, $paginate);
-        
         return view('Admin.Enquiry.assign_member_list', compact('main_title','second_title','title','list','enquiry','assign_type'));
     }
 
@@ -140,7 +139,6 @@ class EnquiryController extends Controller
         $srch['enquery_id'] = $enquiry_id;
         $srch['lead_type'] = 'P';
         $list = $this->enquiry->get_assigned_member_list($srch, $paginate);
-        //print_r($list);exit;
         return view('Admin.Enquiry.assign_member_list', compact('main_title','second_title','title','list','enquiry','assign_type'));
     }
 
@@ -198,9 +196,7 @@ class EnquiryController extends Controller
         $main_title = 'Assign Leads';
 		$second_title = 'Assign Leads to Member(s)';
 		$title = 'Assign Member List';
-
         $enquiry = $this->enquiry->general_enquiry_details($enquiry_id);
-        
         if($enquiry)
         {
             $srch['id'] = $enquiry->id;
@@ -213,8 +209,6 @@ class EnquiryController extends Controller
         }
        
         $list = $this->enquiry->general_unassign_member_list($srch, $paginate);
-        // echo "<pre>";
-        // print_r($list);exit;
         return view('Admin.Enquiry.general_assign_member_list', compact('main_title','second_title','title','list','enquiry','assign_type'));
     }
 
