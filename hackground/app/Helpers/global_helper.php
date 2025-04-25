@@ -1309,7 +1309,7 @@ if (!function_exists('get_property_sub_category_name')) {
             ->where('p_s.id', $id)
             ->first();
 
-        return $result->name;
+        return $result->name??null;
     }
 }
 
