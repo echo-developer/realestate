@@ -1558,4 +1558,13 @@ class ApiModel extends Model
         return $result;
     }
 
+    public function deleteAdRequest($request_id)
+    {
+        $query = DB::table('advertisement_request as a')
+                          ->where('request_id',$request_id)
+                          ->update(['status','-1']);
+        return true;
+
+    }
+
 }

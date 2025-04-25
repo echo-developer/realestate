@@ -198,7 +198,6 @@ class AdvertisementController extends Controller
             ], 200);
         }
         
-        
         // if($otpRecord)
         // {
         //     $user_id = "";
@@ -416,6 +415,34 @@ class AdvertisementController extends Controller
         }
 
         return response()->json(['error' => 'No files uploaded'], 400);
+    }
+
+    public function delete_ad_request(Request $request)
+    {
+        $user_id = $request->user_id;
+        $request_id = $request->request_id;
+        $logged_user_id = auth_user_id();
+        if($user_id == $logged_user_id)
+        {
+            $up = $this->apiModel->deleteAdRequest($request_id);
+            if($up)
+            {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Request deleted successfully !',
+                ], 200);
+            }else{
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Failed to delete !',
+                ], 200);
+            }
+        }else{
+            return response()->json([
+                'status' => 0,
+                'message' => 'User id not matched !',
+            ], 200);
+        }
     }
 
 

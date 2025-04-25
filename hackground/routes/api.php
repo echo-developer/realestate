@@ -265,6 +265,7 @@ Route::post('user-advertisements-list', [AdvertisementController::class, 'userAd
 Route::post('upload-advertisement-banner', [AdvertisementController::class, 'upload_file']);
 Route::get('get-ads-pages', [AdvertisementController::class, 'get_ads_pages']);
 Route::get('get-ads-position/{page}', [AdvertisementController::class, 'get_ads_position']);
+Route::post('delete-ad-request', [AdvertisementController::class, 'delete_ad_request']);
 
 Route::controller(FloorPlaningController::class)->group(function () {
 
