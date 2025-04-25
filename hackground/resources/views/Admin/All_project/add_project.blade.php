@@ -124,6 +124,9 @@
             <button type="button" class="btn btn-primary btn-next" data-step="3">Next <i class="bi bi-arrow-right"></i></button>
           </div>
 
+          <div id="step-3">
+            <button type="button" class="btn btn-primary btn-next" data-step="2">Next <i class="bi bi-arrow-right"></i></button>
+          </div>
         </div>
 
         <div id="step-4" style="display:none;">
@@ -234,6 +237,8 @@
             <button type="button" class="btn btn-primary btn-next" data-step="4">Next <i class="bi bi-arrow-right"></i></button>
           </div>
 
+        
+        
         </div>
 
         <div id="step-5" style="display:none;">
