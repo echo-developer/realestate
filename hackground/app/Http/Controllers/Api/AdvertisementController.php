@@ -110,45 +110,71 @@ class AdvertisementController extends Controller
             'position'=>'required',
             'duration'=>'required',
             'has_banner'=>'required',
-            'otp'=>'required|integer'
         ]);
+        $user_id = '';
+        $user_id = auth_user_id();
+        $is_login = 0;
+        if($user_id)
+        {
+            $is_login = 1;
+        }
+
+        if(!$is_login){
+            $validator = Validator::make($request->all(), [
+                'otp'=>'required|integer'
+            ]);
+        }
+
         if($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
-
-        $otpRecord = EmailVerifyOtpModel::where('email', $request->email)
-            ->where('otp', $request->otp)
-            ->where('expires_at', '>', Carbon::now())
-            ->where('status','!=','1')
-            ->first();
-        
-        if($otpRecord)
+        $is_valid = 0;
+        if($is_login)
         {
-            $user_id = "";
+            $is_valid = 1;
+        }else{
             $email = $request->email;
             $email_exists = DB::table('users as u')->where('u.email',$email)->first();
             if($email_exists)
             {
+                $is_valid = 1;
                 $user_id = $email_exists->id;
             }else{
-                $password = $this->generatePassword('6');
-                $user = User::create([
-                    'name' => $request->name,
-                    'user_type' => $request->user_type,
-                    'email' => $request->email,
-                    'password' => Hash::make('123456'),
-                    'phone' => $request->phone,
-                    'phone_code' => $request->phone_code
-                ]);
-                $user_id = $user->id;
-                $template = 'user-password';
-                $data_parse=array(
-                    'USERNAME'=> $request->name,
-                    'PASSWORD'=> $password
-                );
-                SendMail($request->email, $template, $data_parse);
-                $token = JWTAuth::fromUser($user);
+                $otpRecord = EmailVerifyOtpModel::where('email', $request->email)
+                                    ->where('otp', $request->otp)
+                                    ->where('expires_at', '>', Carbon::now())
+                                    ->where('status','!=','1')
+                                    ->first();
+                if($otpRecord)
+                {
+                    $is_valid = 1;
+                    $password = $this->generatePassword('6');
+                    $user = User::create([
+                        'name' => $request->name,
+                        'user_type' => $request->user_type,
+                        'email' => $request->email,
+                        'password' => Hash::make('123456'),
+                        'phone' => $request->phone,
+                        'phone_code' => $request->phone_code
+                    ]);
+                    $user_id = $user->id;
+                    $template = 'user-password';
+                    $data_parse=array(
+                        'USERNAME'=> $request->name,
+                        'PASSWORD'=> $password
+                    );
+                    SendMail($request->email, $template, $data_parse);
+                }else{
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Invalid OTP entered.',
+                    ], 200);
+                }
             }
+        }
+
+        if($is_valid)
+        {
             $post_data = $request->all();
             $post_data['user_id'] = $user_id;
             $up = $this->apiModel->addAdvertisementRequest($post_data);
@@ -168,9 +194,60 @@ class AdvertisementController extends Controller
         }else{
             return response()->json([
                 'status' => 0,
-                'message' => 'Invalid OTP entered.',
+                'message' => 'Something went wrong.',
             ], 200);
         }
+        
+        
+        // if($otpRecord)
+        // {
+        //     $user_id = "";
+        //     $email = $request->email;
+        //     $email_exists = DB::table('users as u')->where('u.email',$email)->first();
+        //     if($email_exists)
+        //     {
+        //         $user_id = $email_exists->id;
+        //     }else{
+        //         $password = $this->generatePassword('6');
+        //         $user = User::create([
+        //             'name' => $request->name,
+        //             'user_type' => $request->user_type,
+        //             'email' => $request->email,
+        //             'password' => Hash::make('123456'),
+        //             'phone' => $request->phone,
+        //             'phone_code' => $request->phone_code
+        //         ]);
+        //         $user_id = $user->id;
+        //         $template = 'user-password';
+        //         $data_parse=array(
+        //             'USERNAME'=> $request->name,
+        //             'PASSWORD'=> $password
+        //         );
+        //         SendMail($request->email, $template, $data_parse);
+        //         $token = JWTAuth::fromUser($user);
+        //     }
+        //     $post_data = $request->all();
+        //     $post_data['user_id'] = $user_id;
+        //     $up = $this->apiModel->addAdvertisementRequest($post_data);
+        //     if($up)
+        //     {
+        //         $otpRecord = EmailVerifyOtpModel::where('email', $request->email)->update(['status'=>1]);
+        //         return response()->json([
+        //                 'status' => 1,
+        //                 'message' => 'Request sent successfully.',
+        //             ], 200);  
+        //     }else{
+        //         return response()->json([
+        //             'status' => 0,
+        //             'message' => 'Failed to send request.',
+        //         ], 200);
+        //     }
+        // }else{
+        //     return response()->json([
+        //         'status' => 0,
+        //         'message' => 'Invalid OTP entered.',
+        //     ], 200);
+        // }
        
     }
 
