@@ -11,7 +11,7 @@ import { useAuth } from "@/context/AuthProvider";
 const SideBar = () => {
   const { callApi, GetMemberId, logout } = AuthUser();
   // const [userData, setUserData] = useState();
-  const {userData, uploadUserImage} = useAuth();
+  const { userData, uploadUserImage } = useAuth();
 
   const router = useRouter();
   const { pathname } = router;
@@ -212,7 +212,7 @@ const SideBar = () => {
                 <li>
                   <a href="/property-crm-calender">
                     <i className="icon-line-awesome-arrow-right"></i>{" "}
-                    {translation?.schedule_calender || "Schedule Calendar"} 
+                    {translation?.schedule_calender || "Schedule Calendar"}
                   </a>
                 </li>
                 {/* <li>
@@ -285,6 +285,18 @@ const SideBar = () => {
               <Link href="/" onClick={logout}>
                 <i className="bi bi-box-arrow-right"></i>{" "}
                 <span>{translation?.logout || "Logout"}</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/create-advertisement">
+                <i className="bi bi-flag"></i>{" "}
+                <span>Create Advertisement</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/my-advertisement" >
+                <i class="bi bi-badge-ad"></i>{" "}
+                <span>My Advertisement</span>
               </Link>
             </li>
           </ul>

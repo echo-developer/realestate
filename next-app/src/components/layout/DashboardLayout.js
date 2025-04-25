@@ -1,8 +1,9 @@
-"use client"
+"use client";
 import React from 'react';
 import SideBar from '../sidebar/SideBar';
 import Header from '../header/Header';
 import MobileFooter from '../addtional/MobileFooter';
+import dynamic from 'next/dynamic';
 
 const DashboardLayout = ({ children }) => {
   return (

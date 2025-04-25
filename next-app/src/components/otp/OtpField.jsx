@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import AuthUser from '../Authentication/AuthUser';
 import { toast } from 'react-toastify';
 
-const OtpField = ({setOtpValid, setShowOtpField,  email}) => {
+const OtpField = ({setOtpValid, setShowOtpField,  email, setValidatedOtp}) => {
     const { callApi } = AuthUser();
     const inputRef = useRef([]);
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -40,6 +40,9 @@ const OtpField = ({setOtpValid, setShowOtpField,  email}) => {
               if(res && res?.status == 1) {
                 setOtpValid(true);
                 setShowOtpField(false);
+                if(setValidatedOtp) {
+                    setValidatedOtp(otp);
+                }
                 toast.success("OTP verified successfully")
               } else {
                 setOtpErr(res?.message || "")
