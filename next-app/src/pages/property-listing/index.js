@@ -402,9 +402,7 @@ const index = () => {
           });
           if (res && res?.status === 1) {
             setSubPropertyList(res?.data || []);
-          } else {
-            toast.error(res?.message || "Error fetching property for options");
-          }
+          } 
         } catch (error) {
           toast.error(res?.message || "Error fetching property for options");
         } finally {

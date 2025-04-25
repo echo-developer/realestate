@@ -165,12 +165,7 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
                                 option.sub_category_id === initialPropertyFor
                         );
                         setSelectedPropertyFor(matchedFor || null);
-                    } else {
-                        toast.error(
-                            response?.message ||
-                                "Error fetching property for options"
-                        );
-                    }
+                    } 
                 } catch (error) {
                     toast.error(
                         error?.message || "Error fetching property for options"

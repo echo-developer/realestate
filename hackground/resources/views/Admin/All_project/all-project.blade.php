@@ -275,50 +275,7 @@
                 @endif
             </div>
 
-            @if ($project->isNotEmpty())
-            <div class="d-flex justify-content-center mb-3">
-                <ul class="pagination small mb-0">
-                    @if ($project->currentPage() == $project->lastPage() && $project->currentPage() != 1)
-                    <li class="page-item">
-                        <a href="{{ $project->appends(['term' => request('term')])->url(1) }}"
-                            class="page-link" rel="start">
-                            <i class="fa fa-chevron-left"></i> First
-                        </a>
-                    </li>
-                    @endif
-
-                    <li class="page-item {{ $project->currentPage() == 1 ? 'disabled' : '' }}">
-                        <a href="{{ $project->appends(['term' => request('term')])->previousPageUrl() }}"
-                            class="page-link" rel="prev">
-                            <i class="fa fa-chevron-left"></i>
-                        </a>
-                    </li>
-
-                    @for ($i = max($project->currentPage() - 1, 1); $i <= min($project->currentPage() + 1, $project->lastPage()); $i++)
-                        <li class="page-item {{ $project->currentPage() == $i ? 'active' : '' }}">
-                            <a href="{{ $project->appends(['term' => request('term')])->url($i) }}"
-                                class="page-link">{{ $i }}</a>
-                        </li>
-                        @endfor
-
-                        <li class="page-item {{ $project->currentPage() == $project->lastPage() ? 'disabled' : '' }}">
-                            <a href="{{ $project->appends(['term' => request('term')])->nextPageUrl() }}"
-                                class="page-link" rel="next">
-                                <i class="fa fa-chevron-right"></i>
-                            </a>
-                        </li>
-
-                        @if ($project->currentPage() != $project->lastPage())
-                        <li class="page-item">
-                            <a href="{{ $project->appends(['term' => request('term')])->url($project->lastPage()) }}"
-                                class="page-link" rel="end">
-                                Last <i class="fa fa-chevron-right"></i>
-                            </a>
-                        </li>
-                        @endif
-                </ul>
-            </div>
-            @endif
+            {!! $project->links('vendor.pagination.bootstrap-5') !!}
 </div>
 @endsection
 
@@ -893,13 +850,13 @@
                 floor_data: []
             };
 
-            towerElement.querySelectorAll('.floor-container fieldset').forEach((floorElement) => {
+            towerElement.querySelectorAll('.floor-container').forEach((floorElement) => {
                 const floorData = {
                     floor_no: floorElement.querySelector('input[name="floor_no"]').value,
                     flat_no: floorElement.querySelector('input[name="flat_no"]').value,
                     bhk_configurations: []
                 };
-
+               
                 floorElement.querySelectorAll('.bhk-container > div').forEach((bhkElement) => {
                     const floorPlanInput = bhkElement.querySelector('.floor_plan_image_name');
                     const bhkData = {

@@ -78,8 +78,6 @@ class VerifyUserMailController extends Controller
             return response()->json(['status' => 0, 'message' => 'Invalid or expired OTP.']);
         }
 
-        $otpRecord->delete();
-
         return response()->json(['status' => 1, 'message' => 'Email verified successfully.']);
     }
 }

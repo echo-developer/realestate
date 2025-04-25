@@ -164,9 +164,7 @@ export function PropertyMobileFilters({
           });
           if (res && res?.status === 1) {
             setSelectedPropertyForList(res?.data || []);
-          } else {
-            toast.error(res?.message || "Error fetching property for options");
-          }
+          } 
         } catch (error) {
           toast.error(res?.message || "Error fetching property for options");
         }
