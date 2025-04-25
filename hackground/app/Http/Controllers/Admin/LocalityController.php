@@ -225,8 +225,57 @@ class LocalityController extends Controller
 
     public function landmarkStatus(Request $request)
     {
-        log_anything($request->all());
-        $response = DB::table('locality_landmarks')->where('id', $request->id)->update(['status' => $request->status]);
-        return response()->json($response);
+        $response = DB::table('locality_landmarks')
+            ->where('id', $request->id)
+            ->update(['status' => $request->status]);
+        return response()->json(['message' => 'Status Updated']);
+    }
+
+    public function updateLandmark(Request $request)
+    {
+        $validated = $request->validate(
+            [
+                'name.en' => 'required|regex:/^[A-Za-z\s]+$/|max:50',
+                'name.ar' => 'required|regex:/^[\p{Arabic}\s]+$/u|max:50',
+                'distance' => 'required|numeric|min:0|max:5',
+            ],
+            [
+                'name.en.required' => 'This field is required',
+                'name.ar.required' => 'This field is required',
+                'name.en.regex' => 'Only characters are allowed',
+                'name.ar.regex' => 'Only characters are allowed',
+                'name.en.max' => 'Maximum character exceeded',
+                'name.ar.max' => 'Maximum character exceeded',
+                'distance.required' => 'Distance is required',
+                'distance.numeric' => 'Distance must be a number',
+                'distance.min' => 'Distance should be greater than ZERO',
+                'distance.max' => 'Maximum value is 5 KM',
+            ]
+        );
+
+
+        $responce = DB::table('locality_landmarks')
+            ->where('id', $request->landmarkId)
+            ->update([
+                'name_en' => $request->name['en'],
+                'name_ar' => $request->name['ar'],
+                'distance_km' => $request->distance,
+                'status' => $request->status,
+            ]);
+        return response()->json(['message' => 'Landmark Updated']);
+    }
+
+    public function deleteLandmark($id = null)
+    {
+        if (empty($id)) {
+            return response()->json(['message' => 'Something went wrong']);
+        }
+
+        DB::table('locality_landmarks')
+            ->where('id', $id)
+            ->update([
+                'status' => config('constants.STATUS_DELETE'),
+            ]);
+        return response()->json(['message' => 'Deleted !']);
     }
 }

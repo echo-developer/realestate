@@ -176,6 +176,7 @@ class LocalityModel extends Model
             $langs = explode(',', admin_default_lang());
             foreach ($data as $row) {
                 $slug = Str::slug($row[3], '_');
+                $landmarkSlug = Str::slug($row[6], '_');
 
                 $existingLocality = DB::table($this->localityTable)
                     ->where('locality_key', $slug)
@@ -225,13 +226,20 @@ class LocalityModel extends Model
                     }
                 }
 
-                DB::table('locality_landmarks')->insert([
-                    'locality_id' => $localityId,
-                    'type' => $row[5],
-                    'name_en' => $row[6],
-                    'name_ar' => $row[7],
-                    'distance_km' => $row[8],
-                ]);
+                $existingLandmarks = DB::table('locality_landmarks')
+                    ->where(['slug' =>  $landmarkSlug, 'locality_id' => $localityId])
+                    ->exists();
+
+                if (!$existingLandmarks) {
+                    DB::table('locality_landmarks')->insert([
+                        'locality_id' => $localityId,
+                        'type' => $row[5],
+                        'slug' => $landmarkSlug,
+                        'name_en' => $row[6],
+                        'name_ar' => $row[7],
+                        'distance_km' => $row[8],
+                    ]);
+                }
             }
 
             return [

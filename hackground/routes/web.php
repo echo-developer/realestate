@@ -359,6 +359,8 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/landmark-list/{locality_id?}', 'landmarkListPage')->name('locality.landmarks.page');
         Route::get('/landmark-edit/{id?}', 'landmarkDetails')->name('locality.landmarks.details');
         Route::post('/landmark-status', 'landmarkStatus')->name('locality.landmarks.status');
+        Route::post('/update-landmark', 'updateLandmark')->name('locality.landmarks.update');
+        Route::post('/landmark-delete/{id?}', 'deleteLandmark')->name('locality.landmarks.delete');
     });
 
     /*

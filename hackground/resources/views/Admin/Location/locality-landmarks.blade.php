@@ -107,8 +107,8 @@
                             @if (isset($data))
                                 @foreach ($data as $item)
                                     <tr>
-                                        <td>{{ $item->name_en }}</td>
-                                        <td>{{ $item->distance_km }}</td>
+                                        <td>{{ $item->name_en ?? 'N/A' }}</td>
+                                        <td>{{ $item->distance_km ?? 'N/A' }}</td>
                                         <td>
                                             <input data-id="{{ $item->id }}" class="status d-none" type="checkbox"
                                                 data-toggle="toggle" data-on="Active" data-off="Inactive"
@@ -312,8 +312,6 @@
 
         function update() {
             let data = formData.serializeArray();
-            console.log(data)
-            return
             // let lanmark_id = landmarkId.val()
             let url = `{{ url('/update-landmark') }}`
 
@@ -324,8 +322,8 @@
                 success: function(response) {
                     localStorage.setItem('successMessage', response.message);
                     window.location.reload(true);
-                    $modalAction.modal('hide');
-                    $formData[0].reset();
+                    modalAction.modal('hide');
+                    formData[0].reset();
                 },
                 error: function(response) {
                     var errors = response.responseJSON.errors;
@@ -342,10 +340,29 @@
             });
         }
 
+
+        function Delete(id) {
+            if (confirm('Are you sure you want to delete this?')) {
+                $.ajax({
+                    type: 'POST',
+                    url: `{{ url('/landmark-delete') }}/${id}`,
+                    success: function(response) {
+                        localStorage.setItem('successMessage', response.message);
+                        window.location.reload(true);
+                    },
+                    error: function(response) {
+                        var errors = response.responseJSON.errors;
+                        console.log(errors)
+                    }
+                });
+            }
+        }
+
+
+
         $(document).ready(function() {
 
             status.change(function() {
-                toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
                 var id = $(this).data('id');
                 var status = this.checked ? 1 : 0;
                 $.ajax({
@@ -356,13 +373,18 @@
                         status: status,
                         id: id
                     },
-                    success: function(data) {},
+                    success: function(response) {
+                        toastr.success('Request Processed Successfully', response.message,
+                            toastrOptions);
+
+                    },
                     error: function(msg) {
                         console.log(msg);
                     }
                 });
 
             });
+
         })
     </script>
 @endpush

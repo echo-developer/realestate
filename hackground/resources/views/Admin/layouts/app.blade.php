@@ -13,7 +13,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Disable tap highlight on IE -->
     <meta name="msapplication-tap-highlight" content="no">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" type="text/css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" type="text/css"
+        rel="stylesheet">
     <link href="{{ asset('assets/css/base.min.css') }}" type="text/css" rel="stylesheet">
     <link href="{{ asset('assets/css/icons.css') }}" type="text/css" rel="stylesheet">
     <link href="{{ asset('assets/css/google-material-icons.css') }}" type="text/css" rel="stylesheet">
@@ -23,6 +24,16 @@
     <link href="{{ asset('assets/css/custom.css') }}" type="text/css" rel="stylesheet">
     <link href="{{ asset('assets/css/responsive.css') }}" type="text/css" rel="stylesheet">
     <link href="{{ asset('assets/css/ltr.css') }}" type="text/css" rel="stylesheet">
+    <style>
+        #toast-container>div {
+            background-color: #198754 !important;
+            /* slightly transparent dark */
+            color: #fff !important;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            opacity: 1 !important;
+        }
+    </style>
     <!-- <link rel="stylesheet" href="{{ asset('assets/js/scripts-init/select2/dist/css/select2.min.css') }}"> -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -50,7 +61,8 @@
 
     <!--CORE-->
 
-    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js" crossorigin="anonymous">
+    </script> -->
     <script src="https://cdn.jsdelivr.net/npm/metismenu"></script>
     <script src="{{ asset('assets/js/scripts-init/app.js') }}"></script>
     <script src="{{ asset('assets/js/scripts-init/demo.js') }}"></script>
@@ -58,8 +70,12 @@
 
     <!--Toggle Switch -->
     <script src="{{ asset('assets/js/vendors/form-components/toggle-switch.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js" integrity="sha384-VQqxDN0EQCkWoxt/0vsQvZswzTHUVOImccYmSyhJTp7kGtPed0Qcx8rK9h9YEgx+" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.min.js"
+        integrity="sha384-VQqxDN0EQCkWoxt/0vsQvZswzTHUVOImccYmSyhJTp7kGtPed0Qcx8rK9h9YEgx+" crossorigin="anonymous">
+    </script>
     <script>
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
@@ -104,7 +120,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const successMessage = localStorage.getItem('successMessage');
             if (successMessage) {
-                toastr.success(successMessage, '', toastrOptions);
+                toastr.success('Request Processed Successfully', successMessage, toastrOptions);
                 localStorage.removeItem('successMessage');
             }
         });
@@ -139,7 +155,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="ajaxModalLabel"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    
+
                 </button>
             </div>
 
