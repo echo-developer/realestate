@@ -177,7 +177,8 @@
                     </table>
                 </form>
             </div>
-
+            {!! $list->links('vendor.pagination.bootstrap-5') !!}
+            <?php /* ?>
             @if($list->isNotEmpty())
             <div class="card-footer pagination-rounded clearfix justify-content-center">
                 <ul class="pagination small mb-0">
@@ -217,6 +218,7 @@
                 </ul>
             </div>
             @endif
+            <?php */ ?>
 
         </div>
     </div>

@@ -119,8 +119,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if($list)
-                        @foreach($list as $item)
+                        @forelse($list as $item)
                         <tr>
                             <td>{{ $item->enquery_id }}</td>
                             <td>
@@ -143,13 +142,17 @@
                                 {{-- <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->enquery_id }}')"></i> --}}
                             </td>
                         </tr>
-                        @endforeach
-                        @endif
+                        @empty
+                        <tr>
+                            <td colspan="4" class="text-center" >Sorry, no records found!</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
-
-            @if(isset($list))
+            {!! $list->links('vendor.pagination.bootstrap-5') !!}
+            <?php /* ?>
+            @if($list->isNotEmpty())
             <div class="card-footer pagination-rounded clearfix justify-content-center">
                 <ul class="pagination small mb-0">
                     @if ($list->currentPage() == $list->lastPage() && $list->currentPage() != 1)
@@ -188,6 +191,7 @@
                 </ul>
             </div>
             @endif
+            <?php */ ?>
 
         </div>
     </div>

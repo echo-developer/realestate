@@ -156,8 +156,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if($list)
-                        @foreach($list as $item)
+                        @forelse($list as $item)
                         <tr>
                             <td>{{ $item->id }}</td>
                             <td>{{ $item->name }}</td>
@@ -174,13 +173,17 @@
                                 <i class="fa fa-trash text-danger fa-md" onclick="remove_assigned('{{ $item->assign_id }}')"></i>
                             </td>
                         </tr>
-                        @endforeach
-                        @endif
+                        @empty
+                        <tr>
+                            <td colspan="4" class="text-center" >Sorry, no records found!</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
                 @endif
             </div>
-
+            {!! $list->links('vendor.pagination.bootstrap-5') !!}
+            <?php /* ?>
             @if(isset($list))
             <div class="card-footer pagination-rounded clearfix justify-content-center">
                 <ul class="pagination small mb-0">
@@ -220,6 +223,7 @@
                 </ul>
             </div>
             @endif
+            <?php */ ?>
 
         </div>
     </div>

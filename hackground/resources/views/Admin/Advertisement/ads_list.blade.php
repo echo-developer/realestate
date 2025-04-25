@@ -107,8 +107,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if($list)
-                        @foreach($list as $item)
+                        @forelse($list as $item)
                         <tr>
                             <td>{{ $item->advertisement_id }}</td>
                             <td>{{ $item->member_id ? getField('name','users','id',$item->member_id) : '-' }}</td>
@@ -127,51 +126,16 @@
                                 <a href="javascript:void(0)"><i class="bi bi-trash3-fill text-danger fa-md" onclick="Delete('{{ $item->advertisement_id }}')"></i></a>
                             </td>
                         </tr>
-                        @endforeach
-                        @endif
+                        @empty
+                        <tr>
+                            <td colspan="4" class="text-center" >Sorry, no records found!</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
 
-            @if(isset($list))
-            <div class="card-footer pagination-rounded clearfix justify-content-center">
-                <ul class="pagination small mb-0">
-                    @if ($list->currentPage() == $list->lastPage() && $list->currentPage() != 1)
-                    <li class="page-item">
-                        <a href="{{ $list->appends(['term' => request('term')])->url(1) }}" class="page-link" rel="start">
-                            <i class="fa fa-chevron-left"></i> First
-                        </a>
-                    </li>
-                    @endif
-
-                    <li class="page-item {{ $list->currentPage() == 1 ? 'disabled' : '' }}">
-                        <a href="{{ $list->appends(['term' => request('term')])->previousPageUrl() }}" class="page-link" rel="prev">
-                            <i class="fa fa-chevron-left"></i>
-                        </a>
-                    </li>
-
-                    @for ($i = max($list->currentPage() - 1, 1); $i <= min($list->currentPage() + 1, $list->lastPage()); $i++)
-                        <li class="page-item {{ ($list->currentPage() == $i) ? 'active' : '' }}">
-                            <a href="{{ $list->appends(['term' => request('term')])->url($i) }}" class="page-link">{{ $i }}</a>
-                        </li>
-                        @endfor
-
-                        <li class="page-item {{ $list->currentPage() == $list->lastPage() ? 'disabled' : '' }}">
-                            <a href="{{ $list->appends(['term' => request('term')])->nextPageUrl() }}" class="page-link" rel="next">
-                                <i class="fa fa-chevron-right"></i>
-                            </a>
-                        </li>
-
-                        @if ($list->currentPage() != $list->lastPage())
-                        <li class="page-item">
-                            <a href="{{ $list->appends(['term' => request('term')])->url($list->lastPage()) }}" class="page-link" rel="end">
-                                Last <i class="fa fa-chevron-right"></i>
-                            </a>
-                        </li>
-                        @endif
-                </ul>
-            </div>
-            @endif
+            {!! $list->links('vendor.pagination.bootstrap-5') !!}
 
         </div>
     </div>
