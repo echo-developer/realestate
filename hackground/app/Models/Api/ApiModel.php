@@ -1524,7 +1524,8 @@ class ApiModel extends Model
     {
         $query = DB::table('advertisement_request as r')
                             ->select('r.*')
-                            ->where('r.user_id',$user_id);
+                            ->where(['r.user_id'=>$user_id])
+                            ->where('r.status', '!=', '-1');
         if($for_list)
         {
             $query->limit($limit);
