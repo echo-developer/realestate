@@ -1379,12 +1379,15 @@ class ApiModel extends Model
 
     public function getPageAdvertisements($data = array())
     {
+        $curr_date = date('Y-m-d H:i:s');
         $query = DB::table('advertisements as a')
             ->select('a.advertisement_id', 'a.ad_image', 'a.ad_image_mobile', 'a.ad_url', 'a.ad_type', 'a.ad_code')
             ->leftJoin('advertisement_category as a_c', 'a.advertisement_id', '=', 'a_c.advertisement_id')
             ->leftJoin('advertisement_locations as a_l', 'a.advertisement_id', '=', 'a_l.advertisement_id');
 
         $query->where('status', '1');
+        $query->where('a.start_date', '<=', $curr_date);
+        $query->where('a.expire_date', '>=', $curr_date);
 
         if (array_key_exists('page', $data) && !empty($data['page'])) {
             $query->where('a.page', $data['page']);
