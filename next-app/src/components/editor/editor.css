@@ -1,10 +1,11 @@
+/* Increase the minimum and maximum height of the editor container */
 .editor-container .ql-container {
-    min-height: 75px;
-    max-height: 100px;
-    overflow-y: auto;
-  }
-  
-  .editor-container .ql-editor {
-    min-height: 75px;
-  }
-  
+  min-height: 250px; /* Increase the minimum height of the editor */
+  max-height: 500px; /* Increase the maximum height (if needed) */
+  overflow-y: auto;  /* Allow scrolling if content exceeds the max height */
+}
+
+/* Increase the minimum height of the editable area */
+.editor-container .ql-editor {
+  min-height: 250px; /* Set the minimum height of the editor */
+}

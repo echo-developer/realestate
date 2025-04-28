@@ -395,6 +395,7 @@ class ApiModel extends Model
                 'property_additional.brochure_file',
             )
             ->where('properties.uid', '=', $user_id)
+            ->orderBy('created_at', 'desc')
             ->get();
     }
 
