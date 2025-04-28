@@ -73,7 +73,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="ad_image_con">
                 <img id="image_preview1" style="display:none; width: 100px; height: auto;" />
                 <input type="hidden" class="filename" name="ad_image" id="ad_image" />
                 <button type="button" id="delete_image_btn1" style="display:none;"
@@ -92,7 +92,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="ad_image_mobile_con">
                 <img id="image_preview2" src=" " style="display:none; width: 100px; height: auto;" />
                 <input type="hidden" class="filename" name="ad_image_mobile" id="ad_image_mobile" />
                 <button type="button" id="delete_image_btn2" style="display:none;"
@@ -271,10 +271,10 @@
             },
             success: function(data) {
                 if (data.status == 'OK') {
-                    $("#ad_image").val(data.file_name);
-                    $("#image_preview1").show();
-                    $("#delete_image_btn1").show();
-                    $("#image_preview1").attr('src', data.file_path);
+                    var html = '';
+                    html += '<img id="image_preview1" src="'+data.file_path+'" style="width: 100px; height: auto;" /><input type="hidden" class="filename" name="ad_image" id="ad_image" value="'+data.file_name+'" />';
+                    html +=  '<button type="button" id="delete_image_btn1" class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>';
+                    $("#ad_image_con").html(html);
                 }
             },
             error: function(xhr, status, error) {
@@ -298,10 +298,10 @@
             },
             success: function(data) {
                 if (data.status == 'OK') {
-                    $("#ad_image_mobile").val(data.file_name);
-                    $("#image_preview2").show();
-                    $("#delete_image_btn2").show();
-                    $("#image_preview2").attr('src', data.file_path);
+                    var html = '';
+                    html += '<img id="image_preview2" src="'+data.file_path+'" style="width: 100px; height: auto;" /><input type="hidden" class="filename" name="ad_image" id="ad_image" value="'+data.file_name+'" />';
+                    html +=  '<button type="button" id="delete_image_btn2" class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>';
+                    $("#ad_image_mobile_con").html(html);
                 }
             },
             error: function(xhr, status, error) {
@@ -393,19 +393,14 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="form-group" id="ad_image_con">
             @if($detail->ad_image)
-                <div class="form-group">
-                    <img src="{{ asset('user_upload/advertisement/'.$detail->ad_image) }}" id="image_preview1" style="width: 100px; height: auto;" />
-                    <input type="hidden" class="filename" name="ad_image" id="ad_image" value="{{ $detail->ad_image }}" />
-                    <button type="button" id="delete_image_btn1" class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
-                </div>
-            @else
-            <div class="form-group">
-                <img id="image_preview1" style="display:none; width: 100px; height: auto;" />
-                <input type="hidden" class="filename" name="ad_image" id="ad_image" />
-                <button type="button" id="delete_image_btn1" style="display:none;" class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
-            </div>
+                <img src="{{ asset('user_upload/advertisement/'.$detail->ad_image) }}" id="image_preview1" style="width: 100px; height: auto;" />
+                <input type="hidden" class="filename" name="ad_image" id="ad_image" value="{{ $detail->ad_image }}" />
+                <button type="button" id="delete_image_btn1" class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
             @endif
+            </div>
             
         </div>
 
@@ -420,20 +415,15 @@
                     </div>
                 </div>
             </div>
-            @if($detail->ad_image_mobile)
-                <div class="form-group">
+            
+            <div class="form-group" id="ad_image_mobile_con">
+                @if($detail->ad_image_mobile)
                     <img id="image_preview2" src="{{ asset('user_upload/advertisement/'.$detail->ad_image_mobile) }}" style="width: 100px; height: auto;" />
                     <input type="hidden" class="filename" name="ad_image_mobile" id="ad_image_mobile" value="{{ $detail->ad_image_mobile }}" />
                     <button type="button" id="delete_image_btn2" class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
-                </div>
-            @else
-            <div class="form-group">
-                    <img id="image_preview2" src="" style="display:none; width: 100px; height: auto;" />
-                    <input type="hidden" class="filename" name="ad_image_mobile" id="ad_image_mobile" value="" />
-                    <button type="button" id="delete_image_btn2" style="display:none;"
-                        class="btn btn-danger mt-2" onclick="deleteUploadedImage()">Delete Image</button>
-                </div>
-            @endif
+                @endif
+            </div>
+            
         </div>
 
         <div class="form-group" id="ad_code_wrapper" style="display:none">
@@ -625,10 +615,10 @@
             },
             success: function(data) {
                 if (data.status == 'OK') {
-                    $("#ad_image").val(data.file_name);
-                    $("#image_preview1").show();
-                    $("#delete_image_btn1").show();
-                    $("#image_preview1").attr('src', data.file_path);
+                    var html = '';
+                    html += '<img id="image_preview1" src="'+data.file_path+'" style="width: 100px; height: auto;" /><input type="hidden" class="filename" name="ad_image" id="ad_image" value="'+data.file_name+'" />';
+                    html +=  '<button type="button" id="delete_image_btn1" class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>';
+                    $("#ad_image_con").html(html);
                 }
             },
             error: function(xhr, status, error) {
@@ -652,10 +642,10 @@
             },
             success: function(data) {
                 if (data.status == 'OK') {
-                    $("#ad_image_mobile").val(data.file_name);
-                    $("#image_preview2").show();
-                    $("#delete_image_btn2").show();
-                    $("#image_preview2").attr('src', data.file_path);
+                    var html = '';
+                    html += '<img id="image_preview2" src="'+data.file_path+'" style="width: 100px; height: auto;" /><input type="hidden" class="filename" name="ad_image" id="ad_image" value="'+data.file_name+'" />';
+                    html +=  '<button type="button" id="delete_image_btn2" class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>';
+                    $("#ad_image_mobile_con").html(html);
                 }
             },
             error: function(xhr, status, error) {
@@ -772,20 +762,15 @@
                         </div>
                     </div>
                 </div>
-                @if($detail['ad_image'])
-                <div class="form-group">
-                    <img id="image_preview1" src="{{ asset('user_upload/advertisement/'.$detail['ad_image']) }}" style="width: 100px; height: auto;" />
-                    <input type="hidden" class="filename" name="ad_image" id="ad_image" value="{{ !empty($detail['ad_image']) ? $detail['ad_image'] : '' }}" />
-                    <button type="button" id="delete_image_btn1" class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>
+                
+                <div class="form-group" id="ad_image_con">
+                    @if($detail['ad_image'])
+                        <img id="image_preview1" src="{{ asset('user_upload/advertisement/'.$detail['ad_image']) }}" style="width: 100px; height: auto;" />
+                        <input type="hidden" class="filename" name="ad_image" id="ad_image" value="{{ !empty($detail['ad_image']) ? $detail['ad_image'] : '' }}" />
+                        <button type="button" id="delete_image_btn1" class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>
+                    @endif
                 </div>
-                @else
-                <div class="form-group">
-                    <img id="image_preview1" style="display:none; width: 100px; height: auto;" />
-                    <input type="hidden" class="filename" name="ad_image" id="ad_image" value="" />
-                    <button type="button" id="delete_image_btn1" style="display:none;"
-                    class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>
-                </div>
-                @endif
+                
             </div>
 
             <div id="ad_image_mobile_wrapper">
@@ -799,21 +784,15 @@
                         </div>
                     </div>
                 </div>
-                @if($detail['ad_image_mobile'])
-                <div class="form-group">
-                    <img id="image_preview2" src="{{ asset('user_upload/advertisement/'.$detail['ad_image_mobile']) }}" style="width: 100px; height: auto;" />
-                    <input type="hidden" class="filename" name="ad_image_mobile" id="ad_image_mobile" value="{{ !empty($detail['ad_image_mobile']) ? $detail['ad_image_mobile'] : '' }}" />
-                    <button type="button" id="delete_image_btn2"
-                        class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>
+                
+                <div class="form-group" id="ad_image_mobile_con">
+                    @if($detail['ad_image_mobile'])
+                        <img id="image_preview2" src="{{ asset('user_upload/advertisement/'.$detail['ad_image_mobile']) }}" style="width: 100px; height: auto;" />
+                        <input type="hidden" class="filename" name="ad_image_mobile" id="ad_image_mobile" value="{{ !empty($detail['ad_image_mobile']) ? $detail['ad_image_mobile'] : '' }}" />
+                        <button type="button" id="delete_image_btn2" class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>
+                    @endif
                 </div>
-                @else
-                <div class="form-group">
-                    <img id="image_preview2" src="" style="display:none; width: 100px; height: auto;" />
-                    <input type="hidden" class="filename" name="ad_image_mobile" id="ad_image_mobile" value="" />
-                    <button type="button" id="delete_image_btn2" style="display:none;"
-                        class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>
-                </div>
-                @endif
+                
             </div>
 
             <div class="form-group" id="ad_code_wrapper">
@@ -988,10 +967,10 @@
             },
             success: function(data) {
                 if (data.status == 'OK') {
-                    $("#ad_image").val(data.file_name);
-                    $("#image_preview1").show();
-                    $("#delete_image_btn1").show();
-                    $("#image_preview1").attr('src', data.file_path);
+                    var html = '';
+                    html += '<img id="image_preview1" src="'+data.file_path+'" style="width: 100px; height: auto;" /><input type="hidden" class="filename" name="ad_image" id="ad_image" value="'+data.file_name+'" />';
+                    html +=  '<button type="button" id="delete_image_btn1" class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>';
+                    $("#ad_image_con").html(html);
                 }
             },
             error: function(xhr, status, error) {
@@ -1015,10 +994,10 @@
             },
             success: function(data) {
                 if (data.status == 'OK') {
-                    $("#ad_image_mobile").val(data.file_name);
-                    $("#image_preview2").show();
-                    $("#delete_image_btn2").show();
-                    $("#image_preview2").attr('src', data.file_path);
+                    var html = '';
+                    html += '<img id="image_preview2" src="'+data.file_path+'" style="width: 100px; height: auto;" /><input type="hidden" class="filename" name="ad_image" id="ad_image" value="'+data.file_name+'" />';
+                    html +=  '<button type="button" id="delete_image_btn2" class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>';
+                    $("#ad_image_mobile_con").html(html);
                 }
             },
             error: function(xhr, status, error) {
