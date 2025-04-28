@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import TextEditor from "../editor/TextEditor";
 // import { Modal, Button } from 'react-bootstrap';
 import useTranslation from "@/hooks/useTranslation";
+import { useAuth } from "@/context/AuthProvider";
 
 
 // const FreeMapModal = dynamic(() => import("../MapData/FreeMapModal"), { ssr: false });
@@ -13,7 +14,7 @@ const MapComponent = dynamic(() => import("../MapData/Map"), { ssr: false });
 const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const [position, setPosition] = useState([51.505, -0.09]);
   const { callApi } = AuthUser();
-  // const [showMap, setShowMap] = useState(false);
+  const { localityInputSearch, setLocalityInputSearch, localityList, localityDropdown, setLocalityDropdown } = useAuth();
   const [errors, setErrors] = useState({
     city: "",
     locality: "",
@@ -21,9 +22,8 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     address: "",
     description: "",
   });
-  // const [localityList, setLocalityList] = useState([]);
+
   const translation = useTranslation();
-  // const [selectedLocality, setSelectedLocality] = useState(null);
 
   const [cityData, setCityData] = useState([]);
 
@@ -32,28 +32,6 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     fetchCityData();
   }, []);
 
-
-  // useEffect(() => {
-  //   if (formData?.city) {
-  //     const fetchLocalityList = async () => {
-  //       try {
-  //         const res = await callApi({
-  //           api: `/locality-list?city_id=${formData.city}`,
-  //           method: "GET"
-  //         })
-  //         if (res && res?.status == 1) {
-  //           setLocalityList(res?.data);
-  //         } else {
-  //           setLocalityList([])
-  //         }
-  //       } catch (error) {
-  //         console.error(error.message || "Something went wrong")
-  //       }
-  //     }
-
-  //     fetchLocalityList();
-  //   }
-  // }, [formData?.city])
 
   const fetchCityData = async () => {
     try {
@@ -111,6 +89,17 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleLocalitySelect = (locality) => {
+    setFormData(prev => {
+      return {
+        ...prev,
+        locality: locality.id
+      }
+    })
+    setLocalityInputSearch(locality?.name)
+    setLocalityDropdown(false);
+  }
+
   // const handleLocalityChange = (id) => {
   //   if (id) {
   //     const locality = localityList.find((item) => item.locality_id == id);
@@ -138,52 +127,6 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
-  // const handleOpenMap = () => {
-  //   if(selectedLocality) {
-  //     if(selectedLocality?.latitude && selectedLocality?.longitude) {
-  //       setShowMap(true);
-  //     } else {
-  //       setErrors(prev => {
-  //         return {
-  //           ...prev,
-  //           locality: 'Choose a locality that has latitude & longitude'
-  //         }
-  //       })
-  //     }
-  //   } else {
-  //     setErrors(prev => {
-  //       return {
-  //         ...prev,
-  //         locality: 'locality is required'
-  //       }
-  //     })
-  //   }
-
-  // }
-
-  // const handleCloseMap = () => {
-  //   setShowMap(false);
-  // }
-
-  // const handleLocationSelect = (locationData) => {
-  //   if (locationData) {
-  //     setFormData(prev => {
-  //       return {
-  //         ...prev,
-  //         address: locationData?.address || "",
-  //         address_lat: locationData.latitude,
-  //         address_lon: locationData.longitude
-  //       }
-  //     })
-  //     setErrors(prev => {
-  //       return {
-  //         ...prev,
-  //         address: ""
-  //       }
-  //     })
-  //     setShowMap(false);
-  //   }
-  // }
 
   return (
     <>
@@ -216,12 +159,57 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
               )}
             </div>
           </div>
-          <MapComponent
+          {/* <MapComponent
             formData={formData}
             setFormData={setFormData}
             errors={errors}
             setErrors={setErrors}
-          />
+          /> */}
+          <div className="col-lg-6 col-12">
+            <label className="form-label">Locality <span className="text-danger">*</span></label>
+            <div className="form-field" style={{ position: 'relative' }}>
+              <input
+                className="form-control pac-target-input"
+                placeholder="Enter Locality"
+                type="text"
+                value={localityInputSearch}
+
+                onChange={(e) => {
+                  setLocalityInputSearch(e.target.value)
+                  setLocalityDropdown(true)
+                }}
+                // onChange={showSuggestions}
+                autoComplete="off"
+              />
+              {localityDropdown && localityList?.length > 0 && (
+                <ul className="suggestions-list" style={{
+                  position: 'absolute',
+                  border: '1px solid #ccc',
+                  maxHeight: '200px',
+                  overflowY: 'auto',
+                  width: '100%',
+                  backgroundColor: 'white',
+                  zIndex: 10,
+                  padding: '0',
+                  margin: '0',
+                }}>
+                  {localityList.map((locality, index) => (
+                    <li
+                      key={index}
+                      style={{
+                        padding: '8px',
+                        cursor: 'pointer',
+                      }}
+                      // onClick={() => selectSuggestion(locality)}
+                      onClick={() => handleLocalitySelect(locality)}
+                    >
+                      {locality?.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
           {/* <div className="col-lg-6 col-12">
             <label htmlFor="exampleSelect" className="form-label">Choose an option</label>
             <select
@@ -277,17 +265,17 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
               {translation?.address || "Address"}  <span className="text-danger">*</span>
             </label>
             <textarea
-            id="address"
-            name="address"
-            value={formData.address || ""}
-            onChange={handleChange}
-            rows={3}
-            className={`form-control ${errors.address ? "is-invalid" : ""}`}
-            placeholder={
-              translation?.placeholder_enter_your_address ||
-              "Enter Your Address"
-            }
-          />
+              id="address"
+              name="address"
+              value={formData.address || ""}
+              onChange={handleChange}
+              rows={3}
+              className={`form-control ${errors.address ? "is-invalid" : ""}`}
+              placeholder={
+                translation?.placeholder_enter_your_address ||
+                "Enter Your Address"
+              }
+            />
             {/* <div className="input-group"> */}
             {/* <input
               type="text"

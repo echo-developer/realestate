@@ -40,26 +40,28 @@ import {
 import { GeoAlt, Search } from "react-bootstrap-icons";
 import PropertyMobileFilters from "@/components/addtional/PropertyMobileFilter";
 import useIsMobile from "@/hooks/useIsMobile";
-const ListingMapView = dynamic(() => import('../../components/MapData/ListingMapView'), { ssr: false, loading: () => <>
-  <ShimmerContentBlock
-    title
-    text
-    cta
-    thumbnailWidth={350}
-    thumbnailHeight={50}
-  />
-  <ShimmerContentBlock
-    title
-    text
-    cta
-    thumbnailWidth={350}
-    thumbnailHeight={50}
-  />
-</> })
+const ListingMapView = dynamic(() => import('../../components/MapData/ListingMapView'), {
+  ssr: false, loading: () => <>
+    <ShimmerContentBlock
+      title
+      text
+      cta
+      thumbnailWidth={350}
+      thumbnailHeight={50}
+    />
+    <ShimmerContentBlock
+      title
+      text
+      cta
+      thumbnailWidth={350}
+      thumbnailHeight={50}
+    />
+  </>
+})
 
 const index = () => {
   const [showMapView, setShowMapView] = useState(false);
-  const { defaultCity, currency, currencyCode, formatPrice, localityList } = useAuth();
+  const { defaultCity, currency, currencyCode, formatPrice, localityList, localityInputSearch, setLocalityInputSearch, localityDropdown, setLocalityDropdown } = useAuth();
   const translation = useTranslation();
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
@@ -74,12 +76,12 @@ const index = () => {
     translation?.sort_by || "Sort By"
   );
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+  const [locality, setLocality] = useState(null);
   const [dropdownState, setDropdownState] = useState({});
 
 
   const { adsData, logAdClick } = useAdvertisement("listing-page", "right", defaultCity?.city_id, selectedPropertyType);
 
-  const [localityData, setLocalityData] = useState(null);
   const [advanceFilter, setAdvanceFilter] = useState(false);
   const [selectedAdvanceFilter, setSelectedAdvanceFilter] = useState("");
   const [activeDynamicKey, setActiveDynamicKey] = useState("");
@@ -279,11 +281,9 @@ const index = () => {
         if (res && res?.status === 1) {
           setPropertyTypeList(res?.data || []);
           // setSelectedPropertyType(res?.data?.[0]?.category_id);
-        } else {
-          toast.error(res?.message || "Error fetching property types");
-        }
+        } 
       } catch (error) {
-        toast.error(error?.message || "Error fetching property types");
+        console.error(error?.message || "Error fetching property types");
       }
     };
     fetchPropertyTypeList();
@@ -314,9 +314,12 @@ const index = () => {
       if (queryObject?.sort_key && queryObject?.sort_order) {
         setSelectedSort(queryObject.sort_key, queryObject.sort_order);
       }
-      if (queryObject?.locality) {
-        setLocalityData(queryObject.locality)
+      if(queryObject?.locality) {
+        const locality = JSON.parse(queryObject.locality); 
+        setLocality(locality)
+        setLocalityInputSearch(locality?.name)
       }
+
 
       let data = {};
       if (router?.query?.searchData) {
@@ -402,7 +405,7 @@ const index = () => {
           });
           if (res && res?.status === 1) {
             setSubPropertyList(res?.data || []);
-          } 
+          }
         } catch (error) {
           toast.error(res?.message || "Error fetching property for options");
         } finally {
@@ -494,10 +497,7 @@ const index = () => {
     } else {
       delete queryObject.property_for;
     }
-    if (localityData) {
-      // queryObject.location_data = JSON.stringify(localityData);
-      queryObject.locality = localityData;
-    }
+    
 
 
     // Directly add minBudget and maxBudget
@@ -529,6 +529,10 @@ const index = () => {
       delete queryObject.kitchens;
     }
 
+    if(locality) {
+      queryObject.locality = JSON.stringify(locality)
+    }
+
     const searchParams = new URLSearchParams(queryObject).toString();
     router.push(`/property-listing?${searchParams}`);
   };
@@ -554,7 +558,8 @@ const index = () => {
       queryObject.min_budget = router.query.min_budget;
     if (router?.query?.max_budget)
       queryObject.max_budget = router.query.max_budget;
-    if (router?.query?.locality) queryObject.locality = router?.query?.locality;
+
+    if(router.query?.locality) queryObject.locality = router.query?.locality;
     return queryObject;
   };
 
@@ -618,6 +623,14 @@ const index = () => {
     );
   };
 
+
+  const handleLocalitySelect = (locality) => {
+    setLocality(locality);
+    setLocalityInputSearch(locality?.name)
+    setLocalityDropdown(false);
+  }
+
+
   const handleDynamicValueChange = (name, value) => {
     setSearchData((prevState) => {
       const currentValues = prevState[name] || [];
@@ -659,9 +672,6 @@ const index = () => {
     });
   };
 
-  const handleLocalityDataChange = (locality_id) => {
-    setLocalityData(locality_id)
-  }
 
   const handleViewProperty = () => {
     const existingParams = new URLSearchParams();
@@ -671,14 +681,13 @@ const index = () => {
     if (selectedProeprtyFor)
       existingParams.set("property_for", selectedProeprtyFor);
     if (postFor) existingParams.set("post_for", postFor);
-    if (localityData && localityData !== null)
-      existingParams.set("location_data", JSON.stringify(localityData));
     if (minBudget && maxBudget) {
       existingParams.set("min_budget", minBudget);
       existingParams.set("max_budget", maxBudget);
     }
-    if (localityData) {
-      existingParams.set('locality', localityData)
+
+    if(locality) {
+      existingParams.set('locality', JSON.stringify(locality))
     }
 
     // ✅ Add these three lines:
@@ -721,6 +730,10 @@ const index = () => {
 
     if (defaultCity?.city_id) {
       existingParams.set("city_id", defaultCity.city_id);
+    } 
+    if(router?.query?.locality) {
+      const locality = JSON.parse(router.query.locality)
+      existingParams.set("locality", locality?.id)
     }
     const payloadSearch = Object.fromEntries(existingParams.entries());
     const { sort_key, sort_order } = router?.query;
@@ -729,10 +742,6 @@ const index = () => {
     if (sort_key) queryParams += `&sort_key=${sort_key}`;
     if (sort_order) queryParams += `&sort_order=${sort_order}`;
 
-    if (router?.query?.locality) {
-      // const localityObj = JSON.parse(router?.query?.location_data);
-      payloadSearch.locality = router?.query?.locality;
-    }
 
     if (router?.query?.min_budget) {
       const min_budget = router.query.min_budget;
@@ -928,6 +937,9 @@ const index = () => {
     );
   };
 
+
+
+
   const resetSelection = () => {
     setBedroom([]);
     setBathroom([]);
@@ -1018,8 +1030,7 @@ const index = () => {
                           </Dropdown.Menu>
                         </Dropdown>
                       </Col>
-                      <Col className="col-lg col-sm-10">
-                        {/* <LocalityOption setLocationData={setLocalityData} /> */}
+                      {/* <Col className="col-lg col-sm-10">
                         <select className="form-select" id="exampleSelect" value={localityData} onChange={(e) => handleLocalityDataChange(e.target.value)} >
                           <option value="">Select a locality</option>
                           {localityList?.length > 0 && localityList.map((locality, i) => {
@@ -1028,6 +1039,50 @@ const index = () => {
                             )
                           })}
                         </select>
+                      </Col> */}
+                      <Col className="col-lg col-10">
+                        <div className="form-field" style={{ position: 'relative' }}>
+                          <input
+                            className="form-control pac-target-input"
+                            placeholder="Enter Locality"
+                            type="text"
+                            value={localityInputSearch}
+
+                            onChange={(e) => {
+                              setLocalityInputSearch(e.target.value)
+                              setLocalityDropdown(true)
+                            }}
+                            // onChange={showSuggestions}
+                            autoComplete="off"
+                          />
+                          {localityDropdown && localityList?.length > 0 && (
+                            <ul className="suggestions-list" style={{
+                              position: 'absolute',
+                              border: '1px solid #ccc',
+                              maxHeight: '200px',
+                              overflowY: 'auto',
+                              width: '100%',
+                              backgroundColor: 'white',
+                              zIndex: 10,
+                              padding: '0',
+                              margin: '0',
+                            }}>
+                              {localityList.map((locality, index) => (
+                                <li
+                                  key={index}
+                                  style={{
+                                    padding: '8px',
+                                    cursor: 'pointer',
+                                  }}
+                                  // onClick={() => selectSuggestion(locality)}
+                                  onClick={() => handleLocalitySelect(locality)}
+                                >
+                                  {locality?.name}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
                       </Col>
                       {/* {postFor === "sell" ||
                   postFor === "rent" && ( */}
@@ -1649,9 +1704,7 @@ const index = () => {
             handleSortSelection={handleSortSelection}
             propertyTypeList={propertyTypeList}
             subPropertyList={subPropertyList}
-            localityData={localityData}
             localityList={localityList}
-            handleLocalityDataChange={handleLocalityDataChange}
           />
         </div>
 
@@ -1659,7 +1712,7 @@ const index = () => {
           <div className="container-fluid">
             {showMapView ? (
               <>
-                <ListingMapView propertyList={propertyList} loading={loading}  />
+                <ListingMapView propertyList={propertyList} loading={loading} />
               </>
             ) : (
               <>

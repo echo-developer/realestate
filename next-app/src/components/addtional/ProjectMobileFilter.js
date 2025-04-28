@@ -89,9 +89,7 @@ export function ProjectMobileFilters({
         });
         if (response?.status === 1) {
           setPropertyTypeData(response?.data);
-        } else {
-          toast.error(response?.message);
-        }
+        } 
       } catch (error) {
         toast.error(error?.message);
       }

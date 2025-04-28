@@ -201,9 +201,7 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
         });
         if (response?.status === 1) {
           setPropertyTypeData(response?.data);
-        } else {
-          toast.error(response?.message);
-        }
+        } 
       } catch (error) {
         toast.error(error.message);
       }

@@ -58,9 +58,7 @@ const Index = () => {
       });
       if (response && response.data) {
         setPropertyTypeData(response.data);
-      } else {
-        toast.error(response.message);
-      }
+      } 
     } catch (error) {
       toast.error(response.message);
     }

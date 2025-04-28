@@ -27,9 +27,7 @@ const PropertyTypeDropdown = ({
 
       if (response?.data) {
         setPropertyTypeData(response.data);
-      } else {
-        toast.error(response.message || "Failed to fetch property types.");
-      }
+      } 
     } catch (error) {
       toast.error("Error fetching property types.");
     }

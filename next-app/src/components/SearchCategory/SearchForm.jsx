@@ -138,11 +138,7 @@ const SearchForm = ({ setIsAdvanceSearch, setAdvanceSearchData, loadMore, recent
                         (type) => type.category_id === initialPropertyType
                     );
                     setSelectedPropertyType(matchedType || null);
-                } else {
-                    toast.error(
-                        response?.message || "Error fetching property types"
-                    );
-                }
+                } 
             } catch (error) {
                 toast.error(error?.message || "Error fetching property types");
             }

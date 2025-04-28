@@ -18,6 +18,9 @@ export const AuthProvider = ({ children }) => {
   const [currency, setCurrency] = useState("");
   const [currencyCode, setCurrencyCode] = useState("");
   const [localityList, setLocalityList] = useState([]);
+  const [localityInputSearch, setLocalityInputSearch] = useState("");
+  const [debouncedValue, setDebouncedValue] = useState("");
+  const [localityDropdown, setLocalityDropdown] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -81,29 +84,62 @@ export const AuthProvider = ({ children }) => {
     getCurrency();
   }, [memberId])
 
+  // useEffect(() => {
+  //   if(defaultCity?.city_id) {
+  //     const getLocalityList = async () => {
+  //       try {
+  //         const res = await callApi({
+  //           api: `/locality-list`,
+  //           method: "GET",
+  //           data: {
+  //             city_id: defaultCity.city_id
+  //           }
+  //         })
+  //         if(res && res?.status == 1) {
+  //           setLocalityList(res?.data || []);
+  //         } 
+  //       } catch (error) {
+  //         console.error(error.message || 'Something went wrong')
+  //       }
+
+  //     }
+
+  //     getLocalityList();
+  //   }
+  // }, [defaultCity?.city_id])
+
   useEffect(() => {
-    if(defaultCity?.city_id) {
-      const getLocalityList = async () => {
-        try {
-          const res = await callApi({
-            api: `/locality-list`,
-            method: "GET",
-            data: {
-              city_id: defaultCity.city_id
-            }
-          })
-          if(res && res?.status == 1) {
-            setLocalityList(res?.data || []);
-          } 
-        } catch (error) {
-          console.error(error.message || 'Something went wrong')
-        }
+    const handler = setTimeout(() => {
+      setDebouncedValue(localityInputSearch)
+    }, 500)
 
-      }
-
-      getLocalityList();
+    return () => {
+      clearTimeout(handler);
     }
-  }, [defaultCity?.city_id])
+  }, [localityInputSearch])
+
+
+  useEffect(() => {
+    if(debouncedValue?.length >= 3) {
+      fetchLocalityList();
+    }
+  }, [debouncedValue])
+
+
+  const fetchLocalityList = async () => {
+    setLocalityList([
+      { id: 1, name: "Salt Lake" },
+      { id: 2, name: "New Town" },
+      { id: 3, name: "Behala" },
+      { id: 4, name: "Dum Dum" },
+      { id: 5, name: "Garia" },
+      { id: 6, name: "Tollygunge" },
+      { id: 7, name: "Park Street" },
+      { id: 8, name: "Jadavpur" },
+      { id: 9, name: "Ballygunge" },
+      { id: 10, name: "Howrah" }
+    ])
+  }
 
   const getCurrency = async () => {
     try {
@@ -170,6 +206,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("city", JSON.stringify(city));
   };
 
+
   return (
     <AuthContext.Provider
       value={{
@@ -186,7 +223,11 @@ export const AuthProvider = ({ children }) => {
         currency,
         currencyCode,
         formatPrice,
-        localityList
+        localityList,
+        localityInputSearch,
+        setLocalityInputSearch,
+        localityDropdown,
+        setLocalityDropdown
       }}
     >
       {children}
