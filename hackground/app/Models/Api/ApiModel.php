@@ -1562,7 +1562,7 @@ class ApiModel extends Model
     {
         $query = DB::table('advertisement_request as a')
                           ->where('request_id',$request_id)
-                          ->update(['status','-1']);
+                          ->update(['status'=>'-1']);
         return true;
 
     }
