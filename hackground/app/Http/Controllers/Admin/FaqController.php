@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\CategoryName;
 use App\Models\FaqCategory;
+use App\Models\FaqCategoryName;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -13,7 +14,7 @@ class FaqController extends Controller
 {
     protected $categoryname;
 
-    public function __construct(CategoryName $categoryname)
+    public function __construct(FaqCategoryName $categoryname)
     {
         $this->categoryname = $categoryname;
         $this->middleware('view_permit:country');

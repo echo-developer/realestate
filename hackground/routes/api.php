@@ -11,8 +11,8 @@ use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\Api\CmsController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\Enquery_CRM_Controller;
-use App\Http\Controllers\Api\FaqController;
 
+use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\FloorPlaningController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\OtpController;
@@ -37,6 +37,7 @@ use App\Http\Controllers\Api\UserMembershipController;
 use App\Http\Controllers\Api\VerifyUserMailController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 
 
