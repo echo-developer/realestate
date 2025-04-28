@@ -4,8 +4,12 @@ import React, { useEffect, useState } from 'react'
 import { Row, Col, } from 'react-bootstrap';
 import AuthUser from '@/components/Authentication/AuthUser';
 import { ShimmerContentBlock } from "react-shimmer-effects";
+import { useAuth } from '@/context/AuthProvider';
+
+
 
 const index = () => {
+    const { userData } = useAuth();
     const { callApi, GetMemberId } = AuthUser();
     const [activeTab, setActiveTab] = useState('publish');
     const memberId = GetMemberId();
@@ -40,6 +44,26 @@ const index = () => {
             getMyAdvertisements();
         }
     }, [activeTab, memberId])
+
+    // console.log("user data", userData)
+    const handleDeleteClick = async (id) => {
+        try {
+            const res = await callApi({
+                api: '/delete-ad-request',
+                method: "UPLOAD",
+                data: {
+                    user_id: userData?.id,
+                    request_id: id
+                }
+            })
+            if(res && res?.status == 1) {
+                const list = adsList?.filter((item, i) => item.id !== id);
+                setAdsList(list);
+            }
+        } catch (error) {
+            console.error(error?.message || "something went wrong")
+        }
+    }
 
 
     return (
@@ -85,29 +109,28 @@ const index = () => {
                             </>
                         )}
                         {!loading && adsList?.length > 0 && adsList?.map((ad, i) => {
+                            console.log("ad", ad)
                             return (
                                 <>
                                     <div className="card mb-4 shadow-sm" key={i}>
                                         <div className="row g-0">
-                                            {/* Ad Image Column */}
+                                            {/* Placeholder Image Column */}
                                             <div className="col-md-3">
                                                 <img
-                                                    src={ad?.ad_image || ''}
+                                                    src={'/assets/images/property/default-property-1.jpg'}
                                                     className="img-fluid rounded-start h-100"
                                                     alt="Advertisement"
                                                     style={{ objectFit: 'cover' }}
                                                 />
                                             </div>
 
-                                            {/* Ad Details Column */}
+                                            {/* Details Column */}
                                             <div className="col-md-9">
                                                 <div className="card-body">
                                                     <div className="d-flex justify-content-between align-items-start">
                                                         <div>
-                                                            <h5 className="card-title mb-1">Advertisement #{ad?.id || 'N/A'}</h5>
-                                                            {ad?.ad_type && (
-                                                                <span className="badge bg-secondary mb-2">{ad.ad_type}</span>
-                                                            )}
+                                                            <h5 className="card-title mb-1">Ad by {ad?.name || 'N/A'}</h5>
+                                                            <p className="mb-1 text-muted">{ad?.email || 'No email provided'}</p>
                                                         </div>
                                                         {ad?.status && (
                                                             <span className={`badge ${ad.status === 'Completed' ? 'bg-success' :
@@ -121,37 +144,33 @@ const index = () => {
 
                                                     <div className="row mt-2">
                                                         <div className="col-md-6">
-                                                            <p className="mb-1"><strong>Property:</strong> {ad?.property_type || 'N/A'}</p>
+                                                            <p className="mb-1"><strong>Phone:</strong> +{ad?.phone_code || ''} {ad?.phone || 'N/A'}</p>
                                                             <p className="mb-1">
-                                                                <strong>Location:</strong>
-                                                                {[ad?.locality, ad?.city].filter(Boolean).join(', ') || 'N/A'}
+                                                                <strong>Location:</strong> {[ad?.locality, ad?.city].filter(Boolean).join(', ') || 'N/A'}
                                                             </p>
-                                                            <p className="mb-1">
-                                                                <strong>Dates:</strong>
-                                                                {ad?.start_date ? `${ad.start_date} to ${ad?.expire_date || ''}`.trim() : 'N/A'}
-                                                            </p>
+                                                            <p className="mb-1"><strong>Created Date:</strong> {ad?.created_date || 'N/A'}</p>
                                                         </div>
                                                         <div className="col-md-6">
                                                             <p className="mb-1">
-                                                                <strong>Placement:</strong>
-                                                                {[ad?.page, ad?.position].filter(Boolean).map((item, i) =>
+                                                                <strong>Placement:</strong> {[ad?.page, ad?.position].filter(Boolean).map((item, i) =>
                                                                     i === 0 ? item : `(${item} position)`
                                                                 ).join(' ') || 'N/A'}
                                                             </p>
-                                                            <p className="mb-1"><strong>Views:</strong> {ad?.views || '0'}</p>
-                                                            <p className="mb-1"><strong>Impressions:</strong> {ad?.impressions || '0'}</p>
+                                                            <p className="mb-1"><strong>Duration:</strong> {ad?.duration || 'N/A'}</p>
                                                         </div>
                                                     </div>
-
+                                                   {activeTab == "pending" && (
                                                     <div className="d-flex justify-content-end mt-3">
-                                                        <button className="btn btn-sm btn-outline-danger">
-                                                            Delete
-                                                        </button>
-                                                    </div>
+                                                    <button className="btn btn-sm btn-outline-danger" onClick={() => handleDeleteClick(ad?.id)}>
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                                   )}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
                                 </>
                             )
                         })}

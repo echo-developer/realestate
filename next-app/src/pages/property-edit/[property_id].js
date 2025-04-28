@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
 import "./property_edit.css";
 import withAuth from "@/utils/withAuth";
-import { useAuth } from "@/context/AuthProvider";
+// import { useAuth } from "@/context/AuthProvider";
 import useTranslation from "@/hooks/useTranslation";
 import {
   flat_image_tab,
@@ -63,9 +63,9 @@ ChartJS.register(
 
 const Index = () => {
   const router = useRouter();
-  const { localityList } = useAuth();
+  // const { localityList } = useAuth();
   const { callApi } = AuthUser();
-  const [showMap, setShowMap] = useState(false);
+  // const [showMap, setShowMap] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
   const [activeTab, setActiveTab] = useState("");
@@ -230,10 +230,10 @@ const Index = () => {
       formData.galleries = updatedGalleries;
     }
 
-    if(inputValue?.address_lat  && inputValue?.address_lon) {
-      formData.address_lat = inputValue.address_lat;
-      formData.address_lon = inputValue.address_lon;
-    }
+    // if(inputValue?.address_lat  && inputValue?.address_lon) {
+    //   formData.address_lat = inputValue.address_lat;
+    //   formData.address_lon = inputValue.address_lon;
+    // }
 
 
     // Append the formData to FormData object
@@ -344,17 +344,17 @@ const Index = () => {
     ),
   };
 
-  const handleLocationSelect = (locationData) => {
-    setInputValue(prev => {
-      return {
-        ...prev,
-          address: locationData?.address || "",
-          address_lat: locationData.latitude,
-          address_lon: locationData.longitude
-      }
-    })
-    setShowMap(false);
-  }
+  // const handleLocationSelect = (locationData) => {
+  //   setInputValue(prev => {
+  //     return {
+  //       ...prev,
+  //         address: locationData?.address || "",
+  //         address_lat: locationData.latitude,
+  //         address_lon: locationData.longitude
+  //     }
+  //   })
+  //   setShowMap(false);
+  // }
 
 
   const renderModalContent = () => {
@@ -383,18 +383,18 @@ const Index = () => {
         );
       case "locality":
         return (
-          // <Locality
-          //   locality={inputValue?.locality || ""}
-          //   setLocality={setLocality}
-          // />
-          <select className="form-select" id="exampleSelect" value={inputValue?.locality || ""} onChange={(e) => setLocality(e.target.value)}>
-            <option value="">Select a locality</option>
-            {localityList?.length > 0 && localityList?.map((locality, i) => {
-              return (
-                <option key={i} value={locality?.locality_id}>{locality?.locality_name || "Not Available"}</option>
-              )
-            })}
-          </select>
+          <Locality
+            locality={inputValue?.locality || ""}
+            setLocality={setLocality}
+          />
+          // <select className="form-select" id="exampleSelect" value={inputValue?.locality || ""} onChange={(e) => setLocality(e.target.value)}>
+          //   <option value="">Select a locality</option>
+          //   {localityList?.length > 0 && localityList?.map((locality, i) => {
+          //     return (
+          //       <option key={i} value={locality?.locality_id}>{locality?.locality_name || "Not Available"}</option>
+          //     )
+          //   })}
+          // </select>
         );
       case "expected_price":
         return (
@@ -420,7 +420,7 @@ const Index = () => {
       case "address":
         return (
           <>
-            {/* <FloatingLabel controlId="address-input" label="Enter the address:">
+            <FloatingLabel controlId="address-input" label="Enter the address:">
               <Form.Control
                 as="textarea"
                 id="address-input"
@@ -435,9 +435,9 @@ const Index = () => {
                 }
                 style={{ height: "100px" }}
               />
-            </FloatingLabel> */}
-            <Form.Group controlId="address-input">
-              {/* <Form.Label>Enter the address:</Form.Label> */}
+            </FloatingLabel>
+            {/* <Form.Group controlId="address-input">
+              <Form.Label>Enter the address:</Form.Label>
               <Form.Control
                 type="text"
                 id="address-input"
@@ -447,7 +447,7 @@ const Index = () => {
                 readOnly
                 plaintext
               />
-            </Form.Group>
+            </Form.Group> */}
           </>
         );
       case "configuration":
@@ -968,14 +968,14 @@ const Index = () => {
       </Modal>
 
       {/* MAP modal  */}
-      <Modal show={showMap} centered onHide={() => setShowMap(false)} size="lg">
+      {/* <Modal show={showMap} centered onHide={() => setShowMap(false)} size="lg">
         <Modal.Header>
           <h5 className="text-center">Choose Address Location</h5>
         </Modal.Header>
         <Modal.Body>
         <FreeMapModal lat={inputValue?.latitude || 0} lon={inputValue?.longitude || 0} onLocationSelect={handleLocationSelect} />
         </Modal.Body>
-      </Modal>
+      </Modal> */}
 
     </DashboardLayout>
   );

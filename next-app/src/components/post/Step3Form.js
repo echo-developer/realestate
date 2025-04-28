@@ -3,17 +3,17 @@ import React, { useState, useEffect } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import dynamic from "next/dynamic";
 import TextEditor from "../editor/TextEditor";
-import { Modal, Button } from 'react-bootstrap';
+// import { Modal, Button } from 'react-bootstrap';
 import useTranslation from "@/hooks/useTranslation";
 
 
-const FreeMapModal = dynamic(() => import("../MapData/FreeMapModal"), { ssr: false });
+// const FreeMapModal = dynamic(() => import("../MapData/FreeMapModal"), { ssr: false });
 const MapComponent = dynamic(() => import("../MapData/Map"), { ssr: false });
 
 const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
-  // const [position, setPosition] = useState([51.505, -0.09]);
+  const [position, setPosition] = useState([51.505, -0.09]);
   const { callApi } = AuthUser();
-  const [showMap, setShowMap] = useState(false);
+  // const [showMap, setShowMap] = useState(false);
   const [errors, setErrors] = useState({
     city: "",
     locality: "",
@@ -21,9 +21,9 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     address: "",
     description: "",
   });
-  const [localityList, setLocalityList] = useState([]);
+  // const [localityList, setLocalityList] = useState([]);
   const translation = useTranslation();
-  const [selectedLocality, setSelectedLocality] = useState(null);
+  // const [selectedLocality, setSelectedLocality] = useState(null);
 
   const [cityData, setCityData] = useState([]);
 
@@ -33,27 +33,27 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
   }, []);
 
 
-  useEffect(() => {
-    if (formData?.city) {
-      const fetchLocalityList = async () => {
-        try {
-          const res = await callApi({
-            api: `/locality-list?city_id=${formData.city}`,
-            method: "GET"
-          })
-          if (res && res?.status == 1) {
-            setLocalityList(res?.data);
-          } else {
-            setLocalityList([])
-          }
-        } catch (error) {
-          console.error(error.message || "Something went wrong")
-        }
-      }
+  // useEffect(() => {
+  //   if (formData?.city) {
+  //     const fetchLocalityList = async () => {
+  //       try {
+  //         const res = await callApi({
+  //           api: `/locality-list?city_id=${formData.city}`,
+  //           method: "GET"
+  //         })
+  //         if (res && res?.status == 1) {
+  //           setLocalityList(res?.data);
+  //         } else {
+  //           setLocalityList([])
+  //         }
+  //       } catch (error) {
+  //         console.error(error.message || "Something went wrong")
+  //       }
+  //     }
 
-      fetchLocalityList();
-    }
-  }, [formData?.city])
+  //     fetchLocalityList();
+  //   }
+  // }, [formData?.city])
 
   const fetchCityData = async () => {
     try {
@@ -88,7 +88,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
       newErrors.city = `${translation?.please_select_a_city || "Please select a city."
         }`;
     }
-    if (!formData.locality) {
+    if (!formData.locality || formData.locality.trim() === "") {
       newErrors.locality = `${translation?.please_enter_a_locality || "Please enter a locality."
         }`;
     }
@@ -111,26 +111,26 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleLocalityChange = (id) => {
-    if (id) {
-      const locality = localityList.find((item) => item.locality_id == id);
-      if (locality) {
-        setSelectedLocality(locality);
-        setFormData(prev => {
-          return {
-            ...prev,
-            locality: locality?.locality_id
-          }
-        })
-        setErrors(prev => {
-          return {
-            ...prev,
-            locality: ""
-          }
-        })
-      }
-    }
-  }
+  // const handleLocalityChange = (id) => {
+  //   if (id) {
+  //     const locality = localityList.find((item) => item.locality_id == id);
+  //     if (locality) {
+  //       setSelectedLocality(locality);
+  //       setFormData(prev => {
+  //         return {
+  //           ...prev,
+  //           locality: locality?.locality_id
+  //         }
+  //       })
+  //       setErrors(prev => {
+  //         return {
+  //           ...prev,
+  //           locality: ""
+  //         }
+  //       })
+  //     }
+  //   }
+  // }
 
   const handleNext = () => {
     if (validate()) {
@@ -138,52 +138,52 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     }
   };
 
-  const handleOpenMap = () => {
-    if(selectedLocality) {
-      if(selectedLocality?.latitude && selectedLocality?.longitude) {
-        setShowMap(true);
-      } else {
-        setErrors(prev => {
-          return {
-            ...prev,
-            locality: 'Choose a locality that has latitude & longitude'
-          }
-        })
-      }
-    } else {
-      setErrors(prev => {
-        return {
-          ...prev,
-          locality: 'locality is required'
-        }
-      })
-    }
+  // const handleOpenMap = () => {
+  //   if(selectedLocality) {
+  //     if(selectedLocality?.latitude && selectedLocality?.longitude) {
+  //       setShowMap(true);
+  //     } else {
+  //       setErrors(prev => {
+  //         return {
+  //           ...prev,
+  //           locality: 'Choose a locality that has latitude & longitude'
+  //         }
+  //       })
+  //     }
+  //   } else {
+  //     setErrors(prev => {
+  //       return {
+  //         ...prev,
+  //         locality: 'locality is required'
+  //       }
+  //     })
+  //   }
 
-  }
+  // }
 
-  const handleCloseMap = () => {
-    setShowMap(false);
-  }
+  // const handleCloseMap = () => {
+  //   setShowMap(false);
+  // }
 
-  const handleLocationSelect = (locationData) => {
-    if (locationData) {
-      setFormData(prev => {
-        return {
-          ...prev,
-          address: locationData?.address || "",
-          address_lat: locationData.latitude,
-          address_lon: locationData.longitude
-        }
-      })
-      setErrors(prev => {
-        return {
-          ...prev,
-          address: ""
-        }
-      })
-      setShowMap(false);
-    }
-  }
+  // const handleLocationSelect = (locationData) => {
+  //   if (locationData) {
+  //     setFormData(prev => {
+  //       return {
+  //         ...prev,
+  //         address: locationData?.address || "",
+  //         address_lat: locationData.latitude,
+  //         address_lon: locationData.longitude
+  //       }
+  //     })
+  //     setErrors(prev => {
+  //       return {
+  //         ...prev,
+  //         address: ""
+  //       }
+  //     })
+  //     setShowMap(false);
+  //   }
+  // }
 
   return (
     <>
@@ -216,13 +216,13 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
               )}
             </div>
           </div>
-          {/* <MapComponent
+          <MapComponent
             formData={formData}
             setFormData={setFormData}
             errors={errors}
             setErrors={setErrors}
-          /> */}
-          <div className="col-lg-6 col-12">
+          />
+          {/* <div className="col-lg-6 col-12">
             <label htmlFor="exampleSelect" className="form-label">Choose an option</label>
             <select
               className={`form-select ${errors.locality ? 'is-invalid' : ""}`}
@@ -240,7 +240,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
             {errors.locality && (
                 <div className="invalid-feedback">{errors.locality}</div>
               )}
-          </div>
+          </div> */}
           {/* Project Name Input */}
           <div className="form-field ">
             <label className="form-label" htmlFor="project_name">
@@ -276,7 +276,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <label className="form-label" htmlFor="address">
               {translation?.address || "Address"}  <span className="text-danger">*</span>
             </label>
-            {/* <textarea
+            <textarea
             id="address"
             name="address"
             value={formData.address || ""}
@@ -287,16 +287,16 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
               translation?.placeholder_enter_your_address ||
               "Enter Your Address"
             }
-          /> */}
+          />
             {/* <div className="input-group"> */}
-            <input
+            {/* <input
               type="text"
               className={`form-control ${errors?.address ? 'is-invalid' : ""}`}
               value={formData.address || "Choose from Map"}
               readOnly
               onClick={handleOpenMap}
               style={{ cursor: 'pointer' }}
-            />
+            /> */}
             {/* <span className="input-group-text" onClick={() => setShowMap(true)} style={{ cursor: 'pointer' }}>
                 <i className="fas fa-map-marker-alt"></i>
               </span> */}
@@ -340,7 +340,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
           </div>
         </div>
       </div>
-      {selectedLocality?.latitude && selectedLocality?.longitude && (
+      {/* {selectedLocality?.latitude && selectedLocality?.longitude && (
         <Modal show={showMap} centered onHide={handleCloseMap} size="lg">
           <Modal.Header>
             <h5 className="text-center">Choose Address Location</h5>
@@ -349,7 +349,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
             <FreeMapModal lat={selectedLocality?.latitude} lon={selectedLocality?.longitude} onLocationSelect={handleLocationSelect} />
           </Modal.Body>
         </Modal>
-      )}
+      )} */}
     </>
   );
 };

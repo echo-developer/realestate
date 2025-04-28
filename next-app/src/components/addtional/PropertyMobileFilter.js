@@ -24,9 +24,9 @@ export function PropertyMobileFilters({
   selectedOption,
   handleSortSelection,
   propertyTypeList,
-  localityList,
-  localityData,
-  handleLocalityDataChange
+  // localityList,
+  // localityData,
+  // handleLocalityDataChange
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -359,16 +359,8 @@ export function PropertyMobileFilters({
         </Nav>
 
         <Offcanvas.Body>
-          <h6>Locality</h6>
+          {/* <h6>Locality</h6>
           <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">
-            {/* <select className="form-select" id="exampleSelect" value={localityData} onChange={(e) => handleLocalityDataChange(e.target.value)} >
-                            <option value="">Select a locality</option>
-                            {localityList?.length > 0 && localityList.map((locality, i) => {
-                              return (
-                                <option key={i} value={locality?.locality_id}>{locality?.locality_name || "Not Abailable"}</option>
-                              )
-                            })}
-                          </select> */}
             <div className="col-lg-6 col-12">
               <select className="form-select" id="exampleSelect" value={localityData} onChange={(e) => handleLocalityDataChange(e.target.value)}>
                 <option value="">Select...</option>
@@ -380,7 +372,7 @@ export function PropertyMobileFilters({
               </select>
             </div>
 
-          </ButtonGroup>
+          </ButtonGroup> */}
           {/* Property Types */}
           <h6>Property Type</h6>
           <ButtonGroup className="btn-group-light d-flex gap-2 mb-3">

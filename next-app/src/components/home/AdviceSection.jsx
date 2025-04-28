@@ -24,6 +24,14 @@ const AdviceSection = ({ translation }) => {
       icon: "/assets/images/icons/award.png",
     },
     {
+      title: translation?.create_advertisement || "Create Advertisement",
+      description:
+        translation?.create_advertisement_description ||
+        "Create an eye-catching advertisement to promote your property, attract more buyers, and maximize visibility across our platform.",
+      link: "/create-advertisement",
+      icon: "/assets/images/icons/commercial.png",
+    },    
+    {
       title: translation?.emi_calculator || "EMI Calculator",
       description:
         translation?.property_valuation_description_4 ||

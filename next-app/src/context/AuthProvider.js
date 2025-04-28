@@ -76,9 +76,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if(memberId) {
       fetchUserData();
-      getCurrency();
-      getCurrencyCode();
     }
+    getCurrencyCode();
+    getCurrency();
   }, [memberId])
 
   useEffect(() => {
