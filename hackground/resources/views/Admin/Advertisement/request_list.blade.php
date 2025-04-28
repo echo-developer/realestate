@@ -160,8 +160,8 @@
 @push('custom-js')
 <script>
     function approve(request_id){
-        let addCommand = "{{ $add_command }}";
-        let url = `{{ url('advertisement/ajax_page') }}?page=${addCommand}&request_id=${request_id}`;
+        let approveCommand = "{{ $approve_command }}";
+        let url = `{{ url('advertisement/ajax_page') }}?page=${approveCommand}&request_id=${request_id}`;
         $.get(url, function(data) {
             $('#ajax_modal').modal('show');
             $('#ajax_modal .modal-content').html(data);

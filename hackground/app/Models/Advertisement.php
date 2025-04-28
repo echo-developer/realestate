@@ -50,6 +50,7 @@ class Advertisement extends Model
     {
         $ins_data = array(
 			'member_id'=> $data['user_id'] ? $data['user_id'] : '',
+			'request_id'=> $data['request_id'] ? $data['request_id'] : '',
 			'page' => $data['page'] ? $data['page'] : '',
 			'position' => $data['position'] ? $data['position'] : '',
 			'ad_size' => $data['ad_size'] ? $data['ad_size'] : '',
@@ -62,11 +63,10 @@ class Advertisement extends Model
 			'expire_date' => $data['expire_date'] ? $data['expire_date'] : '',
 			'status' => $data['status'] ? $data['status'] : ''
 		);
-        // echo "<pre>";
-        // print_r($ins_data);exit;
+        
         $cities = !empty($data['city']) ? $data['city'] : array();
         $categories = !empty($data['category']) ? $data['category'] : array();
-        $insert_id = DB::table($this->table)->insert($ins_data);
+        $insert_id = DB::table($this->table)->insertGetId($ins_data);
         if($insert_id)
         {
             if($cities)

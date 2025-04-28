@@ -48,6 +48,7 @@ class AdvertisementController extends Controller
     public function ads_request(Request $request)
     {
         $add_command = 'add';
+        $approve_command = 'approve';
 		$edit_command = 'edit';
         $view_command = 'view-request';
 		$add_btn = 'Advertisements Requests';
@@ -66,6 +67,7 @@ class AdvertisementController extends Controller
             'add_command',
             'edit_command',
             'view_command',
+            'approve_command',
             'list',
             'main_title',
             'second_title',
@@ -88,15 +90,20 @@ class AdvertisementController extends Controller
         $property_category = get_all_property_category();
         $request_id = '';
         if($page == 'add'){
+			$pages = $this->advertisement->get_pages();
+			$title = 'Add Advertisement';
+			$form_action = url('advertisement/add');
+		}elseif($page == 'approve'){
             if(isset($srch['request_id']))
             {
                 $request_id = $srch['request_id'];
                 $user_id = getField('user_id','advertisement_request','request_id',$request_id);
+                $detail = $this->advertisement->get_request_details($request_id);
             }
 			$pages = $this->advertisement->get_pages();
-			$title = 'Add Advertisement';
+			$title = 'Approve Advertisement';
 			$form_action = url('advertisement/add');
-		}elseif($page == 'edit')
+        }elseif($page == 'edit')
         {
             $id = $srch['id'];
 			$ID = $id;
