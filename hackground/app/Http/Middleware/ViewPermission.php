@@ -18,7 +18,7 @@ class ViewPermission
      */
     public function handle(Request $request, Closure $next, $slug): Response
     {
-        $userRole = Auth::guard('admin')->user()->role;
+        $userRole = Auth::guard('admin')->user()?->role;
 
         if($userRole == 1){
             return $next($request);
