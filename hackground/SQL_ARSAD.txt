@@ -587,3 +587,8 @@ ALTER TABLE `pref_faq_categories` CHANGE `order` `order` INT(11) NULL DEFAULT NU
 ALTER TABLE `pref_faq_categories` CHANGE `status` `status` INT(11) NOT NULL DEFAULT '1';
 
 ALTER TABLE `pref_locality_landmarks` ADD `slug` VARCHAR(100) NULL DEFAULT NULL AFTER `type`;
+
+
+28/04/2025
+
+ALTER TABLE `pref_locality` CHANGE `city` `city` INT(11) NULL DEFAULT NULL;
