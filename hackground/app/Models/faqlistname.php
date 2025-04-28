@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class faqlistname extends Model
 {
-
     public function getlist($term = null, $lang = 'en', $paginate = 10)
     {
         $query = DB::table('faq_list')

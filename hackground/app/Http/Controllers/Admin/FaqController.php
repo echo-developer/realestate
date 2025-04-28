@@ -26,6 +26,8 @@ class FaqController extends Controller
         $data = $this->categoryname->getCategory($term, $lang, $paginate);
         return view('Admin.Faq.faq-category', compact('data'));
     }
+
+    
     public function submit_Category(Request $request)
 {
     $langs = array_keys($request->input('name', []));

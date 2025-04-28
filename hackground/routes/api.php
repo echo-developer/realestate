@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\FaqListController;
 use App\Http\Controllers\Admin\PaymentMethodController;
 use App\Http\Controllers\Api\AdvanceSearchController;
 use App\Http\Controllers\Api\AdvertisementController;
@@ -10,9 +11,10 @@ use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\Api\CmsController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\Enquery_CRM_Controller;
+use App\Http\Controllers\Api\FaqController;
+
 use App\Http\Controllers\Api\FloorPlaningController;
 use App\Http\Controllers\Api\HomeController;
-
 use App\Http\Controllers\Api\OtpController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PostController;
@@ -35,6 +37,8 @@ use App\Http\Controllers\Api\UserMembershipController;
 use App\Http\Controllers\Api\VerifyUserMailController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+
 
 
 
@@ -321,3 +325,4 @@ Route::get('/get-settings-value/{key?}', function ($key = null) {
 });
 
 Route::get('/payment-methods', [PaymentMethodController::class, 'fetchActivePaymentMethod'])->name('set.payment.method');
+Route::get('/faq-lists', [FaqController::class, 'fetchFaqListsforAPI'])->name('faq.list');
