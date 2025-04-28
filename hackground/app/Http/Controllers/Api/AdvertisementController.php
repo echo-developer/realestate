@@ -352,7 +352,7 @@ class AdvertisementController extends Controller
                 elseif($l->status == '2'){$status == 'Rejected';}
                 $customArr[] = array(
                     'id'=> $l->advertisement_id,
-                    'ad_image'=> $l->ad_image,
+                    'ad_image'=>!empty($l->ad_image)? asset('/user_upload/advertisement/'.$l->ad_image):'',
                     'ad_type'=> $l->ad_type,
                     'views'=> $l->views,
                     'impressions'=> $l->impressions,
