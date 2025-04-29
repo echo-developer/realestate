@@ -232,8 +232,8 @@
                 success: function(response) {
                     if (response.success) {
                         $('#modal_action').modal('hide');
-                        // toastr.success(response.message);
-                        // setTimeout(() => location.reload(), 1200);
+                        toastr.success(response.message);
+                        setTimeout(() => location.reload(), 1200);
                     }
                 },
                 error: function(xhr) {
