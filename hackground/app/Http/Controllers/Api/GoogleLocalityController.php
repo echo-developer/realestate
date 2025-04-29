@@ -11,28 +11,56 @@ use Illuminate\Support\Str;
 
 class GoogleLocalityController extends Controller
 {
-    public function getLocalityDropdownList(Request $request)
+    // public function getLocalityDropdownList(Request $request)
+    // {
+    //     try {
+    //         $keyword = $request->keyWord;
+    //         $lang = $request->input('lang', 'en');
+    //         $databaseReturn = $this->fetchLocalityfromDatabase($keyword, $lang);
+
+    //         // $googleApiReturn = [];
+    //         // if (count($databaseReturn) < 10) {
+    //         //     $googleApiReturn = $this->getGoogletLocalities($keyword, $lang);
+    //         // }
+
+    //         // $data = array_merge($databaseReturn, $googleApiReturn);
+
+    //         return $databaseReturn;
+    //     } catch (\Throwable $th) {
+    //         throw $th;
+    //     }
+    // }
+    public function fetchLocalityfromDatabase(Request $request)
     {
         try {
             $keyword = $request->keyWord;
             $lang = $request->input('lang', 'en');
-            $databaseReturn = $this->fetchLocalityfromDatabase($keyword, $lang);
+            $data = DB::table('locality_names')
+                ->select(
+                    'locality_id',
+                    'name'
+                )
+                ->where('lang', $lang)
+                ->where('name', 'LIKE', $keyword . '%')
+                ->get()->toArray();
 
-            $googleApiReturn = [];
-            if (count($databaseReturn) < 10) {
-                $googleApiReturn = $this->getGoogletLocalities($keyword, $lang);
-            }
+            $message = !empty($data) ? 'Locality Retrived' : 'No Locality Found';
 
-            $data = array_merge($databaseReturn, $googleApiReturn);
-
-            return $data;
+            return response()->json([
+                'status' => 1,
+                'message' => $message,
+                'data' => !empty($data) ? $data : []
+            ]);
         } catch (\Throwable $th) {
             throw $th;
         }
     }
-    private function getGoogletLocalities($keyword, $lang)
+
+    public function getGoogletLocalities(Request $request)
     {
         try {
+            $keyword = $request->keyWord;
+            $lang = $request->input('lang', 'en');
             $apiKey = get_setting('google-api-key');
 
             if (!empty($apiKey)) {
@@ -69,73 +97,79 @@ class GoogleLocalityController extends Controller
                     ];
                 }
                 $savedData = $this->storeandReturnResult($results, $lang);
-                return $savedData;
+
+                $message = !empty($savedData) ? 'Locality Retrived' : 'No Locality Found';
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => $message,
+                    'data' => !empty($savedData) ? $savedData : []
+                ]);
             } else {
-                return [];
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'API key not found',
+                    'data' =>  []
+                ]);
             }
         } catch (\Throwable $th) {
             throw $th;
         }
     }
 
-    private function fetchLocalityfromDatabase($keyword, $lang = 'en')
-    {
-        try {
-
-            $data = DB::table('locality_names')
-                ->select(
-                    'locality_id',
-                    'name'
-                )
-                ->where('lang', $lang)
-                ->where('name', 'LIKE', $keyword . '%')
-                ->get()->toArray();
-            return $data ?? [];
-        } catch (\Throwable $th) {
-            throw $th;
-        }
-    }
 
     private function storeandReturnResult(array $data, $lang)
     {
-        $responce = [];
+        $response = [];
+
         foreach ($data as $locality) {
             $slug = Str::slug($locality['name'], '_');
-            // $slugExsists = $this->checkSlug(trim($slug), $lang);
 
-            $getId = DB::table('locality')->insertGetId([
-                'city' => null,
-                'locality_key' => $slug,
-                'latitude' => $locality['lat'],
-                'longitude' => $locality['lng'],
-            ]);
-            $langs = [
-                'en' => $locality['name'],
-                'ar' => null,
-            ];
+            $existing = $this->checkSlug(trim($slug), $lang);
 
-            foreach ($langs as $langCode => $langName) {
-                DB::table('locality_names')->insert([
-                    'locality_id' => $getId,
-                    'lang' => $langCode,
-                    'name' => $langName,
+            if ($existing) {
+                $response[] = [
+                    'locality_id' => $existing->locality_id,
+                    'name' => $existing->name,
+                ];
+            } else {
+                $getId = DB::table('locality')->insertGetId([
+                    'city' => null,
+                    'locality_key' => $slug,
+                    'latitude' => $locality['lat'],
+                    'longitude' => $locality['lng'],
                 ]);
-            }
 
-            $responce[] = [
-                'locality_id' => $getId,
-                'name' => $locality['name'],
-            ];
+                $langs = [
+                    'en' => $locality['name'],
+                    'ar' => null,
+                ];
+
+                foreach ($langs as $langCode => $langName) {
+                    DB::table('locality_names')->insert([
+                        'locality_id' => $getId,
+                        'lang' => $langCode,
+                        'name' => $langName,
+                    ]);
+                }
+
+                $response[] = [
+                    'locality_id' => $getId,
+                    'name' => $locality['name'],
+                ];
+            }
         }
 
-        return $responce;
+        return $response;
     }
 
-    // private function checkSlug($s, $l)
-    // {
-    //     return DB::table('locality')
-    //         ->select('locality_names.locality_id', 'locality_names.name')
-    //         ->leftJoin('locality_names', 'locality.locality_id', '=', 'locality_names.locality_id')
-    //         ->where('locality.slug', $s)->where('locality_names.lang', $l)->first();
-    // }
+    private function checkSlug($slug, $lang)
+    {
+        return DB::table('locality')
+            ->leftJoin('locality_names', 'locality.locality_id', '=', 'locality_names.locality_id')
+            ->select('locality.locality_id', 'locality_names.name')
+            ->where('locality.locality_key', $slug)
+            ->where('locality_names.lang', $lang)
+            ->first();
+    }
 }

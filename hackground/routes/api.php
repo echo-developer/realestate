@@ -331,4 +331,5 @@ Route::get('/payment-methods', [PaymentMethodController::class, 'fetchActivePaym
 Route::get('/faq-lists', [FaqController::class, 'fetchFaqListsforAPI'])->name('faq.list');
 
 
-Route::get('/global-localities', [GoogleLocalityController::class, 'getLocalityDropdownList'])->name('get.localities');
+Route::get('/global-localities', [GoogleLocalityController::class, 'getGoogletLocalities'])->name('get.localities');
+Route::get('/stored-localities', [GoogleLocalityController::class, 'fetchLocalityfromDatabase'])->name('get.localities.database');
