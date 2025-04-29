@@ -22,12 +22,12 @@ class PropertyEditController extends Controller
     {
 
         try {
-            // if (!is_my_propertyOrProject($request->property_id, null)) {
-            //     return response()->json([
-            //         'status' => 0,
-            //         'message' => 'Unauthorized. Failed to get property',
-            //     ]);
-            // }
+            if (!is_my_propertyOrProject($request->property_id, null)) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Unauthorized. Failed to get property',
+                ]);
+            }
 
             $lang = $request->input('lang', 'en');
 
