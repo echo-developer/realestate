@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react'
 import AuthUser from '../Authentication/AuthUser';
 import { useSearchParams } from 'next/navigation';
 
-const Locality = ({onSelectLocality, errors}) => {
+const Locality = ({onSelectLocality, errors, defaultValue}) => {
     const { callApi } = AuthUser();
     const searchParams = useSearchParams();
-    const [localitySearchInput, setLocalitySearchInput] = useState('');
+    const [localitySearchInput, setLocalitySearchInput] = useState(defaultValue?.locality_name || '');
     const [debouncedValue, setDebouncedValue] = useState('');
     const [localityList, setLocalityList] = useState([]);
     const [localityDropdown, setLocalityDropdown] = useState(false);
@@ -100,6 +100,7 @@ const Locality = ({onSelectLocality, errors}) => {
                             autoComplete="off"
                             value={localitySearchInput}
                             onChange={handleLocalityInputChange}
+                            defaultValue={"hello"}
                           />
                           {errors?.locality && (
               <div className="invalid-feedback">{errors.locality}</div>
