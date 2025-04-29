@@ -86,11 +86,7 @@
                     </table>
                 </div>
 
-                <div class="d-flex justify-content-center mt-4">
-                    <div class="pagination-wrapper">
-                        {{ $data->links() }}
-                    </div>
-                </div>
+                {!! $data->links('vendor.pagination.bootstrap-5') !!}
             </div>
         </div>
     </div>

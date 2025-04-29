@@ -42,24 +42,15 @@
                 margin-top: 1rem;
             }
         </style>
-        @if (session('success_msg'))
-            <div class="alert alert-{{ session('message_type') }}">
-                {{ session('success_msg') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert">
-                    
-                </button>
-            </div>
-        @endif
-
+        
         <div class="main-card mb-3 card">
             <div class="card-body">
-                <div class="card-header p-0">
-                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Activity List
-
+                <div class="card-header d-flex">
+                    <h4>Activity List</h4>
                 </div>
 
                 <div class="table-responsive" id="main_table">
-                    <table class="table table-bordered" id="activity_table">
+                    <table class="mb-0 table" id="activity_table">
                         <thead>
                             <tr>
                                 <th>User</th>
@@ -71,111 +62,69 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($data as $act)
-                                <tr>
-                                    <td>
-                                        <a
-                                            href="{{ route('memberUser.allDetails', $act->user_id) }}">{{ $act->user_name ?? 'N/A' }}</a>
-                                        <br><small>{{ $act->user_email ?? 'N/A' }}</small>
-                                        <br><small>{{ $act->user_phone ?? 'N/A' }}</small>
-                                    </td>
-                                    <td>
-                                        @if ($act->post_for || $act->property_type || $act->property_for)
-                                            @if ($act->post_for)
-                                                <span
-                                                    class="badge bg-info">{{ $act->post_for === 'Sale' ? 'Buy' : 'Rent' }}</span><br>
-                                            @endif
+                            @if (isset($data))
+                                @foreach ($data as $act)
+                                    <tr>
+                                        <td>
+                                            <a
+                                                href="{{ route('memberUser.allDetails', $act->user_id) }}">{{ $act->user_name ?? 'N/A' }}</a>
+                                            <br><small>{{ $act->user_email ?? 'N/A' }}</small>
+                                            <br><small>{{ $act->user_phone ?? 'N/A' }}</small>
+                                        </td>
+                                        <td>
+                                            @if ($act->post_for || $act->property_type || $act->property_for)
+                                                @if ($act->post_for)
+                                                    <span
+                                                        class="badge bg-info">{{ $act->post_for === 'Sale' ? 'Buy' : 'Rent' }}</span><br>
+                                                @endif
 
-                                            @if ($act->property_type)
-                                                <span class="badge bg-success">{{ $act->property_type }}</span><br>
-                                            @endif
+                                                @if ($act->property_type)
+                                                    <span class="badge bg-success">{{ $act->property_type }}</span><br>
+                                                @endif
 
-                                            @if ($act->property_for)
-                                                <span
-                                                    class="badge bg-warning"><small>{{ $act->property_for }}</small></span>
+                                                @if ($act->property_for)
+                                                    <span
+                                                        class="badge bg-warning"><small>{{ $act->property_for }}</small></span>
+                                                @endif
+                                            @else
+                                                <span class="text-muted"><em>N/A</em></span>
                                             @endif
-                                        @else
-                                            <span class="text-muted"><em>N/A</em></span>
-                                        @endif
-                                    </td>
-
-                                    <td>{{ $act->city_id ?? 'N/A' }}</td>
-                                    <td>
-                                        @if ($act->min_budget || $act->max_budget)
-                                            ₹{{ $act->min_budget ?? '0' }} - ₹{{ $act->max_budget ?? 'Any' }}
-                                        @else
-                                            <em>N/A</em>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($act->json_filters)
-                                            @php
-                                                $filters = $act->json_filters;
-                                            @endphp
-                                            @foreach ($filters as $key => $values)
-                                                <div><strong>{{ ucfirst($key) }}:</strong>
-                                                    @foreach ((array) $values as $val)
-                                                        <span class="badge bg-success">{{ $val }}</span>
-                                                    @endforeach
-                                                </div>
-                                            @endforeach
-                                        @else
-                                            <em>No filters</em>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <small>{{ $act->created_at }}</small>
-                                    </td>
-                                </tr>
-                            @endforeach
+                                        </td>
+                                        <td>{{ $act->city_id ?? 'N/A' }}</td>
+                                        <td>
+                                            @if ($act->min_budget || $act->max_budget)
+                                                ₹{{ $act->min_budget ?? '0' }} - ₹{{ $act->max_budget ?? 'Any' }}
+                                            @else
+                                                <em>N/A</em>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($act->json_filters)
+                                                @php
+                                                    $filters = $act->json_filters;
+                                                @endphp
+                                                @foreach ($filters as $key => $values)
+                                                    <div><strong>{{ ucfirst($key) }}:</strong>
+                                                        @foreach ((array) $values as $val)
+                                                            <span class="badge bg-success">{{ $val }}</span>
+                                                        @endforeach
+                                                    </div>
+                                                @endforeach
+                                            @else
+                                                <em>No filters</em>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <small>{{ $act->created_at }}</small>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
 
                 </div>
-                @if ($data->isNotEmpty())
-                    <div class="card-footer pagination-rounded clearfix justify-content-center">
-                        <ul class="pagination small mb-0">
-                            @if ($data->currentPage() == $data->lastPage() && $data->currentPage() != 1)
-                                <li class="page-item">
-                                    <a href="{{ $data->appends(['term' => request('term')])->url(1) }}" class="page-link"
-                                        rel="start">
-                                        <i class="fa fa-chevron-left"></i> First
-                                    </a>
-                                </li>
-                            @endif
-
-                            <li class="page-item {{ $data->currentPage() == 1 ? 'disabled' : '' }}">
-                                <a href="{{ $data->appends(['term' => request('term')])->previousPageUrl() }}"
-                                    class="page-link" rel="prev">
-                                    <i class="fa fa-chevron-left"></i>
-                                </a>
-                            </li>
-
-                            @for ($i = max($data->currentPage() - 1, 1); $i <= min($data->currentPage() + 1, $data->lastPage()); $i++)
-                                <li class="page-item {{ $data->currentPage() == $i ? 'active' : '' }}">
-                                    <a href="{{ $data->appends(['term' => request('term')])->url($i) }}"
-                                        class="page-link">{{ $i }}</a>
-                                </li>
-                            @endfor
-
-                            <li class="page-item {{ $data->currentPage() == $data->lastPage() ? 'disabled' : '' }}">
-                                <a href="{{ $data->appends(['term' => request('term')])->nextPageUrl() }}"
-                                    class="page-link" rel="next">
-                                    <i class="fa fa-chevron-right"></i>
-                                </a>
-                            </li>
-
-                            @if ($data->currentPage() != $data->lastPage())
-                                <li class="page-item">
-                                    <a href="{{ $data->appends(['term' => request('term')])->url($data->lastPage()) }}"
-                                        class="page-link" rel="end">
-                                        Last <i class="fa fa-chevron-right"></i>
-                                    </a>
-                                </li>
-                            @endif
-                        </ul>
-                    </div>
-                @endif
+                {!! $data->links('vendor.pagination.bootstrap-5') !!}
             </div>
         </div>
     </div>
@@ -198,7 +147,7 @@
                     },
                     {
                         "orderable": false,
-                        "targets": [1,2, 3, 4]
+                        "targets": [1, 2, 3, 4]
                     }
                 ]
             });

@@ -127,12 +127,7 @@ class GoogleLocalityController extends Controller
 
             $existing = $this->checkSlug(trim($slug), $lang);
 
-            if ($existing) {
-                $response[] = [
-                    'locality_id' => $existing->locality_id,
-                    'name' => $existing->name,
-                ];
-            } else {
+            if (!$existing) {
                 $getId = DB::table('locality')->insertGetId([
                     'city' => null,
                     'locality_key' => $slug,
@@ -170,6 +165,6 @@ class GoogleLocalityController extends Controller
             ->select('locality.locality_id', 'locality_names.name')
             ->where('locality.locality_key', $slug)
             ->where('locality_names.lang', $lang)
-            ->first();
+            ->exists();
     }
 }

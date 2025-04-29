@@ -1,6 +1,6 @@
 @extends('Admin.layouts.app')
 @php
-    // log_anything($landmarks);
+    // log_anything($data);
 @endphp
 @section('content')
     <div class="body-page-loader d-none">
@@ -131,50 +131,7 @@
                         </tbody>
                     </table>
                 </div>
-                @if (isset($data))
-                    <div class="card-footer pagination-rounded clearfix justify-content-center">
-                        <ul class="pagination small mb-0">
-                            @if ($data->currentPage() == $data->lastPage() && $data->currentPage() != 1)
-                                <li class="page-item">
-                                    <a href="{{ $data->appends(['term' => request('term')])->url(1) }}" class="page-link"
-                                        rel="start">
-                                        <i class="fa fa-chevron-left"></i> First
-                                    </a>
-                                </li>
-                            @endif
-
-                            <li class="page-item {{ $data->currentPage() == 1 ? 'disabled' : '' }}">
-                                <a href="{{ $data->appends(['term' => request('term')])->previousPageUrl() }}"
-                                    class="page-link" rel="prev">
-                                    <i class="fa fa-chevron-left"></i>
-                                </a>
-                            </li>
-
-                            @for ($i = max($data->currentPage() - 1, 1); $i <= min($data->currentPage() + 1, $data->lastPage()); $i++)
-                                <li class="page-item {{ $data->currentPage() == $i ? 'active' : '' }}">
-                                    <a href="{{ $data->appends(['term' => request('term')])->url($i) }}"
-                                        class="page-link">{{ $i }}</a>
-                                </li>
-                            @endfor
-
-                            <li class="page-item {{ $data->currentPage() == $data->lastPage() ? 'disabled' : '' }}">
-                                <a href="{{ $data->appends(['term' => request('term')])->nextPageUrl() }}"
-                                    class="page-link" rel="next">
-                                    <i class="fa fa-chevron-right"></i>
-                                </a>
-                            </li>
-
-                            @if ($data->currentPage() != $data->lastPage())
-                                <li class="page-item">
-                                    <a href="{{ $data->appends(['term' => request('term')])->url($data->lastPage()) }}"
-                                        class="page-link" rel="end">
-                                        Last <i class="fa fa-chevron-right"></i>
-                                    </a>
-                                </li>
-                            @endif
-                        </ul>
-                    </div>
-                @endif
+                {!! $data->links('vendor.pagination.bootstrap-5') !!}
 
             </div>
         </div>
@@ -358,6 +315,24 @@
             }
         }
 
+        // var table = $('#myTable').DataTable({
+        //     "paging": false,
+        //     "searching": false,
+        //     "info": false,
+        //     "ordering": true,
+        //     "order": [
+        //         [0, 'desc']
+        //     ],
+        //     "columnDefs": [{
+        //             "orderable": true,
+        //             "targets": [0]
+        //         },
+        //         {
+        //             "orderable": false,
+        //             "targets": [1,2,3]
+        //         }
+        //     ]
+        // });
 
 
         $(document).ready(function() {
@@ -384,6 +359,8 @@
                 });
 
             });
+
+
 
         })
     </script>

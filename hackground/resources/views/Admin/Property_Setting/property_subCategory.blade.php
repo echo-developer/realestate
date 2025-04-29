@@ -123,45 +123,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="card-footer pagination-rounded clearfix justify-content-center">
-                <ul class="pagination small mb-0">
-                    @if (($subcategory_data->currentPage() == $subcategory_data->lastPage()) & ($subcategory_data->currentPage() != 1))
-                        <li class="page-item">
-                            <a href="{{ $subcategory_data->url(1) }}" class="page-link" rel="start">
-                                <i class="fa fa-chevron-left"></i> First
-                            </a>
-                        </li>
-                    @endif
-
-                    <li class="page-item {{ $subcategory_data->currentPage() == 1 ? 'disabled' : '' }}">
-                        <a href="{{ $subcategory_data->previousPageUrl() }}" class="page-link" rel="prev">
-                            <i class="fa fa-chevron-left"></i>
-                        </a>
-                    </li>
-
-                    @for ($i = max($subcategory_data->currentPage() - 1, 1); $i <= min($subcategory_data->currentPage() + 1, $subcategory_data->lastPage()); $i++)
-                        <li class="page-item {{ $subcategory_data->currentPage() == $i ? 'active' : '' }}">
-                            <a href="{{ $subcategory_data->url($i) }}" class="page-link">{{ $i }}</a>
-                        </li>
-                    @endfor
-
-                    <li
-                        class="page-item {{ $subcategory_data->currentPage() == $subcategory_data->lastPage() ? 'disabled' : '' }}">
-                        <a href="{{ $subcategory_data->nextPageUrl() }}" class="page-link" rel="next">
-                            <i class="fa fa-chevron-right"></i>
-                        </a>
-                    </li>
-
-                    @if ($subcategory_data->currentPage() != $subcategory_data->lastPage())
-                        <li class="page-item">
-                            <a href="{{ $subcategory_data->url($subcategory_data->lastPage()) }}" class="page-link"
-                                rel="end">
-                                Last <i class="fa fa-chevron-right"></i>
-                            </a>
-                        </li>
-                    @endif
-                </ul>
-            </div>
+            {!! $data->links('vendor.pagination.bootstrap-5') !!}
         </div>
     </div>
     

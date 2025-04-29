@@ -114,7 +114,7 @@ class AdvanceSearchController extends Controller
         $user_id = $rq->user_id;
 
         $data = array_merge($data, $data2);
-        Log::info("data:\n" . json_encode($data, JSON_PRETTY_PRINT));
+        // Log::info("data:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
         $qry = $this->MainQuery();
         $qry->where('properties.uid', '!=', $user_id);

@@ -123,6 +123,25 @@
                 toastr.success('Request Processed Successfully', successMessage, toastrOptions);
                 localStorage.removeItem('successMessage');
             }
+
+            // var table = $('#myTable').DataTable({
+            //     "paging": false,
+            //     "searching": false,
+            //     "info": false,
+            //     "ordering": true,
+            //     "order": [
+            //         [0, 'desc']
+            //     ],
+            //     "columnDefs": [{
+            //             "orderable": true,
+            //             "targets": [0]
+            //         },
+            //         {
+            //             "orderable": false,
+            //             "targets": [1, 2, 3,4]
+            //         }
+            //     ]
+            // });
         });
     </script>
     <script>
