@@ -17,12 +17,13 @@ import {
   Button,
 } from "react-bootstrap";
 import { useAuth } from "@/context/AuthProvider";
+import Locality from "../Locality/Locality";
 
 
 const Banner = ({ translation }) => {
   const { callApi } = AuthUser();
   const router = useRouter();
-  const { currency } = useAuth();
+  const { currency, } = useAuth();
   const [locationData, setLocationData] = useState(null);
   const [PropertyTypeData, setPropertyTypeData] = useState([]);
   const [PropertyForData, setPropertyForData] = useState([]);
@@ -51,6 +52,8 @@ const Banner = ({ translation }) => {
   const [kitchens, setKitchens] = useState([]);
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   const [dropdownState, setDropdownState] = useState({});
+  const [selectedLocality, setSelectedLocality] = useState(null);
+
 
   const toggleDropdown = (key) => {
     setDropdownState(prevState => {
@@ -73,8 +76,8 @@ const Banner = ({ translation }) => {
   };
 
   const handleClickOutside = (e) => {
-      setDropdownState({});
-      setIsOverlayVisible(false);
+    setDropdownState({});
+    setIsOverlayVisible(false);
   };
 
   const handleBud1InputClick = (amount) => {
@@ -137,24 +140,27 @@ const Banner = ({ translation }) => {
 
   const displayPropertyTyep = () => {
     let str = "";
-  if (selectedPropertyType) {
-    const category = PropertyTypeData.find(
-      (item) => item.category_id === Number(selectedPropertyType)
-    );
-    if (category) {
-      str = category.category_name;
+    if (selectedPropertyType) {
+      const category = PropertyTypeData.find(
+        (item) => item.category_id === Number(selectedPropertyType)
+      );
+      if (category) {
+        str = category.category_name;
+      }
     }
-  }
-  if (selectedPropertyFor) {
-    const subCategory = PropertyForData?.find(
-      (item) => item?.sub_category_id === Number(selectedPropertyFor)
-    );
-    if (subCategory) {
-      str += str ? ` - ${subCategory.sub_category_name}` : subCategory.sub_category_name;
+    if (selectedPropertyFor) {
+      const subCategory = PropertyForData?.find(
+        (item) => item?.sub_category_id === Number(selectedPropertyFor)
+      );
+      if (subCategory) {
+        str += str ? ` - ${subCategory.sub_category_name}` : subCategory.sub_category_name;
+      }
     }
-  }
-  return str || "Residential";
+    return str || "Residential";
   };
+
+
+
 
   const budgetOptions = [50000, 100000, 200000, 300000, 500000];
 
@@ -286,7 +292,7 @@ const Banner = ({ translation }) => {
       });
       if (response && response.data) {
         setPropertyTypeData(response.data);
-      } 
+      }
     } catch (error) {
       toast.error(response.message);
     }
@@ -301,7 +307,7 @@ const Banner = ({ translation }) => {
       });
       if (response && response.data) {
         setPropertyForData(response.data);
-      } 
+      }
     } catch (error) {
       toast.error(error.message);
     }
@@ -320,8 +326,8 @@ const Banner = ({ translation }) => {
     if (selectedTab) params.post_for = selectedTab;
     if (selectedLocation.length) params.city_id = setLocationData;
     if (gender) params.gender = gender;
-    if (locationData) {
-      params.location_data = JSON.stringify(locationData);
+    if(selectedLocality) {
+      params.locality = JSON.stringify(selectedLocality);
     }
     if (selectedPropertyType) params.property_type = selectedPropertyType;
     if (selectedPropertyFor) params.property_for = selectedPropertyFor;
@@ -351,12 +357,15 @@ const Banner = ({ translation }) => {
       };
     }
 
-    return `/property-listing?${queryString}${
-      Object.keys(searchData).length
+    return `/property-listing?${queryString}${Object.keys(searchData).length
         ? `&searchData=${JSON.stringify(searchData)}`
         : ""
-    }`;
+      }`;
   };
+
+  const onSelectLocality = (locality) => {
+    setSelectedLocality(locality)
+  }
 
   const handleSearch = () => {
     const url = buildSearchUrl();
@@ -403,7 +412,7 @@ const Banner = ({ translation }) => {
       {isOverlayVisible && (
         <div
           className="page-overlay"
-          style={{zIndex: 1}}
+          style={{ zIndex: 1 }}
           onClick={handleClickOutside}
         ></div>
       )}
@@ -435,9 +444,8 @@ const Banner = ({ translation }) => {
                     >
                       <li className="nav-item" role="presentation">
                         <button
-                          className={`nav-link ${
-                            selectedTab === "sale" ? "active" : ""
-                          }`}
+                          className={`nav-link ${selectedTab === "sale" ? "active" : ""
+                            }`}
                           onClick={() => handleTabChange("sale")}
                           type="button"
                           role="tab"
@@ -447,9 +455,8 @@ const Banner = ({ translation }) => {
                       </li>
                       <li className="nav-item" role="presentation">
                         <button
-                          className={`nav-link ${
-                            selectedTab === "rent" ? "active" : ""
-                          }`}
+                          className={`nav-link ${selectedTab === "rent" ? "active" : ""
+                            }`}
                           onClick={() => handleTabChange("rent")}
                           type="button"
                           role="tab"
@@ -460,9 +467,8 @@ const Banner = ({ translation }) => {
 
                       <li className="nav-item" role="presentation">
                         <button
-                          className={`nav-link ${
-                            selectedTab === "projects" ? "active" : ""
-                          }`}
+                          className={`nav-link ${selectedTab === "projects" ? "active" : ""
+                            }`}
                           onClick={() => handleTabChange("projects")}
                           type="button"
                           role="tab"
@@ -482,10 +488,11 @@ const Banner = ({ translation }) => {
                           <div className="row gx-3">
                             {/* Location Dropdown */}
                             <div className="col-lg-6 col-12">
-                              <LocalityOption
+                              {/* <LocalityOption
                                 setLocationData={setLocationData}
                                 translation={translation}
-                              />
+                              /> */}
+                            <Locality onSelectLocality={onSelectLocality} />
                             </div>
 
                             {/* Property Type List */}
@@ -645,7 +652,7 @@ const Banner = ({ translation }) => {
                                           {budgetOptions.map((amount) => (
                                             <Dropdown.Item
                                               key={amount}
-                                              onClick={(e) =>{
+                                              onClick={(e) => {
                                                 e.preventDefault();
                                                 e.stopPropagation()
                                                 handleBud1InputClick(amount)
@@ -973,10 +980,11 @@ const Banner = ({ translation }) => {
                           <div className="row gx-3">
                             {/* Location Dropdown */}
                             <div className="col-lg-6 col-12">
-                              <LocalityOption
+                              {/* <LocalityOption
                                 setLocationData={setLocationData}
                                 translation={translation}
-                              />
+                              /> */}
+                              <Locality onSelectLocality={onSelectLocality} />
                             </div>
 
                             {/* Property Type List */}

@@ -233,7 +233,7 @@ const ListingMapView = ({ propertyList, loading }) => {
       <div className="container-fluid">
         <div className="row">
           {/* Sidebar – Project Listings */}
-          <div className="col-md-5 p-4" style={{ background: "#f8f9fa", height: "100vh", overflowY: "auto" }}>
+          <div className="col-lg p-4" style={{ background: "#f8f9fa", height: "100vh", overflowY: "auto" }}>
             <h4 className="mb-4">New Projects in UAE</h4>
 
             <div className="list-display">
@@ -395,7 +395,7 @@ const ListingMapView = ({ propertyList, loading }) => {
           </div>
 
           {/* Map Container */}
-          <div className="col-md-7 p-0">
+          <div className="col-lg p-0">
             <div style={{ height: '900px', width: '100%' }}>
               <MapContainer
                 center={[22.5726, 88.3639]}
