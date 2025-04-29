@@ -1,8 +1,11 @@
+'use client';
 import React, { useEffect, useState } from 'react'
 import AuthUser from '../Authentication/AuthUser';
+import { useRouter } from 'next/router';
 
 const Locality = ({onSelectLocality}) => {
     const { callApi } = AuthUser();
+    const router = useRouter();
     const [localitySearchInput, setLocalitySearchInput] = useState('');
     const [debouncedValue, setDebouncedValue] = useState('');
     const [localityList, setLocalityList] = useState([]);
@@ -19,6 +22,15 @@ const Locality = ({onSelectLocality}) => {
             clearTimeout(timeout);
         }
     }, [localitySearchInput])
+
+    useEffect(() => {
+      if(router?.isReady) {
+        if(router.query?.locality) {
+          const locality = JSON.parse(router.query.locality);
+          setLocalitySearchInput(locality.name)
+        }
+      }
+    }, [router])
 
     const getGlobalLocalities = async (keyWord) => {
         try {
