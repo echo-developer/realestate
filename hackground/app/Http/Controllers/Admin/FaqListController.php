@@ -89,6 +89,7 @@ class FaqListController extends Controller
             DB::table('faq_list_names')->insert($insertData);
 
             DB::commit();
+            set_flash_message('add');
 
             return response()->json([
                 'success' => true,
@@ -152,6 +153,7 @@ class FaqListController extends Controller
                 ]);
 
                 DB::commit();
+                set_flash_message('delete');
                 return response()->json(['success' => true, 'message' => 'FAQ marked as deleted.']);
             } else {
                 DB::rollBack();
@@ -192,7 +194,7 @@ class FaqListController extends Controller
         $faq->save();
 
         DB::table('faq_list_names')->where('faq_id', $faqId)->delete();
-
+        set_flash_message('update');
         if ($request->has('question') && $request->has('answer')) {
             $now = Carbon::now();
             foreach ($request->question as $lang => $question) {
@@ -209,5 +211,5 @@ class FaqListController extends Controller
         return response()->json(['message' => 'FAQ updated successfully.']);
     }
 
-    
+
 }
