@@ -1,15 +1,16 @@
 'use client';
 import React, { useEffect, useState } from 'react'
 import AuthUser from '../Authentication/AuthUser';
-import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
 
 const Locality = ({onSelectLocality}) => {
     const { callApi } = AuthUser();
-    const router = useRouter();
+    const searchParams = useSearchParams();
     const [localitySearchInput, setLocalitySearchInput] = useState('');
     const [debouncedValue, setDebouncedValue] = useState('');
     const [localityList, setLocalityList] = useState([]);
     const [localityDropdown, setLocalityDropdown] = useState(false);
+    const locality = searchParams.get('locality');
 
 
     useEffect(() => {
@@ -24,13 +25,11 @@ const Locality = ({onSelectLocality}) => {
     }, [localitySearchInput])
 
     useEffect(() => {
-      if(router?.isReady) {
-        if(router.query?.locality) {
-          const locality = JSON.parse(router.query.locality);
-          setLocalitySearchInput(locality.name)
-        }
+      if(locality) {
+        const parsedLocality = JSON.parse(locality);
+        setLocalitySearchInput(parsedLocality?.name)
       }
-    }, [router])
+    }, [locality])
 
     const getGlobalLocalities = async (keyWord) => {
         try {
