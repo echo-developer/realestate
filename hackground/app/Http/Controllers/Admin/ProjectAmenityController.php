@@ -71,7 +71,7 @@ class ProjectAmenityController extends Controller
 
 
         $rules = [
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
             'image' => 'nullable|string',
             'id' => 'nullable|integer',
@@ -81,7 +81,7 @@ class ProjectAmenityController extends Controller
             $rules["name.$lang"] = 'required|string|max:255';
         }
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
             'id.required' => 'The ID field is required.',
         ];
@@ -91,6 +91,7 @@ class ProjectAmenityController extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         try {
             $response = $this->amenityModel->createAmenity($validated);
@@ -124,7 +125,7 @@ class ProjectAmenityController extends Controller
 
         // Validation rules (same as add amenity)
         $rules = [
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
             'image' => 'nullable|string',
             'prop_amenityId' => 'required|integer|exists:project_amenity,id',  // Ensure amenity exists
@@ -136,7 +137,7 @@ class ProjectAmenityController extends Controller
 
         // Custom validation messages (same as add amenity)
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
             'prop_amenityId.required' => 'The Amenity ID field is required.',
             'prop_amenityId.exists' => 'The specified Amenity ID does not exist.',
@@ -148,6 +149,7 @@ class ProjectAmenityController extends Controller
 
         // Validate the request (same as add amenity)
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         // Prepare the data for the update (same as add amenity)
         $data = [

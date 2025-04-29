@@ -23,7 +23,7 @@ class PropertyBudgetController extends Controller
         $term = $request->input('term');
         $data = $this->budgetModel->getbudgets($term,$peginate);
         return view('Admin.Property_Setting.property_budget', compact('data'));
-        
+
     }
 
 
@@ -32,7 +32,7 @@ class PropertyBudgetController extends Controller
 
 
         $rules = [
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
             'id' => 'nullable|integer',
             'max_budget' => 'required|integer',
@@ -40,7 +40,7 @@ class PropertyBudgetController extends Controller
         ];
 
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'max_budget.required' => 'The Max Budget is required.',
             'min_budget.required' => 'The Min Budget is required.',
             'status.required' => 'The Status field is required.',
@@ -49,6 +49,7 @@ class PropertyBudgetController extends Controller
 
 
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         try {
             $response = $this->budgetModel->createBudget($validated);
@@ -79,7 +80,7 @@ class PropertyBudgetController extends Controller
     public function EditBudget(Request $req)
     {
         $rules = [
-            'order' => 'required|integer',
+
             'max_budget' => 'required|integer',
             'min_budget' => 'required|integer',
             'status' => 'required|boolean',
@@ -88,7 +89,7 @@ class PropertyBudgetController extends Controller
 
         // Custom validation messages (same as add category)
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'max_budget.required' => 'The Max Budget is required.',
             'min_budget.required' => 'The Min Budget is required.',
             'status.required' => 'The Status field is required.',
@@ -98,6 +99,7 @@ class PropertyBudgetController extends Controller
 
         // Validate the request (same as add category)
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         // Prepare the data for the update (same as add category)
         $data = [

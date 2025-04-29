@@ -13,7 +13,7 @@ class AllSettingController extends Controller
     {
         $this->middleware('view_permit:all-setting');
     }
-    public function view_AllsettingList(Request $request, String $group_key='default')
+    public function view_AllsettingList(Request $request, String $group_key = 'default')
     {
         $term = $request->input('term');
         $Settings = GroupSetting::where('status', '=', config('constants.STATUS_ACTIVE'))->get();
@@ -41,7 +41,6 @@ class AllSettingController extends Controller
                 'setting_name' => 'required',
                 'setting_Key' => 'required',
                 'setting_Value' => 'required',
-                'Display_Order' => 'required',
                 'Editable' => 'required',
                 'Deletable' => 'required',
             ]
@@ -53,7 +52,6 @@ class AllSettingController extends Controller
             'setting_value' => $validate_setting['setting_Value'],
             'editable' => $validate_setting['Editable'],
             'deletable' => $validate_setting['Deletable'],
-            'display_order' => $validate_setting['Display_Order'],
             'setting_group' => $validate_setting['Groups'],
         ];
 
@@ -81,7 +79,7 @@ class AllSettingController extends Controller
                 'setting_name' => 'required',
                 'setting_Key' => 'required',
                 'setting_Value' => 'required',
-                'Display_Order' => 'required',
+
                 'Editable' => 'required',
                 'Deletable' => 'required',
             ]
@@ -94,7 +92,7 @@ class AllSettingController extends Controller
             'setting_value' => $validate_setting['setting_Value'],
             'editable' => $validate_setting['Editable'],
             'deletable' => $validate_setting['Deletable'],
-            'display_order' => $validate_setting['Display_Order'],
+
             'setting_group' => $validate_setting['Groups'],
         ];
 

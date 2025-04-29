@@ -21,3 +21,28 @@ ALTER TABLE `pref_faq_list` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;
 
  ALTER TABLE `pref_faq_list` CHANGE `status` `status` INT(11) NULL DEFAULT '1';
 
+ALTER TABLE `pref_testimonial` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `pref_email_templates` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `pref_country` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `pref_state` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `pref_city` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `pref_property_furnish` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `pref_property_furnish` CHANGE `icon` `icon` VARCHAR(155) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+
+ALTER TABLE `pref_property_budget` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `pref_property_status` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `pref_property_status` CHANGE `icon` `icon` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+
+ALTER TABLE `pref_property_transaction` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `pref_property_sub_category` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `pref_project_amenity` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;

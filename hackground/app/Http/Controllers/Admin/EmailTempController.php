@@ -36,7 +36,7 @@ class EmailTempController extends Controller
         $rules = [
             'name' => 'required|max:255',
             'template_key' => 'required|max:255|unique:email_templates,key',
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
         ];
 
@@ -45,7 +45,7 @@ class EmailTempController extends Controller
             $rules["content.$lang"] = 'required|string|max:5000';
         }
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'name.required' => 'The Name field is required.',
             'template_key.required' => 'The Template Key field is required.',
             'template_key.unique' => 'The Template Key already exsist.',
@@ -58,6 +58,8 @@ class EmailTempController extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
+
 
         // Sanitize the content to prevent XSS (if needed)
         $purifier = new HTMLPurifier();
@@ -100,7 +102,7 @@ class EmailTempController extends Controller
         $rules = [
             'name' => 'required|max:255',
             'template_key' => 'required|max:255|unique:email_templates,key',
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
         ];
 
@@ -111,7 +113,7 @@ class EmailTempController extends Controller
 
         // Custom validation messages (same as add emailTemplate)
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'name.required' => 'The Name field is required.',
             'template_key.required' => 'The Template Key field is required.',
             'template_key.unique' => 'The Template Key already exsist.',
@@ -126,6 +128,7 @@ class EmailTempController extends Controller
         // Validate the request (same as add emailTemplate)
         $validated = $req->validate($rules, $messages);
         $validated['email_template_id'] = $req->prop_emailTemplateId;
+        $validated['order'] = $req->input('order', null);
 
         try {
             // Call the method to update the emailTemplate in the model

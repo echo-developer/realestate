@@ -10,7 +10,7 @@ class PropertyTransactionController extends Controller
 {
     protected $transactionModel;
 
-   
+
     public function __construct(PropertyTransactionModel $transactionModel)
     {
         $this->transactionModel = $transactionModel;
@@ -32,7 +32,7 @@ class PropertyTransactionController extends Controller
 
 
         $rules = [
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
             'id' => 'nullable|integer',
         ];
@@ -41,7 +41,7 @@ class PropertyTransactionController extends Controller
             $rules["name.$lang"] = 'required|string|max:255';
         }
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
             'id.required' => 'The ID field is required.',
         ];
@@ -51,7 +51,7 @@ class PropertyTransactionController extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
-
+        $validated['order'] = $req->input('order', null);
         try {
             $response = $this->transactionModel->createTransaction($validated);
             return response()->json($response);
@@ -87,7 +87,7 @@ class PropertyTransactionController extends Controller
 
         // Validation rules (same as add category)
         $rules = [
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
             'prop_transactionId' => 'required|integer|exists:property_transaction,id',  // Ensure category exists
         ];
@@ -98,7 +98,7 @@ class PropertyTransactionController extends Controller
 
         // Custom validation messages (same as add category)
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
             'prop_transactionId.required' => 'The Category ID field is required.',
             'prop_transactionId.exists' => 'The specified Category ID does not exist.',
@@ -110,7 +110,7 @@ class PropertyTransactionController extends Controller
 
         // Validate the request (same as add category)
         $validated = $req->validate($rules, $messages);
-
+        $validated['order'] = $req->input('order', null);
         // Prepare the data for the update (same as add category)
         $data = [
             'transaction_id' => $req->prop_transactionId,

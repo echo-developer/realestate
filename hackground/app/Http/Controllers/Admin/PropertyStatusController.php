@@ -24,7 +24,7 @@ class PropertyStatusController extends Controller
         $term = $request->input('term');
         $data = $this->statusModel->getstatus($term, $lang, $peginate);
         return view('Admin.Property_Setting.property_status', compact('data'));
-        // 
+        //
     }
 
     public function AddStatus(Request $req)
@@ -33,7 +33,7 @@ class PropertyStatusController extends Controller
 
 
         $rules = [
-            'order' => 'required|integer',
+
             'icon' => 'nullable|string',
             'status' => 'required|boolean',
             'id' => 'nullable|integer',
@@ -43,7 +43,7 @@ class PropertyStatusController extends Controller
             $rules["name.$lang"] = 'required|string|max:255';
         }
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
             'id.required' => 'The ID field is required.',
         ];
@@ -53,6 +53,7 @@ class PropertyStatusController extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         try {
             $response = $this->statusModel->createStatus($validated);
@@ -121,7 +122,7 @@ class PropertyStatusController extends Controller
         // Validation rules (same as add category)
         $rules = [
             'icon' => 'nullable|string',
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
             'prop_statusId' => 'required|integer|exists:property_status,id',  // Ensure category exists
         ];
@@ -132,7 +133,7 @@ class PropertyStatusController extends Controller
 
         // Custom validation messages (same as add category)
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
             'prop_statusId.required' => 'The Category ID field is required.',
             'prop_statusId.exists' => 'The specified Category ID does not exist.',
@@ -144,6 +145,7 @@ class PropertyStatusController extends Controller
 
         // Validate the request (same as add category)
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         // Prepare the data for the update (same as add category)
         $data = [
@@ -156,6 +158,7 @@ class PropertyStatusController extends Controller
         try {
             // Call the method to update the category in the model
             $response = $this->statusModel->updatestatus($data);
+            $validated['order'] = $req->input('order', null);
 
             return response()->json($response);
         } catch (\Exception $e) {
