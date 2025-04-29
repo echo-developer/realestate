@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import AuthUser from '../Authentication/AuthUser';
 import { useSearchParams } from 'next/navigation';
 
-const Locality = ({onSelectLocality}) => {
+const Locality = ({onSelectLocality, errors}) => {
     const { callApi } = AuthUser();
     const searchParams = useSearchParams();
     const [localitySearchInput, setLocalitySearchInput] = useState('');
@@ -94,13 +94,16 @@ const Locality = ({onSelectLocality}) => {
     <>
         <div className="form-field" style={{ position: 'relative' }}>
                           <input
-                            className="form-control pac-target-input"
+                            className={`form-control pac-target-input ${errors?.locality && 'is-invalid'}`}
                             placeholder="Enter Locality"
                             type="text"
                             autoComplete="off"
                             value={localitySearchInput}
                             onChange={handleLocalityInputChange}
                           />
+                          {errors?.locality && (
+              <div className="invalid-feedback">{errors.locality}</div>
+            )}
                           {localityDropdown && localityList?.length > 0 && (
                             <ul className="suggestions-list" style={{
                               position: 'absolute',

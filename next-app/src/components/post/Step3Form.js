@@ -6,6 +6,7 @@ import TextEditor from "../editor/TextEditor";
 // import { Modal, Button } from 'react-bootstrap';
 import useTranslation from "@/hooks/useTranslation";
 import { useAuth } from "@/context/AuthProvider";
+import Locality from "../Locality/Locality";
 
 
 // const FreeMapModal = dynamic(() => import("../MapData/FreeMapModal"), { ssr: false });
@@ -66,7 +67,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
       newErrors.city = `${translation?.please_select_a_city || "Please select a city."
         }`;
     }
-    if (!formData.locality || formData.locality.trim() === "") {
+    if (!formData.locality) {
       newErrors.locality = `${translation?.please_enter_a_locality || "Please enter a locality."
         }`;
     }
@@ -100,26 +101,20 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     setLocalityDropdown(false);
   }
 
-  // const handleLocalityChange = (id) => {
-  //   if (id) {
-  //     const locality = localityList.find((item) => item.locality_id == id);
-  //     if (locality) {
-  //       setSelectedLocality(locality);
-  //       setFormData(prev => {
-  //         return {
-  //           ...prev,
-  //           locality: locality?.locality_id
-  //         }
-  //       })
-  //       setErrors(prev => {
-  //         return {
-  //           ...prev,
-  //           locality: ""
-  //         }
-  //       })
-  //     }
-  //   }
-  // }
+  const onSelectLocality = (locality) => {
+    setFormData(prev => {
+      return {
+        ...prev,
+        locality: locality?.locality_id
+      }
+    })
+    setErrors(prev => {
+      return {
+        ...prev,
+        locality: ""
+      }
+    })
+  }
 
   const handleNext = () => {
     if (validate()) {
@@ -167,48 +162,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
           /> */}
           <div className="col-lg-6 col-12">
             <label className="form-label">Locality <span className="text-danger">*</span></label>
-            <div className="form-field" style={{ position: 'relative' }}>
-              <input
-                className="form-control pac-target-input"
-                placeholder="Enter Locality"
-                type="text"
-                value={localityInputSearch}
-
-                onChange={(e) => {
-                  setLocalityInputSearch(e.target.value)
-                  setLocalityDropdown(true)
-                }}
-                // onChange={showSuggestions}
-                autoComplete="off"
-              />
-              {localityDropdown && localityList?.length > 0 && (
-                <ul className="suggestions-list" style={{
-                  position: 'absolute',
-                  border: '1px solid #ccc',
-                  maxHeight: '200px',
-                  overflowY: 'auto',
-                  width: '100%',
-                  backgroundColor: 'white',
-                  zIndex: 10,
-                  padding: '0',
-                  margin: '0',
-                }}>
-                  {localityList.map((locality, index) => (
-                    <li
-                      key={index}
-                      style={{
-                        padding: '8px',
-                        cursor: 'pointer',
-                      }}
-                      // onClick={() => selectSuggestion(locality)}
-                      onClick={() => handleLocalitySelect(locality)}
-                    >
-                      {locality?.name}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+            <Locality onSelectLocality={onSelectLocality} errors={errors} />
           </div>
           {/* <div className="col-lg-6 col-12">
             <label htmlFor="exampleSelect" className="form-label">Choose an option</label>
