@@ -46,3 +46,5 @@ ALTER TABLE `pref_property_transaction` CHANGE `order` `order` INT(11) NULL DEFA
 ALTER TABLE `pref_property_sub_category` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;
 
 ALTER TABLE `pref_project_amenity` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `pref_cms` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;

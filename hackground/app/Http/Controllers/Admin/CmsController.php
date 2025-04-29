@@ -35,7 +35,6 @@ class CmsController extends Controller
 
         $rules = [
             'slug' => 'required|max:255',
-            'order' => 'required|integer',
             'status' => 'required|boolean',
         ];
 
@@ -47,7 +46,6 @@ class CmsController extends Controller
             $rules["meta_desc.$lang"] = 'required|string|max:255';
         }
         $messages = [
-            'order.required' => 'The Order field is required.',
             'slug.required' => 'The Slug field is required.',
             'status.required' => 'The Status field is required.',
         ];
@@ -61,6 +59,7 @@ class CmsController extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         // Sanitize the content to prevent XSS (if needed)
         $purifier = new HTMLPurifier();
@@ -101,7 +100,7 @@ class CmsController extends Controller
 
         // Validation rules (same as add cms)
         $rules = [
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
         ];
 
@@ -115,7 +114,7 @@ class CmsController extends Controller
 
         // Custom validation messages (same as add cms)
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
         ];
 
@@ -130,6 +129,7 @@ class CmsController extends Controller
         // Validate the request (same as add cms)
         $validated = $req->validate($rules, $messages);
         $validated['cms_id'] = $req->prop_cmsId;
+        $validated['order'] = $req->input('order', null);
 
         try {
             // Call the method to update the cms in the model
