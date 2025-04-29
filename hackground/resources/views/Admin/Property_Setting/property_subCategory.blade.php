@@ -49,7 +49,7 @@
         <div class="alert alert-{{ session('message_type') }}">
             {{ session('success_msg') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert">
-                
+
             </button>
         </div>
     @endif
@@ -83,7 +83,7 @@
 
             </div>
         <div class="card-body">
-            
+
 
             <div class="table-responsive" id="main_table">
                 <table class="mb-0 table">
@@ -123,10 +123,10 @@
                     </tbody>
                 </table>
             </div>
-            {!! $data->links('vendor.pagination.bootstrap-5') !!}
+            {!! $subcategory_data->links('vendor.pagination.bootstrap-5') !!}
         </div>
     </div>
-    
+
 @endsection
 @section('modals')
     <div class="modal fade" id="prop_subcategory" tabindex="-1" role="dialog"
@@ -138,7 +138,7 @@
                     <h5 class="modal-title" id="prop_subcategoryAddEditModalLabel"></h5>
 
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        
+
                     </button>
                 </div>
                 <div class="modal-body">
@@ -147,7 +147,7 @@
                         <input type="hidden" class='d-none' id="prop_subcategoryimage" name="image">
                         <input type="text" class='d-none' id="prop_subcategoryId" name="prop_subcategoryId">
 
-                        <div class="form-floating mb-3">                                                                                 
+                        <div class="form-floating mb-3">
                             <select name="category_id" id="category_id" class="form-select">
                                 <option value="">-select Category-</option>
                                 @if (isset($category_data))
@@ -155,8 +155,8 @@
                                         <option value="{{ $items->id }}">{{ $items->name }}</option>
                                     @endforeach
                                 @endif
-                            </select>   
-                            <label for="ufile">Category Name</label>                                    
+                            </select>
+                            <label for="ufile">Category Name</label>
                         </div>
 
                         @php
@@ -164,14 +164,14 @@
                         @endphp
                         @foreach ($langs as $lang)
                             <div class="form-floating mb-3">
-                                
+
                                 <input type="text" class="form-control reset_field" id="name_{{ $lang }}"
                                     name="name[{{ $lang }}]" autocomplete="off" placeholder="">
                                 <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
                                 <div class="invalid-feedback" id="name_{{ $lang }}_error"></div>
                             </div>
                         @endforeach
-                        <div class="form-floating mb-3">                            
+                        <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="slug" name="slug" required placeholder="">
                             <label for="Name">Slug</label>
                             <div class="invalid-feedback" id="slug_error"></div>
@@ -186,11 +186,11 @@
                         <div class="form-group">
                             <img id="image_preview" src=" " style="display:none; width: 64px; height: 64px;" />
                             <button type="button" id="delete_image_btn" style="display:none;"
-                            class="btn btn-danger btn-sm" title="Delete Image" onclick="deleteUploadedImage()"><i class="bi bi-trash3-fill"></i></button>                                
+                            class="btn btn-danger btn-sm" title="Delete Image" onclick="deleteUploadedImage()"><i class="bi bi-trash3-fill"></i></button>
                         </div>
 
                         <div class="form-floating mb-3">
-                            
+
                             <input type="Order" class="form-control" id="order" name="order" placeholder="" required>
                             <label for="Order">Order</label>
                             <div class="invalid-feedback" id="Order_error"></div>
