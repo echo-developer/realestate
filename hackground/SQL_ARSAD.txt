@@ -592,3 +592,6 @@ ALTER TABLE `pref_locality_landmarks` ADD `slug` VARCHAR(100) NULL DEFAULT NULL 
 28/04/2025
 
 ALTER TABLE `pref_locality` CHANGE `city` `city` INT(11) NULL DEFAULT NULL;
+
+29/04/2025
+ALTER TABLE `pref_locality` CHANGE `status` `status` TINYINT(1) NULL DEFAULT NULL;

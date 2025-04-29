@@ -21,6 +21,9 @@ ALTER TABLE `pref_faq_list` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;
 
  ALTER TABLE `pref_faq_list` CHANGE `status` `status` INT(11) NULL DEFAULT '1';
 
+
+ 
+
 ALTER TABLE `pref_testimonial` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;
 
 ALTER TABLE `pref_email_templates` CHANGE `order` `order` INT(11) NULL DEFAULT NULL;

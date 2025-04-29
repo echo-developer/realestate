@@ -114,7 +114,7 @@ class AdvanceSearchController extends Controller
         $user_id = $rq->user_id;
 
         $data = array_merge($data, $data2);
-        // Log::info("data2:\n" . json_encode($data, JSON_PRETTY_PRINT));
+        Log::info("data:\n" . json_encode($data, JSON_PRETTY_PRINT));
 
         $qry = $this->MainQuery();
         $qry->where('properties.uid', '!=', $user_id);
@@ -185,6 +185,16 @@ class AdvanceSearchController extends Controller
                 }
             });
         }
+
+        if (isset($data['hasLatlang']) && $data['hasLatlang'] == '1') {
+            $qry->where(function ($query) {
+                $query->whereNotNull('properties_location.latitude')
+                    ->where('properties_location.latitude', '!=', '')
+                    ->whereNotNull('properties_location.longitude')
+                    ->where('properties_location.longitude', '!=', '');
+            });
+        }
+
         // Log::info('SQL Query: ' . json_encode($qry->toSql(), JSON_PRETTY_PRINT));
         // Log::info('Query Bindings: ', $qry->getBindings());
         return $qry->get();
