@@ -27,6 +27,14 @@
                 margin-top: 1rem;
             }
         </style>
+        @if (session('success_msg'))
+            <div class="alert alert-{{ session('message_type') }}">
+                {{ session('success_msg') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert">
+
+                </button>
+            </div>
+        @endif
         <form action="{{ url('/faq-category') }}" method="get">
             <section class="content-header mb-2">
                 <div class="row">
@@ -128,7 +136,8 @@
                     <div class="form-group">
                         <label class="form-label">Status</label>
                         <div class="radio-inline">
-                            <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked required>
+                            <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked
+                                required>
                             <label for="status_1">Active</label>
                             <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
                             <label for="status_2">Inactive</label>
@@ -146,16 +155,23 @@
 
 @push('custom-js')
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             var table = $('#myTable').DataTable({
                 "paging": false,
                 "searching": false,
                 "info": false,
                 "ordering": true,
-                "order": [[0, 'desc']],
-                "columnDefs": [
-                    { "orderable": true, "targets": [0] },
-                    { "orderable": false, "targets": [1, 2, 3, 4] }
+                "order": [
+                    [0, 'desc']
+                ],
+                "columnDefs": [{
+                        "orderable": true,
+                        "targets": [0]
+                    },
+                    {
+                        "orderable": false,
+                        "targets": [1, 2, 3, 4]
+                    }
                 ]
             });
         });
@@ -213,20 +229,20 @@
                 type: 'POST',
                 url: url,
                 data: formData,
-                success: function (response) {
+                success: function(response) {
                     if (response.success) {
                         $('#modal_action').modal('hide');
-                        toastr.success(response.message);
-                        setTimeout(() => location.reload(), 1200);
+                        // toastr.success(response.message);
+                        // setTimeout(() => location.reload(), 1200);
                     }
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     const errors = xhr.responseJSON.errors;
                     $('.invalid-feedback').hide();
                     $('.form-control').removeClass('is-invalid');
 
                     if (errors) {
-                        $.each(errors, function (key, messages) {
+                        $.each(errors, function(key, messages) {
                             const fieldId = key.replace(/\./g, '_');
                             const input = $(`#${fieldId}`);
                             const error = $(`#${fieldId}_error`);
@@ -240,7 +256,7 @@
                 }
             });
         }
-        $('.status').change(function () {
+        $('.status').change(function() {
             toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
 
             var id = $(this).data('id');
@@ -257,14 +273,14 @@
                     'status': status,
                     'id': id
                 },
-                success: function (data) {
-                },
-                error: function (msg) {
+                success: function(data) {},
+                error: function(msg) {
                     console.log(msg);
                     var errors = msg.responseJSON;
                 }
             });
         });
+
         function Delete(id) {
             if (confirm('Are you sure you want to delete this category?')) {
                 $.ajax({
@@ -274,11 +290,11 @@
                         id: id,
                         _token: '{{ csrf_token() }}'
                     },
-                    success: function (response) {
+                    success: function(response) {
                         toastr.success(response.message);
                         setTimeout(() => location.reload(), 1200);
                     },
-                    error: function () {
+                    error: function() {
                         toastr.error('Failed to delete category.');
                     }
                 });
