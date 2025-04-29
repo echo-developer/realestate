@@ -96,7 +96,7 @@
 
 
                 </div>
-                @if ($data->isNotEmpty())
+                {{-- @if ($data->isNotEmpty())
                     <div class="card-footer pagination-rounded clearfix justify-content-center">
                         <ul class="pagination small mb-0">
                             @if ($data->currentPage() == $data->lastPage() && $data->currentPage() != 1)
@@ -139,7 +139,8 @@
                             @endif
                         </ul>
                     </div>
-                @endif
+                @endif --}}
+                {!! $data->links('vendor.pagination.bootstrap-5') !!}
             </div>
         </div>
     </div>

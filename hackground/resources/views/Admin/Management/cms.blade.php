@@ -116,50 +116,7 @@
 
                     </table>
                 </div>
-                @if ($data->isNotEmpty())
-                    <div class="card-footer pagination-rounded clearfix justify-content-center">
-                        <ul class="pagination small mb-0">
-                            @if ($data->currentPage() == $data->lastPage() && $data->currentPage() != 1)
-                                <li class="page-item">
-                                    <a href="{{ $data->appends(['term' => request('term')])->url(1) }}" class="page-link"
-                                        rel="start">
-                                        <i class="fa fa-chevron-left"></i> First
-                                    </a>
-                                </li>
-                            @endif
-
-                            <li class="page-item {{ $data->currentPage() == 1 ? 'disabled' : '' }}">
-                                <a href="{{ $data->appends(['term' => request('term')])->previousPageUrl() }}"
-                                    class="page-link" rel="prev">
-                                    <i class="fa fa-chevron-left"></i>
-                                </a>
-                            </li>
-
-                            @for ($i = max($data->currentPage() - 1, 1); $i <= min($data->currentPage() + 1, $data->lastPage()); $i++)
-                                <li class="page-item {{ $data->currentPage() == $i ? 'active' : '' }}">
-                                    <a href="{{ $data->appends(['term' => request('term')])->url($i) }}"
-                                        class="page-link">{{ $i }}</a>
-                                </li>
-                            @endfor
-
-                            <li class="page-item {{ $data->currentPage() == $data->lastPage() ? 'disabled' : '' }}">
-                                <a href="{{ $data->appends(['term' => request('term')])->nextPageUrl() }}"
-                                    class="page-link" rel="next">
-                                    <i class="fa fa-chevron-right"></i>
-                                </a>
-                            </li>
-
-                            @if ($data->currentPage() != $data->lastPage())
-                                <li class="page-item">
-                                    <a href="{{ $data->appends(['term' => request('term')])->url($data->lastPage()) }}"
-                                        class="page-link" rel="end">
-                                        Last <i class="fa fa-chevron-right"></i>
-                                    </a>
-                                </li>
-                            @endif
-                        </ul>
-                    </div>
-                @endif
+                {!! $data->links('vendor.pagination.bootstrap-5') !!}
             </div>
         </div>
     </div>
