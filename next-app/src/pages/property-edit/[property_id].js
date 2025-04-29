@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-// import dynamic from "next/dynamic";
+import dynamic from "next/dynamic";
 import "./property_edit.css";
 import withAuth from "@/utils/withAuth";
 // import { useAuth } from "@/context/AuthProvider";
@@ -25,7 +25,8 @@ import EditFloorDetails from "@/components/property/EditFloorDetails";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import EditImageGallery from "@/components/property/EditImageGallery";
-import Locality from "@/components/project/Locality";
+// import Locality from "@/components/project/Locality";
+import Locality from "@/components/Locality/Locality";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 const FreeMapModal = dynamic(() => import("../../components/MapData/FreeMapModal"), { ssr: false });
 import {
@@ -344,17 +345,14 @@ const Index = () => {
     ),
   };
 
-  // const handleLocationSelect = (locationData) => {
-  //   setInputValue(prev => {
-  //     return {
-  //       ...prev,
-  //         address: locationData?.address || "",
-  //         address_lat: locationData.latitude,
-  //         address_lon: locationData.longitude
-  //     }
-  //   })
-  //   setShowMap(false);
-  // }
+  const onSelectLocality = (locality) => {
+    setInputValue(prev => {
+      return {
+        ...prev,
+        locality: locality?.locality_id || ""
+      }
+    })
+  }
 
 
   const renderModalContent = () => {
@@ -383,10 +381,13 @@ const Index = () => {
         );
       case "locality":
         return (
-          <Locality
-            locality={inputValue?.locality || ""}
-            setLocality={setLocality}
-          />
+          // <Locality
+          //   locality={inputValue?.locality || ""}
+          //   setLocality={setLocality}
+          // />
+          <div className="form-floating">
+            <Locality onSelectLocality={onSelectLocality} />
+          </div>
           // <select className="form-select" id="exampleSelect" value={inputValue?.locality || ""} onChange={(e) => setLocality(e.target.value)}>
           //   <option value="">Select a locality</option>
           //   {localityList?.length > 0 && localityList?.map((locality, i) => {

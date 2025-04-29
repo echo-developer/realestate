@@ -4,6 +4,7 @@ import AuthUser from "../Authentication/AuthUser";
 import dynamic from "next/dynamic";
 import TextEditor from "../editor/TextEditor";
 import useTranslation from "@/hooks/useTranslation";
+import Locality from "../Locality/Locality";
 
 const MapComponent = dynamic(() => import("../MapData/Map"), { ssr: false });
 
@@ -50,13 +51,28 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
     }));
   };
 
+  const onSelectLocality = (locality) => {
+    setFormData(prev => {
+      return {
+        ...prev,
+        locality: locality?.locality_id
+      }
+    })
+    setErrors(prev => {
+      return {
+        ...prev,
+        locality: ""
+      }
+    })
+  }
+
   const validate = () => {
     const newErrors = {};
 
     if (!formData.city) {
       newErrors.city = `${translation?.please_select_a_city || "Please select a city."}` 
     }
-    if (!formData.locality || formData.locality.trim() === "") {
+    if (!formData.locality) {
       newErrors.locality = `${translation?.please_enter_a_locality || "Please enter a locality."}` 
     }
     if (!formData.project_name || formData.project_name.trim() === "") {
@@ -107,12 +123,16 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
             )}
           </div>
         </div>
-        <MapComponent
+        {/* <MapComponent
           formData={formData}
           setFormData={setFormData}
           errors={errors}
           setErrors={setErrors}
-        />
+        /> */}
+        <div className="col-lg-6 col-12">
+        <label className="form-label">Locality <span className="text-danger">*</span></label>
+          <Locality onSelectLocality={onSelectLocality} errors={errors} />
+        </div>
 
         {/* Project Name Input */}
         <div className="form-field">
