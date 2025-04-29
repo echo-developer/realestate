@@ -64,7 +64,6 @@ class TestimonialController extends Controller
 
 
         $rules = [
-            'order' => 'required|integer',
             'status' => 'required|boolean',
             'image' => 'nullable|string',
             'id' => 'nullable|integer',
@@ -76,7 +75,6 @@ class TestimonialController extends Controller
             $rules["description.$lang"] = 'required|string|max:255';
         }
         $messages = [
-            'order.required' => 'The Order field is required.',
             'status.required' => 'The Status field is required.',
             'id.required' => 'The ID field is required.',
         ];
@@ -88,6 +86,7 @@ class TestimonialController extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         try {
             $response = $this->testimonialModel->createTestimonial($validated);

@@ -24,7 +24,6 @@ class PropertyFurnishController extends Controller
         $term = $request->input('term');
         $data = $this->furnishModel->getfurnish($term, $lang, $peginate);
         return view('Admin.Property_Setting.property_furnish', compact('data'));
-
     }
 
     public function AddFurnish(Request $req)
@@ -34,7 +33,7 @@ class PropertyFurnishController extends Controller
 
         $rules = [
             'icon' => 'nullable|string',
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
             'id' => 'nullable|integer',
         ];
@@ -43,7 +42,7 @@ class PropertyFurnishController extends Controller
             $rules["name.$lang"] = 'required|string|max:255';
         }
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
             'id.required' => 'The ID field is required.',
         ];
@@ -53,6 +52,7 @@ class PropertyFurnishController extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         try {
             $response = $this->furnishModel->createFurnish($validated);
@@ -121,7 +121,7 @@ class PropertyFurnishController extends Controller
         // Validation rules (same as add category)
         $rules = [
             'icon' => 'nullable|string',
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
             'prop_furnishId' => 'required|integer|exists:property_furnish,id',  // Ensure category exists
         ];
@@ -132,7 +132,7 @@ class PropertyFurnishController extends Controller
 
         // Custom validation messages (same as add category)
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
             'prop_furnishId.required' => 'The Category ID field is required.',
             'prop_furnishId.exists' => 'The specified Category ID does not exist.',
@@ -144,6 +144,7 @@ class PropertyFurnishController extends Controller
 
         // Validate the request (same as add category)
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         // Prepare the data for the update (same as add category)
         $data = [

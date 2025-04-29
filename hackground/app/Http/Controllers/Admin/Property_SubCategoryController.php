@@ -35,7 +35,7 @@ class Property_SubCategoryController extends Controller
 
         $rules = [
             'category_id' => 'required',
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
             'image' => 'nullable|string',
             'slug' => 'required|unique:property_sub_category,slug'
@@ -45,7 +45,7 @@ class Property_SubCategoryController extends Controller
             $rules["name.$lang"] = 'required|string|max:255';
         }
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
             'id.required' => 'The ID field is required.',
         ];
@@ -55,7 +55,7 @@ class Property_SubCategoryController extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
-
+        $validated['order'] = $req->input('order', null);
         try {
             $response = $this->subCategoryModel->createsubCategory($validated);
             return response()->json($response);
@@ -122,7 +122,7 @@ class Property_SubCategoryController extends Controller
 
         // Validation rules (same as add category)
         $rules = [
-            'order' => 'required|integer',
+
             'category_id' => 'required|integer',
             'status' => 'required|boolean',
             'image' => 'nullable|string',
@@ -135,7 +135,7 @@ class Property_SubCategoryController extends Controller
 
         // Custom validation messages (same as add category)
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
             'prop_subcategoryId.required' => 'The Category ID field is required.',
             'category_id.required' => 'The Category field is required.',
@@ -148,7 +148,7 @@ class Property_SubCategoryController extends Controller
 
         // Validate the request (same as add category)
         $validated = $req->validate($rules, $messages);
-
+        $validated['order'] = $req->input('order', null);
         // Prepare the data for the update (same as add category)
         $data = [
             'subcategory_id' => $req->prop_subcategoryId,

@@ -22,12 +22,12 @@ class StateController extends Controller
             $lang = strtolower($req->input('lang', 'en'));
             $term = $req->input('term');
             $peginate=10;
-    
+
             $data = $this->state->getState($term,$lang,$peginate);
-            $country_data = $this->state->getCountry($lang); 
+            $country_data = $this->state->getCountry($lang);
             return view('Admin.Location.state', compact('country_data', 'data'));
         }
-        
+
     public function Addstate(Request $req){
 
         $langs = array_keys($req->input('name', []));
@@ -35,7 +35,7 @@ class StateController extends Controller
 
         $rules = [
             'country_id'=>'required',
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
         ];
 
@@ -44,7 +44,7 @@ class StateController extends Controller
         }
         $messages = [
             'country_id.required' => 'Choose Country',
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
         ];
 
@@ -53,6 +53,7 @@ class StateController extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         try {
             $response = $this->state->createState($validated);
@@ -64,7 +65,7 @@ class StateController extends Controller
                 'details' => $e->getMessage(),
             ], 500);
         }
-    
+
     }
     public function stateDetails($id = null)
     {
@@ -84,7 +85,7 @@ class StateController extends Controller
 
         $rules = [
             'country_id'=>'required',
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
         ];
 
@@ -94,7 +95,7 @@ class StateController extends Controller
 
         $messages = [
             'country_id.required' => 'Choose Country',
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.'
         ];
 
@@ -103,10 +104,11 @@ class StateController extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         $validated['state_id'] = $req->StateId;
         try {
-          
+
             $response = $this->state->updatestate($validated);
             set_flash_message('update');
             return response()->json($response);

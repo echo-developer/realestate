@@ -32,7 +32,7 @@ class CountryController extends Controller
 
 
         $rules = [
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
         ];
 
@@ -40,7 +40,7 @@ class CountryController extends Controller
             $rules["name.$lang"] = 'required|string|max:255';
         }
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
         ];
 
@@ -49,6 +49,7 @@ class CountryController extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         try {
             $response = $this->country->createCountry($validated);
@@ -76,14 +77,14 @@ class CountryController extends Controller
         return response()->json($data);
     }
 
-    
+
     public function EditCountry(Request $req)
     {
 
         $langs = array_keys($req->input('name', []));
 
         $rules = [
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
         ];
 
@@ -92,7 +93,7 @@ class CountryController extends Controller
         }
 
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.'
         ];
 
@@ -101,6 +102,7 @@ class CountryController extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         $validated['country_id'] = $req->countryId;
         try {

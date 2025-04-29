@@ -35,7 +35,7 @@ class NotificationTemplateController extends Controller
         $rules = [
             'name' => 'required|max:255',
             'template_key' => 'required|max:255|unique:email_templates,key',
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
         ];
 
@@ -43,7 +43,7 @@ class NotificationTemplateController extends Controller
             $rules["content.$lang"] = 'required|string';
         }
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'name.required' => 'The Name field is required.',
             'template_key.required' => 'The Template Key field is required.',
             'template_key.unique' => 'The Template Key already exsist.',
@@ -56,6 +56,8 @@ class NotificationTemplateController extends Controller
 
         $validated = $req->validate($rules, $messages);
         $validated['all_template_keys'] = $req->all_template_keys;
+        $validated['order'] = $req->input('order', null);
+
         // Sanitize the content to prevent XSS (if needed)
         $purifier = new HTMLPurifier();
         foreach ($langs as $lang) {
@@ -95,7 +97,7 @@ class NotificationTemplateController extends Controller
 
         $rules = [
             'name' => 'required|max:255',
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
         ];
 
@@ -105,7 +107,7 @@ class NotificationTemplateController extends Controller
 
 
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'name.required' => 'The Name field is required.',
             'status.required' => 'The Status field is required.',
         ];
@@ -118,7 +120,7 @@ class NotificationTemplateController extends Controller
         $validated = $req->validate($rules, $messages);
         $validated['all_template_keys'] = $req->all_template_keys;
         $validated['notification_template_id'] = $req->prop_NotificationTemplateId;
-
+        $validated['order'] = $req->input('order', null);
         try {
             // Call the method to update the emailTemplate in the model
             $response = $this->notificationtempModel->updateNotificationTemplate($validated);

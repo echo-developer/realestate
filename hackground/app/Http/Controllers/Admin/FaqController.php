@@ -28,7 +28,7 @@ class FaqController extends Controller
         return view('Admin.Faq.faq-category', compact('data'));
     }
 
-    
+
     public function submit_Category(Request $request)
 {
     $langs = array_keys($request->input('name', []));
@@ -36,7 +36,7 @@ class FaqController extends Controller
     $rules = [
 
         'status' => 'required|boolean',
-        'slug' => 'nullable|string|unique:faq_categories,slug,' . ($request->categoryID ?? 'NULL') . ',id',
+        'slug' => 'required|string|unique:faq_categories,slug,' . ($request->categoryID ?? 'NULL') . ',id',
     ];
 
 

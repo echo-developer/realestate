@@ -53,7 +53,7 @@ class CityController extends Controller
         $rules = [
             'country_id' => 'required',
             'state_id' => 'required',
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
         ];
 
@@ -63,7 +63,7 @@ class CityController extends Controller
         $messages = [
             'country_id.required' => 'Choose Country',
             'state_id.required' => 'Choose State',
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
         ];
 
@@ -72,6 +72,7 @@ class CityController extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         try {
             $response = $this->city->createCity($validated);
@@ -103,7 +104,7 @@ class CityController extends Controller
         $rules = [
             'country_id' => 'required',
             'state_id' => 'required',
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
         ];
 
@@ -114,7 +115,7 @@ class CityController extends Controller
         $messages = [
             'country_id.required' => 'Choose Country',
             'state_id.required' => 'Choose State',
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
         ];
 
@@ -123,6 +124,7 @@ class CityController extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         $validated['city_id'] = $req->cityId;
         try {

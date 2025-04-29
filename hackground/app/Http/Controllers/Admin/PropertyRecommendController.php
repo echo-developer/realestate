@@ -10,7 +10,7 @@ class PropertyRecommendController extends Controller
 {
     protected $recommendedModel;
 
-   
+
     public function __construct(PropertyRecommendModel $recommendedModel)
     {
         $this->recommendedModel = $recommendedModel;
@@ -24,7 +24,7 @@ class PropertyRecommendController extends Controller
         $term = $request->input('term');
         $data = $this->recommendedModel->getrecommendeds($term,$lang,$peginate);
         return view('Admin.Property_Setting.property_recommended', compact('data'));
-        // 
+        //
     }
 
     public function AddRecommended(Request $req)
@@ -33,7 +33,7 @@ class PropertyRecommendController extends Controller
 
 
         $rules = [
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
             'id' => 'nullable|integer',
         ];
@@ -42,7 +42,7 @@ class PropertyRecommendController extends Controller
             $rules["name.$lang"] = 'required|string|max:255';
         }
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
             'id.required' => 'The ID field is required.',
         ];
@@ -52,6 +52,7 @@ class PropertyRecommendController extends Controller
         }
 
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         try {
             $response = $this->recommendedModel->createRecommended($validated);
@@ -88,7 +89,7 @@ class PropertyRecommendController extends Controller
 
         // Validation rules (same as add category)
         $rules = [
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
             'prop_recommendedId' => 'required|integer|exists:property_recommended,id',  // Ensure category exists
         ];
@@ -99,7 +100,7 @@ class PropertyRecommendController extends Controller
 
         // Custom validation messages (same as add category)
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
             'prop_recommendedId.required' => 'The Recommend ID is required.',
             'prop_recommendedId.exists' => 'The specified Recommend ID does not exist.',
@@ -111,6 +112,7 @@ class PropertyRecommendController extends Controller
 
         // Validate the request (same as add category)
         $validated = $req->validate($rules, $messages);
+        $validated['order'] = $req->input('order', null);
 
         // Prepare the data for the update (same as add category)
         $data = [
