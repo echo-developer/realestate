@@ -24,16 +24,7 @@
     <link href="{{ asset('assets/css/custom.css') }}" type="text/css" rel="stylesheet">
     <link href="{{ asset('assets/css/responsive.css') }}" type="text/css" rel="stylesheet">
     <link href="{{ asset('assets/css/ltr.css') }}" type="text/css" rel="stylesheet">
-    <style>
-        #toast-container>div {
-            background-color: #198754 !important;
-            /* slightly transparent dark */
-            color: #fff !important;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-            border-radius: 8px;
-            opacity: 1 !important;
-        }
-    </style>
+    
     <!-- <link rel="stylesheet" href="{{ asset('assets/js/scripts-init/select2/dist/css/select2.min.css') }}"> -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -85,8 +76,7 @@
     <script src="{{ asset('assets/js/scripts-init/scrollbar.js') }}"></script>
     <!-- <script src="{{ asset('assets/plugins/select2/js/select2.min.js') }}"></script> -->
     <!--Toastr-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" crossorigin="anonymous"></script>
-
+    <script src="{{ asset('assets/dist/js/toastr.min.js') }}"></script>
 
     {{-- WUSIWYG (CkEditor) --}}
     <script src="https://cdn.ckeditor.com/4.20.2/standard/ckeditor.js" integrity="sha384-<hash>" crossorigin="anonymous">

@@ -2042,7 +2042,7 @@ h4 {
 	z-index: 1011;
 
 	&:before {
-		background-color: rgba(var(--rgbColor), 85%);
+		background-color: rgba($black, 80%);
 	}
 
 	.container {
@@ -5430,6 +5430,9 @@ fieldset{
 }
 #searchfilter{
 	position: relative;
+	.form-control, .form-select, .select-dropdown .btn-form-control{
+		border-color: transparent;
+	}
 }
 .more-filter-dropdown{
 	background-color: var(--#{$prefix}body-bg);
