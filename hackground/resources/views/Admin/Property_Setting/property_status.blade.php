@@ -47,7 +47,7 @@
     <div class="alert alert-{{ session('message_type') }}">
         {{ session('success_msg') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert">
-            
+
         </button>
     </div>
     @endif
@@ -81,7 +81,7 @@
 
             </div>
         <div class="card-body">
-            
+
 
             <div class="table-responsive" id="main_table">
                 <table id="status" class="mb-0 table">
@@ -90,7 +90,7 @@
                             <th style="width:32px">ID</th>
                             <th style="min-width:120px">Name</th>
                             <th>Order</th>
-                            
+
                             <th>Icon</th>
                             <th>Status</th>
                             <th style="min-width:60px;" class="text-right">Action</th>
@@ -117,7 +117,7 @@
                             <td class="text-right">
                                 <a href="javascript:void(0)" onclick="Edit_prop_status('{{ $item->id }}')" class="me-2"><i class="bi bi-pencil-square text-success fa-md "></i></a>
                                 <a href="javascript:void(0)" onclick="Delete_prop_status('{{ $item->id }}')"><i class="bi bi-trash3-fill text-danger fa-md"></i></a>
-                            </td>                            
+                            </td>
                         </tr>
 
 
@@ -141,7 +141,7 @@
                 <h5 class="modal-title" id="prop_statusAddEditModalLabel"></h5>
 
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    
+
                 </button>
             </div>
             <div class="modal-body">
@@ -154,7 +154,7 @@
                     @endphp
                     @foreach ($langs as $lang)
                     <div class="form-floating mb-3">
-                        
+
                         <input type="text" class="form-control reset_field" id="name_{{ $lang }}"
                             name="name[{{ $lang }}]" autocomplete="off">
                             <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
@@ -164,17 +164,17 @@
 
                     <div class="form-group">
                         <!-- <label for="ufile">Icon</label> -->
-                        <input type="file" name="file" id="fileUpload" class="form-control" onchange="updateFileName()">                            
+                        <input type="file" name="file" id="fileUpload" class="form-control" onchange="updateFileName()">
                     </div>
 
                     <div class="form-group">
                         <img id="image_preview" src=" " style="display:none; width: 64px; height: 64px;" />
-                        <button type="button" id="delete_image_btn" style="display:none;" 
-                        class="btn btn-danger btn-sm" title="Delete Image" onclick="deleteUploadedImage()"><i class="bi bi-trash3-fill"></i></button>      
+                        <button type="button" id="delete_image_btn" style="display:none;"
+                        class="btn btn-danger btn-sm" title="Delete Image" onclick="deleteUploadedImage()"><i class="bi bi-trash3-fill"></i></button>
                     </div>
 
                     <div class="form-floating mb-3">
-                        
+
                         <input type="Order" class="form-control" id="order" name="order" placeholder="" required>
                         <label for="Order">Order</label>
                         <div class="invalid-feedback" id="Order_error"></div>
@@ -264,7 +264,7 @@
             url: url,
             data: data,
             success: function(response) {
-                localStorage.setItem('successMessage', response.message);
+                // localStorage.setItem('successMessage', response.message);
                 window.location.reload(true);
                 $('#prop_status').modal('hide');
                 $('#prop_statusformData')[0].reset();
@@ -411,7 +411,7 @@
                     'id': id
                 },
                 success: function(response) {
-                    localStorage.setItem('successMessage', response.message);
+                    // localStorage.setItem('successMessage', response.message);
                     window.location.reload(true);
                 },
                 error: function(msg) {

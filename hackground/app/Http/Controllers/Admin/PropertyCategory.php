@@ -96,6 +96,7 @@ class PropertyCategory extends Controller
 
         try {
             $response = $this->categoryModel->createCategory($validated);
+            set_flash_message('add');
             return response()->json($response);
         } catch (\Exception $e) {
             return response()->json([
@@ -153,6 +154,7 @@ class PropertyCategory extends Controller
 
         try {
             $response = $this->categoryModel->updateCategory($validated);
+            set_flash_message('update');
 
             return response()->json($response);
         } catch (\Exception $e) {
@@ -178,6 +180,7 @@ class PropertyCategory extends Controller
     public function CategoryDelete(Request $req)
     {
         $response = $this->categoryModel->DeleteCategory($req->id);
+        set_flash_message('delete');
         return response()->json($response);
     }
 }

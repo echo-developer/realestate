@@ -295,7 +295,7 @@
                 url: url,
                 data: data,
                 success: function(response) {
-                    localStorage.setItem('successMessage', response.message);
+                    // localStorage.setItem('successMessage', response.message);
                     window.location.reload(true);
                     $('#prop_subcategory').modal('hide');
                     $('#prop_subcategoryformData')[0].reset();
@@ -370,7 +370,7 @@
                         'id': id
                     },
                     success: function(response) {
-                        localStorage.setItem('successMessage', response.message);
+                        // localStorage.setItem('successMessage', response.message);
                         window.location.reload(true);
                     },
                     error: function(msg) {

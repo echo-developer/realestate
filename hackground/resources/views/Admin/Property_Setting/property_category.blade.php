@@ -112,7 +112,7 @@
                             <td class="text-right">
                                 <a href="javascript:void(0)" onclick="Edit_prop_category('{{ $item->id }}')" class="me-2"><i class="bi bi-pencil-square text-success fa-md "></i></a>
                                 <a href="javascript:void(0)" onclick="Delete_prop_category('{{ $item->id }}')"><i class="bi bi-trash3-fill text-danger fa-md"></i></a>
-                            </td>                            
+                            </td>
                         </tr>
                         @empty
                         <tr>
@@ -151,7 +151,7 @@
                     @endphp
                     @foreach ($langs as $lang)
                     <div class="form-floating mb-3">
-                        
+
                         <input type="text" class="form-control reset_field" id="name_{{ $lang }}"
                             name="name[{{ $lang }}]" placeholder="" autocomplete="off">
                             <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
@@ -159,7 +159,7 @@
                     </div>
                     @endforeach
 
-                    <div class="form-floating mb-3">                        
+                    <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="slug" name="slug" placeholder="" required>
                         <label for="Name">Slug</label>
                         <div class="invalid-feedback" id="slug_error"></div>
@@ -270,7 +270,7 @@
             url: url,
             data: data,
             success: function(response) {
-                localStorage.setItem('successMessage', response.message);
+                // localStorage.setItem('successMessage', response.message);
                 window.location.reload(true);
                 $('#prop_category').modal('hide');
                 $('#prop_categoryformData')[0].reset();
@@ -343,7 +343,7 @@
                     'id': id
                 },
                 success: function(response) {
-                    localStorage.setItem('successMessage', response.message);
+                    // localStorage.setItem('successMessage', response.message);
                     window.location.reload(true);
                 },
                 error: function(msg) {

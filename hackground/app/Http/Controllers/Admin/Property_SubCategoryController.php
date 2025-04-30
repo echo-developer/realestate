@@ -161,7 +161,7 @@ class Property_SubCategoryController extends Controller
         try {
             // Call the method to update the category in the model
             $response = $this->subCategoryModel->updateSubCategory($data);
-
+            set_flash_message('update');
             return response()->json($response);
         } catch (\Exception $e) {
             // Catch and return the error response
@@ -186,6 +186,7 @@ class Property_SubCategoryController extends Controller
     public function SubCategoryDelete(Request $req)
     {
         $response = $this->subCategoryModel->DeleteSubCategory($req->id);
+        set_flash_message('delete');
         return response()->json($response);
     }
 }
