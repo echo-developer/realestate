@@ -929,7 +929,7 @@ class ApiModel extends Model
             ->update([
                 'name' => $data['name'],
                 'email' => $data['email'],
-                'image' => $data['image'],
+                // 'image' => $data['image'],
                 'phone_code' => $data['phone_code'],
                 'phone' => $data['phone'],
                 'whatsapp_no' => $data['whatsapp_no'],

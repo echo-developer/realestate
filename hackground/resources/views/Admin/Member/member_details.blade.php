@@ -2,6 +2,7 @@
 @php
     // log_anything($data);
     // log_anything($cities);
+
     $serviceAreas = $data->serviceArea;
     $social = $data->social;
 @endphp
@@ -107,8 +108,10 @@
                 <div class="col-md-6">
                     <label for="city" class="form-label">City</label>
                     <select name="city" id="city" class="form-control">
-                        <option value="kolkata">kolkata</option>
-                        <option value="varanasi">Varanasi</option>
+                        <option value="" disabled>- select city -</option>
+                        @foreach ($cities as $city)
+                            <option value="{{ $city->city_id }}">{{ $city->name }}</option>
+                        @endforeach
                     </select>
 
                 </div>

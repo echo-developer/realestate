@@ -1028,7 +1028,7 @@ class DashboardController extends Controller
     public function update_my_profile(Request $req)
     {
         try {
-            // log::info($req->all());
+            log::info($req->all());
             $user_id = $req->user_id;
 
             $requestData = [

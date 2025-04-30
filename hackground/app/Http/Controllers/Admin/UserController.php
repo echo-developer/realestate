@@ -8,6 +8,7 @@ use App\Models\AgentAdditional;
 use App\Models\Api\ApiModel;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
@@ -216,6 +217,12 @@ class UserController extends Controller
             'description' => $req->comment,
             'updated_at' => now(),
         ];
+        
+        DB::table('users')
+            ->where('id', $user_id)
+            ->update([
+                'image' => $requestData1['image'],
+            ]);
         $update  = $this->apiModel->UpdateMyProfileData($user_id, $requestData1);
 
         if ($user_type === 'A') {
