@@ -46,9 +46,9 @@ class FaqController extends Controller
 
         $validated = $request->validate($rules);
 
-        if (empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($request->input('name.en'));
-        }
+        // if (empty($validated['slug'])) {
+        //     $validated['slug'] = Str::slug($request->input('name.en'));
+        // }
 
         $validated['category_id'] = $request->input('categoryID');
         $validated['order'] = $request->input('order', null);
@@ -97,9 +97,9 @@ class FaqController extends Controller
         $validated['order'] = $req->input('order', null);
 
 
-        if (empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($req->input('name.en'));
-        }
+        // if (empty($validated['slug'])) {
+        //     $validated['slug'] = Str::slug($req->input('name.en'));
+        // }
 
         $validated['category_id'] = $req->input('categoryID');
 
