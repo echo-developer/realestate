@@ -41,11 +41,12 @@
         </div>
 
         @if (session('success_msg'))
-            <div class="alert alert-{{ session('message_type') }}">
+            <div class="alert alert-{{ session('message_type') }} alert-dismissible fade show" role="alert">
                 {{ session('success_msg') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">x</button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+
         <form method="POST" action="{{ route('save.user.details') }}" enctype="multipart/form-data" class="container mt-4">
             @csrf
             <h4><strong>Basic details</strong></h4>

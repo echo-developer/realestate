@@ -84,9 +84,9 @@
                         <tr>
                             <td>{{$planType->english_name}}</td>
                             <td>
-                                <p class="mb-1"><span style="display:inline-block; min-width: 200px;">Listings Allowed:</span> <b>{{$planType->listings_allowed}}</b></p>
+                                <p class="mb-1"><span style="display:inline-block; min-width: 200px;">Listings Allowed:</span> <b>{{$planType->listings_allowed ?? 'Unlimited'}}</b></p>
                                 
-                                <p class="mb-1"><span style="display:inline-block; min-width: 200px;">Contact Owners:</span> <b>{{$planType->leads}}</b></p>
+                                <p class="mb-1"><span style="display:inline-block; min-width: 200px;">Leads:</span> <b>{{$planType->leads ?? 'Unlimited'}}</b></p>
                                 
                                 <p class="mb-1"><span style="display:inline-block; min-width: 200px;">Listing Visibility:</span> <b class="{{ $planType->listing_visibility == 'Y' ? 'text-success' : 'text-danger' }}">{{ $planType->listing_visibility == 'Y' ? 'Yes' : 'No' }}</b></p>
 
