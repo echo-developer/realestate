@@ -307,7 +307,7 @@ const Index = () => {
           <div className="container-fluid">
             {showMapView ? (<>
             <>
-            <ProjectListingMapView loading={loading} projectList={setProjectListData} />
+            <ProjectListingMapView loading={loading} projectList={projectListData} />
             </>
             </>) : (<>
               <div className="row main-row">

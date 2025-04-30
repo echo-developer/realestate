@@ -824,7 +824,15 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
               </Col>
               <Col className="col-lg-auto col-sm-2 col-auto">
                 <Button style={{ backgroundColor: '#fff', color: '#007bff', border: '1px solid #007bff' }} onClick={() => setShowMapView(!showMapView)}>
-                  {showMapView ? 'Hide Map View' : 'View In Map'}
+                  {showMapView ? (
+                    <>
+                      <i className="bi bi-list-ul"></i> List View
+                    </>
+                  ) : (
+                    <>
+                      <i className="bi bi-geo-alt"></i> Map View
+                    </>
+                  )}
                 </Button>
               </Col>
 
