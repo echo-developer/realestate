@@ -47,7 +47,7 @@
     <div class="alert alert-{{ session('message_type') }}">
         {{ session('success_msg') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert">
-            
+
         </button>
     </div>
     @endif
@@ -79,7 +79,7 @@
 
             </div>
         <div class="card-body">
-            
+
 
             <div class="table-responsive" id="main_table">
                 <table class="mb-0 table">
@@ -112,7 +112,7 @@
                                 <a href="javascript:void(0)" onclick="Edit_prop_furnish('{{ $item->id }}')" class="me-2"><i class="bi bi-pencil-square text-success fa-md "></i></a>
                                 <a href="javascript:void(0)" onclick="Delete_prop_furnish('{{ $item->id }}')"><i class="bi bi-trash3-fill text-danger fa-md"></i></a>
                             </td>
-                            
+
                         </tr>
 
 
@@ -136,7 +136,7 @@
                 <h5 class="modal-title" id="prop_furnishAddEditModalLabel"></h5>
 
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    
+
                 </button>
             </div>
             <div class="modal-body">
@@ -149,7 +149,7 @@
                     @endphp
                     @foreach($langs as $lang)
                     <div class="form-floating mb-3">
-                        
+
                         <input type="text" class="form-control reset_field" id="name_{{ $lang }}" name="name[{{ $lang }}]" autocomplete="off" placeholder="">
                         <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
                         <div class="invalid-feedback" id="name_{{ $lang }}_error"></div>
@@ -158,7 +158,7 @@
 
                     <div class="form-group">
                         <input type="file" name="file" id="fileUpload" class="form-control" onchange="updateFileName()">
-                           
+
                     </div>
 
                     <div class="form-group">
@@ -168,7 +168,7 @@
                     </div>
 
                     <div class="form-floating mb-3">
-                       
+
                         <input type="Order" class="form-control" id="order" name="order" placeholder="" required>
                          <label for="Order">Order</label>
                         <div class="invalid-feedback" id="Order_error"></div>
@@ -255,7 +255,7 @@
             url: url,
             data: data,
             success: function(response) {
-                localStorage.setItem('successMessage', response.message);
+                // localStorage.setItem('successMessage', response.message);
                 window.location.reload(true);
                 $('#prop_furnish').modal('hide');
                 $('#prop_furnishformData')[0].reset();
@@ -328,7 +328,7 @@
                     'id': id
                 },
                 success: function(response) {
-                    localStorage.setItem('successMessage', response.message);
+                    // localStorage.setItem('successMessage', response.message);
                     window.location.reload(true);
                 },
                 error: function(msg) {
@@ -337,7 +337,7 @@
                 }
             });
         }
-      
+
     }
     $('#fileUpload').change(function(event) {
             var fileInput = event.target;

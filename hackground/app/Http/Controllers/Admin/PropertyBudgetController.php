@@ -53,6 +53,7 @@ class PropertyBudgetController extends Controller
 
         try {
             $response = $this->budgetModel->createBudget($validated);
+            set_flash_message('add');
             return response()->json($response);
         } catch (\Exception $e) {
             return response()->json([
@@ -112,6 +113,7 @@ class PropertyBudgetController extends Controller
         try {
             // Call the method to update the category in the model
             $response = $this->budgetModel->updateBudget($data);
+            set_flash_message('update');
 
             return response()->json($response);
         } catch (\Exception $e) {
@@ -137,6 +139,7 @@ class PropertyBudgetController extends Controller
     public function Budgetdelete(Request $req)
     {
         $response = $this->budgetModel->DeleteBudget($req->id);
+        set_flash_message('delete');
         return response()->json($response);
     }
 }

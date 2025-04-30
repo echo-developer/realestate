@@ -111,7 +111,7 @@
                             <td class="text-right">
                                 <a href="javascript:void(0)" onclick="Edit_prop_transaction('{{ $item->id }}')" class="me-2"><i class="bi bi-pencil-square text-success fa-md "></i></a>
                                 <a href="javascript:void(0)" onclick="Delete_prop_transaction('{{ $item->id }}')"><i class="bi bi-trash3-fill text-danger fa-md"></i></a>
-                            </td>                            
+                            </td>
                         </tr>
 
 
@@ -189,7 +189,7 @@
                     @endphp
                     @foreach ($langs as $lang)
                     <div class="form-floating mb-3">
-                        
+
                         <input type="text" class="form-control reset_field" id="name_{{ $lang }}"
                             name="name[{{ $lang }}]" autocomplete="off">
                             <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
@@ -198,7 +198,7 @@
                     @endforeach
 
                     <div class="form-floating mb-3">
-                        
+
                         <input type="Order" class="form-control" id="order" name="order" placeholder="" required>
                         <label for="Order">Order</label>
                         <div class="invalid-feedback" id="Order_error"></div>
@@ -280,7 +280,7 @@
             url: url,
             data: data,
             success: function(response) {
-                localStorage.setItem('successMessage', response.message);
+                // localStorage.setItem('successMessage', response.message);
                 window.location.reload(true);
                 $('#prop_transaction').modal('hide');
                 $('#prop_transactionformData')[0].reset();
@@ -353,7 +353,7 @@
                     'id': id
                 },
                 success: function(response) {
-                    localStorage.setItem('successMessage', response.message);
+                    // localStorage.setItem('successMessage', response.message);
                     window.location.reload(true);
                 },
                 error: function(msg) {

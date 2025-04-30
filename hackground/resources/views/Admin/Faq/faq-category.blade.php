@@ -232,8 +232,8 @@
                 success: function(response) {
                     if (response.success) {
                         $('#modal_action').modal('hide');
-                        toastr.success(response.message);
-                        setTimeout(() => location.reload(), 1200);
+                        // toastr.success(response.message);
+                        // setTimeout(() => location.reload(), 1200);
                     }
                 },
                 error: function(xhr) {
@@ -291,8 +291,8 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
-                        toastr.success(response.message);
-                        setTimeout(() => location.reload(), 1200);
+                        // toastr.success(response.message);
+                        // setTimeout(() => location.reload(), 1200);
                     },
                     error: function() {
                         toastr.error('Failed to delete category.');

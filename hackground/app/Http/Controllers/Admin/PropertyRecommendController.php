@@ -56,6 +56,7 @@ class PropertyRecommendController extends Controller
 
         try {
             $response = $this->recommendedModel->createRecommended($validated);
+            set_flash_message('add');
             return response()->json($response);
         } catch (\Exception $e) {
             return response()->json([
@@ -124,7 +125,7 @@ class PropertyRecommendController extends Controller
         try {
             // Call the method to update the category in the model
             $response = $this->recommendedModel->updaterecommended($data);
-
+            set_flash_message('update');
             return response()->json($response);
         } catch (\Exception $e) {
             // Catch and return the error response
@@ -150,6 +151,7 @@ class PropertyRecommendController extends Controller
     public function Recommendeddelete(Request $req)
     {
         $response = $this->recommendedModel->DeleteRecommended($req->id);
+        set_flash_message('delete');
         return response()->json($response);
     }
 }

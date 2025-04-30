@@ -113,7 +113,7 @@
                                 <a href="javascript:void(0)" onclick="Edit_prop_budget('{{ $item->id }}')" class="me-2"><i class="bi bi-pencil-square text-success fa-md "></i></a>
                                 <a href="javascript:void(0)" onclick="Delete_prop_budget('{{ $item->id }}')"><i class="bi bi-trash3-fill text-danger fa-md"></i></a>
                             </td>
-                            
+
                         </tr>
                         @endforeach
                         @endif
@@ -144,7 +144,7 @@
                 <form id="prop_budgetformData">
                     <input type="text" class='d-none' id="prop_budgetId" name="prop_budgetId">
                     <div class="form-floating mb-3">
-                        
+
                         <input type="min_budget" class="form-control" id="min_budget" name="min_budget" placeholder="" required>
                         <label for="Order">Min Budget</label>
                         <div class="invalid-feedback" id="min_budget_error"></div>
@@ -237,7 +237,7 @@
             url: url,
             data: data,
             success: function(response) {
-                localStorage.setItem('successMessage', response.message);
+                // localStorage.setItem('successMessage', response.message);
                 window.location.reload(true);
                 $('#prop_budget').modal('hide');
                 $('#prop_budgetformData')[0].reset();
@@ -310,7 +310,7 @@
                     'id': id
                 },
                 success: function(response) {
-                    localStorage.setItem('successMessage', response.message);
+                    // localStorage.setItem('successMessage', response.message);
                     window.location.reload(true);
                 },
                 error: function(msg) {
