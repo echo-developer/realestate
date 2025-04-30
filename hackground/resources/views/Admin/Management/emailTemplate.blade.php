@@ -46,7 +46,7 @@
             <div class="alert alert-{{ session('message_type') }}">
                 {{ session('success_msg') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert">
-                    
+
                 </button>
             </div>
         @endif
@@ -134,7 +134,7 @@
                     <h5 class="modal-title" id="prop_emailTemplateAddEditModalLabel"></h5>
 
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    
+
                 </button>
                 </div>
                 <div class="modal-body">
@@ -145,31 +145,31 @@
                         @php
                             $langs = explode(',', admin_default_lang());
                         @endphp
-                        <div class="form-floating mb-3">                            
+                        <div class="form-floating mb-3">
                             <input type="text" class="form-control reset_field" id="name" name="name" placeholder="" autocomplete="off">
                             <label for="name">Name</label>
                             <div class="invalid-feedback" id="name_error"></div>
                         </div>
-                        <div class="form-floating mb-3">                            
+                        <div class="form-floating mb-3">
                             <input type="text" class="form-control reset_field" id="template_key" name="template_key" placeholder="" autocomplete="off">
                             <label for="template_key">Template Key</label>
                             <div class="invalid-feedback" id="template_key_error"></div>
                         </div>
                         @foreach ($langs as $lang)
-                            <div class="form-floating mb-3">                                
+                            <div class="form-floating mb-3">
                                 <input type="text" class="form-control reset_field" id="subject_{{ $lang }}" name="subject[{{ $lang }}]" placeholder="" autocomplete="off">
                                 <label for="subject">{{ __('Subject') }} ({{ strtoupper($lang) }})</label>
                                 <div class="invalid-feedback" id="subject_{{ $lang }}_error"></div>
                             </div>
-                            <div class="form-group mb-3">  
-                                <label class="form-label" for="content">{{ __('Content') }} ({{ strtoupper($lang) }})</label>                              
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="content">{{ __('Content') }} ({{ strtoupper($lang) }})</label>
                                 <textarea type="text" class="form-control reset_field" id="content_{{ $lang }}" name="content[{{ $lang }}]" autocomplete="off" placeholder="" style="min-height: 100px;"></textarea>
-                                
+
                                 <div class="invalid-feedback" id="content_{{ $lang }}_error"></div>
                             </div>
                         @endforeach
 
-                        <div class="form-floating mb-3">                            
+                        <div class="form-floating mb-3">
                             <input type="Order" class="form-control" id="order" name="order" placeholder="" required>
                             <label for="Order">Order</label>
                             <div class="invalid-feedback" id="order_error"></div>
@@ -322,7 +322,7 @@
                 url: url,
                 data: data,
                 success: function(response) {
-                    localStorage.setItem('successMessage', response.message);
+                    // localStorage.setItem('successMessage', response.message);
                     window.location.reload(true);
                     $('#prop_emailTemplate').modal('hide');
                     $('#prop_emailTemplateformData')[0].reset();
@@ -395,7 +395,7 @@
                         'id': id
                     },
                     success: function(response) {
-                        localStorage.setItem('successMessage', response.message);
+                        // localStorage.setItem('successMessage', response.message);
                         window.location.reload(true);
                     },
                     error: function(msg) {

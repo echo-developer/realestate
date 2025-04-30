@@ -46,7 +46,7 @@
             <div class="alert alert-{{ session('message_type') }}">
                 {{ session('success_msg') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert">
-                    
+
                 </button>
             </div>
         @endif
@@ -131,7 +131,7 @@
                     <h5 class="modal-title" id="prop_cmsAddEditModalLabel"></h5>
 
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    
+
                 </button>
                 </div>
                 <div class="modal-body">
@@ -142,13 +142,13 @@
                             $langs = explode(',', admin_default_lang());
                         @endphp
                         @foreach ($langs as $lang)
-                            <div class="form-floating mb-3">                                
+                            <div class="form-floating mb-3">
                                 <input type="text" class="form-control reset_field" id="title_{{ $lang }}" name="title[{{ $lang }}]" placeholder="" autocomplete="off">
                                 <label for="subject">{{ __('Title') }} ({{ strtoupper($lang) }})</label>
                                 <div class="invalid-feedback" id="title_{{ $lang }}_error"></div>
                             </div>
                         @endforeach
-                        <div class="form-floating mb-3">                            
+                        <div class="form-floating mb-3">
                             <input type="text" class="form-control reset_field" id="slug" name="slug" placeholder="" autocomplete="off">
                             <label for="template_key">Slug</label>
                             <div class="invalid-feedback" id="slug_error"></div>
@@ -160,24 +160,24 @@
                                     name="content[{{ $lang }}]" autocomplete="off"></textarea>
                                 <div class="invalid-feedback" id="content_{{ $lang }}_error"></div>
                             </div>
-                            <div class="form-floating mb-3">                                
+                            <div class="form-floating mb-3">
                                 <input type="text" class="form-control reset_field" id="meta_title_{{ $lang }}" name="meta_title[{{ $lang }}]" placeholder="" autocomplete="off">
                                 <label for="subject">{{ __('Meta Title') }} ({{ strtoupper($lang) }})</label>
                                 <div class="invalid-feedback" id="meta_title_{{ $lang }}_error"></div>
                             </div>
-                            <div class="form-floating mb-3">                                
+                            <div class="form-floating mb-3">
                                 <input type="text" class="form-control reset_field" id="meta_keys_{{ $lang }}" name="meta_keys[{{ $lang }}]" placeholder="" autocomplete="off">
                                 <label for="subject">{{ __('Meta Keys') }} ({{ strtoupper($lang) }})</label>
                                 <div class="invalid-feedback" id="meta_keys_{{ $lang }}_error"></div>
                             </div>
-                            <div class="form-floating mb-3">                                
+                            <div class="form-floating mb-3">
                                 <textarea type="text" class="form-control reset_field" id="meta_desc_{{ $lang }}" name="meta_desc[{{ $lang }}]" placeholder="" autocomplete="off" style="min-height: 75px;"></textarea>
                                 <label for="subject">{{ __('Meta Description') }} ({{ strtoupper($lang) }})</label>
                                 <div class="invalid-feedback" id="meta_desc_{{ $lang }}_error"></div>
                             </div>
                         @endforeach
 
-                        <div class="form-floating mb-3">                            
+                        <div class="form-floating mb-3">
                             <input type="Order" class="form-control" id="order" name="order" placeholder="" required>
                             <label for="Order">Order</label>
                             <div class="invalid-feedback" id="order_error"></div>
@@ -295,7 +295,7 @@
                 url: url,
                 data: data,
                 success: function(response) {
-                    localStorage.setItem('successMessage', response.message);
+                    // localStorage.setItem('successMessage', response.message);
                     window.location.reload(true);
                     $('#prop_cms').modal('hide');
                     $('#prop_cmsformData')[0].reset();
@@ -366,7 +366,7 @@
                         'id': id
                     },
                     success: function(response) {
-                        localStorage.setItem('successMessage', response.message);
+                        // localStorage.setItem('successMessage', response.message);
                         window.location.reload(true);
                     },
                     error: function(msg) {
