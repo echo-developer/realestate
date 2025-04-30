@@ -32652,6 +32652,10 @@ header {
 .header-sticky.transparentH .navbar-brand > div > img {
   filter: brightness(0) invert(1);
 }
+.header-sticky .dropdown-menu {
+  max-height: 240px;
+  overflow-y: auto;
+}
 
 .hidden-menu {
   top: -100px !important;
