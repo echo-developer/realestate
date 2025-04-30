@@ -47,7 +47,7 @@
             <div class="alert alert-{{ session('message_type') }}">
                 {{ session('success_msg') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert">
-                    
+
                 </button>
             </div>
         @endif
@@ -78,7 +78,7 @@
                         Testimonial</button>
                 </div>
             </div>
-            <div class="card-body">                
+            <div class="card-body">
                 <div class="table-responsive" id="main_table">
                     <table class="mb-0 table">
                         <thead>
@@ -150,7 +150,7 @@
                     <h5 class="modal-title" id="prop_testimonialAddEditModalLabel"></h5>
 
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        
+
                     </button>
                 </div>
                 <div class="modal-body">
@@ -162,7 +162,7 @@
                             $langs = explode(',', admin_default_lang());
                         @endphp
                         @foreach ($langs as $lang)
-                            <div class="form-floating mb-3">                                
+                            <div class="form-floating mb-3">
                                 <input type="text" class="form-control reset_field" id="name_{{ $lang }}"
                                     name="name[{{ $lang }}]" placeholder="" autocomplete="off">
                                     <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
@@ -170,7 +170,7 @@
                             </div>
                         @endforeach
                         @foreach ($langs as $lang)
-                            <div class="form-floating mb-3">                                
+                            <div class="form-floating mb-3">
                                 <input type="text" class="form-control reset_field" id="subname_{{ $lang }}"
                                     name="subname[{{ $lang }}]" placeholder="" autocomplete="off">
                                     <label for="subname">{{ __('Subname') }} ({{ strtoupper($lang) }})</label>
@@ -178,7 +178,7 @@
                             </div>
                         @endforeach
                         @foreach ($langs as $lang)
-                            <div class="form-floating mb-3">                                
+                            <div class="form-floating mb-3">
                                 <textarea type="text" class="form-control reset_field" id="description_{{ $lang }}"
                                     name="description[{{ $lang }}]" placeholder="" autocomplete="off" style="min-height: 100px;"></textarea>
                                 <label for="description">{{ __('Description') }} ({{ strtoupper($lang) }})</label>
@@ -196,7 +196,7 @@
                                 class="btn btn-danger btn-sm" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>
                         </div>
 
-                        <div class="form-floating mb-3">                            
+                        <div class="form-floating mb-3">
                             <input type="Order" class="form-control" id="order" name="order" placeholder="" required>
                             <label for="Order">Order</label>
                             <div class="invalid-feedback" id="Order_error"></div>
@@ -288,7 +288,7 @@
                 url: url,
                 data: data,
                 success: function(response) {
-                    localStorage.setItem('successMessage', response.message);
+                    // localStorage.setItem('successMessage', response.message);
                     window.location.reload(true);
                     $('#prop_testimonial').modal('hide');
                     $('#prop_testimonialformData')[0].reset();
@@ -361,7 +361,7 @@
                         'id': id
                     },
                     success: function(response) {
-                        localStorage.setItem('successMessage', response.message);
+                        // localStorage.setItem('successMessage', response.message);
                         window.location.reload(true);
                     },
                     error: function(msg) {

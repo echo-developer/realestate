@@ -90,6 +90,7 @@ class TestimonialController extends Controller
 
         try {
             $response = $this->testimonialModel->createTestimonial($validated);
+            set_flash_message('add');
             return response()->json($response);
         } catch (\Exception $e) {
             return response()->json([
@@ -120,7 +121,7 @@ class TestimonialController extends Controller
 
         // Validation rules (same as add testimonial)
         $rules = [
-            'order' => 'required|integer',
+
             'status' => 'required|boolean',
             'image' => 'nullable|string', // Ensure testimonial exists
         ];
@@ -133,7 +134,7 @@ class TestimonialController extends Controller
 
         // Custom validation messages (same as add testimonial)
         $messages = [
-            'order.required' => 'The Order field is required.',
+
             'status.required' => 'The Status field is required.',
         ];
 
@@ -146,11 +147,12 @@ class TestimonialController extends Controller
         // Validate the request (same as add testimonial)
         $validated = $req->validate($rules, $messages);
         $validated['testimonial_id'] = $req->prop_testimonialId;
+        $validated['order'] = $req->input('order', null);
 
         try {
             // Call the method to update the testimonial in the model
             $response = $this->testimonialModel->updateTestimonial($validated);
-
+            set_flash_message('update');
             return response()->json($response);
         } catch (\Exception $e) {
             // Catch and return the error response
@@ -176,6 +178,8 @@ class TestimonialController extends Controller
     public function TestimonialDelete(Request $req)
     {
         $response = $this->testimonialModel->DeleteTestimonial($req->id);
+        set_flash_message('delete');
+
         return response()->json($response);
     }
 }

@@ -41,7 +41,10 @@ class LocalityController extends Controller
                     'foreign_field' => 'city_names.city_id',
                 ],
             ],
-            ['lang' => $lang],
+            [
+                'lang' => $lang,
+                'city.status' =>  config('constants.STATUS_ACTIVE')
+            ],
             null
         );
         // echo "<pre>";
@@ -203,7 +206,7 @@ class LocalityController extends Controller
     /*
 
     LOCALITY LANDMARKS BELOW
-    
+
      */
 
     public function landmarkListPage(Request $request)
