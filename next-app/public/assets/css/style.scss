@@ -356,10 +356,7 @@ header {
 			filter: brightness(0) invert(1);
 		}
 	}
-	.dropdown-menu{
-		max-height: 240px;
-		overflow-y: auto;
-	}
+	
 }
 .hidden-menu {
 	top: -100px !important;
@@ -400,6 +397,10 @@ ul#desk-nav {
 	background-color: $white;
 	color: $primary;
 }
+.dropdown-menu.city-drop{
+	max-height: 240px;
+	overflow-y: auto;
+}
 
 .btn-post {
 	&>img {
@@ -426,7 +427,13 @@ ul#desk-nav {
 		}
 	}
 }
-
+.suggestions-list{
+	li{
+		&:hover{
+			background-color: $primary-bg-subtle;
+		}
+	}
+}
 .banner {
 	background-size: cover;
 	background-position: bottom center;

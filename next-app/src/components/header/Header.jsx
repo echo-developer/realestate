@@ -6,7 +6,7 @@ import Link from "next/link";
 import "../../app/globals.css";
 import AuthUser from "../Authentication/AuthUser";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import { Collapse } from "react-bootstrap";
+import { Collapse, Dropdown } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { useRouter, usePathname } from "next/navigation";
 // import useTranslation from "@/hooks/useTranslation";
@@ -285,35 +285,25 @@ const Header = () => {
                   }
                 `}</style>
               </Link>
-
-              <div className="dropdown ms-3 ms-xxl-4">
-                <button
-                  className="btn btn-link dropdown-toggle text-decoration-none"
-                  data-bs-toggle="dropdown"
-                  aria-expanded={showLocationDrop ? "true" : "false"}
-                  onClick={handleShowLocationDropDown}
-                >
+                          
+              <Dropdown className="ms-3 ms-xxl-4" show={showLocationDrop} onToggle={handleShowLocationDropDown}>
+                <Dropdown.Toggle variant="link" className="text-decoration-none" id="dropdown-basic">
                   {selectedCity}
-                </button>
-
-                <ul
-                  className={`dropdown-menu ${showLocationDrop ? "show" : ""}`}
-                >
+                </Dropdown.Toggle>
+                <Dropdown.Menu className="city-drop">
                   {cityData?.map((city) => (
-                    <li key={city.city_id}>
-                      <button
-                        className="dropdown-item"
-                        onClick={() => {
-                          setShowLocationDrop(false);
-                          handleDefaultCityChange(city);
-                        }}
-                      >
-                        {city.name}
-                      </button>
-                    </li>
+                    <Dropdown.Item
+                      key={city.city_id}
+                      onClick={() => {
+                        setShowLocationDrop(false);
+                        handleDefaultCityChange(city);
+                      }}
+                    >
+                      {city.name}
+                    </Dropdown.Item>
                   ))}
-                </ul>
-              </div>
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
             <div className="d-flex">
               <div id="navigation">
@@ -936,17 +926,17 @@ const Header = () => {
                             </div>
                             <p>{userData?.name || "Guest"}</p>
                           </Link>
-                          <ul className="dropdown-single dropdown-nav account-menu">
+                          <ul className="dropdown-menu dropdown-single dropdown-nav account-menu">
                             <li>
-                              <a href="/dashboard">{translation.dashboard}</a>
+                              <Link href="/dashboard" class="dropdown-item">{translation.dashboard}</Link>
                             </li>
                             <li>
-                              <Link href="/my-profile">
+                              <Link href="/my-profile" class="dropdown-item">
                                 {translation.my_profile}
                               </Link>
                             </li>
                             <li>
-                              <Link href="/" onClick={handleLogout}>
+                              <Link href="/" onClick={handleLogout} class="dropdown-item">
                                 {translation.logout}
                               </Link>
                             </li>
