@@ -1038,7 +1038,7 @@ const Header = () => {
                         ? "De"
                         : "En"}
                     </a>
-                    <ul className="dropdown-single dropdown-nav dropdown-menu-end">
+                    <ul className="dropdown-single dropdown-nav dropdown-menu-end" style={{minWidth:'auto'}}>
                       <li className={currentLang === "en" ? "active" : ""}>
                         <a role="button" onClick={() => changeLanguage("en")}>
                           <img

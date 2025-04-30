@@ -1361,7 +1361,7 @@ const index = () => {
                       </>
                       {/* )} */}
                       <Col className="col-lg-auto col-sm-2 col-auto">
-                        <Button variant="light" onClick={() => setShowMapView(!showMapView)}>
+                        <Button variant="primary" onClick={() => setShowMapView(!showMapView)}>
                           {showMapView ? (
                             <>
                             <i className="bi bi-list-ul"></i> List View
@@ -1376,7 +1376,7 @@ const index = () => {
                       </Col>
                       <Col className="col-lg-auto col-6 mb-3">
                         <div className="d-grid">
-                          <Button variant="info" onClick={handleSearchClick}>
+                          <Button variant="primary" onClick={handleSearchClick}>
                             {translation?.search || "Search"}
                           </Button>
                         </div>
