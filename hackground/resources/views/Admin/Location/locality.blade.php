@@ -164,7 +164,7 @@
                             <label for="ufile">Select City</label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <select name="city_id" id="city_id" class="form-select">
+                                    <select name="city_id" id="city_id" class="form-select select-2">
                                         <option value="">Select City</option>
                                         @if (isset($city_data))
                                             @foreach ($city_data as $items)
@@ -272,7 +272,6 @@
 @push('custom-js')
     <script>
         $(document).ready(function() {
-
             var $cityid = $('#city_id');
             var $stateId = $('#state_id');
             var $formData = $('#formData');
@@ -300,22 +299,22 @@
             });
 
             // var table = $('#myTable').DataTable({
-            //     "paging": false,
-            //     "searching": false,
-            //     "info": false,
-            //     "ordering": true,
-            //     "order": [
-            //         [0, 'desc']
-            //     ],
-            //     "columnDefs": [{
-            //             "orderable": true,
-            //             "targets": [0]
-            //         },
-            //         {
-            //             "orderable": false,
-            //             "targets": [2, 3, 4]
-            //         }
-            //     ]
+            // "paging": false,
+            // "searching": false,
+            // "info": false,
+            // "ordering": true,
+            // "order": [
+            // [0, 'desc']
+            // ],
+            // "columnDefs": [{
+            // "orderable": true,
+            // "targets": [0]
+            // },
+            // {
+            // "orderable": false,
+            // "targets": [2, 3, 4]
+            // }
+            // ]
             // });
 
 
@@ -346,12 +345,12 @@
                 $modalAction.modal('show');
             }
 
-
             function add() {
                 $('.form-control').removeClass('is-invalid');
                 $('.invalid-feedback').empty();
                 AddEdit('Add', 'Add');
             }
+
 
 
             function Edit(id) {
@@ -430,7 +429,6 @@
                     });
                 }
             }
-
 
             window.add = add;
             window.Edit = Edit;

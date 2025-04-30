@@ -238,7 +238,7 @@
                         </span>
                     </div>
 
-                    <h4><a href="http://localhost:3002/property-details/{{ $property->slug }}">{{ $property->name }}</a></h4>
+                    <h4><a href="{{ url('property/edit/' . $property->id) }}">{{ $property->name }}</a></h4>
                     <p class="mb-2"><i class="ri-map-pin-line"></i> {{ $property->property_address }}</p>
                     <p><i class="ri-calendar-line"></i> {{ $property->created_at }}</p>
                     <div class="row">

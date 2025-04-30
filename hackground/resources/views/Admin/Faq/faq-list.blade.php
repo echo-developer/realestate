@@ -326,7 +326,6 @@
                     data: data,
                     dataType: 'json',
                     success: function(response) {
-                        // localStorage.setItem('successMessage', response.message);
                         window.location.reload(true);
                         $modalAction.modal('hide');
                         $formData[0].reset();

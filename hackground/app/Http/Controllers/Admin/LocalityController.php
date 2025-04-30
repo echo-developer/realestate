@@ -265,6 +265,7 @@ class LocalityController extends Controller
                 'distance_km' => $request->distance,
                 'status' => $request->status,
             ]);
+            set_flash_message('update');
         return response()->json(['message' => 'Landmark Updated']);
     }
 
@@ -279,6 +280,7 @@ class LocalityController extends Controller
             ->update([
                 'status' => config('constants.STATUS_DELETE'),
             ]);
+            set_flash_message('delete');
         return response()->json(['message' => 'Deleted !']);
     }
 }

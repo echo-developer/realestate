@@ -36,13 +36,13 @@ class GoogleLocalityController extends Controller
             $keyword = $request->keyWord;
             $lang = $request->input('lang', 'en');
             $data = DB::table('locality_names')
-                ->select(
-                    'locality_id',
-                    'name'
-                )
-                ->where('lang', $lang)
-                ->where('name', 'LIKE', $keyword . '%')
-                ->get()->toArray();
+            ->select('locality_id', 'name')
+            ->where('lang', $lang)
+            ->where('name', 'LIKE', $keyword . '%')
+            ->limit(11)
+            ->get()
+            ->toArray();
+        
 
             $message = !empty($data) ? 'Locality Retrived' : 'No Locality Found';
 

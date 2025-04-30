@@ -61,7 +61,7 @@
                 </button>
             </div>
         @endif --}}
-        <form action="{{ url('landmark-list') }}" method="get">
+        {{-- <form action="{{ url('landmark-list') }}" method="get">
             <section class="content-header mb-2">
                 <div class="row">
                     <div class="offset-sm-8 col-sm-4">
@@ -77,7 +77,7 @@
                     </div>
                 </div>
             </section>
-        </form>
+        </form> --}}
         <div class="main-card mb-3 card">
             <div class="card-body">
                 @php
@@ -277,7 +277,7 @@
                 url: url,
                 data: data,
                 success: function(response) {
-                    localStorage.setItem('successMessage', response.message);
+                    // localStorage.setItem('successMessage', response.message);
                     window.location.reload(true);
                     modalAction.modal('hide');
                     formData[0].reset();
@@ -304,7 +304,6 @@
                     type: 'POST',
                     url: `{{ url('/landmark-delete') }}/${id}`,
                     success: function(response) {
-                        localStorage.setItem('successMessage', response.message);
                         window.location.reload(true);
                     },
                     error: function(response) {
