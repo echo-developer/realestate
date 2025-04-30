@@ -187,6 +187,7 @@ const index = () => {
     addRemoveFav(id, "nearby_properties");
   };
 
+  // console.log(propertyDetails)
   return (
     <MainLayout>
       <Helmet>

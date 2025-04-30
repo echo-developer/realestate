@@ -124,7 +124,7 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                   <li>
                     <i className="icon-img-ratio" title="Carpet Area"></i>
                     <span>
-                      {translation?.occupied_area || "Occupied"}:{" "}
+                      {translation?.occupied_area || "Occupied Area"}:{" "}
                       {project?.occupied_area || "Not Available"}{" "}
                       {project?.occupied_area && project?.unit_type}
                     </span>
@@ -132,7 +132,7 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                   <li>
                     <i className="icon-img-ratio" title="Total Area"></i>
                     <span>
-                      {translation?.total_area || "Total"}:{" "}
+                      {translation?.total_area || "Total Area"}:{" "}
                       {project?.project_size || "Not Available"}{" "}
                       {project?.project_size && project?.unit_type}
                     </span>
@@ -146,16 +146,16 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                   <li>
                     <i className="icon-img-tower" title="Total Tower"></i>
                     <span>
-                      {translation?.total_tower || "Total Tower"}:{" "}
-                      {project?.total_tower || "Not Available"}
+                      {translation?.total_tower || "Total Towers"}:{" "}
+                      {project?.total_towers || "Not Available"}
                     </span>
                   </li>
 
                   <li>
                     <i className="icon-img-project" title="Total Unit"></i>
                     <span>
-                      {translation?.total_unit || "Total Unit:"}{" "}
-                      {project?.total_unit || "Not Available"}
+                      {translation?.total_units || "Total Unit:"}{" "}
+                      {project?.total_units || "Not Available"}
                     </span>
                   </li>
                 </ul>
