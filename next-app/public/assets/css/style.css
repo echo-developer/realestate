@@ -3368,7 +3368,7 @@ textarea.form-control-lg {
   --re-dropdown-box-shadow: var(--re-box-shadow);
   --re-dropdown-link-color: var(--re-body-color);
   --re-dropdown-link-hover-color: var(--re-body-color);
-  --re-dropdown-link-hover-bg: var(--re-tertiary-bg);
+  --re-dropdown-link-hover-bg: var(--re-primary-bg-subtle);
   --re-dropdown-link-active-color: #fff;
   --re-dropdown-link-active-bg: #1365CF;
   --re-dropdown-link-disabled-color: var(--re-tertiary-color);
