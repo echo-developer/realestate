@@ -12,76 +12,6 @@ import useTranslation from "@/hooks/useTranslation";
 import { BoxArrowUpRight, Calendar, GeoAlt, Hash } from "react-bootstrap-icons";
 import { useRouter } from "next/router";
 
-// const customerReviews = [
-//   {
-//     id: 1,
-//     name: "Hawkins Marow",
-//     timeAgo: "4 min ago",
-//     rating: 3.5,
-//     comment:
-//       "I viewed a number of properties with Just Property and found them to be professional, efficient, patient, courteous and helpful every time.",
-//     avatar: "/assets/images/agents/agent-1.jpg",
-//   },
-//   {
-//     id: 2,
-//     name: "Hawkins Marow",
-//     timeAgo: "4 min ago",
-//     rating: 4.5,
-//     comment:
-//       "I viewed a number of properties with Just Property and found them to be professional, efficient, patient, courteous and helpful every time.",
-//     avatar: "/assets/images/agents/agent-3.jpg",
-//   },
-// ];
-
-// const data = {
-//   bestSellers: [
-//     {
-//       imgSrc: "/assets/images/uploads/property-1.jpg",
-//       description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
-//       sold: 318,
-//       price: 320,
-//       earnings: 9800,
-//     },
-//     {
-//       imgSrc: "/assets/images/uploads/property-2.jpg",
-//       description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
-//       sold: 450,
-//       price: 800,
-//       earnings: 1278.3,
-//     },
-//     {
-//       imgSrc: "/assets/images/uploads/property-3.jpg",
-//       description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
-//       sold: 510,
-//       price: 750,
-//       earnings: 1249,
-//     },
-//   ],
-//   topClients: [
-//     {
-//       imgSrc: "/assets/images/uploads/property-1.jpg",
-//       description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
-//       location: "USA",
-//       status: "Online",
-//       amount: 9800,
-//     },
-//     {
-//       imgSrc: "/assets/images/uploads/property-2.jpg",
-//       description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
-//       location: "India",
-//       status: "Offline",
-//       amount: 1278.3,
-//     },
-//     {
-//       imgSrc: "/assets/images/uploads/property-3.jpg",
-//       description: "Lorem ipsum dolor sit amet, ur adipiscing elit.",
-//       location: "Saudi Arabia",
-//       status: "Online",
-//       amount: 1249,
-//     },
-//   ],
-// };
-
 const Index = () => {
   const translation = useTranslation();
   const router = useRouter();
@@ -243,7 +173,7 @@ const Index = () => {
                     />
                   </div>
                   <div className="fun-fact-text">
-                    <h3>{fact.number}</h3>
+                    <h3>{fact.number == '$undefined' ? "" : fact.number}</h3>
                     <h5>{fact.title}</h5>
                   </div>
                 </a>
