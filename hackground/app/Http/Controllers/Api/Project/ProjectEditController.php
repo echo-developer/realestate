@@ -39,8 +39,6 @@ class ProjectEditController extends Controller
             }
             $lang = $request->input('lang', 'en');
 
-            $hasLatLang = $request->input('hasLatLng', 0);
-
 
             $project = PrefProject::where('id', $request->project_id)
                 ->where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
@@ -49,12 +47,7 @@ class ProjectEditController extends Controller
                     'additional',
                     'gallery.images',
                     'landmarks',
-                    'location' => function ($subQuery) use ($hasLatLang) {
-                        if ($hasLatLang == 1) {
-                            $subQuery->whereNotNull('latitude')->where('latitude', '!=', '');
-                            $subQuery->whereNotNull('longitude')->where('longitude', '!=', '');
-                        }
-                    },
+                    'location',
                 ])
                 ->first();
 

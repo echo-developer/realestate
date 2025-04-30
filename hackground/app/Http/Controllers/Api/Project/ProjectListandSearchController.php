@@ -27,6 +27,8 @@ class ProjectListandSearchController extends Controller
         $limit = (int) $req->input('limit', 10);
         $offset = ($currentpage - 1) * $limit;
 
+        $hasLatLang = $req->input('hasLatLng', 0);
+
         $user_id = $req->user_id ?? null;
 
         try {
@@ -51,7 +53,7 @@ class ProjectListandSearchController extends Controller
             ]);
 
 
-            $searchResults = $this->apiModel->searchProject($filters, $user_id);
+            $searchResults = $this->apiModel->searchProject($filters, $user_id,$hasLatLang);
             // log::info(json_encode($searchResults, JSON_PRETTY_PRINT));
 
             if ($searchResults->isEmpty()) {
@@ -123,6 +125,8 @@ class ProjectListandSearchController extends Controller
                     'locality' => $project->location->locality ?? null,
                     'city' => $project->location->city ?? null,
                     'address' => $project->location->address ?? null,
+                    'address_lat' => $project->location->latitude ?? null,
+                    'address_lan' => $project->location->longitude ?? null,
                     'uname' => get_user_name($project->uid) ?? null,
                 ];
             });

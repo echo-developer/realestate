@@ -1134,7 +1134,7 @@ class ApiModel extends Model
         return $data;
     }
 
-    public function searchProject($data, $user_id)
+    public function searchProject($data, $user_id, $hasLatLang)
     {
         // log::info($data);
         $query = PrefProject::where([
@@ -1154,7 +1154,7 @@ class ApiModel extends Model
         // log::info('$filteredData' . json_encode($query, JSON_PRETTY_PRINT));
 
 
-        $filteredData = $query->filter(function ($project) use ($data) {
+        $filteredData = $query->filter(function ($project) use ($data, $hasLatLang) {
 
             $settings = $project->settings;
             $location = $project->location;
@@ -1163,6 +1163,12 @@ class ApiModel extends Model
             if (!empty($data['city_id'])) {
                 $cityIds = array_map('intval', explode(',', $data['city_id']));
                 if (!$location || !in_array((int)$location->city, $cityIds)) {
+                    return false;
+                }
+            }
+
+            if ($hasLatLang == 1) {
+                if (!$location || $location->latitude == null || $location->latitude == '' || $location->longitude == null || $location->longitude == '') {
                     return false;
                 }
             }
@@ -1506,7 +1512,7 @@ class ApiModel extends Model
     public function addAdvertisementRequest($data = array())
     {
         $structure = array(
-            'user_id'=> $data['user_id'] ? $data['user_id'] : '',
+            'user_id' => $data['user_id'] ? $data['user_id'] : '',
             'name' => $data['name'] ? $data['name'] : '',
             'email' => $data['email'] ? $data['email'] : '',
             'phone_code' => $data['phone_code'] ? $data['phone_code'] : '',
@@ -1524,52 +1530,48 @@ class ApiModel extends Model
         return true;
     }
 
-    public function getUserAdvertisementRequests($user_id, $limit='', $offset='', $for_list=TRUE)
+    public function getUserAdvertisementRequests($user_id, $limit = '', $offset = '', $for_list = TRUE)
     {
         $query = DB::table('advertisement_request as r')
-                            ->select('r.*')
-                            ->where(['r.user_id'=>$user_id])
-                            ->where('r.status', '!=', '-1');
-        if($for_list)
-        {
+            ->select('r.*')
+            ->where(['r.user_id' => $user_id])
+            ->where('r.status', '!=', '-1');
+        if ($for_list) {
             $query->limit($limit);
             $query->offset($offset);
-            $result = $query->orderBy('r.created_at','desc')->get();
-        }else{
+            $result = $query->orderBy('r.created_at', 'desc')->get();
+        } else {
             $result = $query->count();
         }
-        
+
         return $result;
     }
 
-    public function getUserAdvertisementsList($user_id, $limit='', $offset='', $for_list=TRUE)
+    public function getUserAdvertisementsList($user_id, $limit = '', $offset = '', $for_list = TRUE)
     {
         $query = DB::table('advertisements as a')
-                            ->select('a.*','a_l.location_id','a_l.city_id','a_l.country_id','a_c.property_category')
-                            ->leftJoin('advertisement_category as a_c', 'a.advertisement_id', '=', 'a_c.advertisement_id')
-                            ->leftJoin('advertisement_locations as a_l', 'a.advertisement_id', '=', 'a_l.advertisement_id')
-                            ->where(['a.member_id'=>$user_id,'status'=>'1'])
-                            ->whereDate('a.start_date', '<=', now())
-                            ->whereDate('a.expire_date', '>=', now());
-        if($for_list)
-        {
+            ->select('a.*', 'a_l.location_id', 'a_l.city_id', 'a_l.country_id', 'a_c.property_category')
+            ->leftJoin('advertisement_category as a_c', 'a.advertisement_id', '=', 'a_c.advertisement_id')
+            ->leftJoin('advertisement_locations as a_l', 'a.advertisement_id', '=', 'a_l.advertisement_id')
+            ->where(['a.member_id' => $user_id, 'status' => '1'])
+            ->whereDate('a.start_date', '<=', now())
+            ->whereDate('a.expire_date', '>=', now());
+        if ($for_list) {
             $query->limit($limit);
             $query->offset($offset);
             $result = $query->groupBy('a.advertisement_id')->get();
-        }else{
+        } else {
             $result = $query->count();
         }
-        
+
         return $result;
     }
 
     public function deleteAdRequest($request_id)
     {
         $query = DB::table('advertisement_request as a')
-                          ->where('request_id',$request_id)
-                          ->update(['status'=>'-1']);
+            ->where('request_id', $request_id)
+            ->update(['status' => '-1']);
         return true;
-
     }
-
 }
