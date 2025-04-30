@@ -285,8 +285,8 @@ const Header = () => {
                   }
                 `}</style>
               </Link>
-                          
-              <Dropdown className="ms-3 ms-xxl-4" show={showLocationDrop} onToggle={handleShowLocationDropDown}>
+              {/* show={showLocationDrop} onToggle={handleShowLocationDropDown} */}
+              <Dropdown className="ms-3 ms-xxl-4">
                 <Dropdown.Toggle variant="link" className="text-decoration-none" id="dropdown-basic">
                   {selectedCity}
                 </Dropdown.Toggle>
@@ -295,7 +295,7 @@ const Header = () => {
                     <Dropdown.Item
                       key={city.city_id}
                       onClick={() => {
-                        setShowLocationDrop(false);
+                        // setShowLocationDrop(false);
                         handleDefaultCityChange(city);
                       }}
                     >
