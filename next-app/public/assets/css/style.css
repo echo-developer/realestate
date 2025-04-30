@@ -3368,7 +3368,7 @@ textarea.form-control-lg {
   --re-dropdown-box-shadow: var(--re-box-shadow);
   --re-dropdown-link-color: var(--re-body-color);
   --re-dropdown-link-hover-color: var(--re-body-color);
-  --re-dropdown-link-hover-bg: var(--re-tertiary-bg);
+  --re-dropdown-link-hover-bg: var(--re-primary-bg-subtle);
   --re-dropdown-link-active-color: #fff;
   --re-dropdown-link-active-bg: #1365CF;
   --re-dropdown-link-disabled-color: var(--re-tertiary-color);
@@ -32652,10 +32652,6 @@ header {
 .header-sticky.transparentH .navbar-brand > div > img {
   filter: brightness(0) invert(1);
 }
-.header-sticky .dropdown-menu {
-  max-height: 240px;
-  overflow-y: auto;
-}
 
 .hidden-menu {
   top: -100px !important;
@@ -32684,6 +32680,11 @@ ul#desk-nav > li > a.btn-post:hover {
   color: #1365CF;
 }
 
+.dropdown-menu.city-drop {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
 .btn-post > img {
   position: absolute;
   top: 0;
@@ -32699,6 +32700,10 @@ ul#desk-nav > li > a.btn-post:hover {
 .setlang a img {
   border-radius: 50%;
   object-fit: cover;
+}
+
+.suggestions-list li:hover {
+  background-color: #d0e0f5;
 }
 
 .banner {
