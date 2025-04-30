@@ -66,6 +66,7 @@ class Advertisement extends Model
         
         $cities = !empty($data['city']) ? $data['city'] : array();
         $categories = !empty($data['category']) ? $data['category'] : array();
+		
         $insert_id = DB::table($this->table)->insertGetId($ins_data);
         if($insert_id)
         {
