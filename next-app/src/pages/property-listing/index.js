@@ -1361,13 +1361,22 @@ const index = () => {
                       </>
                       {/* )} */}
                       <Col className="col-lg-auto col-sm-2 col-auto">
-                        <Button style={{ backgroundColor: '#fff', color: '#007bff', border: '1px solid #007bff' }} onClick={() => setShowMapView(!showMapView)}>
-                          {showMapView ? 'Hide Map View' : 'View In Map'}
+                        <Button variant="light" onClick={() => setShowMapView(!showMapView)}>
+                          {showMapView ? (
+                            <>
+                            <i className="bi bi-list-ul"></i> List View
+                            </>
+                          ) : (
+                            <>
+                            <i  className="bi bi-geo-alt"></i> Map View
+                            </>
+                          )}
+                          {/* {showMapView ? 'List View' : 'Map View'} */}
                         </Button>
                       </Col>
                       <Col className="col-lg-auto col-6 mb-3">
                         <div className="d-grid">
-                          <Button variant="primary" onClick={handleSearchClick}>
+                          <Button variant="info" onClick={handleSearchClick}>
                             {translation?.search || "Search"}
                           </Button>
                         </div>
