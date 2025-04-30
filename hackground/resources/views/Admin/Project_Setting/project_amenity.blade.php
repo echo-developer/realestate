@@ -47,7 +47,7 @@
             <div class="alert alert-{{ session('message_type') }}">
                 {{ session('success_msg') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert">
-                    
+
                 </button>
             </div>
         @endif
@@ -78,7 +78,7 @@
                         Amenity</button>
                 </div>
             </div>
-            <div class="card-body">                
+            <div class="card-body">
                 <div class="table-responsive" id="main_table">
                     <table class="mb-0 table ">
                         <thead>
@@ -117,7 +117,7 @@
                                     </td>
                                     <td class="text-right">
                                         <a href="javascript:void(0)" onclick="Edit_prop_amenity('{{ $item->id }}')" class="me-2"><i class="bi bi-pencil-square text-success fa-md"></i></a>
-                                        <a href="javascript:void(0)" onclick="Delete_prop_amenity('{{ $item->id }}')"><i class="bi bi-trash3-fill text-danger fa-md"></i></a>                                        
+                                        <a href="javascript:void(0)" onclick="Delete_prop_amenity('{{ $item->id }}')"><i class="bi bi-trash3-fill text-danger fa-md"></i></a>
                                     </td>
                                 </tr>
                             @empty
@@ -144,7 +144,7 @@
                     <h5 class="modal-title" id="prop_amenityAddEditModalLabel"></h5>
 
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
-                        
+
                     </button>
                 </div>
                 <div class="modal-body">
@@ -157,7 +157,7 @@
                         @endphp
                         @foreach ($langs as $lang)
                             <div class="form-floating mb-4">
-                                
+
                                 <input type="text" class="form-control reset_field" id="name_{{ $lang }}"
                                     name="name[{{ $lang }}]" autocomplete="off" placeholder="">
                                     <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
@@ -168,7 +168,7 @@
                         <div class="form-group">
                             <!-- <label for="ufile">Image Icon</label> -->
                             <div class="">
-                                <input type="file" name="Amenityfile" id="AmenityfileUpload" class="form-control">                                    
+                                <input type="file" name="Amenityfile" id="AmenityfileUpload" class="form-control">
                             </div>
                         </div>
                         <div class="form-group mb-4">
@@ -177,7 +177,7 @@
                                 class="btn btn-danger btn-sm" title="Delete Image" onclick="deleteUploadedImage()"><i class="bi bi-trash3-fill"></i></button>
                         </div>
 
-                        <div class="form-floating mb-4">                            
+                        <div class="form-floating mb-4">
                             <input type="text" class="form-control" id="order" name="order" placeholder="" required>
                             <label for="Order">Order</label>
                             <div class="invalid-feedback" id="Order_error"></div>
@@ -265,7 +265,7 @@
                 url: url,
                 data: data,
                 success: function(response) {
-                    localStorage.setItem('successMessage', response.message);
+                    // localStorage.setItem('successMessage', response.message);
                     window.location.reload(true);
                     $('#prop_amenity').modal('hide');
                     $('#prop_amenityformData')[0].reset();
@@ -337,7 +337,7 @@
                         'id': id
                     },
                     success: function(response) {
-                        localStorage.setItem('successMessage', response.message);
+                        // localStorage.setItem('successMessage', response.message);
                         window.location.reload(true);
                     },
                     error: function(msg) {
