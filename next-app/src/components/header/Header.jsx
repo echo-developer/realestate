@@ -865,7 +865,7 @@ const Header = () => {
                               )
                             }
                           >
-                            Above ${currency || ""}1600.00
+                            Above {currency || ""}1600.00
                           </a>
                         </li>
                       </ul>
@@ -891,85 +891,6 @@ const Header = () => {
                     </div>
                   </li>
 
-                  {/* for sale  */}
-                  {/* <li className="nav-item mega-menu">
-                    <a className="nav-link dropdown-toggle" role="button">
-                      {translation?.sale || "sale"}
-                    </a>
-                    <div className="dropdown-full">
-                      <ul className="dropdown-nav">
-                        <li>
-                          <span>
-                            <h5 className="mb-0">
-                              {translation?.for_owner || "For Owner"}
-                            </h5>
-                          </span>
-                        </li>
-                        <li>
-                          <Link href="/postproperty">
-                            {translation?.post_property ||
-                              "Post Property"}
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/dashboard">
-                            {translation?.my_dashboard || "My Dashboard"}
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/membership">
-                            {translation?.sell_rent_ad_packages ||
-                              "sale / Rent Ad Packages"}
-                          </Link>
-                        </li>
-                      </ul>
-                      <ul className="dropdown-nav">
-                        <li>
-                          <span>
-                            <h5 className="mb-0">
-                              {translation?.for_agent_builder ||
-                                "For Agent & Builder"}
-                            </h5>
-                          </span>
-                        </li>
-                        <li>
-                          <Link href="/dashboard">
-                            {translation?.my_dashboard || "My Dashboard"}
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="membership">
-                            {translation?.ad_packages || "Ad Packages"}
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/sales-enquiry">
-                            {translation?.sales_enquiry || "Sales Enquiry"}
-                          </Link>
-                        </li>
-                      </ul>
-                      <ul className="dropdown-nav">
-                        <li>
-                          <span>
-                            <h5 className="mb-0">
-                              {translation?.selling_tools || "Selling Tools"}
-                            </h5>
-                          </span>
-                        </li>
-                        <li>
-                          <Link href="/property-valuation">
-                            {translation?.property_valuation ||
-                              "Property Valuation In"}
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/agent-list">
-                            {translation?.find_an_agent || "Find an Agent"}
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </li> */}
                   {/* for agent  */}
                   <li className="nav-item">
                     <Link href="/agent-list" className="nav-link">

@@ -99,6 +99,15 @@ class ProjectEditController extends Controller
             }
 
 
+            if (!empty($flattened['locality'])) {
+                $flattened['locality'] = [
+                    'locality_id' => $flattened['locality'],
+                    'locality_name' => get_name_by_id('locality_names', 'locality_id', $flattened['locality'], 'en')
+                ];
+            } else {
+                $flattened['locality'] = [];
+            }
+
             $parkingMapping = ['AV' => 'av', 'NA' => 'na', 'UC' => 'uc'];
             $flattened['parking_availability'] = $parkingMapping[$flattened['parking_availability']] ?? null;
 

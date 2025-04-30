@@ -30,7 +30,8 @@ import StatusModal from "@/components/project/StatusModal";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import EditImageGallery from "@/components/project/EditImageGalary";
-import Locality from "@/components/project/Locality";
+// import Locality from "@/components/project/Locality";
+import Locality from "@/components/Locality/Locality";
 import withAuth from "@/utils/withAuth";
 import ProjectCompletionStatus from "@/components/addtional/ProjectCompletionStatus";
 import {
@@ -334,14 +335,23 @@ const Index = () => {
     { id: 19, key: "landmarks", name: "Landmark" },
     { id: 20, key: "galleries", name: "Gallery" },
   ];
-  const setLocality = (locality) => {
-    setInputValue((prev) => {
+  // const setLocality = (locality) => {
+  //   setInputValue((prev) => {
+  //     return {
+  //       ...prev,
+  //       locality: locality,
+  //     };
+  //   });
+  // };
+
+  const onSelectLocality = (locality) => {
+    setInputValue(prev => {
       return {
         ...prev,
-        locality: locality,
-      };
-    });
-  };
+        locality: locality?.locality_id
+      }
+    })
+  }
 
   const groupItems = {
     basic: items.filter((item) =>
@@ -421,10 +431,13 @@ const Index = () => {
       case "locality":
         return (
           <>
-            <Locality
+            {/* <Locality
               locality={inputValue?.locality || ""}
               setLocality={setLocality}
-            />
+            /> */}
+            <div className="form-floating">
+              <Locality onSelectLocality={onSelectLocality} />
+            </div>
           </>
         );
       case "address":

@@ -78,7 +78,10 @@ class PropertyEditController extends Controller
         foreach ($property_address as $key) {
             return [
                 'address' => $key->property_address,
-                'locality' => $key->property_locality,
+                'locality' => [
+                    'locality_id' => $key->property_locality,
+                    'locality_name' => !empty($key->property_locality) ? get_name_by_id('locality_names', 'locality_id', $key->property_locality, 'en') : null
+                ],
             ];
         }
     }
