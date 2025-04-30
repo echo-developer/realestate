@@ -46,12 +46,12 @@
     <div class="alert alert-{{ session('message_type') }}">
         {{ session('success_msg') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert">
-            
+
         </button>
     </div>
     @endif
     <div class="main-card mb-3 card">
-        
+
         <div class="card-header d-flex">
             Bank Loan
             {{-- @if (in_array('MEN0005_Add', $Permissions)) --}}
@@ -114,7 +114,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="bankModalLabel"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    
+
                 </button>
             </div>
             <div class="modal-body">
@@ -123,19 +123,19 @@
                     <input type="hidden" name="filename" id="file">
                     <input type="hidden" name="id" id="id">
 
-                    <div class="form-floating mb-3">                        
+                    <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="name" name="name" placeholder="" required>
                         <label for="name" class="form-label">Bank Name</label>
                         <div class="invalid-feedback" id="name_error"></div>
                     </div>
 
-                    <div class="form-floating mb-3">                        
+                    <div class="form-floating mb-3">
                         <input type="number" step="0.01" class="form-control" id="interest_rate" name="interest_rate" placeholder="" required>
                         <label for="interest_rate" class="form-label">Interest Rate (%)</label>
                         <div class="invalid-feedback" id="interest_rate_error"></div>
                     </div>
 
-                    <div class="form-floating mb-3">                        
+                    <div class="form-floating mb-3">
                         <input type="number" step="0.01" class="form-control" id="processing_fees" name="processing_fees" placeholder="" required>
                         <label for="processing_fees" class="form-label">Processing Fees</label>
                         <div class="invalid-feedback" id="processing_fees_error"></div>
@@ -150,7 +150,7 @@
 
 
                     <div class="mb-0">
-                        <label class="form-label d-block">Status</label>                        
+                        <label class="form-label d-block">Status</label>
                         <div class="form-check form-check-inline">
                             <input type="radio" class="form-check-input" name="status" id="status_1" value="1" checked>
                             <label class="form-check-label" for="status_1">Active</label>
@@ -158,7 +158,7 @@
                         <div class="form-check form-check-inline">
                             <input type="radio" class="form-check-input" name="status" id="status_2" value="0">
                             <label class="form-check-label" for="status_2">Inactive</label>
-                        </div>                        
+                        </div>
                     </div>
                 </form>
             </div>
@@ -212,7 +212,7 @@
 
                 if (result.status) {
                     modal.hide();
-                    localStorage.setItem('successMessage', result.message);
+                    // localStorage.setItem('successMessage', result.message);
                     location.reload();
                 } else {
                     handleValidationErrors(result.errors);
@@ -300,7 +300,7 @@
                     const result = await response.json();
 
                     if (result.status) {
-                        localStorage.setItem('successMessage', result.message);
+                        // localStorage.setItem('successMessage', result.message);
                         location.reload();
                     } else {
                         alert(result.message || 'Delete failed.');

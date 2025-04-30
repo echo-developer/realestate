@@ -34,7 +34,8 @@ class BankLoanController extends Controller
 
         $bankLoan = BankLoan::updateOrCreate(
             ['id' => $request->id],
-            $data
+            $data,
+            set_flash_message('update'),
         );
 
         return response()->json([
@@ -69,14 +70,15 @@ class BankLoanController extends Controller
 
         return response()->json([
             'status' => true,
-            'data' => $data
+            'data' => $data,
+            set_flash_message('update'),
         ]);
     }
 
     public function destroy(Request $request)
     {
         $updated = BankLoan::where('id', $request->id)->update(['status' => -1]);
-
+        set_flash_message('delete');
         if ($updated) {
             return response()->json([
                 'status' => true,
