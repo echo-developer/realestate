@@ -73,7 +73,7 @@
                 <button type="button" class="btn btn-sm btn-primary" onclick="add()">Add State</button>
             </div>
         </div>
-        <div class="card-body">            
+        <div class="card-body">
             <div class="table-responsive" id="main_table">
                 <table id="myTable" class="mb-0 table">
                     <thead>
@@ -98,7 +98,7 @@
                             <td class="text-right">
                                 <a href="javascript:void(0)" class="me-2"><i class="bi bi-pencil-fill text-success fa-md " onclick="Edit('{{ $item->id }}')"></i></a>
                                 <a href="javascript:void(0)"><i class="bi bi-trash3-fill text-danger fa-md" onclick="Delete('{{ $item->id }}')"></i></a>
-                            </td>                            
+                            </td>
                         </tr>
                         @endforeach
                         @else
@@ -132,7 +132,7 @@
 
                 <form id="formData">
                     <input type="text" class='d-none' id="StateId" name="StateId">
-                    <div class="form-floating mb-3">                        
+                    <div class="form-floating mb-3">
                         <select name="country_id" id="country_id" class="form-select">
                             <option value="">Select Country</option>
                             @if (isset($country_data))
@@ -148,14 +148,14 @@
                     $langs = explode(',', admin_default_lang());
                     @endphp
                     @foreach($langs as $lang)
-                    <div class="form-floating mb-3">                        
+                    <div class="form-floating mb-3">
                         <input type="text" class="form-control reset_field" id="name_{{ $lang }}" name="name[{{ $lang }}]" placeholder="" autocomplete="off">
                         <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
                         <div class="invalid-feedback" id="name_{{ $lang }}_error"></div>
                     </div>
                     @endforeach
 
-                    <div class="form-floating mb-3">                        
+                    <div class="form-floating mb-3">
                         <input type="Order" class="form-control" id="order" name="order" placeholder="" required>
                         <label for="Order">Order</label>
                         <div class="invalid-feedback" id="Order_error"></div>
@@ -234,7 +234,7 @@
             url: url,
             data: data,
             success: function(response) {
-                localStorage.setItem('successMessage', response.message);
+                // localStorage.setItem('successMessage', response.message);
                 window.location.reload(true);
                 $('#modal_action').modal('hide');
                 $('#formData')[0].reset();
@@ -307,7 +307,7 @@
                     'id': id
                 },
                 success: function(response) {
-                    localStorage.setItem('successMessage', response.message);
+                    // localStorage.setItem('successMessage', response.message);
                     window.location.reload(true);
                 },
                 error: function(msg) {

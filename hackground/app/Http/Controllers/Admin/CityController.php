@@ -37,7 +37,10 @@ class CityController extends Controller
                     'foreign_field' => 'country_names.country_id',
                 ],
             ],
-            ['lang' => $lang],
+            [
+                'lang' => $lang,
+                'country.status' =>  config('constants.STATUS_ACTIVE')
+            ],
             null
         );
 
