@@ -200,6 +200,7 @@ class UserController extends Controller
 
     public function SaveMemberDetails(Request $req)
     {
+        
         $user_id = $req->user_id;
         $user_type = $req->user_type;
 
@@ -217,7 +218,7 @@ class UserController extends Controller
             'description' => $req->comment,
             'updated_at' => now(),
         ];
-        
+
         DB::table('users')
             ->where('id', $user_id)
             ->update([

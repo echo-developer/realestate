@@ -110,7 +110,9 @@
                     <select name="city" id="city" class="form-control">
                         <option value="" disabled>- select city -</option>
                         @foreach ($cities as $city)
-                            <option value="{{ $city->city_id }}">{{ $city->name }}</option>
+                            <option value="{{ $city->city_id }}"
+                                {{ $data?->userAdditional?->city == $city->city_id ? 'selected' : '' }}>
+                                {{ $city->name }}</option>
                         @endforeach
                     </select>
 

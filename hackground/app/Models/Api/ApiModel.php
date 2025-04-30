@@ -923,7 +923,7 @@ class ApiModel extends Model
 
     public function UpdateMyProfileData($user_id, $data)
     {
-
+        // log_anything($data);
         DB::table('users')
             ->where('id', $user_id)
             ->update([
