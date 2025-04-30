@@ -355,7 +355,7 @@ const index = () => {
         getAdvanceSearch(null, page, data);
       }
     }
-  }, [router?.query, memberId, page, defaultCity?.city_id]);
+  }, [router?.query, memberId, page, defaultCity?.city_id, showMapView]);
 
   useEffect(() => {
     if (filterOptions?.length > 0) {
@@ -406,7 +406,7 @@ const index = () => {
             setSubPropertyList(res?.data || []);
           }
         } catch (error) {
-          toast.error(res?.message || "Error fetching property for options");
+          console.error(res?.message || "Error fetching property for options");
         } finally {
           setPropertyForLoading(false);
         }
@@ -726,6 +726,11 @@ const index = () => {
     if(router?.query?.locality) {
       const locality = JSON.parse(router.query.locality);
       existingParams.set('locality', locality?.locality_id)
+    }
+    if(showMapView) {
+      existingParams.set('hasLatlang', 1)
+    } else {
+      existingParams.set('hasLatlang', 0)
     }
 
     const payloadSearch = Object.fromEntries(existingParams.entries());

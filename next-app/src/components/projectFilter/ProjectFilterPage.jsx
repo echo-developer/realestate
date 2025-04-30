@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 import useTranslation from "@/hooks/useTranslation";
-import LocalityOption from "@/components/MapData/LocalitySelector";
 import { Form, Row, Col, ListGroup, Dropdown, Button, ButtonGroup } from "react-bootstrap";
 import {
   ProjectResidentialFilterOption,
@@ -12,13 +11,15 @@ import {
   filterOptions,
 } from "../post/PropertyData";
 import { useAuth } from "@/context/AuthProvider";
+import Locality from "../Locality/Locality";
 
-const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dropdownState, setIsOverlayVisible }) => {
-  const {currency, currencyCode} = useAuth();
+const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dropdownState, setIsOverlayVisible, showMapView, setShowMapView }) => {
+  const { currency, currencyCode } = useAuth();
   const { callApi } = AuthUser();
   const router = useRouter();
   const subFilterRef = useRef({});
-  const [localityData, setLocalityData] = useState(null);
+  // const [localityData, setLocalityData] = useState(null);
+  const [locality, setLocality] = useState(null);
   const [selectedOption, setSelectedOption] = useState("rent");
   const [filters, setFilters] = useState({
     city_id: "",
@@ -201,7 +202,7 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
         });
         if (response?.status === 1) {
           setPropertyTypeData(response?.data);
-        } 
+        }
       } catch (error) {
         toast.error(error.message);
       }
@@ -298,14 +299,17 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
 
     let updatedFilters = { ...filters };
 
-    if (localityData?.locality) {
-      updatedFilters.address = localityData.locality;
-    } else {
-      delete updatedFilters.address;
-    }
+    // if (localityData?.locality) {
+    //   updatedFilters.address = localityData.locality;
+    // } else {
+    //   delete updatedFilters.address;
+    // }
 
     if (selectedOption) {
       updatedFilters.project_for = selectedOption;
+    }
+    if (locality) {
+      updatedFilters.locality = locality;
     }
 
     updatedFilters.min_price = minBudget ?? "";
@@ -316,6 +320,10 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
       router.push(`/project-listing?${queryString}`);
     }
   };
+
+  const onSelectLocality = (locality) => {
+    setLocality(locality)
+  }
 
   const handleSelecteAdvanceFilter = (key) => {
     setAdvanceFilter(key);
@@ -603,10 +611,11 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
               </Col>
 
               <Col className="col-lg-3 col-sm-6 col-12">
-                <LocalityOption
+                {/* <LocalityOption
                   locality={localityData}
                   setLocalityData={setLocalityData}
-                />
+                /> */}
+                <Locality onSelectLocality={onSelectLocality} />
               </Col>
               <Col className="col-lg-2 col-sm-6 col-12" onClick={() => toggleDropdown('project_type')}>
                 <Dropdown className="select-dropdown mb-3 d-grid" show={dropdownState?.project_type}>
@@ -742,7 +751,7 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
                   <Dropdown.Toggle
                     className="btn-form-control"
                     id="budget-dropdown"
-                    // onClick={() => setBudgetDropdown((prev) => !prev)}
+                  // onClick={() => setBudgetDropdown((prev) => !prev)}
                   >
                     {getDisplayText()}
                   </Dropdown.Toggle>
@@ -812,6 +821,11 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
                     </div>
                   </Dropdown.Menu>
                 </Dropdown>
+              </Col>
+              <Col className="col-lg-auto col-sm-2 col-auto">
+                <Button style={{ backgroundColor: '#fff', color: '#007bff', border: '1px solid #007bff' }} onClick={() => setShowMapView(!showMapView)}>
+                  {showMapView ? 'Hide Map View' : 'View In Map'}
+                </Button>
               </Col>
 
               <Col className="col-lg-auto col-6 mb-3">

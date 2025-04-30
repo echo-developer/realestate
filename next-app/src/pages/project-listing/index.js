@@ -25,8 +25,10 @@ import {
 } from "react-bootstrap";
 import { GeoAlt, Search } from "react-bootstrap-icons";
 import ProjectMobileFilters from "@/components/addtional/ProjectMobileFilter";
+import ProjectListingMapView from "@/components/MapData/ProjectListingMapView";
 
 const Index = () => {
+  const [showMapView, setShowMapView] = useState(false);
   const { callApi, GetMemberId } = AuthUser();
   const router = useRouter();
   const { defaultCity } = useAuth();
@@ -105,12 +107,23 @@ const Index = () => {
       setLoading(true);
     }
     let params = { ...router?.query };
+    if(params?.locality) {
+      const locality = JSON.parse(params?.locality)
+      if(locality) {
+        params.locality = locality?.locality_id
+      }
+    }
     if (sortKey) params.sort_key = sortKey;
     if (sortOrder) params.sort_order = sortOrder;
     if (memberId) params.user_id = memberId;
     delete params.address;
     if (router?.query?.address) {
       params.locality = router?.query?.address;
+    }
+    if(showMapView) {
+      params.hasLatLng = 1;
+    } else {
+      params.hasLatLng = 0;
     }
     try {
       const response = await callApi({
@@ -201,7 +214,8 @@ const Index = () => {
     router?.isReady,
     router?.query,
     memberId,
-    defaultCity
+    defaultCity,
+    showMapView
   ]);
 
   useEffect(() => {
@@ -277,14 +291,26 @@ const Index = () => {
         ) : (
           <div className="short-banner pt-4">
             <div className="container-fluid">
-              <ProjectFilterPage setPerPage={setPerPage} toggleDropdown={toggleDropdown} handleClickOutside={handleClickOutside} dropdownState={dropdownState} setIsOverlayVisible={setIsOverlayVisible} />
+              <ProjectFilterPage 
+              setPerPage={setPerPage} 
+              toggleDropdown={toggleDropdown} 
+              handleClickOutside={handleClickOutside} 
+              dropdownState={dropdownState} 
+              setIsOverlayVisible={setIsOverlayVisible}
+              showMapView={showMapView}
+              setShowMapView={setShowMapView} />
             </div>
           </div>
         )}
 
         <section className="section">
           <div className="container-fluid">
-            <div className="row main-row">
+            {showMapView ? (<>
+            <>
+            <ProjectListingMapView loading={loading} projectList={setProjectListData} />
+            </>
+            </>) : (<>
+              <div className="row main-row">
               <aside className="col-xl-9 col-lg-9 col-12">
                 <div className="d-sm-flex justify-content-between align-items-center mb-2">
                   <h4 className="mb-3 mb-sm-0">
@@ -381,6 +407,7 @@ const Index = () => {
                 )}
               </aside>
             </div>
+            </>)}
           </div>
         </section>
       </MainLayout>

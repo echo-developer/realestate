@@ -277,7 +277,11 @@ const Index = () => {
     // Append the formData to FormData object
     Object.entries(formData).forEach(([key, value]) => {
       if (typeof value === "object" && value !== null) {
-        fd.append(key, JSON.stringify(value));
+        if(key == 'locality') {
+          fd.append(key, value?.locality_id)
+        } else {
+          fd.append(key, JSON.stringify(value));
+        }
       } else {
         fd.append(key, value);
       }
@@ -386,6 +390,7 @@ const Index = () => {
     ),
   };
 
+  console.log("project data", projectData)
   const renderModalContent = () => {
     switch (selectedItem) {
       case "instruction":
@@ -436,7 +441,7 @@ const Index = () => {
               setLocality={setLocality}
             /> */}
             <div className="form-floating">
-              <Locality onSelectLocality={onSelectLocality} />
+              <Locality onSelectLocality={onSelectLocality} defaultValue={projectData?.locality} />
             </div>
           </>
         );

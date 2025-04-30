@@ -100,7 +100,6 @@ const Locality = ({onSelectLocality, errors, defaultValue}) => {
                             autoComplete="off"
                             value={localitySearchInput}
                             onChange={handleLocalityInputChange}
-                            defaultValue={"hello"}
                           />
                           {errors?.locality && (
               <div className="invalid-feedback">{errors.locality}</div>

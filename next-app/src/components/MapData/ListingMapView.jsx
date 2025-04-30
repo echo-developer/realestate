@@ -1,485 +1,324 @@
-'use client';
-
-import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
-import Link from 'next/link';
-import { useEffect } from 'react';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { GoogleMap, Marker, InfoWindow, useLoadScript } from "@react-google-maps/api"
 import { GeoAlt } from "react-bootstrap-icons";
-import { ShimmerContentBlock } from 'react-shimmer-effects';
-import CardImageSlider from '../cardImageSlider/CardImageSlider';
-import { useAuth } from '@/context/AuthProvider';
-import useTranslation from '@/hooks/useTranslation';
-import { useState } from 'react';
-import FitBounds from "../../components/MapData/FitBounds"
-import { useMap } from 'react-leaflet';
+import CardImageSlider from "../cardImageSlider/CardImageSlider";
+import { ShimmerContentBlock } from "react-shimmer-effects";
+import { useAuth } from "@/context/AuthProvider";
+import useTranslation from "@/hooks/useTranslation";
 
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png'
-});
 
-const defaultIcon = new L.Icon({
-  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-});
+const containerStyle = {
+  width: "100%",
+  height: "100vh"
+};
 
-const highlightIcon = new L.Icon({
-  // iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-red.png',
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-});
+
+const mapOptions = {
+  disableDefaultUI: false,
+  zoomControl: true
+};
 
 
 
-const tempProperties = [
-  {
-    property_name: "some random name",
-    post_for: "sell",
-    property_id: 1,
-    image_count: 2,
-    is_favorite: true,
-    user_name: "Sarah Thompson",
-    user_type: "A",
-    user_image: "http://localhost/realestate/hackground/public/user_upload/profile_image/1740136514-8.jpg",
-    property_name: null,
-    slug: null,
-    views: 0,
-    is_featured: 0,
-    is_populer: 0,
-    parking_ability: null,
-    property_type_for: "Apartments / Flats",
-    property_type: "Residential",
-    possession_status: null,
-    construct_year: null,
-    possession_month: null,
-    possession_year: null,
-    bedrooms: null,
-    bathroom: null,
-    unit_type: "sqm",
-    price_currency: null,
-    exp_price: 1400000,
-    price_per_sqft: 32512.77,
-    property_size: 4,
-    area_in_sqft: "43.06",
-    created_at: "2025-01-29 14:03:03",
-    address: "Kolkata",
-    address_lat: "22.5726",
-    address_lan: "88.3639",
-    galleries: []
-  },
-  {
-    property_name: "some random name",
-    post_for: "sell",
-    property_id: 2,
-    image_count: 1,
-    is_favorite: false,
-    user_name: "Ravi Mehta",
-    user_type: "A",
-    user_image: "http://localhost/realestate/hackground/public/user_upload/profile_image/dummy2.jpg",
-    property_name: null,
-    slug: null,
-    views: 12,
-    is_featured: 1,
-    is_populer: 0,
-    parking_ability: null,
-    property_type_for: "Apartments / Flats",
-    property_type: "Residential",
-    possession_status: null,
-    construct_year: null,
-    possession_month: null,
-    possession_year: null,
-    bedrooms: 2,
-    bathroom: 1,
-    unit_type: "sqm",
-    price_currency: null,
-    exp_price: 1800000,
-    price_per_sqft: 30000,
-    property_size: 6,
-    area_in_sqft: "60.00",
-    created_at: "2025-02-05 11:23:00",
-    address: "Shyambazar, Kolkata",
-    address_lat: "22.5855",
-    address_lan: "88.3460",
-    galleries: []
-  },
-  {
-    property_name: "some random name",
-    post_for: "sell",
-    property_id: 3,
-    image_count: 3,
-    is_favorite: true,
-    user_name: "Ayesha Khan",
-    user_type: "B",
-    user_image: "http://localhost/realestate/hackground/public/user_upload/profile_image/dummy3.jpg",
-    property_name: null,
-    slug: null,
-    views: 5,
-    is_featured: 0,
-    is_populer: 1,
-    parking_ability: null,
-    property_type_for: "Apartments / Flats",
-    property_type: "Residential",
-    possession_status: null,
-    construct_year: null,
-    possession_month: null,
-    possession_year: null,
-    bedrooms: 3,
-    bathroom: 2,
-    unit_type: "sqm",
-    price_currency: null,
-    exp_price: 2500000,
-    price_per_sqft: 35000,
-    property_size: 7,
-    area_in_sqft: "71.20",
-    created_at: "2025-03-10 09:15:00",
-    address: "Ballygunge, Kolkata",
-    address_lat: "22.5315",
-    address_lan: "88.3600",
-    galleries: []
-  },
-  {
-    property_name: "some random name",
-    post_for: "sell",
-    property_id: 4,
-    image_count: 1,
-    is_favorite: false,
-    user_name: "John D'Souza",
-    user_type: "A",
-    user_image: "http://localhost/realestate/hackground/public/user_upload/profile_image/dummy4.jpg",
-    property_name: null,
-    slug: null,
-    views: 0,
-    is_featured: 0,
-    is_populer: 0,
-    parking_ability: null,
-    property_type_for: "Apartments / Flats",
-    property_type: "Residential",
-    possession_status: null,
-    construct_year: null,
-    possession_month: null,
-    possession_year: null,
-    bedrooms: 1,
-    bathroom: 1,
-    unit_type: "sqm",
-    price_currency: null,
-    exp_price: 950000,
-    price_per_sqft: 28000,
-    property_size: 3,
-    area_in_sqft: "33.92",
-    created_at: "2025-04-01 08:40:00",
-    address: "Salt Lake Sector V, Kolkata",
-    address_lat: "22.5720",
-    address_lan: "88.3990",
-    galleries: []
-  },
-  {
-    property_name: "some random name",
-    post_for: "sell",
-    property_id: 5,
-    image_count: 2,
-    is_favorite: true,
-    user_name: "Meera Banerjee",
-    user_type: "B",
-    user_image: "http://localhost/realestate/hackground/public/user_upload/profile_image/dummy5.jpg",
-    property_name: null,
-    slug: null,
-    views: 18,
-    is_featured: 1,
-    is_populer: 1,
-    parking_ability: null,
-    property_type_for: "Apartments / Flats",
-    property_type: "Residential",
-    possession_status: null,
-    construct_year: null,
-    possession_month: null,
-    possession_year: null,
-    bedrooms: 4,
-    bathroom: 3,
-    unit_type: "sqm",
-    price_currency: null,
-    exp_price: 3200000,
-    price_per_sqft: 37000,
-    property_size: 9,
-    area_in_sqft: "86.48",
-    created_at: "2025-04-15 16:50:00",
-    address: "Tollygunge, Kolkata",
-    address_lat: "22.4995",
-    address_lan: "88.3192",
-    galleries: []
-  }
-];
-
-
-
-const ListingMapView = ({ propertyList, loading }) => {
-  const { formatPrice } = useAuth();
+export default function ListingMapView({ loading, propertyList }) {
   const translation = useTranslation();
-  const [previewPos, setPreviewPos] = useState(null);
-  const [hoveredPropertyIndex, setHoveredPropertyIndex] = useState(null);
-  const [clickedPropertyIndex, setClickedPropertyIndex] = useState(null);
-  const [hoveredPropertyData, setHoveredPropertyData] = useState(null);
+  const [center, setCenter] = useState({
+    lat: 0,
+    lng: 0
+  })
 
+  useEffect(() => {
+    if(propertyList?.length > 0) {
+      const firstProperty = propertyList[0]
+      setCenter({
+        lat: parseFloat(firstProperty?.address_lat),
+        lng: parseFloat(firstProperty?.address_lan)
+      })
+    }
+  }, [propertyList])
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+  })
+  const { formatPrice } = useAuth();
+  const [selectedMarker, setSelectedMarker] = useState(null);
+  const [hoveredProperty, setHoveredProperty] = useState(null);
 
   return (
-    <>
-
-      <div className="container-fluid">
-        <div className="row">
-          {/* Sidebar – Project Listings */}
-          <div className="col-lg p-4" style={{ background: "#f8f9fa", height: "100vh", overflowY: "auto" }}>
-            <h4 className="mb-4">New Projects in UAE</h4>
-
-            <div className="list-display">
-              {/* Show shimmer when loading */}
-              {loading ? (
-                <>
-                  <ShimmerContentBlock
-                    title
-                    text
-                    cta
-                    thumbnailWidth={350}
-                    thumbnailHeight={50}
-                  />
-                  <ShimmerContentBlock
-                    title
-                    text
-                    cta
-                    thumbnailWidth={350}
-                    thumbnailHeight={50}
-                  />
-                </>
-              ) : !loading && tempProperties?.length === 0 ? (
-                // Show No Result Found only when loading is false and no data is present
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "50vh",
-                    textAlign: "center",
-                    fontSize: "28px",
-                    fontWeight: "bold",
-                    color: "#555",
+    <div className="container-fluid">
+      <div className="row">
+        <div className="col-lg p-4" style={{ background: "#f8f9fa", height: "100vh", overflowY: "auto" }}>
+          <h4 className="mb-4">Property MapView</h4>
+          <div className="list-display">
+            {loading ? (
+              <>
+                <ShimmerContentBlock
+                  title
+                  text
+                  cta
+                  thumbnailWidth={350}
+                  thumbnailHeight={50}
+                />
+                <ShimmerContentBlock
+                  title
+                  text
+                  cta
+                  thumbnailWidth={350}
+                  thumbnailHeight={50}
+                />
+              </>
+            ) : !loading && propertyList?.length === 0 ? (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "50vh",
+                  textAlign: "center",
+                  fontSize: "28px",
+                  fontWeight: "bold",
+                  color: "#555",
+                }}
+              >
+                <p>{translation?.no_result_found || "No result found"}</p>
+              </div>
+            ) : (
+              propertyList?.map((property, i) => (
+                <div key={property.property_id} className={`card card-ads ${selectedMarker?.property_id == property?.property_id ? 'border border-primary bg-primary bg-opacity-10' : ''}`}
+                  onMouseEnter={() => {
+                    setHoveredProperty(property)
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredProperty(null)
                   }}
                 >
-                  <p>{translation?.no_result_found || "No result found"}</p>
-                </div>
-              ) : (
-                // Render Property Cards
-                tempProperties?.map((property, i) => (
-                  <div key={property.property_id} className={`card card-ads ${clickedPropertyIndex == i ? 'border border-primary bg-primary bg-opacity-10' : ''}`}
-                    onMouseEnter={() => {
-                      setHoveredPropertyIndex(i);
-                      setHoveredPropertyData(property);
-                    }}
-                    onMouseLeave={() => {
-                      setHoveredPropertyIndex(null);
-                      setHoveredPropertyData(null);
-                    }}
-                  >
-                    <div className="row g-0">
-                      <div className="col-lg-3 col-sm-3">
-                        <CardImageSlider
-                          data={property}
-                          showSq={true}
-                          icons={true}
-                          showFavIcon={false}
-                          addRemoveFav={() =>
-                            SaveFavouriteProperty(property.property_id)
-                          }
-                        />
-                      </div>
-                      <div className="col-lg-9 col-sm-9 position-relative">
-                        <div className="card-body">
-                          <h4 className="mb-1">
-                            <Link href={`/property-details/${property.slug}`}>
-                              {property.property_name}
-                            </Link>
-                          </h4>
-                          <h5 className="mb-0">
-                            {formatPrice(property?.exp_price) || "Price not Available"}
-                          </h5>
-                          <p className="mb-1">
-                          </p>
-                          <ul className="list-info mb-2">
-                            <li>
+                  <div className="row g-0">
+                    <div className="col-lg-3 col-sm-3">
+                      <CardImageSlider
+                        data={property}
+                        showSq={true}
+                        icons={true}
+                        showFavIcon={false}
+                      // addRemoveFav={() =>
+                      //   SaveFavouriteProperty(property.property_id)
+                      // }
+                      />
+                    </div>
+                    <div className="col-lg-9 col-sm-9 position-relative">
+                      <div className="card-body">
+                        <h4 className="mb-1">
+                          <Link href={`/property-details/${property.slug}`}>
+                            {property.property_name}
+                          </Link>
+                        </h4>
+                        <h5 className="mb-0">
+                          {formatPrice(property?.exp_price) || "Price not Available"}
+                        </h5>
+                        <p className="mb-1">
+                        </p>
+                        <ul className="list-info mb-2">
+                          <li>
+                            <i
+                              className="icon-img-bed"
+                              title="Bedrooms:"
+                            ></i>
+                            <span>
+                              {property?.bedrooms ? property.bedrooms : <span className="text-muted">Not Available</span>}
+                            </span>
+                            {property?.bedrooms && " Beds"}
+                          </li>
+                          <li>
+                            <i
+                              className="icon-img-tub"
+                              title="Bathrooms:"
+                            ></i>
+                            <span>
+                              {property?.bathroom ? property.bathroom : <span className="text-muted">Not Available</span>}
+                            </span>
+                            {property?.bathroom && " Bath"}
+                          </li>
+                          <li>
+                            {property?.area_in_sqft && (
                               <i
-                                className="icon-img-bed"
-                                title="Bedrooms:"
+                                className="icon-img-ratio"
+                                title="Carpet Area:"
                               ></i>
-                              <span>
-                                {property?.bedrooms ? property.bedrooms : <span className="text-muted">Not Available</span>}
-                              </span>
-                              {property?.bedrooms && " Beds"}
-                            </li>
-                            <li>
-                              <i
-                                className="icon-img-tub"
-                                title="Bathrooms:"
-                              ></i>
-                              <span>
-                                {property?.bathroom ? property.bathroom : <span className="text-muted">Not Available</span>}
-                              </span>
-                              {property?.bathroom && " Bath"}
-                            </li>
-                            <li>
-                              {property?.area_in_sqft && (
-                                <i
-                                  className="icon-img-ratio"
-                                  title="Carpet Area:"
-                                ></i>
-                              )}
-                              <span>
-                                {property?.area_in_sqft ? `${property?.area_in_sqft} sqft` : "Not Available"}{" "}
-                              </span>
-                              {property?.carpet_area && " Carpet Area"}
-                            </li>
-                            {property?.possession_status && (
-                              <li>
-                                <i
-                                  className="icon-img-check"
-                                  title="Possession Status"
-                                ></i>
-                                <span>{property.possession_status}</span>
-                              </li>
                             )}
+                            <span>
+                              {property?.area_in_sqft ? `${property?.area_in_sqft} sqft` : "Not Available"}{" "}
+                            </span>
+                            {property?.carpet_area && " Carpet Area"}
+                          </li>
+                          {property?.possession_status && (
+                            <li>
+                              <i
+                                className="icon-img-check"
+                                title="Possession Status"
+                              ></i>
+                              <span>{property.possession_status}</span>
+                            </li>
+                          )}
 
-                          </ul>
-                          <p>
-                            <span className="text-primary">
-                              <GeoAlt color="currentColor" size={14} />
-                            </span>{" "}
-                            {property.address || "Not Available"}
-                          </p>
-                        </div>
-                        <div className="card-footer d-flex justify-content-between align-items-center">
-                          <div className="d-flex">
-                            <img
-                              className="rounded-circle"
-                              src={`${property?.user_image ||
-                                "/assets/images/user.jpg"
-                                }`}
-                              alt="Company"
-                              height={36}
-                              width={36}
-                            />
-                            <div className="ps-2">
-                              <h6 className="mb-0">
-                                {property?.user_name || "User"}
-                              </h6>
-                              <p className="small text-muted">
-                                {property?.user_type === "A"
-                                  ? "Agent"
-                                  : property?.user_type === "/"
-                                    ? "Builder"
-                                    : property?.user_type === "O"
-                                      ? "Owner"
-                                      : "Not Available"}
-                              </p>
-                            </div>
+                        </ul>
+                        <p>
+                          <span className="text-primary">
+                            <GeoAlt color="currentColor" size={14} />
+                          </span>{" "}
+                          {property.address || "Not Available"}
+                        </p>
+                      </div>
+                      <div className="card-footer d-flex justify-content-between align-items-center">
+                        <div className="d-flex">
+                          <img
+                            className="rounded-circle"
+                            src={`${property?.user_image ||
+                              "/assets/images/user.jpg"
+                              }`}
+                            alt="Company"
+                            height={36}
+                            width={36}
+                          />
+                          <div className="ps-2">
+                            <h6 className="mb-0">
+                              {property?.user_name || "User"}
+                            </h6>
+                            <p className="small text-muted">
+                              {property?.user_type === "A"
+                                ? "Agent"
+                                : property?.user_type === "/"
+                                  ? "Builder"
+                                  : property?.user_type === "O"
+                                    ? "Owner"
+                                    : "Not Available"}
+                            </p>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                ))
-              )}
-            </div>
+                </div>
+              ))
+            )}
           </div>
-
-          {/* Map Container */}
-          <div className="col-lg p-0">
-            <div style={{ height: '900px', width: '100%' }}>
-              <MapContainer
-                center={[22.5726, 88.3639]}
-                zoom={13}
-                style={{ height: '100%', width: '100%' }}
+        </div>
+        <div className="col-lg p-0">
+          <div style={{ height: '900px', width: '100%' }}>
+            {isLoaded ? (<>
+              <GoogleMap
+                mapContainerStyle={containerStyle}
+                center={center}
+                zoom={12}
+                options={mapOptions}
               >
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                />
-
-                <FitBounds
-                  markers={tempProperties.map(p => [
-                    parseFloat(p.address_lat),
-                    parseFloat(p.address_lan),
-                  ])}
-                />
-
-                <HoverPreview
-                  hoveredPropertyData={hoveredPropertyData}
-                  setPreviewPos={setPreviewPos}
-                />
-
-                {tempProperties?.length > 0 && tempProperties?.map((property, i) => {
+                {propertyList?.map((property) => {
                   return (
                     <Marker
-                      key={i}
-                      position={[property?.address_lat, property?.address_lan]}
-                      icon={i === hoveredPropertyIndex ? highlightIcon : defaultIcon}
-                      eventHandlers={{
-                        click: () => {
-                          setHoveredPropertyIndex(i);
-                          setClickedPropertyIndex(i);
-                          setHoveredPropertyData(property);
-                        }
+                      key={property.id}
+                      position={{
+                        lat: parseFloat(property.address_lat),
+                        lng: parseFloat(property.address_lan)
                       }}
-                    >
-                      {i === hoveredPropertyIndex && hoveredPropertyData && (
-                        <Tooltip
-                          direction="top"
-                          offset={[0, -10]}
-                          permanent
-                          className="custom-tooltip"
-                        >
-                          <div style={{ width: 200 }}>
-                            <img
-                              src='/assets/images/property/default-property-1.jpg'
-                              alt=""
-                              style={{ width: '100%', height: 80, objectFit: 'cover' }}
-                            />
-                            <h6 style={{ margin: '10px 0 5px' }}>{hoveredPropertyData.property_name}</h6>
-                            <small>{hoveredPropertyData.address}</small>
-                          </div>
-                        </Tooltip>
-                      )}
-                    </Marker>
+                      icon={
+                        hoveredProperty == property.property_id
+                          ? 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                          : undefined
+                      }
+                      animation={
+                        hoveredProperty == property.property_id && window?.google
+                          ? window.google.maps.Animation.BOUNCE
+                          : undefined
+                      }
+                      onClick={() => setSelectedMarker(property)}
+                    />
                   )
                 })}
-              </MapContainer>
-            </div>
+                {/* {selectedMarker && (
+                  <InfoWindow
+                    position={{
+                      lat: parseFloat(selectedMarker?.address_lat),
+                      lng: parseFloat(selectedMarker?.address_lan)
+                    }}
+                    onCloseClick={() => setSelectedMarker(null)}
+                  >
+                    <div style={{ maxWidth: "200px" }}>
+                      <img
+                        src={
+                          selectedMarker.galleries?.[0]?.images?.[0]?.image_url ||
+                          "/assets/images/property/default-property-1.jpg"
+                        }
+                        alt="Property"
+                        style={{ width: "100%", height: "100px", objectFit: "cover", borderRadius: "4px" }}
+                      />
+                      <h6 style={{ margin: "8px 0 4px" }}>{selectedMarker.property_name}</h6>
+                      <p style={{ fontSize: "12px", margin: 0 }}>{selectedMarker.address}</p>
+                    </div>
+                  </InfoWindow>
+                )} */}
+                {hoveredProperty && !selectedMarker && (
+                  <InfoWindow
+                    position={{
+                      lat: parseFloat(hoveredProperty.address_lat),
+                      lng: parseFloat(hoveredProperty.address_lan)
+                    }}
+                    onCloseClick={() => setHoveredMarkerId(null)}
+                  >
+                    <div style={{ maxWidth: '200px' }}>
+                      <img
+                        src={
+                          hoveredProperty.galleries?.[0]?.images?.[0]?.image_url ||
+                          '/assets/images/property/default-property-1.jpg'
+                        }
+                        alt="Property"
+                        style={{
+                          width: '100%',
+                          height: '100px',
+                          objectFit: 'cover',
+                          borderRadius: '4px'
+                        }}
+                      />
+                      <h6 style={{ margin: '8px 0 4px' }}>{hoveredProperty.property_name}</h6>
+                      <p style={{ fontSize: '12px', margin: 0 }}>{hoveredProperty.address}</p>
+                    </div>
+                  </InfoWindow>
+                )}
+
+                {selectedMarker && (
+                  <InfoWindow
+                    position={{
+                      lat: parseFloat(selectedMarker.address_lat),
+                      lng: parseFloat(selectedMarker.address_lan)
+                    }}
+                    onCloseClick={() => setSelectedMarker(null)}
+                  >
+                    <div style={{ maxWidth: '200px' }}>
+                      <img
+                        src={
+                          selectedMarker.galleries?.[0]?.images?.[0]?.image_url ||
+                          '/assets/images/property/default-property-1.jpg'
+                        }
+                        alt="Property"
+                        style={{
+                          width: '100%',
+                          height: '100px',
+                          objectFit: 'cover',
+                          borderRadius: '4px'
+                        }}
+                      />
+                      <h6 style={{ margin: '8px 0 4px' }}>{selectedMarker.property_name}</h6>
+                      <p style={{ fontSize: '12px', margin: 0 }}>{selectedMarker.address}</p>
+                    </div>
+                  </InfoWindow>
+                )}
+
+
+              </GoogleMap>
+            </>) : (<>
+              <div>Loading...</div>
+            </>)}
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
-
-export default ListingMapView;
-
-
-
-const HoverPreview = ({ hoveredPropertyData, setPreviewPos }) => {
-  const map = useMap();
-
-  useEffect(() => {
-    if (hoveredPropertyData && map) {
-      const latLng = L.latLng(
-        hoveredPropertyData.address_lat,
-        hoveredPropertyData.address_lan
-      );
-      const containerPoint = map.latLngToContainerPoint(latLng);
-      setPreviewPos(containerPoint);
-    }
-  }, [hoveredPropertyData, map]);
-
-  return null; // This component is only for logic
-};
