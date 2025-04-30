@@ -1134,6 +1134,7 @@ class ApiModel extends Model
         return $data;
     }
 
+
     public function searchProject($data, $user_id, $hasLatLang)
     {
         // log::info($data);
@@ -1148,13 +1149,10 @@ class ApiModel extends Model
                 'location:project_id,locality,city,address,latitude,longitude',
                 'gallery:id,project_id,image_type',
                 'gallery.images:gallary_id,filename,caption'
-            ])
-            ->get();
+            ]);
 
-        // log::info('$filteredData' . json_encode($query, JSON_PRETTY_PRINT));
-
-
-        $filteredData = $query->filter(function ($project) use ($data, $hasLatLang) {
+        // Now call get() and filter right after
+        $filteredData = $query->get()->filter(function ($project) use ($data, $hasLatLang) {
 
             $settings = $project->settings;
             $location = $project->location;
@@ -1177,7 +1175,6 @@ class ApiModel extends Model
                 }
             }
 
-
             if (!empty($data['locality'])) {
                 if (!$location || ($location->locality == $data['locality']) === false) {
                     return false;
@@ -1190,9 +1187,7 @@ class ApiModel extends Model
                 }
             }
 
-
             if (!empty($data['project_amenity'])) {
-
                 $selectedAmenities = array_map('intval', $data['project_amenity']);
                 $projectAmenities = $additional->project_amenity ? json_decode($additional->project_amenity, true) : [];
                 if (empty(array_intersect($selectedAmenities, $projectAmenities))) {
@@ -1268,102 +1263,11 @@ class ApiModel extends Model
                 }
             }
 
-
             return true;
         });
+
         return $filteredData;
     }
-
-    // public function searchProject($filters, $user_id)
-    // {
-    //     // Start query with essential conditions
-    //     $query = PrefProject::where('uid', '!=', $user_id)
-    //         ->where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
-    //         ->where('status', config('constants.STATUS_ACTIVE'))
-    //         ->with([
-    //             'settings:project_id,project_budget,post_for,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type,area_in_sqft',
-    //             'additional:project_id,main_road_facing,project_amenity,possession_status,currency,token_amount,expected_price,developer_details,developer_name',
-    //             'location:project_id,locality,city,address',
-    //             'gallery:id,project_id,image_type',
-    //             'gallery.images:gallary_id,filename,caption'
-    //         ]);
-
-    //     // Apply filters to query
-    //     if (isset($filters['city_id'])) {
-    //         $query->whereHas('location', function ($q) use ($filters) {
-    //             $cityIds = explode(',', $filters['city_id']);
-    //             $q->whereIn('city', $cityIds);
-    //         });
-    //     }
-
-    //     if (isset($filters['locality'])) {
-    //         $query->whereHas('location', function ($q) use ($filters) {
-    //             $q->where('locality', $filters['locality']);
-    //         });
-    //     }
-
-    //     if (isset($filters['project_name'])) {
-    //         $query->where('project_name', 'LIKE', '%' . $filters['project_name'] . '%');
-    //     }
-
-    //     if (!empty($filters['project_amenity'])) {
-    //         $query->whereHas('additional', function ($q) use ($filters) {
-    //             $q->whereJsonContains('project_amenity', array_map('intval', (array) $filters['project_amenity']));
-    //         });
-    //     }
-
-    //     if (isset($filters['project_furnish'])) {
-    //         $query->whereHas('settings', function ($q) use ($filters) {
-    //             $q->whereIn('project_furnish', (array) $filters['project_furnish']);
-    //         });
-    //     }
-
-    //     if (isset($filters['parking_availability'])) {
-    //         $query->whereHas('settings', function ($q) use ($filters) {
-    //             $q->whereIn('parking_availability', array_map('strtolower', (array) $filters['parking_availability']));
-    //         });
-    //     }
-
-    //     if (isset($filters['project_facing'])) {
-    //         $query->whereHas('settings', function ($q) use ($filters) {
-    //             $q->whereIn('project_facing', array_map('strtolower', (array) $filters['project_facing']));
-    //         });
-    //     }
-
-    //     if (isset($filters['total_towers'])) {
-    //         $query->whereHas('settings', function ($q) use ($filters) {
-    //             $q->whereIn('total_towers', (array) $filters['total_towers']);
-    //         });
-    //     }
-
-    //     if (isset($filters['project_type'])) {
-    //         $query->whereHas('settings', function ($q) use ($filters) {
-    //             $q->where('project_type', $filters['project_type']);
-    //         });
-    //     }
-
-    //     if (isset($filters['project_for'])) {
-    //         $query->whereHas('settings', function ($q) use ($filters) {
-    //             $q->where('post_for', $filters['project_for']);
-    //         });
-    //     }
-
-    //     if (isset($filters['possession_status'])) {
-    //         $query->whereHas('additional', function ($q) use ($filters) {
-    //             $q->where('possession_status', $filters['possession_status']);
-    //         });
-    //     }
-
-    //     if (isset($filters['min_price']) || isset($filters['max_price'])) {
-    //         $query->whereHas('additional', function ($q) use ($filters) {
-    //             $minPrice = $filters['min_price'] ?? 0;
-    //             $maxPrice = $filters['max_price'] ?? PHP_INT_MAX;
-    //             $q->whereBetween('expected_price', [$minPrice, $maxPrice]);
-    //         });
-    //     }
-
-    //     return $query->get();
-    // }
 
 
 
