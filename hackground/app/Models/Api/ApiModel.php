@@ -1168,10 +1168,15 @@ class ApiModel extends Model
             }
 
             if ($hasLatLang == 1) {
-                if (!$location || $location->latitude == null || $location->latitude == '' || $location->longitude == null || $location->longitude == '') {
+                if (
+                    !$location ||
+                    empty($location->latitude) ||
+                    empty($location->longitude)
+                ) {
                     return false;
                 }
             }
+
 
             if (!empty($data['locality'])) {
                 if (!$location || ($location->locality == $data['locality']) === false) {
