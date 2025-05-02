@@ -466,7 +466,7 @@ class PropertyDetailsController extends Controller
                         'main_road_facing' => $property->faces_main_road,
                         'galleries' => $transformedData != null ? $transformedData : $formattedPropertyGalleries,
                         'address' => $property->property_address,
-                        'locality' => $property->locality,
+                        'locality' => get_name_by_id('locality_names', 'locality_id', $property->locality, 'en'),
                         'latitude' => $property->latitude,
                         'longitude' => $property->longitude,
                         'created_at' => $property->created_at,
