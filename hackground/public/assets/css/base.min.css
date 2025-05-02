@@ -35437,9 +35437,15 @@ button.toast-close-button {
     cursor: pointer;
     background: 0 0;
     border: 0;
+    color: #fff;
+    opacity: 0.85;
     -webkit-appearance: none
 }
-
+button.toast-close-button:focus,
+button.toast-close-button:hover {
+    color: #fff;
+    opacity: 1;
+}
 .toast-top-center {
     top: 0;
     right: 0;
