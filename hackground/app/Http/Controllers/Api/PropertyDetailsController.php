@@ -334,26 +334,24 @@ class PropertyDetailsController extends Controller
                         ->sortByDesc('overall_rating')
                         ->values();
 
-                        log_anything($property_review);
-
                     // Transform data in one go
                     $property_review->transform(function ($item) {
+                        $raterUserImage = User::select('image')->where('id', $item->user_id)->first();
                         $item->overall_rating = (float) $item->overall_rating;
                         $item->name = get_user_name($item->user_id ?? null);
+                        $item->review_image = !empty($raterUserImage->image) ? asset('user_upload/profile_image/' . $raterUserImage->image) : '';
                         unset($item->user_id);
                         return $item;
                     });
 
                     $total_count = $property_review->count();
                     $average_rating_on_this_property = $property_review->avg('overall_rating');
-                    log_anything('avarage reviews'.$average_rating_on_this_property);
 
                     //TOP AGENT LIST
                     $topAgentList = propertyTopAgentList($property->locality) ?? [];
 
                     //USER's DETAILS
                     $userDetails = User::with('userAdditional')->find($property->uid);
-
                     $userPropertyCounts = UsersPropertyCount($property->uid);
 
                     //rating calculation if user is a AGENT
