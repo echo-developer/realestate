@@ -437,7 +437,7 @@ class HomeController extends Controller
         try {
             $city_id = $request->input('city_id');
 
-            $data = User::with(['userAdditional', 'agentAdditional'])
+            $data = User::with(['userAdditional', 'agentAdditional', 'serviceArea:agent_id,city'])
                 ->where([
                     ['status', config('constants.STATUS_ACTIVE')],
                     ['user_type', 'A'],
@@ -445,7 +445,7 @@ class HomeController extends Controller
                 ]);
 
             if (!empty($city_id)) {
-                $data->whereHas('userAdditional', function ($query) use ($city_id) {
+                $data->whereHas('serviceArea', function ($query) use ($city_id) {
                     $query->where('city', $city_id);
                 });
             }
@@ -796,6 +796,4 @@ class HomeController extends Controller
             ]);
         }
     }
-
-    
 }
