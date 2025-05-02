@@ -62,7 +62,7 @@ class PropertyDetailsController extends Controller
                 'galleries.images:id,gallary_id,filename,caption',
             )
             ->first();
-            
+
         if ($property) {
             $property->increment('views');
             if ($property->views >= 10) {
@@ -328,24 +328,27 @@ class PropertyDetailsController extends Controller
                             'review_title',
                             'review_description',
                             'user_relation'
-                        )->where('property_reviews.property_id', '=', $property->property_id)
+                        )
+                        ->where('property_reviews.property_id', '=', $property->property_id)
                         ->get()
                         ->sortByDesc('overall_rating')
                         ->values();
 
+                        log_anything($property_review);
+
+                    // Transform data in one go
+                    $property_review->transform(function ($item) {
+                        $item->overall_rating = (float) $item->overall_rating;
+                        $item->name = get_user_name($item->user_id ?? null);
+                        unset($item->user_id);
+                        return $item;
+                    });
+
                     $total_count = $property_review->count();
-                    $average_rating = round($property_review->avg('overall_rating'), 1);
-
-
-                    $property_review->map(function ($items) {
-
-                        $items->name = get_user_name($items->user_id ?? null);
-                        unset($items->user_id);
-                        return $items;
-                    })->values();
+                    $average_rating_on_this_property = $property_review->avg('overall_rating');
+                    log_anything('avarage reviews'.$average_rating_on_this_property);
 
                     //TOP AGENT LIST
-
                     $topAgentList = propertyTopAgentList($property->locality) ?? [];
 
                     //USER's DETAILS
@@ -506,7 +509,7 @@ class PropertyDetailsController extends Controller
                         'similar_properties' => $flattenedSimilarProperties,
                         'landmarks' => reset($landmarks),
                         'property_reviews' => [
-                            'rating' => $average_rating ?? null,
+                            'rating' => $average_rating_on_this_property ?? null,
                             'total_reviews' => $total_count ?? null,
                             'reviews' => $property_review ?? [],
                         ]

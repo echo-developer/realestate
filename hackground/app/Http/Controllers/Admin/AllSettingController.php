@@ -33,7 +33,6 @@ class AllSettingController extends Controller
     public function addnewSetting(Request $request)
     {
 
-        // return response($request);
 
         $validate_setting = $request->validate(
             [
@@ -54,6 +53,8 @@ class AllSettingController extends Controller
             'deletable' => $validate_setting['Deletable'],
             'setting_group' => $validate_setting['Groups'],
         ];
+        $insert_setting['display_order'] = $request->Display_Order;
+        
 
         $all_setting = AllSettings::create($insert_setting);
 
@@ -71,7 +72,7 @@ class AllSettingController extends Controller
 
     public function allSetting_update(Request $request)
     {
-
+        // log_anything($request->all());
         $validate_setting = $request->validate(
             [
 
@@ -95,6 +96,7 @@ class AllSettingController extends Controller
 
             'setting_group' => $validate_setting['Groups'],
         ];
+        $updated_setting['display_order'] = $request->Display_Order;
 
         $upd_setting = AllSettings::where('id', $request->settingsId)->update($updated_setting);
 
