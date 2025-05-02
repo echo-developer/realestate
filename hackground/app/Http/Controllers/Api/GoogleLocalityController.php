@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\LocalityAreaPrice;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use SebastianBergmann\CodeUnit\FunctionUnit;
-use Illuminate\Support\Str;
 
 class GoogleLocalityController extends Controller
 {
@@ -166,5 +167,32 @@ class GoogleLocalityController extends Controller
             ->where('locality.locality_key', $slug)
             ->where('locality_names.lang', $lang)
             ->exists();
+    }
+    public function getYearlyPriceTrend()
+    {
+        $data = (new LocalityAreaPrice())->getYearlyTrendData();
+
+        // Group data by price_for (prop or proj)
+        $grouped = [
+            'property_price_trend' => [],
+            'project_price_trend' => [],
+        ];
+
+        foreach ($data as $item) {
+            $entry = [
+                'locality_id' => $item->locality,
+                'locality_name' =>get_name_by_id("locality_names", "locality_id", $item->locality, "en"),
+                'year' => $item->year,
+                'avg_price_per_sqft' => $item->price_per_sqft,
+            ];
+
+            if ($item->price_for === 'prop') {
+                $grouped['property_price_trend'][] = $entry;
+            } elseif ($item->price_for === 'proj') {
+                $grouped['project_price_trend'][] = $entry;
+            }
+        }
+
+        return response()->json(['status'=>1,'data'=>$grouped]);
     }
 }

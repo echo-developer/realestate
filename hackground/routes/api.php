@@ -1,43 +1,44 @@
 <?php
 
-use App\Http\Controllers\Admin\FaqListController;
-use App\Http\Controllers\Admin\PaymentMethodController;
-use App\Http\Controllers\Api\AdvanceSearchController;
-use App\Http\Controllers\Api\AdvertisementController;
-use App\Http\Controllers\Api\AgentDetailsController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\CmsController;
+use App\Http\Controllers\Api\FaqController;
+use App\Http\Controllers\Api\OtpController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BankController;
 use App\Http\Controllers\Api\ChatController;
-use App\Http\Controllers\Api\CmsController;
-use App\Http\Controllers\Api\DashboardController;
-use App\Http\Controllers\Api\Enquery_CRM_Controller;
-
-use App\Http\Controllers\Api\FaqController;
-use App\Http\Controllers\Api\FloorPlaningController;
-use App\Http\Controllers\Api\GoogleLocalityController;
 use App\Http\Controllers\Api\HomeController;
-use App\Http\Controllers\Api\OtpController;
-use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PostController;
-use App\Http\Controllers\Api\Project\ImageEditController;
-use App\Http\Controllers\Api\Project\PostProjectController;
-use App\Http\Controllers\Api\Project\ProjectDashboardController;
-use App\Http\Controllers\Api\Project\ProjectDeleteController;
-use App\Http\Controllers\Api\Project\ProjectDetailsController;
-use App\Http\Controllers\Api\Project\ProjectEditController;
-use App\Http\Controllers\Api\Project\ProjectHomeController;
-use App\Http\Controllers\Api\Project\ProjectImageUploade;
-use App\Http\Controllers\Api\Project\ProjectListandSearchController;
-use App\Http\Controllers\Api\Project\ProjectPropertyController;
-use App\Http\Controllers\Api\PropertyController;
-use App\Http\Controllers\Api\PropertyDetailsController;
-use App\Http\Controllers\Api\PropertyEditController;
-use App\Http\Controllers\Api\PropertyUpdateControler;
 use App\Http\Controllers\Api\SeachController;
+
+use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\PropertyController;
+use App\Http\Controllers\Admin\FaqListController;
+use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Admin\AreaPriceController;
+use App\Http\Controllers\Api\AgentDetailsController;
+use App\Http\Controllers\Api\Enquery_CRM_Controller;
+use App\Http\Controllers\Api\FloorPlaningController;
+use App\Http\Controllers\Api\PropertyEditController;
+use App\Http\Controllers\Api\AdvanceSearchController;
+use App\Http\Controllers\Api\AdvertisementController;
+use App\Http\Controllers\Api\PropertyUpdateControler;
+use App\Http\Controllers\Api\GoogleLocalityController;
 use App\Http\Controllers\Api\UserMembershipController;
 use App\Http\Controllers\Api\VerifyUserMailController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\PaymentMethodController;
+use App\Http\Controllers\Api\PropertyDetailsController;
+use App\Http\Controllers\Api\Project\ImageEditController;
+use App\Http\Controllers\Api\Project\ProjectImageUploade;
+use App\Http\Controllers\Api\Project\PostProjectController;
+use App\Http\Controllers\Api\Project\ProjectEditController;
+use App\Http\Controllers\Api\Project\ProjectHomeController;
+use App\Http\Controllers\Api\Project\ProjectDeleteController;
+use App\Http\Controllers\Api\Project\ProjectDetailsController;
+use App\Http\Controllers\Api\Project\ProjectPropertyController;
+use App\Http\Controllers\Api\Project\ProjectDashboardController;
+use App\Http\Controllers\Api\Project\ProjectListandSearchController;
 
 
 
@@ -333,3 +334,4 @@ Route::get('/faq-lists', [FaqController::class, 'fetchFaqListsforAPI'])->name('f
 
 Route::get('/global-localities', [GoogleLocalityController::class, 'getGoogletLocalities'])->name('get.localities');
 Route::get('/stored-localities', [GoogleLocalityController::class, 'fetchLocalityfromDatabase'])->name('get.localities.database');
+Route::get('/yearly-price-trend', [GoogleLocalityController::class, 'getYearlyPriceTrend']);

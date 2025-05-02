@@ -42,24 +42,18 @@
             margin-top: 1rem;
         }
     </style>
-    @if (session('success_msg'))
-    <div class="alert alert-{{ session('message_type') }}">
-        {{ session('success_msg') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert">
-            
-        </button>
-    </div>
-    @endif
+
+
     <div class="main-card mb-3 card">
         <div class="card-body">
-            <ul class="nav nav-tabs" id="priceTab" role="tablist">
+            <ul class="nav nav-underline mb-3" id="priceTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="area-price-tab" data-toggle="tab" href="#area-price" role="tab" aria-controls="area-price" aria-selected="true">
+                    <a class="nav-link active" id="area-price-tab" data-bs-toggle="tab" href="#area-price" role="tab" aria-controls="area-price" aria-selected="true">
                         Property Area Price
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="project-tab" data-toggle="tab" href="#project" role="tab" aria-controls="project" aria-selected="false">
+                    <a class="nav-link" id="project-tab" data-bs-toggle="tab" href="#project" role="tab" aria-controls="project" aria-selected="false">
                         Project Area Price
                     </a>
                 </li>
@@ -129,6 +123,8 @@
         </div>
     </div>
 
+
+
 </div>
 @endsection
 
@@ -140,7 +136,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="ModalLabel"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    
+
                 </button>
             </div>
             <div class="modal-body">

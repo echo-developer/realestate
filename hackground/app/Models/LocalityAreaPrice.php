@@ -44,7 +44,7 @@ class LocalityAreaPrice extends Model
 
         return $propertyData;
     }
-    
+
     public function getProjectLocationPrice()
     {
 
@@ -76,5 +76,14 @@ class LocalityAreaPrice extends Model
     ", [$latestProjectYear]);
 
         return $projectData;
+    }
+
+    public function getYearlyTrendData()
+    {
+        return DB::table('area_locality_price')
+            ->select('locality', 'year', 'price_for', 'price_per_sqft')
+            ->orderBy('locality')
+            ->orderBy('year')
+            ->get();
     }
 }
