@@ -204,7 +204,7 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <!-- Displaying Project Name (Assuming `name` exists) -->
-                                <h4><a href="{{ url('project/project_details') }}/{{ $proj->id }}">{{ $proj->project_name }}</a></h4>
+                                <h4><a href="{{ url('project/edit') }}/{{ $proj->id }}">{{ $proj->project_name }}</a></h4>
 
                                 <span>                                
                                     <a href="{{ url('/enquiry/project-leads/' . $proj->id) }}" title="View Leads"><i class="ri-eye-fill"></i></a>

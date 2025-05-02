@@ -50,135 +50,138 @@
                 <div class="offset-sm-8 col-sm-4">
                     <div class="input-group">
                         <input class="form-control" id="prop_transaction_search" placeholder="Search..." name="term" value="{{ request('term') }}" />
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </form> --}}
-
-    <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header p-0">
-                <h4>Lead Details</h4>
-                <ul>
-                    <li>
-                        @if($enquiry->property_id)
-                          Property Name: {{ $enquiry->property_name }}
-                          @elseif($enquiry->project_id)
-                          Project Name: {{ $enquiry->project_name }}
-                        @endif
-                        
-                    </li>
-                    <li>Owner Name: {{ $enquiry->owner }}</li>
-                </ul>
-                <ul>
-                    <li>Customer Name: {{ $enquiry->customer }}</li>
-                    <li>Customer Phone: {{ $enquiry->customer_phone }}</li>
-                </ul>
-                <ul>
-                    <li>Customer Email: {{ $enquiry->customer_email }}</li>
-                </ul>
-                
-                <ul>
-                    <li>Posted On: {{ date('d-M-Y', strtotime($enquiry->created_at)) }}</li>
-                    <li>Message: {{ $enquiry->message }}</li>
-                </ul>
-                
-            </div>
-        </div>
+    <div class="input-group-append">
+        <button type="submit" class="btn btn-primary">
+            <i class="fa fa-search"></i>
+        </button>
     </div>
+</div>
+</div>
+</div>
+</section>
+</form> --}}
 
-    <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav ml-0">
-        <li class="nav-item">
-            <a class="nav-link ajax-link {{ Request::is('enquiry/assign-list/'.$enquiry->enquery_id) ? 'active' : '' }}"
-                href="{{ url('enquiry/assign-list/'.$enquiry->enquery_id) }}" data-url="{{ url('enquiry/assign-list/'.$enquiry->enquery_id) }}">
-                <span>Unassigned</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link ajax-link {{ Request::is('enquiry/assign-list/assigned/'.$enquiry->enquery_id) ? 'active' : '' }}"
-                href="{{ url('enquiry/assign-list/assigned/'.$enquiry->enquery_id) }}" data-url="{{ url('enquiry/assign-list/assigned/'.$enquiry->enquery_id) }}">
-                <span>Assigned</span>
-            </a>
-        </li>
-    </ul>
+<div class="main-card mb-3 card">
+    <div class="card-header">
+        <h4>Lead Details</h4>
+    </div>
+    <div class="card-body">
 
-
-    <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> {{ $title }}
-                @if($assign_type == 'unassigned')  
-                    <div class="btn-actions-pane-right">
-                        <button type="button" class="btn btn-sm btn-success" onclick="assign()">Assign</button>
-                    </div>
+        <ul class="list list-2">
+            <li>
+                @if($enquiry->property_id)
+                <b>Property Name:</b> {{ $enquiry->property_name }}
+                @elseif($enquiry->project_id)
+                <b>Project Name:</b> {{ $enquiry->project_name }}
                 @endif
 
-            </div>
+            </li>
+            <li><b>Owner Name:</b> {{ $enquiry->owner }}</li>
+        </ul>
+        <ul class="list list-2">
+            <li><b>Customer Name:</b> {{ $enquiry->customer }}</li>
+            <li><b>Customer Phone:</b> {{ $enquiry->customer_phone }}</li>
+        </ul>
+        <ul class="list list-2">
+            <li><b>Customer Email:</b> {{ $enquiry->customer_email }}</li>
+        </ul>
 
-            <div class="table-responsive" id="assign_table">
-                <form id="assign-form">
-                    <input type="hidden" name="enquery_id" value="{{ $enquiry->enquery_id }}" />
-                    <table id="myTable" class="mb-0 table">
-                        <thead>
-                            <tr>
-                                @if($assign_type == 'unassigned')
-                                <th style="width:5%">Check</th>
-                                @endif
-                                <th style="width:5%">User ID</th>
-                                <th style="width:10%">Member Name</th>
-                                <th style="width:10%">Leads Used</th>
-                                @if($assign_type == 'assigned')
-                                    <th style="width:10%">Assigned Date</th>  
-                                    <th style="width:10%">Action</th>
-                                @endif
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($list as $item)
-                                @php 
-                                    $is_clickable = 0;
-                                @endphp
-                                @if($item->leads > $item->leads_used)
-                                @php
-                                    $is_clickable = 1;
-                                @endphp
-                                @endif
-                                <tr>
-                                    @if($assign_type == 'unassigned')
-                                    <td>
-                                        <input name="userid[]" value="{{ $item->user_id }}" type="checkbox" class="user-selected" {{ !$is_clickable ? 'disabled' : '' }} />
-                                    </td>
-                                    @endif
-                                    <td>{{ $item->user_id }}</td>
-                                    <td>{{ $item->member_name }}</td>
-                                    <td>{{ $item->leads ? $item->leads_used.'/'.$item->leads : '0/0'; }}</td>
-                                    @if($assign_type == 'assigned')
-                                    <td>{{ $item->created_at ? date('d-M-Y',strtotime($item->created_at)) : ''; }}</td>
-                                    <td>  
-                                        <a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Remove from assigned list" class="allUsersDeleteButton" user-id="{{ $item->user_id }}" onclick="remove_assigned('{{ $item->assign_id }}')"><i class="fa fa-trash text-danger fa-md"></i>
-                                        </a>
-                                    </td>
-                                    @endif
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="4" class="text-center" >Sorry, no records found!</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </form>
-            </div>
+        <ul class="list list-2">
+            <li><b>Posted On:</b> {{ date('d-M-Y', strtotime($enquiry->created_at)) }}</li>
+            <li><b>Message:</b> {{ $enquiry->message }}</li>
+        </ul>
 
-            {!! $list->links('vendor.pagination.bootstrap-5') !!}
 
-            <?php /* ?>
+    </div>
+</div>
+
+<ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav ml-0">
+    <li class="nav-item">
+        <a class="nav-link ajax-link {{ Request::is('enquiry/assign-list/'.$enquiry->enquery_id) ? 'active' : '' }}"
+            href="{{ url('enquiry/assign-list/'.$enquiry->enquery_id) }}" data-url="{{ url('enquiry/assign-list/'.$enquiry->enquery_id) }}">
+            <span>Unassigned</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link ajax-link {{ Request::is('enquiry/assign-list/assigned/'.$enquiry->enquery_id) ? 'active' : '' }}"
+            href="{{ url('enquiry/assign-list/assigned/'.$enquiry->enquery_id) }}" data-url="{{ url('enquiry/assign-list/assigned/'.$enquiry->enquery_id) }}">
+            <span>Assigned</span>
+        </a>
+    </li>
+</ul>
+
+
+<div class="main-card mb-3 card">
+    <div class="card-header d-flex">
+        {{ $title }}
+        @if($assign_type == 'unassigned')
+        <div class="btn-actions-pane-right">
+            <button type="button" class="btn btn-sm btn-success" onclick="assign()">Assign</button>
+        </div>
+        @endif
+
+    </div>
+    <div class="card-body">
+
+
+        <div class="table-responsive" id="assign_table">
+            <form id="assign-form">
+                <input type="hidden" name="enquery_id" value="{{ $enquiry->enquery_id }}" />
+                <table id="myTable" class="mb-0 table">
+                    <thead>
+                        <tr>
+                            @if($assign_type == 'unassigned')
+                            <th style="width:5%">Check</th>
+                            @endif
+                            <th style="width:5%">User ID</th>
+                            <th style="width:10%">Member Name</th>
+                            <th style="width:10%">Leads Used</th>
+                            @if($assign_type == 'assigned')
+                            <th style="width:10%">Assigned Date</th>
+                            <th style="width:10%">Action</th>
+                            @endif
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($list as $item)
+                        @php
+                        $is_clickable = 0;
+                        @endphp
+                        @if($item->leads > $item->leads_used)
+                        @php
+                        $is_clickable = 1;
+                        @endphp
+                        @endif
+                        <tr>
+                            @if($assign_type == 'unassigned')
+                            <td>
+                                <input name="userid[]" value="{{ $item->user_id }}" type="checkbox" class="user-selected" {{ !$is_clickable ? 'disabled' : '' }} />
+                            </td>
+                            @endif
+                            <td>{{ $item->user_id }}</td>
+                            <td>{{ $item->member_name }}</td>
+                            <td>{{ $item->leads ? $item->leads_used.'/'.$item->leads : '0/0'; }}</td>
+                            @if($assign_type == 'assigned')
+                            <td>{{ $item->created_at ? date('d-M-Y',strtotime($item->created_at)) : ''; }}</td>
+                            <td>
+                                <a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Remove from assigned list" class="allUsersDeleteButton" user-id="{{ $item->user_id }}" onclick="remove_assigned('{{ $item->assign_id }}')"><i class="fa fa-trash text-danger fa-md"></i>
+                                </a>
+                            </td>
+                            @endif
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="4" class="text-center">Sorry, no records found!</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </form>
+        </div>
+
+        {!! $list->links('vendor.pagination.bootstrap-5') !!}
+
+        <?php /* ?>
             @if($list->isNotEmpty())
             <div class="card-footer pagination-rounded clearfix justify-content-center">
                 <ul class="pagination small mb-0">
@@ -220,8 +223,8 @@
             @endif
             <?php */ ?>
 
-        </div>
     </div>
+</div>
 </div>
 @endsection
 @section('modals')
@@ -233,7 +236,7 @@
                 <h5 class="modal-title" id="AddEditModalLabel"></h5>
 
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    
+
                 </button>
             </div>
             <div class="modal-body">
@@ -283,72 +286,68 @@
     function assign() {
         var formId = $("#assign-form");
         var ln = $('#assign-form input[name="userid[]"]:checked').length;
-        if(ln > 0)
-        {
-           $.ajax({
-             type : 'POST',
-             url : '{{ url("/enquiry/save-assign-list") }}',
-             data : $(formId).serialize(),
-             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-             },
-             dataType : 'JSON',
-             success : function(res){
-                if(res.status == 'OK')
-                {
-                    Swal.fire({
-                        title: "Success!",
-                        text: 'Lead assigned to member(s) successfully !',
-                        icon: "success",
-                        confirmButtonText: "OK"
+        if (ln > 0) {
+            $.ajax({
+                type: 'POST',
+                url: '{{ url("/enquiry/save-assign-list") }}',
+                data: $(formId).serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                dataType: 'JSON',
+                success: function(res) {
+                    if (res.status == 'OK') {
+                        Swal.fire({
+                            title: "Success!",
+                            text: 'Lead assigned to member(s) successfully !',
+                            icon: "success",
+                            confirmButtonText: "OK"
                         }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location = location.href;
-                        }
-                    });
-                }else{
-                    Swal.fire({
-                        title: "Failed!",
-                        text: 'Failed to assign members',
-                        icon: "error",
-                        confirmButtonText: "OK"
+                            if (result.isConfirmed) {
+                                window.location = location.href;
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Failed!",
+                            text: 'Failed to assign members',
+                            icon: "error",
+                            confirmButtonText: "OK"
                         }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location = res.redirect;
-                        }
-                    });
+                            if (result.isConfirmed) {
+                                window.location = res.redirect;
+                            }
+                        });
+                    }
                 }
-             }
-           }); 
-        }else{
+            });
+        } else {
             alert('Please select member(s)');
         }
     }
 
-    function remove_assigned(assign_id)
-    {
-        if(assign_id)
-        {
+    function remove_assigned(assign_id) {
+        if (assign_id) {
             var conf = confirm('Are you sure want to remove from assigned list?');
-            if(conf == true)
-            {
+            if (conf == true) {
                 $.ajax({
-                    type : 'POST',
-                    url : '{{ url("/enquiry/remove-assign-list") }}',
-                    data : {assign_id : assign_id},
-                    headers : {
+                    type: 'POST',
+                    url: '{{ url("/enquiry/remove-assign-list") }}',
+                    data: {
+                        assign_id: assign_id
+                    },
+                    headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    dataType : 'JSON',
-                    success : function(res){
-                        if(res.status == 'OK')
-                        {
+                    dataType: 'JSON',
+                    success: function(res) {
+                        if (res.status == 'OK') {
                             Swal.fire({
                                 title: "Success!",
                                 text: 'Member removed from assigned list.',
                                 icon: "success",
                                 confirmButtonText: "OK"
-                                }).then((result) => {
+                            }).then((result) => {
                                 if (result.isConfirmed) {
                                     window.location = location.href;
                                 }
@@ -357,9 +356,9 @@
                     }
                 });
             }
-             
+
         }
-        
+
     }
 
     function Edit(id) {
@@ -490,26 +489,25 @@
     }
 
     $(document).ready(function() {
-    var table = $('#myTable').DataTable({
-        "paging": false, 
-        "searching": false, 
-        "info": false, 
-        "ordering": true, 
-        "order": [
-            [0, 'desc'] 
-        ], 
-        "columnDefs": [
-            { 
-                "orderable": true, 
-                "targets": [0]     
-            },
-            {
-                "orderable": false,
-                "targets": [2, 3, 4]
-            }
-        ]
+        var table = $('#myTable').DataTable({
+            "paging": false,
+            "searching": false,
+            "info": false,
+            "ordering": true,
+            "order": [
+                [0, 'desc']
+            ],
+            "columnDefs": [{
+                    "orderable": true,
+                    "targets": [0]
+                },
+                {
+                    "orderable": false,
+                    "targets": [2, 3, 4]
+                }
+            ]
+        });
     });
-});
 </script>
 
 
