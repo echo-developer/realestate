@@ -35,7 +35,7 @@ const StarRating = ({ rating, onRatingChange }) => {
   );
 };
 
-const UserReviewData = ({ propertyId, closeButton }) => {
+const UserReviewData = ({ propertyId, closeButton, addReviewSuccessFunction }) => {
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const { callApi, GetMemberId, isLogin } = AuthUser();
   const memberId = GetMemberId();
@@ -131,14 +131,12 @@ const translation = useTranslation();
             toast.success(response.message);
             resetForm();
             closeButton();
-          } else {
-            toast.error(response?.message || "Failed to submit review");
-          }
+            if(addReviewSuccessFunction) {
+              addReviewSuccessFunction(formData)
+            }
+          } 
         } catch (error) {
           console.error("Error submitting review:", error);
-          toast.error(
-            "An error occurred while submitting your review. Please try again."
-          );
         }
       }
     } else {

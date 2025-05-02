@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     if (typeof window !== "undefined") {
       setDefaultCity(
         JSON.parse(localStorage.getItem("city")) || {
-          city_id: 1,
+          city_id: 21,
           name: "Kolkata",
         }
       );

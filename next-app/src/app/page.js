@@ -139,9 +139,7 @@ export default function Home() {
         if (res && res?.status === 1) {
           toast.success(res?.message || "Successfully");
           addRemoveSuccessFunction(id, type, listKey);
-        } else {
-          toast.error(res?.message || "An error occurred. Please try again.");
-        }
+        } 
       } catch (error) {
         console.error("Error:", error);
       }

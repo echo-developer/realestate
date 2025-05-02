@@ -4,9 +4,11 @@ import Link from 'next/link'
 import AuthUser from '../Authentication/AuthUser'
 import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
+import { useAuth } from '@/context/AuthProvider'
 
 const VerifiedAgent = ({ translation }) => {
   const { callApi } = AuthUser();
+  const { defaultCity } = useAuth();
   const [verifiedAgentList, setVerifiedAgentList] = useState([]);
 
   useEffect(() => {
@@ -14,7 +16,10 @@ const VerifiedAgent = ({ translation }) => {
       try {
         const res = await callApi({
           api: "/verified_agents",
-          method: "GET"
+          method: "GET",
+          data: {
+            city_id: defaultCity.city_id
+          }
         })
 
         if (res && res?.status === 1) {
@@ -26,7 +31,7 @@ const VerifiedAgent = ({ translation }) => {
     }
 
     getVerifiedAgentList();
-  }, [])
+  }, [defaultCity?.city_id])
 
   const responsive = {
     superLargeDesktop: {
@@ -57,7 +62,7 @@ const VerifiedAgent = ({ translation }) => {
                 <img src="/assets/images/icons/house-sm-1.png" alt="Icon" height="20" width="20" loading="lazy" />
                 {translation?.top_most || "Top Most"}
               </h5>
-              <h3>{translation?.verified_agents_kolkata || "Verified Agents in Kolkata"}</h3>
+              <h3>Verified Agents in {defaultCity?.name}</h3>
               <p>
                 {translation?.top_agents_description ||
                   "Top agents are experienced professionals offering expert guidance, market insights, and personalized services to help you find the perfect property"}
@@ -81,9 +86,15 @@ const VerifiedAgent = ({ translation }) => {
                       </div>
                       <div className="mb-3 mx-auto">
                         <h4 className='text-center mb-1'>
-                          <a role="button">{agent?.name || "Not available"}</a>
+                          <a role="button">{agent?.name || ""}</a>
                         </h4>
-                        <p className="text-center">{agent?.company_name || <span className="text-muted">Not available</span>}</p>
+                        <p className='text-center'>
+                          {agent?.company_name ? (
+                            <>
+                            <i class="icon-img-company"></i> {agent.company_name}
+                            </>
+                          ) : (<></>)}
+                        </p>
                         <p className="mb-1">
                           <i className="bi bi-calendar me-1"></i>
                           {translation?.operating_since || "Operating Since"}:{" "}

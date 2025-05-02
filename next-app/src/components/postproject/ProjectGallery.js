@@ -54,11 +54,9 @@ const ProjectGallery = ({ setVisible, projectId, userDetails }) => {
       });
       if (response && response.status === 1) {
         setData(response.data);
-      } else {
-        toast.error(response.message || "Failed to fetch images");
-      }
+      } 
     } catch (error) {
-      toast.error("An error occurred while fetching images.");
+      console.error("An error occurred while fetching images.");
     }
   };
 

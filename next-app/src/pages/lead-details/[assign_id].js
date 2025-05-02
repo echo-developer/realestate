@@ -49,7 +49,6 @@ const Index = () => {
       }
     } catch (error) {
       console.error("Error fetching lead details:", error);
-      toast.error("An error occurred while fetching lead details.");
     } finally {
       setLoading(false);
     }

@@ -121,9 +121,7 @@ const Index = () => {
                 })
                 setList(newState);
                 toast.success("lead status updated successfully")
-            } else {
-                toast.error("Failed to update lead status")
-            }
+            } 
         } catch (error) {
             console.error(error?.message);
         }
@@ -261,7 +259,7 @@ const Index = () => {
                                             <div className="col-lg-9 col-sm-8 position-relative">
                                                 <div className="card-body">
                                                     <div className="d-flex justify-content-between">
-                                                        <h4>{lead?.property_name || lead?.project_name || "Not available"}</h4>
+                                                        <h4>{lead?.property_name || lead?.project_name || ""}</h4>
 
                                                         {!lead?.is_blur && (
                                                             <div className="text-end">

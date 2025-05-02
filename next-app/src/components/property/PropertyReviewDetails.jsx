@@ -10,6 +10,7 @@ const PropertyReviewDetails = ({ property_reviews, handleShowCanvas, isMyPropert
   const { rating, total_reviews, reviews } = property_reviews;
   const [showOffcanvas, setShowOffcanvas] = useState(false);
 
+  console.log("property reviews", property_reviews);
 
   const handleShow = () => setShowOffcanvas(true);
   const handleClose = () => setShowOffcanvas(false);
@@ -70,7 +71,7 @@ const PropertyReviewDetails = ({ property_reviews, handleShowCanvas, isMyPropert
                       <span className="text-muted ps-4"><Calendar color="gray" size={14} /> {useDateFormat(review.created_at)}</span>
                     </div>
                     <h4><small>{review.review_title}</small></h4>
-                    
+
                     <TextComponent text={review.review_description} />
                     <div className="d-flex user-review-footer">
                       <img src={`${review?.review_image || "/assets/images/user.jpg"}`} alt="User" height="40" width="40" className="rounded-circle flex-shrink-0" />
@@ -84,12 +85,15 @@ const PropertyReviewDetails = ({ property_reviews, handleShowCanvas, isMyPropert
               ))}
             </div>
 
-
-            <div className="d-grid d-sm-block">
-              <button onClick={handleShow} className="btn btn-outline-primary">
-                {translation?.view_more_reviews || "View More Reviews"}
-              </button>
-            </div>
+            {reviews?.length > 2 && (
+              <>
+                <div className="d-grid d-sm-block">
+                  <button onClick={handleShow} className="btn btn-outline-primary">
+                    {translation?.view_more_reviews || "View More Reviews"}
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>

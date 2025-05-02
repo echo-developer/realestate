@@ -36,7 +36,7 @@ import { CheckCircleFill, XCircleFill, Calendar2Check } from "react-bootstrap-ic
 const index = () => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const router = useRouter();
-  const { defaultCity, currencyCode, formatPrice } = useAuth();
+  const { userData, defaultCity, currencyCode, formatPrice } = useAuth();
   const translation = useTranslation();
   const [showAll, setShowAll] = useState(false);
   const { property_id } = router.query;
@@ -51,6 +51,7 @@ const index = () => {
   const [showCommunicationModal, setShowCommunicationModal] = useState(false);
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const [userDetails, setUserDetails] = useState();
+  const [activeScrollMenu, setActiveScrollMenu] = useState("overview")
   const { adsData, logAdClick } = useAdvertisement(
     "detail-page",
     "footer",
@@ -187,7 +188,54 @@ const index = () => {
     addRemoveFav(id, "nearby_properties");
   };
 
-  // console.log(propertyDetails)
+  const addReviewSuccessFunction = (review) => {
+  
+    // Basic validation
+    if (!review || typeof review !== 'object') {
+      console.error("Invalid review data");
+      return;
+    }
+  
+    // Filter rating keys
+    const ratingKeys = Object.keys(review).filter(
+      key => key.endsWith('_rate') && typeof review[key] === 'number'
+    );
+  
+    if (ratingKeys.length === 0) {
+      return;
+    }
+  
+    // Calculate total and average
+    const total = ratingKeys.reduce((sum, key) => sum + review[key], 0);
+    const overallRating = total / ratingKeys.length;
+  
+    const ratingObj = {
+      "property_id": review?.property_id,
+      "overall_rating": overallRating,
+      "created_at": Date.now(),
+      "updated_at": Date.now(),
+      "review-id": "",
+      "review_title": review?.review_title,
+      "review_description": review?.review_description,
+      "user_relation": userData?.user_type == 'O' ? "Owner" : userData?.user_type == 'B' ? "Builder" : 'Agent',
+      "name": userData?.name
+  }
+   setPropertyDetails(prev => {
+    return {
+      ...prev,
+      "property_reviews": {
+                ...prev.property_reviews,
+                "total_reviews": prev.property_reviews?.total_reviews,
+                "reviews": [
+                    ...prev.property_reviews?.reviews,
+                    ratingObj
+                ]
+            }
+    }
+   })
+  };
+  
+
   return (
     <MainLayout>
       <Helmet>
@@ -206,7 +254,7 @@ const index = () => {
         <div className="container-fluid">
           <div className="row">
             <aside className="col-xl-9 col-12 mb-4 mb-xl-0">
-              <div className="d-md-flex justify-content-between align-items-end mb-3">
+              {/* <div className="d-md-flex justify-content-between align-items-end mb-3">
                 <div className="mb-3 mb-md-0">
                   <h1 className="h3">
                     {propertyDetails?.property_name ||
@@ -226,9 +274,36 @@ const index = () => {
                     {translation?.launched_in || "Launched In"}
                   </p>
                   <h5 className="mb-0">
-                    {/* <Calendar2Check size={18}/> */}
                     {useDateFormat(propertyDetails?.created_at) || "Date "}
                   </h5>
+                </div>
+              </div> */}
+              <div className="d-md-flex justify-content-between align-items-end mb-3">
+                <div className="mb-3 mb-md-0">
+                  <h1 className="h3">
+                    {propertyDetails?.property_name ||
+                      "property name not available"}{" "}
+                    {"in"} {propertyDetails?.address || "address not available"}
+                  </h1>
+                  <p className="mb-0">
+                    <a role="button">
+                      <i className="icon-feather-map-pin"></i>{" "}
+                      {propertyDetails?.address ||
+                        `${translation?.not_available || "Not available"}`}
+                    </a>{" "}
+                    {/* <span className="text-muted">
+                      {translation?.by_real_estate_limited ||
+                        "(By Real Estate Limited)"}
+                    </span> */}
+                  </p>
+                  <p className="text-muted mb-0">
+                    {translation?.launched_in || "Launched On:"}{" "} {useDateFormat(propertyDetails?.created_at)}
+                  </p>
+                </div>
+                <div className="text-md-end" style={{ minWidth: "150px" }}>
+                  <h3>
+                    {propertyDetails?.price ? formatPrice(propertyDetails?.price) : ""}
+                  </h3>
                 </div>
               </div>
               <div className="position-relative">
@@ -252,9 +327,7 @@ const index = () => {
 
               <div className="row mb-3">
                 <div className="col-md mb-3 mb-md-0">
-                  <h3>
-                    {/* {currencyCode}{" "}
-                    {propertyDetails?.price || "Not available"} */}
+                  {/* <h3>
                     {propertyDetails?.price ? formatPrice(propertyDetails?.price) : ""}
                   </h3>
                   {propertyDetails?.property_features?.bedrooms && (
@@ -262,7 +335,7 @@ const index = () => {
                       {propertyDetails?.property_features?.bedrooms}{" "}
                       {translation?.bhk_flats || "BHK Flats"}
                     </p>
-                  )}
+                  )} */}
                 </div>
                 {propertyDetails?.property_brochure_pdf && (
                   <div class="col-md-auto text-md-end">
@@ -290,27 +363,27 @@ const index = () => {
               <div id="undefined-sticky-wrapper" className="sticky-wrapper">
                 <div className="one-page-menu mb-3">
                   <ul>
-                    <li className="active">
+                    <li className={activeScrollMenu == 'overview' ? "active" : ""} onClick={() => setActiveScrollMenu('overview')}>
                       <a href="#overview">
                         {translation?.overview || "Overview"}
                       </a>
                     </li>
-                    <li>
+                    <li className={activeScrollMenu == 'about_property' ? "active" : ""} onClick={() => setActiveScrollMenu('about_property')}>
                       <a href="#about">
                         {translation?.about_property || "About Property"}
                       </a>
                     </li>
-                    <li>
+                    <li className={activeScrollMenu == 'amenities' ? "active" : ""} onClick={() => setActiveScrollMenu('amenities')}>
                       <a href="#amenity">
                         {translation?.amenities || "Amenities"}
                       </a>
                     </li>
-                    <li>
+                    <li className={activeScrollMenu == 'property_reviews' ? "active" : ""} onClick={() => setActiveScrollMenu('property_reviews')}>
                       <a href="#property_review">
                         {translation?.property_reviews || "Property Reviews"}
                       </a>
                     </li>
-                    <li>
+                    <li className={activeScrollMenu == 'about_landmark' ? "active" : ""} onClick={() => setActiveScrollMenu('about_landmark')}>
                       <a href="#landmark-near">
                         {translation?.about_landmark || "About Landmark"}
                       </a>
@@ -459,159 +532,154 @@ const index = () => {
                       {translation?.more_details || "More Details"}
                     </h4>
                     <Row>
-                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                        <p className="text-muted mb-2">
-                          {translation?.price_breakup || "Price Breakup:"}
-                        </p>
-                        <div className="flex-grow-1 ps-2">
-                          <span className="text-muted">
-                            {translation?.booking_price || "Booking Price"}
-                          </span>
+                      {propertyDetails?.price && (
+                        <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                          <p className="text-muted mb-2">
+                            {translation?.price_breakup || "Price Breakup:"}
+                          </p>
+                          <div className="flex-grow-1 ps-2">
+                            <span className="text-muted">
+                              {translation?.booking_price || "Booking Price"}
+                            </span>
+                            <h5>
+                              {currencyCode}
+                              {propertyDetails.price}
+                            </h5>
+                          </div>
+                        </Col>
+                      )}
+
+                      {propertyDetails?.furnish_status && (
+                        <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                          <p className="text-muted mb-2">
+                            {translation?.furnishing || "Furnishing:"}
+                          </p>
+                          <h5>{propertyDetails.furnish_status}</h5>
+                        </Col>
+                      )}
+
+
+
+                      {propertyDetails?.ownership_type && (
+                        <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                          <p className="text-muted mb-2">
+                            {translation?.type_of_ownership || "Type of Ownership:"}
+                          </p>
                           <h5>
-                            {propertyDetails?.currency
-                              ? `${propertyDetails?.currency} `
-                              : ""}
-                            {propertyDetails?.price ||
-                              translation?.not_available ||
-                              "Not available"}
+                            {
+                              ownershipTypeOptions.find(
+                                (item) => item.key === propertyDetails.ownership_type
+                              )?.value
+                            }
                           </h5>
-                        </div>
-                      </Col>
+                        </Col>
+                      )}
 
-                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                        <p className="text-muted mb-2">
-                          {translation?.furnishing || "Furnishing:"}
-                        </p>
-                        <h5>
-                          {propertyDetails?.furnish_status ||
-                            `${translation?.not_available || "Not available"}`}
-                        </h5>
-                      </Col>
+                      {propertyDetails?.parking_ability && (
+                        <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                          <p className="text-muted mb-2">
+                            {translation?.parking_availability || "Parking Availability:"}
+                          </p>
+                          <h5>
+                            {propertyDetails.parking_ability === "av"
+                              ? "Available"
+                              : propertyDetails.parking_ability === "na"
+                                ? translation?.not_available || "Not available"
+                                : propertyDetails.parking_ability === "uc"
+                                  ? "Under Construction"
+                                  : translation?.not_available || "Not available"}
+                          </h5>
+                        </Col>
+                      )}
 
-                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                        <p className="text-muted mb-2">
-                          {translation?.type_of_ownership ||
-                            "Type of Ownership:"}
-                        </p>
-                        <h5>
-                          {ownershipTypeOptions.find(
-                            (item) =>
-                              item.key === propertyDetails?.ownership_type
-                          )?.value ||
-                            `${translation?.not_available || "Not available"}`}
-                        </h5>
-                      </Col>
 
-                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                        <p className="text-muted mb-2">
-                          {translation?.parking_availability ||
-                            "Parking Availability:"}
-                        </p>
-                        <h5>
-                          {propertyDetails?.parking_ability === "av"
-                            ? "Available"
-                            : propertyDetails?.parking_ability === "na"
-                              ? `${translation?.not_available || "Not available"}`
-                              : propertyDetails?.parking_ability === "uc"
-                                ? "Under Construction"
-                                : `${translation?.not_available || "Not available"
-                                }`}
-                        </h5>
-                      </Col>
+                      {propertyDetails?.possession_status && (
+                        <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                          <p className="text-muted mb-2">
+                            {translation?.possession_status || "Possession Status:"}
+                          </p>
+                          <h5>{propertyDetails.possession_status}</h5>
+                        </Col>
+                      )}
 
-                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                        <p className="text-muted mb-2">
-                          {translation?.possession_status ||
-                            "Possession Status:"}
-                        </p>
-                        <h5>
-                          {propertyDetails?.possession_status ||
-                            `${translation?.not_available || "Not available"
-                            }`}{" "}
-                        </h5>
-                      </Col>
-                      <Col className="col-md-6 col-12 mb-4">
-                        <p className="text-muted mb-2">
-                          {translation?.address || "Address:"}
-                        </p>
-                        <h5>
-                          {propertyDetails?.address ||
-                            `${translation?.not_available || "Not available"}`}
-                        </h5>
-                      </Col>
-                      <Col className="col-md-6 col-12 mb-4">
-                        <p className="text-muted mb-2">
-                          {translation?.locality || "Locality:"}
-                        </p>
-                        <h5>
-                          {propertyDetails?.locality ||
-                            `${translation?.not_available || "Not available"}`}
-                        </h5>
-                      </Col>
+                      {propertyDetails?.address && (
+                        <Col className="col-md-6 col-12 mb-4">
+                          <p className="text-muted mb-2">
+                            {translation?.address || "Address:"}
+                          </p>
+                          <h5>{propertyDetails.address}</h5>
+                        </Col>
+                      )}
+
+                      {propertyDetails?.locality && (
+                        <Col className="col-md-6 col-12 mb-4">
+                          <p className="text-muted mb-2">
+                            {translation?.locality || "Locality:"}
+                          </p>
+                          <h5>{propertyDetails.locality}</h5>
+                        </Col>
+                      )}
+
 
                       {viewMore && (
                         <>
-                          <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                            <p className="text-muted mb-2">
-                              {translation?.main_road_facing ||
-                                "Main Road Facing:"}
-                            </p>
-                            <h5>
-                              {propertyDetails?.main_road_facing ||
-                                `${translation?.not_available || "Not available"
-                                }`}
-                            </h5>
-                          </Col>
-                          <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                            <p className="text-muted mb-2">
-                              {translation?.flats_per_floor || "Flat per floor"}
-                            </p>
-                            <h5>
-                              {propertyDetails?.flats_per_floor ||
-                                `${translation?.not_available || "Not available"
-                                }`}
-                            </h5>
-                          </Col>
-                          <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                            <p className="text-muted mb-2">
-                              {" "}
-                              {translation?.lift_number || "Lift Number:"}
-                            </p>
-                            <h5>
-                              {propertyDetails?.lifts_in_tower ||
-                                `${translation?.not_available || "Not available"
-                                }`}
-                            </h5>
-                          </Col>
-                          <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                            <p className="text-muted mb-2">
-                              {translation?.water_availability ||
-                                "Water Availability:"}
-                            </p>
-                            <h5>
-                              {waterAvailabilityOptions.find(
-                                (item) =>
-                                  item.key ===
-                                  propertyDetails?.water_availability
-                              )?.value ||
-                                `${translation?.not_available || "Not available"
-                                }`}
-                            </h5>
-                          </Col>
-                          <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                            <p className="text-muted mb-2">
-                              {translation?.electricity_status ||
-                                "Electricity Status:"}
-                            </p>
-                            <h5>
-                              {electricityStatusOptions.find(
-                                (item) =>
-                                  item.key === propertyDetails?.electricity
-                              )?.value ||
-                                `${translation?.not_available || "Not available"
-                                }`}
-                            </h5>
-                          </Col>
+                          {propertyDetails?.main_road_facing && (
+                            <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                              <p className="text-muted mb-2">
+                                {translation?.main_road_facing || "Main Road Facing:"}
+                              </p>
+                              <h5>{propertyDetails.main_road_facing}</h5>
+                            </Col>
+                          )}
+
+                          {propertyDetails?.flats_per_floor &&  (
+                            <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                              <p className="text-muted mb-2">
+                                {translation?.flats_per_floor || "Flat per floor"}
+                              </p>
+                              <h5>{propertyDetails.flats_per_floor}</h5>
+                            </Col>
+                          )}
+
+                          {propertyDetails?.lifts_in_tower &&  (
+                            <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                              <p className="text-muted mb-2">
+                                {translation?.lift_number || "Lift Number:"}
+                              </p>
+                              <h5>{propertyDetails.lifts_in_tower}</h5>
+                            </Col>
+                          )}
+
+                          {propertyDetails?.water_availability && (
+                            <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                              <p className="text-muted mb-2">
+                                {translation?.water_availability || "Water Availability:"}
+                              </p>
+                              <h5>
+                                {
+                                  waterAvailabilityOptions.find(
+                                    (item) => item.key === propertyDetails.water_availability
+                                  )?.value
+                                }
+                              </h5>
+                            </Col>
+                          )}
+
+                          {propertyDetails?.electricity && (
+                            <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                              <p className="text-muted mb-2">
+                                {translation?.electricity_status || "Electricity Status:"}
+                              </p>
+                              <h5>
+                                {
+                                  electricityStatusOptions.find(
+                                    (item) => item.key === propertyDetails.electricity
+                                  )?.value
+                                }
+                              </h5>
+                            </Col>
+                          )}
+
                         </>
                       )}
                     </Row>
@@ -842,34 +910,34 @@ const index = () => {
 
       {!propertyDetails?.is_my_property ? (
         <footer className="small-footer special-footer p-3">
-        <div className="d-grid columns-2">
-          <button
-            className="btn btn-outline-primary"
-            onClick={() => {
-              setShowPhoneNumber(true);
-              setShowCommunicationModal(true);
-            }}
-          >
-                            {viewNumber || "GET Phone Number"}
-          </button>
-          <button
-            className="btn btn-primary"
-            onClick={() => setShowCommunicationModal(true)}
-          >
-            {translation?.contact_now || "Contact Now"}
-          </button>
-        </div>
-      </footer>
+          <div className="d-grid columns-2">
+            <button
+              className="btn btn-outline-primary"
+              onClick={() => {
+                setShowPhoneNumber(true);
+                setShowCommunicationModal(true);
+              }}
+            >
+              {viewNumber || "GET Phone Number"}
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={() => setShowCommunicationModal(true)}
+            >
+              {translation?.contact_now || "Contact Now"}
+            </button>
+          </div>
+        </footer>
       ) : (
         <footer className="small-footer">
-      <ul>
-        <li><Link href="/" className=''><House color="current" size={20} /> {translation?.home || "Home"} </Link></li>
-        <li><Link href="/property-listing" className=''><Search color="current" size={20} /> Search</Link></li>
-        <li><Link href="/postproperty" className='postAd-btn'><HouseAddFill color="white" size={32} /></Link></li>
-        <li><Link href="/agent-list" className=''><People color="current" size={20} /> Agents</Link></li>
-        <li><Link href="/dashboard" className=''><Person color="current" size={20} /> You</Link></li>
-      </ul>
-    </footer>
+          <ul>
+            <li><Link href="/" className=''><House color="current" size={20} /> {translation?.home || "Home"} </Link></li>
+            <li><Link href="/property-listing" className=''><Search color="current" size={20} /> Search</Link></li>
+            <li><Link href="/postproperty" className='postAd-btn'><HouseAddFill color="white" size={32} /></Link></li>
+            <li><Link href="/agent-list" className=''><People color="current" size={20} /> Agents</Link></li>
+            <li><Link href="/dashboard" className=''><Person color="current" size={20} /> You</Link></li>
+          </ul>
+        </footer>
       )}
       <>
         <Offcanvas show={show} placement="end" onHide={handleClose}>
@@ -883,6 +951,7 @@ const index = () => {
             <UserReviewData
               propertyId={propertyDetails?.property_id}
               closeButton={handleClose}
+              addReviewSuccessFunction={addReviewSuccessFunction}
             />
           </Offcanvas.Body>
         </Offcanvas>
