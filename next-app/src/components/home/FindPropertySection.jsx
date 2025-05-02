@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PropertyRequirementForm from "./PropertyRequirementForm";
 import Aos from "aos";
 import "aos/dist/aos.css";
@@ -11,7 +11,9 @@ const FindPropertySection = ({translation}) => {
     Aos.refresh();
   }, [])
 
+
   return (
+    <>
     <section
       className="section post-req"
       style={{ backgroundImage: "url('assets/images/building.jpg')" }}
@@ -136,6 +138,7 @@ const FindPropertySection = ({translation}) => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 

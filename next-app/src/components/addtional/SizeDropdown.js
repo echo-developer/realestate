@@ -10,13 +10,20 @@ const SizeDropdown = ({
   applySizes,
   resetSizes,
   translation = {},
+  showDropdown,
+  setShowDropdown,
+  handleClickOutside, 
+  setIsOverlayVisible,
 }) => {
-  const [showDropdown, setShowDropdown] = useState(false);
+  // const [showDropdown, setShowDropdown] = useState(false);
   const [tempMinSize, setTempMinSize] = useState(minSize);
   const [tempMaxSize, setTempMaxSize] = useState(maxSize);
   const [error, setError] = useState(""); // Error message state
 
-  const toggleDropdown = (isOpen) => setShowDropdown(isOpen);
+  const toggleDropdown = (isOpen) => {
+    setShowDropdown(isOpen);
+    setIsOverlayVisible(true);
+  };
 
   const handleApply = () => {
     if (parseInt(tempMinSize) > parseInt(tempMaxSize)) {
@@ -28,6 +35,7 @@ const SizeDropdown = ({
     setMaxSize(tempMaxSize);
     applySizes(); // Call parent apply function
     setShowDropdown(false); // Close dropdown
+    handleClickOutside();
   };
 
   const handleTempMinChange = (e) => {

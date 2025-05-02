@@ -23,7 +23,6 @@ const translation = useTranslation();
             </h4>
           </div>
 
-          {/* Tabs for different sections */}
           <ul
             className="nav nav-underline nav-fill border-bottom mb-3"
             role="tablist"
@@ -66,7 +65,7 @@ const translation = useTranslation();
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-muted">{translation?.no_items_available || "No items available."}</p>
+                    <p className="text-muted text-center">{translation?.no_items_available || "No items available."}</p>
                   )}
                 </div>
               ))}

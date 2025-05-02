@@ -12,6 +12,8 @@ class MyDocument extends Document {
             type="image/png"
             rel="shortcut icon"
           />
+          <link rel="preload" href="/assets/images/logo.png" as="image" />
+          <link rel="preload" href="/assets/images/logo-mobile.png" as="image" />
           <link href="/assets/css/icons.css" type="text/css" rel="stylesheet" />
           <link
             href="/assets/css/google-material-icons.css"

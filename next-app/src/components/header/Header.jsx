@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import useTranslation from "@/hooks/useTranslation";
 import Link from "next/link";
+import NextImage from "next/image";
 import "../../app/globals.css";
 import AuthUser from "../Authentication/AuthUser";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
@@ -16,7 +17,7 @@ import MobileMenu from "../addtional/Mmenu";
 
 const Header = () => {
   const { callApi, isLogin, logout, GetMemberId } = AuthUser();
-  const { defaultCity, handleDefaultCityChange ,setGetAllCity, currency } = useAuth();
+  const { defaultCity, handleDefaultCityChange, setGetAllCity, currency } = useAuth();
   const [isDesktopLogoLoaded, setIsDesktopLogoLoaded] = useState(false);
   const [isMobileLogoLoaded, setIsMobileLogoLoaded] = useState(false);
   const [showLocationDrop, setShowLocationDrop] = useState(false);
@@ -78,10 +79,8 @@ const Header = () => {
       if (response && response.success === 1) {
         setUserData(response.data);
         setUserLogo(response?.data?.image);
-      } else {
-        toast.error(response.message);
-      }
-    } catch (error) {}
+      } 
+    } catch (error) { }
   };
 
   useEffect(() => {
@@ -147,10 +146,8 @@ const Header = () => {
       if (response && response.status === 1) {
         setCityData(response.data);
         setGetAllCity(response.data);
-      } else {
-        toast.error(response.message);
-      }
-    } catch (error) {}
+      } 
+    } catch (error) { }
   };
 
   const handleShowLocationDropDown = () => {
@@ -207,10 +204,10 @@ const Header = () => {
   };
 
   useEffect(() => {
-    const desktopImage = new Image();
-    desktopImage.src = "/assets/images/logo.png";
-    desktopImage.onload = () => setIsDesktopLogoLoaded(true);
-    desktopImage.onerror = () => setIsDesktopLogoLoaded(false);
+    // const desktopImage = new Image();
+    // desktopImage.src = "/assets/images/logo.png";
+    // desktopImage.onload = () => setIsDesktopLogoLoaded(true);
+    // desktopImage.onerror = () => setIsDesktopLogoLoaded(false);
 
     const mobileImage = new Image();
     mobileImage.src = "/assets/images/logo-mobile.png";
@@ -227,18 +224,27 @@ const Header = () => {
               <Link href="/" className="navbar-brand">
                 {/* Desktop Logo with Shimmer */}
                 <div
-                  className="d-none d-md-block"                  
+                  className="d-none d-md-block"
                 >
-                  {!isDesktopLogoLoaded && (
+                  {/* {!isDesktopLogoLoaded && (
                     <div className="shimmer-placeholder"></div>
-                  )}
-                  {isDesktopLogoLoaded && (
+                  )} */}
+                  {/* {isDesktopLogoLoaded && (
                     <img
                       src="/assets/images/logo.png"
                       alt="Logo"
                       loading="lazy"
+                      style={{ opacity: isDesktopLogoLoaded ? 1 : 0, transition: 'opacity 0.3s ease-in-out' }}
                     />
-                  )}
+                  )} */}
+                  <NextImage
+  src="/assets/images/logo.png"
+  alt="Logo"
+  width={150}
+  height={50}
+  priority
+/>
+
                 </div>
 
                 {/* Mobile Logo with Shimmer */}
@@ -258,32 +264,32 @@ const Header = () => {
                 </div>
 
                 <style jsx>{`
-                  .shimmer-placeholder {
-                    width: 100%;
-                    height: 100%;
-                    border-radius: 8px;
-                    background: linear-gradient(
-                      90deg,
-                      #f0f0f0 25%,
-                      #e0e0e0 50%,
-                      #f0f0f0 75%
-                    );
-                    background-size: 200% 100%;
-                    animation: shimmer 2s infinite;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                  }
+  .shimmer-placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    background: linear-gradient(
+      90deg,
+      #f0f0f0 25%,
+      #e0e0e0 50%,
+      #f0f0f0 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
 
-                  @keyframes shimmer {
-                    0% {
-                      background-position: -200% 0;
-                    }
-                    100% {
-                      background-position: 200% 0;
-                    }
-                  }
-                `}</style>
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+`}</style>
+
+
               </Link>
               {/* show={showLocationDrop} onToggle={handleShowLocationDropDown} */}
               <Dropdown className="ms-3 ms-xxl-4">
@@ -1020,13 +1026,12 @@ const Header = () => {
                   <li className="nav-item ms-3 setlang">
                     <a className="nav-link dropdown-toggle" role="button">
                       <img
-                        src={`/assets/images/flags/${
-                          currentLang === "ar"
+                        src={`/assets/images/flags/${currentLang === "ar"
                             ? "ae"
                             : currentLang === "de"
-                            ? "de"
-                            : "gb"
-                        }.svg`}
+                              ? "de"
+                              : "gb"
+                          }.svg`}
                         alt={currentLang.toUpperCase()}
                         height="20"
                         width="20"
@@ -1035,10 +1040,10 @@ const Header = () => {
                       {currentLang === "ar"
                         ? "Ar"
                         : currentLang === "de"
-                        ? "De"
-                        : "En"}
+                          ? "De"
+                          : "En"}
                     </a>
-                    <ul className="dropdown-single dropdown-nav dropdown-menu-end" style={{minWidth:'auto'}}>
+                    <ul className="dropdown-single dropdown-nav dropdown-menu-end" style={{ minWidth: 'auto' }}>
                       <li className={currentLang === "en" ? "active" : ""}>
                         <a role="button" onClick={() => changeLanguage("en")}>
                           <img

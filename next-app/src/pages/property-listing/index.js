@@ -281,7 +281,7 @@ const index = () => {
         if (res && res?.status === 1) {
           setPropertyTypeList(res?.data || []);
           // setSelectedPropertyType(res?.data?.[0]?.category_id);
-        } 
+        }
       } catch (error) {
         console.error(error?.message || "Error fetching property types");
       }
@@ -314,8 +314,8 @@ const index = () => {
       if (queryObject?.sort_key && queryObject?.sort_order) {
         setSelectedSort(queryObject.sort_key, queryObject.sort_order);
       }
-      
-      if(queryObject?.locality) {
+
+      if (queryObject?.locality) {
         setLocality(JSON.parse(queryObject.locality));
       }
 
@@ -496,10 +496,10 @@ const index = () => {
     } else {
       delete queryObject.property_for;
     }
-    
-    if(locality?.locality_id) {
+
+    if (locality?.locality_id) {
       queryObject.locality = JSON.stringify(locality)
-    } 
+    }
 
     // Directly add minBudget and maxBudget
     if (minBudget) {
@@ -551,7 +551,7 @@ const index = () => {
     if (router?.query?.sort_order)
       queryObject.sort_order = router.query.sort_order;
 
-    if(router?.query?.locality) queryObject.locality = router.query.locality; 
+    if (router?.query?.locality) queryObject.locality = router.query.locality;
     if (router?.query?.min_budget)
       queryObject.min_budget = router.query.min_budget;
     if (router?.query?.max_budget)
@@ -678,7 +678,7 @@ const index = () => {
       existingParams.set("max_budget", maxBudget);
     }
 
-    if(locality) {
+    if (locality) {
       existingParams.set('locality', JSON.stringify(locality));
     }
     // ✅ Add these three lines:
@@ -721,13 +721,13 @@ const index = () => {
 
     if (defaultCity?.city_id) {
       existingParams.set("city_id", defaultCity.city_id);
-    } 
+    }
 
-    if(router?.query?.locality) {
+    if (router?.query?.locality) {
       const locality = JSON.parse(router.query.locality);
       existingParams.set('locality', locality?.locality_id)
     }
-    if(showMapView) {
+    if (showMapView) {
       existingParams.set('hasLatlang', 1)
     } else {
       existingParams.set('hasLatlang', 0)
@@ -1364,11 +1364,11 @@ const index = () => {
                         <Button variant="primary" onClick={() => setShowMapView(!showMapView)}>
                           {showMapView ? (
                             <>
-                            <i className="bi bi-list-ul"></i> List View
+                              <i className="bi bi-list-ul"></i> List View
                             </>
                           ) : (
                             <>
-                            <i  className="bi bi-geo-alt"></i> Map View
+                              <i className="bi bi-geo-alt"></i> Map View
                             </>
                           )}
                           {/* {showMapView ? 'List View' : 'Map View'} */}
@@ -1779,35 +1779,27 @@ const index = () => {
                                   </h4>
                                   <h5 className="mb-0">
                                     {formatPrice(property?.exp_price) || "Price not Available"}
-                                    {/* {property?.exp_price ? `${currencyCode || ""} ${property?.exp_price}` : "Price not Available"} */}
-                                    {/* {property?.price_currency && property?.exp_price
-                                ? `${property.price_currency
-                                } ${new Intl.NumberFormat("en-US").format(
-                                  property.exp_price
-                                )} ${property?.price_per_sqft ? `(${property?.price_currency} ${property.price_per_sqft} sq/ft)` : ""}`
-                                : "Price not available"} */}
                                   </h5>
                                   <p className="mb-1">
-                                    {/* <small>
-                                {translation?.average_price || "Average Price:"}{" "}
-                                {property?.price_currency ||
-                                  property?.currency ||
-                                  ""}{" "}
-                                {property?.area_in_sqft || ""} {" sq/ft"}
-                              </small> */}
                                   </p>
                                   <ul className="list-info mb-2">
-                                    <li>
-                                      <i
-                                        className="icon-img-bed"
-                                        title="Bedrooms:"
-                                      ></i>
-                                      <span>
-                                        {property?.bedrooms ? property.bedrooms : <span className="text-muted">Not Available</span>}
-                                      </span>
-                                      {property?.bedrooms && " Beds"}
-                                    </li>
-                                    <li>
+                                    {property?.bedrooms && (
+                                      <>
+                                        <li>
+                                          <i
+                                            className="icon-img-bed"
+                                            title="Bedrooms:"
+                                          ></i>
+                                          <span>
+                                            {property?.bedrooms ? property.bedrooms : <span className="text-muted">Not Available</span>}
+                                          </span>
+                                          {property?.bedrooms && " Beds"}
+                                        </li>
+                                      </>
+                                    )}
+                                    {property?.bathroom && (
+                                      <>
+                                        <li>
                                       <i
                                         className="icon-img-tub"
                                         title="Bathrooms:"
@@ -1817,6 +1809,8 @@ const index = () => {
                                       </span>
                                       {property?.bathroom && " Bath"}
                                     </li>
+                                      </>
+                                    )}
                                     <li>
                                       {property?.area_in_sqft && (
                                         <i
@@ -1844,7 +1838,7 @@ const index = () => {
                                     <span className="text-primary">
                                       <GeoAlt color="currentColor" size={14} />
                                     </span>{" "}
-                                    {property.address || "Not Available"}
+                                    {property.address || ""}
                                   </p>
                                 </div>
                                 <div className="card-footer d-flex justify-content-between align-items-center">

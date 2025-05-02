@@ -40,7 +40,7 @@ const PropertyReviewDetails = ({ property_reviews, handleShowCanvas, isMyPropert
                   <div className="ps-4">
                     <p className="text-muted">
                       {rating} {translation?.ratings || "ratings"} <br />
-                      {total_reviews}  {translation?.reviews || "Reviews"}
+                      {/* {total_reviews}  {translation?.reviews || "Reviews"} */}
                     </p>
                   </div>
                 </div>

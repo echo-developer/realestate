@@ -96,24 +96,10 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                 </h4>
                 <h5 className="mb-0">
                   {formatPrice(project?.expected_price) || "Price not available"}
-                  {/* {project?.expected_price ? `${currencyCode || ""} ${project?.expected_price}` : "Price not available"} */}
-                  {/* {project?.currency && project?.expected_price
-                    ? `${project.currency} ${new Intl.NumberFormat(
-                        "en-US"
-                      ).format(project.expected_price)}`
-                    : "Price not available"} */}
                 </h5>
                 <p className="mb-1">
                   <small>
                   {translation?.price_per_sqft || "Price Per sqft:"}{" "}
-                    {/* {project?.area_in_sqft ? (
-                      <>
-                        {project?.currency || project?.price_currency || ""}{" "}
-                        {project?.area_in_sqft || ""} sq/ft
-                      </>
-                    ) : (
-                      "Not Available"
-                    )} */}
                     {project?.price_per_sqft ? (<>
                     {`${currencyCode} `} {project?.price_per_sqft}
                     </>) : ('Not Available')}
@@ -121,7 +107,9 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                 </p>
 
                 <ul className="list-info mb-2">
-                  <li>
+                  {project?.occupied_area && (
+                    <>
+                    <li>
                     <i className="icon-img-ratio" title="Carpet Area"></i>
                     <span>
                       {translation?.occupied_area || "Occupied Area"}:{" "}
@@ -129,7 +117,11 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                       {project?.occupied_area && project?.unit_type}
                     </span>
                   </li>
-                  <li>
+                    </>
+                  )}
+                  {project?.project_size && (
+                    <>
+                    <li>
                     <i className="icon-img-ratio" title="Total Area"></i>
                     <span>
                       {translation?.total_area || "Total Area"}:{" "}
@@ -137,31 +129,49 @@ const ResidentialProjectList = ({ projectListData, setProjectListData }) => {
                       {project?.project_size && project?.unit_type}
                     </span>
                   </li>
-                  <li>
+                    </>
+                  )}
+                  {project?.possession_status && (
+                    <>
+                    <li>
                     <i className="icon-img-check" title="Possession Status"></i>
                     <span>
-                      {project?.possession_status || "Not Available"}
+                      {project?.possession_status || ""}
                     </span>
                   </li>
-                  <li>
+                    </>
+                  )}
+                  {project?.total_towers && (
+                    <>
+                    <li>
                     <i className="icon-img-tower" title="Total Tower"></i>
                     <span>
                       {translation?.total_tower || "Total Towers"}:{" "}
-                      {project?.total_towers || "Not Available"}
+                      {project?.total_towers || ""}
                     </span>
                   </li>
-
-                  <li>
+                    </>
+                  )}
+                  {project?.total_units && (
+                    <>
+                    <li>
                     <i className="icon-img-project" title="Total Unit"></i>
                     <span>
                       {translation?.total_units || "Total Unit:"}{" "}
                       {project?.total_units || "Not Available"}
                     </span>
                   </li>
+                    </>
+                  )}
+                  
                 </ul>
                 <p className="mb-1">
-                  <i className="icon-feather-map-pin me-1"></i>
-                  {project.address}
+                  {project.address && (
+                    <>
+                    <i className="icon-feather-map-pin me-1"></i>
+                    {project.address}
+                    </>
+                  )}
                 </p>
               </div>
               <div className="card-footer d-flex justify-content-between align-items-center">

@@ -93,6 +93,7 @@ class ProjectDetailsController extends Controller
             $project->settings->project_furnish = isset($project->settings->project_furnish) ? get_name_by_id('property_furnish_names', 'furnish_id', $project->settings->project_furnish, 'en') : null;
 
             $possesion_month_possesion_year = !empty($project->additional->possesion_month_possesion_year) ? explode('-', $project->additional->possesion_month_possesion_year) : [];
+            $project->location->locality = isset($project->location->locality) ? get_name_by_id('locality_names', 'locality_id', $project->location->locality, 'en') : null;
 
 
 

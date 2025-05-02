@@ -10,9 +10,12 @@ const PropertyTypeDropdown = ({
   handlePropertyForChange,
   handleReset,
   handleDone,
+  handleClickOutside, 
+  setIsOverlayVisible,
+  showDropdown,
+  setShowDropdown
 }) => {
   const { callApi } = AuthUser();
-  const [showDropdown, setShowDropdown] = useState(false);
   const [propertyTypeData, setPropertyTypeData] = useState([]);
   const [propertyForData, setPropertyForData] = useState([]);
 
@@ -29,7 +32,7 @@ const PropertyTypeDropdown = ({
         setPropertyTypeData(response.data);
       } 
     } catch (error) {
-      toast.error("Error fetching property types.");
+      console.error("Error fetching property types.");
     }
   };
 
@@ -47,7 +50,7 @@ const PropertyTypeDropdown = ({
         setPropertyForData(response.data);
       } 
     } catch (error) {
-      toast.error("Error fetching property for options.");
+      console.error("Error fetching property for options.");
     }
   };
 
@@ -61,11 +64,16 @@ const PropertyTypeDropdown = ({
     fetchPropertyForData();
   }, [selectedPropertyType]);
 
-  const toggleDropdown = () => setShowDropdown((prev) => !prev);
+  const toggleDropdown = () => {
+    console.log("toggle dropdown ran")
+    setIsOverlayVisible(true)
+    setShowDropdown((prev) => !prev);
+  }
 
   const handleDoneClick = () => {
     handleDone();  // Call existing function
     setShowDropdown(false); // Close dropdown
+    handleClickOutside();
   };
 
   const displayPropertyTyep = () => {
@@ -82,7 +90,8 @@ const PropertyTypeDropdown = ({
   }
   
   return (
-    <Dropdown className="select-dropdown d-grid mb-3" show={showDropdown}>
+    <>
+        <Dropdown className="select-dropdown d-grid mb-3" show={showDropdown}>
       <Dropdown.Toggle
         className="btn-form-control"
         id="dropdown-basic"
@@ -149,6 +158,7 @@ const PropertyTypeDropdown = ({
         </div>
       </Dropdown.Menu>
     </Dropdown>
+    </>
   );
   
 };

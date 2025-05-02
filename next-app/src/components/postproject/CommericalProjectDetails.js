@@ -253,11 +253,11 @@ const CommercialProjectDetails = ({
               )}
 
               <div className="row mb-3 mt-3">
-                <div className="col-md mb-3 mb-md-0">
+                {/* <div className="col-md mb-3 mb-md-0">
                   <h3>
                     {detailsData?.expected_price ? formatPrice(detailsData?.expected_price) : ""}
                   </h3>
-                </div>
+                </div> */}
                 <div className="col-md-auto text-md-end">
                   <div className="d-grid flex-column gap-3 h-100">
                     {detailsData?.project_brochure_pdf && (
@@ -352,300 +352,299 @@ const CommercialProjectDetails = ({
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
                       <h4 className="mb-3 text-primary">
-                      {translation?.overview || "Overview"}
+                        {translation?.overview || "Overview"}
                       </h4>
                     </div>
                     <ul className="list list-property-details mb-4">
-                      <li>
-                        <div className="d-flex">
-                          <img
-                            alt="Property Type"
-                            height="48"
-                            width="48"
-                            src="/assets/images/icons/property-type.png"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span className="text-muted">
-                              {translation?.property_type || "Property Type"}
-                            </span>
-                            <h5>
-                              {detailsData?.project_type ||
-                                `${translation?.not_available || "Not available"
-                                }`}
-                            </h5>
+                      {detailsData?.project_type && (
+                        <li>
+                          <div className="d-flex">
+                            <img
+                              alt="Property Type"
+                              height="48"
+                              width="48"
+                              src="/assets/images/icons/property-type.png"
+                            />
+                            <div className="flex-grow-1 ps-2">
+                              <span className="text-muted">
+                                {translation?.property_type || "Property Type"}
+                              </span>
+                              <h5>{detailsData.project_type}</h5>
+                            </div>
                           </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="d-flex">
-                          <img
-                            alt="Total Units"
-                            height="48"
-                            width="48"
-                            src="/assets/images/icons/carpet-area.png"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span>
-                              {translation?.total_units || "Total Units"}
-                            </span>
-                            <h5>
-                              {detailsData?.total_units ||
-                                `${translation?.not_available || "Not available"
-                                }`}
-                            </h5>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="d-flex">
-                          <img
-                            alt="Total Towers"
-                            height="48"
-                            width="48"
-                            src="/assets/images/icons/tower.png"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span>
-                              {translation?.total_towers || "Total Towers"}
-                            </span>
-                            <h5>
-                              {detailsData?.total_towers ||
-                                `${translation?.not_available || "Not available"
-                                }`}
-                            </h5>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="d-flex">
-                          <img
-                            alt="Garage Size"
-                            height="48"
-                            width="48"
-                            src="/assets/images/icons/carpet-area.png"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span>
-                              {translation?.occupied_area || "Occupied Area"}
-                            </span>
-                            <h5>
-                              {detailsData?.occupied_area ||
-                                `${translation?.not_available || "Not available"
-                                }`}{" "}
-                              {detailsData?.unit_type}
-                            </h5>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="d-flex">
-                          <img
-                            alt="Launch Date"
-                            height="48"
-                            width="48"
-                            src="/assets/images/icons/calendar.png"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span>
-                              {translation?.launch_date || "Launch Date"}
-                            </span>
-                            <h5>
-                              {useDateFormat(detailsData?.created_at) ||
-                                `${translation?.not_available || "Not available"
-                                }`}
-                            </h5>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="d-flex">
-                          <img
-                            alt="Locatily"
-                            height="48"
-                            width="48"
-                            src="/assets/images/icons/size.png"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span>
-                              {" "}
-                              {translation?.total_area || "Total Area"}
-                            </span>
-                            <h5>
-                              {detailsData?.total_area ||
-                                `${translation?.not_available || "Not available"
-                                }`}{" "}
-                              {detailsData?.unit_type}
-                            </h5>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="d-flex">
-                          <img
-                            alt="Facing"
-                            height="48"
-                            width="48"
-                            src="/assets/images/icons/8270179.png"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span>{translation?.facing || "Facing"}</span>
-                            <h5>
-                              {facingOptions.find(
-                                (item) =>
-                                  item.key === detailsData?.project_facing
-                              )?.value ||
-                                `${translation?.not_available || "Not available"
-                                }`}
-                            </h5>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="d-flex">
-                          <img
-                            alt="Booking Price"
-                            height="48"
-                            width="48"
-                            src="/assets/images/icons/money.png"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span className="text-muted">
-                              {translation?.booking_price || "Booking Price"}
-                            </span>
+                        </li>
+                      )}
 
-                            <h5>
-                              {detailsData?.currency || "Not Available"}{" "}
-                              {detailsData?.token_amount ||
-                                `${translation?.not_available || "Not available"
-                                }`}
-                            </h5>
+                      {detailsData?.total_units && (
+                        <li>
+                          <div className="d-flex">
+                            <img
+                              alt="Total Units"
+                              height="48"
+                              width="48"
+                              src="/assets/images/icons/carpet-area.png"
+                            />
+                            <div className="flex-grow-1 ps-2">
+                              <span>{translation?.total_units || "Total Units"}</span>
+                              <h5>{detailsData.total_units}</h5>
+                            </div>
                           </div>
-                        </div>
-                      </li>
+                        </li>
+                      )}
+
+                      {detailsData?.total_towers && (
+                        <li>
+                          <div className="d-flex">
+                            <img
+                              alt="Total Towers"
+                              height="48"
+                              width="48"
+                              src="/assets/images/icons/tower.png"
+                            />
+                            <div className="flex-grow-1 ps-2">
+                              <span>{translation?.total_towers || "Total Towers"}</span>
+                              <h5>{detailsData.total_towers}</h5>
+                            </div>
+                          </div>
+                        </li>
+                      )}
+
+                      {detailsData?.occupied_area && (
+                        <li>
+                          <div className="d-flex">
+                            <img
+                              alt="Garage Size"
+                              height="48"
+                              width="48"
+                              src="/assets/images/icons/carpet-area.png"
+                            />
+                            <div className="flex-grow-1 ps-2">
+                              <span>{translation?.occupied_area || "Occupied Area"}</span>
+                              <h5>
+                                {detailsData.occupied_area} {detailsData?.unit_type}
+                              </h5>
+                            </div>
+                          </div>
+                        </li>
+                      )}
+
+                      {detailsData?.created_at && (
+                        <li>
+                          <div className="d-flex">
+                            <img
+                              alt="Launch Date"
+                              height="48"
+                              width="48"
+                              src="/assets/images/icons/calendar.png"
+                            />
+                            <div className="flex-grow-1 ps-2">
+                              <span>{translation?.launch_date || "Launch Date"}</span>
+                              <h5>{useDateFormat(detailsData.created_at)}</h5>
+                            </div>
+                          </div>
+                        </li>
+                      )}
+
+                      {detailsData?.total_area && (
+                        <li>
+                          <div className="d-flex">
+                            <img
+                              alt="Locatily"
+                              height="48"
+                              width="48"
+                              src="/assets/images/icons/size.png"
+                            />
+                            <div className="flex-grow-1 ps-2">
+                              <span>{translation?.total_area || "Total Area"}</span>
+                              <h5>
+                                {detailsData.total_area} {detailsData?.unit_type}
+                              </h5>
+                            </div>
+                          </div>
+                        </li>
+                      )}
+
+                      {detailsData?.project_facing && (
+                        <li>
+                          <div className="d-flex">
+                            <img
+                              alt="Facing"
+                              height="48"
+                              width="48"
+                              src="/assets/images/icons/8270179.png"
+                            />
+                            <div className="flex-grow-1 ps-2">
+                              <span>{translation?.facing || "Facing"}</span>
+                              <h5>
+                                {facingOptions.find(
+                                  (item) => item.key === detailsData.project_facing
+                                )?.value}
+                              </h5>
+                            </div>
+                          </div>
+                        </li>
+                      )}
+
+                      {detailsData?.token_amount && (
+                        <li>
+                          <div className="d-flex">
+                            <img
+                              alt="Booking Price"
+                              height="48"
+                              width="48"
+                              src="/assets/images/icons/money.png"
+                            />
+                            <div className="flex-grow-1 ps-2">
+                              <span className="text-muted">
+                                {translation?.booking_price || "Booking Price"}
+                              </span>
+                              <h5>
+                                {detailsData.currency || "Not Available"} {detailsData.token_amount}
+                              </h5>
+                            </div>
+                          </div>
+                        </li>
+                      )}
                     </ul>
+
                     <h4 className="mb-3 text-primary">{translation?.more_details || "More Details"}</h4>
                     <Row>
-                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                        <p className="text-muted mb-2">
-                          {translation?.price_breakup || "Price Breakup:"}
-                        </p>
-                        <h5>
-                          {detailsData?.currency || "Not Available"}{" "}
-                          {detailsData?.expected_price ||
-                            `${translation?.not_available || "Not Available"}`}
-                        </h5>
-                      </Col>
-                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                        <p className="text-muted mb-2">
-                          {translation?.furnishing || "Furnishing:"}
-                        </p>
-                        <h5>
-                          {detailsData?.project_furnish ||
-                            `${translation?.not_available || "Not Available"}`}
-                        </h5>
-                      </Col>
-                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                        <p className="text-muted mb-2">
-                          {translation?.type_of_ownership ||
-                            "Type of Ownership:"}
-                        </p>
-                        <h5>
-                          {detailsData?.ownership_type ||
-                            `${translation?.not_available || "Not Available"}`}
-                        </h5>
-                      </Col>
-                      <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                        <p className="text-muted mb-2">
-                          {translation?.main_road_facing || "Main Road Facing:"}
-                        </p>
-                        <h5>
-                          {detailsData?.main_road_facing ||
-                            `${translation?.not_available || "Not Available"}`}
-                        </h5>
-                      </Col>
-                      <Col className="col-xl-6 col-md-6 mb-4">
-                        <p className="text-muted mb-2">
-                          {translation?.address || "Address:"}
-                        </p>
-                        <h5>
-                          {detailsData?.address ||
-                            `${translation?.not_available || "Not Available"}`}
-                        </h5>
-                      </Col>
-                      <Col className="col-xl-6 col-md-6 mb-4">
-                        <p className="text-muted mb-2">
-                          {translation?.locality || "Locality:"}
-                        </p>
-                        <h5>
-                          {detailsData?.locality ||
-                            `${translation?.not_available || "Not Available"}`}
-                        </h5>
-                      </Col>
+                      {detailsData?.expected_price && (
+                        <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                          <p className="text-muted mb-2">
+                            {translation?.price_breakup || "Price Breakup:"}
+                          </p>
+                          <h5>
+                            {detailsData?.currency || "Not Available"}{" "}
+                            {detailsData?.expected_price ||
+                              `${translation?.not_available || "Not Available"}`}
+                          </h5>
+                        </Col>
+                      )}
+
+                      {detailsData?.project_furnish && (
+                        <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                          <p className="text-muted mb-2">
+                            {translation?.furnishing || "Furnishing:"}
+                          </p>
+                          <h5>
+                            {detailsData?.project_furnish ||
+                              `${translation?.not_available || "Not Available"}`}
+                          </h5>
+                        </Col>
+                      )}
+
+                      {detailsData?.ownership_type && (
+                        <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                          <p className="text-muted mb-2">
+                            {translation?.type_of_ownership || "Type of Ownership:"}
+                          </p>
+                          <h5>
+                            {detailsData?.ownership_type ||
+                              `${translation?.not_available || "Not Available"}`}
+                          </h5>
+                        </Col>
+                      )}
+
+                      {detailsData?.main_road_facing && (
+                        <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                          <p className="text-muted mb-2">
+                            {translation?.main_road_facing || "Main Road Facing:"}
+                          </p>
+                          <h5>
+                            {detailsData?.main_road_facing ||
+                              `${translation?.not_available || "Not Available"}`}
+                          </h5>
+                        </Col>
+                      )}
+
+                      {detailsData?.address && (
+                        <Col className="col-xl-6 col-md-6 mb-4">
+                          <p className="text-muted mb-2">
+                            {translation?.address || "Address:"}
+                          </p>
+                          <h5>
+                            {detailsData?.address ||
+                              `${translation?.not_available || "Not Available"}`}
+                          </h5>
+                        </Col>
+                      )}
+
+                      {detailsData?.locality && (
+                        <Col className="col-xl-6 col-md-6 mb-4">
+                          <p className="text-muted mb-2">
+                            {translation?.locality || "Locality:"}
+                          </p>
+                          <h5>
+                            {detailsData?.locality ||
+                              `${translation?.not_available || "Not Available"}`}
+                          </h5>
+                        </Col>
+                      )}
 
                       {/* View More Details */}
                       {viewMore && (
                         <>
-                          <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                            <p className="text-muted mb-2">
-                              {translation?.possession_status ||
-                                "Possession Status:"}
-                            </p>
-                            <h5>
-                              {detailsData?.possession_status ||
-                                `${translation?.not_available || "Not Available"
-                                }`}
-                            </h5>
-                          </Col>
-                          <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                            <p className="text-muted mb-2">
-                              {translation?.parking_availability ||
-                                "Parking Availability:"}
-                            </p>
-                            <h5>
-                              {detailsData?.parking_availability === "AV"
-                                ? "Available"
-                                : detailsData?.parking_availability === "NA"
-                                  ? `${translation?.not_available ||
-                                  "Not Available"
-                                  }`
-                                  : detailsData?.parking_availability === "UC"
-                                    ? "Under Construction"
-                                    : `${translation?.not_available ||
-                                    "Not Available"
-                                    }`}
-                            </h5>
-                          </Col>
+                          {detailsData?.possession_status && (
+                            <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                              <p className="text-muted mb-2">
+                                {translation?.possession_status || "Possession Status:"}
+                              </p>
+                              <h5>
+                                {detailsData?.possession_status ||
+                                  `${translation?.not_available || "Not Available"}`}
+                              </h5>
+                            </Col>
+                          )}
 
-                          <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                            <p className="text-muted mb-2">
-                              {translation?.water_availability ||
-                                "Water Availability:"}
-                            </p>
-                            <h5>
-                              {waterAvailabilityOptions.find(
-                                (item) =>
-                                  item.key === detailsData?.water_availability
-                              )?.value ||
-                                `${translation?.not_available || "Not Available"
-                                }`}
-                            </h5>
-                          </Col>
-                          <Col className="col-xl-3 col-md-4 col-6 mb-4">
-                            <p className="text-muted mb-2">
-                              {translation?.electricity_status ||
-                                "Electricity Status:"}
-                            </p>
-                            <h5>
-                              {electricityStatusOptions.find(
-                                (item) => item.key === detailsData?.electricity
-                              )?.value ||
-                                `${translation?.not_available || "Not Available"
-                                }`}
-                            </h5>
-                          </Col>
+                          {detailsData?.parking_availability && (
+                            <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                              <p className="text-muted mb-2">
+                                {translation?.parking_availability || "Parking Availability:"}
+                              </p>
+                              <h5>
+                                {detailsData?.parking_availability === "AV"
+                                  ? "Available"
+                                  : detailsData?.parking_availability === "NA"
+                                    ? `${translation?.not_available || "Not Available"}`
+                                    : detailsData?.parking_availability === "UC"
+                                      ? "Under Construction"
+                                      : `${translation?.not_available || "Not Available"}`}
+                              </h5>
+                            </Col>
+                          )}
+
+                          {detailsData?.water_availability && (
+                            <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                              <p className="text-muted mb-2">
+                                {translation?.water_availability || "Water Availability:"}
+                              </p>
+                              <h5>
+                                {waterAvailabilityOptions.find(
+                                  (item) => item.key === detailsData?.water_availability
+                                )?.value ||
+                                  `${translation?.not_available || "Not Available"}`}
+                              </h5>
+                            </Col>
+                          )}
+
+                          {detailsData?.electricity && (
+                            <Col className="col-xl-3 col-md-4 col-6 mb-4">
+                              <p className="text-muted mb-2">
+                                {translation?.electricity_status || "Electricity Status:"}
+                              </p>
+                              <h5>
+                                {electricityStatusOptions.find(
+                                  (item) => item.key === detailsData?.electricity
+                                )?.value ||
+                                  `${translation?.not_available || "Not Available"}`}
+                              </h5>
+                            </Col>
+                          )}
                         </>
                       )}
                     </Row>
+
 
                     <Button
                       variant="outline-primary"
@@ -676,7 +675,7 @@ const CommercialProjectDetails = ({
 
               {!Array.isArray(detailsData?.project_properties) && (
                 <ProjectedProperty
-                title={detailsData?.project_name}
+                  title={detailsData?.project_name}
                   projectProperties={detailsData?.project_properties}
                 />
               )}

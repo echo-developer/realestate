@@ -26,6 +26,11 @@ const PropertyRequirementForm = () => {
   const [minBudget, setMinBudget] = useState("");
   const [maxBudget, setMaxBudget] = useState("");
   const [locality, setLocality] = useState("");
+  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [budgetDropdown, setBudgetDropdown] = useState(false);
+  
+  
 
   const validationSchema = Yup.object({
     name: Yup.string().required(
@@ -99,15 +104,26 @@ const PropertyRequirementForm = () => {
           resetForm();
           resetSizes();
           setSelectedPropertyType("1")
-        }else{
-          toast.error(res.message ||"Not Send Enquiry")
         }
       } catch (error) {
         console.error(error?.message || "Something went wrong");
       }
   };
+  const handleClickOutside = (e) => {
+    setIsOverlayVisible(false);
+    setShowDropdown(false);
+    setBudgetDropdown(false);
+  };
 
   return (
+    <>
+    {isOverlayVisible && (
+        <div
+          className="page-overlay"
+          style={{ zIndex: 0 }}
+          onClick={handleClickOutside}
+        ></div>
+      )}
     <aside className="col-lg-6 col-12">
       <div className="card">
         <div className="card-body p-lg-4">
@@ -207,6 +223,11 @@ const PropertyRequirementForm = () => {
                           handlePropertyForChange={handlePropertyForChange}
                           handleReset={handleReset}
                           handleDone={handleDone}
+                          handleClickOutside={handleClickOutside}
+                          setIsOverlayVisible={setIsOverlayVisible}
+                          showDropdown={showDropdown} 
+                          setShowDropdown={setShowDropdown}
+                          
                         />
                       </Col>
                       {/* Area Input with Unit Selection */}
@@ -219,6 +240,10 @@ const PropertyRequirementForm = () => {
                           applySizes={applySizes}
                           resetSizes={resetSizes}
                           translation={translation}
+                          showDropdown={budgetDropdown}
+                          setShowDropdown={setBudgetDropdown}
+                          handleClickOutside={handleClickOutside}
+                          setIsOverlayVisible={setIsOverlayVisible}
                         />
                       </Col>
                     </Row>
@@ -365,6 +390,7 @@ const PropertyRequirementForm = () => {
         </Modal.Body>
       </Modal>
     </aside>
+    </>
   );
 };
 

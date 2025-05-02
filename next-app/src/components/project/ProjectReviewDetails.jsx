@@ -46,7 +46,7 @@ const ProjectReviewDetails = ({ project_reviews, ShowReviewModal, is_my_project 
                   <div className="ps-4">
                     <p className="text-muted">
                       {parseFloat(rating).toFixed(1)} {translation?.ratings || "ratings"}<br />
-                      {total_reviews} {translation?.reviews || "Reviews"}
+                      {/* {total_reviews} {translation?.reviews || "Reviews"} */}
                     </p>
                   </div>
                 </div>
