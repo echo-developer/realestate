@@ -12,7 +12,7 @@ import { AuthProvider, useAuth } from "@/context/AuthProvider";
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
   const { userData, userLoading, currency } = useAuth();
-  const [counters, setCounters] = useState({});
+  const [dashboardList, setDashboardList] = useState({});
   const [facts, setFacts] = useState([]);
   const memberId = GetMemberId();
   const translation = useTranslation();
@@ -27,7 +27,7 @@ const Index = () => {
         },
       });
       if (response && response.status === 1) {
-        setCounters(response.data?.counters);
+        setDashboardList(response.data);
       }
     } catch (error) { }
   };
@@ -36,7 +36,60 @@ const Index = () => {
     fetchDashboardListData();
   }, [])
 
-  console.log("counters", counters)
+  useEffect(() => {
+    if (dashboardList) {
+      setFacts([
+        {
+          bgColor: "rgba(137, 178, 231, 0.2)",
+          iconBgColor: "rgb(19, 101, 207)",
+          iconSrc: "/assets/images/icons/home-2.png",
+          number: dashboardList?.counters?.allProperty,
+          url: '/my-property-listing',
+          title: `${translation?.all_property || 'All Property'}`,
+        },
+        {
+          bgColor: "rgba(139, 202, 153, 0.2)",
+          iconBgColor: "rgb(24, 150, 52)",
+          iconSrc: "/assets/images/icons/sale-2.png",
+          number: dashboardList?.counters?.forSell,
+          url: '/my-property-listing?post_for=sale',
+          title: `${translation?.property_for_sale || 'Property for Sale'}`,
+        },
+        {
+          bgColor: "rgba(243, 168, 189, 0.2)",
+          iconBgColor: "rgb(232, 82, 124)",
+          iconSrc: "/assets/images/icons/rent-3.png",
+          number: dashboardList?.counters?.forRent,
+          url: '/my-property-listing?post_for=rent',
+          title: `${translation?.property_for_rent || 'Property for Rent'}`,
+        },
+        {
+          bgColor: "rgba(208, 168, 243, 0.2)",
+          iconBgColor: "rgb(162, 82, 232)",
+          iconSrc: "/assets/images/icons/wallet.png",
+          number: `$${dashboardList?.counters?.totalSpending}`,
+          title: `${translation?.total_spending || 'Total Spending'}`,
+        },
+        {
+          bgColor: "rgba(144, 220, 222, 0.2)",
+          iconBgColor: "rgb(34, 185, 190)",
+          iconSrc: "/assets/images/icons/favourite-property.png",
+          number: dashboardList?.counters?.favProperty,
+          url: "/my-favourite-list",
+          title: `${translation?.favourite_property || 'Favourite Property'}`,
+        },
+        {
+          bgColor: "rgba(239, 195, 141, 0.2)",
+          iconBgColor: "rgb(224, 135, 28)",
+          iconSrc: "/assets/images/icons/home-2.png",
+          number: dashboardList?.counters?.propertyEnquery,
+          url: '/property-crm',
+          title: `${translation?.property_enquiries || 'Property Enquiries'}`
+          ,
+        },
+      ]);
+    }
+  }, [dashboardList]);
 
 
   return (
@@ -126,7 +179,7 @@ const Index = () => {
                   </div>
                 </div>
               </div>
-              {Object.keys(counters).length > 0 && (
+              {/* {Object.keys(counters).length > 0 && (
                 <div className="row g-4 mt-3">
                   {counters.totalSpending && (
                     <div className="col-md-3">
@@ -265,9 +318,35 @@ const Index = () => {
                     </div>
                   )}
                 </div>
-              )}
+              )} */}
 
-
+              <div className="row">
+                {facts.map((fact, index) => (
+                  <article className="col-md-4 col-sm-6 col-12" key={index} onClick={() => routePush(fact?.url)}>
+                    <a
+                      role="button"
+                      className="fun-fact"
+                      style={{ backgroundColor: fact.bgColor }}
+                    >
+                      <div
+                        className="fun-fact-icon"
+                        style={{ backgroundColor: fact.iconBgColor }}
+                      >
+                        <img
+                          src={fact.iconSrc}
+                          alt={`${fact.title} Icon`}
+                          height="40"
+                          width="40"
+                        />
+                      </div>
+                      <div className="fun-fact-text">
+                        <h3>{fact.number == '$undefined' ? "" : fact.number}</h3>
+                        <h5>{fact.title}</h5>
+                      </div>
+                    </a>
+                  </article>
+                ))}
+              </div>
             </>
 
           )}
