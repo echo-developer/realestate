@@ -1,57 +1,58 @@
 <?php
 
-use App\Http\Controllers\Admin\_Menu_Controller;
-use App\Http\Controllers\Admin\AdminUserController;
-use App\Http\Controllers\Admin\AdvertisementController;
-use App\Http\Controllers\Admin\AdvertisementPackagesController;
-use App\Http\Controllers\Admin\AllProjectController;
-use App\Http\Controllers\Admin\AllPropertyController;
-use App\Http\Controllers\Admin\AllSettingController;
-use App\Http\Controllers\Admin\AreaPriceController;
-use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\Admin\BankLoanController;
-use App\Http\Controllers\Admin\CityController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Admin\CmsController;
+use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\CityController;
+use App\Http\Controllers\Admin\MetaController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\StateController;
+use App\Http\Controllers\Admin\_Menu_Controller;
+use App\Http\Controllers\Admin\PropertyCategory;
 use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\EnquiryController;
+use App\Http\Controllers\Admin\FaqListController;
+use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\BankLoanController;
+use App\Http\Controllers\Admin\FeedbackController;
+use App\Http\Controllers\Admin\LocalityController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AreaPriceController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmailTempController;
-use App\Http\Controllers\Admin\EnquiryController;
-use App\Http\Controllers\Admin\FaqController;
-use App\Http\Controllers\Admin\FaqListController;
-use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\FloorPlanController;
-use App\Http\Controllers\Admin\GroupSettingController;
-use App\Http\Controllers\Admin\LoanEnqueryController;
-use App\Http\Controllers\Admin\LocalityController;
-use App\Http\Controllers\Admin\MembershipFeaturesController;
-use App\Http\Controllers\Admin\MembershipPlanController;
-use App\Http\Controllers\Admin\NotificationController;
-use App\Http\Controllers\Admin\NotificationTemplateController;
-use App\Http\Controllers\Admin\PaymentMethodController;
+use App\Http\Controllers\Admin\AllProjectController;
+use App\Http\Controllers\Admin\AllSettingController;
 use App\Http\Controllers\Admin\PermissionController;
-use App\Http\Controllers\Admin\PostPropertyController;
-use App\Http\Controllers\Admin\ProjectAmenityController;
-use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Api\FloorPlaningController;
+use App\Http\Controllers\Admin\AllPropertyController;
+use App\Http\Controllers\Admin\LoanEnqueryController;
 use App\Http\Controllers\Admin\ProjectEditController;
-use App\Http\Controllers\Admin\Property_SubCategoryController;
-use App\Http\Controllers\Admin\PropertyBudgetController;
-use App\Http\Controllers\Admin\PropertyCategory;
-use App\Http\Controllers\Admin\PropertyFurnishController;
-use App\Http\Controllers\Admin\PropertyLengthController;
-use App\Http\Controllers\Admin\PropertyRecommendController;
-use App\Http\Controllers\Admin\PropertyStatusController;
-use App\Http\Controllers\Admin\PropertyTransactionController;
-use App\Http\Controllers\Admin\ResetPasswordController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\StateController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\TransactionController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\UserSearchActivityController;
-use App\Http\Controllers\Api\FloorPlaningController;
+use App\Http\Controllers\Admin\GroupSettingController;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\PostPropertyController;
+use App\Http\Controllers\Admin\AdvertisementController;
+use App\Http\Controllers\Admin\PaymentMethodController;
+use App\Http\Controllers\Admin\ResetPasswordController;
+use App\Http\Controllers\Admin\MembershipPlanController;
+use App\Http\Controllers\Admin\ProjectAmenityController;
+use App\Http\Controllers\Admin\PropertyBudgetController;
+use App\Http\Controllers\Admin\PropertyLengthController;
+use App\Http\Controllers\Admin\PropertyStatusController;
+use App\Http\Controllers\Admin\PropertyFurnishController;
 use App\Http\Controllers\Api\Project\ProjectImageUploade;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\PropertyRecommendController;
+use App\Http\Controllers\Admin\MembershipFeaturesController;
+use App\Http\Controllers\Admin\UserSearchActivityController;
+use App\Http\Controllers\Admin\PropertyTransactionController;
+use App\Http\Controllers\Admin\NotificationTemplateController;
+use App\Http\Controllers\Admin\Property_SubCategoryController;
+use App\Http\Controllers\Admin\AdvertisementPackagesController;
 
 
 
@@ -166,8 +167,8 @@ Route::middleware('admin_auth')->group(function () {
     });
 
     /*
-|--------------------------------------------------------------------------
-| Property Category Routes
+    |--------------------------------------------------------------------------
+    | Property Category Routes
 |--------------------------------------------------------------------------
 | These routes handle the property category management.
 | Created By: Soumyadip
@@ -452,8 +453,8 @@ Route::middleware('admin_auth')->group(function () {
     Route::post('/save-payment-methods', [PaymentMethodController::class, 'updatePaymentMethod'])->name('save.payment.method');
 
     /*
-|--------------------------------------------------------------------------
-| POST PROPERTY ROUTES
+    |--------------------------------------------------------------------------
+    | POST PROPERTY ROUTES
 |--------------------------------------------------------------------------
 | These routes handle the Notification Template management.
 | Created By: Soumyadip
@@ -589,3 +590,16 @@ Route::post('/update/list/category', [FaqListController::class, 'update_list'])-
 Route::get('/faq/list/details/{id}', [FaqListController::class, 'list_category'])->name('list_category');
 Route::post('/faq/list/status', [FaqListController::class, 'list_status'])->name('list_status');
 Route::post('/faq/list/delete', [FaqListController::class, 'list_delete'])->name('list_delete');
+
+
+Route::prefix('page-meta')->name('meta.')->controller(MetaController::class)->group(function () {
+    Route::get('/', 'listMeta')->name('list'); // meta.list
+    Route::post('/store', 'store')->name('store'); // meta.store
+    Route::get('/edit/{id}', 'edit')->name('edit'); // meta.edit
+    Route::put('/update/{id}', 'update')->name('update'); // meta.update
+    Route::post('/status', 'statusUpdate')->name('status'); // meta.status
+    Route::delete('/delete/{id}', 'destroy')->name('destroy'); // meta.status
+    Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple'); // meta.delete-multiple
+    Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple'); // meta.activate-multiple
+    Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple'); // meta.deactivate-multiple
+});
