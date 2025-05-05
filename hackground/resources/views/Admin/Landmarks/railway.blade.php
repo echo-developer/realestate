@@ -22,12 +22,12 @@
                 <div class="page-title-icon">
                     <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
                 </div>
-                <div>Hospital</div>
+                <div>Railway</div>
             </div>
             <div class="page-title-actions">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
-                    <li class="breadcrumb-item active">Hospital List</li>
+                    <li class="breadcrumb-item active">Railway List</li>
                 </ol>
             </div>
         </div>
@@ -50,7 +50,7 @@
     </div>
     @endif
 
-    <form action="{{route('hospital.index')}}" method="get">
+    <form action="{{route('railway.index')}}" method="get">
         <section class="content-header mb-2">
             <div class="row justify-content-end">
                 <div class="col-xl-4 col-lg-6">
@@ -70,7 +70,7 @@
 
     <div class="main-card mb-3 card">
         <div class="card-header d-flex">
-            <h4>Hospital List</h4>
+            <h4>Railway List</h4>
 
             <div class="btn-actions-pane-right">
                 <div class="btn-group" id="all-select" style="display: none;">
@@ -270,7 +270,7 @@
             }
 
             $.ajax({
-                url: id ? `{{ route('hospital.update', ':id') }}`.replace(':id', id) : `{{ route('hospital.store') }}`,
+                url: id ? `{{ route('railway.update', ':id') }}`.replace(':id', id) : `{{ route('railway.store') }}`,
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -299,7 +299,7 @@
             $('#AddEditModalLabel').text('Edit')
             let id = $(this).data('id');
             $.ajax({
-                url: "{{ route('hospital.edit', ':id') }}".replace(':id', id),
+                url: "{{ route('railway.edit', ':id') }}".replace(':id', id),
                 type: 'GET',
                 success: function(response) {
                     $('#edit_id').val(response.id);
@@ -323,7 +323,7 @@
 
 
             $.ajax({
-                url: `{{route('hospital.status')}}`.replace(':id', id),
+                url: `{{route('railway.status')}}`.replace(':id', id),
                 type: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',
@@ -349,7 +349,7 @@
             let id = $(this).data('id');
             if (confirm('Are you sure you want to delete this item?')) {
                 $.ajax({
-                    url: `{{route('hospital.destroy', ':id')}}`.replace(':id', id),
+                    url: `{{route('railway.destroy', ':id')}}`.replace(':id', id),
                     type: 'DELETE',
                     data: {
                         _token: '{{ csrf_token() }}',
@@ -375,7 +375,7 @@
             if (selectedIds.length > 0) {
                 if (confirm('Are you sure you want to delete all selected items?')) {
                     $.ajax({
-                        url: `{{route('hospital.delete-multiple')}}`,
+                        url: `{{route('railway.delete-multiple')}}`,
                         type: 'POST',
                         data: {
                             _token: '{{ csrf_token() }}',
@@ -406,7 +406,7 @@
             if (selectedIds.length > 0) {
                 if (confirm('Are you sure you want to activate all selected items?')) {
                     $.ajax({
-                        url: `{{route('hospital.activate-multiple')}}`,
+                        url: `{{route('railway.activate-multiple')}}`,
                         type: 'POST',
                         data: {
                             _token: '{{ csrf_token() }}',
@@ -436,7 +436,7 @@
             if (selectedIds.length > 0) {
                 if (confirm('Are you sure you want to deactivate all selected items?')) { // Confirmation dialog
                     $.ajax({
-                        url: `{{route('hospital.deactivate-multiple')}}`, // Your backend route
+                        url: `{{route('railway.deactivate-multiple')}}`, // Your backend route
                         type: 'POST',
                         data: {
                             _token: '{{ csrf_token() }}',
