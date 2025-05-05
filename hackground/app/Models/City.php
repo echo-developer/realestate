@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
+use function Laravel\Prompts\select;
+
 class City extends Model
 {
     use HasFactory;
@@ -164,37 +166,100 @@ class City extends Model
         ];
     }
 
-    public function cityAddfromExcel(array $data)
+    // public function cityAddfromExcel(array $data)
+    // {
+    //     try {
+    //         $langs = explode(',', admin_default_lang());
+    //         foreach ($data as $row) {
+
+    //             $stateData = $this->get_state_data($row[1]);
+    //             $newCityId =  DB::table($this->cityTable)->insertGetId([
+    //                 'country' => $stateData?->country ?? get_setting('other-country-id'),
+    //                 'state' =>  $stateData?->id ?? get_setting('other-state-id'),
+    //                 'order'  => rand(1, 4),
+    //                 'status' => config('constants.STATUS_ACTIVE'),
+    //             ]);
+
+    //             $nameByLang = [
+    //                 'en' => $row[2] ?? null,
+    //                 'ar' => $row[3] ?? null,
+    //             ];
+
+    //             foreach ($langs as $lang) {
+    //                 DB::table($this->cityNamesTable)->insert([
+    //                     'city_id' => $newCityId,
+    //                     'lang'        => $lang,
+    //                     'name'        => $nameByLang[$lang] ?? null,
+    //                 ]);
+    //             }
+    //         }
+    //         return [
+    //             'message' => 'City added successfully.',
+    //         ];
+    //     } catch (\Throwable $th) {
+    //         throw $th;
+    //     }
+    // }
+
+    public function cityAddfromExcel(array $data, $perChunck = 100)
     {
         try {
-            // log_anything($data);
             $langs = explode(',', admin_default_lang());
-            foreach ($data as $row) {
 
-                $newCityId =  DB::table($this->cityTable)->insertGetId([
-                    'country' => $row[0],
-                    'state' =>  $row[1],
-                    'order'  => rand(1, 4),
-                    'status' => config('constants.STATUS_ACTIVE'),
-                ]);
+            foreach (array_chunk($data, $perChunck) as $chunk) {
+                DB::beginTransaction();
 
-                $nameByLang = [
-                    'en' => $row[2] ?? null,
-                    'ar' => $row[3] ?? null,
-                ];
+                foreach ($chunk as $row) {
+                    $stateData = $this->get_state_data($row[1]);
+                    log_anything($row[1]);
+                    log_anything($row[2]);
+                    log_anything($stateData);
 
-                foreach ($langs as $lang) {
-                    DB::table($this->cityNamesTable)->insert([
-                        'city_id' => $newCityId,
-                        'lang'        => $lang,
-                        'name'        => $nameByLang[$lang] ?? null,
+                    $newCityId = DB::table($this->cityTable)->insertGetId([
+                        'country' => $stateData?->country ?? get_setting('other-country-id'),
+                        'state'   => $stateData?->id ?? get_setting('other-state-id'),
+                        'order'   => rand(1, 4),
+                        'status'  => config('constants.STATUS_ACTIVE'),
                     ]);
-                }
-            }
 
-            return [
-                'message' => 'City added successfully.',
-            ];
+                    $nameByLang = [
+                        'en' => $row[2] ?? null,
+                        'ar' => $row[3] ?? null,
+                    ];
+
+                    $cityNames = [];
+                    foreach ($langs as $lang) {
+                        $cityNames[] = [
+                            'city_id' => $newCityId,
+                            'lang'    => $lang,
+                            'name'    => $nameByLang[$lang] ?? null,
+                        ];
+                    }
+
+                    DB::table($this->cityNamesTable)->insert($cityNames); // Bulk insert for languages
+                }
+
+                DB::commit();
+            }
+            return ['message' => 'City added successfully.'];
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+    }
+
+
+    private function get_state_data($stateName)
+    {
+        try {
+
+            $stateName = trim(preg_replace('/\s+/', ' ', $stateName));
+            return DB::table('state')
+                ->leftJoin('state_names', 'state_names.state_id', '=', 'state.id')
+                ->where('state_names.lang', '=', 'en')
+                ->whereRaw('LOWER(pref_state_names.name) = ?', [strtolower($stateName)])
+                ->select('state.id', 'state.country')
+                ->first();
         } catch (\Throwable $th) {
             throw $th;
         }

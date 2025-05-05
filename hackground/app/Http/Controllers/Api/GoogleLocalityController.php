@@ -130,7 +130,7 @@ class GoogleLocalityController extends Controller
 
             if (!$existing) {
                 $getId = DB::table('locality')->insertGetId([
-                    'city' => null,
+                    'city' => get_setting('other-city-id'),
                     'locality_key' => $slug,
                     'latitude' => $locality['lat'],
                     'longitude' => $locality['lng'],
