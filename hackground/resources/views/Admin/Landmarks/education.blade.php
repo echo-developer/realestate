@@ -22,12 +22,12 @@
                 <div class="page-title-icon">
                     <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
                 </div>
-                <div>Meta</div>
+                <div>Education</div>
             </div>
             <div class="page-title-actions">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
-                    <li class="breadcrumb-item active">Meta List</li>
+                    <li class="breadcrumb-item active">Education List</li>
                 </ol>
             </div>
         </div>
@@ -50,12 +50,12 @@
     </div>
     @endif
 
-    <form action="" method="get">
+    <form action="{{route('education.index')}}" method="get">
         <section class="content-header mb-2">
             <div class="row justify-content-end">
                 <div class="col-xl-4 col-lg-6">
                     <div class="input-group">
-                        <input class="form-control" id="prop_category_search" placeholder="Search..." name="term"
+                        <input class="form-control" id="" placeholder="Search..." name="term"
                             value="{{ request('term') }}" />
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-primary">
@@ -70,7 +70,7 @@
 
     <div class="main-card mb-3 card">
         <div class="card-header d-flex">
-            <h4>Meta List</h4>
+            <h4>Education List</h4>
 
             <div class="btn-actions-pane-right">
                 <div class="btn-group" id="all-select" style="display: none;">
@@ -89,26 +89,24 @@
                 <table class="mb-0 table">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" id="select-all"></th>
+                            <!-- <th><input type="checkbox" id="select-all"></th> -->
                             <th>ID</th>
-                            <th>Page Name</th>
-                            <th>Meta Title</th>
-                            <th>Meta Key</th>
-                            <th>Meta Description</th>
+                            <th>Name</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
                             <th>Status</th>
                             <th style="min-width:60px;" class="text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody id="user">
 
-                        @forelse($meta as $data)
+                        @forelse($list as $data)
                         <tr>
-                            <td><input type="checkbox" data-id="{{$data->id}}" class="select-item"></td>
+                            <!-- <td><input type="checkbox" data-id="{{$data->id}}" class="select-item"></td> -->
                             <td>{{$data->id}} </td>
-                            <td>{{$data->page_name}} </td>
-                            <td>{{$data->meta_title}} </td>
-                            <td>{{$data->meta_key}} </td>
-                            <td>{{$data->meta_description}} </td>
+                            <td>{{$data->name}} </td>
+                            <td>{{$data->lat}} </td>
+                            <td>{{$data->long}} </td>
                             <td>
                                 <input type="checkbox" class="status d-none" data-id="{{$data->id}}" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ $data->status ? 'checked' : '' }}>
                             </td>
@@ -129,8 +127,7 @@
                 </table>
             </div>
 
-            {!! $meta->links('vendor.pagination.bootstrap-5') !!}
-
+            {!! $list->links('vendor.pagination.bootstrap-5') !!}
         </div>
     </div>
 </div>
@@ -155,56 +152,35 @@
                     <input type="text" class='d-none' id="edit_id" name="edit_id">
 
                     <div class="mb-3">
-                        <label for="page_name">Page Name </label>
-                        <input type="text" class="form-control reset_field" id="page_name" name="page_name" autocomplete="off">
-                        <div class="invalid-feedback" id="page_name_error"></div>
+                        <label for="page_name"> Name </label>
+                        <input type="text" class="form-control reset_field" id="name" name="name" autocomplete="off">
+                        <div class="invalid-feedback" id="name_error"></div>
                     </div>
-                    <div class="mb-3">
-                        <label for="meta_title">Meta Title</label>
-                        <input type="text" class="form-control reset_field" id="meta_title" name="meta_title" autocomplete="off">
-                        <div class="invalid-feedback" id="meta_title_error"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="meta_key">Meta key</label>
-                        <input type="text" class="form-control reset_field" id="meta_key" name="meta_key" autocomplete="off">
-                        <div class="invalid-feedback" id="meta_key_error"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="meta_description">Meta Description</label>
-                        <input type="text" class="form-control reset_field" id="meta_description" name="meta_description" autocomplete="off">
-                        <div class="invalid-feedback" id="meta_description_error"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="ufile">Page </label>
-                        <select name="page" id="page_type" class="form-select">
-                            <option value="">Select Page</option>
-                            @php
-                            $pages = [
-                            'home_page' => 'Home Page',
-                            'about_us' => 'About Us',
-                            'search_page' => 'Search Page',
-                            ];
-                            @endphp
 
-                            @foreach ($pages as $key => $value)
-                            <option value="{{ $key }}">{{ $value }}</option>
-                            @endforeach
-                        </select>
-
-                        <div class="invalid-feedback" id="Page_type_error"></div>
+                    <div class="mb-3">
+                        <label for="latitude">Latitude</label>
+                        <input type="text" class="form-control reset_field" id="latitude" name="latitude" autocomplete="off">
+                        <div class="invalid-feedback" id="latitude_error"></div>
                     </div>
+
+                    <div class="mb-3">
+                        <label for="longitude">Longitude</label>
+                        <input type="text" class="form-control reset_field" id="longitude" name="longitude" autocomplete="off">
+                        <div class="invalid-feedback" id="longitude_error"></div>
+                    </div>
+
                     <div class="form-group mb-0">
                         <label class="form-label d-block">Status</label>
                         <div class="form-check form-check-inline">
-                            <input type="radio" name="status" value="1" class="form-check-input" id="status_1" required>
+                            <input type="radio" name="status" value=1 class="form-check-input" id="status_1" checked
+                                required>
                             <label class="form-check-label" for="status_1">Active</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input type="radio" name="status" value="0" class="form-check-input" id="status_2">
+                            <input type="radio" name="status" value=0 class="form-check-input" id="status_2">
                             <label class="form-check-label" for="status_2">Inactive</label>
                         </div>
                     </div>
-
                 </form>
             </div>
             <div class="modal-footer">
@@ -216,6 +192,8 @@
     </div>
 </div>
 @endsection
+
+
 @push('custom-js')
 <script>
     $(document).ready(function() {
@@ -292,7 +270,7 @@
             }
 
             $.ajax({
-                url: id ? `{{ route('meta.update', ':id') }}`.replace(':id', id) : `{{ route('meta.store') }}`,
+                url: id ? `{{ route('education.update', ':id') }}`.replace(':id', id) : `{{ route('education.store') }}`,
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -321,16 +299,15 @@
             $('#AddEditModalLabel').text('Edit')
             let id = $(this).data('id');
             $.ajax({
-                url: "{{ route('meta.edit', ':id') }}".replace(':id', id),
+                url: "{{ route('education.edit', ':id') }}".replace(':id', id),
                 type: 'GET',
                 success: function(response) {
-                    $('#page_name').val(response.page_name);
-                    $('#meta_title').val(response.meta_title);
-                    $('#meta_key').val(response.meta_key);
-                    $('#meta_description').val(response.meta_description);
-                    $('#page_type').val(response.page);
                     $('#edit_id').val(response.id);
-                    $('input[name="status"][value="' + response.status + '"]').prop('checked', true);
+                    $('#name').val(response.name);
+                    $('#latitude').val(response.lat);
+                    $('#longitude').val(response.long);
+                     $('input[name=status][value="' + response.status + '"]').prop('checked',
+                                true);
                     $('#defult-modal').modal('show');
                 },
                 error: function(xhr) {
@@ -346,7 +323,7 @@
 
 
             $.ajax({
-                url: `{{route('meta.status')}}`.replace(':id', id),
+                url: `{{route('education.status')}}`.replace(':id', id),
                 type: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',
@@ -372,7 +349,7 @@
             let id = $(this).data('id');
             if (confirm('Are you sure you want to delete this item?')) {
                 $.ajax({
-                    url: `{{route('meta.destroy', ':id')}}`.replace(':id', id),
+                    url: `{{route('education.destroy', ':id')}}`.replace(':id', id),
                     type: 'DELETE',
                     data: {
                         _token: '{{ csrf_token() }}',
@@ -398,7 +375,7 @@
             if (selectedIds.length > 0) {
                 if (confirm('Are you sure you want to delete all selected items?')) {
                     $.ajax({
-                        url: `{{route('meta.delete-multiple')}}`,
+                        url: `{{route('education.delete-multiple')}}`,
                         type: 'POST',
                         data: {
                             _token: '{{ csrf_token() }}',
@@ -429,7 +406,7 @@
             if (selectedIds.length > 0) {
                 if (confirm('Are you sure you want to activate all selected items?')) {
                     $.ajax({
-                        url: `{{route('meta.activate-multiple')}}`,
+                        url: `{{route('education.activate-multiple')}}`,
                         type: 'POST',
                         data: {
                             _token: '{{ csrf_token() }}',
@@ -459,7 +436,7 @@
             if (selectedIds.length > 0) {
                 if (confirm('Are you sure you want to deactivate all selected items?')) { // Confirmation dialog
                     $.ajax({
-                        url: `{{route('meta.deactivate-multiple')}}`, // Your backend route
+                        url: `{{route('education.deactivate-multiple')}}`, // Your backend route
                         type: 'POST',
                         data: {
                             _token: '{{ csrf_token() }}',

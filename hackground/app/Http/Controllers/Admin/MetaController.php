@@ -10,7 +10,7 @@ class MetaController extends Controller
 {
     public function listMeta()
     {
-        $meta = MetaData::where('status', '!=', env('DELETED'))->paginate(10);
+        $meta = MetaData::where('status', '!=', config('constants.STATUS_DELETE'))->paginate(10);
 
         return view('Admin.page_meta', compact('meta'));
     }

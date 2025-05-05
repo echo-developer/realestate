@@ -221,7 +221,7 @@
                                     {{ UniquePropertyCode($property->id) }}</td>
                                 <td class="text-center"><a href="javascript:void(0)"></a>{{ $property->name }}</td>
                                 <td class="text-center"><a
-                                        href="javascript:void(0)"></a>{{ $property->location->locality ?? 'N/A' }}</td>
+                                        href="javascript:void(0)"></a>{{get_name_by_id('locality_names', 'locality_id', $property->location->locality, 'en')  ?? 'N/A' }}</td>
                                 <td class="text-center"><a
                                         href="javascript:void(0)"></a>{{ date('d F Y', strtotime($property->created_at)) }}
                                 </td>

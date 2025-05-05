@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\LocalityController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AreaPriceController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EducationController;
 use App\Http\Controllers\Admin\EmailTempController;
 use App\Http\Controllers\Admin\FloorPlanController;
 use App\Http\Controllers\Admin\AllProjectController;
@@ -34,6 +35,7 @@ use App\Http\Controllers\Admin\ProjectEditController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\GroupSettingController;
+use App\Http\Controllers\Admin\MetroStationController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\PostPropertyController;
 use App\Http\Controllers\Admin\AdvertisementController;
@@ -602,4 +604,38 @@ Route::prefix('page-meta')->name('meta.')->controller(MetaController::class)->gr
     Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple'); // meta.delete-multiple
     Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple'); // meta.activate-multiple
     Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple'); // meta.deactivate-multiple
+});
+
+Route::prefix('landmark/education')->name('education.')->controller(EducationController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::post('/store', 'store')->name('store');
+    Route::get('/edit/{id}', 'edit')->name('edit');
+    Route::put('/update/{id}', 'update')->name('update');
+    Route::post('/status', 'statusUpdate')->name('status');
+    Route::delete('/delete/{id}', 'destroy')->name('destroy');
+    Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
+    Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
+    Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
+});
+Route::prefix('landmark/metro')->name('metro.')->controller(MetroStationController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::post('/store', 'store')->name('store');
+    Route::get('/edit/{id}', 'edit')->name('edit');
+    Route::put('/update/{id}', 'update')->name('update');
+    Route::post('/status', 'statusUpdate')->name('status');
+    Route::delete('/delete/{id}', 'destroy')->name('destroy');
+    Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
+    Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
+    Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
+});
+Route::prefix('landmark/hospital')->name('hospital.')->controller(MetroStationController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::post('/store', 'store')->name('store');
+    Route::get('/edit/{id}', 'edit')->name('edit');
+    Route::put('/update/{id}', 'update')->name('update');
+    Route::post('/status', 'statusUpdate')->name('status');
+    Route::delete('/delete/{id}', 'destroy')->name('destroy');
+    Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
+    Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
+    Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
 });

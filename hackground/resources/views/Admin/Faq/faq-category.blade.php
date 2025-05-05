@@ -54,7 +54,7 @@
         </form>
         <div class="main-card mb-3 card">
             <div class="card-body">
-                <div class="card-header p-0">
+                <div class="card-header d-flex">
                     <i class="header-icon lnr-layers icon-gradient bg-plum-plate"></i> Category List
                     <div class="btn-actions-pane-right">
                         <button type="button" class="btn btn-sm btn-success" onclick="add()">Add Category</button>
