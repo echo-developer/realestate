@@ -273,7 +273,7 @@ class LocalityModel extends Model
 
     public function get_cityId($cityname)
     {
-
+        $cityname = trim(preg_replace('/\s+/', ' ', $cityname));
         return DB::table('city_names')
             ->where('lang', 'en')
             ->whereRaw('LOWER(name) = ?', [strtolower($cityname)])

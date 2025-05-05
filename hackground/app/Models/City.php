@@ -211,9 +211,6 @@ class City extends Model
 
                 foreach ($chunk as $row) {
                     $stateData = $this->get_state_data($row[1]);
-                    log_anything($row[1]);
-                    log_anything($row[2]);
-                    log_anything($stateData);
 
                     $newCityId = DB::table($this->cityTable)->insertGetId([
                         'country' => $stateData?->country ?? get_setting('other-country-id'),

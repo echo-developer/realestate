@@ -10,4 +10,5 @@ return [
     'NO_IMAGE_PROPERTY' => 'assets/images/no-image.jpg',
     'LOCALITY_EXCEL_FORMAT' => 'assets/defaults/locality_excel_format/locality_excel_format.xlsx',
     'CITY_EXCEL_FORMAT' => 'assets/defaults/city_excel_format/city_excel_format.xlsx',
+    'EDUCATION_EXCEL_FORMAT' => 'assets/defaults/education_excel_format/education_excel_format.xlsx',
 ];

@@ -618,6 +618,7 @@ Route::prefix('landmark/education')->name('education.')->controller(EducationCon
     Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
     Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
     Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
+    Route::post('/import-excel', 'importEducationExcel')->name('import-excel');
 });
 Route::prefix('landmark/metro')->name('metro.')->controller(MetroStationController::class)->group(function () {
     Route::get('/', 'index')->name('index');

@@ -4,10 +4,21 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Education;
+use App\Traits\Imports\ExcelImportTrait;
 use Illuminate\Http\Request;
 
 class EducationController extends Controller
 {
+
+    use ExcelImportTrait;
+    protected $educationModel;
+
+
+    public function __construct(Education $educationModel)
+    {
+        $this->educationModel = $educationModel;
+        $this->middleware('view_permit:city');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -115,5 +126,18 @@ class EducationController extends Controller
             'success' => true,
             'message' => 'Item deleted successfully.',
         ]);
+    }
+
+    public function importEducationExcel(Request $request)
+    {
+        try {
+            $rows = $this->parseUploadedExcel($request,'xlsFileEducation', 3);
+            $response = Education::educationAddfromExcel($rows, 200);
+
+            set_flash_message('add');
+            return redirect()->back();
+        } catch (\Throwable $e) {
+            return redirect()->back()->withErrors(['xlsFileEducation' => $e->getMessage()]);
+        }
     }
 }
