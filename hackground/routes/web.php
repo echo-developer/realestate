@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\FaqListController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\RailwayController;
 use App\Http\Controllers\Admin\BankLoanController;
+use App\Http\Controllers\Admin\BusStandController;
 use App\Http\Controllers\Admin\FeedbackController;
 use App\Http\Controllers\Admin\HospitalController;
 use App\Http\Controllers\Admin\LocalityController;
@@ -643,6 +644,18 @@ Route::prefix('landmark/hospital')->name('hospital.')->controller(HospitalContro
     Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
 });
 Route::prefix('landmark/railway')->name('railway.')->controller(RailwayController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::post('/store', 'store')->name('store');
+    Route::get('/edit/{id}', 'edit')->name('edit');
+    Route::put('/update/{id}', 'update')->name('update');
+    Route::post('/status', 'statusUpdate')->name('status');
+    Route::delete('/delete/{id}', 'destroy')->name('destroy');
+    Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
+    Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
+    Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
+});
+
+Route::prefix('landmark/bus')->name('bus.')->controller(BusStandController::class)->group(function () {
     Route::get('/', 'index')->name('index');
     Route::post('/store', 'store')->name('store');
     Route::get('/edit/{id}', 'edit')->name('edit');
