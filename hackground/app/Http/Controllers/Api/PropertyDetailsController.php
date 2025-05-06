@@ -245,6 +245,7 @@ class PropertyDetailsController extends Controller
                         ->whereNotNull('properties_location.longitude')
                         ->where('properties.id', '!=', $property->property_id)
                         ->where('properties.uid', '!=', $user_id)
+                        ->where('properties.is_deleted', '!=', config('constants.STATUS_ACTIVE'))
                         ->whereRaw("(
                         6371 * acos(
                             cos(radians(?)) * cos(radians(pref_properties_location.latitude)) * cos(radians(pref_properties_location.longitude) - radians(?)) + 
