@@ -13,7 +13,7 @@ class LocalityModel extends Model
 
     // Define table prefix constant
     const TABLE_PREFIX = '';
-
+    protected $table = 'locality';
     // Define the tables with the prefix appended
     protected $localityTable = self::TABLE_PREFIX . 'locality';
     protected $localityNamesTable = self::TABLE_PREFIX . 'locality_names';
@@ -297,5 +297,24 @@ class LocalityModel extends Model
         }
 
         return $query->paginate($paginate);
+    }
+    public static function getNearbyLandmarks($table, $latitude, $longitude, $radius)
+    {
+        return DB::table($table)
+            ->select(
+                'name',
+                DB::raw("(
+                    6371 * acos(
+                        cos(radians($latitude)) *
+                        cos(radians(`lat`)) *
+                        cos(radians(`long`) - radians($longitude)) +
+                        sin(radians($latitude)) *
+                        sin(radians(`lat`))
+                    )
+                ) AS distance")
+            )
+            ->having('distance', '<=', $radius)
+            ->orderBy('distance')
+            ->get();
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\LocalityAreaPrice;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\LocalityModel;
 use Illuminate\Support\Facades\Http;
 use SebastianBergmann\CodeUnit\FunctionUnit;
 
@@ -31,19 +32,28 @@ class GoogleLocalityController extends Controller
     //         throw $th;
     //     }
     // }
+
+    protected $localityModel;
+
+
+    public function __construct()
+    {
+        $this->localityModel = new LocalityModel;
+ 
+    }
     public function fetchLocalityfromDatabase(Request $request)
     {
         try {
             $keyword = $request->keyWord;
             $lang = $request->input('lang', 'en');
             $data = DB::table('locality_names')
-            ->select('locality_id', 'name')
-            ->where('lang', $lang)
-            ->where('name', 'LIKE', $keyword . '%')
-            ->limit(11)
-            ->get()
-            ->toArray();
-        
+                ->select('locality_id', 'name')
+                ->where('lang', $lang)
+                ->where('name', 'LIKE', $keyword . '%')
+                ->limit(11)
+                ->get()
+                ->toArray();
+
 
             $message = !empty($data) ? 'Locality Retrived' : 'No Locality Found';
 
@@ -181,7 +191,7 @@ class GoogleLocalityController extends Controller
         foreach ($data as $item) {
             $entry = [
                 'locality_id' => $item->locality,
-                'locality_name' =>get_name_by_id("locality_names", "locality_id", $item->locality, "en"),
+                'locality_name' => get_name_by_id("locality_names", "locality_id", $item->locality, "en"),
                 'year' => $item->year,
                 'avg_price_per_sqft' => $item->price_per_sqft,
             ];
@@ -193,6 +203,38 @@ class GoogleLocalityController extends Controller
             }
         }
 
-        return response()->json(['status'=>1,'data'=>$grouped]);
+        return response()->json(['status' => 1, 'data' => $grouped]);
+    }
+    public function landmark(Request $request)
+    {
+        $locality_id = $request->input('locality_id');
+        $radius = 2;
+
+        $locality = LocalityModel::select('latitude', 'longitude')
+            ->where('locality_id', $locality_id)
+            ->first();
+
+        if (!$locality) {
+            return response()->json(['status' => 0, 'message' => 'Locality not found.']);
+        }
+
+        $latitude = $locality->latitude;
+        $longitude = $locality->longitude;
+
+        $tables = [
+            'education' => 'education',
+            'metro' => 'metro_station',
+            'railway' => 'railway_station',
+            'bus_stand' => 'bus_stand',
+            'hospital' => 'hospital'
+        ];
+
+        $landmarks = [];
+
+        foreach ($tables as $key => $table) {
+            $landmarks[$key] =  LocalityModel::getNearbyLandmarks($table, $latitude, $longitude, $radius);
+        }
+
+        return response()->json(['status' => 1, 'data' => $landmarks]);
     }
 }

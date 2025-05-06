@@ -336,3 +336,4 @@ Route::get('/faq-lists', [FaqController::class, 'fetchFaqListsforAPI'])->name('f
 Route::get('/global-localities', [GoogleLocalityController::class, 'getGoogletLocalities'])->name('get.localities');
 Route::get('/stored-localities', [GoogleLocalityController::class, 'fetchLocalityfromDatabase'])->name('get.localities.database');
 Route::get('/yearly-price-trend', [GoogleLocalityController::class, 'getYearlyPriceTrend']);
+Route::get('/landmark-list', [GoogleLocalityController::class, 'landmark']);
