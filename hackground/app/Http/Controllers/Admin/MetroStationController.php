@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Metro;
+use App\Traits\Imports\ExcelImportTrait;
 use Illuminate\Http\Request;
 
 class MetroStationController extends Controller
 {
+    use ExcelImportTrait;
     public function index(Request $request)
     {
         $term = $request->input('term');
@@ -112,5 +114,18 @@ class MetroStationController extends Controller
             'success' => true,
             'message' => 'Item deleted successfully.',
         ]);
+    }
+
+    public function importMetroExcel(Request $request)
+    {
+        try {
+            $rows = $this->parseUploadedExcel($request, 'xlsFileMetro', 3);
+            $response = Metro::metroAddfromExcel($rows, 200);
+
+            set_flash_message('add');
+            return redirect()->back();
+        } catch (\Throwable $e) {
+            return redirect()->back()->withErrors(['xlsFileMetro' => $e->getMessage()]);
+        }
     }
 }

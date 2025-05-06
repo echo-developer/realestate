@@ -46,7 +46,6 @@ trait ExcelImportTrait
             $spreadsheet = IOFactory::load($filePath);
             $sheet = $spreadsheet->getActiveSheet();
             $rows = $sheet->toArray();
-            log_anything($rows);
             if ($skipHeader) {
                 array_shift($rows);
             }

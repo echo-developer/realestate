@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Railway;
+use App\Traits\Imports\ExcelImportTrait;
 use Illuminate\Http\Request;
 
 class RailwayController extends Controller
 {
-
+    use ExcelImportTrait;
     public function index(Request $request)
     {
         $term = $request->input('term');
@@ -113,5 +114,18 @@ class RailwayController extends Controller
             'success' => true,
             'message' => 'Item deleted successfully.',
         ]);
+    }
+
+    public function importRailwayExcel(Request $request)
+    {
+        try {
+            $rows = $this->parseUploadedExcel($request, 'xlsFileRailway', 3);
+            $response = Railway::railwayAddfromExcel($rows, 200);
+
+            set_flash_message('add');
+            return redirect()->back();
+        } catch (\Throwable $e) {
+            return redirect()->back()->withErrors(['xlsFileRailway' => $e->getMessage()]);
+        }
     }
 }

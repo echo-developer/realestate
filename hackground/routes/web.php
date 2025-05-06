@@ -631,6 +631,7 @@ Route::prefix('landmark/metro')->name('metro.')->controller(MetroStationControll
     Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
     Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
     Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
+    Route::post('/import-excel', 'importMetroExcel')->name('import-excel');
 });
 Route::prefix('landmark/hospital')->name('hospital.')->controller(HospitalController::class)->group(function () {
     Route::get('/', 'index')->name('index');
@@ -642,6 +643,7 @@ Route::prefix('landmark/hospital')->name('hospital.')->controller(HospitalContro
     Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
     Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
     Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
+    Route::post('/import-excel', 'importHospitalExcel')->name('import-excel');
 });
 Route::prefix('landmark/railway')->name('railway.')->controller(RailwayController::class)->group(function () {
     Route::get('/', 'index')->name('index');
@@ -653,6 +655,7 @@ Route::prefix('landmark/railway')->name('railway.')->controller(RailwayControlle
     Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
     Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
     Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
+    Route::post('/import-excel', 'importRailwayExcel')->name('import-excel');
 });
 
 Route::prefix('landmark/bus')->name('bus.')->controller(BusStandController::class)->group(function () {

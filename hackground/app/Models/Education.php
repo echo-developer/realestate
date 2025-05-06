@@ -21,11 +21,12 @@ class Education extends Model
 
             foreach (array_chunk($data, $perChunck) as $chunk) {
                 DB::beginTransaction();
+                log_anything($chunk);
 
                 foreach ($chunk as $row) {
 
                     $exists = self::whereRaw('LOWER(name) = ?', [strtolower($row[0])])->exists();
-
+                    log_anything($exists);
                     if (!$exists) {
                         $newEdId = self::insertGetId([
                             'name' => $row[0],

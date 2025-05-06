@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Hospital;
+use App\Traits\Imports\ExcelImportTrait;
 use Illuminate\Http\Request;
 
 class HospitalController extends Controller
 {
+    use ExcelImportTrait;
     /**
      * Display a listing of the resource.
      */
@@ -115,5 +117,18 @@ class HospitalController extends Controller
             'success' => true,
             'message' => 'Item deleted successfully.',
         ]);
+    }
+
+    public function importHospitalExcel(Request $request)
+    {
+        try {
+            $rows = $this->parseUploadedExcel($request, 'xlsFileHospital', 3);
+            $response = Hospital::hospitalAddfromExcel($rows, 200);
+
+            set_flash_message('add');
+            return redirect()->back();
+        } catch (\Throwable $e) {
+            return redirect()->back()->withErrors(['xlsFileHospital' => $e->getMessage()]);
+        }
     }
 }
