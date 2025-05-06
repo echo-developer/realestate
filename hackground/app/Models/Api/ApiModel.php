@@ -1150,7 +1150,7 @@ class ApiModel extends Model
             ]);
 
         // Now call get() and filter right after
-        $filteredData = $query->get()->filter(function ($project) use ($data, $hasLatLang) {
+        $filteredData = $query->cursor()->filter(function ($project) use ($data, $hasLatLang) {
 
             $settings = $project->settings;
             $location = $project->location;

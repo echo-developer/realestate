@@ -27,8 +27,16 @@ class AgentSecviceLocationModel extends Model
         'agent_id',
     ];
 
+    public function getLocalityAttribute($value)
+    {
+        return [
+            'locality_id' => $value,
+            'locality_name' => get_name_by_id('locality_names', 'locality_id', $value, 'en') ?? null
+        ];
+    }
+
     public function agent()
     {
-        return $this->belongsTo(User::class, 'agent_id' ,'id')->where('user_type', 'A');
+        return $this->belongsTo(User::class, 'agent_id', 'id')->where('user_type', 'A');
     }
 }

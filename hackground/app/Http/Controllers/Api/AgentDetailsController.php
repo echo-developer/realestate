@@ -175,12 +175,13 @@ class AgentDetailsController extends Controller
     public function AgentList(Request $request)
     {
         try {
+            log_anything($request->all());
             $locality = $request->input('locality');
             $lang = $request->input('lang', 'en');
             $city_id = $request->input('city_id');
             $name = $request->input('name');
 
-            $broker_type = $request->input('broker_type'); //broker type payload is not correct
+            $broker_type = $request->input('broker_type');
             $post_for = $request->input('post_for');
             $property_type = $request->input('property_type');
 
@@ -201,7 +202,8 @@ class AgentDetailsController extends Controller
                     if (isset($value) && $value !== '') {
                         $agentIdsQuery->whereHas($relation, function ($query) use ($column, $value) {
                             if ($column === 'locality') {
-                                $query->where($column, 'like', "%{$value}%");
+                                $query->where($column, $value);
+                                $query->orWhere($column, 'like', "%{$value}%");
                             } else {
                                 $query->where($column, $value);
                             }
@@ -224,8 +226,11 @@ class AgentDetailsController extends Controller
 
             $formattedAgents = collect($agents->items())->map(function ($item) use ($lang) {
                 $item->user_id = $item->id;
-                if (!empty($item->image)) {
+                $path = public_path('user_upload/profile_image/' . $item->image);
+                if (!empty($item->image) && file_exists($path)) {
                     $item->image = asset('user_upload/profile_image/' . $item->image);
+                } else {
+                    $item->image = null;
                 }
                 $item->forSell = UsersPropertyCount($item->id)['forSell'];
                 $item->forRent = UsersPropertyCount($item->id)['forRent'];
