@@ -180,7 +180,7 @@ class AllProjectController extends Controller
         $statusMapping = config('property_status.status');
         $statusKey = array_search($status, $statusMapping);
 
-        $project = PrefProject::find($req->propertyId);
+        $project = PrefProject::find($req->id);
 
         if (!$project) {
             return response()->json([
