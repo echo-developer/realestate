@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Models\User;
+use App\Models\MetaData;
 use App\Models\LoanEnquery;
 use App\Models\PrefProject;
 use App\Models\Api\ApiModel;
@@ -12,8 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\TestimonialModel;
 use App\Models\UserFeedbackModel;
-use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\PrefPropertyLocation;
@@ -793,6 +794,26 @@ class HomeController extends Controller
             return response()->json([
                 'status' => 0,
                 'message' => 'An error occurred while submitting feedback.',
+            ]);
+        }
+    }
+    public function getMeta(Request $request)
+    {
+        try {
+           $meta = MetaData::where([['page', $request->key], ['status', config('constants.STATUS_ACTIVE')]])
+                ->first();
+
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Data Fetched successfully.',
+                'data'=>$meta
+            ]);
+        } catch (\Throwable $th) {
+            log_anything($th);
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred.',
             ]);
         }
     }

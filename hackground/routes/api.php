@@ -107,6 +107,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('locality-list', 'fetchLocalities');
     Route::post('save-feedback', 'saveFeedback');
     Route::post('save_loan_enquery', 'saveLoanEnquery');
+    Route::get('/get-meta-data/{key?}', 'getMeta');
 });
 
 // Post Routes
@@ -337,3 +338,4 @@ Route::get('/global-localities', [GoogleLocalityController::class, 'getGoogletLo
 Route::get('/stored-localities', [GoogleLocalityController::class, 'fetchLocalityfromDatabase'])->name('get.localities.database');
 Route::get('/yearly-price-trend', [GoogleLocalityController::class, 'getYearlyPriceTrend']);
 Route::get('/landmark-list', [GoogleLocalityController::class, 'landmark']);
+ 
