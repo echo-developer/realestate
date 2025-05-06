@@ -4,8 +4,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
-import LocalitySearch from "@/components/MapData/LocalitySearch";
-import LocalityOption from "@/components/MapData/LocalitySelector";
+import Locality from "@/components/Locality/Locality";
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthProvider";
 import useTranslation from "@/hooks/useTranslation";
@@ -33,10 +32,9 @@ const Index = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPages, setCurrentPages] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
-  const [locality, setLocality] = useState();
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(true);
-  const [localityData, setLocalityData] = useState(null);
+  const [locality, setLocality] = useState(null);
   const { defaultCity } = useAuth();
   const [brokerType, setBrokerType] = useState("A");
   const [postFor, setPostFor] = useState("sale");
@@ -60,7 +58,7 @@ const Index = () => {
         setPropertyTypeData(response.data);
       } 
     } catch (error) {
-      toast.error(response.message);
+      console.error(response.message);
     }
   };
 
@@ -72,7 +70,7 @@ const Index = () => {
         post_for,
         property_type,
         is_verified_agent,
-        locality,
+        locality
       } = router?.query || {};
 
       if (name) setName(name);
@@ -80,15 +78,8 @@ const Index = () => {
       if (post_for) setPostFor(post_for);
       if (property_type) setPropertyType(property_type);
       if (is_verified_agent) setIsVerified(JSON.parse(is_verified_agent));
+      if (locality) setLocality(JSON.parse(locality))
 
-      if (locality) {
-        try {
-          const localityObj = JSON.parse(locality);
-          setLocality(localityObj);
-        } catch (error) {
-          console.error("Invalid locality data:", error);
-        }
-      }
     }
   }, [router?.isReady, router?.query]);
 
@@ -112,8 +103,8 @@ const Index = () => {
       broker_type,
       property_type,
       post_for,
-      locality,
       is_verified_agent,
+      locality
     } = router?.query || {};
 
     if (!loadMore) setLoading(true);
@@ -141,21 +132,11 @@ const Index = () => {
       data.is_verified_agent = JSON.parse(is_verified_agent);
       setIsVerified(data.is_verified_agent);
     }
-    if (locality) {
-      try {
-        const localityObj = JSON.parse(locality);
-        setLocality(localityObj);
-        if (localityObj?.locality) {
-          const localityStr = localityObj.locality
-            .split(", ")
-            .slice(0, 2)
-            .join(", ");
-          data.locality = localityStr;
-        }
-      } catch (e) {
-        console.error("Invalid locality data:", e);
-      }
+    if(locality) {
+      const parsedLocality = JSON.parse(locality); 
+      data.locality = parsedLocality.locality_id;
     }
+
 
     // API call
     try {
@@ -177,10 +158,10 @@ const Index = () => {
         setTotalPages(response?.pagination?.total_pages || 0);
         setCurrentPages(response?.pagination?.current_page || 0);
       } else {
-        toast.error(response?.message || "Failed to fetch agents");
+        console.error(response?.message || "Failed to fetch agents");
       }
     } catch (error) {
-      toast.error(error?.message || "Something went wrong");
+      console.error(error?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -194,6 +175,10 @@ const Index = () => {
   const handleSearchChange = (e) => {
     setName(e.target.value);
   };
+
+  const onSelectLocality = (locality) => {
+    setLocality(locality)
+  }
 
   const handleVerifiedAgentChange = () => {
     const params = new URLSearchParams(window.location.search);
@@ -213,14 +198,14 @@ const Index = () => {
     if (name) {
       url = `${url}&name=${name}`;
     }
-    if (locality) {
-      url = `${url}&locality=${JSON.stringify(locality)}`;
-    }
     if (brokerType) {
       url = `${url}&broker_type=${brokerType}`;
     }
     if (selectedTab) {
       url = `${url}&post_for=${selectedTab}`;
+    } 
+    if(locality) {
+      url = `${url}&locality=${JSON.stringify(locality)}`
     }
     if (propertyType) {
       url = `${url}&property_type=${propertyType}`;
@@ -419,10 +404,7 @@ const Index = () => {
                     </Col>
 
                     <Col className="col-lg col-sm-6 col-12">
-                      <LocalityOption
-                        locality={localityData}
-                        setLocalityData={setLocalityData}
-                      />
+                      <Locality onSelectLocality={onSelectLocality} />
                     </Col>
 
                     {/* Submit Button */}

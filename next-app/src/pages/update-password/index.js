@@ -3,19 +3,21 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import React, { useState } from "react";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
-import { Formik,Form, Form as FormikForm, Field, ErrorMessage } from "formik";
+import { Formik, Form, Form as FormikForm, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import useTranslation from "@/hooks/useTranslation";
 import { Row, Col, Card, Form as BootstrapForm, FloatingLabel, Button } from "react-bootstrap";
+import { useAuth } from "@/context/AuthProvider";
 
 const Index = () => {
     const { callApi, GetMemberId } = AuthUser();
+    const { userData } = useAuth();
     const memberId = GetMemberId();
     const [showPassword, setShowPassword] = useState(false);
+    const [step, setStep] = useState('password');
     const translation = useTranslation();
 
     const validationSchema = Yup.object({
-        oldpassword: Yup.string().required(translation?.old_password_required || "Old password is required."),
         newpassword: Yup.string()
             .min(6, translation?.password_min_length || "Password must be at least 6 characters.")
             .required(translation?.new_password_required || "New password is required."),
@@ -44,7 +46,7 @@ const Index = () => {
                 toast.error(response.message || "Password failed to update");
             }
         } catch (error) {
-            toast.error("Data not found");
+            console.error(error.message || "Data not found");
         }
         setSubmitting(false);
     };
@@ -72,26 +74,27 @@ const Index = () => {
                                                 <div className="row">
                                                     <div className="col-md-12 col-12">
                                                         <FloatingLabel
-                                                            label={
-                                                                <>
-                                                                  {translation?.old_password || "Old Password"} <span>*</span>
-                                                                </>
-                                                            }
-                                                            className="mb-3"                                                            
+                                                            label="Email"
+                                                            className="mb-3"
                                                         >
-                                                            <Field type={showPassword ? "text" : "password"} name="oldpassword" className="form-control" placeholder="" />
-                                                            <ErrorMessage name="oldpassword" component="div" className="text-danger small" />
+                                                            <input
+                                                                type="email"
+                                                                className="form-control"
+                                                                value={userData.email}
+                                                                readOnly
+                                                            />
                                                         </FloatingLabel>
-                                                        
+
+
 
                                                         <FloatingLabel
                                                             label={
                                                                 <>
-                                                                {translation?.new_password || "New Password"} <span>*</span>
+                                                                    {translation?.new_password || "New Password"} <span>*</span>
                                                                 </>
                                                             }
                                                             className="mb-3"
-                                                        >                                                            
+                                                        >
                                                             <Field type={showPassword ? "text" : "password"} name="newpassword" className="form-control" placeholder="" />
                                                             <ErrorMessage name="newpassword" component="div" className="text-danger small" />
                                                         </FloatingLabel>
@@ -99,11 +102,11 @@ const Index = () => {
                                                         <FloatingLabel
                                                             label={
                                                                 <>
-                                                                {translation?.confirm_password || "Confirm Password"} <span>*</span>
+                                                                    {translation?.confirm_password || "Confirm Password"} <span>*</span>
                                                                 </>
                                                             }
                                                             className="mb-3"
-                                                        >                                                            
+                                                        >
                                                             <Field type={showPassword ? "text" : "password"} name="confirm_password" className="form-control" placeholder="" />
                                                             <ErrorMessage name="confirm_password" component="div" className="text-danger small" />
                                                         </FloatingLabel>
@@ -118,15 +121,29 @@ const Index = () => {
                                                                     id="showPassword"
                                                                     checked={showPassword}
                                                                     onChange={(e) => setShowPassword(e.target.checked)}
-                                                                /> 
-                                                            </FormikForm>                                                                                                                        
+                                                                />
+                                                            </FormikForm>
                                                         </div>
 
                                                         <div className="d-grid">
-                                                            <Button type="submit" variant="primary" disabled={isSubmitting}>
-                                                                {isSubmitting ? "Updating..." : `${translation?.update_password || "Update Password"}`}
-                                                            </Button>
+                                                            {step === 'password' && (
+                                                                <Button type="submit" variant="primary" disabled={isSubmitting}>
+                                                                    Send OTP
+                                                                </Button>
+                                                            )}
+
+                                                            {step === 'otp' && (
+                                                                <div className="d-flex justify-content-between">
+                                                                    <Button variant="secondary" onClick={() => setStep('password')}>
+                                                                        Go Back
+                                                                    </Button>
+                                                                    <Button type="submit" variant="primary" disabled={isSubmitting}>
+                                                                        Verify
+                                                                    </Button>
+                                                                </div>
+                                                            )}
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             </Form>

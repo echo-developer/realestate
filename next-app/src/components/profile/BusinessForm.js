@@ -11,6 +11,7 @@ import {
   ListGroup,
   FloatingLabel,
 } from "react-bootstrap";
+import Locality from "./Locality";
 
 const libraries = ["places"];
 
@@ -38,7 +39,7 @@ const translation = useTranslation();
       if (response && response.status === 1) {
         setCityData(response.data);
       } else {
-        toast.error(response.message || "Data not retrieved");
+        console.error(response.message || "Data not retrieved");
       }
     } catch (error) {
       console.error("Error fetching cities:", error);
@@ -104,6 +105,12 @@ const translation = useTranslation();
       )
     );
   };
+  const onSelectLocality = (locality, key) => {
+    if(!locality || key == null) return;
+    const state = addresses;
+    state[key].locality = locality.locality_id;
+    setAddresses(state);
+  }
 
   const handleChange = (key, field, value) => {
     setAddresses((prev) =>
@@ -138,7 +145,7 @@ const translation = useTranslation();
   return (
     <fieldset className="mb-4">
       <legend>Business Address</legend>
-      {addresses.map((address) => (
+      {addresses.map((address, i) => (
         <div className="input-group mb-4" key={address.key}>
           {/* City Dropdown */}
           <FloatingLabel controlId="floatingSelect" label={translation?.code || "Code"}
@@ -159,21 +166,9 @@ const translation = useTranslation();
             ))}
             </Form.Select>
           </FloatingLabel>
-
-          {/* Locality Input with Google Places Autocomplete */}
-          <FloatingLabel
-            controlId="floatingInput"
-            label="Locality"
-          >
-            <Form.Control
-              type="text"
-              name={`locality_${address.key}`}
-              placeholder={translation?.enter_locality || "Enter Locality"}
-              ref={(el) => (inputRefs.current[address.key] = el)}
-              value={address.locality}
-              onChange={(e) => handleChange(address.key, "locality", e.target.value)} 
-            />
-          </FloatingLabel>
+          {address && (
+            <Locality onSelectLocality={onSelectLocality} index={i} /> 
+          )}
 
           {/* Remove Button (Hidden for the first address) */}
           {addresses.length > 1 && (

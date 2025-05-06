@@ -140,7 +140,7 @@ const ProfileForm = () => {
         setFormData(updatedFormData);
       } 
     } catch (error) {
-      toast.error("An error occurred while fetching user data.");
+      console.error("An error occurred while fetching user data.");
     }
   };
 
@@ -176,7 +176,7 @@ const ProfileForm = () => {
         // toast.error(response.message || "Failed to update profile.");
       }
     } catch (error) {
-      toast.error("An error occurred while updating your profile.");
+      console.error("An error occurred while updating your profile.");
     }
   };
 

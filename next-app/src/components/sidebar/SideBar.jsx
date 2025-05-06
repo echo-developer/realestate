@@ -275,18 +275,7 @@ const SideBar = () => {
                 <span>{translation?.user_report || "User Report"}</span>
               </Link>
             </li>
-            <li>
-              <Link href="/update-password">
-                <i className="bi bi-lock"></i>{" "}
-                <span>{translation?.change_password || "Change Password"}</span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/" onClick={logout}>
-                <i className="bi bi-box-arrow-right"></i>{" "}
-                <span>{translation?.logout || "Logout"}</span>
-              </Link>
-            </li>
+            
             <li>
               <Link href="/create-advertisement">
                 <i className="bi bi-flag"></i>{" "}
@@ -297,6 +286,18 @@ const SideBar = () => {
               <Link href="/my-advertisement" >
                 <i class="bi bi-badge-ad"></i>{" "}
                 <span>My Advertisement</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/update-password">
+                <i className="bi bi-lock"></i>{" "}
+                <span>{translation?.change_password || "Change Password"}</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/" onClick={logout}>
+                <i className="bi bi-box-arrow-right"></i>{" "}
+                <span>{translation?.logout || "Logout"}</span>
               </Link>
             </li>
           </ul>
