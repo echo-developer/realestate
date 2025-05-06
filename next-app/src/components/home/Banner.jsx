@@ -294,7 +294,7 @@ const Banner = ({ translation }) => {
         setPropertyTypeData(response.data);
       }
     } catch (error) {
-      toast.error(response.message);
+      console.error(response.message);
     }
   };
 
@@ -309,7 +309,7 @@ const Banner = ({ translation }) => {
         setPropertyForData(response.data);
       }
     } catch (error) {
-      toast.error(error.message);
+      console.error(error.message);
     }
   };
 

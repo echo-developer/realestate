@@ -77,12 +77,9 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
           }, {}),
         }));
   
-      } else {
-        toast.error(response?.message || "Failed to fetch property details");
-      }
+      } 
     } catch (error) {
       console.error("API call failed:", error);
-      toast.error("Something went wrong while fetching property details");
     } finally {
       setLoading(false);
     }
@@ -145,9 +142,7 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
 
       if (response && response.status === 1) {
         toast.success(response.message || "New Property Added Successfully");
-      } else {
-        toast.error(response.message || "New Property Addition failed");
-      }
+      } 
     } catch (error) {
       console.error("API call failed:", error);
     } finally {

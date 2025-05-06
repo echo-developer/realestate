@@ -109,7 +109,7 @@ export function ProjectMobileFilters({
             setSelectedPropertyForList(res?.data || []);
           } 
         } catch (error) {
-          toast.error(res?.message || "Error fetching property for options");
+         
         }
       };
 

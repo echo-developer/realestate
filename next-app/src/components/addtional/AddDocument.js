@@ -30,12 +30,9 @@ const translation = useTranslation();
 
       if (response?.status === 1) {
         setDocuments(response.data);
-      } else {
-        toast.error(response?.message || "Failed to fetch documents.");
-      }
+      } 
     } catch (error) {
       console.error("Error fetching documents:", error);
-      toast.error("Error fetching documents.");
     }
   };
 
@@ -68,12 +65,9 @@ const translation = useTranslation();
         setFileUrl(response.filename_url);
         setCurrentDoc((prev) => ({ ...prev, fileName: response.fileName }));
         toast.success(response.message || "File uploaded successfully.");
-      } else {
-        toast.error(response?.message || "Upload failed");
-      }
+      } 
     } catch (error) {
       console.error("Error during upload:", error);
-      toast.error("Error uploading file.");
     }
   };
 
@@ -84,7 +78,6 @@ const translation = useTranslation();
       !currentDoc.certificate_name ||
       !fileUrl
     ) {
-      toast.error("Please complete all fields and upload a file.");
       return;
     }
 
@@ -104,12 +97,9 @@ const translation = useTranslation();
         setNewDocuments((prev) => [...prev, newDocument]);
 
         resetForm();
-      } else {
-        toast.error(response?.message || "Document upload failed.");
-      }
+      } 
     } catch (error) {
       console.error("API Error:", error);
-      toast.error("Error saving document.");
     } finally {
       setLoading(false);
     }

@@ -53,11 +53,9 @@ const validationSchema = Yup.object({
             if (response) {
                 setOtpSent(true);
                 toast.success("OTP sent successfully!");
-            } else {
-                toast.error("Failed to send OTP.");
-            }
+            } 
         } catch (error) {
-            toast.error("An error occurred while sending the OTP");
+            
         } finally {
             setLoading(false);
         }
@@ -75,11 +73,9 @@ const validationSchema = Yup.object({
             if (response) {
                 setOtpVerified(true);
                 toast.success("OTP verified successfully!");
-            } else {
-                toast.error("Invalid OTP");
-            }
+            } 
         } catch (error) {
-            toast.error("An error occurred while verifying the OTP");
+            
         } finally {
             setLoading(false);
         }
@@ -113,11 +109,9 @@ const validationSchema = Yup.object({
                 handleClose();
                 resetForm();
                 toast.success(response.message || "Enquiry Send Success");
-            } else {
-                toast.error(response.message || "Form submission failed.");
-            }
+            } 
         } catch (error) {
-            toast.error("An error occurred while submitting the form");
+            
         } finally {
             setLoading(false);
         }

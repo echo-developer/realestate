@@ -67,7 +67,6 @@ const PropertyDetailsForm = ({ translation, propertyId, setShowLoginErrorModal }
         }
       } catch (error) {
         console.error("Error submitting form:", error);
-        toast.error("An unexpected error occurred.");
       }
     } else {
       setShowLoginErrorModal(true);
