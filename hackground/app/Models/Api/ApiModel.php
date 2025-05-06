@@ -530,9 +530,7 @@ class ApiModel extends Model
 
         $user = DB::table('users')->where('id', $data['user_id'])->first();
 
-        if (!$user || !Hash::check($data['oldpassword'], $user->password)) {
-            return false;
-        }
+   
 
         $updated = DB::table('users')
             ->where('id', $data['user_id'])
