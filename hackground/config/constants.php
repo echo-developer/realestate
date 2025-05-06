@@ -14,4 +14,5 @@ return [
     'HOSPITAL_EXCEL_FORMAT' => 'assets/defaults/hospital_excel_format/hospital_excel_format.xlsx',
     'METRO_EXCEL_FORMAT' => 'assets/defaults/metro_excel_format/metro_excel_format.xlsx',
     'RAILWAY_EXCEL_FORMAT' => 'assets/defaults/railway_excel_format/railway_excel_format.xlsx',
+    'BUS_EXCEL_FORMAT' => 'assets/defaults/bus_excel_format/bus_excel_format.xlsx',
 ];

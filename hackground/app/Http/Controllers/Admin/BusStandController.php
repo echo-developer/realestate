@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Bus;
+use App\Traits\Imports\ExcelImportTrait;
 use Illuminate\Http\Request;
 
 class BusStandController extends Controller
 {
+    use ExcelImportTrait;
     public function index(Request $request)
     {
         $term = $request->input('term');
@@ -112,5 +114,17 @@ class BusStandController extends Controller
             'success' => true,
             'message' => 'Item deleted successfully.',
         ]);
+    }
+
+    public function importBusExcel(Request $request){
+        try {
+            $rows = $this->parseUploadedExcel($request,'xlsFileBus', 3);
+            $response = Bus::busAddfromExcel($rows, 200);
+
+            set_flash_message('add');
+            return redirect()->back();
+        } catch (\Throwable $e) {
+            return redirect()->back()->withErrors(['xlsFileBus' => $e->getMessage()]);
+        }
     }
 }

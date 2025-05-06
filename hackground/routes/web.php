@@ -668,4 +668,5 @@ Route::prefix('landmark/bus')->name('bus.')->controller(BusStandController::clas
     Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
     Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
     Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
+    Route::post('/import-excel', 'importBusExcel')->name('import-excel');
 });
