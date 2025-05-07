@@ -69,6 +69,7 @@ const ProfileForm = () => {
     }
   }, [memberId]);
 
+  console.log("userData", userData)
   const fetchUserData = async () => {
     try {
       const response = await callApi({
@@ -155,9 +156,7 @@ const ProfileForm = () => {
       [name]: "",
     }));
   };
-console.log("addresses", addresses)
   const handleSubmit = async (e) => {
-    console.log("addresses", addresses)
     const service_area = addresses.map(item => {
       if(typeof item.locality === 'object') {
         return {
@@ -170,7 +169,6 @@ console.log("addresses", addresses)
         }
       }
     })
-    console.log("searvice area", service_area)
     e.preventDefault();
     try {
       const response = await callApi({

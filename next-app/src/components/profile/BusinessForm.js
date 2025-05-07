@@ -167,7 +167,7 @@ const translation = useTranslation();
             </Form.Select>
           </FloatingLabel>
           {address && (
-            <Locality onSelectLocality={onSelectLocality} index={i} /> 
+            <Locality onSelectLocality={onSelectLocality} index={i} defaultValue={address?.locality} /> 
           )}
 
           {/* Remove Button (Hidden for the first address) */}
