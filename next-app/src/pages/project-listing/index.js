@@ -26,6 +26,7 @@ import {
 import { GeoAlt, Search } from "react-bootstrap-icons";
 import ProjectMobileFilters from "@/components/addtional/ProjectMobileFilter";
 import ProjectListingMapView from "@/components/MapData/ProjectListingMapView";
+import Head from "next/head";
 
 const Index = () => {
   const [showMapView, setShowMapView] = useState(false);
@@ -240,6 +241,8 @@ const Index = () => {
     FetchProjectListData(true, nextPage);
   };
 
+  const metaTitle = `Find top residential projects in ${defaultCity?.name} including new launch, under construction, and ready-to-move properties. Compare amenities, prices, and locations to choose the best project for your needs.`
+  const metaDescription = `Discover a wide range of projects in ${defaultCity?.name}, including newly launched, under-construction, and ready-to-move properties by top builders. Whether you're looking for 1, 2, 3, or 4 BHK flats, explore verified project listings with detailed information on floor plans, amenities, possession dates, and location insights. Compare prices, view real images, and make informed decisions when buying property in ${defaultCity?.name}`
 
   return (
     <>
@@ -250,17 +253,10 @@ const Index = () => {
         ></div>
       )}
       <MainLayout>
-        <Helmet>
-          <title>
-            {translation?.explore_property_listings ||
-              "Explore Property Listings | Buy, Rent, or Invest with RealEstate"}
-          </title>
-          <meta
-            name="description"
-            content="Browse the best real estate projects, including residential and commercial properties. Compare prices, amenities, and locations to find your perfect investment or dream home."
-          />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-        </Helmet>
+        <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        </Head>
 
         {isMobile ? (
           <>

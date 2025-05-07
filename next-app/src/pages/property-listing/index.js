@@ -40,6 +40,7 @@ import { GeoAlt, Search } from "react-bootstrap-icons";
 import PropertyMobileFilters from "@/components/addtional/PropertyMobileFilter";
 import useIsMobile from "@/hooks/useIsMobile";
 import Locality from "@/components/Locality/Locality";
+import Head from "next/head";
 const ListingMapView = dynamic(() => import('../../components/MapData/ListingMapView'), {
   ssr: false, loading: () => <>
     <ShimmerContentBlock
@@ -75,6 +76,7 @@ const index = () => {
   const [selectedOption, setSelectedOption] = useState(
     translation?.sort_by || "Sort By"
   );
+  const [metaData, setMetadata] = useState(null);
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   const [dropdownState, setDropdownState] = useState({});
 
@@ -362,6 +364,20 @@ const index = () => {
       setSelectedAdvanceFilter(filterOptions[0]?.key);
     }
   }, [filterOptions]);
+
+  // useEffect(() => {
+  //   if(router.isReady) {
+  //     let metaObject = {};
+  //     if(defaultCity) {
+  //       metaObject.defaultCity = defaultCity.name;
+  //     }
+  //     metaObject = {
+  //       ...metaObject,
+  //       ...router.query
+  //     }
+  //     console.log("metaObject", metaObject)
+  //   }
+  // }, [router.query, defaultCity?.city_id])
 
   const displayPropertyTyep = () => {
     let str = "";
@@ -963,6 +979,10 @@ const index = () => {
     }
   };
 
+  let metaTitle = `Explore ${selectedPropertyType} Properties in ${defaultCity?.name} – New Launch, Under Construction & Ready to Move`;
+  let metaDescription = `Explore ${totalPropertyCount}+ verified properties available for sale/rent in ${defaultCity?.name}, only on realestate.scriptlisting.com. Discover apartments with real photos, map views, and complete details to help you make the right choice`;
+
+
   return (
     <>
       {isOverlayVisible && (
@@ -972,17 +992,20 @@ const index = () => {
         ></div>
       )}
       <MainLayout>
-        <Helmet>
+        {/* <Helmet>
           <title>
-            {translation?.explore_property_listings ||
-              "Explore Property Listings | Buy, Rent, or Invest with RealEstate"}
+            {metaTitle}
           </title>
           <meta
             name="description"
-            content="Browse thousands of properties for sale or rent, including houses, apartments, and commercial spaces. Find the perfect property that matches your needs and budget."
+            content={metaDescription}
           />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-        </Helmet>
+        </Helmet> */}
+        <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        </Head>
 
         {isMobile ? (
           <React.Fragment>

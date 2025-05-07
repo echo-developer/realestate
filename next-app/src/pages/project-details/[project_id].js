@@ -12,6 +12,8 @@ import { People, House, HouseAddFill, Person, Search } from 'react-bootstrap-ico
 import Link from "next/link";
 
 
+
+console.log("project details page ran")
 const Index = () => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const router = useRouter();
@@ -168,16 +170,18 @@ const Index = () => {
     addRemoveFav(id, "other_projects")
   }
 
+  const title = `${detailsData.project_name} | Real Estate Project Details`;;
+  const description = detailsData?.project_desc?.replace(/<\/?[^>]+(>|$)/g, "")?.substring(0, 160);
+
   return (
     <MainLayout>
       <Helmet>
         <title>
-          Premium Real Estate Project Details | Modern Living & Investment
-          Opportunities
+          {title}
         </title>
         <meta
           name="description"
-          content="Explore premium real estate project details with modern amenities, prime locations, and excellent investment opportunities. Find your dream home or next property investment today!"
+          content={description}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>

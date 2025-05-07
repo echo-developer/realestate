@@ -192,26 +192,26 @@ const index = () => {
   };
 
   const addReviewSuccessFunction = (review) => {
-  
+
     // Basic validation
     if (!review || typeof review !== 'object') {
       console.error("Invalid review data");
       return;
     }
-  
+
     // Filter rating keys
     const ratingKeys = Object.keys(review).filter(
       key => key.endsWith('_rate') && typeof review[key] === 'number'
     );
-  
+
     if (ratingKeys.length === 0) {
       return;
     }
-  
+
     // Calculate total and average
     const total = ratingKeys.reduce((sum, key) => sum + review[key], 0);
     const overallRating = total / ratingKeys.length;
-  
+
     const ratingObj = {
       "property_id": review?.property_id,
       "overall_rating": overallRating,
@@ -222,32 +222,33 @@ const index = () => {
       "review_description": review?.review_description,
       "user_relation": userData?.user_type == 'O' ? "Owner" : userData?.user_type == 'B' ? "Builder" : 'Agent',
       "name": userData?.name
-  }
-   setPropertyDetails(prev => {
-    return {
-      ...prev,
-      "property_reviews": {
-                ...prev.property_reviews,
-                "total_reviews": prev.property_reviews?.total_reviews,
-                "reviews": [
-                    ...prev.property_reviews?.reviews,
-                    ratingObj
-                ]
-            }
     }
-   })
+    setPropertyDetails(prev => {
+      return {
+        ...prev,
+        "property_reviews": {
+          ...prev.property_reviews,
+          "total_reviews": prev.property_reviews?.total_reviews,
+          "reviews": [
+            ...prev.property_reviews?.reviews,
+            ratingObj
+          ]
+        }
+      }
+    })
   };
-  
+  const title = `${propertyDetails?.property_name || ''}, ${propertyDetails?.locality || ''}, ${propertyDetails?.address || ''}. Priced at ${formatPrice(propertyDetails?.price)} | https://realestate.scriptlisting.com`
+  const description = `${propertyDetails?.property_name || ''}, ${propertyDetails?.locality || ''}, ${propertyDetails?.address || ''}. Priced at ${formatPrice(propertyDetails?.price)}, this ${propertyDetails?.property_features?.area_in_sqft ? `${propertyDetails?.property_features?.area_in_sqft} sqft` : ''} ${propertyDetails?.ownership_type || 'property'} offers modern amenities like ${propertyDetails?.property_amenities?.slice(0, 5).map(a => a.amenity_name).join(', ')} `;
 
   return (
     <MainLayout>
       <Helmet>
         <title>
-          Property Details | Find Your Dream Home or Investment Property
+          {title}
         </title>
         <meta
           name="description"
-          content="Discover detailed information about premium properties, including features, pricing, and locations. Explore your perfect home or property investment opportunity today!"
+          content={description}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Helmet>
@@ -403,133 +404,127 @@ const index = () => {
                     </div>
 
                     <ul className="list list-property-details mb-4">
-                      {propertyDetails?.property_key === "residential" ? (
-                        <li>
-                          <div className="d-flex">
-                            <img
-                              src="/assets/images/icons/bed.png"
-                              alt="bhk"
-                              height="48"
-                              width="48"
-                            />
-                            <div className="flex-grow-1 ps-2">
-                              <span>{translation?.bedrooms || "Bedrooms"}</span>
-                              <h5>
-                                {propertyDetails?.property_features?.bedrooms}
-                              </h5>
+                      {propertyDetails?.property_key === "residential"
+                        ? propertyDetails?.property_features?.bedrooms && (
+                          <li>
+                            <div className="d-flex">
+                              <img
+                                src="/assets/images/icons/bed.png"
+                                alt="bhk"
+                                height="48"
+                                width="48"
+                              />
+                              <div className="flex-grow-1 ps-2">
+                                <span>{translation?.bedrooms || "Bedrooms"}</span>
+                                <h5>{propertyDetails?.property_features?.bedrooms}</h5>
+                              </div>
                             </div>
-                          </div>
-                        </li>
-                      ) : (
+                          </li>
+                        )
+                        : propertyDetails?.property_features?.washroom && (
+                          <li>
+                            <div className="d-flex">
+                              <img
+                                src="/assets/images/icons/bed.png"
+                                alt="bhk"
+                                height="48"
+                                width="48"
+                              />
+                              <div className="flex-grow-1 ps-2">
+                                <span>{translation?.washrooms || "Washrooms"}</span>
+                                <h5>{propertyDetails?.property_features?.washroom}</h5>
+                              </div>
+                            </div>
+                          </li>
+                        )}
+
+                      {propertyDetails?.carpet_area && (
                         <li>
                           <div className="d-flex">
                             <img
-                              src="/assets/images/icons/bed.png"
-                              alt="bhk"
+                              src="/assets/images/icons/size.png"
+                              alt="Property Size"
                               height="48"
                               width="48"
                             />
                             <div className="flex-grow-1 ps-2">
-                              <span>
-                                {translation?.washrooms || "Washrooms"}{" "}
+                              <span className="text-muted">
+                                {translation?.carpet_area || "Carpet Area"}
                               </span>
                               <h5>
-                                {propertyDetails?.property_features?.washroom ||
-                                  `${translation?.not_available ||
-                                  "Not available"
-                                  }`}
+                                {propertyDetails?.carpet_area} {propertyDetails?.unit_type}
                               </h5>
                             </div>
                           </div>
                         </li>
                       )}
 
-                      <li>
-                        <div className="d-flex">
-                          <img
-                            src="/assets/images/icons/size.png"
-                            alt="Property Size"
-                            height="48"
-                            width="48"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span className="text-muted">
-                              {translation?.carpet_area || "Carpet Area"}
-                            </span>
-                            <h5>
-                              {propertyDetails?.carpet_area
-                                ? `${propertyDetails?.carpet_area} ${propertyDetails?.unit_type}`
-                                : `${translation?.not_available ||
-                                "Not available"
-                                }`}
-                            </h5>
+                      {propertyDetails?.created_at && (
+                        <li>
+                          <div className="d-flex">
+                            <img
+                              src="/assets/images/icons/calendar.png"
+                              alt="Launch Date"
+                              height="48"
+                              width="48"
+                            />
+                            <div className="flex-grow-1 ps-2">
+                              <span>{translation?.launch_date || "Launch Date"}</span>
+                              <h5>{useDateFormat(propertyDetails?.created_at)}</h5>
+                            </div>
                           </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="d-flex">
-                          <img
-                            src="/assets/images/icons/calendar.png"
-                            alt="Launch Date"
-                            height="48"
-                            width="48"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span>
-                              {translation?.launch_date || "Launch Date"}
-                            </span>
-                            <h5>
-                              {useDateFormat(propertyDetails?.created_at) ||
-                                "Date"}
-                            </h5>
+                        </li>
+                      )}
+
+                      {propertyDetails?.facing_direction && (
+                        <li>
+                          <div className="d-flex">
+                            <img
+                              src="/assets/images/icons/8270179.png"
+                              alt="Facing"
+                              height="48"
+                              width="48"
+                            />
+                            <div className="flex-grow-1 ps-2">
+                              <span>{translation?.facing || "Facing"}</span>
+                              <h5>
+                                {
+                                  facingOptions.find(
+                                    (item) =>
+                                      item.key === propertyDetails?.facing_direction
+                                  )?.value
+                                }
+                              </h5>
+                            </div>
                           </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="d-flex">
-                          <img
-                            src="/assets/images/icons/8270179.png"
-                            alt="Facing"
-                            height="48"
-                            width="48"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span>{translation?.facing || "Facing"}</span>
-                            <h5>
-                              {facingOptions.find(
-                                (item) =>
-                                  item.key === propertyDetails?.facing_direction
-                              )?.value ||
-                                `${translation?.not_available || "Not available"
-                                }`}
-                            </h5>
+                        </li>
+                      )}
+
+                      {propertyDetails?.price && (
+                        <li>
+                          <div className="d-flex">
+                            <img
+                              src="/assets/images/icons/money.png"
+                              alt="Booking Price"
+                              height="48"
+                              width="48"
+                            />
+                            <div className="flex-grow-1 ps-2">
+                              <span className="text-muted">
+                                {translation?.booking_price || "Booking Price"}
+                              </span>
+                              <h5>
+                                {propertyDetails?.currency
+                                  ? `${propertyDetails?.currency} `
+                                  : ""}
+                                {propertyDetails?.price}
+                              </h5>
+                            </div>
                           </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="d-flex">
-                          <img
-                            src="/assets/images/icons/money.png"
-                            alt="Booking Price"
-                            height="48"
-                            width="48"
-                          />
-                          <div className="flex-grow-1 ps-2">
-                            <span className="text-muted">
-                              {translation?.booking_price || "Booking Price"}
-                            </span>
-                            <h5>
-                              {propertyDetails?.currency
-                                ? `${propertyDetails?.currency} `
-                                : ""}
-                              {propertyDetails?.price ||
-                                translation?.not_available ||
-                                "Not available"}
-                            </h5>
-                          </div>
-                        </div>
-                      </li>
+                        </li>
+                      )}
                     </ul>
+
 
                     <h4 className="mb-3 text-primary">
                       {translation?.more_details || "More Details"}
@@ -635,7 +630,7 @@ const index = () => {
                             </Col>
                           )}
 
-                          {propertyDetails?.flats_per_floor &&  (
+                          {propertyDetails?.flats_per_floor && (
                             <Col className="col-xl-3 col-md-4 col-6 mb-4">
                               <p className="text-muted mb-2">
                                 {translation?.flats_per_floor || "Flat per floor"}
@@ -644,7 +639,7 @@ const index = () => {
                             </Col>
                           )}
 
-                          {propertyDetails?.lifts_in_tower &&  (
+                          {propertyDetails?.lifts_in_tower && (
                             <Col className="col-xl-3 col-md-4 col-6 mb-4">
                               <p className="text-muted mb-2">
                                 {translation?.lift_number || "Lift Number:"}

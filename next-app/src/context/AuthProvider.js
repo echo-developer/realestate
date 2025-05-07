@@ -37,9 +37,10 @@ export const AuthProvider = ({ children }) => {
   // const currencies = ["USD", "EUR", "GBP", "INR", "JPY", "AUD", "CAD", "CHF", "CNY", "AED"];
 
   function formatPrice(price) {
-    if (!currencyCode) return price.toString();  
+    if(!price) return;
+    if (!currencyCode) return price?.toString();  
   
-    const upperCurrency = currencyCode.toUpperCase();
+    const upperCurrency = currencyCode?.toUpperCase();
   
     switch (upperCurrency) {
   

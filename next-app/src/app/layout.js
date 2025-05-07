@@ -3,13 +3,26 @@ import { AuthProvider } from "@/context/AuthProvider";
 import "./globals.css";
 
 
-export const metadata = {
-  title: "RealEstate - Find Your Dream Home",
-  description: "Discover your dream home with RealEstate. Browse the latest listings, compare prices, and explore properties in your area. Your next home is just a click away!",
-};
+export async function generateMetadata() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/get-meta-data/home_page`);
+  // const res = await fetch('https://realestate.scriptlisting.com/hackground/api/get-meta-data/home_page')
+  const data = await res.json();
+
+  if(data && data?.status == 1) {
+    return {
+      title: data.data?.meta_title,
+      description: data?.data?.meta_description
+    }
+  } else {
+    return {
+      title: "RealEstate - Find Your Dream Home",
+      description: "Discover your dream home with RealEstate. Browse the latest listings, compare prices, and explore properties in your area. Your next home is just a click away!",
+    }
+  }
+}
 
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
@@ -20,3 +33,5 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
+

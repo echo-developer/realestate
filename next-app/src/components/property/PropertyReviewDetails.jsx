@@ -10,7 +10,6 @@ const PropertyReviewDetails = ({ property_reviews, handleShowCanvas, isMyPropert
   const { rating, total_reviews, reviews } = property_reviews;
   const [showOffcanvas, setShowOffcanvas] = useState(false);
 
-  console.log("property reviews", property_reviews);
 
   const handleShow = () => setShowOffcanvas(true);
   const handleClose = () => setShowOffcanvas(false);

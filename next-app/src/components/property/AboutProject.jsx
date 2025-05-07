@@ -3,9 +3,14 @@ import React from "react";
 import Link from "next/link";
 import useTranslation from "@/hooks/useTranslation";
 import DOMPurify from "dompurify";
+import { useAuth } from "@/context/AuthProvider";
 
 const AboutProject = ({ projectData }) => {
+  const {formatPrice} = useAuth();
   const translation = useTranslation();
+  const priceArr = projectData?.project_budget?.split("-");
+  const minPrice = formatPrice(priceArr?.[0]);
+  const maxPrice = formatPrice(priceArr?.[1]);
   const price = formatToLacCr(projectData?.project_budget);
   return (
     <div
@@ -118,7 +123,7 @@ const AboutProject = ({ projectData }) => {
             {translation?.price || "Price"}
           </p>
           <p style={{ fontWeight: "bold" }}>
-            {price || `${translation?.not_available || "Not available"}`}
+            {minPrice || 0}-{maxPrice}
           </p>
         </div>
       )}
