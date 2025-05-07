@@ -59,13 +59,7 @@ use App\Http\Controllers\Admin\PropertyTransactionController;
 use App\Http\Controllers\Admin\NotificationTemplateController;
 use App\Http\Controllers\Admin\Property_SubCategoryController;
 use App\Http\Controllers\Admin\AdvertisementPackagesController;
-
-
-
-
-
-
-
+use App\Http\Controllers\Admin\RequestedLandmarkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -682,4 +676,10 @@ Route::prefix('landmark/others')->name('others.')->controller(OthersLandmarksCon
     Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
     Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
     Route::post('/import-excel', 'importBusExcel')->name('import-excel');
+});
+
+Route::prefix('landmark/requested')->name('landmark-requested.')->controller(RequestedLandmarkController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/edit/{id}', 'getLandmarkForEdit')->name('edit');
+    Route::POST('/approve', 'approveLandmark')->name('approve');
 });

@@ -45,10 +45,10 @@
             }
         </style>
         @if (session('success_msg'))
-            <div class="alert alert-{{ session('message_type') }} alert-dismissible" >
+            <div class="alert alert-{{ session('message_type') }} alert-dismissible">
                 {{ session('success_msg') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert">
-                    
+
                 </button>
             </div>
         @endif
@@ -59,7 +59,7 @@
 
             <form action="{{ url('/permission-save') }}" method="POST">
                 @csrf
-                
+
                 <div class="card-header d-flex">
                     <h4>Menu Permission</h4>
                     <span class="badge badge-warning ml-2" id="role-badge"></span>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\PrefPropertyLocation;
+use App\Models\RequestedLandmarkModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -35,6 +36,7 @@ class PropertyUpdateControler extends Controller
             $this->UpdateAdditionalData($request);
             $this->UpdateSettingData($request);
             $this->UpdatePropertyLandmarks($request);
+            $this->addRequestedLandmarks($request);
 
 
             return response()->json([
@@ -69,22 +71,18 @@ class PropertyUpdateControler extends Controller
                 $datatoupdate['locality'] = $req->locality;
             }
 
-            DB::table('properties_location')->where('pid', $req->property_id)->update($datatoupdate);
+            if (!empty($datatoupdate)) {
+                DB::table('properties_location')->where('pid', $req->property_id)->update($datatoupdate);
+            }
 
             DB::commit();
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'status' => 0,
-                'message' => 'Failed to get property',
-                'error' => $e->getMessage()
-            ]);
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 
     public function UpdateAdditionalData($req)
     {
-        Log::info("Formatted Data:\n" . json_encode($req->all(), JSON_PRETTY_PRINT));
         DB::beginTransaction();
 
         try {
@@ -152,14 +150,8 @@ class PropertyUpdateControler extends Controller
 
             DB::commit();
             return response()->json(['status' => 1, 'message' => 'Property updated successfully']);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            LOG::info($e->getMessage());
-            return response()->json([
-                'status' => 0,
-                'message' => 'Failed to update property',
-                'error' => $e->getMessage()
-            ]);
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 
@@ -291,17 +283,8 @@ class PropertyUpdateControler extends Controller
                 'status' => 1,
                 'message' => 'Property updated successfully',
             ]);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error("Error in UpdateSettingData: {$e->getMessage()}", [
-                'trace' => $e->getTraceAsString(),
-            ]);
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'Failed to update property',
-                'error' => $e->getMessage(),
-            ], 500);
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 
@@ -368,13 +351,36 @@ class PropertyUpdateControler extends Controller
                     }
                 }
             }
-        } catch (\Exception $e) {
-            LOG::info($e->getMessage());
-            return response()->json([
-                'status' => 0,
-                'message' => 'Failed to update property',
-                'error' => $e->getMessage()
-            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function addRequestedLandmarks($req)
+    {
+        try {
+            DB::beginTransaction();
+
+            $data = json_decode($req->nearbyLocations, true);
+            $dataInsert = [];
+
+            if ($data) {
+                foreach ($data as $landmark) {
+                    $dataInsert[] = [
+                        'name' => $landmark['name'],
+                        'type' => strtolower($landmark['type']),
+                        'distance' => $landmark['distance'],
+                    ];
+                }
+            }
+            if (!empty($dataInsert)) {
+                RequestedLandmarkModel::insert($dataInsert);
+            }
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
         }
     }
 }

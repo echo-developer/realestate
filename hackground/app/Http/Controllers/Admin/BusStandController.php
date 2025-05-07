@@ -22,7 +22,7 @@ class BusStandController extends Controller
             $query->where('name', 'like', '%' . $term . '%');
         }
 
-        $list = $query->paginate(10);
+        $list = $query->orderByDesc('id')->paginate(10);
 
         return view('Admin.Landmarks.bus_stand', compact('list'));
     }
