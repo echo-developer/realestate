@@ -49,6 +49,7 @@ use App\Http\Controllers\Admin\ProjectAmenityController;
 use App\Http\Controllers\Admin\PropertyBudgetController;
 use App\Http\Controllers\Admin\PropertyLengthController;
 use App\Http\Controllers\Admin\PropertyStatusController;
+use App\Http\Controllers\Admin\OthersLandmarksController;
 use App\Http\Controllers\Admin\PropertyFurnishController;
 use App\Http\Controllers\Api\Project\ProjectImageUploade;
 use App\Http\Controllers\Admin\PropertyRecommendController;
@@ -659,6 +660,18 @@ Route::prefix('landmark/railway')->name('railway.')->controller(RailwayControlle
 });
 
 Route::prefix('landmark/bus')->name('bus.')->controller(BusStandController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::post('/store', 'store')->name('store');
+    Route::get('/edit/{id}', 'edit')->name('edit');
+    Route::put('/update/{id}', 'update')->name('update');
+    Route::post('/status', 'statusUpdate')->name('status');
+    Route::delete('/delete/{id}', 'destroy')->name('destroy');
+    Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
+    Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
+    Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
+    Route::post('/import-excel', 'importBusExcel')->name('import-excel');
+});
+Route::prefix('landmark/others')->name('others.')->controller(OthersLandmarksController::class)->group(function () {
     Route::get('/', 'index')->name('index');
     Route::post('/store', 'store')->name('store');
     Route::get('/edit/{id}', 'edit')->name('edit');
