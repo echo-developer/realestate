@@ -52,6 +52,9 @@ const index = () => {
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const [userDetails, setUserDetails] = useState();
   const [activeScrollMenu, setActiveScrollMenu] = useState("overview")
+  const [pendingLocations, setPendingLocations] = useState([
+    { name: 'Local Library', distance: '1.0' },
+  ]);
   const { adsData, logAdClick } = useAdvertisement(
     "detail-page",
     "footer",

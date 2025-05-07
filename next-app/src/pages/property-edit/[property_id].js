@@ -49,6 +49,7 @@ import {
   LineElement,
 } from "chart.js";
 import PropertyCompletionStatus from "@/components/addtional/PropertyCompletionStatus";
+import NearbyLocation from "@/components/property/NearbyLocation";
 
 // Register Chart.js components
 ChartJS.register(
@@ -72,6 +73,9 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState("");
   const [tabData, setTabData] = useState({});
   const [options, setOptions] = useState();
+  const [pendingLocations, setPendingLocations] = useState([
+    
+  ]);
 
   const doughnutData = {
     labels: ["Pending", "Completed"],
@@ -218,6 +222,9 @@ const Index = () => {
     if (inputValue.carpet_area) {
       formData.carpet_area = inputValue.carpet_area;
     }
+    if(pendingLocations?.length > 0) {
+      formData.nearbyLocations = JSON.stringify(pendingLocations);
+    }
 
     if (inputValue.super_area) {
       formData.super_area = inputValue.super_area;
@@ -301,7 +308,7 @@ const Index = () => {
     { id: 16, key: "electric_available", name: "Status of Electricity" },
     // { id: 17, key: "property_approved", name: "Approved By" },
     { id: 18, key: "ownership_type", name: "Type of Ownership" },
-    { id: 19, key: "landmarks", name: "Landmark" },
+    { id: 19, key: "landmarks", name: "Nearby Places" },
     { id: 20, key: "galleries", name: "Gallery" },
   ];
 
@@ -823,16 +830,17 @@ const Index = () => {
 
       case "landmarks":
         return (
-          <EditLandmarkData
-            value={inputValue[selectedItem] || ""}
-            onChange={(newValue) =>
-              setInputValue((prev) => ({
-                ...prev,
-                [selectedItem]: newValue,
-              }))
-            }
-            propertyData={propertyData}
-          />
+          // <EditLandmarkData
+          //   value={inputValue[selectedItem] || ""}
+          //   onChange={(newValue) =>
+          //     setInputValue((prev) => ({
+          //       ...prev,
+          //       [selectedItem]: newValue,
+          //     }))
+          //   }
+          //   propertyData={propertyData}
+          // />
+          <NearbyLocation pendingLocations={pendingLocations} setPendingLocations={setPendingLocations} />
         );
       default:
         return null;

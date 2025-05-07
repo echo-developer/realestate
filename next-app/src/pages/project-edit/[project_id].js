@@ -45,6 +45,7 @@ import {
   PointElement,
   LineElement,
 } from "chart.js";
+import NearbyLocation from "@/components/property/NearbyLocation";
 
 // Register Chart.js components
 ChartJS.register(
@@ -69,6 +70,9 @@ const Index = () => {
   const translation = useTranslation();
   const { project_id } = router.query;
   const [projectData, setProjectData] = useState();
+  const [pendingLocations, setPendingLocations] = useState([
+     
+    ]);
 
   const [inputValue, setInputValue] = useState({
     expected_price: "",
@@ -261,6 +265,9 @@ const Index = () => {
     if (inputValue?.total_units) {
       formData.total_units = inputValue?.total_units;
     }
+    if(pendingLocations?.length > 0) {
+      formData.nearbyLocations = JSON.stringify(pendingLocations);
+    }
 
     if (inputValue.total_area) {
       formData.total_area = inputValue.total_area;
@@ -336,7 +343,7 @@ const Index = () => {
     { id: 16, key: "electric_availability", name: "Status of Electricity" },
     // { id: 17, key: "project_approved", name: "Approved By" },
     { id: 18, key: "type_of_ownership", name: "Type of Ownership" },
-    { id: 19, key: "landmarks", name: "Landmark" },
+    { id: 19, key: "landmarks", name: "Nearby Places" },
     { id: 20, key: "galleries", name: "Gallery" },
   ];
   // const setLocality = (locality) => {
@@ -853,16 +860,17 @@ const Index = () => {
 
       case "landmarks":
         return (
-          <EditLandmarkData
-            value={inputValue[selectedItem] || ""}
-            onChange={(newValue) =>
-              setInputValue((prev) => ({
-                ...prev,
-                [selectedItem]: newValue,
-              }))
-            }
-            projectData={projectData}
-          />
+          // <EditLandmarkData
+          //   value={inputValue[selectedItem] || ""}
+          //   onChange={(newValue) =>
+          //     setInputValue((prev) => ({
+          //       ...prev,
+          //       [selectedItem]: newValue,
+          //     }))
+          //   }
+          //   projectData={projectData}
+          // />
+          <NearbyLocation pendingLocations={pendingLocations} setPendingLocations={setPendingLocations} />
         );
       default:
         return null;

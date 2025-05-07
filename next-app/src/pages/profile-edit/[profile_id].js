@@ -155,8 +155,22 @@ const ProfileForm = () => {
       [name]: "",
     }));
   };
-
+console.log("addresses", addresses)
   const handleSubmit = async (e) => {
+    console.log("addresses", addresses)
+    const service_area = addresses.map(item => {
+      if(typeof item.locality === 'object') {
+        return {
+          ...item,
+          locality: item.locality?.locality_id
+        }
+      } else {
+        return {
+          ...item,
+        }
+      }
+    })
+    console.log("searvice area", service_area)
     e.preventDefault();
     try {
       const response = await callApi({
@@ -164,7 +178,7 @@ const ProfileForm = () => {
         method: "UPLOAD",
         data: {
           ...formData,
-          service_area: JSON.stringify(addresses),
+          service_area: JSON.stringify(service_area),
           social_media: JSON.stringify(socialLinks),
           user_id: memberId,
         },
