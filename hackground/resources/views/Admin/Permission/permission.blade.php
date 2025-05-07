@@ -45,7 +45,7 @@
             }
         </style>
         @if (session('success_msg'))
-            <div class="alert alert-{{ session('message_type') }}">
+            <div class="alert alert-{{ session('message_type') }} alert-dismissible" >
                 {{ session('success_msg') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert">
                     
@@ -62,7 +62,7 @@
                 
                 <div class="card-header d-flex">
                     <h4>Menu Permission</h4>
-                    <span class="badge badge-secondary" id="role-badge"></span>
+                    <span class="badge badge-warning ml-2" id="role-badge"></span>
                     <div class="btn-actions-pane-right">
                         <select class="form-select form-select-sm" name="user_role" id="user_role">
                             <option value="">Choose</option>
