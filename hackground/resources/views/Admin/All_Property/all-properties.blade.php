@@ -89,7 +89,7 @@
             </div>
             <div class="col-lg-auto col-12">
                 <button type="button" onclick="$('#advanceFilter').slideToggle();" class="btn btn-outline-primary">
-                <i class="bi bi-funnel"></i> Advanced
+                    <i class="bi bi-funnel"></i> Advanced
                 </button>
             </div>
         </div>
@@ -230,7 +230,7 @@
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
-                        <h3><small>{{ $property->price_currency }}</small>{{ $property->expected_price }}</h3>
+                        <h3><small> {{ get_setting('site-currency') . formatPrice($property->expected_price,get_setting('site-currency-code'))}} </small></h3>
 
                         <span>
                             <a href="{{ url('/enquiry/property-leads/' . $property->id) }}" title="View Leads"><i class="ri-eye-fill"></i></a>

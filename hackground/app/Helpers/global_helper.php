@@ -110,20 +110,39 @@ if (!function_exists('SendMail')) {
     }
 }
 
+
 if (!function_exists('formatPrice')) {
-    function formatPrice($price)
+    function formatPrice($price, $currency = 'INR')
     {
-        if ($price >= 10000000) {
-            return round($price / 10000000, 2) . ' Cr';
-        } elseif ($price >= 100000) {
-            return round($price / 100000, 2) . ' Lac';
-        } elseif ($price >= 1000) {
-            return round($price / 1000, 2) . ' K';
-        } else {
-            return $price;
+        switch (strtoupper($currency)) {
+            case 'INR':
+                if ($price >= 10000000) {
+                    return round($price / 10000000, 2) . ' Cr';
+                } elseif ($price >= 100000) {
+                    return round($price / 100000, 2) . ' Lac';
+                } elseif ($price >= 1000) {
+                    return round($price / 1000, 2) . ' K';
+                } else {
+                    return $price;
+                }
+
+            case 'USD':
+            case 'EUR':
+            case 'GBP':
+                if ($price >= 1000000) {
+                    return round($price / 1000000, 2) . ' M';
+                } elseif ($price >= 1000) {
+                    return round($price / 1000, 2) . ' K';
+                } else {
+                    return $price;
+                }
+
+            default:
+                return $price;
         }
     }
 }
+
 function getAvatarColor($input)
 {
     $colors = [
@@ -155,7 +174,7 @@ if (!function_exists('generatePropertyCardHTML')) {
     {
         $html = '';
         foreach ($properties as $property) {
-            $Price = get_setting('site-currency') . formatPrice($property->settings->expected_price);
+            $Price = get_setting('site-currency') . formatPrice($property->settings->expected_price, get_setting('site-currency-code'));
             $locality = get_name_by_id("locality_names", "locality_id", $property->location->locality, "en");
             $possession = get_name_by_id("property_status_names", "status_id", $property->additional->possession_status, "en");
             $parking = $property->settings->parking_ability
@@ -292,16 +311,16 @@ if (!function_exists('getTableData')) {
 }
 
 if (!function_exists('getField')) {
-    
-    function getField($column = '', $table = '', $where = '', $val = '') {
+
+    function getField($column = '', $table = '', $where = '', $val = '')
+    {
         $res = DB::table($table)
-                ->select($column)
-                ->where($where, $val)
-                ->get()
-                ->first();
+            ->select($column)
+            ->where($where, $val)
+            ->get()
+            ->first();
         return $res->$column;
     }
-
 }
 
 
@@ -402,7 +421,7 @@ if (!function_exists('AllmenusForSideBar')) {
         }
 
         $allmenus = $allmenus->where('mmt.status', 1)
-            ->orderBy('order', 'asc')     
+            ->orderBy('order', 'asc')
             ->get()
             ->groupBy('parent_id')
             ->map(function ($group) {
@@ -1309,7 +1328,7 @@ if (!function_exists('get_property_sub_category_name')) {
             ->where('p_s.id', $id)
             ->first();
 
-        return $result->name??null;
+        return $result->name ?? null;
     }
 }
 
