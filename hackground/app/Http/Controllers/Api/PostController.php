@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Api\ApiModel;
 use App\Models\PrefProperty;
 use Illuminate\Http\Request;
+use App\Models\LocalityModel;
 use Illuminate\Support\Facades\DB;
 use App\Models\PrefPropertyGallery;
 use App\Models\PrefPropertySetting;
@@ -84,6 +85,7 @@ class PostController extends Controller
             $this->savePropertyDimensions($property->id, $request);
             $this->savePropertyAdditional($property->id, $request);
             $this->savePropertyGalleries($property->id, $request);
+            $this->savePropertyLandmarks($property->id, $request);
             $can_post = get_remaining_values('remaining_listings_allowed', $this->UserId);
             if ($can_post != null) {
 
@@ -340,7 +342,45 @@ class PostController extends Controller
             }
         }
     }
+    private function savePropertyLandmarks($propertyId, $request)
+    {
+        $radius = 2;
 
+        $locality = LocalityModel::select('latitude', 'longitude')
+            ->where('locality_id',  $request->locality)
+            ->first();
+
+        if (!$locality) {
+            return response()->json(['status' => 0, 'message' => 'Locality not found.']);
+        }
+
+        $latitude = $locality->latitude;
+        $longitude = $locality->longitude;
+
+        $tables = [
+            'education' => 'education',
+            'metro' => 'metro_station',
+            'rail' => 'railway_station',
+            'bus' => 'bus_stand',
+            'healthcare' => 'hospital',
+            'others' => 'others_landmarks'
+        ];
+
+        foreach ($tables as $landmarkType => $table) {
+            $nearbyLandmarks = LocalityModel::getNearbyLandmarks($table, $latitude, $longitude, $radius);
+
+            foreach ($nearbyLandmarks as $landmark) {
+                DB::table('nearby_landmarks')->insert([
+                    'uid' => auth_user_id(),
+                    'property_id' => $propertyId,
+                    'loc_id' =>  $request->locality,
+                    'landmark_type' => $landmarkType,
+                    'landmark_id' => $landmark->id,
+                    'distance' => $landmark->distance,
+                ]);
+            }
+        }
+    }
     private function countRooms($rooms)
     {
         // Check if the input is already an array

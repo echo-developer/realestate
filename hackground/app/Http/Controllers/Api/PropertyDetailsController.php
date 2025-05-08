@@ -144,7 +144,7 @@ class PropertyDetailsController extends Controller
                     }
 
                     //calling the landmarks data from property edit controller
-                    $landmarks = $this->propertyEditController->EditPropertyLandmarks($property->property_id);
+                    $landmarks = PrefProperty::nearby_landmarks($property->property_id);
 
                     $flooring = json_decode($property->flooring_style, true);
                     $floor_array  = $flooring != null ?  array_values($flooring) : [];
@@ -506,7 +506,7 @@ class PropertyDetailsController extends Controller
                         'floor_plans' => $mergedFloorPlans,
                         'nearby_properties' => $flattenedNearbyProperties ?? null,
                         'similar_properties' => $flattenedSimilarProperties,
-                        'landmarks' => reset($landmarks),
+                        'landmarks' => $landmarks,
                         'property_reviews' => [
                             'rating' => $average_rating_on_this_property ?? null,
                             'total_reviews' => $total_count ?? null,

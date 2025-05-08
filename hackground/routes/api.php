@@ -119,6 +119,7 @@ Route::controller(PostController::class)->group(function () {
     Route::get('get_locality/{id?}', 'FetchLocality')->name('Fetch.Locality');
     Route::get('get_property_furnish', 'furnish');
     Route::get('get_property_status', 'status');
+    Route::get('nearby_land_mark_save', 'savePropertyLandmarks');
 });
 
 // Dashboard Routes

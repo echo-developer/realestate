@@ -302,7 +302,7 @@ class LocalityModel extends Model
     {
         return DB::table($table)
             ->select(
-                'name',
+                'name','id',
                 DB::raw("(
                     6371 * acos(
                         cos(radians($latitude)) *
