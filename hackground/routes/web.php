@@ -678,8 +678,8 @@ Route::prefix('landmark/others')->name('others.')->controller(OthersLandmarksCon
     Route::post('/import-excel', 'importBusExcel')->name('import-excel');
 });
 
-Route::prefix('landmark/requested')->name('landmark-requested.')->controller(RequestedLandmarkController::class)->group(function () {
-    Route::get('/', 'index')->name('index');
-    Route::get('/edit/{id}', 'getLandmarkForEdit')->name('edit');
-    Route::POST('/approve', 'approveLandmark')->name('approve');
-});
+// Route::prefix('landmark/requested')->name('landmark-requested.')->controller(RequestedLandmarkController::class)->group(function () {
+//     Route::get('/', 'index')->name('index');
+//     Route::get('/edit/{id}', 'getLandmarkForEdit')->name('edit');
+//     Route::POST('/approve', 'approveLandmark')->name('approve');
+// });

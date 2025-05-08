@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\PrefPropertyLocation;
 use App\Models\RequestedLandmarkModel;
+use App\Services\RequestedLandmarkService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -22,7 +23,7 @@ class PropertyUpdateControler extends Controller
         return is_array($decodedRooms) ? count($decodedRooms) : 0;
     }
 
-    public function UpdateProperty(Request $request)
+    public function UpdateProperty(Request $request, RequestedLandmarkService $landmarkService)
     {
 
         try {
@@ -36,7 +37,7 @@ class PropertyUpdateControler extends Controller
             $this->UpdateAdditionalData($request);
             $this->UpdateSettingData($request);
             $this->UpdatePropertyLandmarks($request);
-            $this->addRequestedLandmarks($request);
+            $landmarkService->addRequestedLandmarks($request);
 
 
             return response()->json([
@@ -356,31 +357,31 @@ class PropertyUpdateControler extends Controller
         }
     }
 
-    public function addRequestedLandmarks($req)
-    {
-        try {
-            DB::beginTransaction();
+    // public function addRequestedLandmarks($req)
+    // {
+    //     try {
+    //         DB::beginTransaction();
 
-            $data = json_decode($req->nearbyLocations, true);
-            $dataInsert = [];
+    //         $data = json_decode($req->nearbyLocations, true);
+    //         $dataInsert = [];
 
-            if ($data) {
-                foreach ($data as $landmark) {
-                    $dataInsert[] = [
-                        'name' => $landmark['name'],
-                        'type' => strtolower($landmark['type']),
-                        'distance' => $landmark['distance'],
-                    ];
-                }
-            }
-            if (!empty($dataInsert)) {
-                RequestedLandmarkModel::insert($dataInsert);
-            }
+    //         if ($data) {
+    //             foreach ($data as $landmark) {
+    //                 $dataInsert[] = [
+    //                     'name' => $landmark['name'],
+    //                     'type' => strtolower($landmark['type']),
+    //                     'distance' => $landmark['distance'],
+    //                 ];
+    //             }
+    //         }
+    //         if (!empty($dataInsert)) {
+    //             RequestedLandmarkModel::insert($dataInsert);
+    //         }
 
-            DB::commit();
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            throw $th;
-        }
-    }
+    //         DB::commit();
+    //     } catch (\Throwable $th) {
+    //         DB::rollBack();
+    //         throw $th;
+    //     }
+    // }
 }

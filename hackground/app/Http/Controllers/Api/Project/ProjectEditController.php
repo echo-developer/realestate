@@ -8,6 +8,8 @@ use App\Models\PrefProject;
 use App\Models\ProjectAdditional;
 use App\Models\ProjectLocation;
 use App\Models\ProjectSetting;
+use App\Models\RequestedLandmarkModel;
+use App\Services\RequestedLandmarkService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -148,7 +150,7 @@ class ProjectEditController extends Controller
         }
     }
 
-    public function Updateproject(Request $request)
+    public function Updateproject(Request $request,RequestedLandmarkService $landmarkService)
     {
 
         try {
@@ -163,6 +165,9 @@ class ProjectEditController extends Controller
             $this->UpdateSettingData($request);
             $this->UpdateProjectMaintable($request);
             $this->UpdateProjectLandmarks($request);
+            $landmarkService->addRequestedLandmarks($request);
+
+
 
 
             return response()->json([
@@ -384,4 +389,32 @@ class ProjectEditController extends Controller
             ]);
         }
     }
+
+    // public function addRequestedLandmarks($req)
+    // {
+    //     try {
+    //         DB::beginTransaction();
+
+    //         $data = json_decode($req->nearbyLocations, true);
+    //         $dataInsert = [];
+
+    //         if ($data) {
+    //             foreach ($data as $landmark) {
+    //                 $dataInsert[] = [
+    //                     'name' => $landmark['name'],
+    //                     'type' => strtolower($landmark['type']),
+    //                     'distance' => $landmark['distance'],
+    //                 ];
+    //             }
+    //         }
+    //         if (!empty($dataInsert)) {
+    //             RequestedLandmarkModel::insert($dataInsert);
+    //         }
+
+    //         DB::commit();
+    //     } catch (\Throwable $th) {
+    //         DB::rollBack();
+    //         throw $th;
+    //     }
+    // }
 }
