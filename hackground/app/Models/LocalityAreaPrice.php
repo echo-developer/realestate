@@ -81,7 +81,7 @@ class LocalityAreaPrice extends Model
     public function getYearlyTrendData($loc_id)
     {
         return DB::table('area_locality_price')
-            ->select('locality', 'year', 'price_for', 'price_per_sqft')
+            ->select('locality', 'year', 'price_for', 'price_per_sqft','new_price')
             ->where('locality',$loc_id)
             ->orderBy('locality')
             ->orderBy('year')

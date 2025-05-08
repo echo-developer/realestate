@@ -39,7 +39,6 @@ class GoogleLocalityController extends Controller
     public function __construct()
     {
         $this->localityModel = new LocalityModel;
- 
     }
     public function fetchLocalityfromDatabase(Request $request)
     {
@@ -193,7 +192,7 @@ class GoogleLocalityController extends Controller
                 'locality_id' => $item->locality,
                 'locality_name' => get_name_by_id("locality_names", "locality_id", $item->locality, "en"),
                 'year' => $item->year,
-                'avg_price_per_sqft' => $item->price_per_sqft,
+                'avg_price_per_sqft' => $item->new_price ?? $item->price_per_sqft,
             ];
 
             if ($item->price_for === 'prop') {
