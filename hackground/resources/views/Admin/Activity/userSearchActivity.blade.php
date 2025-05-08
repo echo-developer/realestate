@@ -1,5 +1,5 @@
 @extends('Admin.layouts.app')
-{{ log_anything($data) }}
+{{-- {{ log_anything($data) }} --}}
 @section('content')
     <div class="body-page-loader d-none">
         <div class="loader">

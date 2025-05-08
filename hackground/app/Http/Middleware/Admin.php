@@ -30,7 +30,6 @@ class Admin
                 return $next($request);
             }
 
-            // Optional: logout if status is inactive
             Auth::guard('admin')->logout();
 
             return redirect()->route('login.form')->withErrors(['account' => 'Your account is inactive.']);

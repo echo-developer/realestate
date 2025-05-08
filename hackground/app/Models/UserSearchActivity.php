@@ -74,6 +74,7 @@ class UserSearchActivity extends Model
         return Attribute::make(
             get: function ($value) {
                 $filters = json_decode($value, true);
+                unset($filters['hasLatlang']);
                 if (!$filters || !is_array($filters)) {
                     return [];
                 }
@@ -111,6 +112,10 @@ class UserSearchActivity extends Model
 
                     if ($key === 'furnishing') {
                         $val = array_map(fn($v) => get_name_by_id('property_furnish_names', 'furnish_id', $v, 'en') ?? "Unknown ($v)", $val);
+                    }
+
+                    if ($key === 'locality') {
+                        $val = get_name_by_id('locality_names', 'locality_id', $val, 'en') ?? "Unknown ($val) locality Id";
                     }
                 }
 
