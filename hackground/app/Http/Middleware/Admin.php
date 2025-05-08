@@ -15,11 +15,27 @@ class Admin
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
+    // {
+    //     if (Auth::guard('admin')->check()) {
+    //         return $next($request);
+    //     } else {
+    //         return redirect()->route('login.form');
+    //     }
+    // }
     {
         if (Auth::guard('admin')->check()) {
-            return $next($request);
-        } else {
-            return redirect()->route('login.form');
+            $admin = Auth::guard('admin')->user();
+
+            if ($admin->status == 1) {
+                return $next($request);
+            }
+
+            // Optional: logout if status is inactive
+            Auth::guard('admin')->logout();
+
+            return redirect()->route('login.form')->withErrors(['account' => 'Your account is inactive.']);
         }
+
+        return redirect()->route('login.form');
     }
 }

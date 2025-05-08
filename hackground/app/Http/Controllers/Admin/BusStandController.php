@@ -10,6 +10,12 @@ use Illuminate\Http\Request;
 class BusStandController extends Controller
 {
     use ExcelImportTrait;
+
+    public function __construct()
+    {
+        $this->middleware('view_permit:bus-stands');
+    }
+
     public function index(Request $request)
     {
         $term = $request->input('term');

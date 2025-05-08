@@ -559,6 +559,115 @@ Route::middleware('admin_auth')->group(function () {
     });
 
     Route::get('feedback', [FeedbackController::class, 'getFeedbackList']);
+
+
+
+    Route::controller(AreaPriceController::class)->group(function () {
+        Route::get('area-price/{id?}', 'AreaPrice')->name('area-price.view');
+        Route::get('edit', 'Edit')->name('locality_price.edit');
+        Route::post('update', 'Update')->name('locality_price.update');
+    });
+    Route::get('/faq-category/{lang?}', [FaqController::class, 'category_view'])->name('category_view');
+    Route::post('/add/faq/category', [FaqController::class, 'submit_Category'])->name('submit_Category');
+    Route::get('/category/faq/details/{id?}', [FaqController::class, 'category_details'])->name('category_details');
+    Route::post('/edit/faq/category', [FaqController::class, 'update_faqcategory'])->name('update_faqcategory');
+    Route::post('/status/faq/category', [FaqController::class, 'faqcategory_status'])->name('faqcategory_status');
+    Route::post('/delete-faqcategory', [FaqController::class, 'categoryDelete'])->name('categoryDelete');
+
+
+    Route::get('/faq-list-category/{lang?}', [FaqListController::class, 'list_view'])->name('list_view');
+    Route::post('/faq/list/category', [FaqListController::class, 'list_submit'])->name('list_submit');
+    Route::post('/update/list/category', [FaqListController::class, 'update_list'])->name('update_list');
+    Route::get('/faq/list/details/{id}', [FaqListController::class, 'list_category'])->name('list_category');
+    Route::post('/faq/list/status', [FaqListController::class, 'list_status'])->name('list_status');
+    Route::post('/faq/list/delete', [FaqListController::class, 'list_delete'])->name('list_delete');
+
+
+    Route::prefix('page-meta')->name('meta.')->controller(MetaController::class)->group(function () {
+        Route::get('/', 'listMeta')->name('list'); // meta.list
+        Route::post('/store', 'store')->name('store'); // meta.store
+        Route::get('/edit/{id}', 'edit')->name('edit'); // meta.edit
+        Route::put('/update/{id}', 'update')->name('update'); // meta.update
+        Route::post('/status', 'statusUpdate')->name('status'); // meta.status
+        Route::delete('/delete/{id}', 'destroy')->name('destroy'); // meta.status
+        Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple'); // meta.delete-multiple
+        Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple'); // meta.activate-multiple
+        Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple'); // meta.deactivate-multiple
+    });
+
+    Route::prefix('landmark/education')->name('education.')->controller(EducationController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::put('/update/{id}', 'update')->name('update');
+        Route::post('/status', 'statusUpdate')->name('status');
+        Route::delete('/delete/{id}', 'destroy')->name('destroy');
+        Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
+        Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
+        Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
+        Route::post('/import-excel', 'importEducationExcel')->name('import-excel');
+    });
+    Route::prefix('landmark/metro')->name('metro.')->controller(MetroStationController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::put('/update/{id}', 'update')->name('update');
+        Route::post('/status', 'statusUpdate')->name('status');
+        Route::delete('/delete/{id}', 'destroy')->name('destroy');
+        Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
+        Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
+        Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
+        Route::post('/import-excel', 'importMetroExcel')->name('import-excel');
+    });
+    Route::prefix('landmark/hospital')->name('hospital.')->controller(HospitalController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::put('/update/{id}', 'update')->name('update');
+        Route::post('/status', 'statusUpdate')->name('status');
+        Route::delete('/delete/{id}', 'destroy')->name('destroy');
+        Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
+        Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
+        Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
+        Route::post('/import-excel', 'importHospitalExcel')->name('import-excel');
+    });
+    Route::prefix('landmark/railway')->name('railway.')->controller(RailwayController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::put('/update/{id}', 'update')->name('update');
+        Route::post('/status', 'statusUpdate')->name('status');
+        Route::delete('/delete/{id}', 'destroy')->name('destroy');
+        Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
+        Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
+        Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
+        Route::post('/import-excel', 'importRailwayExcel')->name('import-excel');
+    });
+
+    Route::prefix('landmark/bus')->name('bus.')->controller(BusStandController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::put('/update/{id}', 'update')->name('update');
+        Route::post('/status', 'statusUpdate')->name('status');
+        Route::delete('/delete/{id}', 'destroy')->name('destroy');
+        Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
+        Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
+        Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
+        Route::post('/import-excel', 'importBusExcel')->name('import-excel');
+    });
+    Route::prefix('landmark/others')->name('others.')->controller(OthersLandmarksController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::put('/update/{id}', 'update')->name('update');
+        Route::post('/status', 'statusUpdate')->name('status');
+        Route::delete('/delete/{id}', 'destroy')->name('destroy');
+        Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
+        Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
+        Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
+        Route::post('/import-excel', 'importBusExcel')->name('import-excel');
+    });
 });
 
 Route::get('/artisan-run', function () {
@@ -568,114 +677,6 @@ Route::get('/artisan-run', function () {
     Artisan::call('config:cache');
 
     return response()->json(['message' => 'Cache cleared and config cached successfully']);
-});
-
-
-Route::controller(AreaPriceController::class)->group(function () {
-    Route::get('area-price/{id?}', 'AreaPrice')->name('area-price.view');
-    Route::get('edit', 'Edit')->name('locality_price.edit');
-    Route::post('update', 'Update')->name('locality_price.update');
-});
-Route::get('/faq-category/{lang?}', [FaqController::class, 'category_view'])->name('category_view');
-Route::post('/add/faq/category', [FaqController::class, 'submit_Category'])->name('submit_Category');
-Route::get('/category/faq/details/{id?}', [FaqController::class, 'category_details'])->name('category_details');
-Route::post('/edit/faq/category', [FaqController::class, 'update_faqcategory'])->name('update_faqcategory');
-Route::post('/status/faq/category', [FaqController::class, 'faqcategory_status'])->name('faqcategory_status');
-Route::post('/delete-faqcategory', [FaqController::class, 'categoryDelete'])->name('categoryDelete');
-
-
-Route::get('/faq-list-category/{lang?}', [FaqListController::class, 'list_view'])->name('list_view');
-Route::post('/faq/list/category', [FaqListController::class, 'list_submit'])->name('list_submit');
-Route::post('/update/list/category', [FaqListController::class, 'update_list'])->name('update_list');
-Route::get('/faq/list/details/{id}', [FaqListController::class, 'list_category'])->name('list_category');
-Route::post('/faq/list/status', [FaqListController::class, 'list_status'])->name('list_status');
-Route::post('/faq/list/delete', [FaqListController::class, 'list_delete'])->name('list_delete');
-
-
-Route::prefix('page-meta')->name('meta.')->controller(MetaController::class)->group(function () {
-    Route::get('/', 'listMeta')->name('list'); // meta.list
-    Route::post('/store', 'store')->name('store'); // meta.store
-    Route::get('/edit/{id}', 'edit')->name('edit'); // meta.edit
-    Route::put('/update/{id}', 'update')->name('update'); // meta.update
-    Route::post('/status', 'statusUpdate')->name('status'); // meta.status
-    Route::delete('/delete/{id}', 'destroy')->name('destroy'); // meta.status
-    Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple'); // meta.delete-multiple
-    Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple'); // meta.activate-multiple
-    Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple'); // meta.deactivate-multiple
-});
-
-Route::prefix('landmark/education')->name('education.')->controller(EducationController::class)->group(function () {
-    Route::get('/', 'index')->name('index');
-    Route::post('/store', 'store')->name('store');
-    Route::get('/edit/{id}', 'edit')->name('edit');
-    Route::put('/update/{id}', 'update')->name('update');
-    Route::post('/status', 'statusUpdate')->name('status');
-    Route::delete('/delete/{id}', 'destroy')->name('destroy');
-    Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
-    Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
-    Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
-    Route::post('/import-excel', 'importEducationExcel')->name('import-excel');
-});
-Route::prefix('landmark/metro')->name('metro.')->controller(MetroStationController::class)->group(function () {
-    Route::get('/', 'index')->name('index');
-    Route::post('/store', 'store')->name('store');
-    Route::get('/edit/{id}', 'edit')->name('edit');
-    Route::put('/update/{id}', 'update')->name('update');
-    Route::post('/status', 'statusUpdate')->name('status');
-    Route::delete('/delete/{id}', 'destroy')->name('destroy');
-    Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
-    Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
-    Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
-    Route::post('/import-excel', 'importMetroExcel')->name('import-excel');
-});
-Route::prefix('landmark/hospital')->name('hospital.')->controller(HospitalController::class)->group(function () {
-    Route::get('/', 'index')->name('index');
-    Route::post('/store', 'store')->name('store');
-    Route::get('/edit/{id}', 'edit')->name('edit');
-    Route::put('/update/{id}', 'update')->name('update');
-    Route::post('/status', 'statusUpdate')->name('status');
-    Route::delete('/delete/{id}', 'destroy')->name('destroy');
-    Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
-    Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
-    Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
-    Route::post('/import-excel', 'importHospitalExcel')->name('import-excel');
-});
-Route::prefix('landmark/railway')->name('railway.')->controller(RailwayController::class)->group(function () {
-    Route::get('/', 'index')->name('index');
-    Route::post('/store', 'store')->name('store');
-    Route::get('/edit/{id}', 'edit')->name('edit');
-    Route::put('/update/{id}', 'update')->name('update');
-    Route::post('/status', 'statusUpdate')->name('status');
-    Route::delete('/delete/{id}', 'destroy')->name('destroy');
-    Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
-    Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
-    Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
-    Route::post('/import-excel', 'importRailwayExcel')->name('import-excel');
-});
-
-Route::prefix('landmark/bus')->name('bus.')->controller(BusStandController::class)->group(function () {
-    Route::get('/', 'index')->name('index');
-    Route::post('/store', 'store')->name('store');
-    Route::get('/edit/{id}', 'edit')->name('edit');
-    Route::put('/update/{id}', 'update')->name('update');
-    Route::post('/status', 'statusUpdate')->name('status');
-    Route::delete('/delete/{id}', 'destroy')->name('destroy');
-    Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
-    Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
-    Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
-    Route::post('/import-excel', 'importBusExcel')->name('import-excel');
-});
-Route::prefix('landmark/others')->name('others.')->controller(OthersLandmarksController::class)->group(function () {
-    Route::get('/', 'index')->name('index');
-    Route::post('/store', 'store')->name('store');
-    Route::get('/edit/{id}', 'edit')->name('edit');
-    Route::put('/update/{id}', 'update')->name('update');
-    Route::post('/status', 'statusUpdate')->name('status');
-    Route::delete('/delete/{id}', 'destroy')->name('destroy');
-    Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
-    Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
-    Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
-    Route::post('/import-excel', 'importBusExcel')->name('import-excel');
 });
 
 // Route::prefix('landmark/requested')->name('landmark-requested.')->controller(RequestedLandmarkController::class)->group(function () {

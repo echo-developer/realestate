@@ -7,9 +7,15 @@ use App\Models\Railway;
 use App\Traits\Imports\ExcelImportTrait;
 use Illuminate\Http\Request;
 
-class RailwayController extends Controller
+class RailwayController extends Controller 
 {
     use ExcelImportTrait;
+
+    public function __construct()
+    {
+        $this->middleware('view_permit:railway-station');
+    }
+    
     public function index(Request $request)
     {
         $term = $request->input('term');

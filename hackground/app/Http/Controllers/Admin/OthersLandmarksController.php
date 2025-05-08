@@ -4,10 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Others;
+use App\Traits\Imports\ExcelImportTrait;
 use Illuminate\Http\Request;
 
 class OthersLandmarksController extends Controller
 {
+    use ExcelImportTrait;
+
+    public function __construct()
+    {
+        $this->middleware('view_permit:others');
+    }
+
     public function index(Request $request)
     {
         $term = $request->input('term');
@@ -25,7 +33,7 @@ class OthersLandmarksController extends Controller
         return view('Admin.Landmarks.others', compact('list'));
     }
 
-
+    
 
     /**
      * Store a newly created resource in storage.

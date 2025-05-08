@@ -10,6 +10,12 @@ use Illuminate\Http\Request;
 class MetroStationController extends Controller
 {
     use ExcelImportTrait;
+
+    public function __construct()
+    {
+        $this->middleware('view_permit:metro-station');
+    }
+
     public function index(Request $request)
     {
         $term = $request->input('term');

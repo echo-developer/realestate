@@ -17,7 +17,7 @@ class EducationController extends Controller
     public function __construct(Education $educationModel)
     {
         $this->educationModel = $educationModel;
-        $this->middleware('view_permit:city');
+        $this->middleware('view_permit:education');
     }
     /**
      * Display a listing of the resource.

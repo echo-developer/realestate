@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 class HospitalController extends Controller
 {
     use ExcelImportTrait;
+
+    public function __construct()
+    {
+        $this->middleware('view_permit:hospital');
+    }
     /**
      * Display a listing of the resource.
      */

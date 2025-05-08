@@ -33,32 +33,39 @@
                                     </div>
                                     <p>Please sign in to your account below.</p>
                                 </div>
+                                @error('account')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                                 <form id="loginForm">
                                     @csrf
 
                                     <div class="form-floating mb-4">
-                                        <input name="username" id="username" placeholder="Username here..." type="text" class="form-control">
+                                        <input name="username" id="username" placeholder="Username here..."
+                                            type="text" class="form-control">
                                         <label for="username">Username</label>
                                         <p id="usernameError" class="text-danger small"></p>
                                     </div>
 
                                     <div class="form-floating mb-4">
-                                        <input name="password" id="password" placeholder="Password here..." type="password" class="form-control">
+                                        <input name="password" id="password" placeholder="Password here..."
+                                            type="password" class="form-control">
                                         <label for="password">Password</label>
                                         <p id="passwordError" class="text-danger small"></p>
-                                    </div>                        
+                                    </div>
 
                                     <div class="row">
                                         <div class="col">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" name="check" id="exampleCheck">
+                                                <input class="form-check-input" type="checkbox" value=""
+                                                    name="check" id="exampleCheck">
                                                 <label class="form-check-label small text-muted" for="exampleCheck">
                                                     Keep me logged in
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-auto">
-                                            <a href="{{url('password_recover_form')}}" class="small">Recover Password</a>
+                                            <a href="{{ url('password_recover_form') }}" class="small">Recover
+                                                Password</a>
                                         </div>
                                     </div>
 
