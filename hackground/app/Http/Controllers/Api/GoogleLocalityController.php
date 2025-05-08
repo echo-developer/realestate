@@ -178,9 +178,9 @@ class GoogleLocalityController extends Controller
             ->where('locality_names.lang', $lang)
             ->exists();
     }
-    public function getYearlyPriceTrend()
+    public function getYearlyPriceTrend(Request $req)
     {
-        $data = (new LocalityAreaPrice())->getYearlyTrendData();
+        $data = (new LocalityAreaPrice())->getYearlyTrendData($req->input('locality_id'));
 
         // Group data by price_for (prop or proj)
         $grouped = [
