@@ -468,6 +468,7 @@ class PropertyDetailsController extends Controller
                         'galleries' => $transformedData != null ? $transformedData : $formattedPropertyGalleries,
                         'address' => $property->property_address,
                         'locality' => get_name_by_id('locality_names', 'locality_id', $property->locality, 'en'),
+                        'locality_id' => $property->locality,
                         'latitude' => $property->latitude,
                         'longitude' => $property->longitude,
                         'created_at' => $property->created_at,
