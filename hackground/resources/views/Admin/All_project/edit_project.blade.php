@@ -96,7 +96,7 @@
               </li>
               <li>
                 <b>Developer Experience:</b>
-                <span>{{$projectData->additional->developer_experience??'N/A'}}</span>
+                <span>{{$projectData->additional->developer_experience . ' Yr'??'N/A'}}</span>
               </li>
               <li>
                 <b>Developer Details:</b>
@@ -121,7 +121,7 @@
               </li>
               <li>
                 <b>Locality:</b>
-                <span>{{$projectData->location->locality}}</span>
+                <span>{{get_name_by_id('locality_names', 'locality_id', $projectData->location->locality, 'en')  ?? 'N/A' }}</span>
               </li>
               <li>
                 <b>Project/Society Name:</b>

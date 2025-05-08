@@ -75,9 +75,12 @@
     </div>
 
     <div class="form-floating mb-4">
-        <input id="locality" class="form-control" type="text" name="project_locality" placeholder="Enter a location"
-            value="{{ $projectData->location->locality }}">
-        <label for="locality">Locality</label>
+        <select class="form-select" name="project_locality">
+            <option value="">Select Locality</option>
+            @foreach ($locality as $value)
+            <option value="{{ $value->locality_id }}" {{ $projectData->location->locality == $value->locality_id ? 'selected' : '' }}>{{ $value->name}}</option>
+            @endforeach
+        </select>
     </div>
 
     <div class="form-floating">

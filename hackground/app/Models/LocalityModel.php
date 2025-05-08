@@ -70,7 +70,22 @@ class LocalityModel extends Model
         $query->orderBy($this->localityTable . '.locality_id', 'desc');
         return $query->paginate($paginate);
     }
+    public function fetchLocality($lang = 'en')
+    {
+        $query = DB::table($this->localityNamesTable)
+            ->join($this->localityTable, $this->localityNamesTable . '.locality_id', '=', $this->localityTable . '.locality_id')
+            ->where([
+                [$this->localityNamesTable . '.lang', '=', $lang],
+                [$this->localityTable . '.status', config('constants.STATUS_ACTIVE')],
+            ])
+            ->select(
+                $this->localityTable . '.locality_id',
+                $this->localityNamesTable . '.name',
+            );
 
+        $query->orderBy($this->localityTable . '.locality_id', 'desc');
+        return $query->get();
+    }
     public function getLocalityDetails($id)
     {
         $locality = DB::table($this->localityNamesTable)
@@ -302,7 +317,8 @@ class LocalityModel extends Model
     {
         return DB::table($table)
             ->select(
-                'name','id',
+                'name',
+                'id',
                 DB::raw("(
                     6371 * acos(
                         cos(radians($latitude)) *

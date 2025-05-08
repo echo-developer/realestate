@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\PrefProject;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\LocalityModel;
 use App\Models\ProjectGallery;
 use App\Models\ProjectSetting;
 use App\Models\ProjectLocation;
@@ -184,7 +185,7 @@ class ProjectController extends Controller
     {
         ProjectLocation::create([
             'project_id' => $projectId,
-            'locality' => is_string($request->locality) ? $request->locality : null,
+            'locality' => is_numeric($request->locality) ? $request->locality : null,
             'city' => is_numeric($request->city) ? $request->city : null,
             'address' => is_string($request->project_address) ? $request->project_address : null,
             'latitude' => $request->latitude ?? null,
@@ -343,11 +344,13 @@ class ProjectController extends Controller
             'gallery.images'
         ])->findOrFail($request->query('project_id'));
         $postController = new PostController();
+        $locality = new LocalityModel();
         $propertyStatus = json_decode($postController->status($request)->getContent(), true)['data'] ?? [];
         $projectFurnishes = json_decode($postController->furnish($request)->getContent(), true)['data'] ?? [];
         $SubCategoryModel = new SubCategoryModel;
         $projectTypes = $SubCategoryModel->getCategories();
+        $locality = $locality->fetchLocality();
         $groupedGallery = $projectData->gallery->groupBy('image_type');
-        return view('Admin.All_project.project_modal', compact('step', 'projectData', 'projectTypes', 'groupedGallery','propertyStatus','projectFurnishes'));
+        return view('Admin.All_project.project_modal', compact('step', 'projectData', 'projectTypes', 'groupedGallery','propertyStatus','projectFurnishes','locality'));
     }
 }
