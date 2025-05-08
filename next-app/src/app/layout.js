@@ -4,21 +4,30 @@ import "./globals.css";
 
 
 export async function generateMetadata() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/get-meta-data/home_page`);
-  // const res = await fetch('https://realestate.scriptlisting.com/hackground/api/get-meta-data/home_page')
-  const data = await res.json();
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/get-meta-data/home_page`, {
+      cache: 'no-store'
+    });
 
-  if(data && data?.status == 1) {
-    return {
-      title: data.data?.meta_title,
-      description: data?.data?.meta_description
+    if (!res.ok) throw new Error('Failed to fetch metadata');
+
+    const data = await res.json();
+
+    if (data?.status === 1) {
+      return {
+        title: data.data?.meta_title,
+        description: data.data?.meta_description,
+      };
     }
-  } else {
-    return {
-      title: "RealEstate - Find Your Dream Home",
-      description: "Discover your dream home with RealEstate. Browse the latest listings, compare prices, and explore properties in your area. Your next home is just a click away!",
-    }
+  } catch (error) {
+    console.error('Metadata fetch error:', error);
   }
+
+  return {
+    title: "RealEstate - Find Your Dream Home",
+    description:
+      "Discover your dream home with RealEstate. Browse the latest listings, compare prices, and explore properties in your area. Your next home is just a click away!",
+  };
 }
 
 
