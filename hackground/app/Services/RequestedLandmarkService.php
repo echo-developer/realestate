@@ -19,6 +19,7 @@ class RequestedLandmarkService
             $dataToForward = [];
             $map = [
                 'healthcare' => \App\Models\Hospital::class,
+                'Healthcare' => \App\Models\Hospital::class,
                 'metro'      => \App\Models\Metro::class,
                 'rail'       => \App\Models\Railway::class,
                 'education'  => \App\Models\Education::class,

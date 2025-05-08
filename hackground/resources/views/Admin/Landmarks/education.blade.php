@@ -100,13 +100,12 @@
                     <table class="mb-0 table">
                         <thead>
                             <tr>
-                                <!-- <th><input type="checkbox" id="select-all"></th> -->
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Latitude</th>
-                                <th>Longitude</th>
-                                <th>Status</th>
-                                <th style="min-width:60px;" class="text-right">Action</th>
+                                <th style="width: 50px;">ID</th>
+                                <th style="width: 220px;">Name</th>
+                                <th style="width: 120px;">Latitude</th>
+                                <th style="width: 150px;">Longitude</th>
+                                <th style="width: 240px;">Status</th>
+                                <th style="width: 100px;" class="text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody id="user">
@@ -115,14 +114,24 @@
                                 <tr>
                                     <!-- <td><input type="checkbox" data-id="{{ $data->id }}" class="select-item"></td> -->
                                     <td>{{ $data->id }} </td>
-                                    <td>{{ $data->name }} </td>
-                                    <td>{{ $data->lat }} </td>
-                                    <td>{{ $data->long }} </td>
-                                    <td>
-                                        <input type="checkbox" class="status d-none" data-id="{{ $data->id }}"
-                                            data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success"
-                                            data-offstyle="danger" data-size="mini" {{ $data->status ? 'checked' : '' }}>
-                                    </td>
+                                    <td>{{ $data->name ?? 'N/A' }} </td>
+                                    <td>{{ $data->lat ?? 'N/A' }} </td>
+                                    <td>{{ $data->long ?? 'N/A' }} </td>
+                                    @if (!empty($data->lat) && !empty($data->long))
+                                        <td>
+                                            <input type="checkbox" class="status d-none" data-id="{{ $data->id }}"
+                                                data-toggle="toggle" data-on="Active" data-off="Inactive"
+                                                data-onstyle="success" data-offstyle="danger" data-size="mini"
+                                                {{ $data->status ? 'checked' : '' }}>
+                                        </td>
+                                    @else
+                                        <td>
+                                            <span class="text-warning">
+                                                <i class="fas fa-info-circle me-1"></i> <small>Add latitude & longitude to
+                                                    approve</small>
+                                            </span>
+                                        </td>
+                                    @endif
                                     <td class="text-right">
                                         <a href="javascript:void(0)" class="me-2 edit" data-id="{{ $data->id }}"><i
                                                 class="bi bi-pencil-square text-success fa-md "></i></a>
