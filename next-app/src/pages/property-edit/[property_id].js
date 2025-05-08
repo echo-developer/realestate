@@ -224,6 +224,7 @@ const Index = () => {
     }
     if(pendingLocations?.length > 0) {
       formData.nearbyLocations = JSON.stringify(pendingLocations);
+      formData.locality_id = propertyData.locality?.locality_id || "";      
     }
 
     if (inputValue.super_area) {

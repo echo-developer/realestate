@@ -267,6 +267,7 @@ const Index = () => {
     }
     if(pendingLocations?.length > 0) {
       formData.nearbyLocations = JSON.stringify(pendingLocations);
+      formData.locality_id = projectData.locality?.locality_id || '';
     }
 
     if (inputValue.total_area) {
@@ -397,7 +398,6 @@ const Index = () => {
     ),
   };
 
-  console.log("project data", projectData)
   const renderModalContent = () => {
     switch (selectedItem) {
       case "instruction":

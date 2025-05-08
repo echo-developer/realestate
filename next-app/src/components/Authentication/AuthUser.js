@@ -30,7 +30,6 @@ const AuthUser = () => {
 
   const isLogin = () => {
     const token =  GetMemberId();
-    console.log('token',token);
     if (!token) {
        localStorage.removeItem("user");
       return false;
