@@ -119,13 +119,9 @@
             <textarea id="description" name="description" rows="3" class="form-control " placeholder="Enter Project Description" style="min-height: 100px;"></textarea>
             <label for="description">Project Description</label>
           </div>
-          <div id="step-3" style="display: none;">
+          <div id="step-3">
             <button type="button" class="btn btn-secondary btn-back me-2">Back</button>
             <button type="button" class="btn btn-primary btn-next" data-step="3">Next <i class="bi bi-arrow-right"></i></button>
-          </div>
-
-          <div id="step-3">
-            <button type="button" class="btn btn-primary btn-next" data-step="2">Next <i class="bi bi-arrow-right"></i></button>
           </div>
         </div>
 
@@ -232,12 +228,10 @@
             @endforeach
           </div>
 
-          <div id="step-4" style="display: none;">
+          <div id="step-4">
             <button type="button" class="btn btn-secondary btn-back me-2">Back</button>
-            <button type="button" class="btn btn-primary btn-next" data-step="4">Next <i class="bi bi-arrow-right"></i></button>
+            <button type="button" class="btn btn-primary btn-next" data-step="4">Back <i class="bi bi-arrow-right"></i></button>
           </div>
-
-        
         
         </div>
 
@@ -300,7 +294,7 @@
             </div>
           </div>
 
-          <div id="step-5" style="display: none;">
+          <div id="step-5">
             <button type="button" class="btn btn-secondary btn-back me-2">Back</button>
             <button type="button" class="btn btn-primary btn-next" data-step="5">Next <i class="bi bi-arrow-right"></i></button>
           </div>
@@ -369,7 +363,7 @@
           </div>
 
 
-          <div id="step-6" style="display: none;">
+          <div id="step-6">
             <button type="button" class="btn btn-secondary btn-back me-2">Back</button>
             <button type="submit" class="btn btn-primary btn-next">Submit Project</button>
           </div>
