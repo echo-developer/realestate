@@ -104,11 +104,11 @@ const translation = useTranslation();
                         <strong>{`${key.charAt(0).toUpperCase() + key.slice(1)} ${index + 1}`}</strong>
                       </div>
                       <div className="col-sm-6">
-                        <label className="form-label">{translation?.height || "Height"}</label>
+                        <label className="form-label">Length</label>
                         <input
                           type="text"
                           className="form-control"
-                          placeholder="Enter Height"
+                          placeholder="Enter Length"
                           value={room.height}
                           onChange={(e) =>
                             handleFieldChange(key, index, "height", e.target.value)
