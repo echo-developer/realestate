@@ -344,7 +344,7 @@ const Index = () => {
                               <Field
                                 type="radio"
                                 name="user_type"
-                                value="Builder"
+                                value="B"
                                 id="builder"
                                 className="btn-check"
                               />

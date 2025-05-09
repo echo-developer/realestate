@@ -478,9 +478,12 @@ const Index = () => {
                     </ul>
                   ))
                 ) : (
-                  <p className="text-center my-3">
-                    {translation?.no_property_data_available || 'No property data available'}
-                  </p>
+                <tr className="text-center">                  
+                <td colSpan={6}>
+                  <p className="text-muted p-2">{translation?.no_property_data_available || 'No property data available'}</p>
+                </td>                
+                </tr> 
+                  
                 )}
               </div>
             </div>

@@ -156,7 +156,7 @@ const ChartsRow = ({ dashboardList }) => {
       }));
     }
   }, [dashboardList?.propPieChart]);
- 
+
 
   const lineData = {
     labels: ["January", "February", "March", "April", "May"],
@@ -182,10 +182,20 @@ const ChartsRow = ({ dashboardList }) => {
           <div className="card border-0 mb-4">
             <div className="card-body">
               <div
-                className="mx-auto"
+                // className="mx-auto"
+                className={`mx-auto ${doughnutData?.labels?.length > 0 ? '' : 'd-flex flex-column justify-content-center align-items-center'}`}
                 style={{ width: "320px", height: "320px" }}
               >
-                <Doughnut data={doughnutData} options={doughnutOptions} />
+                {doughnutData?.labels?.length > 0 ? (<>
+                  <Doughnut data={doughnutData} options={doughnutOptions} /></>) : (<><img
+                    alt="Icon"
+                    height="48"
+                    width="48"
+                    className="mb-2"
+                    loading="lazy"
+                    src="/assets/images/icons/9939447.png"
+                  />
+                    <p className="text-muted">No Record Found</p></>)}
               </div>
             </div>
           </div>
@@ -225,54 +235,30 @@ const ChartsRow = ({ dashboardList }) => {
 
       <Row>
         {/* Sale Summary */}
-        <Col lg={6} xs={12}>
+        {/* <Col lg={6} xs={12}>
           <div className="card border-0 mb-4">
             <div className="card-header d-flex justify-content-between align-items-center">
               <h4 className="text-primary">{translation?.sale_summary || 'Sale Summary'}
               </h4>
-              {/* <select
-                className="form-select form-select-sm"
-                style={{ width: "110px" }}
-              >
-                <option disabled selected>
-                {translation?.sort_by || 'Sort By'}
-
-                </option>
-                {dropdownOptions.map((option, index) => (
-                  <option key={index}>{option}</option>
-                ))}
-              </select> */}
             </div>
             <div className="card-body">
               <Line data={lineData} options={chartOptions} />
             </div>
           </div>
-        </Col>
+        </Col> */}
 
         {/* Active Buyers */}
-        <Col lg={6} xs={12}>
+        {/* <Col lg={6} xs={12}>
           <div className="card border-0 mb-4">
             <div className="card-header d-flex justify-content-between align-items-center">
               <h4 className="text-primary">{translation?.active_buyers || 'Active Buyers'}
               </h4>
-              {/* <select
-                className="form-select form-select-sm"
-                style={{ width: "110px" }}
-              >
-                <option disabled selected>
-                {translation?.sort_by || 'Sort By'}
-
-                </option>
-                {dropdownOptions.map((option, index) => (
-                  <option key={index}>{option}</option>
-                ))}
-              </select> */}
             </div>
             <div className="card-body">
               <Line data={lineData} options={chartOptions} />
             </div>
           </div>
-        </Col>
+        </Col> */}
       </Row>
     </>
   );

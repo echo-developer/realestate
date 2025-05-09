@@ -156,10 +156,10 @@ const Index = () => {
           toast.success(res.message);
           favStateUpdater(PropertyId);
         } else {
-          toast.error(res?.message || "An error occurred. Please try again.");
+          console.error(res?.message || "An error occurred. Please try again.");
         }
       } catch (error) {
-        toast.error("Failed to save the property. Please try again.");
+        console.error("Failed to save the property. Please try again.");
       }
     } else {
       setShowLoginErrorModal(true);
@@ -229,10 +229,10 @@ const Index = () => {
         toast.success(res?.message || "Successfull");
         stateFavUpdateFuncation(id, type);
       } else {
-        toast?.error(res?.message || "An error occurred. Please try again.");
+        console?.error(res?.message || "An error occurred. Please try again.");
       }
     } catch (error) {
-      toast?.error(error?.message);
+      console?.error(error?.message);
     }
   };
 
@@ -608,7 +608,7 @@ const Index = () => {
                                 <img
                                   className="rounded-circle"
                                   src={`${
-                                    property?.user_image ||
+                                    agentDetailsData?.image ||
                                     "/assets/images/user.jpg"
                                   }`}
                                   alt="Company"
@@ -617,16 +617,17 @@ const Index = () => {
                                 />
                                 <div className="ps-2">
                                   <h6 className="mb-0">
-                                    {property?.user_name || "User"}
+                                    {agentDetailsData?.name || "User"}
                                   </h6>
                                   <p className="small text-muted">
-                                    {property?.user_type === "A"
+                                    {/* {property?.user_type === "A"
                                       ? "Agent"
                                       : property?.user_type === "/"
                                       ? "Builder"
                                       : property?.user_type === "O"
                                       ? "Owner"
-                                      : "Not Available"}
+                                      : "Not Available"} */}
+                                      Agent
                                   </p>
                                 </div>
                               </div>
