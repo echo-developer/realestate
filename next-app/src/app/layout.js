@@ -1,18 +1,18 @@
+// app/layout.js or app/layout.jsx (depending on your setup)
 
 import { AuthProvider } from "@/context/AuthProvider";
 import "./globals.css";
 
-
+// Optimized generateMetadata function with revalidation
 export async function generateMetadata() {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/get-meta-data/home_page`, {
-      cache: 'no-store'
+    const res = await fetch(`https://realestate.scriptlisting.com/hackground/api/get-meta-data/home_page`, {
+      next: { revalidate: 3600 }, // cache result and revalidate every 1 hour
     });
 
     if (!res.ok) throw new Error('Failed to fetch metadata');
 
     const data = await res.json();
-
     if (data?.status === 1) {
       return {
         title: data.data?.meta_title,
@@ -23,6 +23,7 @@ export async function generateMetadata() {
     console.error('Metadata fetch error:', error);
   }
 
+  // Fallback metadata
   return {
     title: "RealEstate - Find Your Dream Home",
     description:
@@ -30,17 +31,14 @@ export async function generateMetadata() {
   };
 }
 
-
-export default async function RootLayout({ children }) {
+export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
         <AuthProvider>
-        {children}
+          {children}
         </AuthProvider>
       </body>
     </html>
   );
 }
-
-

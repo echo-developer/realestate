@@ -338,8 +338,7 @@
                 div.setAttribute("data-field-id", "");
 
                 const cityOptions = cities.map(city => `
-            <option value="${city.city_id}" ${city.city_id == cityId ? 'selected' : ''}>${city.name}</option>
-        `).join('');
+            <option value="${city.city_id}" ${city.city_id == cityId ? 'selected' : ''}>${city.name}</option>`).join('');
 
                 div.innerHTML = `
             <div class="col">
@@ -349,17 +348,71 @@
                 </select>
             </div>
             <div class="col">
-                 <input type="text" name="service_area[locality_id][]" class="form-control" placeholder="Locality" value="${locality}">
+                 <input type="text"  name="service_area[locality_id][]" class="form-control service_area" placeholder="Locality" value="${locality}">
             </div>
             <div class="col-auto">
                 <input type="hidden" name="service_area[field_unique_key][]" value="${locKey}">
                 ${index > 0 ? '<button type="button" class="btn btn-danger remove-field">🗑️</button>' : ''}
             </div>
-        `;
+`;
 
                 parentSeviceArea.appendChild(div);
                 fieldCount++;
+
+                function debounce(fn, delay) {
+                let timeoutId;
+                return function(...args) {
+                    clearTimeout(timeoutId);
+                    timeoutId = setTimeout(() => fn.apply(this, args), delay);
+                };
             }
+    
+
+            const localityInput = document.querySelectorAll('.service_area');
+            const arr = [...localityInput];
+
+            // const suggesstionList = document.createElement('ul');
+            // suggesstionList.className = 'list-group position-absolute w-100 shadow d-none';
+
+            // localityInput.parentElement.classList.add('position-relative');
+            // localityInput.parentElement.appendChild(suggestionList);
+
+            arr.forEach(item => {
+                const suggestionList = document.createElement('ul');
+                suggestionList.className = 'list-group position-absolute w-100 shadow';
+                suggestionList.style.zIndex = '1';
+
+                const col = item.closest('.col');
+                    col.classList.add('position-relative');
+                    col.appendChild(suggestionList);
+
+                    console.log("suggestionList", suggestionList)
+                item.addEventListener('keyup', debounce(function() {
+                    fetch(`https://realestate.scriptlisting.com/hackground/api/stored-localities?keyWord=${this.value}`).then(res => res.json()).then(data => {
+                        if(data && data.status == 1) {
+                            data.data.forEach((locality) => {
+                                const li = document.createElement('li');
+                                li.className = 'list-group-item list-group-item-action';
+                                li.textContent = locality.name;
+                                console.log('locality loop', locality);
+                                console.log("li", li)
+                                li.addEventListener("click", function() {
+                                    item.value = locality.name; 
+                                    suggestionList.classList.add('d-none')
+                                })
+                                suggestionList.appendChild(li);
+                            })
+                            suggestionList.classList.remove('d-none')
+                            console.log("suggestionList", suggestionList)
+                        }
+                    })
+                }, 300))
+            })
+            }
+            
+            
+ 
+
 
             serviceAreas.forEach((sa, i) => appendServiceAreaField(sa, i));
 

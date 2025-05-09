@@ -32,6 +32,7 @@ import {
   flooringOptions,
 } from "@/components/post/PropertyData";
 import { CheckCircleFill, XCircleFill, Calendar2Check } from "react-bootstrap-icons";
+import YearlyPriceTrendChart from "@/components/property/YearlyPriceTrends";
 
 const index = () => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
@@ -52,6 +53,7 @@ const index = () => {
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const [userDetails, setUserDetails] = useState();
   const [activeScrollMenu, setActiveScrollMenu] = useState("overview")
+  const [propertyPriceTrends, setPropertyPriceTrends] = useState(null);
   const [pendingLocations, setPendingLocations] = useState([
     { name: 'Local Library', distance: '1.0' },
   ]);
@@ -67,6 +69,12 @@ const index = () => {
       FetchPropertyDetails(property_id);
     }
   }, [property_id, memberId]);
+
+  useEffect(() => {
+    if(propertyDetails?.locality_id) {
+      getPriceTrends(propertyDetails?.locality_id)
+    }
+  }, [propertyDetails])
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -191,6 +199,23 @@ const index = () => {
     addRemoveFav(id, "nearby_properties");
   };
 
+  const getPriceTrends = async (locality_id) => {
+    try {
+      const res = await callApi({
+        api: `/yearly-price-trend`,
+        method: "GET",
+        data: {
+          locality_id: locality_id
+        }
+      })
+      if(res && res?.status == 1) {
+        setPropertyPriceTrends(res?.data?.property_price_trend)
+      }
+    } catch (error) {
+      console.error(error.message || "Something went wrong")
+    }
+  }
+
   const addReviewSuccessFunction = (review) => {
 
     // Basic validation
@@ -239,6 +264,7 @@ const index = () => {
   };
   const title = `${propertyDetails?.property_name || ''}, ${propertyDetails?.locality || ''}, ${propertyDetails?.address || ''}. Priced at ${formatPrice(propertyDetails?.price)} | https://realestate.scriptlisting.com`
   const description = `${propertyDetails?.property_name || ''}, ${propertyDetails?.locality || ''}, ${propertyDetails?.address || ''}. Priced at ${formatPrice(propertyDetails?.price)}, this ${propertyDetails?.property_features?.area_in_sqft ? `${propertyDetails?.property_features?.area_in_sqft} sqft` : ''} ${propertyDetails?.ownership_type || 'property'} offers modern amenities like ${propertyDetails?.property_amenities?.slice(0, 5).map(a => a.amenity_name).join(', ')} `;
+
 
   return (
     <MainLayout>
@@ -850,12 +876,14 @@ const index = () => {
                   isMyProperty={propertyDetails?.is_my_property}
                 />
               )}
+              {console.log("propertyDetails", propertyDetails)}
               {propertyDetails?.landmarks && (
                 <PropertyLandmarkData
                   detailsData={propertyDetails}
                   translation={translation}
                 />
               )}
+              <YearlyPriceTrendChart data={propertyPriceTrends || []} />
               <div className="text-center mb-4">
                 {adsData.length > 0 ? (
                   adsData.map((ad) => (

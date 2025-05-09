@@ -32,6 +32,7 @@ import ProjectReviewDetails from "../project/ProjectReviewDetails";
 import FloorSection from "../project/FloorSection";
 import { useAuth } from "@/context/AuthProvider";
 import useAdvertisement from "@/hooks/useAdvertisement";
+import YearlyPriceTrendChart from "../property/YearlyPriceTrends";
 
 const ResidentialProjectDetails = ({
   detailsData,
@@ -49,6 +50,7 @@ const ResidentialProjectDetails = ({
   setShowPhoneNumber,
   displayNumber,
   viewNumber,
+  propertyPriceTrends
 }) => {
   const { defaultCity, currencyCode, formatPrice } = useAuth();
   const [visible, setVisible] = useState(false);
@@ -838,10 +840,10 @@ const ResidentialProjectDetails = ({
                 ShowReviewModal={ShowReviewModal}
                 is_my_project={detailsData?.is_my_project}
               />
-              {detailsData?.landmarks && (
+              {/* {detailsData?.landmarks && (
                 <ProjectLandmarkData detailsData={detailsData} />
-              )}
-
+              )} */}
+              <YearlyPriceTrendChart data={propertyPriceTrends || []} />
               <section id="about-developer" className="mb-4">
                 <div className="card border-0 shadow-1 mb-4">
                   <div className="card-body">

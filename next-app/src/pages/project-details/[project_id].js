@@ -13,7 +13,7 @@ import Link from "next/link";
 
 
 
-console.log("project details page ran")
+
 const Index = () => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const router = useRouter();
@@ -27,11 +27,18 @@ const Index = () => {
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);
   const [userDetails, setUserDetails] = useState()
   const [viewNumber, setViewNumber] = useState("");
+  const [propertyPriceTrends, setPropertyPriceTrends] = useState(null);
   useEffect(() => {
     if (project_id) {
       FetchProjectDetails();
     }
   }, [project_id, memberId]);
+
+  useEffect(() => {
+    if(detailsData?.locality_id) {
+      getPriceTrends(detailsData?.locality_id)
+    }
+  }, [detailsData])
 
   const FetchProjectDetails = async () => {
     setLoading(true);
@@ -170,8 +177,26 @@ const Index = () => {
     addRemoveFav(id, "other_projects")
   }
 
+  const getPriceTrends = async (locality_id) => {
+    try {
+      const res = await callApi({
+        api: `/yearly-price-trend`,
+        method: "GET",
+        data: {
+          locality_id: locality_id
+        }
+      })
+      if(res && res?.status == 1) {
+        setPropertyPriceTrends(res?.data?.project_price_trend)
+      }
+    } catch (error) {
+      console.error(error.message || "Something went wrong")
+    }
+  }
+
   const title = `${detailsData.project_name} | Real Estate Project Details`;;
   const description = detailsData?.project_desc?.replace(/<\/?[^>]+(>|$)/g, "")?.substring(0, 160);
+
 
   return (
     <MainLayout>
@@ -203,6 +228,7 @@ const Index = () => {
           setShowPhoneNumber={setShowPhoneNumber}
           displayNumber={displayNumber}
           viewNumber={viewNumber}
+          propertyPriceTrends={propertyPriceTrends}
         />
       ) : (
         <CommercialProjectDetails
@@ -221,6 +247,7 @@ const Index = () => {
           setShowPhoneNumber={setShowPhoneNumber}
           displayNumber={displayNumber}
           viewNumber={viewNumber}
+          propertyPriceTrends={propertyPriceTrends}
         />
       )}
       {!detailsData?.is_my_project ? (
