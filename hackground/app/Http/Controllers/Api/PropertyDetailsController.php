@@ -507,7 +507,7 @@ class PropertyDetailsController extends Controller
                         'floor_plans' => $mergedFloorPlans,
                         'nearby_properties' => $flattenedNearbyProperties ?? null,
                         'similar_properties' => $flattenedSimilarProperties,
-                        'landmarks' => $landmarks,
+                        'landmarks' => empty($landmarks) ? null : $landmarks,
                         'property_reviews' => [
                             'rating' => $average_rating_on_this_property ?? null,
                             'total_reviews' => $total_count ?? null,
