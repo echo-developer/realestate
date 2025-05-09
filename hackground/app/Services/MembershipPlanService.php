@@ -71,7 +71,7 @@ class MembershipPlanService
                 'plan_type_id' => $data['plan_type'],
                 'validity_days' => $data['validity_days'],
                 'discounted_price' => $data['discounted_price'],
-                'discount' => (($data['price'] - $data['discounted_price']) / $data['price']) * 100,
+                'discount' => $data['price'] > 0 ?  (($data['price'] - $data['discounted_price']) / $data['price']) * 100 : 0,
                 'status' => $data['status'],
             ]);
 

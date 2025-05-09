@@ -1489,7 +1489,7 @@ if (!function_exists('assign_free_plan')) {
             DB::table('user_membership')->insert([
                 'user_id'               => $user_id,
                 'transaction_id'        => $transactionId ?? null,
-                'plan_id'               => 1,
+                'plan_id'               => 10,
                 'subcription_date'      => $subscriptionDate,
                 'expire_date'           => $expireDate,
                 'leads'       => $features->ownerleads_contacted ?? null,
