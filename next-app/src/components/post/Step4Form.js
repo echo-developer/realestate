@@ -359,7 +359,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
       case "residential-house" || 6:
       case "villas" || 2:
       case "penthouse" || 9:
-        return [`${translation?.bedroom || "bedroom"}`, `${translation?.balcony || "balcony"}`, `${translation?.bathrooms || "bathrooms"}`];
+        // return [`${translation?.bedroom || "bedroom"}`, `${translation?.balcony || "balcony"}`, `${translation?.bathrooms || "bathrooms"}`];
+        return [`bedroom`, 'balcony', 'bathroom'];
       case "studio-apartment" || 10:
         return ["balcony", "bathroom"];
       case "commercial-office-space" || 11:
