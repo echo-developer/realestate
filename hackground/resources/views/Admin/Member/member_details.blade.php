@@ -18,8 +18,8 @@
     <div class="card">
         <div class="card-body">
             <div class="mb-3">
-                <h2 class="text-xl font-semibold mb-2">User Details</h2>
-                <p class="text-sm text-gray-600 mb-4">Update your profile information below.</p>
+                <h3 class="text-xl font-semibold mb-2">User Details</h3>
+                <p class="text-muted">Update your profile information below.</p>
             </div>
 
             @if (session('success_msg'))
