@@ -143,10 +143,10 @@ const Index = () => {
                           </b>
                         </span>
                       </p>
-                      <p className="mb-1">
+                      {userData?.whatsapp_no && (<p className="mb-1">
                         <Whatsapp color="current" size={14} className="me-1" />
                         <b>{userData?.whatsapp_no || ""}</b>
-                      </p>
+                      </p>)}
                       <p className="mb-2">
                         <i className="icon-feather-pin"></i>{" "}
                         <b>{userData?.address || ""}</b>
