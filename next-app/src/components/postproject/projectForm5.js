@@ -41,10 +41,10 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       if (response && response.status === 1) {
         setPossessionData(response.data);
       } else {
-        toast.error(response.message);
+        console.error(response.message);
       }
     } catch (error) {
-      toast.error("Failed to fetch possession status data.");
+      console.error("Failed to fetch possession status data.");
     } finally {
       setTimeout(() => {
         setLoading(false);
@@ -112,11 +112,11 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       }`;
     }
 
-    if (!formData.currency) {
-      newErrors.currency = `${
-        translation?.please_select_currency || "Please select a currency"
-      }`;
-    }
+    // if (!formData.currency) {
+    //   newErrors.currency = `${
+    //     translation?.please_select_currency || "Please select a currency"
+    //   }`;
+    // }
 
     if (formData.token_amount && isNaN(formData.token_amount)) {
       newErrors.token_amount = `${

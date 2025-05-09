@@ -36,6 +36,8 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [locality, setLocality] = useState(null);
   const { defaultCity } = useAuth();
+  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+  const [dropdownState, setDropdownState] = useState({});
   const [brokerType, setBrokerType] = useState("A");
   const [postFor, setPostFor] = useState("sale");
   const [propertyType, setPropertyType] = useState("");
@@ -230,8 +232,43 @@ const Index = () => {
     setPropertyTypeDropDown(false);
   };
 
+  const toggleDropdown = (key) => {
+    setDropdownState(prevState => {
+      const newState = { ...prevState };
+      if (!newState[key]) {
+        newState[key] = true;
+        setIsOverlayVisible(true); // Show overlay when dropdown is open
+      } else {
+        newState[key] = false;
+        setIsOverlayVisible(false); // Hide overlay when dropdown is closed
+      }
+
+      // Close other dropdowns when one is opened
+      Object.keys(newState).forEach(k => {
+        if (k !== key) newState[k] = false;
+      });
+
+      return newState;
+    });
+  };
+
+  const handleClickOutside = (e) => {
+    // If clicked outside the dropdown and overlay, close all dropdowns
+    if (!e.target.closest('.dropdown') && !e.target.closest('.overlay')) {
+      setDropdownState({});
+      setIsOverlayVisible(false);
+    }
+  };
+
   return (
-    <MainLayout>
+    <>
+    {isOverlayVisible && (
+        <div
+          className="page-overlay"
+          onClick={handleClickOutside}
+        ></div>
+      )}
+      <MainLayout>
       <Helmet>
         <title>
           {translation?.trusted_property_experts_near_you ||
@@ -269,8 +306,8 @@ const Index = () => {
               <div className="acc-panel">
                 <form data-filter="n" onSubmit={handleSubmit}>
                   <Row className="gx-3">
-                    <Col className="col-lg-auto col-sm-2 col-auto">
-                      <Dropdown className="d-grid select-dropdown">
+                    <Col className="col-lg-auto col-sm-2 col-auto" onClick={() => toggleDropdown('agent_type')}>
+                      <Dropdown className="d-grid select-dropdown" show={dropdownState?.agent_type}>
                         <Dropdown.Toggle
                           variant="light"
                           className="btn-form-control"
@@ -297,11 +334,11 @@ const Index = () => {
                     <Col
                       className="col-lg col-sm-4 col-12"
                       data-id="parent"
-                      onClick={handlePropertyTypeDropDown}
+                      onClick={() => toggleDropdown('property_type')}
                     >
                       <Dropdown
                         className="select-dropdown mb-3 d-grid"
-                        show={propertyTypeDropDown}
+                        show={dropdownState?.property_type}
                       >
                         <Dropdown.Toggle className="btn-form-control">
                           {displayPropertyType()}
@@ -376,7 +413,10 @@ const Index = () => {
                             </Button>
                             <Button
                               variant="primary"
-                              onClick={() => setPropertyTypeDropDown(false)}
+                              onClick={() => {
+                                setDropdownState({});
+                                setIsOverlayVisible(false)
+                              }}
                             >
                               {translation?.done || "Done"}
                             </Button>
@@ -660,6 +700,7 @@ const Index = () => {
         </div>
       </aside>
     </MainLayout>
+    </>
   );
 };
 

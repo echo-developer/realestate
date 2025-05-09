@@ -12,7 +12,6 @@ const scrollbar = {
 };
 
 const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
-  console.log("step 4 is")
   const [errors, setErrors] = useState({});
   const { callApi } = AuthUser();
   const [AmenityData, setAmenityData] = useState([]);
@@ -46,7 +45,6 @@ const ProjectForm4 = ({ formData, setFormData, nextStep, prevStep }) => {
     }));
   };
 
-  console.log("step 4 ran");
   const handlePropertyStatusChange = (status) => {
     setErrors((prevErrors) => ({
       ...prevErrors,
