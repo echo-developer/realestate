@@ -327,7 +327,7 @@ const Index = () => {
                                 height={20}
                                 width={20}
                               />{" "}
-                             {translation?.trubroker || "TruBrok"} 
+                              {translation?.trubroker || "TruBrok"}
                             </Button>
                             <Button
                               variant=""
@@ -400,10 +400,10 @@ const Index = () => {
                     {agentDetailsData?.broker_type === "I"
                       ? "Indepedent"
                       : agentDetailsData?.broker_type === "F"
-                      ? "Franchise"
-                      : agentDetailsData?.broker_type === "A"
-                      ? "Agent"
-                      : "Not Available"}
+                        ? "Franchise"
+                        : agentDetailsData?.broker_type === "A"
+                          ? "Agent"
+                          : "Not Available"}
                   </p>
                   <p>
                     <span className="text-muted">{translation?.expertise || "Expertise:"}
@@ -521,21 +521,20 @@ const Index = () => {
                                 </Link>
                               </h4>
                               <h5 className="mb-0">
-                              {translation?.price || "Price:"}
-                              {" "}
+                                {translation?.price || "Price:"}
+                                {" "}
                                 {property?.price_currency &&
-                                property?.expected_price
-                                  ? `${
-                                      property.price_currency
-                                    } ${new Intl.NumberFormat("en-US").format(
-                                      property.expected_price
-                                    )}`
+                                  property?.expected_price
+                                  ? `${property.price_currency
+                                  } ${new Intl.NumberFormat("en-US").format(
+                                    property.expected_price
+                                  )}`
                                   : "Not Available"}
                               </h5>
 
                               <p className="mb-1">
                                 <small>
-                                {translation?.average_price || "Average Price:"}{" "}
+                                  {translation?.average_price || "Average Price:"}{" "}
                                   {property?.price_per_sqft ? (
                                     <>
                                       {property?.price_currency ||
@@ -551,51 +550,41 @@ const Index = () => {
                               </p>
 
                               <ul className="list-info mb-2">
-                                <li>
-                                  <i
-                                    className="icon-img-bed"
-                                    title="Bedrooms:"
-                                  ></i>
-                                  <span>
-                                    {property?.bedrooms || "Not Available"}
-                                  </span>{" "}
-                                  {property?.bedrooms && "Beds"}
-                                </li>
-                                <li>
-                                  <i
-                                    className="icon-img-tub"
-                                    title="Bathrooms:"
-                                  ></i>
-                                  <span>
-                                    {property?.bathroom || "Not Available"}
-                                  </span>{" "}
-                                  {property?.bedrooms && "Bath"}
-                                </li>
-                                <li>
-                                  <i
-                                    className="icon-img-ratio"
-                                    title="Carpet Area:"
-                                  ></i>
-                                  <span>
-                                    {property?.carpet_area || "Not Available"}
-                                    {property?.carpet_area &&
-                                      property?.unit_type}
-                                  </span>{" "}
-                                  {property?.carpet_area && "Carpet Area"}
-                                </li>
-                                <li>
-                                  <i
-                                    className="icon-img-check"
-                                    title="Possession Status"
-                                  ></i>
-                                  <span>
-                                    {translation?.possession_status ||
-                                      "Possession Status:"}{" "}
-                                    {property?.possession_status ||
-                                      "Not Available"}
-                                  </span>
-                                </li>
+                                {property?.bedrooms && (
+                                  <li>
+                                    <i className="icon-img-bed" title="Bedrooms:" />
+                                    <span>{property.bedrooms}</span> Beds
+                                  </li>
+                                )}
+
+                                {property?.bathroom && (
+                                  <li>
+                                    <i className="icon-img-tub" title="Bathrooms:" />
+                                    <span>{property.bathroom}</span> Bath
+                                  </li>
+                                )}
+
+                                {property?.carpet_area && (
+                                  <li>
+                                    <i className="icon-img-ratio" title="Carpet Area:" />
+                                    <span>
+                                      {property.carpet_area}
+                                      {property.unit_type || " sqft"}
+                                    </span>{" "}
+                                  </li>
+                                )}
+
+                                {property?.possession_status && (
+                                  <li>
+                                    <i className="icon-img-check" title="Possession Status" />
+                                    <span>
+                                      {translation?.possession_status || "Possession Status:"}{" "}
+                                      {property.possession_status}
+                                    </span>
+                                  </li>
+                                )}
                               </ul>
+
                               <p>
                                 <span className="text-primary">
                                   <GeoAlt color="currentColor" size={14} />
@@ -607,10 +596,9 @@ const Index = () => {
                               <div className="d-flex">
                                 <img
                                   className="rounded-circle"
-                                  src={`${
-                                    agentDetailsData?.image ||
+                                  src={`${agentDetailsData?.image ||
                                     "/assets/images/user.jpg"
-                                  }`}
+                                    }`}
                                   alt="Company"
                                   height={36}
                                   width={36}
@@ -627,7 +615,7 @@ const Index = () => {
                                       : property?.user_type === "O"
                                       ? "Owner"
                                       : "Not Available"} */}
-                                      Agent
+                                    Agent
                                   </p>
                                 </div>
                               </div>
@@ -686,10 +674,10 @@ const Index = () => {
                   {agentDetailsData?.broker_type === "I"
                     ? "Indepedent"
                     : agentDetailsData?.broker_type === "F"
-                    ? "Franchise"
-                    : agentDetailsData?.broker_type === "A"
-                    ? "Agent"
-                    : "Not Available"}
+                      ? "Franchise"
+                      : agentDetailsData?.broker_type === "A"
+                        ? "Agent"
+                        : "Not Available"}
                 </p>
                 <p>
                   <span className="text-muted">{translation?.expertise || "Expertise:"}
