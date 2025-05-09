@@ -128,6 +128,7 @@ class AdvanceSearchController extends Controller
             'furnishing' => 'property_additional.property_furnish',
             'amenities' => 'property_additional.property_amenity',
             'floor' => 'property_additional.flooring_style',
+            
             'facing' => 'property_additional.facing_direction',
             'property_type' => 'properties_settings.property_type',
             'property_for' => 'properties_settings.property_type_for',
