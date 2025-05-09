@@ -101,6 +101,7 @@ const Locality = ({ onSelectLocality, errors, defaultValue, index }) => {
                     autoComplete="off"
                     value={localitySearchInput}
                     onChange={handleLocalityInputChange}
+                    onPaste={(e) => e.preventDefault()}
                 />
                 <label htmlFor="localityInput">Locality</label>
                 {errors?.locality && (

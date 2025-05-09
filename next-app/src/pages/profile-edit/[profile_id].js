@@ -69,7 +69,6 @@ const ProfileForm = () => {
     }
   }, [memberId]);
 
-  console.log("userData", userData)
   const fetchUserData = async () => {
     try {
       const response = await callApi({
