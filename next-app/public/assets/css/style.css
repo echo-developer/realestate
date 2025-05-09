@@ -37083,7 +37083,7 @@ fieldset .btn-delete {
 #searchfilter {
   position: relative;
 }
-#searchfilter .form-control, #searchfilter .form-select, #searchfilter .select-dropdown .btn-form-control {
+#searchfilter .form-field .form-control, #searchfilter .form-field .form-select, #searchfilter .form-field .select-dropdown .btn-form-control {
   border-color: transparent;
 }
 
