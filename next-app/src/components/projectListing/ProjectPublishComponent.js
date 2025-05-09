@@ -69,11 +69,11 @@ const ProjectPendingComponent = ({ projectData }) => {
           prevProperties.filter((project) => project.id !== projectId)
         );
       } else {
-        toast.error("Failed to delete project");
+        console.error("Failed to delete project");
       }
     } catch (error) {
       console.error("Error while deleting project:", error);
-      toast.error("An error occurred while deleting the project");
+      console.error("An error occurred while deleting the project");
     }
   };
 

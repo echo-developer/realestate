@@ -56,11 +56,11 @@ const PublishComponent = ({ propertiesData }) => {
           )
         );
       } else {
-        toast.error("Failed to delete property");
+        console.error("Failed to delete property");
       }
     } catch (error) {
       console.error("Error while deleting property:", error);
-      toast.error("An error occurred while deleting the property");
+      console.error("An error occurred while deleting the property");
     }
   };
 
@@ -133,19 +133,28 @@ const PublishComponent = ({ propertiesData }) => {
                     <React.Fragment>
                       {property.property_type === "Residential" ? (
                         <ul className="list-info mb-2">
+                        {property.property_type_for && (
                           <li>
                             <i className="icon-img-flat"></i>{" "}
                             {property.property_type_for}
                           </li>
+                        )}
+                      
+                        {property.bedrooms && (
                           <li>
-                            <i className="icon-img-bed"></i>  {translation?.bathrooms || "Bedrooms"}{" "}
-                            <span>{property.bedrooms || `${translation?.not_available ||"Not available"}`}</span>
+                            <i className="icon-img-bed"></i> {translation?.bedrooms || "Bedrooms"}{" "}
+                            <span>{property.bedrooms}</span>
                           </li>
+                        )}
+                      
+                        {property.bathroom && (
                           <li>
-                            <i className="icon-img-tub"></i>  {translation?.bathrooms || "Bathrooms"}{" "}
-                            <span>{property.bathroom || `${translation?.not_available ||"Not available"}`}</span>
+                            <i className="icon-img-tub"></i> {translation?.bathrooms || "Bathrooms"}{" "}
+                            <span>{property.bathroom}</span>
                           </li>
-                        </ul>
+                        )}
+                      </ul>
+                      
                       ) : (
                         <ul className="list-info mb-2">
                           <li>

@@ -186,7 +186,7 @@ const ChartsRow = ({ dashboardList }) => {
                 className={`mx-auto ${doughnutData?.labels?.length > 0 ? '' : 'd-flex flex-column justify-content-center align-items-center'}`}
                 style={{ width: "320px", height: "320px" }}
               >
-                {doughnutData?.labels?.length > 0 ? (<>
+                {doughnutData && doughnutData?.labels?.length > 0 ? (<>
                   <Doughnut data={doughnutData} options={doughnutOptions} /></>) : (<><img
                     alt="Icon"
                     height="48"

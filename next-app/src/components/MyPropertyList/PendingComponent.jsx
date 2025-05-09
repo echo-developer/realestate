@@ -18,7 +18,7 @@ const PendingComponent = ({ propertiesData }) => {
   const [propId, setPropId] = useState(null);
   const [showBrochModal, setShowBrochModal] = useState(false);
   const [showAddProperty, setShowAddProperty] = useState(false);
-  const [docModal,setShowDocModal]=useState(false)
+  const [docModal, setShowDocModal] = useState(false)
   const [properties, setProperties] = useState(
     propertiesData?.pending_properties?.data || []
   );
@@ -28,7 +28,7 @@ const PendingComponent = ({ propertiesData }) => {
   const [totalPages, setTotalPages] = useState(
     Math.ceil(
       (propertiesData?.pending_properties?.total || 0) /
-        (propertiesData?.pending_properties?.per_page || 10)
+      (propertiesData?.pending_properties?.per_page || 10)
     )
   );
   useEffect(() => {
@@ -103,7 +103,7 @@ const PendingComponent = ({ propertiesData }) => {
     setPropId(id);
   };
 
-  const handleDocClose=()=>{
+  const handleDocClose = () => {
     setShowDocModal(false);
   }
 
@@ -137,62 +137,56 @@ const PendingComponent = ({ propertiesData }) => {
                     <React.Fragment>
                       {property.property_type === "Residential" ? (
                         <ul className="list-info mb-2">
-                          <li>
-                            <i className="icon-img-flat"></i>{" "}
-                            {property.property_type_for}
-                          </li>
-                          <li>
-                            <i className="icon-img-bed"></i>{" "}
-                            {translation?.bathrooms || "Bedrooms"}{" "}
-                            <span>
-                              {property.bedrooms ||
-                                `${
-                                  translation?.not_available || "Not available"
-                                }`}
-                            </span>
-                          </li>
-                          <li>
-                            <i className="icon-img-tub"></i>{" "}
-                            {translation?.bathrooms || "Bathrooms"}:{" "}
-                            <span>
-                              {property.bathroom ||
-                                `${
-                                  translation?.not_available || "Not available"
-                                }`}
-                            </span>
-                          </li>
+                          {property.property_type_for && (
+                            <li>
+                              <i className="icon-img-flat"></i>{" "}
+                              {property.property_type_for}
+                            </li>
+                          )}
+
+                          {property.bedrooms && (
+                            <li>
+                              <i className="icon-img-bed"></i>{" "}
+                              {translation?.bedrooms || "Bedrooms"}{" "}
+                              <span>{property.bedrooms}</span>
+                            </li>
+                          )}
+
+                          {property.bathroom && (
+                            <li>
+                              <i className="icon-img-tub"></i>{" "}
+                              {translation?.bathrooms || "Bathrooms"}:{" "}
+                              <span>{property.bathroom}</span>
+                            </li>
+                          )}
                         </ul>
+
                       ) : (
                         <ul className="list-info mb-2">
-                          <li>
-                            <i className="icon-img-flat"></i>{" "}
-                            {property.property_type_for ||
-                              `${
-                                translation?.not_available || "Not available"
-                              }`}
-                          </li>
-                          <li>
-                            <i className="icon-img-bed"></i>{" "}
-                            {translation?.cafeteria || "Cafeteria"}:{" "}
-                            <span>
-                              {property.cafeteria ||
-                                `${
-                                  translation?.not_available || "Not available"
-                                }`}
-                            </span>
-                          </li>
-                          <li>
-                            <i className="icon-img-tub"></i>{" "}
-                            {translation?.personal_washroom ||
-                              "Personal Washroom:"}{" "}
-                            <span>
-                              {property.personal_washroom ||
-                                `${
-                                  translation?.not_available || "Not available"
-                                }`}
-                            </span>
-                          </li>
+                          {property.property_type_for && (
+                            <li>
+                              <i className="icon-img-flat"></i>{" "}
+                              {property.property_type_for}
+                            </li>
+                          )}
+
+                          {property.cafeteria && (
+                            <li>
+                              <i className="icon-img-bed"></i>{" "}
+                              {translation?.cafeteria || "Cafeteria"}:{" "}
+                              <span>{property.cafeteria}</span>
+                            </li>
+                          )}
+
+                          {property.personal_washroom && (
+                            <li>
+                              <i className="icon-img-tub"></i>{" "}
+                              {translation?.personal_washroom || "Personal Washroom"}:{" "}
+                              <span>{property.personal_washroom}</span>
+                            </li>
+                          )}
                         </ul>
+
                       )}
                     </React.Fragment>
 
@@ -287,7 +281,7 @@ const PendingComponent = ({ propertiesData }) => {
         />
       )}
 
-      {docModal && <DocumentUploadModal propId={propId} show={docModal} onClose={handleDocClose}/>}
+      {docModal && <DocumentUploadModal propId={propId} show={docModal} onClose={handleDocClose} />}
 
       <UploadPropertyBrochure
         show={showBrochModal}

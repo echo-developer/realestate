@@ -869,14 +869,13 @@ const index = () => {
                 <AboutProject projectData={propertyDetails?.property_project} />
               )}
 
-              {propertyDetails?.property_reviews && (
+              {propertyDetails?.property_reviews?.reviews?.length > 0 && (
                 <PropertyReviewDetails
                   property_reviews={propertyDetails?.property_reviews}
                   handleShowCanvas={handleShow}
                   isMyProperty={propertyDetails?.is_my_property}
                 />
               )}
-              {console.log("propertyDetails", propertyDetails)}
               {propertyDetails?.landmarks && (
                 <PropertyLandmarkData
                   detailsData={propertyDetails}
