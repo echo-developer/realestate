@@ -223,7 +223,6 @@ class PostPropertyController extends Controller
                     'postFor' => 'required',
                     'property_type' => 'required',
                     'property_for' => 'required',
-                    'property_category' => 'required',
                 ]);
 
                 return json_encode(array(

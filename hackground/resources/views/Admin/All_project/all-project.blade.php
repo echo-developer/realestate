@@ -221,6 +221,7 @@
                             <div class="d-flex flex-wrap gap-2 mb-3">
                                 <button class="btn btn-sm btn-outline-warning"
                                     onclick="addAmenity(`{{ $proj->id }}`)"><i class="bi bi-plus-lg"></i> Amenity</button>
+
                                 <button type="button" onclick="addProperty(`{{ $proj->id }}`)"
                                     class="btn btn-sm btn-outline-primary"><i class="bi bi-plus-lg"></i> Property</button>
 
@@ -328,7 +329,7 @@
                 <div id="tower-container-modal"></div>
             </div>
             <div class="modal-footer">                
-                <button type="button" class="btn btn-primary" id="saveButton">Save</button>
+                <button type="button" class="btn btn-primary" id="propertySaveButton">Save</button>
             </div>
         </div>
     </div>
@@ -579,6 +580,7 @@
     const towerContainerModal = document.getElementById("tower-container-modal");
 
     function addProperty(project_id) {
+
         $.ajax({
             url: "{{ route('get.towers') }}",
             type: "GET",
@@ -614,7 +616,7 @@
     function createTower(towerData, towerIndex, container, project_id) {
         const tower = document.createElement("div");
         tower.classList.add("mb-4", "border", "p-3");
-        $('#saveButton').val(project_id);
+        $('#propertySaveButton').val(project_id);
         let slug = 'tower' + towerIndex;
         tower.innerHTML = `
         <input class="form-control" name="project_id" type="hidden" value="${project_id}">
@@ -712,6 +714,7 @@
     }
 
     function createBHK(bhkContainer, bhkIndex, bhkData = null) {
+        console.log(bhkData);
         const bhk = document.createElement("div");
         bhk.classList.add("mb-3");
         bhk.innerHTML =
@@ -882,8 +885,8 @@
         return towers;
     }
 
-    document.getElementById('saveButton').addEventListener('click', function() {
-        const project_id = this.value;
+    document.getElementById('propertySaveButton').addEventListener('click', function() {
+        const project_id =  $('#propertySaveButton').val();
         const towersData = collectData();
         $.ajax({
             url: "{{ route('save.towers') }}",

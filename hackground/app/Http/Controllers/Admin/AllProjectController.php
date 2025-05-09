@@ -72,7 +72,7 @@ class AllProjectController extends Controller
             })
             ->get();
 
-
+          
         $project_name = PrefProject::where('id', $project_id)->value('project_name');
         $project_location = ProjectLocation::where('project_id', $project_id)->value('locality');
 
@@ -316,7 +316,8 @@ class AllProjectController extends Controller
                                 'expected_price' => (float) $bhkdata['property_price'],
                             ]
                         );
-
+                          log_anything($bhkdata['floor_plan_image']);
+                          log_anything($prop_ID);
                         PrefPropertyAdditional::updateOrCreate(
                             ['pid' => $prop_ID],
                             [

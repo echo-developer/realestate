@@ -65,7 +65,7 @@
                         <div class="row gx-3">
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">                            
-                                    <select name="user_type" id="user_type" class="form-select">
+                                    <select name="postAs" id="postAs" class="form-select">
                                         <option value="O" <?= $userData->user_type == 'O' ? 'selected' : '' ?>>Owner</option>
                                         <option value="A" <?= $userData->user_type == 'A' ? 'selected' : '' ?>>Agent</option>
                                         <option value="B" <?= $userData->user_type == 'B' ? 'selected' : '' ?>>Builder</option>
@@ -75,10 +75,10 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    <select name="user_type" id="user_type" class="form-select">
-                                        <option value="rent" <?= $userData->user_type == 'O' ? 'selected' : '' ?>>Rent</option>
-                                        <option value="sale" <?= $userData->user_type == 'A' ? 'selected' : '' ?>>Sale</option>
-                                        <option value="pg" <?= $userData->user_type == 'B' ? 'selected' : '' ?>>PG/Hostel</option>
+                                    <select name="postFor" id="postFor" class="form-select">
+                                        <option value="rent" >Rent</option>
+                                        <option value="sale" >Sale</option>
+                                        <option value="pg">PG/Hostel</option>
                                     </select>
                                     <label class="form-label">You are here to</label>
                                     <span class="error postForError text-danger"></span>
@@ -140,8 +140,8 @@
 
                         <div class="form-floating mb-3">                                 
                             <select name="user_type" id="user_type" class="form-select">
-                                <option value="individual" <?= $userData->user_type == 'O' ? 'selected' : '' ?>>Standalone Property</option>
-                                <option value="project" <?= $userData->user_type == 'A' ? 'selected' : '' ?>> Under a Project</option>
+                                <option value="individual" >Standalone Property</option>
+                                <option value="project" > Under a Project</option>
                             </select>
                             <label class="form-label">Property Under:</label>       
                             <span class="error property_categoryError text-danger"></span>
