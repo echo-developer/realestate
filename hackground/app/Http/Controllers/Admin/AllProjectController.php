@@ -156,7 +156,7 @@ class AllProjectController extends Controller
     }
     public function Propertydelete(Request $req)
     {
-        $project = PrefProject::find($req->propertyId);
+        $project = PrefProject::find($req->id);
 
         if (!$project) {
             return response()->json([

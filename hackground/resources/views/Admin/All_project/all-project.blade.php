@@ -248,7 +248,7 @@
                                 </div>
                                 <div class="col-xxl-auto">
                                     <select name="prop_status" id="prop_status"
-                                        data-property-id="{{ $proj->id }}"
+                                        data-project-id="{{ $proj->id }}"
                                         class="prop_status form-select form-select-sm">
                                         @foreach ($statusMapping as $key => $value)
                                         <option value="{{ $value }}"
@@ -551,7 +551,7 @@
 
     // Handle Property Status Change (Delete, Edit, Update)
     $('.prop_status').change(function() {
-        let propertyId = $(this).data('property-id');
+        let projectId = $(this).data('project-id');
         let status = $(this).val();
         let url = '';
 
@@ -560,14 +560,14 @@
                 url = `{{ url('allproject/delete') }}`;
                 break;
             case 'edit_view':
-                window.location.href = `{{ url('project/edit') }}/${propertyId}`;
+                window.location.href = `{{ url('project/edit') }}/${projectId}`;
                 return;
             default:
                 url = `{{ url('allproject/statusupdate') }}`;
                 break;
         }
 
-        updateStatus(url, propertyId, status);
+        updateStatus(url, projectId, status);
         location.reload();
     });
 </script>
