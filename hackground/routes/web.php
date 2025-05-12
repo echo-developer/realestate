@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\StateController;
 use App\Http\Controllers\Admin\_Menu_Controller;
+use App\Http\Controllers\Admin\BadgesController;
 use App\Http\Controllers\Admin\PropertyCategory;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\EnquiryController;
@@ -53,13 +54,13 @@ use App\Http\Controllers\Admin\OthersLandmarksController;
 use App\Http\Controllers\Admin\PropertyFurnishController;
 use App\Http\Controllers\Api\Project\ProjectImageUploade;
 use App\Http\Controllers\Admin\PropertyRecommendController;
+use App\Http\Controllers\Admin\RequestedLandmarkController;
 use App\Http\Controllers\Admin\MembershipFeaturesController;
 use App\Http\Controllers\Admin\UserSearchActivityController;
 use App\Http\Controllers\Admin\PropertyTransactionController;
 use App\Http\Controllers\Admin\NotificationTemplateController;
 use App\Http\Controllers\Admin\Property_SubCategoryController;
 use App\Http\Controllers\Admin\AdvertisementPackagesController;
-use App\Http\Controllers\Admin\RequestedLandmarkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -684,3 +685,17 @@ Route::get('/artisan-run', function () {
 //     Route::get('/edit/{id}', 'getLandmarkForEdit')->name('edit');
 //     Route::POST('/approve', 'approveLandmark')->name('approve');
 // });
+
+Route::prefix('badges')->name('badges.')->controller(BadgesController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::post('/store', 'store')->name('store');
+    Route::get('/edit/{id}', 'edit')->name('edit');
+    Route::put('/update/{id}', 'update')->name('update');
+    Route::post('/upload',  'upload')->name('upload');
+    Route::post('/status', 'statusUpdate')->name('status');
+    Route::delete('/delete/{id}', 'destroy')->name('destroy');
+    Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
+    Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
+    Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
+    Route::post('/import-excel', 'importBusExcel')->name('import-excel');
+});
