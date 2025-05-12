@@ -135,7 +135,7 @@ const ProjectPendingComponent = ({ projectData }) => {
             <div className="card card-ads" key={project.id}>
               <div className="row g-0">
                 <div className="col-sm-4">
-                  <CardImageSlider data={project} keyword="gallery" icons={false} showSq={true} showPrice={false} showFavIcon={showFavIcon} />
+                  <CardImageSlider data={project} keyword="gallery" icons={false} showSq={true} showPrice={false} showFavIcon={false} />
                 </div>
                 <div className="col-sm-8 position-relative">
                   <div className="card-body">
@@ -150,11 +150,11 @@ const ProjectPendingComponent = ({ projectData }) => {
                     <ul className="list-info mb-2">
                       <li>
                         <i className="icon-img-flat"></i> {translation?.occupied_area || "Occupied Area:"}{" "}
-                        {project.occupied_area}
+                        {project.occupied_area} {project?.unit_type || ''}
                       </li>
                       <li>
                         <i className="icon-img-bed"></i> {translation?.total_area || "Total Area:"}{" "}
-                        {project.total_area}
+                        {project.total_area} {project?.unit_type || ''}
                       </li>
                       <li>
                         <i className="icon-img-tub"></i>  {translation?.total_units || "Total Units:"}{" "}

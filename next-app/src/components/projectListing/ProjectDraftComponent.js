@@ -130,7 +130,7 @@ const ProjectDraftComponent = ({ projectData }) => {
               <div className="row g-0">
                 <div className="col-sm-4">
                   
-                  <CardImageSlider data={project} keyword="gallery" icons={false} showSq={true} showPrice={false} showFavIcon={showFavIcon} />
+                  <CardImageSlider data={project} keyword="gallery" icons={false} showSq={true} showPrice={false} showFavIcon={false} />
                 </div>
                 <div className="col-sm-8 position-relative">
                   <div className="card-body">

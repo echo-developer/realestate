@@ -872,7 +872,7 @@ const ResidentialProjectDetails = ({
                       {/* Operating In Info */}
                       <article className="col-lg-auto col-sm-5">
                         <h4>{translation?.operating_in || "Operating In"}</h4>
-                        <p>{translation?.mumbai || "Mumbai"}</p>
+                        <p></p>
                       </article>
 
                       {/* Description */}
