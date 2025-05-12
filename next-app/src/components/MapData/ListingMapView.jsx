@@ -39,15 +39,37 @@ export default function ListingMapView({
     lng: 0
   })
 
-  useEffect(() => {
-    if(propertyList?.length > 0) {
-      const firstProperty = propertyList[0]
-      setCenter({
-        lat: parseFloat(firstProperty?.address_lat),
-        lng: parseFloat(firstProperty?.address_lan)
-      })
+useEffect(() => {
+  if (propertyList?.length > 0) {
+    const firstProperty = propertyList[0];
+    let lat = parseFloat(firstProperty?.address_lat);
+    let lng = parseFloat(firstProperty?.address_lan);
+
+    if (isNaN(lat) || isNaN(lng)) {
+      const secondProperty = propertyList[1];
+      if (secondProperty) {
+        lat = parseFloat(secondProperty?.address_lat);
+        lng = parseFloat(secondProperty?.address_lan);
+      }
     }
-  }, [propertyList])
+
+    if (isNaN(lat) || isNaN(lng)) {
+      const thirdProperty = propertyList[2];
+      if (thirdProperty) {
+        lat = parseFloat(thirdProperty?.address_lat);
+        lng = parseFloat(thirdProperty?.address_lan);
+      }
+    }
+
+    if (!isNaN(lat) && !isNaN(lng)) {
+      setCenter({
+        lat: lat,
+        lng: lng,
+      });
+    }
+  }
+}, [propertyList]);
+
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
