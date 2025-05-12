@@ -1003,8 +1003,8 @@ const index = () => {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Helmet> */}
         <Head>
-        <title>{metaTitle}</title>
-        <meta name="description" content={metaDescription} />
+          <title>{metaTitle}</title>
+          <meta name="description" content={metaDescription} />
         </Head>
 
         {isMobile ? (
@@ -1383,7 +1383,7 @@ const index = () => {
                         </Col>
                       </>
                       {/* )} */}
-                      <Col className="col-lg-auto col-sm-2 col-auto">
+                      {/* <Col className="col-lg-auto col-sm-2 col-auto">
                         <Button variant="primary" onClick={() => setShowMapView(!showMapView)}>
                           {showMapView ? (
                             <>
@@ -1394,9 +1394,8 @@ const index = () => {
                               <i className="bi bi-geo-alt"></i> Map View
                             </>
                           )}
-                          {/* {showMapView ? 'List View' : 'Map View'} */}
                         </Button>
-                      </Col>
+                      </Col> */}
                       <Col className="col-lg-auto col-6 mb-3">
                         <div className="d-grid">
                           <Button variant="primary" onClick={handleSearchClick}>
@@ -1704,7 +1703,8 @@ const index = () => {
           <div className="container-fluid">
             {showMapView ? (
               <>
-                <ListingMapView propertyList={propertyList} loading={loading} />
+                
+                <ListingMapView propertyList={propertyList} loading={loading} showDrop={showDrop} totalPropertyCount={totalPropertyCount} selectedOption={selectedOption} setShowDrop={setShowDrop} handleSortSelection={handleSortSelection} showMapView={showMapView} setShowMapView={setShowMapView} />
               </>
             ) : (
               <>
@@ -1741,6 +1741,18 @@ const index = () => {
                             </Dropdown.Item>
                           ))}
                         </DropdownButton>
+                        <button
+                            className={`btn btn-outline-primary ${!showMapView ? 'active' : ''}`}
+                            onClick={() => setShowMapView(false)}
+                          >
+                            <i className="bi bi-list-ul me-1"></i> List View
+                          </button>
+                          <button
+                            className={`btn btn-outline-primary ${showMapView ? 'active' : ''}`}
+                            onClick={() => setShowMapView(true)}
+                          >
+                            <i className="bi bi-map me-1"></i> Map View
+                          </button>
                       </div>
                     </div>
                     <div className="list-display">
@@ -1823,15 +1835,15 @@ const index = () => {
                                     {property?.bathroom && (
                                       <>
                                         <li>
-                                      <i
-                                        className="icon-img-tub"
-                                        title="Bathrooms:"
-                                      ></i>
-                                      <span>
-                                        {property?.bathroom ? property.bathroom : <span className="text-muted">Not Available</span>}
-                                      </span>
-                                      {property?.bathroom && " Bath"}
-                                    </li>
+                                          <i
+                                            className="icon-img-tub"
+                                            title="Bathrooms:"
+                                          ></i>
+                                          <span>
+                                            {property?.bathroom ? property.bathroom : <span className="text-muted">Not Available</span>}
+                                          </span>
+                                          {property?.bathroom && " Bath"}
+                                        </li>
                                       </>
                                     )}
                                     <li>

@@ -6,6 +6,7 @@ import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import { ShimmerContentBlock } from "react-shimmer-effects";
 import { useAuth } from "@/context/AuthProvider";
 import useTranslation from "@/hooks/useTranslation";
+import { DropdownButton, Dropdown } from 'react-bootstrap'
 
 
 const containerStyle = {
@@ -21,7 +22,17 @@ const mapOptions = {
 
 
 
-export default function ListingMapView({ loading, propertyList }) {
+export default function ListingMapView({ 
+  loading,
+  propertyList,
+   totalPropertyCount,
+  selectedOption,
+  showDrop,
+   setShowDrop,
+   handleSortSelection,
+   showMapView,
+   setShowMapView
+   }) {
   const translation = useTranslation();
   const [center, setCenter] = useState({
     lat: 0,
@@ -41,15 +52,60 @@ export default function ListingMapView({ loading, propertyList }) {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
   })
-  const { formatPrice } = useAuth();
+  const { defaultCity, formatPrice } = useAuth();
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [hoveredProperty, setHoveredProperty] = useState(null);
 
   return (
-    <div className="container-fluid">
-      <div className="row">
+    <>
+    
+    <div className="row">
         <div className="col-lg p-4" style={{ background: "#f8f9fa", height: "100vh", overflowY: "auto" }}>
-          <h4 className="mb-4">Property MapView</h4>
+          <div className="d-sm-flex justify-content-between align-items-center mb-2">
+                                <h4 className="mb-3 mb-sm-0">
+                                  {translation?.total || "Total"}{" "}
+                                  <span className="text-primary">{totalPropertyCount}</span>{" "}
+                                  {translation?.properties_in || "Properties in"}{" "}
+                                  {defaultCity?.name || "Kolkata"}
+                                </h4>
+                                <div className="sort-by d-none d-md-block">
+                                  <DropdownButton
+                                    align="end"
+                                    title={selectedOption}
+                                    id="dropdown-menu-align-end"
+                                    onClick={() => setShowDrop(!showDrop)}
+                                    aria-expanded={showDrop ? "true" : "false"}
+                                  >
+                                    {[
+                                      "Recent",
+                                      "Price - Low to High",
+                                      "Price - High to Low",
+                                      "Size - Low to High",
+                                      "Size - High to Low",
+                                    ].map((option) => (
+                                      <Dropdown.Item
+                                        eventKey="1"
+                                        key={option}
+                                        onClick={() => handleSortSelection(option)}
+                                      >
+                                        {option}
+                                      </Dropdown.Item>
+                                    ))}
+                                  </DropdownButton>
+                                  <button
+                                      className={`btn btn-outline-primary ${!showMapView ? 'active' : ''}`}
+                                      onClick={() => setShowMapView(false)}
+                                    >
+                                      <i className="bi bi-list-ul me-1"></i> List View
+                                    </button>
+                                    <button
+                                      className={`btn btn-outline-primary ${showMapView ? 'active' : ''}`}
+                                      onClick={() => setShowMapView(true)}
+                                    >
+                                      <i className="bi bi-map me-1"></i> Map View
+                                    </button>
+                                </div>
+                              </div>
           <div className="list-display">
             {loading ? (
               <>
@@ -319,6 +375,6 @@ export default function ListingMapView({ loading, propertyList }) {
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
