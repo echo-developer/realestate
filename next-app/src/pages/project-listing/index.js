@@ -108,9 +108,9 @@ const Index = () => {
       setLoading(true);
     }
     let params = { ...router?.query };
-    if(params?.locality) {
+    if (params?.locality) {
       const locality = JSON.parse(params?.locality)
-      if(locality) {
+      if (locality) {
         params.locality = locality?.locality_id
       }
     }
@@ -121,7 +121,7 @@ const Index = () => {
     if (router?.query?.address) {
       params.locality = router?.query?.address;
     }
-    if(showMapView) {
+    if (showMapView) {
       params.hasLatLng = 1;
     } else {
       params.hasLatLng = 0;
@@ -254,8 +254,8 @@ const Index = () => {
       )}
       <MainLayout>
         <Head>
-        <title>{metaTitle}</title>
-        <meta name="description" content={metaDescription} />
+          <title>{metaTitle}</title>
+          <meta name="description" content={metaDescription} />
         </Head>
 
         {isMobile ? (
@@ -287,14 +287,14 @@ const Index = () => {
         ) : (
           <div className="short-banner pt-4">
             <div className="container-fluid">
-              <ProjectFilterPage 
-              setPerPage={setPerPage} 
-              toggleDropdown={toggleDropdown} 
-              handleClickOutside={handleClickOutside} 
-              dropdownState={dropdownState} 
-              setIsOverlayVisible={setIsOverlayVisible}
-              showMapView={showMapView}
-              setShowMapView={setShowMapView} />
+              <ProjectFilterPage
+                setPerPage={setPerPage}
+                toggleDropdown={toggleDropdown}
+                handleClickOutside={handleClickOutside}
+                dropdownState={dropdownState}
+                setIsOverlayVisible={setIsOverlayVisible}
+                showMapView={showMapView}
+                setShowMapView={setShowMapView} />
             </div>
           </div>
         )}
@@ -302,12 +302,7 @@ const Index = () => {
         <section className="section">
           <div className="container-fluid">
             {showMapView ? (<>
-            <>
-            <ProjectListingMapView loading={loading} projectList={projectListData} />
-            </>
-            </>) : (<>
-              <div className="row main-row">
-              <aside className="col-xl-9 col-lg-9 col-12">
+              <>
                 <div className="d-sm-flex justify-content-between align-items-center mb-2">
                   <h4 className="mb-3 mb-sm-0">
                     {translation?.total || "Total"}{" "}
@@ -338,71 +333,132 @@ const Index = () => {
                         </Dropdown.Item>
                       ))}
                     </DropdownButton>
+                    <button
+                      className={`btn btn-outline-primary ${!showMapView ? 'active' : ''}`}
+                      onClick={() => setShowMapView(false)}
+                    >
+                      <i className="bi bi-list-ul me-1"></i> List View
+                    </button>
+                    <button
+                      className={`btn btn-outline-primary ${showMapView ? 'active' : ''}`}
+                      onClick={() => setShowMapView(true)}
+                    >
+                      <i className="bi bi-map me-1"></i> Map View
+                    </button>
                   </div>
                 </div>
-
-                {loading ? (
-                  <>
-                    <ShimmerContentBlock
-                      title
-                      text
-                      cta
-                      thumbnailWidth={350}
-                      thumbnailHeight={50}
-                    />
-                    <ShimmerContentBlock
-                      title
-                      text
-                      cta
-                      thumbnailWidth={350}
-                      thumbnailHeight={50}
-                    />
-                  </>
-                ) : projectListData.length > 0 ? (
-                  <ResidentialProjectList
-                    projectListData={projectListData}
-                    setProjectListData={setProjectListData}
-                  />
-                ) : (
-                  <div style={noRecordsStyle}>
-                    <h2>
-                      {" "}
-                      {translation?.no_records_found || "No Records Found"}
-                    </h2>
+                <ProjectListingMapView loading={loading} projectList={projectListData} />
+              </>
+            </>) : (<>
+              <div className="row main-row">
+                <aside className="col-xl-9 col-lg-9 col-12">
+                  <div className="d-sm-flex justify-content-between align-items-center mb-2">
+                    <h4 className="mb-3 mb-sm-0">
+                      {translation?.total || "Total"}{" "}
+                      <span className="text-primary">{projectListData.length}</span>{" "}
+                      {translation?.projects_found || "Projects Found"}
+                    </h4>
+                    <div className="sort-by d-none d-md-block">
+                      <DropdownButton
+                        align="end"
+                        title={selectedOption}
+                        id="dropdown-menu-align-end"
+                        onClick={() => setShowDrop(!showDrop)}
+                        aria-expanded={showDrop ? "true" : "false"}
+                      >
+                        {[
+                          "Recent",
+                          "Price - Low to High",
+                          "Price - High to Low",
+                          "Size - Low to High",
+                          "Size - High to Low",
+                        ].map((option) => (
+                          <Dropdown.Item
+                            eventKey="1"
+                            key={option}
+                            onClick={() => handleSortSelection(option)}
+                          >
+                            {option}
+                          </Dropdown.Item>
+                        ))}
+                      </DropdownButton>
+                      <button
+                        className={`btn btn-outline-primary ${!showMapView ? 'active' : ''}`}
+                        onClick={() => setShowMapView(false)}
+                      >
+                        <i className="bi bi-list-ul me-1"></i> List View
+                      </button>
+                      <button
+                        className={`btn btn-outline-primary ${showMapView ? 'active' : ''}`}
+                        onClick={() => setShowMapView(true)}
+                      >
+                        <i className="bi bi-map me-1"></i> Map View
+                      </button>
+                    </div>
                   </div>
-                )}
-                {!loading && currentPages < totalPages && (
-                  <button
-                    className="btn btn-primary d-block mx-auto mt-4"
-                    onClick={() => handleLoadMoreClick(perPage + 1)}
-                  >
-                    {translation?.load_more || "Load More"}
-                  </button>
-                )}
-              </aside>
-              <aside className="col-xl-3 col-lg-3 col-12">
-                {adsData.length > 0 ? (
-                  adsData.map((ad) => (
-                    <a
-                      key={ad.advertisement_id}
-                      role="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        logAdClick(ad.advertisement_id, ad.ad_url);
-                      }}
+
+                  {loading ? (
+                    <>
+                      <ShimmerContentBlock
+                        title
+                        text
+                        cta
+                        thumbnailWidth={350}
+                        thumbnailHeight={50}
+                      />
+                      <ShimmerContentBlock
+                        title
+                        text
+                        cta
+                        thumbnailWidth={350}
+                        thumbnailHeight={50}
+                      />
+                    </>
+                  ) : projectListData.length > 0 ? (
+                    <ResidentialProjectList
+                      projectListData={projectListData}
+                      setProjectListData={setProjectListData}
+                    />
+                  ) : (
+                    <div style={noRecordsStyle}>
+                      <h2>
+                        {" "}
+                        {translation?.no_records_found || "No Records Found"}
+                      </h2>
+                    </div>
+                  )}
+                  {!loading && currentPages < totalPages && (
+                    <button
+                      className="btn btn-primary d-block mx-auto mt-4"
+                      onClick={() => handleLoadMoreClick(perPage + 1)}
                     >
-                      <img src={ad.ad_image} alt="Ad" />
-                    </a>
-                  ))
-                ) : (
-                  <img
-                    alt="Advertisement"
-                    src="/assets/images/ads/real-estate-poster.jpg"
-                    className="img-fluid"
-                  />
-                )}
-              </aside>
-            </div>
+                      {translation?.load_more || "Load More"}
+                    </button>
+                  )}
+                </aside>
+                <aside className="col-xl-3 col-lg-3 col-12">
+                  {adsData.length > 0 ? (
+                    adsData.map((ad) => (
+                      <a
+                        key={ad.advertisement_id}
+                        role="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          logAdClick(ad.advertisement_id, ad.ad_url);
+                        }}
+                      >
+                        <img src={ad.ad_image} alt="Ad" />
+                      </a>
+                    ))
+                  ) : (
+                    <img
+                      alt="Advertisement"
+                      src="/assets/images/ads/real-estate-poster.jpg"
+                      className="img-fluid"
+                    />
+                  )}
+                </aside>
+              </div>
             </>)}
           </div>
         </section>

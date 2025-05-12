@@ -865,10 +865,7 @@ const ResidentialProjectDetails = ({
                             `${translation?.not_available || "Not Available"}`}
                         </h4>
                         <p>
-                          {detailsData?.developer_experience ||
-                            `${translation?.not_available ||
-                            `${translation?.not_available || "Not Available"}`
-                            }`}{" "}
+                          {detailsData?.developer_experience}
                         </p>
                       </article>
 

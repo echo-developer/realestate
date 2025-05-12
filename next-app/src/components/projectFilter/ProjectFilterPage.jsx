@@ -822,7 +822,7 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>
-              <Col className="col-lg-auto col-sm-2 col-auto">
+              {/* <Col className="col-lg-auto col-sm-2 col-auto">
                 <Button style={{ backgroundColor: '#fff', color: '#007bff', border: '1px solid #007bff' }} onClick={() => setShowMapView(!showMapView)}>
                   {showMapView ? (
                     <>
@@ -834,7 +834,7 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
                     </>
                   )}
                 </Button>
-              </Col>
+              </Col> */}
 
               <Col className="col-lg-auto col-6 mb-3">
                 <div className="d-grid">

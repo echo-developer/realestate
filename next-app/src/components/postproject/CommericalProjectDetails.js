@@ -546,7 +546,7 @@ const CommercialProjectDetails = ({
                               `${translation?.not_available || "Not Available"}`} */}
                             {
                               ownershipTypeOptions.find(
-                                (item) => item.key === propertyDetails.ownership_type
+                                (item) => item.key === detailsData.ownership_type
                               )?.value
                             }
                           </h5>
@@ -834,9 +834,7 @@ const CommercialProjectDetails = ({
                             `${translation?.not_available || "Not available"}`}
                         </h4>
                         <p>
-                          {detailsData?.developer_experience ||
-                            `${translation?.not_available || "Not available"
-                            }`}{" "}
+                          {detailsData?.developer_experience}
                         </p>
                       </article>
 
