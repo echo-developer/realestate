@@ -6,7 +6,7 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import useDateFormat from "@/hooks/useDateFormat";
 import ProjectGallery from "./ProjectGallery";
 import ProjectedProperty from "./ProjectedProperty";
-import { minBudgetOptions, maxBudgetOptions } from "../post/PropertyData";
+import { minBudgetOptions, maxBudgetOptions, ownershipTypeOptions } from "../post/PropertyData";
 import FloorPlanSection from "../project/FloorPlanSection";
 import NearbyProjects from "../project/NearByProject";
 import OtherProjects from "../project/OtherProject";
@@ -542,8 +542,13 @@ const CommercialProjectDetails = ({
                             {translation?.type_of_ownership || "Type of Ownership:"}
                           </p>
                           <h5>
-                            {detailsData?.ownership_type ||
-                              `${translation?.not_available || "Not Available"}`}
+                            {/* {detailsData?.ownership_type ||
+                              `${translation?.not_available || "Not Available"}`} */}
+                            {
+                              ownershipTypeOptions.find(
+                                (item) => item.key === propertyDetails.ownership_type
+                              )?.value
+                            }
                           </h5>
                         </Col>
                       )}

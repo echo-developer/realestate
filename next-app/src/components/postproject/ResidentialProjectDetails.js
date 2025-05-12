@@ -6,7 +6,7 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import useDateFormat from "@/hooks/useDateFormat";
 import ProjectGallery from "./ProjectGallery";
 import ProjectedProperty from "./ProjectedProperty";
-import { minBudgetOptions, maxBudgetOptions } from "../post/PropertyData";
+import { minBudgetOptions, maxBudgetOptions, ownershipTypeOptions } from "../post/PropertyData";
 import FloorPlanSection from "../project/FloorPlanSection";
 import NearbyProjects from "../project/NearByProject";
 import OtherProjects from "../project/OtherProject";
@@ -52,7 +52,7 @@ const ResidentialProjectDetails = ({
   viewNumber,
   propertyPriceTrends
 }) => {
-  const { defaultCity, currencyCode, formatPrice } = useAuth();
+  const { defaultCity, currencyCode, currency, formatPrice } = useAuth();
   const [visible, setVisible] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [projectId, setprojectId] = useState();
@@ -542,7 +542,7 @@ const ResidentialProjectDetails = ({
                               </span>
 
                               <h5>
-                                {detailsData?.currency || "Not Available"}{" "}
+                                {currency || ""}{" "}
                                 {detailsData?.token_amount ||
                                   `${translation?.not_available || "Not Available"
                                   }`}
@@ -563,7 +563,7 @@ const ResidentialProjectDetails = ({
                             {translation?.price_breakup || "Price Breakup:"}
                           </p>
                           <h5>
-                            {detailsData?.currency || "Not Available"} {detailsData?.expected_price}
+                            {currency || ""} {detailsData?.expected_price}
                           </h5>
                         </Col>
                       )}
@@ -582,7 +582,14 @@ const ResidentialProjectDetails = ({
                           <p className="text-muted mb-2">
                             {translation?.type_of_ownership || "Type of Ownership:"}
                           </p>
-                          <h5>{detailsData.ownership_type}</h5>
+                          <h5>
+                            {/* {detailsData.ownership_type} */}
+                            {
+                              ownershipTypeOptions.find(
+                                (item) => item.key === detailsData.ownership_type
+                              )?.value
+                            }
+                          </h5>
                         </Col>
                       )}
 

@@ -97,7 +97,7 @@ const translation = useTranslation();
 
       if (res && res?.status === 1) {
         handleSetImage(res?.data?.images)
-        toast.success("Image deleted succe3ssfully")
+        toast.success("Image deleted successfully")
       }
     } catch (error) {
       console.error(error?.message || "Something went wrong")
