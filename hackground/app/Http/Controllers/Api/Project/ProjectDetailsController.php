@@ -93,7 +93,7 @@ class ProjectDetailsController extends Controller
             $project->settings->project_furnish = isset($project->settings->project_furnish) ? get_name_by_id('property_furnish_names', 'furnish_id', $project->settings->project_furnish, 'en') : null;
 
             $possesion_month_possesion_year = !empty($project->additional->possesion_month_possesion_year) ? explode('-', $project->additional->possesion_month_possesion_year) : [];
-            $project->location->locality_id= $project->location->locality;
+            $project->location->locality_id = $project->location->locality;
             $project->location->locality = isset($project->location->locality) ? get_name_by_id('locality_names', 'locality_id', $project->location->locality, 'en') : null;
 
 
@@ -175,7 +175,7 @@ class ProjectDetailsController extends Controller
             $flattenedData['is_my_project'] = $is_my_project;
             $flattenedData['top_agents'] = propertyTopAgentList($project->location->locality) ?? [];
             $flattenedData['project_type_id'] =  $this->project_type;
-        
+
             unset($flattenedData['settings'], $flattenedData['additional'], $flattenedData['location'], $flattenedData['possesion_month_possesion_year']);
 
             // Fetching user details from uid
@@ -527,16 +527,18 @@ class ProjectDetailsController extends Controller
             // all reviews  ---by arsad
             $property_review = DB::table('project_reviews')
                 ->leftJoin('project_review_additional', 'project_reviews.id', '=', 'project_review_additional.review_id')
+                ->leftJoin('users', 'project_reviews.user_id', '=', 'users.id')
                 ->select(
                     'user_id',
                     'project_id',
                     'overall_rating',
-                    'created_at',
-                    'updated_at',
+                    'project_reviews.created_at',
+                    'project_reviews.updated_at',
                     'review_id',
                     'review_title',
                     'review_description',
-                    'user_relation'
+                    'user_relation',
+                    'image as review_image',
                 )->where(['project_reviews.project_id' => $project_id])
                 ->get()
                 ->sortByDesc('overall_rating');
@@ -548,6 +550,7 @@ class ProjectDetailsController extends Controller
             $property_review->map(function ($items) {
 
                 $items->name = get_user_name($items->user_id ?? null);
+                $items->review_image = !empty($items->review_image) ? asset('user_upload/profile_image/' . $items->review_image) : '';;
                 unset($items->user_id);
                 return $items;
             });

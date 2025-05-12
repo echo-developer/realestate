@@ -128,7 +128,7 @@ class AdvanceSearchController extends Controller
             'furnishing' => 'property_additional.property_furnish',
             'amenities' => 'property_additional.property_amenity',
             'floor' => 'property_additional.flooring_style',
-            
+
             'facing' => 'property_additional.facing_direction',
             'property_type' => 'properties_settings.property_type',
             'property_for' => 'properties_settings.property_type_for',
@@ -190,10 +190,8 @@ class AdvanceSearchController extends Controller
 
         if (isset($data['hasLatlang']) && $data['hasLatlang'] == '1') {
             $qry->where(function ($query) {
-                $query->whereNotNull('properties_location.latitude')
-                    ->where('properties_location.latitude', '!=', '')
-                    ->whereNotNull('properties_location.longitude')
-                    ->where('properties_location.longitude', '!=', '');
+                $query->whereNotNull('properties_location.locality')
+                    ->where('properties_location.locality', '!=', '');
             });
         }
 
