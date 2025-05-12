@@ -104,6 +104,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('get_testimonial_list', 'getTestimonialList');
     Route::post('buyer_property_enquery', 'buyerEnquerytoAdmin');
     Route::get('verified_agents', 'VerifiedAgentList');
+    Route::get('get_badges', 'agentBadges');
     Route::get('property_trending_rates', 'propertyInTrendsandRates');
     Route::get('locality-list', 'fetchLocalities');
     Route::post('save-feedback', 'saveFeedback');

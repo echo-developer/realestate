@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Api\HomeController;
-use App\Http\Controllers\Controller;
-use App\Models\AgentAdditional;
-use App\Models\Api\ApiModel;
 use App\Models\User;
+use App\Models\Badges;
+use App\Models\UserBadges;
+use App\Models\BadgesNames;
+use App\Models\Api\ApiModel;
 use Illuminate\Http\Request;
+use App\Models\AgentAdditional;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\HomeController;
 
 class UserController extends Controller
 {
@@ -34,9 +37,21 @@ class UserController extends Controller
             $data = $this->memberUserModel->getMemberUsers($term, $paginate, $typekey);
             return view('Admin.Member.index', compact('data'));
         }
+        $query = BadgesNames::with(['badge' => function ($q) {
+            $q->select('badge_id', 'icon', 'status');
+        }])
+            ->whereHas('badge', function ($q) {
+                $q->where('status', '!=', config('constants.STATUS_DELETE'));
+            })
+            ->where('lang', config('app.locale'))
+            ->select('badge_id', 'name', 'description');
+        $badge_list = $query->orderByDesc('badge_id')->get();
 
+        
         $data = $this->memberUserModel->getMemberUsers($term, $paginate, $typekey);
-        return view('Admin.Member.index', compact('data', 'typeName'));
+
+        // dd( $data);
+        return view('Admin.Member.index', compact('data', 'typeName', 'badge_list'));
     }
 
     public function MemberUserImage(Request $req)
@@ -252,5 +267,26 @@ class UserController extends Controller
 
         set_flash_message('update');
         return redirect()->back();
+    }
+
+    public function assignBadges(Request $request)
+    {
+
+        $user = User::findOrFail($request->user_id);
+        $user->userbadges()->sync($request->badge_ids); // removes old, adds new
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Badges assigned successfully.',
+        ]);
+    }
+
+    public function getUserBadges($userId)
+    {
+        $assignedBadges = UserBadges::where('user_id', $userId)->pluck('badge_id')->toArray();
+
+        return response()->json([
+            'assigned' => $assignedBadges,
+        ]);
     }
 }

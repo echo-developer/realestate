@@ -150,7 +150,7 @@ $userTypes = [
                         <tbody id="allUserBody">
                             @forelse ($data as $items)
                             <tr>
-                               
+
                                 <td>
                                     <a href="{{ route('memberUser.allDetails', $items->id) }}" target="_blank" class="d-flex">
                                         @php
@@ -164,7 +164,26 @@ $userTypes = [
                                         @else
                                         <span class="user-initial rounded-circle me-2" style="background-color: <?= getAvatarColor($items->name) ?>;"><?php echo strtoupper($items->name[0]);  ?></span>
                                         @endif
-                                        <div>{{ $items->name }}<br><span class="badge bg-info">{{ $userTypes[$items->user_type] ?? 'Unknown' }}</span></div>
+                                        <div>{{ $items->name }}<br><span class="badge bg-info">{{ $userTypes[$items->user_type] ?? 'Unknown' }}</span>
+
+                                            @if($items->userbadges && $items->userbadges->count())
+                                            <div class="mt-1">
+                                                @foreach($items->userbadges as $badge)
+                                                @php
+                                                $badgeName = $badge->names->firstWhere('lang', app()->getLocale())?->name;
+                                                @endphp
+                                                <span class="badge bg-secondary d-inline-flex align-items-center me-1" title="{{ $badgeName }}">
+                                                    @if($badge->icon)
+                                                    <img src="{{ asset('user_upload/badges/' . $badge->icon) }}" alt="Badge Icon" width="16" height="16" class="me-1">
+                                                    @endif
+                                                    {{ $badgeName }}
+                                                </span>
+                                                @endforeach
+                                            </div>
+                                            @endif
+
+
+                                        </div>
                                     </a>
 
                                 </td>
@@ -199,6 +218,18 @@ $userTypes = [
                                         data-size="mini" {{ $items->status ? 'checked' : '' }}>
                                 </td>
                                 <td class="text-right" style="padding-right:15px;">
+                                    @if ($items->user_type == 'A')
+                                    <a href="javascript:void(0)"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        data-bs-title="Assign Badge"
+                                        class="assignBadgeButton"
+                                        data-user-id="{{ $items->id }}">
+                                        <i class="bi bi-award-fill text-primary fa-md"></i>
+                                    </a>
+                                    &nbsp;
+                                    @endif
+
 
                                     {{-- @if (in_array('MEN0051_LIST_Edit', $rolePermissions)) --}}
                                     <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" class="allUsersEditButton"
@@ -357,6 +388,53 @@ $userTypes = [
 
 
 </div>
+</div>
+
+<div class="modal fade" id="defult-modal" tabindex="-1" role="dialog" aria-labelledby="addEditModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="AddEditModalLabel">Assign Badges</h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formData">
+                    <input type="hidden" id="selected_user_id" name="user_id">
+                    <div class="mb-3">
+                        <div class="row" id="badgeCheckboxContainer">
+                            @foreach($badge_list as $item)
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="badge_ids[]"
+                                        value="{{ $item->badge_id }}"
+                                        id="badge_{{ $item->badge_id }}">
+                                    <label class="form-check-label" for="badge_{{ $item->badge_id }}">
+                                        {{ $item->name }}
+                                    </label>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        <div class="invalid-feedback d-block" id="badge_ids_error"></div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" onclick="saveData()" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+
+    </div>
 </div>
 @endsection
 
@@ -663,6 +741,54 @@ $userTypes = [
             },
             error: function(xhr, status, error) {
                 console.error('Error deleting file:', error);
+            }
+        });
+    }
+</script>
+
+
+<script>
+    $(document).on('click', '.assignBadgeButton', function() {
+        var userId = $(this).data('user-id');
+        $('#selected_user_id').val(userId);
+        $.get(`{{ route('badges.get', ':id') }}`.replace(':id', userId), res => {
+            $('input[name="badge_ids[]"]').prop('checked', false);
+
+            // Then, check the assigned ones
+            res.assigned.forEach(id => {
+                $(`#badge_${id}`).prop('checked', true);
+            });
+        });
+        $('#defult-modal').modal('show');
+    });
+
+    function saveData() {
+        let form = $('#formData')[0];
+        let formData = new FormData(form);
+        $('.is-invalid').removeClass('is-invalid');
+
+        $.ajax({
+            url: `{{ route('user-badges.assgin') }}`,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $('#defult-modal').modal('hide');
+                $('#formData')[0].reset();
+                localStorage.setItem('successMessage', response.message);
+                window.location.reload();
+            },
+            error: function(xhr) {
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+                    $.each(errors, function(key, messages) {
+                        let fieldId = key.replace('.', '_');
+                        $('#' + fieldId).addClass('is-invalid');
+                    });
+                } else {
+                    console.error('Error:', xhr.responseText);
+                }
             }
         });
     }

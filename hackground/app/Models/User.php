@@ -68,6 +68,10 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
     {
         return $this->hasMany(PrefProperty::class, 'uid', 'id');
     }
+    public function userbadges()
+    {
+        return $this->belongsToMany(Badges::class, 'user_badges', 'user_id', 'badge_id')->with('names');
+    }
 
 
 
@@ -135,28 +139,33 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
         ];
     }
 
-    public function getMemberUsers($term = null, $paginate, $typeKey = null,)
+    public function getMemberUsers($term = null, $paginate, $typeKey = null)
     {
-
         try {
-            $query = User::where([
-                ['users.status', '!=', config('constants.STATUS_DELETE')],
-            ]);
+            $query = User::with(['userbadges' => function ($q) {
+                $q->with(['names' => function ($q2) {
+                    $q2->where('lang', app()->getLocale()); // or use a fixed string like 'en'
+                }]);
+            }])
+                ->where('users.status', '!=', config('constants.STATUS_DELETE'));
 
             if ($term) {
                 $query->where('users.name', 'like', "%{$term}%");
             }
+
             if ($typeKey) {
                 $query->where('users.user_type', 'like', $typeKey);
             }
+
             return $query->paginate($paginate);
         } catch (\Exception $e) {
-            Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
+            Log::error('Error in getMemberUsers: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);
         }
     }
+
 
     public function getMemberUsersDetails($id)
     {

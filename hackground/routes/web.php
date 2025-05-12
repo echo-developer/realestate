@@ -397,6 +397,8 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/memberUser-status', 'MemberUserStatus')->name('memberUser.status');
         Route::post('/memberUser/agent-status', 'MemberUserAgentStatus')->name('memberUser.agent.status');
         Route::post('/memberUser-delete/{id}', 'MemberUserDelete')->name('memberUser.delete');
+        Route::post('/badge-assgine', 'assignBadges')->name('user-badges.assgin');
+        Route::get('/badge-get/{id}', 'getUserBadges')->name('badges.get');
     });
 
     Route::controller(PermissionController::class)->group(function () {
@@ -697,5 +699,4 @@ Route::prefix('badges')->name('badges.')->controller(BadgesController::class)->g
     Route::post('/delete-multiple', 'deleteMultiple')->name('delete-multiple');
     Route::post('/activate-multiple', 'activateMultiple')->name('activate-multiple');
     Route::post('/deactivate-multiple', 'deactivateMultiple')->name('deactivate-multiple');
-    Route::post('/import-excel', 'importBusExcel')->name('import-excel');
 });

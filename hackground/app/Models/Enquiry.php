@@ -170,19 +170,19 @@ class Enquiry extends Model
         }
 
         if (array_key_exists('city', $srch) && $srch['city']) {
-            $query->where('p_l.city', $srch['city']);
+            $query->orWhere('p_l.city', $srch['city']);
         }
         if (array_key_exists('property_type_for', $srch) && $srch['property_type_for']) {
-            $query->where('p_s.property_type_for', $srch['property_type_for']);
+            $query->orWhere('p_s.property_type_for', $srch['property_type_for']);
         }
         if (array_key_exists('property_type', $srch) && $srch['property_type']) {
-            $query->where('p_s.property_type', $srch['property_type']);
+            $query->orWhere('p_s.property_type', $srch['property_type']);
         }
         if (array_key_exists('post_for', $srch) && $srch['post_for']) {
-            $query->where('p_s.post_for', $srch['post_for']);
+            $query->orWhere('p_s.post_for', $srch['post_for']);
         }
         if (array_key_exists('project_type', $srch) && $srch['project_type']) {
-            $query->where('p_s.post_for', $srch['project_type']);
+            $query->orWhere('p_s.post_for', $srch['project_type']);
         }
 
         if ($assigned_users) {

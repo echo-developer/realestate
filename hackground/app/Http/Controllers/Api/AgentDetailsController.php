@@ -52,32 +52,86 @@ class AgentDetailsController extends Controller
     {
         try {
 
-            $data =  User::where(['user_type' => 'A', 'id' => $rq->agent_id])
-                ->with(['userAdditional', 'agentAdditional', 'serviceArea', 'social'])
+            $data = User::where([
+                'user_type' => 'A',
+                'id' => $rq->agent_id
+            ])
+                ->with([
+                    'userAdditional',
+                    'agentAdditional',
+                    'serviceArea',
+                    'social',
+                    'userbadges' => function ($q) {
+                        $q->with(['names' => function ($q2) {
+                            $q2->where('lang', app()->getLocale()); // or use a fixed string like 'en'
+                        }]);
+                    }
+                ])
                 ->first();
 
-            // Log::info("Formatted dataArray:\n" . json_encode($data, JSON_PRETTY_PRINT));
-
             if (empty($data)) {
-                return  [];
+                return [];
             }
+
+            // Handle image path
             $data->image = $data->image ? asset('user_upload/profile_image/' . $data->image) : '';
+
+            // Get property counts
             $data->forSell = UsersPropertyCount($data->id)['forSell'];
             $data->forRent = UsersPropertyCount($data->id)['forRent'];
-            $data->agentAdditional->agent_doc = !empty($data->agentAdditional->agent_doc) ? asset('user_upload/agent_docs/' . $data->agentAdditional->agent_doc) : null;
 
-            $data->userAdditional->city = !empty($data->userAdditional->city) ? get_name_by_id('city_names', 'city_id', $data->userAdditional->city, $lang)  : null;
+            // Handle agentAdditional safely
+            if ($data->agentAdditional) {
+                $data->agentAdditional->agent_doc = !empty($data->agentAdditional->agent_doc)
+                    ? asset('user_upload/agent_docs/' . $data->agentAdditional->agent_doc)
+                    : null;
+            }
 
-            $data->service_area = !empty($data->serviceArea) ? collect($data->serviceArea)->map(function ($area) use ($lang) {
-                $area->city = !empty($area->city) ? get_name_by_id('city_names', 'city_id', $area->city, $lang) : null;
-            }) : [];
+            // Handle userAdditional safely
+            if ($data->userAdditional) {
+                $data->userAdditional->city = !empty($data->userAdditional->city)
+                    ? get_name_by_id('city_names', 'city_id', $data->userAdditional->city, $lang)
+                    : null;
+            }
+
+            // Handle service area with city name mapping
+            $data->service_area = !empty($data->serviceArea)
+                ? collect($data->serviceArea)->map(function ($area) use ($lang) {
+                    $area->city = !empty($area->city)
+                        ? get_name_by_id('city_names', 'city_id', $area->city, $lang)
+                        : null;
+                    return $area;
+                })
+                : [];
+
+
+            if ($data->userbadges) {
+                $data->userbadges = $data->userbadges->map(function ($badge) {
+
+                    $badge->name = $badge->names->first()->name ?? null;
+                    $badge->description = $badge->names->first()->description ?? null;
+                    unset($badge->slug, $badge->created_at, $badge->updated_at, $badge->status, $badge->lang);
+                    $badge->icon = asset('user_upload/badges/' . $badge->icon);  // Adjust path if needed
+                    unset($badge->names);
+                    unset($badge->pivot);
+                    return $badge;
+                });
+            }
+
+            // Convert to array
             $dataArray = $data->toArray();
 
-            $mergedData = array_merge($dataArray, $dataArray['user_additional'] ?? [], $dataArray['agent_additional'] ?? []);
+            // Merge main, user_additional, and agent_additional into one array
+            $mergedData = array_merge(
+                $dataArray,
+                $dataArray['user_additional'] ?? [],
+                $dataArray['agent_additional'] ?? []
+            );
 
+            // Remove nested user_additional and agent_additional arrays
             unset($mergedData['user_additional'], $mergedData['agent_additional']);
 
-            return  $mergedData;
+            return $mergedData;
         } catch (\Exception $e) {
             Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
@@ -195,7 +249,11 @@ class AgentDetailsController extends Controller
                 'properties.settings' => ['post_for' => $post_for, 'property_type' => $property_type]
             ];
 
-            $agentIdsQuery = User::with(['serviceArea:agent_id,loc_key,city,locality', 'agentAdditional:agent_id,company_name'])->where('user_type', 'A')->where('id', '!=', $this->user_id);
+            $agentIdsQuery = User::with(['serviceArea:agent_id,loc_key,city,locality', 'agentAdditional:agent_id,company_name', 'userbadges' => function ($q) {
+                $q->with(['names' => function ($q2) {
+                    $q2->where('lang', app()->getLocale()); // or use a fixed string like 'en'
+                }]);
+            }])->where('user_type', 'A')->where('id', '!=', $this->user_id);
 
             foreach ($filters as $relation => $conditions) {
                 foreach ($conditions as $column => $value) {
@@ -244,6 +302,19 @@ class AgentDetailsController extends Controller
                 })->all() : [];
 
                 unset($item->id, $item->agentAdditional);
+
+                if ($item->userbadges) {
+                    $item->userbadges = $item->userbadges->map(function ($badge) {
+
+                        $badge->name = $badge->names->first()->name ?? null;
+                        $badge->description = $badge->names->first()->description ?? null;
+                        unset($badge->slug, $badge->created_at, $badge->updated_at, $badge->status, $badge->lang);
+                        $badge->icon = asset('user_upload/badges/' . $badge->icon);  // Adjust path if needed
+                        unset($badge->names);
+                        unset($badge->pivot);
+                        return $badge;
+                    });
+                }
                 return $item;
             });
 
