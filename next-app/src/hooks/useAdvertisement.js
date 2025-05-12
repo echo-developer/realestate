@@ -1,19 +1,21 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import AuthUser from "@/components/Authentication/AuthUser";
+import { useAuth } from "@/context/AuthProvider";
 
 const useAdvertisement = (page, position, city, category) => {
   const { callApi } = AuthUser();
   const [adsData, setAdsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { defaultCity } = useAuth();
 
   useEffect(() => {
     const fetchAdvertisementData = async () => {
       setLoading(true);
       setError(null);
       let data = {
-        page, position, city
+        page, position, city: defaultCity.city_id
       }
 
       if(category) {
@@ -38,8 +40,10 @@ const useAdvertisement = (page, position, city, category) => {
       }
     };
 
-    fetchAdvertisementData();
-  }, [page, position, city, category]);
+    if(defaultCity) {
+      fetchAdvertisementData();
+    }
+  }, [page, position, defaultCity, category]);
 
   const logAdClick = async (advertisement_id, ad_url) => {
     try {

@@ -137,6 +137,7 @@ const index = () => {
 
   const isMobile = useIsMobile();
 
+  console.log("adsData", adsData);
 
   const toggleDropdown = (key) => {
     setDropdownState(prevState => {
@@ -1941,11 +1942,7 @@ const index = () => {
                         </a>
                       ))
                     ) : (
-                      <img
-                        alt="Advertisement"
-                        src="/assets/images/ads/real-estate-poster.jpg"
-                        className="img-fluid"
-                      />
+                      <></>
                     )}
                   </aside>
                 </div>
