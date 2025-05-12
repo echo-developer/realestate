@@ -120,6 +120,7 @@ const PendingComponent = ({ propertiesData }) => {
                     showSq={true}
                     icons={false}
                     showPrice={false}
+                    showFavIcon={false}
                   />
                 </div>
                 <div className="col-sm-8 position-relative">

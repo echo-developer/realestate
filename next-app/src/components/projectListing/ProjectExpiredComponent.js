@@ -133,6 +133,7 @@ const ProjectExpiredComponent = ({ projectData }) => {
                     icons={false}
                     showSq={true}
                     showPrice={false}
+                    showFavIcon={false}
                   />
                 </div>
                 <div className="col-sm-8 position-relative">

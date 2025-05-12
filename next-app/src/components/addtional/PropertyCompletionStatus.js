@@ -23,7 +23,7 @@ const PropertyCompletionStatus = ({ propertyData }) => {
             { key: "facing_direction", label: "Facing", weight: 15 },
             { key: "overlooking", label: "OverLooking", weight: 7 },
             { key: "flooring", label: "Flooring", weight: 10 },
-            { key: "floor_details", label: "Floor Details", weight: 8 },
+            { key: "floor_number", label: "Floor Details", weight: 8 },
         ],
         "Additional Features": [
             { key: "water_available", label: "Water Availability", weight: 5 },

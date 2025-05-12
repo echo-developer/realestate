@@ -130,7 +130,7 @@ const ProjectPendingComponent = ({ projectData }) => {
             <div className="card card-ads" key={project.id}>
               <div className="row g-0">
                 <div className="col-sm-4">
-                  <CardImageSlider data={project} keyword="gallery" showSq={true} icons={false} showPrice={false} />
+                  <CardImageSlider data={project} keyword="gallery" showSq={true} icons={false} showPrice={false} showFavIcon={showFavIcon} />
                 </div>
                 <div className="col-sm-8 position-relative">
                   <div className="card-body">
