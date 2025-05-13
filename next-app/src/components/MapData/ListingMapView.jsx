@@ -6,12 +6,11 @@ import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import { ShimmerContentBlock } from "react-shimmer-effects";
 import { useAuth } from "@/context/AuthProvider";
 import useTranslation from "@/hooks/useTranslation";
-import { DropdownButton, Dropdown } from 'react-bootstrap'
-
+import { DropdownButton, Dropdown, Modal, Row, Col, Button } from "react-bootstrap";
 
 const containerStyle = {
   width: "100%",
-  height: "100vh"
+  height: "100%"
 };
 
 
@@ -75,8 +74,8 @@ useEffect(() => {
     <>
     
     <div className="row">
-        <div className="col-lg p-4" style={{ background: "#f8f9fa", height: "100vh", overflowY: "auto" }}>
-          <div className="list-display">
+        <div className="col-lg">
+          <div className="grid-display">
             {loading ? (
               <>
                 <ShimmerContentBlock
@@ -110,29 +109,30 @@ useEffect(() => {
                 <p>{translation?.no_result_found || "No result found"}</p>
               </div>
             ) : (
-              propertyList?.map((property, i) => (
-                <div key={property.property_id} className={`card card-ads ${selectedMarker?.property_id == property?.property_id ? 'border border-primary bg-primary bg-opacity-10' : ''}`}
-                  onMouseEnter={() => {
-                    setHoveredProperty(property)
-                  }}
-                  onMouseLeave={() => {
-                    setHoveredProperty(null)
-                  }}
-                >
-                  <div className="row g-0">
-                    <div className="col-lg-3 col-sm-3">
-                      <CardImageSlider
-                        data={property}
-                        showSq={true}
-                        icons={true}
-                        showFavIcon={false}
-                      // addRemoveFav={() =>
-                      //   SaveFavouriteProperty(property.property_id)
-                      // }
-                      />
-                    </div>
-                    <div className="col-lg-9 col-sm-9 position-relative">
-                      <div className="card-body">
+              <Row>
+              {propertyList?.map((property, i) => (
+                <Col className="col-sm-6">
+                  <div key={property.property_id} className={`card card-ads ${selectedMarker?.property_id == property?.property_id ? 'border border-primary bg-primary bg-opacity-10' : ''}`}
+                    onMouseEnter={() => {
+                      setHoveredProperty(property)
+                    }}
+                    onMouseLeave={() => {
+                      setHoveredProperty(null)
+                    }}
+                  >
+                    <div className="456">
+                      <div className="123">
+                        <CardImageSlider
+                          data={property}
+                          showSq={true}
+                          icons={true}
+                          showFavIcon={false}
+                        // addRemoveFav={() =>
+                        //   SaveFavouriteProperty(property.property_id)
+                        // }
+                        />
+                      </div>
+                      <div className="card-body position-relative">
                         <h4 className="mb-1">
                           <Link href={`/property-details/${property.slug}`}>
                             {property.property_name}
@@ -223,13 +223,14 @@ useEffect(() => {
                       </div>
                     </div>
                   </div>
-                </div>
-              ))
+                </Col>
+              ))}
+              </Row>
             )}
           </div>
         </div>
-        <div className="col-lg p-0">
-          <div style={{ height: '900px', width: '100%' }}>
+        <div className="col-lg">
+          <div className="googleMap">
             {isLoaded ? (<>
               <GoogleMap
                 mapContainerStyle={containerStyle}

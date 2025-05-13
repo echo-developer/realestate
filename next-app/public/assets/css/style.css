@@ -32693,10 +32693,6 @@ ul#desk-nav > li > a.btn-post:hover {
   filter: brightness(0) invert(1);
 }
 
-.navbar {
-  padding: 0;
-}
-
 .setlang a img {
   border-radius: 50%;
   object-fit: cover;
@@ -34983,10 +34979,6 @@ ul.list-property-feature > li i {
 }
 .user-review-footer > ul > li {
   margin-right: 1rem;
-}
-
-.grid-display {
-  display: none;
 }
 
 .my-assets .total-ad-pic {
@@ -37285,6 +37277,20 @@ fieldset .btn-delete {
   margin-bottom: 1.5rem;
 }
 
+.grid-display {
+  /* display: none; */
+}
+.grid-display.scroll {
+  height: calc(100vh - 238px);
+}
+
+.googleMap {
+  height: calc(100vh - 238px);
+  position: sticky;
+  top: 0;
+  width: 100%;
+}
+
 /* Media Start */
 @media (min-width: 576px) {
   .card-ads .row .card-img-top {
@@ -37350,7 +37356,7 @@ fieldset .btn-delete {
     font-size: 16px;
   }
   #wrapper {
-    padding-top: 74px;
+    padding-top: 76px;
   }
   .navbar-brand > div > img {
     max-height: 64px;

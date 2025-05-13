@@ -1388,7 +1388,7 @@ const index = () => {
                           {showMapView ? (
                             <>
                               <i className="bi bi-list-ul"></i> List View
-                            </>
+                            </>6
                           ) : (
                             <>
                               <i className="bi bi-geo-alt"></i> Map View
@@ -1701,59 +1701,10 @@ const index = () => {
 
         <section className="section">
           <div className="container-fluid">
-            {showMapView ? (
-              <>
-                <div className="d-sm-flex justify-content-between align-items-center mb-2">
-                  <h4 className="mb-3 mb-sm-0">
-                    {translation?.total || "Total"}{" "}
-                    <span className="text-primary">{totalPropertyCount}</span>{" "}
-                    {translation?.properties_in || "Properties in"}{" "}
-                    {defaultCity?.name || "Kolkata"}
-                  </h4>
-                  <div className="sort-by d-none d-md-block">
-                    <DropdownButton
-                      align="end"
-                      title={selectedOption}
-                      id="dropdown-menu-align-end"
-                      onClick={() => setShowDrop(!showDrop)}
-                      aria-expanded={showDrop ? "true" : "false"}
-                    >
-                      {[
-                        "Recent",
-                        "Price - Low to High",
-                        "Price - High to Low",
-                        "Size - Low to High",
-                        "Size - High to Low",
-                      ].map((option) => (
-                        <Dropdown.Item
-                          eventKey="1"
-                          key={option}
-                          onClick={() => handleSortSelection(option)}
-                        >
-                          {option}
-                        </Dropdown.Item>
-                      ))}
-                    </DropdownButton>
-                    <button
-                      className={`btn btn-outline-primary ${!showMapView ? 'active' : ''}`}
-                      onClick={() => setShowMapView(false)}
-                    >
-                      <i className="bi bi-list-ul me-1"></i> List View
-                    </button>
-                    <button
-                      className={`btn btn-outline-primary ${showMapView ? 'active' : ''}`}
-                      onClick={() => setShowMapView(true)}
-                    >
-                      <i className="bi bi-map me-1"></i> Map View
-                    </button>
-                  </div>
-                </div>
-                <ListingMapView propertyList={propertyList} loading={loading} />
-              </>
-            ) : (
-              <>
-                <div className="row main-row">
-                  <aside className="col-xl-9 col-lg-9 col-12">
+            <div className="row">
+                  <aside
+                   className={showMapView ? 'col-12' : 'col-lg-9'}
+                   >
                     <div className="d-sm-flex justify-content-between align-items-center mb-2">
                       <h4 className="mb-3 mb-sm-0">
                         {translation?.total || "Total"}{" "}
@@ -1761,9 +1712,11 @@ const index = () => {
                         {translation?.properties_in || "Properties in"}{" "}
                         {defaultCity?.name || "Kolkata"}
                       </h4>
+                      <div className="d-flex gap-2">
                       <div className="sort-by d-none d-md-block">
                         <DropdownButton
                           align="end"
+                          size='sm'
                           title={selectedOption}
                           id="dropdown-menu-align-end"
                           onClick={() => setShowDrop(!showDrop)}
@@ -1784,21 +1737,36 @@ const index = () => {
                               {option}
                             </Dropdown.Item>
                           ))}
-                        </DropdownButton>
-                        <button
-                          className={`btn btn-outline-primary ${!showMapView ? 'active' : ''}`}
+                        </DropdownButton>                        
+                      </div>
+                        <Button variant="outline-primary"
+                          className={`${!showMapView ? 'active' : ''}`}
+                          size='sm'
                           onClick={() => setShowMapView(false)}
                         >
                           <i className="bi bi-list-ul me-1"></i> List View
-                        </button>
-                        <button
-                          className={`btn btn-outline-primary ${showMapView ? 'active' : ''}`}
+                        </Button>
+                        <Button variant="outline-primary"
+                          className={`${showMapView ? 'active' : ''}`}
+                          size='sm'
                           onClick={() => setShowMapView(true)}
                         >
                           <i className="bi bi-map me-1"></i> Map View
-                        </button>
-                      </div>
+                        </Button>
+                        </div>
                     </div>
+                  </aside>
+            </div>
+            {showMapView ? (
+              <>
+                
+                <ListingMapView propertyList={propertyList} loading={loading} />
+              </>
+            ) : (
+              <>
+                <div className="row main-row">
+                  <aside className="col-xl-9 col-lg-9 col-12">
+                  
                     <div className="list-display">
                       {/* Show shimmer when loading */}
                       {loading ? (
@@ -1946,12 +1914,12 @@ const index = () => {
                                       </p>
                                     </div>
                                   </div>
-                                  <button
+                                  <Button
                                     className="btn btn-primary btn-sm"
                                     onClick={() => handleClick(property.property_id)}
                                   >
                                     {translation?.contact_now || "Contact Now"}
-                                  </button>
+                                  </Button>
                                 </div>
                               </div>
                             </div>
