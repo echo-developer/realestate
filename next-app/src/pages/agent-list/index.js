@@ -358,99 +358,7 @@ const Index = () => {
                           </Dropdown.Menu>
                         </Dropdown>
                       </Col>
-                      <Col
-                        className="col-lg col-sm-4 col-12"
-                        data-id="parent"
-                        onClick={() => toggleDropdown('property_type')}
-                      >
-                        <Dropdown
-                          className="select-dropdown mb-3 d-grid"
-                          show={dropdownState?.property_type}
-                        >
-                          <Dropdown.Toggle className="btn-form-control">
-                            {displayPropertyType()}
-                          </Dropdown.Toggle>
-                          <Dropdown.Menu
-                            className="p-3"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            {/* Purpose Tabs */}
-                            <Form.Label className="fw-bold">Purpose</Form.Label>
-                            <div className="form-field">
-                              <Nav variant="underline" activeKey={selectedTab}>
-                                <Nav.Item>
-                                  <Nav.Link
-                                    role="button"
-                                    eventKey="sale"
-                                    onClick={() => handleTab("sale")}
-                                  >
-                                    {translation?.buy || "Buy"}
-                                  </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                  <Nav.Link
-                                    role="button"
-                                    eventKey="rent"
-                                    onClick={() => handleTab("rent")}
-                                  >
-                                    {translation?.rent || "Rent"}
-                                  </Nav.Link>
-                                </Nav.Item>
-                              </Nav>
-                            </div>
-
-                            {/* Property Type Selection */}
-                            <Form.Label className="fw-bold mt-3">{translation?.type || "Type"}</Form.Label>
-                            <div className="form-field">
-                              <ButtonGroup className="btn-group-light d-flex flex-wrap">
-                                {PropertyTypeData?.map((type) => (
-                                  <React.Fragment key={type.category_id}>
-                                    <input
-                                      type="radio"
-                                      className="btn-check"
-                                      name="propertyForGroup"
-                                      id={`buy_${type.category_id}`}
-                                      value={type.category_id}
-                                      checked={
-                                        selectedPropertyType === type.category_id
-                                      }
-                                      onChange={() =>
-                                        handleSelectPropertyType(type.category_id)
-                                      }
-                                    />
-                                    <label
-                                      className="btn btn-outline-light"
-                                      htmlFor={`buy_${type.category_id}`}
-                                    >
-                                      {type.category_name}
-                                    </label>
-                                  </React.Fragment>
-                                ))}
-                              </ButtonGroup>
-                            </div>
-
-                            {/* Action Buttons */}
-                            <div className="d-flex justify-content-between mt-3">
-                              <Button
-                                variant="outline-secondary"
-                                onClick={resetSelection}
-                              >
-                                {translation?.reset || "Reset"}
-
-                              </Button>
-                              <Button
-                                variant="primary"
-                                onClick={() => {
-                                  setDropdownState({});
-                                  setIsOverlayVisible(false)
-                                }}
-                              >
-                                {translation?.done || "Done"}
-                              </Button>
-                            </div>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </Col>
+                      
                       {/* Name Search */}
                       <Col className="col-lg col-sm-6 col-12">
                         <Form.Group className="form-field with-icon-start">
@@ -488,10 +396,9 @@ const Index = () => {
               </div>
             </div>
           </div>
-          <div className="p-4">
+          <div className="p-lg-4 p-3">
             <Row>
               <Col className="col-xl-9 col-lg-8 col-12">
-                {/* Main Content */}
                 <div className="d-sm-flex justify-content-between align-items-center mb-3">
                   <h4 className="flex-grow-1 mb-3 mb-sm-0">
                     {translation?.agent_list || "Agent List"} (
@@ -507,17 +414,19 @@ const Index = () => {
                       <Form.Check
                         type="switch"
                         id="custom-switch"
-                        label={
-                          isVerified
-                            ? `${translation?.on || "ON"}`
-                            : `${translation?.off || "OFF"}`
-                        }
+                        
                         checked={isVerified}
                         onChange={handleVerifiedAgentChange}
                       />
                     </div>
                   </div>
                 </div>
+                </Col>
+              </Row>
+            <Row>
+              <Col className="col-xl-9 col-lg-8 col-12">
+                {/* Main Content */}
+                
                 {loading && (
                   <div className="loading-spinner">
                     <div className="spinner-border" role="status">
@@ -533,7 +442,7 @@ const Index = () => {
                     {agentList.map((agent) => (
                       <Col className="col-12" key={agent.id}>
                         <div className="card card-agent">                          
-                            <Row className="gx-0 align-items-center">
+                            <Row className="gx-0">
                               <Col xs={3}>
                                 <div className="card-image">
                                   <a>
@@ -544,21 +453,14 @@ const Index = () => {
                                     />
                                   </a>
                                   {/* Static Company Logo Image Only */}
-                                  <NextImage
-                                    src="/assets/images/company-logo.png"
-                                    alt="Company Logo"
-                                    width={48}
-                                    height={48}
-                                    className="c-logo"                                    
-                                    priority
-                                  />  
+                                    
                                 </div>
                               </Col>
-                              <Col xs={9}>
+                              <Col lg xs={9}>
                                 <div className="card-body">
                                   <div className="card-title">
                                     <h4>
-                                      <a>{agent?.name || "Not Available"}</a>
+                                      <a href={`/agent-details/${agent.user_id}`}>{agent?.name || "Not Available"}</a>
                                       {agent?.is_verified_agent && (
                                         <span title="Verified">
                                           <i className="icon-img-check ms-1"></i>
@@ -599,6 +501,15 @@ const Index = () => {
                                   </p>
                                   <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">English, Arabic, French, Italian</span></p>
 
+                                  <div className="mb-2">
+                                    <span className="badge badge-outline-secondary text-dark me-2">
+                                      {agent?.forSell} {translation?.sale || "SALE"}
+                                    </span>
+                                    
+                                    <span className="badge badge-outline-secondary text-dark me-2">
+                                        {agent?.forRent} {translation?.rent || "RENT"}
+                                      </span>
+                                  </div>
                                   {/* Phone
                                   <p className="mb-2">
                                     <i className="icon-feather-phone"></i>{" "}
@@ -621,7 +532,8 @@ const Index = () => {
                                     </p>
                                   )}
                                   <div className="d-grid d-sm-flex gap-2 mb-3">
-                                    <Button
+                                    
+                                      <Button
                                       variant="outline-primary"
                                       size="sm"
                                       onClick={() => setShowEnquiryModal(true)}
@@ -643,30 +555,30 @@ const Index = () => {
                                     >
                                       <Whatsapp color="#198754" size={16} />{" "}
                                       {translation?.whatsapp || "whatsapp"}
-                                    </Button>
-                                  </div>
-                                  {/* Footer badges and button */}
-                                  <div className="d-flex card-group-btn">
-                                    <div>
-                                      <span className="badge badge-outline-secondary text-dark me-2">
-                                        {agent?.forSell} {translation?.sale || "SALE"}
-                                      </span>
-                                      
-                                      <span className="badge badge-outline-secondary text-dark me-2">
-                                          {agent?.forRent} {translation?.rent || "RENT"}
-                                        </span>
-                                    </div>
+                                    </Button>                                    
 
-                                    {agent?.user_id && (
+                                    {/* {agent?.user_id && (
                                       <a
-                                        className="btn btn-primary btn-sm"
+                                        className="btn btn-primary btn-sm ms-auto"
                                         href={`/agent-details/${agent.user_id}`}
                                       >
                                         {translation?.view_profile || "View Profile"}
                                       </a>
-                                    )}
+                                    )} */}
+                                    
                                   </div>
+                                  
                                 </div>
+                              </Col>
+                              <Col lg='auto' className="p-3 align-self-end">
+                              <NextImage
+                                    src="/assets/images/company-logo.png"
+                                    alt="Company Logo"
+                                    width={48}
+                                    height={48}
+                                    className="ms-auto"                                    
+                                    priority
+                                  />
                               </Col>
                             </Row>                          
                         </div>
