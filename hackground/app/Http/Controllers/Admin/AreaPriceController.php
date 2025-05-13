@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Models\LocalityModel;
 use App\Models\LocalityAreaPrice;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -16,11 +17,12 @@ class AreaPriceController extends Controller
         $this->middleware('view_permit:area-price');
         $this->locality_area_price = $locality_area_price;
     }
-    public function AreaPrice()
+    public function AreaPrice(Request $request,LocalityModel $locality)
     {
 
         $projectData = $this->locality_area_price->getProjectLocationPrice();
         $propertyData = $this->locality_area_price->getProprtyLocationPrice();
+        $localities = $locality->fetchLocality();
         // dd($propertyData);
         foreach ($propertyData as $item) {
             LocalityAreaPrice::updateOrInsert(
@@ -51,15 +53,35 @@ class AreaPriceController extends Controller
         }
 
 
-        $locality_price_prop = LocalityAreaPrice::where([
-            ['price_for', 'prop']
-        ])->get();
+        $localityIds = $request->input('locality', []);
+        $year = $request->input('year');
+        $avgPrice = $request->input('avg_price');
 
-        $locality_price_proj = LocalityAreaPrice::where([
-            ['price_for', 'proj']
-        ])->get();
+        $locality_price_prop = LocalityAreaPrice::where('price_for', 'prop')
+            ->when(!empty($localityIds), function ($query) use ($localityIds) {
+                $query->whereIn('locality', $localityIds);
+            })
+            ->when($year, function ($query) use ($year) {
+                $query->where('year', $year);
+            })
+            ->when($avgPrice, function ($query) use ($avgPrice) {
+                $query->where('price_per_sqft', '>=', $avgPrice);
+            })
+            ->get();
 
-        return view('Admin.area_price', compact('locality_price_prop', 'locality_price_proj'));
+        $locality_price_proj = LocalityAreaPrice::where('price_for', 'proj')
+            ->when(!empty($localityIds), function ($query) use ($localityIds) {
+                $query->whereIn('locality', $localityIds);
+            })
+            ->when($year, function ($query) use ($year) {
+                $query->where('year', $year);
+            })
+            ->when($avgPrice, function ($query) use ($avgPrice) {
+                $query->where('price_per_sqft', '>=', $avgPrice);
+            })
+            ->get();
+
+        return view('Admin.area_price', compact('locality_price_prop', 'locality_price_proj', 'localities'));
     }
 
 
@@ -98,6 +120,4 @@ class AreaPriceController extends Controller
             ], 500);
         }
     }
-
-   
 }

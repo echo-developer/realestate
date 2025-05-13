@@ -1,6 +1,11 @@
 @extends('Admin.layouts.app')
 {{-- @dd($users ) --}}
+@push('custom-css')
 
+    <link href="{{ asset('assets/dist/css/select2.css') }}" type="text/css" rel="stylesheet">
+    <link href="{{ asset('assets/dist/css/select2-bootstrap-5-theme.css') }}" type="text/css" rel="stylesheet">
+
+@endpush
 @section('content')
 <div class="body-page-loader d-none">
     <div class="loader">
@@ -42,7 +47,52 @@
             margin-top: 1rem;
         }
     </style>
+    <form action="{{ route('area-price.view') }}" class="form-horizontal" novalidate="">
+        <div class="row">
+            <div class="col-xl col-md-4 col-sm-6">
+                <div class="form-field">
+                    <label>Locality</label>
+                    <select name="locality[]" class="form-select select-2" multiple>
+                        @foreach($localities as $locality)
+                        <option value="{{ $locality->locality_id }}"
+                            @if(is_array(request('locality')) && in_array($locality->locality_id, request('locality')))
+                            selected
+                            @endif
+                            >
+                            {{ $locality->name }}
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
 
+
+            <div class="col-xl col-md-4 col-sm-6">
+                <div class="form-field">
+                    <label>Year</label>
+                    <select name="year" class="form-control">
+                        <option value="" >Selete Year</option>
+                        @for ($i = date('Y'); $i >= 2000; $i--)
+                        <option value="{{ $i }}" {{ request('year') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                        @endfor
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="col-xl col-md-4 col-sm-6">
+                <div class="form-field">
+                    <label>Avg Price</label>
+                    <input type="search" class="form-control" name="avg_price" value="{{ request('avg_price') }}" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="col-sm-auto col-12 mb-3">
+                <label class="d-none d-sm-block">&nbsp;</label>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
 
     <div class="main-card mb-3 card">
         <div class="card-body">
@@ -86,7 +136,7 @@
                                         <i class="fa fa-edit text-success fa-md editButton" data-id="{{$item->id}}"></i>
                                     </td>
                                 </tr>
-                                @endforeach  
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -178,6 +228,14 @@
 
 @endsection
 @push('custom-js')
+<script src="{{ asset('assets/dist/js/select2.js') }}"></script>
+<script>
+    $(".select-2").select2({
+        theme: "bootstrap-5",
+        selectionCssClass: "select2--single",
+        dropdownCssClass: "select2--single",
+    });
+</script>
 <script>
     $(document).ready(function() {
         $('.editButton').on('click', function() {
