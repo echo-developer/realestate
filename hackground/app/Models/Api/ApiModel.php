@@ -1067,7 +1067,8 @@ class ApiModel extends Model
         if (!empty($filters['bedrooms'])) {
             $query->whereIn('properties_settings.bedrooms', $filters['bedrooms']);
         }
-
+        // Log::info('SQL Query: ' . json_encode($query->toSql(), JSON_PRETTY_PRINT));
+        // Log::info('Query Bindings: ', $query->getBindings());
         return $query->groupBy('properties_settings.area_in_sqft')->get();
     }
 
