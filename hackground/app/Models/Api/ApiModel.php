@@ -1034,16 +1034,42 @@ class ApiModel extends Model
     }
 
 
-    public function PropertyListforAgentPage($user_id)
+    public function PropertyListforAgentPage($user_id, $filters = [])
     {
+        $query = $this->basePropertyQuery()
+            ->where('properties.uid', $user_id)
+            ->addSelect('properties_settings.area_in_sqft');
 
-        return $this->basePropertyQuery()
-            ->where('properties.uid', '=', $user_id)
-            ->addSelect('properties_settings.area_in_sqft')
-            ->groupBy('properties_settings.area_in_sqft')
-            ->get();
+        if (!empty($filters['post_for'])) {
+            $query->where('properties_settings.post_for', $filters['post_for']);
+        }
+
+        if (!empty($filters['property_type'])) {
+            $query->where('properties_settings.property_type', $filters['property_type']);
+        }
+
+        if (!empty($filters['property_for'])) {
+            $query->where('properties_settings.property_type_for', $filters['property_for']);
+        }
+
+        if (!empty($filters['locality']) && isset($filters['locality'])) {
+            $query->where('properties_location.locality', $filters['locality']);
+        }
+
+        if (!empty($filters['min_budget'])) {
+            $query->where('properties_settings.expected_price', '>=', $filters['min_budget']);
+        }
+
+        if (!empty($filters['max_budget'])) {
+            $query->where('properties_settings.expected_price', '<=', $filters['max_budget']);
+        }
+
+        if (!empty($filters['bedrooms'])) {
+            $query->whereIn('properties_settings.bedrooms', $filters['bedrooms']);
+        }
+
+        return $query->groupBy('properties_settings.area_in_sqft')->get();
     }
-
 
 
     public function queryForScheduleDetails($enq_id)

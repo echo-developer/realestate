@@ -146,7 +146,16 @@ class AgentDetailsController extends Controller
             $currentPage = $rq->input('currentPage', 1);
             $perPage = $rq->input('perPage', 10);
             $offSet = ($currentPage - 1) * $perPage;
-            $property_details = $this->apiModel->PropertyListforAgentPage($rq->agent_id);
+            $filters = [
+                'post_for' => $rq->input('post_for'),
+                'property_type' => $rq->input('property_type'),
+                'property_for' => $rq->input('property_for'),
+                'locality' => $rq->input('locality'),
+                'min_budget' => $rq->input('min_budget'),
+                'max_budget' => $rq->input('max_budget'),
+               'bedrooms' => is_string($rq->input('bedrooms')) ? json_decode($rq->input('bedrooms'), true) : ($rq->input('bedrooms') ?? []),
+            ];
+            $property_details = $this->apiModel->PropertyListforAgentPage($rq->agent_id, $filters);
 
 
             $formattedPropertiesDetails = $property_details->map(function ($property) {
