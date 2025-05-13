@@ -303,7 +303,7 @@ class PropertyDetailsController extends Controller
                             'id' => UniquePropertyCode($similarProperty->id),
                             'property_name' => $similarProperty->name,
                             'slug' => $similarProperty->slug,
-                            'address' => isset($similarProperty->location->address) ? $similarProperty->location->address : null,
+                            'address' => isset($similarProperty->location->property_address) ? $similarProperty->location->property_address : null,
                             'possession_status' => isset($similarProperty->additional->possession_status)
                                 ? get_name_by_id('property_status_names', 'status_id', $similarProperty->additional->possession_status, 'en')
                                 : null,
