@@ -51,10 +51,10 @@ const YearlyPriceTrendChart = ({ data }) => {
 
   console.log("currency", currency)
   return (
-    <div className="container my-4">
-      <div className="card shadow-sm" style={{ maxWidth: '800px', margin: '0 auto' }}>
+    <div className="my-4">
+      <div className="card shadow-sm">
         <div className="card-body">
-          <h5 className="card-title text-center mb-4">Yearly Price Trend - {data[0]?.locality_name}</h5>
+          <h4 className="card-title text-primary mb-3">Yearly Price Trend - {data[0]?.locality_name}</h4>
           <div style={{ height: '350px' }}>
             <Line data={chartData} options={options} />
           </div>

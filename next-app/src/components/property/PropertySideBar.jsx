@@ -215,9 +215,9 @@ const PropertySidebar = ({
                   <div className="mb-3">
                     <img
                       alt="Agent image"
-                      height="84"
-                      width="84"
-                      className="rounded-circle"
+                      height="100"
+                      width="100"
+                      className="avatar rounded-circle"
                       src={`${propertyDetails?.user_details?.image ||
                         "/assets/images/user.jpg"
                         }`}

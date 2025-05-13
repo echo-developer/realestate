@@ -805,6 +805,8 @@ ul {
 		}
 	}
 	&.list-none {
+		list-style: none;
+		padding: 0;
 		&>li {
 			padding: 0;
 		}
@@ -2408,6 +2410,7 @@ h4 {
 		width: 100px;
 		height: 100px;
 		margin: auto;
+		object-fit: cover;
 		position: relative;
 
 		&>img {

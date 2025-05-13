@@ -50,7 +50,7 @@ const PropertyLandmarkData = ({ detailsData }) => {
                           </h5>
                         </div>
                       </div>
-                      <ul className="mb-0">
+                      <ul className="list-none mb-0">
                         {itemsToShow.map((item, i) => (
                           <li key={i}>
                            {item.name} - {item?.distance ? `${convert(Number(item?.distance))}` : ""}

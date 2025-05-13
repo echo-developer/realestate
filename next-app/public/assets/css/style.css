@@ -32999,6 +32999,10 @@ ul.list-3 > li:before {
 ul.list-get > li {
   margin-bottom: 0.5rem;
 }
+ul.list-none {
+  list-style: none;
+  padding: 0;
+}
 ul.list-none > li {
   padding: 0;
 }
@@ -34414,6 +34418,7 @@ h4 .icon-img-check, .h4 .icon-img-check {
   width: 100px;
   height: 100px;
   margin: auto;
+  object-fit: cover;
   position: relative;
 }
 .user-profile .avatar > img {
