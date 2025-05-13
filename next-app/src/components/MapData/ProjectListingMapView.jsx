@@ -279,7 +279,7 @@ export default function ProjectListingMapView({ loading, projectList }) {
 
             </GoogleMap>
           </>) : (<>
-            <div></div>
+            <div>loading...</div>
           </>)}
         </div>
       </Col>

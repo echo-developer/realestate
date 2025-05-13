@@ -28,6 +28,7 @@ import { GeoAlt, Search } from "react-bootstrap-icons";
 import ProjectMobileFilters from "@/components/addtional/ProjectMobileFilter";
 import ProjectListingMapView from "@/components/MapData/ProjectListingMapView";
 import Head from "next/head";
+import ProjectMobileMapView from "@/components/MapData/ProjectMapMobile";
 
 const Index = () => {
   const [showMapView, setShowMapView] = useState(false);
@@ -362,8 +363,11 @@ const Index = () => {
             
             {showMapView ? (<>
               <>
-                
+               {isMobile ? (<>
+                <ProjectMobileMapView loading={loading} projectList={projectListData} />
+               </>) : (<>
                 <ProjectListingMapView loading={loading} projectList={projectListData} />
+               </>)}
               </>
             </>) : (<>
               <div className="row main-row">

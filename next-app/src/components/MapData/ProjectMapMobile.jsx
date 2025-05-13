@@ -6,8 +6,8 @@ import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import { ShimmerContentBlock } from "react-shimmer-effects";
 import { useAuth } from "@/context/AuthProvider";
 import useTranslation from "@/hooks/useTranslation";
-import { Container, Row, Col, Button, Form, Offcanvas, Card } from "react-bootstrap";
-// import './map.css';
+import { Row, Col, Button, Form, Offcanvas, Card } from "react-bootstrap";
+import './map.css';
 
 const containerStyle = {
     width: "100%",
@@ -22,10 +22,7 @@ const mapOptions = {
 
 
 
-export default function PropertyMapMobileView({
-    loading,
-    propertyList,
-}) {
+export default function ProjectMobileMapView({ loading, projectList }) {
     const translation = useTranslation();
     const [center, setCenter] = useState({
         lat: 0,
@@ -33,52 +30,26 @@ export default function PropertyMapMobileView({
     })
 
     useEffect(() => {
-        if (propertyList?.length > 0) {
-            const firstProperty = propertyList[0];
-            let lat = parseFloat(firstProperty?.address_lat);
-            let lng = parseFloat(firstProperty?.address_lan);
-
-            if (isNaN(lat) || isNaN(lng)) {
-                const secondProperty = propertyList[1];
-                if (secondProperty) {
-                    lat = parseFloat(secondProperty?.address_lat);
-                    lng = parseFloat(secondProperty?.address_lan);
-                }
-            }
-
-            if (isNaN(lat) || isNaN(lng)) {
-                const thirdProperty = propertyList[2];
-                if (thirdProperty) {
-                    lat = parseFloat(thirdProperty?.address_lat);
-                    lng = parseFloat(thirdProperty?.address_lan);
-                }
-            }
-
-            if (!isNaN(lat) && !isNaN(lng)) {
-                setCenter({
-                    lat: lat,
-                    lng: lng,
-                });
-            }
+        if (projectList?.length > 0) {
+            const firstProject = projectList[0]
+            setCenter({
+                lat: parseFloat(firstProject?.address_lat),
+                lng: parseFloat(firstProject?.address_lan)
+            })
         }
-    }, [propertyList]);
-
+    }, [projectList])
 
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
     })
-    const { defaultCity, formatPrice } = useAuth();
+    const { currencyCode, formatPrice } = useAuth();
     const [selectedMarker, setSelectedMarker] = useState(null);
     const [hoveredProperty, setHoveredProperty] = useState(null);
-
-
     const [showFullList, setShowFullList] = useState(false);
 
-
-
+    console.log("mobile view ran")
     return (
         <>
-            {/* Full Screen Map Wrapper */}
             <div className="position-relative" style={{ height: '100vh', width: '100vw', overflow: 'hidden' }}>
                 {isLoaded ? (<>
                     <GoogleMap
@@ -87,7 +58,7 @@ export default function PropertyMapMobileView({
                         zoom={12}
                         options={mapOptions}
                     >
-                        {propertyList?.map((property) => {
+                        {projectList?.map((property) => {
                             return (
                                 <Marker
                                     key={property.id}
@@ -96,12 +67,12 @@ export default function PropertyMapMobileView({
                                         lng: parseFloat(property.address_lan)
                                     }}
                                     icon={
-                                        hoveredProperty == property.property_id
+                                        hoveredProperty?.id == property.id
                                             ? 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
                                             : undefined
                                     }
                                     animation={
-                                        hoveredProperty == property.property_id && window?.google
+                                        hoveredProperty?.id == property.id && window?.google
                                             ? window.google.maps.Animation.BOUNCE
                                             : undefined
                                     }
@@ -115,12 +86,12 @@ export default function PropertyMapMobileView({
                                     lat: parseFloat(hoveredProperty.address_lat),
                                     lng: parseFloat(hoveredProperty.address_lan)
                                 }}
-                                onCloseClick={() => setHoveredProperty(null)}
+                                onCloseClick={() => setHoveredMarkerId(null)}
                             >
                                 <div style={{ maxWidth: '200px' }}>
                                     <img
                                         src={
-                                            hoveredProperty.galleries?.[0]?.images?.[0]?.image_url ||
+                                            hoveredProperty.gallery?.[0]?.images?.[0]?.file ||
                                             '/assets/images/property/default-property-1.jpg'
                                         }
                                         alt="Property"
@@ -131,7 +102,7 @@ export default function PropertyMapMobileView({
                                             borderRadius: '4px'
                                         }}
                                     />
-                                    <h6 style={{ margin: '8px 0 4px' }}>{hoveredProperty.property_name}</h6>
+                                    <h6 style={{ margin: '8px 0 4px' }}>{hoveredProperty.project_name}</h6>
                                     <p style={{ fontSize: '12px', margin: 0 }}>{hoveredProperty.address}</p>
                                 </div>
                             </InfoWindow>
@@ -148,7 +119,7 @@ export default function PropertyMapMobileView({
                                 <div style={{ maxWidth: '200px' }}>
                                     <img
                                         src={
-                                            selectedMarker.galleries?.[0]?.images?.[0]?.image_url ||
+                                            selectedMarker.gallery?.[0]?.images?.[0]?.file ||
                                             '/assets/images/property/default-property-1.jpg'
                                         }
                                         alt="Property"
@@ -168,11 +139,10 @@ export default function PropertyMapMobileView({
 
                     </GoogleMap>
                 </>) : (<>
-                    <div>Loading...</div>
+                    <div>loading...</div>
                 </>)}
             </div>
 
-            {/* Bottom Preview Panel */}
             {!showFullList && (
                 <div
                     className="position-fixed bottom-0 start-0 end-0 bg-white shadow-lg rounded-top"
@@ -191,8 +161,9 @@ export default function PropertyMapMobileView({
                             <Card.Body className="p-2 d-flex align-items-start">
                                 <div style={{ width: '100px', height: '75px', borderRadius: '6px', overflow: 'hidden' }}>
                                     <CardImageSlider
-                                        data={propertyList[0]}
+                                        data={projectList[0]}
                                         showSq={true}
+                                        keyword={"gallery"}
                                         icons={true}
                                         showFavIcon={false}
                                         showImgCount={false}
@@ -200,15 +171,15 @@ export default function PropertyMapMobileView({
                                 </div>
                                 <div className="ms-2 flex-grow-1">
                                     <div className="text-primary fw-semibold small">
-                                        {formatPrice(propertyList[0]?.exp_price) || ""}
+                                        {formatPrice(projectList?.exp_price) || ""}
                                     </div>
                                     <div className="small fw-semibold text-truncate" style={{ maxWidth: '100%' }}>
-                                        {propertyList[0]?.property_name}
+                                        {projectList?.property_name}
                                     </div>
                                     <div className="text-muted small d-flex justify-content-between mt-1" style={{ maxWidth: '100%' }}>
-                                        <small><i className="icon-img-bed"></i> {propertyList[0]?.bedrooms || ''}</small>
-                                        <small><i className="icon-img-tub"></i> {propertyList[0]?.bathroom || ''}</small>
-                                        <small><i className="icon-img-ratio"></i> {propertyList[0]?.carpet_area || ''}</small>
+                                        <small><i className="icon-img-bed"></i> {projectList?.bedrooms || ''}</small>
+                                        <small><i className="icon-img-tub"></i> {projectList?.bathroom || ''}</small>
+                                        <small><i className="icon-img-ratio"></i> {projectList?.carpet_area || ''}</small>
                                     </div>
                                 </div>
                             </Card.Body>
@@ -218,7 +189,6 @@ export default function PropertyMapMobileView({
                 </div>
             )}
 
-            {/* Full Offcanvas Property List */}
             <Offcanvas
                 show={showFullList}
                 onHide={() => setShowFullList(false)}
@@ -230,17 +200,18 @@ export default function PropertyMapMobileView({
                     <Offcanvas.Title></Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
-                    {propertyList?.map((property, i) => {
+                    {projectList?.map((project, i) => {
                         return (
                             <Card className="mb-3 shadow-sm border-0 rounded-3" key={i} onClick={() => {
-                                setHoveredProperty(property);
+                                setHoveredProperty(project);
                                 setShowFullList(false);
                             }}>
                                 <Card.Body className="p-2 d-flex align-items-start">
                                     <div style={{ width: '100px', height: '75px', borderRadius: '6px', overflow: 'hidden', flexShrink: 0 }}>
                                         <CardImageSlider
-                                            data={property}
+                                            data={project}
                                             showSq={true}
+                                            keyword={"gallery"}
                                             icons={true}
                                             showFavIcon={false}
                                             showImgCount={false}
@@ -249,20 +220,20 @@ export default function PropertyMapMobileView({
 
                                     <div className="ms-2 flex-grow-1">
                                         <div className="text-primary fw-semibold small mb-1">
-                                            {formatPrice(property?.exp_price) || ""}
+                                            {formatPrice(project?.expected_price) || ""}
                                         </div>
                                         <div className="small fw-semibold text-truncate" style={{ maxWidth: '100%' }}>
-                                            {property?.property_name}
+                                            {project.project_name}
                                         </div>
                                         <div className="d-flex justify-content-between mt-1 text-muted small" style={{ maxWidth: '100%' }}>
-                                            {property?.bedrooms && (
-                                                <small><i className="icon-img-bed"></i> {property.bedrooms}</small>
+                                            {project?.occupied_area && (
+                                                <small><i className="icon-img-ratio"></i> {project.occupied_area} {project?.project?.unit_type}</small>
                                             )}
-                                            {property?.bathroom && (
-                                                <small><i className="icon-img-tub"></i> {property.bathroom}</small>
+                                            {project?.total_area && (
+                                                <small><i className="icon-img-ratio"></i> {project.total_area} {project?.project?.unit_type}</small>
                                             )}
-                                            {property?.carpet_area && (
-                                                <small><i className="icon-img-ratio"></i> {property.carpet_area}</small>
+                                            {project?.possession_status && (
+                                                <small><i className="icon-img-check"></i> {project.possession_status}</small>
                                             )}
                                         </div>
 
@@ -276,6 +247,6 @@ export default function PropertyMapMobileView({
                 </Offcanvas.Body>
             </Offcanvas>
         </>
-
-    );
+    )
 }
+
