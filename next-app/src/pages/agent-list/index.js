@@ -529,9 +529,7 @@ const Index = () => {
                                 <div className="card-image">
                                   <a>
                                     <img
-                                      src={
-                                        agent?.image || "/assets/images/agents/user.jpg"
-                                      }
+                                      src={agent?.image || "/assets/images/agents/user.jpg"}
                                       alt={agent?.name || "User"}
                                       className="img-fluid"
                                     />
@@ -569,39 +567,55 @@ const Index = () => {
                                                 objectFit: "contain",
                                               }}
                                             />
-                                            <small className="fw-medium text-dark">
-                                              {badge.name}
-                                            </small>
+                                            <small className="fw-medium text-dark">{badge.name}</small>
                                           </div>
                                         ))}
                                       </div>
                                     )}
                                   </div>
 
-                                  <p className="mb-1">
-                                    <i className="icon-img-company"></i>{" "}
-                                    {agent?.company_name || "Originate Soft Pvt Ltd"}
+                                  {/* Company Name */}
+                                  <p className="mb-1 d-flex align-items-center gap-2">
+                                    <i className="icon-img-company"></i>
+                                    <span>{agent?.company_name || "Originate Soft Pvt Ltd"}</span>
                                   </p>
 
+                                  {/* Static Company Logo Image Only */}
+                                  <div className="mb-2">
+                                    <img
+                                      src="/assets/images/company-logo.png"
+                                      alt="Company Logo"
+                                      style={{
+                                        width: "50px",
+                                        height: "50px",
+                                        objectFit: "contain",
+                                      }}
+                                    />
+                                  </div>
+
+                                  {/* Phone */}
                                   <p className="mb-2">
                                     <i className="icon-feather-phone"></i>{" "}
                                     {agent.phone || "Not Available"}
                                   </p>
 
+                                  {/* Email */}
                                   <p className="mb-2">
                                     <i className="icon-feather-mail"></i>{" "}
                                     {agent.email || "Not Available"}
                                   </p>
 
+                                  {/* Service Area */}
                                   {agent?.service_area?.length > 0 && (
                                     <p className="mb-1">
-                                      <span className="text-muted ">
+                                      <span className="text-muted">
                                         {translation?.serve_in || "Serve in"}
                                       </span>{" "}
                                       {[...new Set(agent?.service_area?.map((area) => area.city))].join(", ")}
                                     </p>
                                   )}
 
+                                  {/* Footer badges and button */}
                                   <div className="d-flex card-group-btn">
                                     <div>
                                       {!agent?.forSell === 0 && (
