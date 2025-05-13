@@ -5,22 +5,25 @@ import "react-multi-carousel/lib/styles.css";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import NextImage from "next/image";
 import { toast } from "react-toastify";
 import { Offcanvas } from "react-bootstrap";
 import AgentReview from "@/components/userReview/AgentReview";
 import useTranslation from "@/hooks/useTranslation";
 import EnquiryForm from "@/components/charts/EnquiryForm";
 import {
+  Mic,
   GeoAlt,
   EnvelopeFill,
   PhoneFill,
   Whatsapp,
 } from "react-bootstrap-icons";
 import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
-import { Row, Col, Button, Modal } from "react-bootstrap";
+import { Row, Col, Button, Modal, Dropdown, ButtonGroup, Form, Nav } from "react-bootstrap";
 import AgentEnquiryForm from "@/components/addtional/AgentEnquiryForm";
 import { useAuth } from "@/context/AuthProvider";
 import useAdvertisement from "@/hooks/useAdvertisement";
+import Locality from "@/components/Locality/Locality";
 
 const Index = () => {
   const router = useRouter();
@@ -281,18 +284,31 @@ const Index = () => {
       <section className="section profile">
         <div className="container-fluid">
           <Row>
-            <Col className="col-lg-8 col-12">
-              <div className="card border-0 shadow-sm mb-4">
+            <Col lg={8} xs={12}>
+              <div className="search-form">
+
+              </div>
+              <div className="card card-agent h-auto border-0 shadow-sm mb-4">
                 <div className="card-body">
                   <Row className="gx-3 text-center text-sm-start">
                     <Col className="col-sm-auto col-12 mb-3 mb-sm-0">
-                      <img
-                        src={
-                          agentDetailsData?.image || "/assets/images/user.jpg"
-                        }
-                        alt="Agent Logo"
-                        height={"180"}
-                      />
+                      <div className="card-image">
+                        <img
+                          src={
+                            agentDetailsData?.image || "/assets/images/user.jpg"
+                          }
+                          alt="Agent Logo"
+                          height={"180"}
+                        />
+                        <NextImage
+                          src="/assets/images/company-logo.png"
+                          alt="Company Logo"
+                          width={48}
+                          height={48}
+                          className="c-logo"                                    
+                          priority
+                        />  
+                      </div>
                     </Col>
                     <Col className="col-sm col-12">
                       <h4 className="mb-1">
@@ -303,19 +319,32 @@ const Index = () => {
                         <i className="icon-img-company"></i>
                         {agentDetailsData?.company_name || "Not Available"}
                       </p>
+                      <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">English, Arabic, French, Italian</span></p>
+                      {/* Service Area */}
+                      
+                        <p className="mb-3">
+                          <GeoAlt color="#1365CF" size={18} /> {translation?.serve_in || "Serve in"}{": "}
+                          <span className="text-muted">
+                            Garia, New Garia, Ajay Nager, Medica, Kalikapur, Ruby 
+                          </span>                                      
+                        </p>
+                      
+
+                      {/* Email
                       <p className="mb-2">
                         <i className="icon-feather-mail text-primary"></i>{" "}
                         {agentDetailsData?.email ||
                           `${translation?.not_available || "Not available"}`}
-                      </p>
+                      </p> */}
+                      {/* Phone
                       <p>
                         <i className="icon-feather-phone text-primary"></i>{" "}
                         {agentDetailsData?.phone ||
                           `${translation?.not_available || "Not available"}`}
-                      </p>
+                      </p> */}
                       <Row className="">
                         <Col className="col-xl col-12">
-                          <div className="d-flex gap-2 mb-3 mb-xl-0">
+                          <div className="d-flex gap-2 mb-3">
                             <Button
                               variant=""
                               className="bg-warning-subtle"
@@ -356,30 +385,30 @@ const Index = () => {
                               {translation?.resopnse_broker || "Responsive Broker"}
                             </Button>
                           </div>
-                        </Col>
-                        <Col className="col-xl-auto col-12">
+                          
+
                           <div className="d-grid d-sm-flex gap-2">
                             <Button
-                              variant="primary"
+                              variant="outline-primary"
                               size="sm"
                               onClick={() => setShowEnquiryModal(true)}
                             >
-                              <EnvelopeFill color="white" size={16} /> {translation?.email || "Email"}
+                              <EnvelopeFill color="#1365CF" size={16} /> {translation?.email || "Email"}
                             </Button>
                             <Button
-                              variant="info"
+                              variant="outline-info"
                               size="sm"
-                              className="text-white"
                               onClick={() => setShowEnquiryModal(true)}
+                              style={{ minWidth: '72px' }}
                             >
-                              <PhoneFill color="white" size={16} /> {translation?.call || "Call"}
+                              <PhoneFill color="#0dcaf0" size={16} /> {translation?.call || "Call"}
                             </Button>
                             <Button
-                              variant="success"
+                              variant="outline-success"
                               size="sm"
                               onClick={() => setShowEnquiryModal(true)}
                             >
-                              <Whatsapp color="white" size={16} />{" "}
+                              <Whatsapp color="#198754" size={16} />{" "}
                               {translation?.whatsapp || "whatsapp"}
                             </Button>
                           </div>
@@ -387,9 +416,350 @@ const Index = () => {
                       </Row>
                     </Col>
                   </Row>
+                  <div className="d-none d-lg-block mb-2">
+                <h4>{translation?.about || "About"}
+                </h4>
+                <p>
+                  <span className="text-muted">{translation?.broker_type || "Broker Type:"}
+                  </span>
+                  {agentDetailsData?.broker_type === "I"
+                    ? "Indepedent"
+                    : agentDetailsData?.broker_type === "F"
+                      ? "Franchise"
+                      : agentDetailsData?.broker_type === "A"
+                        ? "Agent"
+                        : "Not Available"}
+                </p>
+                <p>
+                  <span className="text-muted">{translation?.expertise || "Expertise:"}
+                  </span>{" "}
+                  {agentDetailsData?.specialization || "Not Available"}
+                </p>
+                <p>
+                  <span className="text-muted">{translation?.address || "Address:"}
+                  </span>{" "}
+                  {agentDetailsData?.address || "Not Available"}
+                </p>
+                <p>
+                  <span className="text-muted">{translation?.service_areas || "Service Areas:"}
+                  </span>
+                  {[
+                    ...new Set(
+                      agentDetailsData?.service_area?.map((area) => area.city)
+                    ),
+                  ].join(", ")}
+                </p>
+                <p>
+                  <span className="text-muted">{translation?.social_media || "Social Media:"}
+                  </span>
+                  {[
+                    ...new Set(
+                      agentDetailsData?.social?.map(
+                        (area) => area.platform_name
+                      )
+                    ),
+                  ].join(", ")}
+                </p>
+                <p>
+                  <span className="text-muted">{translation?.properties_for_sale || "Properties For Sale"}
+                  </span>  (
+                  {agentDetailsData?.forSell}), {translation?.for_rent || "For Rent"}
+                  (
+                  {agentDetailsData?.forRent})
+                </p>
+                <p>
+                  <span className="text-muted">{translation?.licence_number || "Licence Number:"}
+                  </span>{" "}
+                  {agentDetailsData?.license_no || "Not Available"}
+                </p>
+                <p>
+                  <span className="text-muted">{translation?.business_phone || "Business Phone:"}
+                  </span>{" "}
+                  {agentDetailsData?.bussiness_phone || "Not Available"}
+                </p>
+                <p>
+                  <span className="text-muted">{translation?.business_email || "Business Email:"}
+                  </span>{" "}
+                  {agentDetailsData?.bussiness_email || "Not Available"}
+                </p>
+                <p>
+                  <span className="text-muted">{translation?.company_name || "Company Name:"}
+                  </span>{" "}
+                  {agentDetailsData?.company_name || "Not Available"}
+                </p>
+                <p>
+                  <span className="text-muted">{translation?.working_hours || "Working Hours:"}
+                  </span>{" "}
+                  {agentDetailsData?.opening_hours} -{" "}
+                  {agentDetailsData?.closing_hours}
+                </p>
+                <p>
+                  <span className="text-muted d-block">{translation?.description || "Description:"}
+                  </span>
+                  {agentDetailsData?.description || "Not Available"}
+                </p>
+                <p>
+                  <span className="text-muted">{translation?.experience || "Experience:"}
+                  </span>{" "}
+                  {agentDetailsData?.experience_yr || "Not Available"}
+                  {agentDetailsData?.experience_yr && "Years"}
+                </p>
+              </div>
                 </div>
               </div>
+              <form id="">
+                <Row className="gx-3">
+                  <Col lg='auto' sm={2} xs='auto'>
+                    <Dropdown className="mb-2">
+                      <Dropdown.Toggle
+                        variant="outline-secondary"
+                        className="btn-form-control"
+                      >
+                        Buy
+                      </Dropdown.Toggle>
 
+                      <Dropdown.Menu>
+                        <Dropdown.Item href="#/action-1">Buy</Dropdown.Item>
+                        <Dropdown.Item href="#/action-2">Rent</Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Col>
+                  <Col lg xs={10}>
+                    <Locality />
+                  </Col>
+                  <Col className="col-lg col-sm-4 col-12">
+                    <Dropdown className="select-dropdown mb-3 d-grid" >
+                      <Dropdown.Toggle className="btn-form-control">
+                        Property Type
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu className="p-3">
+                        <div className="form-field">
+                          <Nav variant="underline">
+                            <Nav.Item>
+                              <Nav.Link role="button">Residential</Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                              <Nav.Link role="button">Commercial</Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                              <Nav.Link role="button">Agricultural</Nav.Link>
+                            </Nav.Item>
+                          </Nav>
+                        </div>
+
+                        <div className="mt-3">
+                          <div className="form-field">
+                            <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                              <div className="me-2 mb-2">
+                                <input
+                                  type="radio"
+                                  className="btn-check"
+                                  name="propertyForGroup"
+                                  id="propertyFor-1"
+                                />
+                                <label
+                                  className="btn btn-outline-light btn-sm"
+                                  htmlFor="propertyFor-1"
+                                >
+                                  Apartments / Flats
+                                </label>
+                              </div>
+                              
+                              <div className="me-2 mb-2">
+                                <input
+                                  type="radio"
+                                  className="btn-check"
+                                  name="propertyForGroup"
+                                  id="propertyFor-2"
+                                />
+                                <label
+                                  className="btn btn-outline-light btn-sm"
+                                  htmlFor="propertyFor-2"
+                                >
+                                  Villas
+                                </label>
+                              </div>
+                              <div class="me-2 mb-2">
+                                <input
+                                 type="radio" 
+                                 class="btn-check" 
+                                 id="propertyFor-3" 
+                                 value="6" 
+                                 name="propertyForGroup"
+                                />
+                                <label class="btn btn-outline-light btn-sm" for="propertyFor-3">Residential House</label>
+                              </div>
+                              <div className="me-2 mb-2">
+                                <input
+                                  type="radio"
+                                  className="btn-check"
+                                  name="propertyForGroup"
+                                  id="propertyFor-4"
+                                />
+                                <label
+                                  className="btn btn-outline-light btn-sm"
+                                  htmlFor="propertyFor-4"
+                                >
+                                  Penthouse
+                                </label>
+                              </div>
+                            </ButtonGroup>
+                          </div>
+                          
+                        </div>
+
+                        <div className="d-flex justify-content-between mt-3">
+                          <Button variant="outline-secondary">Reset</Button>
+                          <Button variant="primary">Done</Button>
+                        </div>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Col>
+
+                  <Col className="col-lg col-sm-4 col-12">
+                    <Dropdown className="select-dropdown d-grid mb-3" >
+                      <Dropdown.Toggle className="btn-form-control">
+                        Beds, Baths, Kitchens
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                        <div>
+                          <label className="fw-bold mb-2">Beds</label>
+                          <ButtonGroup className="btn-group-light d-flex gap-2">
+                            <div>
+                              <input type="checkbox" className="btn-check" id="bedroom-1" />
+                              <label className="btn btn-outline-light btn-sm" htmlFor="bedroom-1">
+                                1
+                              </label>
+                            </div>
+                            <div>
+                              <input type="checkbox" className="btn-check" id="bedroom-2" />
+                              <label className="btn btn-outline-light btn-sm" htmlFor="bedroom-2">
+                                2
+                              </label>
+                            </div>
+                            <div>
+                              <input type="checkbox" className="btn-check" id="bedroom-3" />
+                              <label className="btn btn-outline-light btn-sm" htmlFor="bedroom-3">
+                                3
+                              </label>
+                            </div>
+                            <div>
+                              <input type="checkbox" className="btn-check" id="bedroom-4" />
+                              <label className="btn btn-outline-light btn-sm" htmlFor="bedroom-4">
+                                4
+                              </label>
+                            </div>
+                            <div>
+                              <input type="checkbox" className="btn-check" id="bedroom-5" />
+                              <label className="btn btn-outline-light btn-sm" htmlFor="bedroom-5">
+                                5
+                              </label>
+                            </div>
+                            <div>
+                              <input type="checkbox" className="btn-check" id="bedroom-5" />
+                              <label className="btn btn-outline-light btn-sm" htmlFor="bedroom-5">
+                                6
+                              </label>
+                            </div>
+                            <div>
+                              <input type="checkbox" className="btn-check" id="bedroom-5" />
+                              <label className="btn btn-outline-light btn-sm" htmlFor="bedroom-5">
+                                7
+                              </label>
+                            </div>
+                            <div>
+                              <input type="checkbox" className="btn-check" id="bedroom-5" />
+                              <label className="btn btn-outline-light btn-sm" htmlFor="bedroom-5">
+                                8
+                              </label>
+                            </div>
+                          </ButtonGroup>
+                        </div>
+
+                        <div className="mt-3">
+                          <label className="fw-bold mb-2">Baths</label>
+                          <ButtonGroup className="btn-group-light d-flex gap-2">
+                            <div>
+                              <input type="checkbox" className="btn-check" id="bathroom-1" />
+                              <label className="btn btn-outline-light btn-sm" htmlFor="bathroom-1">
+                                1
+                              </label>
+                            </div>
+                            <div>
+                              <input type="checkbox" className="btn-check" id="bathroom-2" />
+                              <label className="btn btn-outline-light btn-sm" htmlFor="bathroom-2">
+                                2
+                              </label>
+                            </div>
+                          </ButtonGroup>
+                        </div>
+
+                        <div className="mt-3">
+                          <label className="fw-bold mb-2">Kitchens</label>
+                          <ButtonGroup className="btn-group-light d-flex gap-2">
+                            <div>
+                              <input type="checkbox" className="btn-check" id="kitchen-1" />
+                              <label className="btn btn-outline-light btn-sm" htmlFor="kitchen-1">
+                                1
+                              </label>
+                            </div>
+                            <div>
+                              <input type="checkbox" className="btn-check" id="kitchen-2" />
+                              <label className="btn btn-outline-light btn-sm" htmlFor="kitchen-2">
+                                2
+                              </label>
+                            </div>
+                          </ButtonGroup>
+                        </div>
+
+                        <div className="d-flex justify-content-between mt-3">
+                          <Button variant="outline-secondary">Reset</Button>
+                          <Button variant="primary">Done</Button>
+                        </div>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Col>
+
+                  <Col className="col-lg col-sm-4 col-12">
+                    <Dropdown className="select-dropdown d-grid mb-3">
+                      <Dropdown.Toggle className="btn-form-control">
+                        Budget
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                        <Row className="gx-2">
+                          <Col className="col-6">
+                            <Form.Group className="dropdown minMax">
+                              <Form.Label>Min</Form.Label>
+                              <input
+                                type="number"
+                                className="form-control"
+                                placeholder="00"
+                              />
+                            </Form.Group>
+                          </Col>
+                          <Col className="col-6">
+                            <Form.Group className="dropdown minMax">
+                              <Form.Label>Max</Form.Label>
+                              <input
+                                type="number"
+                                className="form-control"
+                                placeholder="00"
+                              />
+                            </Form.Group>
+                          </Col>
+                        </Row>
+
+                        <div className="d-flex justify-content-between mt-3">
+                          <Button variant="outline-secondary">Reset</Button>
+                          <Button variant="primary">Done</Button>
+                        </div>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Col>
+                </Row>
+              </form>
               <div className="card border-0 shadow-sm d-lg-none mb-4">
                 <div className="card-body">
                   <h4>{translation?.about || "About"}
@@ -664,96 +1034,8 @@ const Index = () => {
               )}
               {/* )} */}
             </Col>
-            <Col className="col-lg-4 col-12">
-              <div className="d-none d-lg-block mb-2">
-                <h4>{translation?.about || "About"}
-                </h4>
-                <p>
-                  <span className="text-muted">{translation?.broker_type || "Broker Type:"}
-                  </span>
-                  {agentDetailsData?.broker_type === "I"
-                    ? "Indepedent"
-                    : agentDetailsData?.broker_type === "F"
-                      ? "Franchise"
-                      : agentDetailsData?.broker_type === "A"
-                        ? "Agent"
-                        : "Not Available"}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.expertise || "Expertise:"}
-                  </span>{" "}
-                  {agentDetailsData?.specialization || "Not Available"}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.address || "Address:"}
-                  </span>{" "}
-                  {agentDetailsData?.address || "Not Available"}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.service_areas || "Service Areas:"}
-                  </span>
-                  {[
-                    ...new Set(
-                      agentDetailsData?.service_area?.map((area) => area.city)
-                    ),
-                  ].join(", ")}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.social_media || "Social Media:"}
-                  </span>
-                  {[
-                    ...new Set(
-                      agentDetailsData?.social?.map(
-                        (area) => area.platform_name
-                      )
-                    ),
-                  ].join(", ")}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.properties_for_sale || "Properties For Sale"}
-                  </span>  (
-                  {agentDetailsData?.forSell}), {translation?.for_rent || "For Rent"}
-                  (
-                  {agentDetailsData?.forRent})
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.licence_number || "Licence Number:"}
-                  </span>{" "}
-                  {agentDetailsData?.license_no || "Not Available"}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.business_phone || "Business Phone:"}
-                  </span>{" "}
-                  {agentDetailsData?.bussiness_phone || "Not Available"}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.business_email || "Business Email:"}
-                  </span>{" "}
-                  {agentDetailsData?.bussiness_email || "Not Available"}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.company_name || "Company Name:"}
-                  </span>{" "}
-                  {agentDetailsData?.company_name || "Not Available"}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.working_hours || "Working Hours:"}
-                  </span>{" "}
-                  {agentDetailsData?.opening_hours} -{" "}
-                  {agentDetailsData?.closing_hours}
-                </p>
-                <p>
-                  <span className="text-muted d-block">{translation?.description || "Description:"}
-                  </span>
-                  {agentDetailsData?.description || "Not Available"}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.experience || "Experience:"}
-                  </span>{" "}
-                  {agentDetailsData?.experience_yr || "Not Available"}
-                  {agentDetailsData?.experience_yr && "Years"}
-                </p>
-              </div>
+            <Col lg={4} xs={12}>
+              
               <>
                 {adsData.length > 0 ? (
                   adsData.map((ad) => (

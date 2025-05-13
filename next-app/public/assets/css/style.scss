@@ -69,7 +69,22 @@ b,
 strong {
 	font-weight: 500;
 }
-
+.btn-outline-danger,
+.btn-outline-primary,
+.btn-outline-success{
+	&:hover{
+		svg{
+			filter: brightness(0) invert(1);
+		}
+	}
+}
+.btn-outline-info{
+	&:hover{
+		svg{
+			filter: invert(1) brightness(0);
+		}
+	}
+}
 .card {
 	--#{$prefix}card-cap-bg: rgba(0, 0, 0, 0);
 
@@ -1047,9 +1062,16 @@ ul {
 
 .card-agent {
 	.card-image {
+		position: relative;
 		.img-fluid {
-			max-height: 100px;
 			object-fit: cover;
+			height: 250px;
+		}
+		.c-logo{
+			position: absolute;
+			right: 0;
+    		bottom: 0;
+			border-start-start-radius: 0.25rem;
 		}
 	}
 }
@@ -1222,6 +1244,11 @@ ul {
 			.card-img-overlay{
 				background-color: rgba(var(--#{$prefix}black-rgb), 0.5);
 			}
+		}
+	}
+	.card-footer{
+		.rounded-circle{
+			object-fit: cover;
 		}
 	}
 }
@@ -1443,9 +1470,6 @@ ul {
 	}
 }
 .card-title {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
 	margin-bottom: 0;
 }
 
@@ -5730,6 +5754,7 @@ fieldset{
 		padding-top: 76px;
 	}
 	.navbar-brand {
+		padding: 0;
 		& > div{
 			& >img {
 				max-height: 64px;

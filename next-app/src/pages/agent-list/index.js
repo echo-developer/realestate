@@ -8,7 +8,15 @@ import Locality from "@/components/Locality/Locality";
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthProvider";
 import useTranslation from "@/hooks/useTranslation";
-import { Search } from "react-bootstrap-icons";
+import {
+  Search,
+  GeoAlt,
+  EnvelopeFill,
+  PhoneFill,
+  Whatsapp,
+  Mic,
+} from "react-bootstrap-icons";
+import NextImage from "next/image";
 import {
   Form,
   Row,
@@ -484,28 +492,30 @@ const Index = () => {
             <Row>
               <Col className="col-xl-9 col-lg-8 col-12">
                 {/* Main Content */}
-                <div className="d-sm-flex justify-content-between align-items-center mb-2">
-                  <h4 className="mb-3 mb-sm-0">
+                <div className="d-sm-flex justify-content-between align-items-center mb-3">
+                  <h4 className="flex-grow-1 mb-3 mb-sm-0">
                     {translation?.agent_list || "Agent List"} (
                     {agentList.length ||
                       `${translation?.not_available || "Not available"}`}
                     )
                   </h4>
-                  <div>
-                    <span>
-                      {translation?.verified_agents || "Verified agents"}{" "}
-                    </span>
-                    <Form.Check
-                      type="switch"
-                      id="custom-switch"
-                      label={
-                        isVerified
-                          ? `${translation?.on || "ON"}`
-                          : `${translation?.off || "OFF"}`
-                      }
-                      checked={isVerified}
-                      onChange={handleVerifiedAgentChange}
-                    />
+                  <div className="flex-shrink-0">
+                    <div className="d-flex">
+                      <span className="me-3">
+                        {translation?.verified_agents || "Verified agents"}{" "}
+                      </span>
+                      <Form.Check
+                        type="switch"
+                        id="custom-switch"
+                        label={
+                          isVerified
+                            ? `${translation?.on || "ON"}`
+                            : `${translation?.off || "OFF"}`
+                        }
+                        checked={isVerified}
+                        onChange={handleVerifiedAgentChange}
+                      />
+                    </div>
                   </div>
                 </div>
                 {loading && (
@@ -521,11 +531,10 @@ const Index = () => {
                 {!loading && agentList?.length > 0 && (
                   <Row className="list-display ">
                     {agentList.map((agent) => (
-                      <Col className="col-lg-6 col-12" key={agent.id}>
-                        <div className="card card-agent">
-                          <div className="card-body">
-                            <Row className="gx-3">
-                              <div className="col-sm-auto col-3">
+                      <Col className="col-12" key={agent.id}>
+                        <div className="card card-agent">                          
+                            <Row className="gx-0 align-items-center">
+                              <Col xs={3}>
                                 <div className="card-image">
                                   <a>
                                     <img
@@ -534,10 +543,19 @@ const Index = () => {
                                       className="img-fluid"
                                     />
                                   </a>
+                                  {/* Static Company Logo Image Only */}
+                                  <NextImage
+                                    src="/assets/images/company-logo.png"
+                                    alt="Company Logo"
+                                    width={48}
+                                    height={48}
+                                    className="c-logo"                                    
+                                    priority
+                                  />  
                                 </div>
-                              </div>
-                              <div className="col-sm col-9">
-                                <div className="">
+                              </Col>
+                              <Col xs={9}>
+                                <div className="card-body">
                                   <div className="card-title">
                                     <h4>
                                       <a>{agent?.name || "Not Available"}</a>
@@ -552,23 +570,23 @@ const Index = () => {
                                     {agent?.userbadges?.length > 0 && (
                                       <div className="d-flex flex-wrap gap-2 mb-2">
                                         {agent.userbadges.map((badge) => (
-                                          <div
-                                            key={badge.badge_id}
-                                            className="d-inline-flex align-items-center px-2 py-1 rounded bg-light border"
+                                          <>                                          
+                                          <Button
+                                            variant=""
+                                            className="bg-info-subtle"
+                                            size="sm"
                                             title={badge.description}
+                                            key={badge.badge_id}
                                           >
                                             <img
                                               src={badge.icon}
                                               alt={badge.name}
                                               className="me-1"
-                                              style={{
-                                                width: "20px",
-                                                height: "20px",
-                                                objectFit: "contain",
-                                              }}
-                                            />
-                                            <small className="fw-medium text-dark">{badge.name}</small>
-                                          </div>
+                                              height={20}
+                                              width={20}
+                                            />{" "}{badge.name}
+                                          </Button>                                          
+                                          </>
                                         ))}
                                       </div>
                                     )}
@@ -579,60 +597,69 @@ const Index = () => {
                                     <i className="icon-img-company"></i>
                                     <span>{agent?.company_name || "Originate Soft Pvt Ltd"}</span>
                                   </p>
+                                  <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">English, Arabic, French, Italian</span></p>
 
-                                  {/* Static Company Logo Image Only */}
-                                  <div className="mb-2">
-                                    <img
-                                      src="https://realestate.scriptlisting.com/hackground/public/user_upload/profile_image/1742822624-Mask Group.png"
-                                      alt="Company Logo"
-                                      style={{
-                                        width: "50px",
-                                        height: "50px",
-                                        objectFit: "contain",
-                                      }}
-                                    />
-                                  </div>
-
-                                  {/* Phone */}
+                                  {/* Phone
                                   <p className="mb-2">
                                     <i className="icon-feather-phone"></i>{" "}
                                     {agent.phone || "Not Available"}
-                                  </p>
+                                  </p> */}
 
-                                  {/* Email */}
+                                  {/* Email
                                   <p className="mb-2">
                                     <i className="icon-feather-mail"></i>{" "}
                                     {agent.email || "Not Available"}
-                                  </p>
+                                  </p> */}
 
                                   {/* Service Area */}
                                   {agent?.service_area?.length > 0 && (
-                                    <p className="mb-1">
+                                    <p className="mb-3">
+                                     <GeoAlt color="#1365CF" size={18} /> {translation?.serve_in || "Serve in"}{": "}
                                       <span className="text-muted">
-                                        {translation?.serve_in || "Serve in"}
-                                      </span>{" "}
-                                      {[...new Set(agent?.service_area?.map((area) => area.city))].join(", ")}
+                                        {[...new Set(agent?.service_area?.map((area) => area.city))].join(", ")}
+                                      </span>                                      
                                     </p>
                                   )}
-
+                                  <div className="d-grid d-sm-flex gap-2 mb-3">
+                                    <Button
+                                      variant="outline-primary"
+                                      size="sm"
+                                      onClick={() => setShowEnquiryModal(true)}
+                                    >
+                                      <EnvelopeFill color="#1365CF" size={16} /> {translation?.email || "Email"}
+                                    </Button>
+                                    <Button
+                                      variant="outline-info"
+                                      size="sm"
+                                      onClick={() => setShowEnquiryModal(true)}
+                                      style={{minWidth: '72px'}}
+                                    >
+                                      <PhoneFill color="#0dcaf0" size={16} /> {translation?.call || "Call"}
+                                    </Button>
+                                    <Button
+                                      variant="outline-success"
+                                      size="sm"
+                                      onClick={() => setShowEnquiryModal(true)}
+                                    >
+                                      <Whatsapp color="#198754" size={16} />{" "}
+                                      {translation?.whatsapp || "whatsapp"}
+                                    </Button>
+                                  </div>
                                   {/* Footer badges and button */}
                                   <div className="d-flex card-group-btn">
                                     <div>
-                                      {!agent?.forSell === 0 && (
-                                        <span className="badge badge-outline-secondary text-dark me-2">
-                                          {agent?.forSell} {translation?.sale || "SALE"}
-                                        </span>
-                                      )}
-                                      {!agent?.forRent === 0 && (
-                                        <span className="badge badge-outline-secondary text-dark">
+                                      <span className="badge badge-outline-secondary text-dark me-2">
+                                        {agent?.forSell} {translation?.sale || "SALE"}
+                                      </span>
+                                      
+                                      <span className="badge badge-outline-secondary text-dark me-2">
                                           {agent?.forRent} {translation?.rent || "RENT"}
                                         </span>
-                                      )}
                                     </div>
 
                                     {agent?.user_id && (
                                       <a
-                                        className="btn btn-primary btn-sm ms-auto"
+                                        className="btn btn-primary btn-sm"
                                         href={`/agent-details/${agent.user_id}`}
                                       >
                                         {translation?.view_profile || "View Profile"}
@@ -640,9 +667,8 @@ const Index = () => {
                                     )}
                                   </div>
                                 </div>
-                              </div>
-                            </Row>
-                          </div>
+                              </Col>
+                            </Row>                          
                         </div>
                       </Col>
                     ))}
