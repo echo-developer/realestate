@@ -10,7 +10,8 @@ const CardImageSlider = ({
   addRemoveFav,
   mainType,
   listKey,
-  showFavIcon=true
+  showFavIcon=true,
+  showImgCount=true
 }) => {
   const translation = useTranslation();
   const [allImages, setAllImages] = useState([]);
@@ -113,7 +114,7 @@ const CardImageSlider = ({
       </span>
         )
       }
-      {data.image_count && (
+      {showImgCount && data.image_count && (
         <span className="total-ad-pic">
         <i className="bi bi-camera"></i>{data.image_count}
       </span>

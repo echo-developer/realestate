@@ -16,7 +16,6 @@ import useTranslation from "@/hooks/useTranslation";
 import { ShimmerContentBlock } from "react-shimmer-effects";
 import useAdvertisement from "@/hooks/useAdvertisement";
 
-// import ListingMapView from "@/components/MapData/ListingMapView";
 import {
   filterOptions,
   CommercialFilterOptions,
@@ -42,6 +41,25 @@ import useIsMobile from "@/hooks/useIsMobile";
 import Locality from "@/components/Locality/Locality";
 import Head from "next/head";
 const ListingMapView = dynamic(() => import('../../components/MapData/ListingMapView'), {
+  ssr: false, loading: () => <>
+    <ShimmerContentBlock
+      title
+      text
+      cta
+      thumbnailWidth={350}
+      thumbnailHeight={50}
+    />
+    <ShimmerContentBlock
+      title
+      text
+      cta
+      thumbnailWidth={350}
+      thumbnailHeight={50}
+    />
+  </>
+})
+
+const ListingMobileMapView = dynamic(() => import("../../components/MapData/PropertyMapMobile"), {
   ssr: false, loading: () => <>
     <ShimmerContentBlock
       title
@@ -1759,8 +1777,13 @@ const index = () => {
             </div>
             {showMapView ? (
               <>
-                
+                {isMobile ? (
+                  <>
+                  <ListingMobileMapView propertyList={propertyList} loading={loading} />
+                  </>
+                ) : (<>
                 <ListingMapView propertyList={propertyList} loading={loading} />
+                </>)}
               </>
             ) : (
               <>

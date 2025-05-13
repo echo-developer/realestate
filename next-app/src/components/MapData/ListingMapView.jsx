@@ -128,9 +128,6 @@ useEffect(() => {
                       showSq={true}
                       icons={true}
                       showFavIcon={false}
-                    // addRemoveFav={() =>
-                    //   SaveFavouriteProperty(property.property_id)
-                    // }
                     />
                     
                     <div className="card-body position-relative">
@@ -288,7 +285,7 @@ useEffect(() => {
                       lat: parseFloat(hoveredProperty.address_lat),
                       lng: parseFloat(hoveredProperty.address_lan)
                     }}
-                    onCloseClick={() => setHoveredMarkerId(null)}
+                    onCloseClick={() => setHoveredProperty(null)}
                   >
                     <div style={{ maxWidth: '200px' }}>
                       <img
