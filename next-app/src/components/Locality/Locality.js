@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import AuthUser from '../Authentication/AuthUser';
 import { useSearchParams } from 'next/navigation';
 
-const Locality = ({onSelectLocality, errors, defaultValue}) => {
+const Locality = ({onSelectLocality, errors, defaultValue, city}) => {
     const { callApi } = AuthUser();
     const searchParams = useSearchParams();
     const [localitySearchInput, setLocalitySearchInput] = useState(defaultValue?.locality_name || '');
@@ -31,13 +31,15 @@ const Locality = ({onSelectLocality, errors, defaultValue}) => {
       }
     }, [locality])
 
-    const getGlobalLocalities = async (keyWord) => {
+    const getGlobalLocalities = async (keyWord, city) => {
         try {
             const res = await callApi({
                 api: `/global-localities`,
                 method: 'GET',
                 data: {
-                    keyWord: keyWord
+                    keyWord: keyWord,
+                    city_id: city.city_id,
+                    city_name: city.name
                 }
             })
 
@@ -60,21 +62,25 @@ const Locality = ({onSelectLocality, errors, defaultValue}) => {
                     api: `/stored-localities`,
                     method: 'GET',
                     data: {
-                        keyWord: debouncedValue
+                        keyWord: debouncedValue,
+                        city_id: city.city_id,
+                        city_name: city.name
                     }
                 })
                 if(res && res?.status == 1) {
                     setLocalityList(res?.data);
                     if(res.data?.length < 10) {
-                        getGlobalLocalities(debouncedValue);
+                        getGlobalLocalities(debouncedValue, city);
                     }
                 }
             } catch (error) {
                 console.error(error?.message || "Something went wrong")
             }
         }
-        getLocalityList();
-    }, [debouncedValue])
+        if(city) {
+          getLocalityList();
+        }
+    }, [debouncedValue, city])
 
 
     const handleLocalityInputChange = (e) => {
@@ -100,6 +106,7 @@ const Locality = ({onSelectLocality, errors, defaultValue}) => {
                             autoComplete="off"
                             value={localitySearchInput}
                             onChange={handleLocalityInputChange}
+                            readOnly={!city}
                           />
                           {errors?.locality && (
               <div className="invalid-feedback">{errors.locality}</div>

@@ -16,6 +16,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
   const [position, setPosition] = useState([51.505, -0.09]);
   const { callApi } = AuthUser();
   const { localityInputSearch, setLocalityInputSearch, localityList, localityDropdown, setLocalityDropdown } = useAuth();
+  const [selectedCity, setSelectedCity] = useState(null);
   const [errors, setErrors] = useState({
     city: "",
     locality: "",
@@ -50,6 +51,8 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    const city = cityData.find(city => city.city_id == value);
+    setSelectedCity(city);
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -162,7 +165,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
           /> */}
           <div className="col-lg-6 col-12">
             <label className="form-label">Locality <span className="text-danger">*</span></label>
-            <Locality onSelectLocality={onSelectLocality} errors={errors} />
+            <Locality onSelectLocality={onSelectLocality} errors={errors} city={selectedCity} />
           </div>
           {/* <div className="col-lg-6 col-12">
             <label htmlFor="exampleSelect" className="form-label">Choose an option</label>
