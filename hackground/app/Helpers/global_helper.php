@@ -1465,6 +1465,7 @@ if (!function_exists('debit_membership_feature_value')) {
 
         DB::table('user_membership')
             ->where('plan_id', $count_det->plan_id)
+            ->where('user_id', $user_id)
             ->update([$remaining_field => DB::raw("$remaining_field - 1")]);
 
         return true;
