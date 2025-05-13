@@ -19,6 +19,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
   });
   const [cityData, setCityData] = useState([]);
   const translation = useTranslation();
+  const [selectedCity, setSelectedCity] = useState(null);
 
   useEffect(() => {
     fetchCityData();
@@ -41,6 +42,10 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if(name == 'city') {
+      const city = cityData.find(city => city.city_id == value);
+      setSelectedCity(city);
+    }
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -131,7 +136,7 @@ const ProjectForm3 = ({ formData, setFormData, nextStep, prevStep }) => {
         /> */}
         <div className="col-lg-6 col-12">
         <label className="form-label">Locality <span className="text-danger">*</span></label>
-          <Locality onSelectLocality={onSelectLocality} errors={errors} />
+          <Locality onSelectLocality={onSelectLocality} errors={errors} city={selectedCity} />
         </div>
 
         {/* Project Name Input */}

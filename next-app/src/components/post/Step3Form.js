@@ -51,8 +51,10 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const city = cityData.find(city => city.city_id == value);
-    setSelectedCity(city);
+    if(name == 'city') {
+      const city = cityData.find(city => city.city_id == value);
+      setSelectedCity(city);
+    }
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
