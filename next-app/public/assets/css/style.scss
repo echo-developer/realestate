@@ -5643,16 +5643,22 @@ fieldset{
 	height: calc(100% - 1.5rem);
 	margin-bottom: 1.5rem;
 }
-.grid-display {
-	/* display: none; */
-	&.scroll{
-		height: calc(100vh - 238px);
+.mapViewScroll{
+	.grid-display {
+		/* display: none; */
+		&.scroll{
+			height: calc(100vh - 238px);
+			overflow-y: auto;
+			overflow-x: hidden;
+			&::-webkit-scrollbar { width: 17px; }
+		}
 	}
 }
+
 .googleMap{
+	border-radius: 0.5rem;
+    overflow: hidden;
 	height: calc(100vh - 238px);
-	position: sticky;
-	top: 0;
 	width: 100%;
 }
 

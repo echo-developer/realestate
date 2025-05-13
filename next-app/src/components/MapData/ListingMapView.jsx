@@ -6,7 +6,8 @@ import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import { ShimmerContentBlock } from "react-shimmer-effects";
 import { useAuth } from "@/context/AuthProvider";
 import useTranslation from "@/hooks/useTranslation";
-import { DropdownButton, Dropdown, Modal, Row, Col, Button } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
+import './map.css';
 
 const containerStyle = {
   width: "100%",
@@ -73,9 +74,9 @@ useEffect(() => {
   return (
     <>
     
-    <div className="row">
-        <div className="col-lg">
-          <div className="grid-display">
+      <Row className="gx-2">
+        <Col className="col-lg mapViewScroll">
+          <div className="grid-display scroll">
             {loading ? (
               <>
                 <ShimmerContentBlock
@@ -120,116 +121,115 @@ useEffect(() => {
                       setHoveredProperty(null)
                     }}
                   >
-                    <div className="456">
-                      <div className="123">
-                        <CardImageSlider
-                          data={property}
-                          showSq={true}
-                          icons={true}
-                          showFavIcon={false}
-                        // addRemoveFav={() =>
-                        //   SaveFavouriteProperty(property.property_id)
-                        // }
-                        />
-                      </div>
-                      <div className="card-body position-relative">
-                        <h4 className="mb-1">
-                          <Link href={`/property-details/${property.slug}`}>
-                            {property.property_name}
-                          </Link>
-                        </h4>
-                        <h5 className="mb-0">
-                          {formatPrice(property?.exp_price) || "Price not Available"}
-                        </h5>
-                        <p className="mb-1">
-                        </p>
-                        <ul className="list-info mb-2">
-                          <li>
+                    
+                      
+                    <CardImageSlider
+                      data={property}
+                      showSq={true}
+                      icons={true}
+                      showFavIcon={false}
+                    // addRemoveFav={() =>
+                    //   SaveFavouriteProperty(property.property_id)
+                    // }
+                    />
+                    
+                    <div className="card-body position-relative">
+                      <h4 className="mb-1">
+                        <Link href={`/property-details/${property.slug}`}>
+                          {property.property_name}
+                        </Link>
+                      </h4>
+                      <h5 className="mb-0">
+                        {formatPrice(property?.exp_price) || "Price not Available"}
+                      </h5>
+                      <p className="mb-1">
+                      </p>
+                      <ul className="list-info mb-2">
+                        <li>
+                          <i
+                            className="icon-img-bed"
+                            title="Bedrooms:"
+                          ></i>
+                          <span>
+                            {property?.bedrooms ? property.bedrooms : <span className="text-muted">Not Available</span>}
+                          </span>
+                          {property?.bedrooms && " Beds"}
+                        </li>
+                        <li>
+                          <i
+                            className="icon-img-tub"
+                            title="Bathrooms:"
+                          ></i>
+                          <span>
+                            {property?.bathroom ? property.bathroom : <span className="text-muted">Not Available</span>}
+                          </span>
+                          {property?.bathroom && " Bath"}
+                        </li>
+                        <li>
+                          {property?.area_in_sqft && (
                             <i
-                              className="icon-img-bed"
-                              title="Bedrooms:"
+                              className="icon-img-ratio"
+                              title="Carpet Area:"
                             ></i>
-                            <span>
-                              {property?.bedrooms ? property.bedrooms : <span className="text-muted">Not Available</span>}
-                            </span>
-                            {property?.bedrooms && " Beds"}
-                          </li>
-                          <li>
-                            <i
-                              className="icon-img-tub"
-                              title="Bathrooms:"
-                            ></i>
-                            <span>
-                              {property?.bathroom ? property.bathroom : <span className="text-muted">Not Available</span>}
-                            </span>
-                            {property?.bathroom && " Bath"}
-                          </li>
-                          <li>
-                            {property?.area_in_sqft && (
-                              <i
-                                className="icon-img-ratio"
-                                title="Carpet Area:"
-                              ></i>
-                            )}
-                            <span>
-                              {property?.area_in_sqft ? `${property?.area_in_sqft} sqft` : "Not Available"}{" "}
-                            </span>
-                            {property?.carpet_area && " Carpet Area"}
-                          </li>
-                          {property?.possession_status && (
-                            <li>
-                              <i
-                                className="icon-img-check"
-                                title="Possession Status"
-                              ></i>
-                              <span>{property.possession_status}</span>
-                            </li>
                           )}
+                          <span>
+                            {property?.area_in_sqft ? `${property?.area_in_sqft} sqft` : "Not Available"}{" "}
+                          </span>
+                          {property?.carpet_area && " Carpet Area"}
+                        </li>
+                        {property?.possession_status && (
+                          <li>
+                            <i
+                              className="icon-img-check"
+                              title="Possession Status"
+                            ></i>
+                            <span>{property.possession_status}</span>
+                          </li>
+                        )}
 
-                        </ul>
-                        <p>
-                          <span className="text-primary">
-                            <GeoAlt color="currentColor" size={14} />
-                          </span>{" "}
-                          {property.address || "Not Available"}
-                        </p>
-                      </div>
-                      <div className="card-footer d-flex justify-content-between align-items-center">
-                        <div className="d-flex">
-                          <img
-                            className="rounded-circle"
-                            src={`${property?.user_image ||
-                              "/assets/images/user.jpg"
-                              }`}
-                            alt="Company"
-                            height={36}
-                            width={36}
-                          />
-                          <div className="ps-2">
-                            <h6 className="mb-0">
-                              {property?.user_name || "User"}
-                            </h6>
-                            <p className="small text-muted">
-                              {property?.user_type === "A"
-                                ? "Agent"
-                                : property?.user_type === "/"
-                                  ? "Builder"
-                                  : property?.user_type === "O"
-                                    ? "Owner"
-                                    : "Not Available"}
-                            </p>
-                          </div>
+                      </ul>
+                      <p>
+                        <span className="text-primary">
+                          <GeoAlt color="currentColor" size={14} />
+                        </span>{" "}
+                        {property.address || "Not Available"}
+                      </p>
+                    </div>
+                    <div className="card-footer d-flex justify-content-between align-items-center">
+                      <div className="d-flex">
+                        <img
+                          className="rounded-circle"
+                          src={`${property?.user_image ||
+                            "/assets/images/user.jpg"
+                            }`}
+                          alt="Company"
+                          height={36}
+                          width={36}
+                        />
+                        <div className="ps-2">
+                          <h6 className="mb-0">
+                            {property?.user_name || "User"}
+                          </h6>
+                          <p className="small text-muted">
+                            {property?.user_type === "A"
+                              ? "Agent"
+                              : property?.user_type === "/"
+                                ? "Builder"
+                                : property?.user_type === "O"
+                                  ? "Owner"
+                                  : "Not Available"}
+                          </p>
                         </div>
                       </div>
-                    </div>
+                    </div>                    
                   </div>
                 </Col>
               ))}
               </Row>
             )}
           </div>
-        </div>
-        <div className="col-lg">
+        </Col>
+        <Col className="col-lg mapViewScroll">          
           <div className="googleMap">
             {isLoaded ? (<>
               <GoogleMap
@@ -343,9 +343,9 @@ useEffect(() => {
             </>) : (<>
               <div>Loading...</div>
             </>)}
-          </div>
-        </div>
-      </div>
+          </div>          
+        </Col>
+      </Row>
     </>
   )
 }

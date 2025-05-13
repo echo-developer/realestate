@@ -6,7 +6,8 @@ import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import { ShimmerContentBlock } from "react-shimmer-effects";
 import { useAuth } from "@/context/AuthProvider";
 import useTranslation from "@/hooks/useTranslation";
-import { DropdownButton, Dropdown, Modal, Row, Col, Button } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
+import './map.css';
 
 const containerStyle = {
   width: "100%",
@@ -47,9 +48,9 @@ export default function ProjectListingMapView({ loading, projectList }) {
 
   return (
     
-    <div className="row">
-      <div className="col-lg">
-        <div className="grid-display">
+    <Row className="gx-2">
+      <Col className="col-lg mapViewScroll">
+        <div className="grid-display scroll">
           {loading ? (
             <>
               <ShimmerContentBlock
@@ -95,95 +96,91 @@ export default function ProjectListingMapView({ loading, projectList }) {
                     setHoveredProperty(null)
                   }}
                 >
-                  <div className="456">
-                    <div className="123">
-                      <CardImageSlider
-                        data={project}
-                        keyword={"gallery"}
-                        showSq={true}
-                        icons={false}
-                      />
-                    </div>                      
-                    <div className="card-body position-relative">
-                      <h4>
-                        <Link href={`/project-details/${project.slug}`}>
-                          {project.project_name}
-                        </Link>
-                      </h4>
-                      <h5 className="mb-0">
-                        {formatPrice(project?.expected_price) || "Price not available"}
+                  <CardImageSlider
+                    data={project}
+                    keyword={"gallery"}
+                    showSq={true}
+                    icons={false}
+                  />                                
+                  <div className="card-body position-relative">
+                    <h4>
+                      <Link href={`/project-details/${project.slug}`}>
+                        {project.project_name}
+                      </Link>
+                    </h4>
+                    <h5 className="mb-0">
+                      {formatPrice(project?.expected_price) || "Price not available"}
 
-                      </h5>
-                      <p className="mb-1">
-                        <small>
-                          {translation?.price_per_sqft || "Price Per sqft:"}{" "}
-                          {project?.price_per_sqft ? (<>
-                            {`${currencyCode} `} {project?.price_per_sqft}
-                          </>) : ('Not Available')}
-                        </small>
-                      </p>
+                    </h5>
+                    <p className="mb-1">
+                      <small>
+                        {translation?.price_per_sqft || "Price Per sqft:"}{" "}
+                        {project?.price_per_sqft ? (<>
+                          {`${currencyCode} `} {project?.price_per_sqft}
+                        </>) : ('Not Available')}
+                      </small>
+                    </p>
 
-                      <ul className="list-info mb-2">
-                        <li>
-                          <i className="icon-img-ratio" title="Carpet Area"></i>
-                          <span>
-                            {translation?.occupied_area || "Occupied"}:{" "}
-                            {project?.occupied_area || "Not Available"}{" "}
-                            {project?.occupied_area && project?.unit_type}
-                          </span>
-                        </li>
-                        <li>
-                          <i className="icon-img-ratio" title="Total Area"></i>
-                          <span>
-                            {translation?.total_area || "Total"}:{" "}
-                            {project?.project_size || "Not Available"}{" "}
-                            {project?.project_size && project?.unit_type}
-                          </span>
-                        </li>
-                        <li>
-                          <i className="icon-img-check" title="Possession Status"></i>
-                          <span>
-                            {project?.possession_status || "Not Available"}
-                          </span>
-                        </li>
-                        <li>
-                          <i className="icon-img-tower" title="Total Tower"></i>
-                          <span>
-                            {translation?.total_tower || "Total Tower"}:{" "}
-                            {project?.total_tower || "Not Available"}
-                          </span>
-                        </li>
+                    <ul className="list-info mb-2">
+                      <li>
+                        <i className="icon-img-ratio" title="Carpet Area"></i>
+                        <span>
+                          {translation?.occupied_area || "Occupied"}:{" "}
+                          {project?.occupied_area || "Not Available"}{" "}
+                          {project?.occupied_area && project?.unit_type}
+                        </span>
+                      </li>
+                      <li>
+                        <i className="icon-img-ratio" title="Total Area"></i>
+                        <span>
+                          {translation?.total_area || "Total"}:{" "}
+                          {project?.project_size || "Not Available"}{" "}
+                          {project?.project_size && project?.unit_type}
+                        </span>
+                      </li>
+                      <li>
+                        <i className="icon-img-check" title="Possession Status"></i>
+                        <span>
+                          {project?.possession_status || "Not Available"}
+                        </span>
+                      </li>
+                      <li>
+                        <i className="icon-img-tower" title="Total Tower"></i>
+                        <span>
+                          {translation?.total_tower || "Total Tower"}:{" "}
+                          {project?.total_tower || "Not Available"}
+                        </span>
+                      </li>
 
-                        <li>
-                          <i className="icon-img-project" title="Total Unit"></i>
-                          <span>
-                            {translation?.total_unit || "Total Unit:"}{" "}
-                            {project?.total_unit || "Not Available"}
-                          </span>
-                        </li>
-                      </ul>
-                      <p className="mb-1">
-                        <i className="icon-feather-map-pin me-1"></i>
-                        {project.address}
-                      </p>
-                    </div>
-                    <div className="card-footer d-flex justify-content-between align-items-center">
-                      <div className="d-flex">
-                        <div className="ps-1">
-                          <h6 className="mb-0">
-                            {project?.developer_name || "Developer Name"}
-                          </h6>
-                          <p className="small text-muted">Developer</p>
-                        </div>
-                      </div>
-                      <button
-                        className="btn btn-primary btn-sm"
-                        onClick={() => handleContactClick(project.id)}
-                      >
-                        {translation?.contact_now || "Contact Now"}
-                      </button>
-                    </div>                      
+                      <li>
+                        <i className="icon-img-project" title="Total Unit"></i>
+                        <span>
+                          {translation?.total_unit || "Total Unit:"}{" "}
+                          {project?.total_unit || "Not Available"}
+                        </span>
+                      </li>
+                    </ul>
+                    <p className="mb-1">
+                      <i className="icon-feather-map-pin me-1"></i>
+                      {project.address}
+                    </p>
                   </div>
+                  <div className="card-footer d-flex justify-content-between align-items-center">
+                    <div className="d-flex">
+                      <div className="ps-1">
+                        <h6 className="mb-0">
+                          {project?.developer_name || "Developer Name"}
+                        </h6>
+                        <p className="small text-muted">Developer</p>
+                      </div>
+                    </div>
+                    <button
+                      className="btn btn-primary btn-sm"
+                      onClick={() => handleContactClick(project.id)}
+                    >
+                      {translation?.contact_now || "Contact Now"}
+                    </button>
+                  </div>                                        
                 </div>
                 </Col>
               )
@@ -191,8 +188,8 @@ export default function ProjectListingMapView({ loading, projectList }) {
             </Row>
           )}
         </div>
-      </div>
-      <div className="col-lg">
+      </Col>
+      <Col className="col-lg">
         <div className="googleMap">
           {isLoaded ? (<>
             <GoogleMap
@@ -285,9 +282,8 @@ export default function ProjectListingMapView({ loading, projectList }) {
             <div></div>
           </>)}
         </div>
-      </div>
-    </div>
-  
+      </Col>
+    </Row>  
   )
 }
 
