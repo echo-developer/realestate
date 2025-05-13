@@ -32459,6 +32459,10 @@ strong {
   color: #fff;
 }
 
+.text-blur {
+  filter: blur(3px);
+}
+
 .text-indigo {
   color: var(--re-indigo) !important;
 }

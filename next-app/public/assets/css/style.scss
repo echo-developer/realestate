@@ -160,7 +160,9 @@ strong {
 		color: $white;
 	}
 }
-
+.text-blur{
+	filter: blur(3px);
+}
 .text-indigo {
 	color: var(--#{$prefix}indigo) !important;
 }
