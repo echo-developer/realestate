@@ -322,7 +322,7 @@
                 const locKey = item.loc_key || `service_${fieldCount}`;
                 const cityId = item.city || "";
                 const locality = item.locality || "";
-
+                    console.log(item);
                 const div = document.createElement("div");
                 div.className = "row mb-3 address-field";
                 div.id = `field-${fieldCount}`;
@@ -339,7 +339,7 @@
                 </select>
             </div>
             <div class="col">
-                 <input type="text"  name="service_area[locality_id][]" class="form-control service_area" placeholder="Locality" value="${locality}">
+                 <input type="text"  name="service_area[locality_id][]" class="form-control service_area" placeholder="Locality" value="${locality.locality_name}">
             </div>
             <div class="col-auto">
                 <input type="hidden" name="service_area[field_unique_key][]" value="${locKey}">
