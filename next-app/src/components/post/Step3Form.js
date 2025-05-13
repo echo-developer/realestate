@@ -166,8 +166,12 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
             setErrors={setErrors}
           /> */}
           <div className="col-lg-6 col-12">
-            <label className="form-label">Locality <span className="text-danger">*</span></label>
-            <Locality onSelectLocality={onSelectLocality} errors={errors} city={selectedCity} />
+            {selectedCity && (
+              <>
+              <label className="form-label">Locality <span className="text-danger">*</span></label>
+              <Locality onSelectLocality={onSelectLocality} errors={errors} city={selectedCity} type="post" />
+              </>
+            )}
           </div>
           {/* <div className="col-lg-6 col-12">
             <label htmlFor="exampleSelect" className="form-label">Choose an option</label>

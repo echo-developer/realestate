@@ -121,7 +121,7 @@ const Index = () => {
                 })
                 setList(newState);
                 toast.success("lead status updated successfully")
-            } 
+            }
         } catch (error) {
             console.error(error?.message);
         }
@@ -287,7 +287,7 @@ const Index = () => {
                                                             </span>
                                                         )}
                                                     </p>
-                                                    
+
                                                     {lead?.message && (
                                                         <p className={`text-wrap mb-2 ${lead?.is_blur ? 'text-blur' : ''}`}>{lead?.message}</p>
                                                     )}
@@ -367,16 +367,17 @@ const Index = () => {
                                                         </div>
                                                     </div>
                                                     <p className="d-flex flex-column flex-md-row mb-2">
-                                                        <span className="me-3">
-                                                            <i className={`bi bi-telephone ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead?.phone}
+                                                        <span className={`me-3 ${lead?.is_blur ? 'text-blur' : ''}`}>
+                                                            <i className="bi bi-telephone"></i> {lead?.phone}
                                                         </span>
-                                                        <span className="me-3">
-                                                            <i className={`bi bi-envelope ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead?.email}
+                                                        <span className={`me-3 ${lead?.is_blur ? 'text-blur' : ''}`}>
+                                                            <i className="bi bi-envelope"></i> {lead?.email}
                                                         </span>
-                                                        <span className="me-3">
-                                                            <i className={`bi bi-clock ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead?.created_at}
+                                                        <span className={`me-3 ${lead?.is_blur ? 'text-blur' : ''}`}>
+                                                            <i className="bi bi-clock"></i> {lead?.created_at}
                                                         </span>
                                                     </p>
+
                                                     <p className={`text-wrap mb-2 ${lead?.is_blur ? 'text-blur' : ''}`}>{lead?.message}</p>
                                                     <div class="row">
                                                         <div className="col-lg mb-2 mb-lg-0">

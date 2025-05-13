@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import AuthUser from '../Authentication/AuthUser';
 import { useSearchParams } from 'next/navigation';
 
-const Locality = ({onSelectLocality, errors, defaultValue, city}) => {
+const Locality = ({onSelectLocality, errors, defaultValue, city, type}) => {
     const { callApi } = AuthUser();
     const searchParams = useSearchParams();
     const [localitySearchInput, setLocalitySearchInput] = useState(defaultValue?.locality_name || '');
@@ -106,7 +106,7 @@ const Locality = ({onSelectLocality, errors, defaultValue, city}) => {
                             autoComplete="off"
                             value={localitySearchInput}
                             onChange={handleLocalityInputChange}
-                            readOnly={!city}
+                            // readOnly={type ? !city : true}
                           />
                           {errors?.locality && (
               <div className="invalid-feedback">{errors.locality}</div>
