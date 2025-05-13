@@ -407,6 +407,7 @@ $userTypes = [
                     <input type="hidden" id="selected_user_id" name="user_id">
                     <div class="mb-3">
                         <div class="row" id="badgeCheckboxContainer">
+                        @isset($badge_list)
                             @foreach($badge_list as $item)
                             <div class="col-md-6">
                                 <div class="form-check">
@@ -422,6 +423,7 @@ $userTypes = [
                                 </div>
                             </div>
                             @endforeach
+                         @endisset
                         </div>
                         <div class="invalid-feedback d-block" id="badge_ids_error"></div>
                     </div>
