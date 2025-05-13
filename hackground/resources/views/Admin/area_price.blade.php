@@ -68,6 +68,7 @@
                                 <tr>
                                     <th style="width:15%">ID</th>
                                     <th style="width:25%">Locality</th>
+                                    <th style="width:25%">Year</th>
                                     <th style="width:25%">Original Price</th>
                                     <th style="width:15%">New Price</th>
                                     <th style="min-width:30px;" class="text-right">Action</th>
@@ -78,13 +79,14 @@
                                 <tr>
                                     <td>{{$item->id}}</td>
                                     <td>{{get_name_by_id('locality_names','locality_id',$item->locality,'en')??'N/A'}}</td>
+                                    <td>{{$item->year}}</td>
                                     <td>{{$item->price_per_sqft}}</td>
                                     <td>{{ $item->new_price ?? 'N/A' }}</td>
                                     <td class="text-right">
                                         <i class="fa fa-edit text-success fa-md editButton" data-id="{{$item->id}}"></i>
                                     </td>
                                 </tr>
-                                @endforeach
+                                @endforeach  
                             </tbody>
                         </table>
                     </div>
