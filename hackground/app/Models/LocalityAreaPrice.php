@@ -17,11 +17,6 @@ class LocalityAreaPrice extends Model
 
     public function getProprtyLocationPrice()
     {
-
-        $latestPropertyYear = DB::table('properties')
-            ->selectRaw('MAX(YEAR(created_at)) as year')
-            ->value('year');
-
         $propertyData = DB::select("
         SELECT
             loc.locality,
@@ -35,24 +30,18 @@ class LocalityAreaPrice extends Model
             pref_properties_location loc ON p.id = loc.pid
         WHERE
             s.expected_price > 0 AND s.area_in_sqft > 0
-            AND YEAR(p.created_at) = ?
         GROUP BY
             loc.locality, year
         ORDER BY
-            loc.locality
-    ", [$latestPropertyYear]);
+            loc.locality, year
+    ");
 
         return $propertyData;
     }
 
+
     public function getProjectLocationPrice()
     {
-
-        $latestProjectYear = DB::table('project')
-            ->selectRaw('MAX(YEAR(created_at)) as year')
-            ->value('year');
-
-
         $projectData = DB::select("
         SELECT
             pl.locality,
@@ -68,21 +57,21 @@ class LocalityAreaPrice extends Model
             ps.project_budget REGEXP '^[0-9]+(\\.[0-9]+)?$'
             AND CAST(ps.project_budget AS DECIMAL(12,2)) > 0
             AND ps.area_in_sqft > 0
-            AND YEAR(proj.created_at) = ?
         GROUP BY
             pl.locality, year
         ORDER BY
-            pl.locality
-    ", [$latestProjectYear]);
+            pl.locality, year
+    ");
 
         return $projectData;
     }
 
+
     public function getYearlyTrendData($loc_id)
     {
         return DB::table('area_locality_price')
-            ->select('locality', 'year', 'price_for', 'price_per_sqft','new_price')
-            ->where('locality',$loc_id)
+            ->select('locality', 'year', 'price_for', 'price_per_sqft', 'new_price')
+            ->where('locality', $loc_id)
             ->orderBy('locality')
             ->orderBy('year')
             ->get();
