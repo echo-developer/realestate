@@ -583,7 +583,7 @@ const Index = () => {
                                   {/* Static Company Logo Image Only */}
                                   <div className="mb-2">
                                     <img
-                                      src="/assets/images/company-logo.png"
+                                      src="https://realestate.scriptlisting.com/hackground/public/user_upload/profile_image/1742822624-Mask Group.png"
                                       alt="Company Logo"
                                       style={{
                                         width: "50px",
