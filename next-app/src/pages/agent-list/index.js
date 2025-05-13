@@ -44,9 +44,11 @@ const Index = () => {
   const [propertyTypeDropDown, setPropertyTypeDropDown] = useState(false);
   const [selectedTab, setSelectedTab] = useState("sale");
   const [selectedPropertyType, setSelectedPropertyType] = useState("");
+  const [badgeList, setBadgeList] = useState([]);
 
   useEffect(() => {
     FetchPropertyTypeData();
+    getBagesDetails();
   }, []);
 
   const FetchPropertyTypeData = async () => {
@@ -58,11 +60,28 @@ const Index = () => {
       });
       if (response && response.data) {
         setPropertyTypeData(response.data);
-      } 
+      }
     } catch (error) {
       console.error(response.message);
     }
   };
+
+  const getBagesDetails = async () => {
+    try {
+      const res = await callApi({
+        api: `/badge-list`,
+        method: 'GET'
+      })
+      if (res && res.status == 1) {
+        setBadgeList(res?.data || [])
+      }
+
+    } catch (error) {
+      console.error(error.message || "Something went wrong")
+    }
+  }
+
+  console.log("bages list", badgeList)
 
   useEffect(() => {
     if (router?.isReady) {
@@ -134,8 +153,8 @@ const Index = () => {
       data.is_verified_agent = JSON.parse(is_verified_agent);
       setIsVerified(data.is_verified_agent);
     }
-    if(locality) {
-      const parsedLocality = JSON.parse(locality); 
+    if (locality) {
+      const parsedLocality = JSON.parse(locality);
       data.locality = parsedLocality.locality_id;
     }
 
@@ -205,8 +224,8 @@ const Index = () => {
     }
     if (selectedTab) {
       url = `${url}&post_for=${selectedTab}`;
-    } 
-    if(locality) {
+    }
+    if (locality) {
       url = `${url}&locality=${JSON.stringify(locality)}`
     }
     if (propertyType) {
@@ -262,444 +281,431 @@ const Index = () => {
 
   return (
     <>
-    {isOverlayVisible && (
+      {isOverlayVisible && (
         <div
           className="page-overlay"
           onClick={handleClickOutside}
         ></div>
       )}
       <MainLayout>
-      <Helmet>
-        <title>
-          {translation?.trusted_property_experts_near_you ||
-            "Find Real Estate Agents | Trusted Property Experts Near You"}
-        </title>
-        <meta
-          name="description"
-          content="Browse a list of experienced real estate agents ready to help you buy, sell, or rent properties. Find the perfect agent to assist with your property journey today!"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Helmet>
+        <Helmet>
+          <title>
+            {translation?.trusted_property_experts_near_you ||
+              "Find Real Estate Agents | Trusted Property Experts Near You"}
+          </title>
+          <meta
+            name="description"
+            content="Browse a list of experienced real estate agents ready to help you buy, sell, or rent properties. Find the perfect agent to assist with your property journey today!"
+          />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+        </Helmet>
 
-      <aside className="col-lg col-12">
-        <div className="short-banner pt-3">
-          <div className="container-fluid">
-            <div className="filterHeader d-lg-none">
-              <h4> {translation?.filters || "Filters"}</h4>
-              <a className="float-end" title="Filter">
-                <i className="icon-feather-filter f20"></i>
-              </a>
-            </div>
-            <div className="filter">
-              <div className="card-header filterHeader d-lg-none mb-4">
-                <div className="row d-flex">
-                  <div className="col text-left">
-                    <h4> {translation?.filters || "Filters"}</h4>
-                  </div>
-                  <div className="col">
-                    <a className="close_filter" title="Filter">
-                      <i className="icon-feather-x f20"></i>
-                    </a>
+        <aside className="col-lg col-12">
+          <div className="short-banner pt-3">
+            <div className="container-fluid">
+              <div className="filterHeader d-lg-none">
+                <h4> {translation?.filters || "Filters"}</h4>
+                <a className="float-end" title="Filter">
+                  <i className="icon-feather-filter f20"></i>
+                </a>
+              </div>
+              <div className="filter">
+                <div className="card-header filterHeader d-lg-none mb-4">
+                  <div className="row d-flex">
+                    <div className="col text-left">
+                      <h4> {translation?.filters || "Filters"}</h4>
+                    </div>
+                    <div className="col">
+                      <a className="close_filter" title="Filter">
+                        <i className="icon-feather-x f20"></i>
+                      </a>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="acc-panel">
-                <form data-filter="n" onSubmit={handleSubmit}>
-                  <Row className="gx-3">
-                    <Col className="col-lg-auto col-sm-2 col-auto" onClick={() => toggleDropdown('agent_type')}>
-                      <Dropdown className="d-grid select-dropdown" show={dropdownState?.agent_type}>
-                        <Dropdown.Toggle
-                          variant="light"
-                          className="btn-form-control"
-                        >
-                          {brokerType === "A"
-                            ? "Agency"
-                            : brokerType === "F"
-                              ? "Francise"
-                              : "Independent"}
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu>
-                          <Dropdown.Item onClick={() => handleSelect("I")}>
-                            {"Independent"}
-                          </Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleSelect("A")}>
-                            {"Agency"}
-                          </Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleSelect("F")}>
-                            {"Franchise"}
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </Col>
-                    <Col
-                      className="col-lg col-sm-4 col-12"
-                      data-id="parent"
-                      onClick={() => toggleDropdown('property_type')}
-                    >
-                      <Dropdown
-                        className="select-dropdown mb-3 d-grid"
-                        show={dropdownState?.property_type}
+                <div className="acc-panel">
+                  <form data-filter="n" onSubmit={handleSubmit}>
+                    <Row className="gx-3">
+                      <Col className="col-lg-auto col-sm-2 col-auto" onClick={() => toggleDropdown('agent_type')}>
+                        <Dropdown className="d-grid select-dropdown" show={dropdownState?.agent_type}>
+                          <Dropdown.Toggle
+                            variant="light"
+                            className="btn-form-control"
+                          >
+                            {brokerType === "A"
+                              ? "Agency"
+                              : brokerType === "F"
+                                ? "Francise"
+                                : "Independent"}
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                            <Dropdown.Item onClick={() => handleSelect("I")}>
+                              {"Independent"}
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleSelect("A")}>
+                              {"Agency"}
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleSelect("F")}>
+                              {"Franchise"}
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </Col>
+                      <Col
+                        className="col-lg col-sm-4 col-12"
+                        data-id="parent"
+                        onClick={() => toggleDropdown('property_type')}
                       >
-                        <Dropdown.Toggle className="btn-form-control">
-                          {displayPropertyType()}
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu
-                          className="p-3"
-                          onClick={(e) => e.stopPropagation()}
+                        <Dropdown
+                          className="select-dropdown mb-3 d-grid"
+                          show={dropdownState?.property_type}
                         >
-                          {/* Purpose Tabs */}
-                          <Form.Label className="fw-bold">Purpose</Form.Label>
-                          <div className="form-field">
-                            <Nav variant="underline" activeKey={selectedTab}>
-                              <Nav.Item>
-                                <Nav.Link
-                                  role="button"
-                                  eventKey="sale"
-                                  onClick={() => handleTab("sale")}
-                                >
-                                  {translation?.buy || "Buy"}
-                                </Nav.Link>
-                              </Nav.Item>
-                              <Nav.Item>
-                                <Nav.Link
-                                  role="button"
-                                  eventKey="rent"
-                                  onClick={() => handleTab("rent")}
-                                >
-                                  {translation?.rent || "Rent"}
-                                </Nav.Link>
-                              </Nav.Item>
-                            </Nav>
-                          </div>
-
-                          {/* Property Type Selection */}
-                          <Form.Label className="fw-bold mt-3">{translation?.type || "Type"}</Form.Label>
-                          <div className="form-field">
-                            <ButtonGroup className="btn-group-light d-flex flex-wrap">
-                              {PropertyTypeData?.map((type) => (
-                                <React.Fragment key={type.category_id}>
-                                  <input
-                                    type="radio"
-                                    className="btn-check"
-                                    name="propertyForGroup"
-                                    id={`buy_${type.category_id}`}
-                                    value={type.category_id}
-                                    checked={
-                                      selectedPropertyType === type.category_id
-                                    }
-                                    onChange={() =>
-                                      handleSelectPropertyType(type.category_id)
-                                    }
-                                  />
-                                  <label
-                                    className="btn btn-outline-light"
-                                    htmlFor={`buy_${type.category_id}`}
+                          <Dropdown.Toggle className="btn-form-control">
+                            {displayPropertyType()}
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu
+                            className="p-3"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {/* Purpose Tabs */}
+                            <Form.Label className="fw-bold">Purpose</Form.Label>
+                            <div className="form-field">
+                              <Nav variant="underline" activeKey={selectedTab}>
+                                <Nav.Item>
+                                  <Nav.Link
+                                    role="button"
+                                    eventKey="sale"
+                                    onClick={() => handleTab("sale")}
                                   >
-                                    {type.category_name}
-                                  </label>
-                                </React.Fragment>
-                              ))}
-                            </ButtonGroup>
-                          </div>
+                                    {translation?.buy || "Buy"}
+                                  </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item>
+                                  <Nav.Link
+                                    role="button"
+                                    eventKey="rent"
+                                    onClick={() => handleTab("rent")}
+                                  >
+                                    {translation?.rent || "Rent"}
+                                  </Nav.Link>
+                                </Nav.Item>
+                              </Nav>
+                            </div>
 
-                          {/* Action Buttons */}
-                          <div className="d-flex justify-content-between mt-3">
-                            <Button
-                              variant="outline-secondary"
-                              onClick={resetSelection}
-                            >
-                              {translation?.reset || "Reset"}
+                            {/* Property Type Selection */}
+                            <Form.Label className="fw-bold mt-3">{translation?.type || "Type"}</Form.Label>
+                            <div className="form-field">
+                              <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                                {PropertyTypeData?.map((type) => (
+                                  <React.Fragment key={type.category_id}>
+                                    <input
+                                      type="radio"
+                                      className="btn-check"
+                                      name="propertyForGroup"
+                                      id={`buy_${type.category_id}`}
+                                      value={type.category_id}
+                                      checked={
+                                        selectedPropertyType === type.category_id
+                                      }
+                                      onChange={() =>
+                                        handleSelectPropertyType(type.category_id)
+                                      }
+                                    />
+                                    <label
+                                      className="btn btn-outline-light"
+                                      htmlFor={`buy_${type.category_id}`}
+                                    >
+                                      {type.category_name}
+                                    </label>
+                                  </React.Fragment>
+                                ))}
+                              </ButtonGroup>
+                            </div>
 
-                            </Button>
-                            <Button
-                              variant="primary"
-                              onClick={() => {
-                                setDropdownState({});
-                                setIsOverlayVisible(false)
-                              }}
-                            >
-                              {translation?.done || "Done"}
-                            </Button>
-                          </div>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </Col>
-                    {/* Name Search */}
-                    <Col className="col-lg col-sm-6 col-12">
-                      <Form.Group className="form-field with-icon-start">
-                        <Search color="gray" size={14} />
-                        <Form.Control
-                          type="text"
-                          name="nameSearch"
-                          id="nameSearch"
-                          className="address-box"
-                          placeholder={
-                            translation?.search_by_name || "Search by Name"
-                          }
-                          autoComplete="off"
-                          value={name || ""}
-                          onChange={handleSearchChange}
-                        />
-                      </Form.Group>
-                    </Col>
+                            {/* Action Buttons */}
+                            <div className="d-flex justify-content-between mt-3">
+                              <Button
+                                variant="outline-secondary"
+                                onClick={resetSelection}
+                              >
+                                {translation?.reset || "Reset"}
 
-                    <Col className="col-lg col-sm-6 col-12">
-                      <Locality onSelectLocality={onSelectLocality} />
-                    </Col>
+                              </Button>
+                              <Button
+                                variant="primary"
+                                onClick={() => {
+                                  setDropdownState({});
+                                  setIsOverlayVisible(false)
+                                }}
+                              >
+                                {translation?.done || "Done"}
+                              </Button>
+                            </div>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </Col>
+                      {/* Name Search */}
+                      <Col className="col-lg col-sm-6 col-12">
+                        <Form.Group className="form-field with-icon-start">
+                          <Search color="gray" size={14} />
+                          <Form.Control
+                            type="text"
+                            name="nameSearch"
+                            id="nameSearch"
+                            className="address-box"
+                            placeholder={
+                              translation?.search_by_name || "Search by Name"
+                            }
+                            autoComplete="off"
+                            value={name || ""}
+                            onChange={handleSearchChange}
+                          />
+                        </Form.Group>
+                      </Col>
 
-                    {/* Submit Button */}
-                    <Col className="col-lg-auto col-sm-6 col-12">
-                      <div className="d-grid">
-                        <button type="submit" className="btn btn-light">
-                          {translation?.search || "Search"}
-                        </button>
-                      </div>
-                    </Col>
-                  </Row>
-                </form>
+                      <Col className="col-lg col-sm-6 col-12">
+                        <Locality onSelectLocality={onSelectLocality} />
+                      </Col>
+
+                      {/* Submit Button */}
+                      <Col className="col-lg-auto col-sm-6 col-12">
+                        <div className="d-grid">
+                          <button type="submit" className="btn btn-light">
+                            {translation?.search || "Search"}
+                          </button>
+                        </div>
+                      </Col>
+                    </Row>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="p-4">
-          <Row>
-            <Col className="col-xl-9 col-lg-8 col-12">
-              {/* Main Content */}
-              <div className="d-sm-flex justify-content-between align-items-center mb-2">
-                <h4 className="mb-3 mb-sm-0">
-                  {translation?.agent_list || "Agent List"} (
-                  {agentList.length ||
-                    `${translation?.not_available || "Not available"}`}
-                  )
-                </h4>
-                <div>
-                  <span>
-                    {translation?.verified_agents || "Verified agents"}{" "}
-                  </span>
-                  <Form.Check
-                    type="switch"
-                    id="custom-switch"
-                    label={
-                      isVerified
-                        ? `${translation?.on || "ON"}`
-                        : `${translation?.off || "OFF"}`
-                    }
-                    checked={isVerified}
-                    onChange={handleVerifiedAgentChange}
-                  />
-                </div>
-              </div>
-              {loading && (
-                <div className="loading-spinner">
-                  <div className="spinner-border" role="status">
-                    <span className="visually-hidden">
-                      {" "}
-                      {translation?.loading || "Loading...."}{" "}
+          <div className="p-4">
+            <Row>
+              <Col className="col-xl-9 col-lg-8 col-12">
+                {/* Main Content */}
+                <div className="d-sm-flex justify-content-between align-items-center mb-2">
+                  <h4 className="mb-3 mb-sm-0">
+                    {translation?.agent_list || "Agent List"} (
+                    {agentList.length ||
+                      `${translation?.not_available || "Not available"}`}
+                    )
+                  </h4>
+                  <div>
+                    <span>
+                      {translation?.verified_agents || "Verified agents"}{" "}
                     </span>
+                    <Form.Check
+                      type="switch"
+                      id="custom-switch"
+                      label={
+                        isVerified
+                          ? `${translation?.on || "ON"}`
+                          : `${translation?.off || "OFF"}`
+                      }
+                      checked={isVerified}
+                      onChange={handleVerifiedAgentChange}
+                    />
                   </div>
                 </div>
-              )}
-              {!loading && agentList?.length > 0 && (
-                <Row className="list-display ">
-                  {agentList.map((agent) => (
-                    <Col className="col-lg-6 col-12">
-                      <div key={agent.id} className="card card-agent">
-                        <div className="card-body">
-                          <Row className="gx-3">
-                            <div className="col-sm-auto col-3">
-                              <div className="card-image">
-                                <a>
-                                  <img
-                                    src={
-                                      agent?.image ||
-                                      "/assets/images/agents/user.jpg"
-                                    }
-                                    alt={agent?.name || "User"}
-                                    className="img-fluid"
-                                  />
-                                </a>
-                              </div>
-                            </div>
-                            <div className="col-sm col-9">
-                              <div className="">
-                                <div className="card-title">
-                                  <h4>
-                                    <a>{agent?.name || "Not Available"}</a>
-                                    {agent?.is_verified_agent && (
-                                      <span title="Verified">
-                                        <i className="icon-img-check ms-1"></i>
-                                      </span>
-                                    )}
-                                  </h4>
-                                  {/* <span className="badge badge-outline-secondary text-dark">
-                                    {translation?.properties || "Properties"}
-                                  </span> */}
+                {loading && (
+                  <div className="loading-spinner">
+                    <div className="spinner-border" role="status">
+                      <span className="visually-hidden">
+                        {" "}
+                        {translation?.loading || "Loading...."}{" "}
+                      </span>
+                    </div>
+                  </div>
+                )}
+                {!loading && agentList?.length > 0 && (
+                  <Row className="list-display ">
+                    {agentList.map((agent) => (
+                      <Col className="col-lg-6 col-12" key={agent.id}>
+                        <div className="card card-agent">
+                          <div className="card-body">
+                            <Row className="gx-3">
+                              <div className="col-sm-auto col-3">
+                                <div className="card-image">
+                                  <a>
+                                    <img
+                                      src={
+                                        agent?.image || "/assets/images/agents/user.jpg"
+                                      }
+                                      alt={agent?.name || "User"}
+                                      className="img-fluid"
+                                    />
+                                  </a>
                                 </div>
-                                <p className="mb-1">
-                                  <i className="icon-img-company"></i>{" "}
-                                  {agent?.company_name ||
-                                    "Originate Soft Pvt Ltd"}
-                                </p>
+                              </div>
+                              <div className="col-sm col-9">
+                                <div className="">
+                                  <div className="card-title">
+                                    <h4>
+                                      <a>{agent?.name || "Not Available"}</a>
+                                      {agent?.is_verified_agent && (
+                                        <span title="Verified">
+                                          <i className="icon-img-check ms-1"></i>
+                                        </span>
+                                      )}
+                                    </h4>
 
-                                <p className="mb-2">
-                                  <i className="icon-feather-phone"></i>{" "}
-                                  {agent.phone || "Not Available"}
-                                </p>
-
-                                <p className="mb-2">
-                                  <i className="icon-feather-mail"></i>{" "}
-                                  {agent.email || "Not Available"}
-                                </p>
-                                {agent?.service_area?.length > 0 && (
-                                  <p className="mb-1">
-                                    <span className="text-muted ">
-                                      {translation?.serve_in || "Serve in"}
-                                    </span>{" "}
-                                    {[
-                                      ...new Set(
-                                        agent?.service_area?.map(
-                                          (area) => area.city
-                                        )
-                                      ),
-                                    ].join(", ")}
-                                  </p>
-                                )}
-
-                                <div className="d-flex card-group-btn">
-                                  <div>
-                                    {!agent?.forSell === 0 && (
-                                      <span className="badge badge-outline-secondary text-dark me-2">
-                                        {agent?.forSell} {translation?.sale || "SALE"}
-
-                                      </span>
-                                    )}
-                                    {!agent?.forRent === 0 && (
-                                      <span className="badge badge-outline-secondary text-dark">
-                                        {agent?.forRent}{translation?.rent || "RENT"}
-
-                                      </span>
+                                    {/* 🏅 Badges Section */}
+                                    {agent?.userbadges?.length > 0 && (
+                                      <div className="d-flex flex-wrap gap-2 mb-2">
+                                        {agent.userbadges.map((badge) => (
+                                          <div
+                                            key={badge.badge_id}
+                                            className="d-inline-flex align-items-center px-2 py-1 rounded bg-light border"
+                                            title={badge.description}
+                                          >
+                                            <img
+                                              src={badge.icon}
+                                              alt={badge.name}
+                                              className="me-1"
+                                              style={{
+                                                width: "20px",
+                                                height: "20px",
+                                                objectFit: "contain",
+                                              }}
+                                            />
+                                            <small className="fw-medium text-dark">
+                                              {badge.name}
+                                            </small>
+                                          </div>
+                                        ))}
+                                      </div>
                                     )}
                                   </div>
 
-                                  {agent?.user_id && (
-                                    <a
-                                      className="btn btn-primary btn-sm ms-auto"
-                                      href={`/agent-details/${agent.user_id}`}
-                                    >
-                                      {translation?.view_profile ||
-                                        "View Profile"}
-                                    </a>
+                                  <p className="mb-1">
+                                    <i className="icon-img-company"></i>{" "}
+                                    {agent?.company_name || "Originate Soft Pvt Ltd"}
+                                  </p>
+
+                                  <p className="mb-2">
+                                    <i className="icon-feather-phone"></i>{" "}
+                                    {agent.phone || "Not Available"}
+                                  </p>
+
+                                  <p className="mb-2">
+                                    <i className="icon-feather-mail"></i>{" "}
+                                    {agent.email || "Not Available"}
+                                  </p>
+
+                                  {agent?.service_area?.length > 0 && (
+                                    <p className="mb-1">
+                                      <span className="text-muted ">
+                                        {translation?.serve_in || "Serve in"}
+                                      </span>{" "}
+                                      {[...new Set(agent?.service_area?.map((area) => area.city))].join(", ")}
+                                    </p>
                                   )}
+
+                                  <div className="d-flex card-group-btn">
+                                    <div>
+                                      {!agent?.forSell === 0 && (
+                                        <span className="badge badge-outline-secondary text-dark me-2">
+                                          {agent?.forSell} {translation?.sale || "SALE"}
+                                        </span>
+                                      )}
+                                      {!agent?.forRent === 0 && (
+                                        <span className="badge badge-outline-secondary text-dark">
+                                          {agent?.forRent} {translation?.rent || "RENT"}
+                                        </span>
+                                      )}
+                                    </div>
+
+                                    {agent?.user_id && (
+                                      <a
+                                        className="btn btn-primary btn-sm ms-auto"
+                                        href={`/agent-details/${agent.user_id}`}
+                                      >
+                                        {translation?.view_profile || "View Profile"}
+                                      </a>
+                                    )}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </Row>
+                            </Row>
+                          </div>
                         </div>
+                      </Col>
+                    ))}
+
+                  </Row>
+                )}
+                {!loading && agentList?.length === 0 && (
+                  <>
+                    <div className="card border-0 text-center">
+                      <div className="card-body">
+                        <img
+                          src="/assets/images/icons/9939447.png"
+                          alt="Icon"
+                          height={48}
+                          width={48}
+                          className="mb-2"
+                        />
+                        <p className="text-muted">
+                          {translation?.no_record_founds || "No Record Founds"}
+                        </p>
                       </div>
-                    </Col>
-                  ))}
-                </Row>
-              )}
-              {!loading && agentList?.length === 0 && (
-                <>
-                  <div className="card border-0 text-center">
-                    <div className="card-body">
-                      <img
-                        src="/assets/images/icons/9939447.png"
-                        alt="Icon"
-                        height={48}
-                        width={48}
-                        className="mb-2"
-                      />
-                      <p className="text-muted">
-                        {translation?.no_record_founds || "No Record Founds"}
-                      </p>
                     </div>
+                  </>
+                )}
+                {currentPages < totalPages && (
+                  <button
+                    className="btn btn-primary btn-lg d-block mx-auto mt-4"
+                    onClick={() => handleLoadMoreClick(perPage + 1)}
+                  >
+                    {translation?.load_more || "Load More"}
+                  </button>
+                )}
+              </Col>
+              <Col className="col-xl-3 col-lg-4 col-12">
+                <div className="card text-center border-0 shadow-1">
+                  <div className="card-body">
+                    <img
+                      src="/assets/images/icons/award.png"
+                      alt="Badges"
+                      className="mb-2"
+                      height={64}
+                      width={64}
+                    />
+                    <h4>{translation?.how_do_agents_earn_badges || "How do agents earn badges?"}
+                    </h4>
+                    <p>
+                      {translation?.badge_info || "To highlight great performance, we reward agents with customised badges on Realestate."}
+
+                    </p>
+                    {badgeList?.length > 0 && badgeList?.map((badge, i) => {
+                      return (
+                        <>
+                          <h5 key={i}>
+                            <img
+                              src={badge?.icon || '/assets/images/icons/badge-award.png'}
+                              alt="Badges"
+                              className="mb-2"
+                              height={32}
+                              width={32}
+                            />{" "}
+                            {badge?.name}
+
+                          </h5>
+                          <p className="text-italic text-muted small">
+                            {badge?.description}
+
+                          </p>
+                        </>
+                      )
+                    })}
                   </div>
-                </>
-              )}
-              {currentPages < totalPages && (
-                <button
-                  className="btn btn-primary btn-lg d-block mx-auto mt-4"
-                  onClick={() => handleLoadMoreClick(perPage + 1)}
-                >
-                  {translation?.load_more || "Load More"}
-                </button>
-              )}
-            </Col>
-            <Col className="col-xl-3 col-lg-4 col-12">
-              <div className="card text-center border-0 shadow-1">
-                <div className="card-body">
-                  <img
-                    src="/assets/images/icons/award.png"
-                    alt="Badges"
-                    className="mb-2"
-                    height={64}
-                    width={64}
-                  />
-                  <h4>{translation?.how_do_agents_earn_badges || "How do agents earn badges?"}
-                  </h4>
-                  <p>
-                    {translation?.badge_info || "To highlight great performance, we reward agents with customised badges on Realestate."}
-
-                  </p>
-
-                  <h5>
-                    <img
-                      src="/assets/images/icons/badge-award.png"
-                      alt="Badges"
-                      className="mb-2"
-                      height={32}
-                      width={32}
-                    />{" "}
-                    {translation?.trubroker || "TruBroker"}
-
-                  </h5>
-
-                  <p className="text-italic text-muted small">
-                    {translation?.trubroker_desc || "Exclusive badge awarded to agents who are highly responsive and advertise genuine properties."}
-
-                  </p>
-
-                  <h5>
-                    <img
-                      src="/assets/images/icons/408472.png"
-                      alt="Badges"
-                      className="mb-2"
-                      height={32}
-                      width={32}
-                    />{" "}
-                    {translation?.quality_lister || "Quality Lister"}
-
-                  </h5>
-
-                  <p className="text-italic text-muted small">
-                    {translation?.quality_lister_desc || "Exclusive badge awarded to agents who authenticate their listings using badges."}
-
-                  </p>
-
-                  <h5>
-                    <img
-                      src="/assets/images/icons/7644063.png"
-                      alt="Badges"
-                      className="mb-2"
-                      height={32}
-                      width={32}
-                    />{" "}
-                    {translation?.responsive_broker || "Responsive Broker"}
-
-                  </h5>
-                  <p className="text-italic text-muted small">
-                    {translation?.responsive_broker_desc || "Exclusive badge awarded to agents who are highly reachable and responsive."}
-
-                  </p>
                 </div>
-              </div>
-            </Col>
-          </Row>
-        </div>
-      </aside>
-    </MainLayout>
+              </Col>
+            </Row>
+          </div>
+        </aside>
+      </MainLayout>
     </>
   );
 };
