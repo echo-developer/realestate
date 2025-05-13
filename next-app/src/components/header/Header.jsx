@@ -240,8 +240,8 @@ const Header = () => {
                   <NextImage
   src="/assets/images/logo.png"
   alt="Logo"
-  width={150}
-  height={50}
+  width={151}
+  height={56}
   priority
 />
 

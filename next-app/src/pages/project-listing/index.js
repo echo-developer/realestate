@@ -306,14 +306,14 @@ const Index = () => {
               <aside
                    className={showMapView ? 'col-12' : 'col-lg-9'}
                    >
-                    <div className="d-sm-flex justify-content-between align-items-center mb-3">
+                    <div className="d-md-flex justify-content-between align-items-center mb-3">
                   <h4 className="mb-3 mb-sm-0">
                     {translation?.total || "Total"}{" "}
                     <span className="text-primary">{projectListData.length}</span>{" "}
                     {translation?.projects_found || "Projects Found"}
                   </h4>
                   <div className="d-flex gap-2">
-                    <div className="sort-by d-none d-md-block">
+                    <div className="sort-by">
                     <DropdownButton
                       align="end"
                       size='sm'

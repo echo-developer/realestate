@@ -278,31 +278,7 @@ export function PropertyMobileFilters({
           Filters <CiFilter size={20} />
         </Button>
 
-        <div className="sort-by">
-          <DropdownButton
-            align="end"
-            title={selectedOption}
-            id="dropdown-menu-align-end"
-            onClick={() => setShowDrop(!showDrop)}
-            aria-expanded={showDrop ? "true" : "false"}
-          >
-            {[
-              "Recent",
-              "Price - Low to High",
-              "Price - High to Low",
-              "Size - Low to High",
-              "Size - High to Low",
-            ].map((option) => (
-              <Dropdown.Item
-                eventKey="1"
-                key={option}
-                onClick={() => handleSortSelection(option)}
-              >
-                {option}
-              </Dropdown.Item>
-            ))}
-          </DropdownButton>
-        </div>
+        
       </div>
 
       {/* Bootstrap Offcanvas */}

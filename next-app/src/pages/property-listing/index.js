@@ -1705,15 +1705,15 @@ const index = () => {
                   <aside
                    className={showMapView ? 'col-12' : 'col-lg-9'}
                    >
-                    <div className="d-sm-flex justify-content-between align-items-center mb-3">
-                      <h4 className="mb-3 mb-sm-0">
+                    <div className="d-md-flex justify-content-between align-items-center mb-3">
+                      <h4 className="mb-3 mb-md-0">
                         {translation?.total || "Total"}{" "}
                         <span className="text-primary">{totalPropertyCount}</span>{" "}
                         {translation?.properties_in || "Properties in"}{" "}
                         {defaultCity?.name || "Kolkata"}
                       </h4>
                       <div className="d-flex gap-2">
-                      <div className="sort-by d-none d-md-block">
+                      <div className="sort-by">
                         <DropdownButton
                           align="end"
                           size='sm'
@@ -1765,7 +1765,7 @@ const index = () => {
             ) : (
               <>
                 <div className="row main-row">
-                  <aside className="col-xl-9 col-lg-9 col-12">
+                  <aside className="col-lg-9 col-12">
                   
                     <div className="list-display">
                       {/* Show shimmer when loading */}

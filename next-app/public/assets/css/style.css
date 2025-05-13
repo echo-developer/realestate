@@ -37349,6 +37349,15 @@ fieldset .btn-delete {
   }
 }
 @media (min-width: 992px) {
+  html {
+    font-size: 16px;
+  }
+  #wrapper {
+    padding-top: 76px;
+  }
+  .navbar-brand > div > img {
+    max-height: 64px;
+  }
   .container-fluid, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
     --re-gutter-x: 4rem;
   }
@@ -37360,15 +37369,6 @@ fieldset .btn-delete {
   }
   .card-ads .row .card-img-top {
     height: 215px;
-  }
-  html {
-    font-size: 16px;
-  }
-  #wrapper {
-    padding-top: 76px;
-  }
-  .navbar-brand > div > img {
-    max-height: 64px;
   }
   .short-banner {
     min-height: 80px;
@@ -37501,8 +37501,12 @@ fieldset .btn-delete {
     padding-top: 58px;
     padding-bottom: 60px;
   }
-  .navbar-brand > div > img {
-    max-height: 48px;
+  .navbar {
+    padding: 0;
+  }
+  .navbar .navbar-brand > div > img {
+    height: 48px;
+    width: 130px;
   }
   .short-banner {
     min-height: 64px;

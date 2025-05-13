@@ -5723,6 +5723,19 @@ fieldset{
 }
 
 @media (min-width: 992px) {
+	html {
+		font-size: 16px;
+	}
+	#wrapper {
+		padding-top: 76px;
+	}
+	.navbar-brand {
+		& > div{
+			& >img {
+				max-height: 64px;
+			}
+		}		
+	}
 	.container-fluid {
 		--#{$prefix}gutter-x: 4rem;
 	}
@@ -5738,19 +5751,6 @@ fieldset{
 				height: 215px;
 			}
 		}
-	}
-	html {
-		font-size: 16px;
-	}
-	#wrapper {
-		padding-top: 76px;
-	}
-	.navbar-brand {
-		& > div{
-			& >img {
-				max-height: 64px;
-			}
-		}		
 	}
 	.short-banner {
 		min-height: 80px;
@@ -5940,13 +5940,18 @@ fieldset{
 		padding-top: 58px;
 		padding-bottom: 60px;
 	}
-	.navbar-brand {
-		& > div{
-			& >img {
-				max-height: 48px;
-			}
-		}		
+	.navbar{
+		padding: 0;
+		.navbar-brand {
+			& > div{
+				& >img {
+					height: 48px;
+					width: 130px;
+				}
+			}		
+		}
 	}
+	
 	.short-banner {
 		min-height: 64px;
 	}

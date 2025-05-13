@@ -75,7 +75,7 @@ useEffect(() => {
     <>
     
       <Row className="gx-2">
-        <Col className="col-lg mapViewScroll">
+        <Col lg={6} xs={12} className="mapViewScroll">
           <div className="grid-display scroll">
             {loading ? (
               <>
@@ -229,7 +229,7 @@ useEffect(() => {
             )}
           </div>
         </Col>
-        <Col className="col-lg mapViewScroll">          
+        <Col lg={6} xs={12}>
           <div className="googleMap">
             {isLoaded ? (<>
               <GoogleMap
