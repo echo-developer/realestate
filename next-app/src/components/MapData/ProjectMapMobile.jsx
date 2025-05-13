@@ -47,7 +47,6 @@ export default function ProjectMobileMapView({ loading, projectList }) {
     const [hoveredProperty, setHoveredProperty] = useState(null);
     const [showFullList, setShowFullList] = useState(false);
 
-    console.log("mobile view ran")
     return (
         <>
             <div className="position-relative" style={{ height: '100vh', width: '100vw', overflow: 'hidden' }}>
@@ -171,16 +170,29 @@ export default function ProjectMobileMapView({ loading, projectList }) {
                                 </div>
                                 <div className="ms-2 flex-grow-1">
                                     <div className="text-primary fw-semibold small">
-                                        {formatPrice(projectList?.exp_price) || ""}
+                                        {formatPrice(projectList[0]?.expected_price) || ""}
                                     </div>
                                     <div className="small fw-semibold text-truncate" style={{ maxWidth: '100%' }}>
-                                        {projectList?.property_name}
+                                        {projectList[0]?.project_name}
                                     </div>
                                     <div className="text-muted small d-flex justify-content-between mt-1" style={{ maxWidth: '100%' }}>
-                                        <small><i className="icon-img-bed"></i> {projectList?.bedrooms || ''}</small>
-                                        <small><i className="icon-img-tub"></i> {projectList?.bathroom || ''}</small>
-                                        <small><i className="icon-img-ratio"></i> {projectList?.carpet_area || ''}</small>
+                                        {projectList[0]?.occupied_area && (
+                                            <small>
+                                                <i className="icon-img-ratio"></i> {projectList[0].occupied_area} {projectList[0]?.unit_type}
+                                            </small>
+                                        )}
+                                        {projectList[0]?.total_area && (
+                                            <small>
+                                                <i className="icon-img-ratio"></i> {projectList[0].total_area} {projectList[0].unit_type}
+                                            </small>
+                                        )}
+                                        {projectList[0]?.possession_status && (
+                                            <small>
+                                                <i className="icon-img-check"></i> {projectList[0].possession_status}
+                                            </small>
+                                        )}
                                     </div>
+
                                 </div>
                             </Card.Body>
                         </Card>
@@ -227,10 +239,10 @@ export default function ProjectMobileMapView({ loading, projectList }) {
                                         </div>
                                         <div className="d-flex justify-content-between mt-1 text-muted small" style={{ maxWidth: '100%' }}>
                                             {project?.occupied_area && (
-                                                <small><i className="icon-img-ratio"></i> {project.occupied_area} {project?.project?.unit_type}</small>
+                                                <small><i className="icon-img-ratio"></i> {project.occupied_area} {project?.unit_type}</small>
                                             )}
                                             {project?.total_area && (
-                                                <small><i className="icon-img-ratio"></i> {project.total_area} {project?.project?.unit_type}</small>
+                                                <small><i className="icon-img-ratio"></i> {project.total_area} {project?.unit_type}</small>
                                             )}
                                             {project?.possession_status && (
                                                 <small><i className="icon-img-check"></i> {project.possession_status}</small>
