@@ -285,6 +285,7 @@ class ApiModel extends Model
     {
         return $this->basePropertyQuery()
             ->leftJoin('property_additional', 'properties.id', '=', 'property_additional.pid')
+            ->leftJoin('users', 'properties.uid', '=', 'users.id')
             ->addSelect(
                 'property_additional.property_amenity',
                 'properties_settings.super_area',
@@ -319,6 +320,7 @@ class ApiModel extends Model
                 'property_additional.ownership_type',
                 'property_additional.property_desc',
                 'properties_location.locality',
+                'users.image',
 
             )
             ->groupBy(
@@ -355,6 +357,7 @@ class ApiModel extends Model
                 'property_additional.ownership_type',
                 'property_additional.property_desc',
                 'properties_location.locality',
+                'users.image',
             )
             ->where('properties.status', '=', config('constants.STATUS_ACTIVE'))
             ->get();
@@ -530,7 +533,7 @@ class ApiModel extends Model
 
         $user = DB::table('users')->where('id', $data['user_id'])->first();
 
-   
+
 
         $updated = DB::table('users')
             ->where('id', $data['user_id'])

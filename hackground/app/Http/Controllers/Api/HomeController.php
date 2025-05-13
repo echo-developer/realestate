@@ -226,6 +226,9 @@ class HomeController extends Controller
                     'property_id' => $property->property_id,
                     'is_favourite' => $is_favorite,
                     'user' => get_user_name($property->uid),
+                    'logo' => !empty($property->image) && file_exists(public_path('user_upload/profile_image/' . $property->image))
+                        ? asset('user_upload/profile_image/' . $property->image)
+                        : '',
                     'property_size' => $property->super_area,
                     'unit_type' => $property->unit_type,
                     'area_in_sqft' => $property->area_in_sqft,
@@ -800,14 +803,14 @@ class HomeController extends Controller
     public function getMeta(Request $request)
     {
         try {
-           $meta = MetaData::where([['page', $request->key], ['status', config('constants.STATUS_ACTIVE')]])
+            $meta = MetaData::where([['page', $request->key], ['status', config('constants.STATUS_ACTIVE')]])
                 ->first();
 
 
             return response()->json([
                 'status' => 1,
                 'message' => 'Data Fetched successfully.',
-                'data'=>$meta
+                'data' => $meta
             ]);
         } catch (\Throwable $th) {
             log_anything($th);
@@ -817,6 +820,4 @@ class HomeController extends Controller
             ]);
         }
     }
-
-
 }
