@@ -70,58 +70,131 @@ class GoogleLocalityController extends Controller
     {
         try {
             $keyword = $request->keyWord;
+            $cityId = $request->city_id;
+            $cityName = $request->city_name;
             $lang = $request->input('lang', 'en');
             $apiKey = get_setting('google-api-key');
 
-            if (!empty($apiKey)) {
-                $autocompleteUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=" . urlencode($keyword) . "&key=$apiKey";
-                $autoResponse = Http::get($autocompleteUrl)->json();
-                $results = [];
+            // if (!empty($apiKey)) {
+            //     $autocompleteUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=" . urlencode($keyword) . "&key=$apiKey";
+            //     $autoResponse = Http::get($autocompleteUrl)->json();
+            //     $results = [];
 
-                if (($autoResponse['status'] ?? 'INVALID_REQUEST') !== 'OK') {
-                    return response()->json(
-                        [
-                            'status' => 1,
-                            'message' => $autoResponse['error_message'] ?? 'Autocomplete request failed'
-                        ]
-                    );
-                }
+            //     if (($autoResponse['status'] ?? 'INVALID_REQUEST') !== 'OK') {
+            //         return response()->json(
+            //             [
+            //                 'status' => 1,
+            //                 'message' => $autoResponse['error_message'] ?? 'Autocomplete request failed'
+            //             ]
+            //         );
+            //     }
 
-                foreach ($autoResponse['predictions'] ?? [] as $prediction) {
-                    $placeId = $prediction['place_id'];
+            //     foreach ($autoResponse['predictions'] ?? [] as $prediction) {
+            //         $placeId = $prediction['place_id'];
 
-                    $detailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&fields=name,geometry,address_components&key=$apiKey";
-                    $detail = Http::get($detailsUrl)->json();
-                    $loc = $detail['result']['geometry']['location'] ?? ['lat' => null, 'lng' => null];
-                    $addressComponents = $detail['result']['address_components'] ?? [];
+            //         $detailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&fields=name,geometry,address_components&key=$apiKey";
+            //         $detail = Http::get($detailsUrl)->json();
+            //         $loc = $detail['result']['geometry']['location'] ?? ['lat' => null, 'lng' => null];
+            //         $addressComponents = $detail['result']['address_components'] ?? [];
 
-                    $city = collect($addressComponents)->firstWhere('types', ['locality', 'political'])['long_name'] ??
-                        collect($addressComponents)->firstWhere('types', ['administrative_area_level_3', 'political'])['long_name'] ?? null;
+            //         $city = collect($addressComponents)->firstWhere('types', ['locality', 'political'])['long_name'] ??
+            //             collect($addressComponents)->firstWhere('types', ['administrative_area_level_3', 'political'])['long_name'] ?? null;
 
 
-                    $results[] = [
-                        'name' => $detail['result']['name'] ?? $prediction['description'],
-                        'lat' => $loc['lat'],
-                        'lng' => $loc['lng'],
-                        'city' => $city,
-                    ];
-                }
-                $savedData = $this->storeandReturnResult($results, $lang);
+            //         $results[] = [
+            //             'name' => $detail['result']['name'] ?? $prediction['description'],
+            //             'lat' => $loc['lat'],
+            //             'lng' => $loc['lng'],
+            //             'city' => $city,
+            //         ];
+            //     }
+            //     $savedData = $this->storeandReturnResult($results, $lang);
 
-                $message = !empty($savedData) ? 'Locality Retrived' : 'No Locality Found';
+            //     $message = !empty($savedData) ? 'Locality Retrived' : 'No Locality Found';
 
-                return response()->json([
-                    'status' => 1,
-                    'message' => $message,
-                    'data' => !empty($savedData) ? $savedData : []
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'API key not found',
-                    'data' =>  []
-                ]);
+            //     return response()->json([
+            //         'status' => 1,
+            //         'message' => $message,
+            //         'data' => !empty($results) ? $results : []
+            //     ]);
+            // } else {
+            //     return response()->json([
+            //         'status' => 0,
+            //         'message' => 'API key not found',
+            //         'data' =>  []
+            //     ]);
+            // }
+            $geoUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" . urlencode($cityName) . "&key=$apiKey";
+            $geoResponse = Http::get($geoUrl)->json();
+
+            if (empty($geoResponse['results'])) {
+                return response()->json(['success' => false, 'message' => 'City not found']);
             }
+
+            $cityLocation = $geoResponse['results'][0]['geometry']['location'];
+            $lat = $cityLocation['lat'];
+            $lng = $cityLocation['lng'];
+
+
+            $keyword = $request->keyWord;
+            $lang = $request->input('lang', 'en');
+
+            $autocompleteUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?" . http_build_query([
+                'input' => $keyword,
+                'types' => 'geocode',
+                'location' => "$lat,$lng",
+                'radius' => 50000,
+                'language' => $lang,
+                'key' => $apiKey
+            ]);
+            $autoResponse = Http::get($autocompleteUrl)->json();
+
+
+            $filteredResults = collect($autoResponse['predictions'])->filter(function ($prediction) {
+                return collect($prediction['types'])->contains(function ($type) {
+                    return in_array($type, ['sublocality', 'sublocality_level_1']);
+                });
+            })->values();
+
+            // $ch = curl_init('https://example.com/your-api');
+            // curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+            // curl_setopt($ch, CURLOPT_TIMEOUT, 1); // Very short timeout
+            // curl_setopt($ch, CURLOPT_POST, true);
+            // curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+            //     'key' => 'value'
+            // ]));
+
+            // curl_exec($ch);
+            // curl_close($ch);
+
+            // $detailedResults = $filteredResults->map(function ($prediction) use ($apiKey) {
+            //     $placeId = $prediction['place_id'];
+
+            //     $detailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?" . http_build_query([
+            //         'place_id' => $placeId,
+            //         'fields' => 'geometry,name,formatted_address',
+            //         'key' => $apiKey
+            //     ]);
+
+            //     $detailsResponse = Http::get($detailsUrl)->json();
+
+            //     if (isset($detailsResponse['result'])) {
+            //         return [
+            //             'place_id' => $placeId,
+            //             'name' => $detailsResponse['result']['name'] ?? null,
+            //             'address' => $detailsResponse['result']['formatted_address'] ?? null,
+            //             'latitude' => $detailsResponse['result']['geometry']['location']['lat'] ?? null,
+            //             'longitude' => $detailsResponse['result']['geometry']['location']['lng'] ?? null,
+            //         ];
+            //     }
+
+            //     return null;
+            // })->filter()->values();
+
+            return response()->json([
+                'success' => true,
+                'data' => $filteredResults
+            ]);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -139,7 +212,7 @@ class GoogleLocalityController extends Controller
 
             if (!$existing) {
                 $getId = DB::table('locality')->insertGetId([
-                    'city' => get_setting('other-city-id'),
+                    'city' => $locality['city'] ?? get_setting('other-city-id'),
                     'locality_key' => $slug,
                     'latitude' => $locality['lat'],
                     'longitude' => $locality['lng'],

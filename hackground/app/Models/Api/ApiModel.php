@@ -102,9 +102,16 @@ class ApiModel extends Model
     public function getCity(string $lang)
     {
         return getTableData(
-            'city_names',
-            ['city_id', 'name'],
-            [],
+            'city',
+            ['city.city_id', 'city_names.name','city.latitude','city.longitude'],
+            [
+                [
+                    'table' => 'city_names',
+                    'base_field' => 'city.city_id',
+                    'operator' => '=',
+                    'foreign_field' => 'city_names.city_id'
+                ]
+            ],
             ['lang' => $lang],
             null
         );
