@@ -204,6 +204,7 @@ Route::get('agent_details_page', [AgentDetailsController::class, 'AgentDetailsPa
 Route::get('agent_property_list', [AgentDetailsController::class, 'ProeprtyInfo']);
 Route::get('agent_list', [AgentDetailsController::class, 'AgentList']);
 Route::post('agent_company_image', [AgentDetailsController::class, 'companyImage']);
+Route::post('agent_company_image_delete', [AgentDetailsController::class, 'companyImageDelete']);
 Route::post('save_agent_review', [AgentDetailsController::class, 'agentsRating']);
 Route::post('save_contact_agent', [AgentDetailsController::class, 'agentsContact']);
 

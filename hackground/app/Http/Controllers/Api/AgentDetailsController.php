@@ -462,7 +462,7 @@ class AgentDetailsController extends Controller
                 if ($update) {
                     return response()->json([
                         'status' => 1,
-                        'message' => 'Profile image updated successfully.',
+                        'message' => 'Compnay logo updated successfully.',
                         'data' => [
                             'file_name' => $fileName,
                             'image_url' => asset('user_upload/company_logo/' . ltrim($fileName, '/')),
@@ -486,6 +486,55 @@ class AgentDetailsController extends Controller
                 'message' => 'File size limit exceeded. Max size 5 MB',
             ], 200);
         } catch (\Throwable $e) {
+            // You may want to log the actual error here.
+            return response()->json([
+                'status' => 0,
+                'message' => 'Something went wrong.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+     public function companyImageDelete(Request $request)
+    {
+        try {
+
+            if ($request->company_logo) {
+
+                $agent = AgentAdditional::where('agent_id',$request->agent_id)->first();
+
+                if (!$agent) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Agent not found.',
+                    ], 404);
+                }
+
+
+    
+                if ($request->company_logo && file_exists(public_path('user_upload/company_logo/' . $request->company_logo))) {
+                    unlink(public_path('user_upload/company_logo/' . $request->company_logo));
+                }
+
+                $update = $agent->update(['company_logo' => '']);
+
+                if ($update) {
+                    return response()->json([
+                        'status' => 1,
+                        'message' => 'Compnay logo deleted successfully.',
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Failed to update the profile image in the database.',
+                    ]);
+                }
+            }
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'No image file found in the request.',
+            ], 400);
+        }  catch (\Throwable $e) {
             // You may want to log the actual error here.
             return response()->json([
                 'status' => 0,
