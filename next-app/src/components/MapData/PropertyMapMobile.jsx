@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { GoogleMap, Marker, InfoWindow, useLoadScript } from "@react-google-maps/api"
-import { GeoAlt } from "react-bootstrap-icons";
+import { ChevronUp, GeoAlt } from "react-bootstrap-icons";
 import CardImageSlider from "../cardImageSlider/CardImageSlider";
 import { ShimmerContentBlock } from "react-shimmer-effects";
 import { useAuth } from "@/context/AuthProvider";
@@ -176,42 +176,54 @@ export default function PropertyMapMobileView({
             {!showFullList && (
                 <div
                     className="position-fixed bottom-0 start-0 end-0 bg-white shadow-lg rounded-top"
-                    style={{ zIndex: 1030, padding: '1rem', height: '180px' }}
+                    style={{ zIndex: 1030, padding: '1rem', height: '220px' }}
                 >
                     <div className="d-flex justify-content-between align-items-center mb-2">
-                        <h6 className="fw-bold mb-0">Properties for sale in UAE</h6>
+                        <h5 className="fw-bold mb-0">Properties for sale in UAE</h5>
                         <Button variant="light" size="sm" onClick={() => setShowFullList(true)}>
-                            <i className="bi bi-chevron-up" />
+                            <ChevronUp size={18} />
                         </Button>
                     </div>
 
                     {/* First property preview */}
                     <div className="property-card-wrapper mb-2">
-                        <Card className="shadow-sm border-0 rounded-3">
-                            <Card.Body className="p-2 d-flex align-items-start">
-                                <div style={{ width: '100px', height: '75px', borderRadius: '6px', overflow: 'hidden' }}>
-                                    <CardImageSlider
-                                        data={propertyList[0]}
-                                        showSq={true}
-                                        icons={true}
-                                        showFavIcon={false}
-                                        showImgCount={false}
-                                    />
-                                </div>
-                                <div className="ms-2 flex-grow-1">
-                                    <div className="text-primary fw-semibold small">
-                                        {formatPrice(propertyList[0]?.exp_price) || ""}
+                        <Card className="card-ads h-100 shadow-sm border-0 rounded-3">
+                            <Row className="gx-0">
+                                <Col xs='auto'>
+                                    <div class="card-image" style={{ width: '120px', height: '100px', borderRadius: '4px', overflow: 'hidden' }}>
+                                        <CardImageSlider
+                                            data={propertyList[0]}
+                                            showSq={true}
+                                            icons={true}
+                                            showFavIcon={false}
+                                            showImgCount={false}
+                                        />
                                     </div>
-                                    <div className="small fw-semibold text-truncate" style={{ maxWidth: '100%' }}>
-                                        {propertyList[0]?.property_name}
-                                    </div>
-                                    <div className="text-muted small d-flex justify-content-between mt-1" style={{ maxWidth: '100%' }}>
-                                        <small><i className="icon-img-bed"></i> {propertyList[0]?.bedrooms || ''}</small>
-                                        <small><i className="icon-img-tub"></i> {propertyList[0]?.bathroom || ''}</small>
-                                        <small><i className="icon-img-ratio"></i> {propertyList[0]?.carpet_area || ''}</small>
-                                    </div>
-                                </div>
-                            </Card.Body>
+                                </Col>
+                                <Col xs>
+                                    <Card.Body className="py-2">                                                                   
+                                        <h5 className="small fw-semibold text-truncate">
+                                            {propertyList[0]?.property_name}
+                                        </h5>
+                                        <h5>
+                                            {formatPrice(propertyList[0]?.exp_price) || ""}
+                                        </h5>
+                                        <p className="small mb-2">
+                                            <span className="text-primary">
+                                                <GeoAlt color="currentColor" size={14} />
+                                            </span>{" "}
+                                            {propertyList[0].address || "Not Available"}
+                                        </p>
+                                        <div className="d-flex gap-3">
+                                            <span><i className="icon-img-bed"></i> {propertyList[0]?.bedrooms || ''}</span>
+                                            <span><i className="icon-img-tub"></i> {propertyList[0]?.bathroom || ''}</span>
+                                            {propertyList[0]?.area_in_sqft && (
+                                                <span><i className="icon-img-ratio"></i> {propertyList[0].area_in_sqft} sqft</span>
+                                            )}
+                                        </div>                                    
+                                    </Card.Body>
+                                </Col>
+                            </Row>
                         </Card>
                     </div>
 
@@ -227,49 +239,58 @@ export default function PropertyMapMobileView({
                 scroll={true}
             >
                 <Offcanvas.Header closeButton>
-                    <Offcanvas.Title></Offcanvas.Title>
+                    <Offcanvas.Title>Properties for sale in UAE</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     {propertyList?.map((property, i) => {
                         return (
-                            <Card className="mb-3 shadow-sm border-0 rounded-3" key={i} onClick={() => {
+                            <Card className="card-ads h-auto mb-3 shadow-sm border-0 rounded-3" key={i} onClick={() => {
                                 setHoveredProperty(property);
                                 setShowFullList(false);
                             }}>
-                                <Card.Body className="p-2 d-flex align-items-start">
-                                    <div style={{ width: '100px', height: '75px', borderRadius: '6px', overflow: 'hidden', flexShrink: 0 }}>
-                                        <CardImageSlider
-                                            data={property}
-                                            showSq={true}
-                                            icons={true}
-                                            showFavIcon={false}
-                                            showImgCount={false}
-                                        />
-                                    </div>
+                                <Row className="gx-0">
+                                    <Col xs='auto'>
+                                        <div className="card-image" style={{ width: '120px', height: '80px', borderRadius: '4px', overflow: 'hidden'}}>
+                                            <CardImageSlider
+                                                data={property}
+                                                showSq={true}
+                                                icons={true}
+                                                showFavIcon={false}
+                                                showImgCount={false}
+                                            />
+                                        </div>
+                                    </Col>
+                                    <Col xs>
+                                        <Card.Body className="py-2">                                    
+                                            <h5 className="small fw-semibold text-truncate">
+                                                {property?.property_name}
+                                            </h5>
+                                            <h5>
+                                                {formatPrice(property?.exp_price) || ""}
+                                            </h5>
+                                            <p className="small mb-2">
+                                                <span className="text-primary">
+                                                    <GeoAlt color="currentColor" size={14} />
+                                                </span>{" "}
+                                                {property.address || "Not Available"}
+                                            </p>
+                                            <div className="d-flex gap-3">
+                                                {property?.bedrooms && (
+                                                    <span><i className="icon-img-bed"></i> {property.bedrooms}</span>
+                                                )}
+                                                {property?.bathroom && (
+                                                    <span><i className="icon-img-tub"></i> {property.bathroom}</span>
+                                                )}
+                                                {property?.area_in_sqft && (
+                                                    <span><i className="icon-img-ratio"></i> {property.area_in_sqft} sqft</span>
+                                                )}                                            
+                                            </div>
 
-                                    <div className="ms-2 flex-grow-1">
-                                        <div className="text-primary fw-semibold small mb-1">
-                                            {formatPrice(property?.exp_price) || ""}
-                                        </div>
-                                        <div className="small fw-semibold text-truncate" style={{ maxWidth: '100%' }}>
-                                            {property?.property_name}
-                                        </div>
-                                        <div className="d-flex justify-content-between mt-1 text-muted small" style={{ maxWidth: '100%' }}>
-                                            {property?.bedrooms && (
-                                                <small><i className="icon-img-bed"></i> {property.bedrooms}</small>
-                                            )}
-                                            {property?.bathroom && (
-                                                <small><i className="icon-img-tub"></i> {property.bathroom}</small>
-                                            )}
-                                            {property?.carpet_area && (
-                                                <small><i className="icon-img-ratio"></i> {property.carpet_area}</small>
-                                            )}
-                                        </div>
-
-                                    </div>
-                                </Card.Body>
+                                        
+                                        </Card.Body>
+                                    </Col>
+                                </Row>
                             </Card>
-
 
                         )
                     })}

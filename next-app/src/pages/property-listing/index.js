@@ -35,7 +35,7 @@ import {
   ButtonGroup,
   Button,
 } from "react-bootstrap";
-import { GeoAlt, Search } from "react-bootstrap-icons";
+import { GeoAlt, ListUl, Map, Search } from "react-bootstrap-icons";
 import PropertyMobileFilters from "@/components/addtional/PropertyMobileFilter";
 import useIsMobile from "@/hooks/useIsMobile";
 import Locality from "@/components/Locality/Locality";
@@ -1704,19 +1704,6 @@ const index = () => {
           </React.Fragment>
         )}
 
-
-
-        <div className="d-md-none mb-4">
-          <PropertyMobileFilters
-            showDrop={showDrop}
-            setShowDrop={setShowDrop}
-            selectedOption={selectedOption}
-            handleSortSelection={handleSortSelection}
-            propertyTypeList={propertyTypeList}
-            subPropertyList={subPropertyList}
-          />
-        </div>
-
         <section className="section pb-0">
           <div className="container-fluid">
             <div className="row">
@@ -1731,47 +1718,57 @@ const index = () => {
                         {defaultCity?.name || "Kolkata"}
                       </h4>
                       <div className="d-flex gap-2">
-                      <div className="sort-by">
-                        <DropdownButton
-                          align="end"
-                          size='sm'
-                          title={selectedOption}
-                          id="dropdown-menu-align-end"
-                          onClick={() => setShowDrop(!showDrop)}
-                          aria-expanded={showDrop ? "true" : "false"}
-                        >
-                          {[
-                            "Recent",
-                            "Price - Low to High",
-                            "Price - High to Low",
-                            "Size - Low to High",
-                            "Size - High to Low",
-                          ].map((option) => (
-                            <Dropdown.Item
-                              eventKey="1"
-                              key={option}
-                              onClick={() => handleSortSelection(option)}
-                            >
-                              {option}
-                            </Dropdown.Item>
-                          ))}
-                        </DropdownButton>                        
-                      </div>
+                        <div className="sort-by">
+                          <DropdownButton
+                            align="end"
+                            size='sm'
+                            title={selectedOption}
+                            id="dropdown-menu-align-end"
+                            onClick={() => setShowDrop(!showDrop)}
+                            aria-expanded={showDrop ? "true" : "false"}
+                          >
+                            {[
+                              "Recent",
+                              "Price - Low to High",
+                              "Price - High to Low",
+                              "Size - Low to High",
+                              "Size - High to Low",
+                            ].map((option) => (
+                              <Dropdown.Item
+                                eventKey="1"
+                                key={option}
+                                onClick={() => handleSortSelection(option)}
+                              >
+                                {option}
+                              </Dropdown.Item>
+                            ))}
+                          </DropdownButton>                        
+                        </div>
                         <Button variant="outline-primary"
                           className={`${!showMapView ? 'active' : ''}`}
                           size='sm'
                           onClick={() => setShowMapView(false)}
                         >
-                          <i className="bi bi-list-ul me-1"></i> List View
+                          <ListUl color="#1365CF" size={16} className="me-1" /> List View
                         </Button>
                         <Button variant="outline-primary"
                           className={`${showMapView ? 'active' : ''}`}
                           size='sm'
                           onClick={() => setShowMapView(true)}
                         >
-                          <i className="bi bi-map me-1"></i> Map View
+                          <Map color="#1365CF" size={16} className="me-1" /> Map View
                         </Button>
-                        </div>
+                        
+                        <PropertyMobileFilters
+                          showDrop={showDrop}
+                          setShowDrop={setShowDrop}
+                          selectedOption={selectedOption}
+                          handleSortSelection={handleSortSelection}
+                          propertyTypeList={propertyTypeList}
+                          subPropertyList={subPropertyList}
+                        />
+                        
+                      </div>
                     </div>
                   </aside>
             </div>

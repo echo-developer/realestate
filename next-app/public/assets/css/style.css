@@ -32376,9 +32376,11 @@ strong {
   font-weight: 500;
 }
 
-.btn-outline-danger:hover svg,
+.btn-outline-danger:hover svg, .btn-outline-danger.active svg,
 .btn-outline-primary:hover svg,
-.btn-outline-success:hover svg {
+.btn-outline-primary.active svg,
+.btn-outline-success:hover svg,
+.btn-outline-success.active svg {
   filter: brightness(0) invert(1);
 }
 
@@ -37591,6 +37593,9 @@ fieldset .btn-delete {
   }
 }
 @media only screen and (max-width: 767.98px) {
+  .offcanvas .card-ads .col, .property-card-wrapper .card-ads .col {
+    max-width: calc(100% - 120px);
+  }
   .large-footer {
     display: none;
   }

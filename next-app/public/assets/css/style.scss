@@ -72,7 +72,7 @@ strong {
 .btn-outline-danger,
 .btn-outline-primary,
 .btn-outline-success{
-	&:hover{
+	&:hover, &.active{
 		svg{
 			filter: brightness(0) invert(1);
 		}
@@ -1454,6 +1454,7 @@ ul {
 		}
 	}
 }
+
 .card-agent {
 	h4{
 		a{
@@ -6043,6 +6044,14 @@ fieldset{
 }
 
 @media only screen and (max-width: 767.98px) {
+	.offcanvas, .property-card-wrapper{
+		.card-ads{
+			.col{
+				max-width: calc(100% - 120px);
+			}
+		}
+	}
+	
 	.large-footer{
 		display: none;
 	}

@@ -148,7 +148,7 @@ export default function ProjectMobileMapView({ loading, projectList }) {
                     style={{ zIndex: 1030, padding: '1rem', height: '180px' }}
                 >
                     <div className="d-flex justify-content-between align-items-center mb-2">
-                        <h6 className="fw-bold mb-0">Properties for sale in UAE</h6>
+                        <h5 className="fw-bold mb-0">Projects in UAE</h5>
                         <Button variant="light" size="sm" onClick={() => setShowFullList(true)}>
                             <i className="bi bi-chevron-up" />
                         </Button>
@@ -157,8 +157,8 @@ export default function ProjectMobileMapView({ loading, projectList }) {
                     {/* First property preview */}
                     <div className="property-card-wrapper mb-2">
                         <Card className="shadow-sm border-0 rounded-3">
-                            <Card.Body className="p-2 d-flex align-items-start">
-                                <div style={{ width: '100px', height: '75px', borderRadius: '6px', overflow: 'hidden' }}>
+                            <Card.Body className="p-0 d-flex align-items-start">
+                                <div style={{ width: '120px', height: '120px', borderRadius: '4px', overflow: 'hidden' }}>
                                     <CardImageSlider
                                         data={projectList[0]}
                                         showSq={true}
@@ -168,28 +168,32 @@ export default function ProjectMobileMapView({ loading, projectList }) {
                                         showImgCount={false}
                                     />
                                 </div>
-                                <div className="ms-2 flex-grow-1">
-                                    <div className="text-primary fw-semibold small">
-                                        {formatPrice(projectList[0]?.expected_price) || ""}
-                                    </div>
-                                    <div className="small fw-semibold text-truncate" style={{ maxWidth: '100%' }}>
+                                <div className="ps-3 flex-grow-1">                                    
+                                    <h5 className="small fw-semibold text-truncate">
                                         {projectList[0]?.project_name}
-                                    </div>
-                                    <div className="text-muted small d-flex justify-content-between mt-1" style={{ maxWidth: '100%' }}>
+                                    </h5>
+                                    <h5>
+                                        {formatPrice(projectList[0]?.expected_price) || ""}
+                                    </h5>
+                                    <p className="small mb-1">
+                                        <i className="icon-feather-map-pin me-1"></i>
+                                        {projectList[0].address}
+                                    </p>
+                                    <div className="d-flex flex-wrap column-gap-3">
                                         {projectList[0]?.occupied_area && (
-                                            <small>
+                                            <span>
                                                 <i className="icon-img-ratio"></i> {projectList[0].occupied_area} {projectList[0]?.unit_type}
-                                            </small>
+                                            </span>
                                         )}
-                                        {projectList[0]?.total_area && (
-                                            <small>
-                                                <i className="icon-img-ratio"></i> {projectList[0].total_area} {projectList[0].unit_type}
-                                            </small>
+                                        {projectList[0]?.project_size && (
+                                            <span>
+                                                <i className="icon-img-ratio"></i> {projectList[0].project_size} {projectList[0].unit_type}
+                                            </span>
                                         )}
                                         {projectList[0]?.possession_status && (
-                                            <small>
+                                            <span>
                                                 <i className="icon-img-check"></i> {projectList[0].possession_status}
-                                            </small>
+                                            </span>
                                         )}
                                     </div>
 
@@ -209,7 +213,7 @@ export default function ProjectMobileMapView({ loading, projectList }) {
                 scroll={true}
             >
                 <Offcanvas.Header closeButton>
-                    <Offcanvas.Title></Offcanvas.Title>
+                    <Offcanvas.Title>Projects in UAE</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     {projectList?.map((project, i) => {
@@ -218,8 +222,8 @@ export default function ProjectMobileMapView({ loading, projectList }) {
                                 setHoveredProperty(project);
                                 setShowFullList(false);
                             }}>
-                                <Card.Body className="p-2 d-flex align-items-start">
-                                    <div style={{ width: '100px', height: '75px', borderRadius: '6px', overflow: 'hidden', flexShrink: 0 }}>
+                                <Card.Body className="p-0 d-flex align-items-start">
+                                    <div style={{ width: '120px', height: '120px', borderRadius: '4px', overflow: 'hidden', flexShrink: 0 }}>
                                         <CardImageSlider
                                             data={project}
                                             showSq={true}
@@ -230,23 +234,28 @@ export default function ProjectMobileMapView({ loading, projectList }) {
                                         />
                                     </div>
 
-                                    <div className="ms-2 flex-grow-1">
-                                        <div className="text-primary fw-semibold small mb-1">
-                                            {formatPrice(project?.expected_price) || ""}
-                                        </div>
-                                        <div className="small fw-semibold text-truncate" style={{ maxWidth: '100%' }}>
+                                    <div className="ps-3 flex-grow-1">                                        
+                                        <h5 className="small fw-semibold text-truncate">
                                             {project.project_name}
-                                        </div>
-                                        <div className="d-flex justify-content-between mt-1 text-muted small" style={{ maxWidth: '100%' }}>
+                                        </h5>
+                                        <h5>
+                                            {formatPrice(project?.expected_price) || ""}
+                                        </h5>
+                                        <p className="small mb-1">
+                                        <i className="icon-feather-map-pin me-1"></i>
+                                        {project.address}
+                                        </p>
+                                        <div className="d-flex flex-wrap column-gap-3">
                                             {project?.occupied_area && (
-                                                <small><i className="icon-img-ratio"></i> {project.occupied_area} {project?.unit_type}</small>
+                                                <span><i className="icon-img-ratio"></i> {project.occupied_area} {project?.unit_type}</span>
                                             )}
-                                            {project?.total_area && (
-                                                <small><i className="icon-img-ratio"></i> {project.total_area} {project?.unit_type}</small>
+                                            {project?.project_size && (
+                                                <span><i className="icon-img-ratio"></i> {project.project_size} {project?.unit_type} </span>
                                             )}
                                             {project?.possession_status && (
-                                                <small><i className="icon-img-check"></i> {project.possession_status}</small>
+                                                <span><i className="icon-img-check"></i> {project.possession_status}</span>
                                             )}
+
                                         </div>
 
                                     </div>

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { FaFilter } from "react-icons/fa6";
 import { CiFilter } from "react-icons/ci";
+import { Funnel } from "react-bootstrap-icons";
 import {
   Button,
   Offcanvas,
@@ -272,14 +273,11 @@ export function PropertyMobileFilters({
 
   return (
     <>
-      <div className="d-flex justify-content-between p-3">
-        {/* Filter Button */}
-        <Button variant="outline-primary" onClick={() => setShow(true)}>
-          Filters <CiFilter size={20} />
-        </Button>
-
-        
-      </div>
+      
+      {/* Filter Button */}
+      <Button variant="outline-primary d-md-none" size="sm" onClick={() => setShow(true)}>
+        <Funnel color="#1365CF" size={16} /> Filters
+      </Button>              
 
       {/* Bootstrap Offcanvas */}
       <Offcanvas
