@@ -1026,7 +1026,11 @@ class DashboardController extends Controller
                 $agentAdditional->docName = !empty($agentAdditional->agent_doc) ? $agentAdditional->agent_doc : null;
                 unset($agentAdditional->agent_doc);
             }
-
+            if ($agentAdditional) {
+               $agentAdditional->company_logo = !empty($agentAdditional->company_logo)
+                    ? asset('user_upload/company_logo/' . $agentAdditional->company_logo)
+                    : null;
+            }
             if (!empty($get_user?->image)) {
                 $get_user->image = asset('user_upload/profile_image/' . $get_user->image);
             }
