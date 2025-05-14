@@ -43,7 +43,7 @@ const Index = () => {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(true);
   const [locality, setLocality] = useState(null);
-  const { defaultCity } = useAuth();
+  const { defaultCity, getBadgeButtonClass, buildAgentUrl } = useAuth();
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   const [dropdownState, setDropdownState] = useState({});
   const [brokerType, setBrokerType] = useState("A");
@@ -89,7 +89,6 @@ const Index = () => {
     }
   }
 
-  console.log("bages list", badgeList)
 
   useEffect(() => {
     if (router?.isReady) {
@@ -358,7 +357,7 @@ const Index = () => {
                           </Dropdown.Menu>
                         </Dropdown>
                       </Col>
-                      
+
                       {/* Name Search */}
                       <Col className="col-lg col-sm-6 col-12">
                         <Form.Group className="form-field with-icon-start">
@@ -414,19 +413,19 @@ const Index = () => {
                       <Form.Check
                         type="switch"
                         id="custom-switch"
-                        
+
                         checked={isVerified}
                         onChange={handleVerifiedAgentChange}
                       />
                     </div>
                   </div>
                 </div>
-                </Col>
-              </Row>
+              </Col>
+            </Row>
             <Row>
               <Col className="col-xl-9 col-lg-8 col-12">
                 {/* Main Content */}
-                
+
                 {loading && (
                   <div className="loading-spinner">
                     <div className="spinner-border" role="status">
@@ -441,41 +440,41 @@ const Index = () => {
                   <Row className="list-display ">
                     {agentList.map((agent) => (
                       <Col className="col-12" key={agent.id}>
-                        <div className="card card-agent">                          
-                            <Row className="gx-0">
-                              <Col xs={3}>
-                                <div className="card-image">
-                                  <a>
-                                    <img
-                                      src={agent?.image || "/assets/images/agents/user.jpg"}
-                                      alt={agent?.name || "User"}
-                                      className="img-fluid"
-                                    />
-                                  </a>
-                                  {/* Static Company Logo Image Only */}
-                                    
-                                </div>
-                              </Col>
-                              <Col lg xs={9}>
-                                <div className="card-body">
-                                  <div className="card-title">
-                                    <h4>
-                                      <a href={`/agent-details/${agent.user_id}`}>{agent?.name || "Not Available"}</a>
-                                      {agent?.is_verified_agent && (
-                                        <span title="Verified">
-                                          <i className="icon-img-check ms-1"></i>
-                                        </span>
-                                      )}
-                                    </h4>
+                        <div className="card card-agent">
+                          <Row className="gx-0">
+                            <Col xs={3}>
+                              <div className="card-image">
+                                <a>
+                                  <img
+                                    src={agent?.image || "/assets/images/agents/user.jpg"}
+                                    alt={agent?.name || "User"}
+                                    className="img-fluid"
+                                  />
+                                </a>
+                                {/* Static Company Logo Image Only */}
 
-                                    {/* 🏅 Badges Section */}
-                                    {agent?.userbadges?.length > 0 && (
-                                      <div className="d-flex flex-wrap gap-2 mb-2">
-                                        {agent.userbadges.map((badge) => (
-                                          <>                                          
+                              </div>
+                            </Col>
+                            <Col lg xs={9}>
+                              <div className="card-body">
+                                <div className="card-title">
+                                  <h4>
+                                    <a href={buildAgentUrl(agent)}>{agent?.name || "Not Available"}</a>
+                                    {agent?.is_verified_agent && (
+                                      <span title="Verified">
+                                        <i className="icon-img-check ms-1"></i>
+                                      </span>
+                                    )}
+                                  </h4>
+
+                                  {/* 🏅 Badges Section */}
+                                  {agent?.userbadges?.length > 0 && (
+                                    <div className="d-flex flex-wrap gap-2 mb-2">
+                                      {agent.userbadges.map((badge) => (
+                                        <>
                                           <Button
                                             variant=""
-                                            className="bg-info-subtle"
+                                            className={getBadgeButtonClass(badge.name)}
                                             size="sm"
                                             title={badge.description}
                                             key={badge.badge_id}
@@ -487,77 +486,81 @@ const Index = () => {
                                               height={20}
                                               width={20}
                                             />{" "}{badge.name}
-                                          </Button>                                          
-                                          </>
-                                        ))}
-                                      </div>
-                                    )}
-                                  </div>
+                                          </Button>
+                                        </>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
 
-                                  {/* Company Name */}
-                                  <p className="mb-1 d-flex align-items-center gap-2">
-                                    <i className="icon-img-company"></i>
-                                    <span>{agent?.company_name || "Originate Soft Pvt Ltd"}</span>
-                                  </p>
-                                  <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">English, Arabic, French, Italian</span></p>
+                                {/* Company Name */}
+                                <p className="mb-1 d-flex align-items-center gap-2">
+                                  {agent?.company_name && (
+                                    <>
+                                      <i className="icon-img-company"></i>
+                                      <span>{agent?.company_name || ""}</span>
+                                    </>
+                                  )}
+                                </p>
+                                <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">English, Arabic, French, Italian</span></p>
 
-                                  <div className="mb-2">
-                                    <span className="badge badge-outline-secondary text-dark me-2">
-                                      {agent?.forSell} {translation?.sale || "SALE"}
-                                    </span>
-                                    
-                                    <span className="badge badge-outline-secondary text-dark me-2">
-                                        {agent?.forRent} {translation?.rent || "RENT"}
-                                      </span>
-                                  </div>
-                                  {/* Phone
+                                <div className="mb-2">
+                                  <span className="badge badge-outline-secondary text-dark me-2">
+                                    {agent?.forSell} {translation?.sale || "SALE"}
+                                  </span>
+
+                                  <span className="badge badge-outline-secondary text-dark me-2">
+                                    {agent?.forRent} {translation?.rent || "RENT"}
+                                  </span>
+                                </div>
+                                {/* Phone
                                   <p className="mb-2">
                                     <i className="icon-feather-phone"></i>{" "}
                                     {agent.phone || "Not Available"}
                                   </p> */}
 
-                                  {/* Email
+                                {/* Email
                                   <p className="mb-2">
                                     <i className="icon-feather-mail"></i>{" "}
                                     {agent.email || "Not Available"}
                                   </p> */}
 
-                                  {/* Service Area */}
-                                  {agent?.service_area?.length > 0 && (
-                                    <p className="mb-3">
-                                     <GeoAlt color="#1365CF" size={18} /> {translation?.serve_in || "Serve in"}{": "}
-                                      <span className="text-muted">
-                                        {[...new Set(agent?.service_area?.map((area) => area.city))].join(", ")}
-                                      </span>                                      
-                                    </p>
-                                  )}
-                                  <div className="d-grid d-sm-flex gap-2 mb-3">
-                                    
-                                      <Button
-                                      variant="outline-primary"
-                                      size="sm"
-                                      onClick={() => setShowEnquiryModal(true)}
-                                    >
-                                      <EnvelopeFill color="#1365CF" size={16} /> {translation?.email || "Email"}
-                                    </Button>
-                                    <Button
-                                      variant="outline-info"
-                                      size="sm"
-                                      onClick={() => setShowEnquiryModal(true)}
-                                      style={{minWidth: '72px'}}
-                                    >
-                                      <PhoneFill color="#0dcaf0" size={16} /> {translation?.call || "Call"}
-                                    </Button>
-                                    <Button
-                                      variant="outline-success"
-                                      size="sm"
-                                      onClick={() => setShowEnquiryModal(true)}
-                                    >
-                                      <Whatsapp color="#198754" size={16} />{" "}
-                                      {translation?.whatsapp || "whatsapp"}
-                                    </Button>                                    
+                                {/* Service Area */}
+                                {agent?.service_area?.length > 0 && (
+                                  <p className="mb-3">
+                                    <GeoAlt color="#1365CF" size={18} /> {translation?.serve_in || "Serve in"}{": "}
+                                    <span className="text-muted">
+                                      {[...new Set(agent?.service_area?.map(area => area.locality?.locality_name))].join(", ")}
+                                    </span>
+                                  </p>
+                                )}
+                                <div className="d-grid d-sm-flex gap-2 mb-3">
 
-                                    {/* {agent?.user_id && (
+                                  <Button
+                                    variant="outline-primary"
+                                    size="sm"
+                                    onClick={() => setShowEnquiryModal(true)}
+                                  >
+                                    <EnvelopeFill color="#1365CF" size={16} /> {translation?.email || "Email"}
+                                  </Button>
+                                  <Button
+                                    variant="outline-info"
+                                    size="sm"
+                                    onClick={() => setShowEnquiryModal(true)}
+                                    style={{ minWidth: '72px' }}
+                                  >
+                                    <PhoneFill color="#0dcaf0" size={16} /> {translation?.call || "Call"}
+                                  </Button>
+                                  <Button
+                                    variant="outline-success"
+                                    size="sm"
+                                    onClick={() => setShowEnquiryModal(true)}
+                                  >
+                                    <Whatsapp color="#198754" size={16} />{" "}
+                                    {translation?.whatsapp || "whatsapp"}
+                                  </Button>
+
+                                  {/* {agent?.user_id && (
                                       <a
                                         className="btn btn-primary btn-sm ms-auto"
                                         href={`/agent-details/${agent.user_id}`}
@@ -565,22 +568,22 @@ const Index = () => {
                                         {translation?.view_profile || "View Profile"}
                                       </a>
                                     )} */}
-                                    
-                                  </div>
-                                  
+
                                 </div>
-                              </Col>
-                              <Col lg='auto' className="p-3 align-self-end">
+
+                              </div>
+                            </Col>
+                            <Col lg='auto' className="p-3 align-self-end">
                               <NextImage
-                                    src="/assets/images/company-logo.png"
-                                    alt="Company Logo"
-                                    width={48}
-                                    height={48}
-                                    className="ms-auto"                                    
-                                    priority
-                                  />
-                              </Col>
-                            </Row>                          
+                                src="/assets/images/company-logo.png"
+                                alt="Company Logo"
+                                width={48}
+                                height={48}
+                                className="ms-auto"
+                                priority
+                              />
+                            </Col>
+                          </Row>
                         </div>
                       </Col>
                     ))}
@@ -663,3 +666,4 @@ const Index = () => {
 };
 
 export default Index;
+

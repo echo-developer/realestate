@@ -207,6 +207,27 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("city", JSON.stringify(city));
   };
 
+  function getBadgeButtonClass(name) {
+  switch (name) {
+    case "Responsive Broker":
+      return "btn btn-primary";
+    case "Quality Lister":
+      return "bg-primary-subtle btn btn-sm";
+    case "TruBroker":
+      return "bg-warning-subtle btn btn-sm";
+    case "Great performar":
+      return "bg-success-subtle btn btn-sm";
+    default:
+      return "btn btn-secondary";
+  }
+}
+
+
+const buildAgentUrl = (agent) => {
+  return `/agent-details/${agent.name.toLowerCase().replace(/\s+/g, '-')}?id=${agent.user_id}`;
+}
+
+
 
   return (
     <AuthContext.Provider
@@ -228,7 +249,9 @@ export const AuthProvider = ({ children }) => {
         localityInputSearch,
         setLocalityInputSearch,
         localityDropdown,
-        setLocalityDropdown
+        setLocalityDropdown, 
+        getBadgeButtonClass,
+        buildAgentUrl
       }}
     >
       {children}
