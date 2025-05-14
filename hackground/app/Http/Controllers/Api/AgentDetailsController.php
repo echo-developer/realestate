@@ -93,7 +93,10 @@ class AgentDetailsController extends Controller
                     ? asset('user_upload/company_logo/' . $data->agentAdditional->company_logo)
                     : null;
             }
-
+            if ($data->agentAdditional) {
+                $data->agentAdditional->languages = !empty($data->agentAdditional->language_speak) ? $data->agentAdditional->language_speak : null;
+                unset($data->agentAdditional->language_speak);
+            }
             // Handle userAdditional safely
             if ($data->userAdditional) {
                 $data->userAdditional->city = !empty($data->userAdditional->city)
@@ -323,7 +326,7 @@ class AgentDetailsController extends Controller
                 $item->forRent = UsersPropertyCount($item->id)['forRent'];
                 $item->is_verified_agent = (bool) $item->is_verified_agent;
                 $item->company_name = !empty($item->agentAdditional) ? $item->agentAdditional->company_name : null;
-                $item->language_speak = !empty($item->agentAdditional) ? $item->agentAdditional->language_speak : null;
+                $item->languages = !empty($item->agentAdditional) ? $item->agentAdditional->language_speak : null;
 
 
                 //$item->serviceArea ====> is $item->service_area in responce, [dont change!!]
