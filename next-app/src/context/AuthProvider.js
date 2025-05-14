@@ -210,7 +210,7 @@ export const AuthProvider = ({ children }) => {
   function getBadgeButtonClass(name) {
   switch (name) {
     case "Responsive Broker":
-      return "btn btn-primary";
+      return "bg-info-subtle btn btn-sm";
     case "Quality Lister":
       return "bg-primary-subtle btn btn-sm";
     case "TruBroker":

@@ -1705,12 +1705,12 @@ const index = () => {
                    className={showMapView ? 'col-12' : 'col-lg-9'}
                    >
                     <div className="d-md-flex justify-content-between align-items-center mb-3">
-                      <h4 className="mb-3 mb-md-0">
+                      <h5 className="mb-3 mb-md-0">
                         {translation?.total || "Total"}{" "}
                         <span className="text-primary">{totalPropertyCount}</span>{" "}
                         {translation?.properties_in || "Properties in"}{" "}
                         {defaultCity?.name || "Kolkata"}
-                      </h4>
+                      </h5>
                       <div className="d-flex gap-2">
                         <div className="sort-by">
                           <DropdownButton

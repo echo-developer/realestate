@@ -49,7 +49,7 @@ export default function ProjectMobileMapView({ loading, projectList }) {
 
     return (
         <>
-            <div className="position-relative" style={{ height: '100vh', width: '100vw', overflow: 'hidden' }}>
+            <div className="position-relative" style={{ height: '75vh', width: '100vw', overflow: 'hidden' }}>
                 {isLoaded ? (<>
                     <GoogleMap
                         mapContainerStyle={containerStyle}
