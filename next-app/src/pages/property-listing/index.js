@@ -1758,7 +1758,7 @@ const index = () => {
                         >
                           <Map color="#1365CF" size={16} className="me-1" /> Map View
                         </Button>
-                        
+                        {isMobile && (
                         <PropertyMobileFilters
                           showDrop={showDrop}
                           setShowDrop={setShowDrop}
@@ -1767,7 +1767,7 @@ const index = () => {
                           propertyTypeList={propertyTypeList}
                           subPropertyList={subPropertyList}
                         />
-                        
+                        )}
                       </div>
                     </div>
                   </aside>

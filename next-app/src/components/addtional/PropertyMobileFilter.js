@@ -4,7 +4,6 @@ import { ChevronLeft, Plus, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { FaFilter } from "react-icons/fa6";
-import { CiFilter } from "react-icons/ci";
 import { Funnel } from "react-bootstrap-icons";
 import {
   Button,

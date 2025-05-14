@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { ChevronLeft, Plus, X } from "lucide-react";
 import AuthUser from "../Authentication/AuthUser";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CiFilter } from "react-icons/ci";
+import { Funnel } from "react-bootstrap-icons";
 import {
   Button,
   Offcanvas,
@@ -298,12 +298,10 @@ export function ProjectMobileFilters({
     }
 
   return (
-    <div>
-      <div className="d-flex justify-content-between p-3">
-        <Button variant="outline-primary" onClick={() => setShow(true)}>
-          Filters <CiFilter size={20} />
-        </Button>        
-      </div>
+    <div>      
+      <Button size='sm' variant="outline-primary" onClick={() => setShow(true)}>
+        <Funnel color="#1365CF" size={16} />  Filters
+      </Button>             
 
       {/* Bootstrap Offcanvas */}
       <Offcanvas

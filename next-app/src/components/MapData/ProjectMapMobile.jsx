@@ -156,49 +156,52 @@ export default function ProjectMobileMapView({ loading, projectList }) {
 
                     {/* First property preview */}
                     <div className="property-card-wrapper mb-2">
-                        <Card className="shadow-sm border-0 rounded-3">
-                            <Card.Body className="p-0 d-flex align-items-start">
-                                <div style={{ width: '120px', height: '120px', borderRadius: '4px', overflow: 'hidden' }}>
-                                    <CardImageSlider
-                                        data={projectList[0]}
-                                        showSq={true}
-                                        keyword={"gallery"}
-                                        icons={true}
-                                        showFavIcon={false}
-                                        showImgCount={false}
-                                    />
-                                </div>
-                                <div className="ps-3 flex-grow-1">                                    
-                                    <h5 className="small fw-semibold text-truncate">
-                                        {projectList[0]?.project_name}
-                                    </h5>
-                                    <h5>
-                                        {formatPrice(projectList[0]?.expected_price) || ""}
-                                    </h5>
-                                    <p className="small mb-1">
-                                        <i className="icon-feather-map-pin me-1"></i>
-                                        {projectList[0].address}
-                                    </p>
-                                    <div className="d-flex flex-wrap column-gap-3">
-                                        {projectList[0]?.occupied_area && (
-                                            <span>
-                                                <i className="icon-img-ratio"></i> {projectList[0].occupied_area} {projectList[0]?.unit_type}
-                                            </span>
-                                        )}
-                                        {projectList[0]?.project_size && (
-                                            <span>
-                                                <i className="icon-img-ratio"></i> {projectList[0].project_size} {projectList[0].unit_type}
-                                            </span>
-                                        )}
-                                        {projectList[0]?.possession_status && (
-                                            <span>
-                                                <i className="icon-img-check"></i> {projectList[0].possession_status}
-                                            </span>
-                                        )}
+                        <Card className="card-ads h-auto">
+                            <Row className="gx-0">
+                                <Col xs='auto'>
+                                    <div class="card-image" style={{ width: '120px', height: '120px', borderRadius: '4px', overflow: 'hidden' }}>
+                                        <CardImageSlider
+                                            data={projectList[0]}
+                                            showSq={true}
+                                            keyword={"gallery"}
+                                            icons={true}
+                                            showFavIcon={false}
+                                            showImgCount={false}
+                                        />
                                     </div>
-
-                                </div>
-                            </Card.Body>
+                                </Col>
+                                <Col xs>
+                                    <Card.Body className="py-2 pe-0">
+                                        <h5 className="small fw-semibold text-truncate">
+                                            {projectList[0]?.project_name}
+                                        </h5>
+                                        <h5>
+                                            {formatPrice(projectList[0]?.expected_price) || ""}
+                                        </h5>
+                                        <p className="small mb-1">
+                                            <i className="icon-feather-map-pin me-1"></i>
+                                            {projectList[0].address}
+                                        </p>
+                                        <div className="d-flex flex-wrap column-gap-3">
+                                            {projectList[0]?.occupied_area && (
+                                                <span>
+                                                    <i className="icon-img-ratio"></i> {projectList[0].occupied_area} {projectList[0]?.unit_type}
+                                                </span>
+                                            )}
+                                            {projectList[0]?.project_size && (
+                                                <span>
+                                                    <i className="icon-img-ratio"></i> {projectList[0].project_size} {projectList[0].unit_type}
+                                                </span>
+                                            )}
+                                            {projectList[0]?.possession_status && (
+                                                <span>
+                                                    <i className="icon-img-check"></i> {projectList[0].possession_status}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </Card.Body>
+                                </Col>
+                            </Row>
                         </Card>
                     </div>
 
@@ -218,48 +221,51 @@ export default function ProjectMobileMapView({ loading, projectList }) {
                 <Offcanvas.Body>
                     {projectList?.map((project, i) => {
                         return (
-                            <Card className="mb-3 shadow-sm border-0 rounded-3" key={i} onClick={() => {
+                            <Card className="card-ads h-auto mb-3" key={i} onClick={() => {
                                 setHoveredProperty(project);
                                 setShowFullList(false);
                             }}>
-                                <Card.Body className="p-0 d-flex align-items-start">
-                                    <div style={{ width: '120px', height: '120px', borderRadius: '4px', overflow: 'hidden', flexShrink: 0 }}>
-                                        <CardImageSlider
-                                            data={project}
-                                            showSq={true}
-                                            keyword={"gallery"}
-                                            icons={true}
-                                            showFavIcon={false}
-                                            showImgCount={false}
-                                        />
-                                    </div>
-
-                                    <div className="ps-3 flex-grow-1">                                        
-                                        <h5 className="small fw-semibold text-truncate">
-                                            {project.project_name}
-                                        </h5>
-                                        <h5>
-                                            {formatPrice(project?.expected_price) || ""}
-                                        </h5>
-                                        <p className="small mb-1">
-                                        <i className="icon-feather-map-pin me-1"></i>
-                                        {project.address}
-                                        </p>
-                                        <div className="d-flex flex-wrap column-gap-3">
-                                            {project?.occupied_area && (
-                                                <span><i className="icon-img-ratio"></i> {project.occupied_area} {project?.unit_type}</span>
-                                            )}
-                                            {project?.project_size && (
-                                                <span><i className="icon-img-ratio"></i> {project.project_size} {project?.unit_type} </span>
-                                            )}
-                                            {project?.possession_status && (
-                                                <span><i className="icon-img-check"></i> {project.possession_status}</span>
-                                            )}
-
+                                <Row className="gx-0">
+                                    <Col xs='auto'>
+                                        <div className="card-image" style={{ width: '120px', height: '120px', borderRadius: '4px', overflow: 'hidden', flexShrink: 0 }}>
+                                            <CardImageSlider
+                                                data={project}
+                                                showSq={true}
+                                                keyword={"gallery"}
+                                                icons={true}
+                                                showFavIcon={false}
+                                                showImgCount={false}
+                                            />
                                         </div>
+                                    </Col>
+                                    <Col xs>
+                                        <Card.Body className="py-2">
+                                            <h5 className="small fw-semibold text-truncate">
+                                                {project.project_name}
+                                            </h5>
+                                            <h5>
+                                                {formatPrice(project?.expected_price) || ""}
+                                            </h5>
+                                            <p className="small mb-1">
+                                                <i className="icon-feather-map-pin me-1"></i>
+                                                {project.address}
+                                            </p>
+                                            <div className="d-flex flex-wrap column-gap-3">
+                                                {project?.occupied_area && (
+                                                    <span><i className="icon-img-ratio"></i> {project.occupied_area} {project?.unit_type}</span>
+                                                )}
+                                                {project?.project_size && (
+                                                    <span><i className="icon-img-ratio"></i> {project.project_size} {project?.unit_type} </span>
+                                                )}
+                                                {project?.possession_status && (
+                                                    <span><i className="icon-img-check"></i> {project.possession_status}</span>
+                                                )}
 
-                                    </div>
-                                </Card.Body>
+                                            </div>
+
+                                        </Card.Body>
+                                    </Col>
+                                </Row>
                             </Card>
 
 

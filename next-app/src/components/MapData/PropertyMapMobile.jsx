@@ -187,7 +187,7 @@ export default function PropertyMapMobileView({
 
                     {/* First property preview */}
                     <div className="property-card-wrapper mb-2">
-                        <Card className="card-ads h-100 shadow-sm border-0 rounded-3">
+                        <Card className="card-ads h-100">
                             <Row className="gx-0">
                                 <Col xs='auto'>
                                     <div class="card-image" style={{ width: '120px', height: '100px', borderRadius: '4px', overflow: 'hidden' }}>
@@ -201,7 +201,7 @@ export default function PropertyMapMobileView({
                                     </div>
                                 </Col>
                                 <Col xs>
-                                    <Card.Body className="py-2">                                                                   
+                                    <Card.Body className="py-2 pe-0">
                                         <h5 className="small fw-semibold text-truncate">
                                             {propertyList[0]?.property_name}
                                         </h5>
@@ -220,7 +220,7 @@ export default function PropertyMapMobileView({
                                             {propertyList[0]?.area_in_sqft && (
                                                 <span><i className="icon-img-ratio"></i> {propertyList[0].area_in_sqft} sqft</span>
                                             )}
-                                        </div>                                    
+                                        </div>
                                     </Card.Body>
                                 </Col>
                             </Row>
@@ -244,13 +244,13 @@ export default function PropertyMapMobileView({
                 <Offcanvas.Body>
                     {propertyList?.map((property, i) => {
                         return (
-                            <Card className="card-ads h-auto mb-3 shadow-sm border-0 rounded-3" key={i} onClick={() => {
+                            <Card className="card-ads h-auto mb-3" key={i} onClick={() => {
                                 setHoveredProperty(property);
                                 setShowFullList(false);
                             }}>
                                 <Row className="gx-0">
                                     <Col xs='auto'>
-                                        <div className="card-image" style={{ width: '120px', height: '80px', borderRadius: '4px', overflow: 'hidden'}}>
+                                        <div className="card-image" style={{ width: '120px', height: '80px', borderRadius: '4px', overflow: 'hidden' }}>
                                             <CardImageSlider
                                                 data={property}
                                                 showSq={true}
@@ -261,7 +261,7 @@ export default function PropertyMapMobileView({
                                         </div>
                                     </Col>
                                     <Col xs>
-                                        <Card.Body className="py-2">                                    
+                                        <Card.Body className="py-2">
                                             <h5 className="small fw-semibold text-truncate">
                                                 {property?.property_name}
                                             </h5>
@@ -283,10 +283,8 @@ export default function PropertyMapMobileView({
                                                 )}
                                                 {property?.area_in_sqft && (
                                                     <span><i className="icon-img-ratio"></i> {property.area_in_sqft} sqft</span>
-                                                )}                                            
+                                                )}
                                             </div>
-
-                                        
                                         </Card.Body>
                                     </Col>
                                 </Row>

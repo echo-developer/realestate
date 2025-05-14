@@ -278,13 +278,7 @@ const Index = () => {
               </div>
             </React.Fragment>
 
-            <ProjectMobileFilters
-              showDrop={showDrop}
-              setShowDrop={setShowDrop}
-              selectedOption={selectedOption}
-              handleSortSelection={handleSortSelection}
-              toggleDropdown={toggleDropdown}
-            />
+            
           </>
         ) : (
           <div className="short-banner pt-4">
@@ -356,6 +350,15 @@ const Index = () => {
                     >
                       <i className="bi bi-map me-1"></i> Map View
                     </Button>
+                    {isMobile && (
+                      <ProjectMobileFilters
+                        showDrop={showDrop}
+                        setShowDrop={setShowDrop}
+                        selectedOption={selectedOption}
+                        handleSortSelection={handleSortSelection}
+                        toggleDropdown={toggleDropdown}
+                      />
+                    )}
                   </div>                  
                 </div>
               </aside>
