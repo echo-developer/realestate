@@ -100,8 +100,8 @@ class HomeController extends Controller
     public function city(Request $request)
     {
         try {
-            $lang = strtolower($request->input('lang', 'en')); // Default to 'en' if not provided
-            $data = $this->apiModel->getCity($lang); // Pass $lang dynamically
+            $lang = strtolower($request->input('lang', 'en'));
+            $data = $this->apiModel->getCity($lang);
 
             if ($data->isEmpty()) {
                 return response()->json([

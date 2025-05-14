@@ -624,3 +624,5 @@ ALTER TABLE `pref_railway_station` CHANGE `status` `status` INT(11) NULL DEFAULT
 
 ALTER TABLE `pref_city` ADD `laitude` FLOAT NULL DEFAULT NULL AFTER `state`, ADD `longitude` FLOAT NULL DEFAULT NULL AFTER `laitude`;
 ALTER TABLE `pref_city` CHANGE `laitude` `latitude` FLOAT NULL DEFAULT NULL;
+
+ALTER TABLE `pref_locality` ADD `google_place_id` VARCHAR(70) NULL DEFAULT NULL AFTER `locality_key`;

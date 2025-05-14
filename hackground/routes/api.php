@@ -344,10 +344,13 @@ Route::get('/payment-methods', [PaymentMethodController::class, 'fetchActivePaym
 Route::get('/faq-lists', [FaqController::class, 'fetchFaqListsforAPI'])->name('faq.list');
 
 
-Route::get('/global-localities', [GoogleLocalityController::class, 'getGoogletLocalities'])->name('get.localities');
 Route::get('/stored-localities', [GoogleLocalityController::class, 'fetchLocalityfromDatabase'])->name('get.localities.database');
+Route::get('/global-localities', [GoogleLocalityController::class, 'getGoogletLocalities'])->name('get.localities');
 Route::get('/yearly-price-trend', [GoogleLocalityController::class, 'getYearlyPriceTrend']);
 Route::get('/landmark-list', [GoogleLocalityController::class, 'landmark']);
+Route::get('/saveLocalityLatLong', [GoogleLocalityController::class, 'saveLocalityLatLong']);
+
+
 Route::get('/badge-list', [BadgesController::class, 'getBadges']);
 Route::get('/sync-landmark', [CustomLandmarksAddController::class, 'insertLandmarks']);
 

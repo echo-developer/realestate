@@ -1801,3 +1801,24 @@ if (!function_exists('is_my_propertyOrProject')) {
         return false;
     }
 }
+
+if (!function_exists('cURL_request')) {
+
+    function cURL_request($apiName = '', $data = [])
+    {
+        if (!empty($apiName)) {
+            $apiEndpoint = env('APP_URL') . '/api/' . $apiName;
+            // logger($apiEndpoint);
+            $ch = curl_init($apiEndpoint);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 1);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+                'data' => $data
+            ]));
+
+            curl_exec($ch);
+            curl_close($ch);
+        }
+    }
+}
