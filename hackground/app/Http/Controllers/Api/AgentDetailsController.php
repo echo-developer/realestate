@@ -265,7 +265,7 @@ class AgentDetailsController extends Controller
                 'properties.settings' => ['post_for' => $post_for, 'property_type' => $property_type]
             ];
 
-            $agentIdsQuery = User::with(['serviceArea:agent_id,loc_key,city,locality', 'agentAdditional:agent_id,company_name,company_logo', 'userbadges' => function ($q) {
+            $agentIdsQuery = User::with(['serviceArea:agent_id,loc_key,city,locality', 'agentAdditional:agent_id,company_name,company_logo,language_speak', 'userbadges' => function ($q) {
                 $q->with(['names' => function ($q2) {
                     $q2->where('lang', app()->getLocale()); // or use a fixed string like 'en'
                 }]);
@@ -306,18 +306,25 @@ class AgentDetailsController extends Controller
                 } else {
                     $item->image = null;
                 }
-                $company_logo_path = public_path('user_upload/company_logo/' . $item->agentAdditional->company_logo);
-                if (!empty($item->agentAdditional->company_logo) && file_exists($company_logo_path)) {
-                    $item->company_logo = asset('user_upload/company_logo/' . $item->agentAdditional->company_logo);
+                if (!empty($item->agentAdditional) && !empty($item->agentAdditional->company_logo)) {
+                    $company_logo_path = public_path('user_upload/company_logo/' . $item->agentAdditional->company_logo);
+
+                    if (file_exists($company_logo_path)) {
+                        $item->company_logo = asset('user_upload/company_logo/' . $item->agentAdditional->company_logo);
+                    } else {
+                        $item->company_logo = null;
+                    }
                 } else {
                     $item->company_logo = null;
                 }
+
 
                 $item->forSell = UsersPropertyCount($item->id)['forSell'];
                 $item->forRent = UsersPropertyCount($item->id)['forRent'];
                 $item->is_verified_agent = (bool) $item->is_verified_agent;
                 $item->company_name = !empty($item->agentAdditional) ? $item->agentAdditional->company_name : null;
-               
+                $item->language_speak = !empty($item->agentAdditional) ? $item->agentAdditional->language_speak : null;
+
 
                 //$item->serviceArea ====> is $item->service_area in responce, [dont change!!]
                 $item->service_area = !empty($item->serviceArea) ? collect($item->serviceArea)->map(function ($area) use ($lang) {
