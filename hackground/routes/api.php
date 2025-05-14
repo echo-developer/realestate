@@ -12,8 +12,8 @@ use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\SeachController;
 
-use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\BadgesController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PropertyController;
 use App\Http\Controllers\Admin\FaqListController;
 use App\Http\Controllers\Api\DashboardController;
@@ -28,6 +28,7 @@ use App\Http\Controllers\Api\PropertyUpdateControler;
 use App\Http\Controllers\Api\GoogleLocalityController;
 use App\Http\Controllers\Api\UserMembershipController;
 use App\Http\Controllers\Api\VerifyUserMailController;
+use App\Http\Controllers\CustomLandmarksAddController;
 use App\Http\Controllers\Admin\PaymentMethodController;
 use App\Http\Controllers\Api\PropertyDetailsController;
 use App\Http\Controllers\Api\Project\ImageEditController;
@@ -343,3 +344,4 @@ Route::get('/stored-localities', [GoogleLocalityController::class, 'fetchLocalit
 Route::get('/yearly-price-trend', [GoogleLocalityController::class, 'getYearlyPriceTrend']);
 Route::get('/landmark-list', [GoogleLocalityController::class, 'landmark']);
 Route::get('/badge-list', [BadgesController::class, 'getBadges']);
+Route::get('/sync-landmark', [CustomLandmarksAddController::class, 'insertLandmarks']);

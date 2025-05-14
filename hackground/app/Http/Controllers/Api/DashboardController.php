@@ -1105,6 +1105,7 @@ class DashboardController extends Controller
                 'license_no' => $req->license_number,
                 'experience_yr' => $req->experience_years,
                 'specialization' => $req->specialization,
+                'language_speak' => $req->language_speak,
                 'broker_type' => $req->broker_type,
                 'bussiness_phone' => $req->business_phone,
                 'bussiness_email' => $req->business_email,
