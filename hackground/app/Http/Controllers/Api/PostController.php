@@ -362,7 +362,7 @@ class PostController extends Controller
             'metro' => 'metro_station',
             'rail' => 'railway_station',
             'bus' => 'bus_stand',
-            'healthcare' => 'hospital',
+            'healthcare' => 'hospital', 
             'others' => 'others_landmarks'
         ];
 

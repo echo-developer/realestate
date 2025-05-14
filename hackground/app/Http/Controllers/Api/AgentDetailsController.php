@@ -88,6 +88,12 @@ class AgentDetailsController extends Controller
                     : null;
             }
 
+            if ($data->agentAdditional) {
+                $data->agentAdditional->company_logo = !empty($data->agentAdditional->company_logo)
+                    ? asset('user_upload/company_logo/' . $data->agentAdditional->company_logo)
+                    : null;
+            }
+
             // Handle userAdditional safely
             if ($data->userAdditional) {
                 $data->userAdditional->city = !empty($data->userAdditional->city)
@@ -259,7 +265,7 @@ class AgentDetailsController extends Controller
                 'properties.settings' => ['post_for' => $post_for, 'property_type' => $property_type]
             ];
 
-            $agentIdsQuery = User::with(['serviceArea:agent_id,loc_key,city,locality', 'agentAdditional:agent_id,company_name', 'userbadges' => function ($q) {
+            $agentIdsQuery = User::with(['serviceArea:agent_id,loc_key,city,locality', 'agentAdditional:agent_id,company_name,company_logo', 'userbadges' => function ($q) {
                 $q->with(['names' => function ($q2) {
                     $q2->where('lang', app()->getLocale()); // or use a fixed string like 'en'
                 }]);
@@ -300,10 +306,13 @@ class AgentDetailsController extends Controller
                 } else {
                     $item->image = null;
                 }
+
+
                 $item->forSell = UsersPropertyCount($item->id)['forSell'];
                 $item->forRent = UsersPropertyCount($item->id)['forRent'];
                 $item->is_verified_agent = (bool) $item->is_verified_agent;
                 $item->company_name = !empty($item->agentAdditional) ? $item->agentAdditional->company_name : null;
+                $item->company_logo = !empty($item->agentAdditional) ? asset('user_upload/company_logo/' . $item->agentAdditional->company_logo) : null;
 
                 //$item->serviceArea ====> is $item->service_area in responce, [dont change!!]
                 $item->service_area = !empty($item->serviceArea) ? collect($item->serviceArea)->map(function ($area) use ($lang) {
@@ -417,7 +426,6 @@ class AgentDetailsController extends Controller
 
     public function companyImage(Request $request)
     {
-
         try {
             $request->validate([
                 'company_logo' => 'required|image|mimes:jpg,jpeg,png,gif|max:5120',
@@ -428,6 +436,14 @@ class AgentDetailsController extends Controller
             if ($request->hasFile('company_logo')) {
 
                 $agent = AgentAdditional::find($agentid);
+
+                if (!$agent) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Agent not found.',
+                    ], 404);
+                }
+
                 $oldImage = $agent->company_logo;
 
                 $file = $request->file('company_logo');
@@ -437,12 +453,9 @@ class AgentDetailsController extends Controller
                 $fileName = time() . '-' . $sanitizedName . '.' . $extension;
                 $file->move(public_path('user_upload/company_logo'), $fileName);
 
-
-
                 if ($oldImage && file_exists(public_path('user_upload/company_logo/' . $oldImage))) {
                     unlink(public_path('user_upload/company_logo/' . $oldImage));
                 }
-
 
                 $update = $agent->update(['company_logo' => $fileName]);
 
@@ -462,14 +475,23 @@ class AgentDetailsController extends Controller
                     ]);
                 }
             }
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'No image file found in the request.',
+            ], 400);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'status' => 0,
                 'message' => 'File size limit exceeded. Max size 5 MB',
-                // 'errors' => $e->errors(),
             ], 200);
         } catch (\Throwable $e) {
-            throw $e;
+            // You may want to log the actual error here.
+            return response()->json([
+                'status' => 0,
+                'message' => 'Something went wrong.',
+                'error' => $e->getMessage(),
+            ], 500);
         }
     }
 }
