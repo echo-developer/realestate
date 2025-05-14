@@ -586,7 +586,7 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
         <div className="acc-panel">
           <form id="projectSearchFilter" onSubmit={handleSubmit}>
             <Row className="gx-3">
-              <Col className="col-lg-auto col-sm-2 col-auto" onClick={() => toggleDropdown('buy_sell')}>
+              <Col lg='auto' sm={2} xs='auto' onClick={() => toggleDropdown('buy_sell')}>
                 <Dropdown className="d-grid select-dropdown" show={dropdownState?.buy_sell}>
                   <Dropdown.Toggle variant="light" className="btn-form-control">
                     {selectedOption == 'rent' ? "Rent" : "Sale"}
@@ -610,14 +610,14 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
                 </Dropdown>
               </Col>
 
-              <Col className="col-lg-3 col-sm-6 col-12">
+              <Col lg sm={6} xs={12}>
                 {/* <LocalityOption
                   locality={localityData}
                   setLocalityData={setLocalityData}
                 /> */}
                 <Locality onSelectLocality={onSelectLocality} />
               </Col>
-              <Col className="col-lg-2 col-sm-6 col-12" onClick={() => toggleDropdown('project_type')}>
+              <Col lg sm={6} xs={12} onClick={() => toggleDropdown('project_type')}>
                 <Dropdown className="select-dropdown mb-3 d-grid" show={dropdownState?.project_type}>
                   <Dropdown.Toggle className="btn-form-control">
                     {/* Select Project Type */}
@@ -670,7 +670,7 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>
-              <Col className="col-lg-2 col-sm-6 col-12" onClick={() => toggleDropdown('possession_status')}>
+              <Col lg sm={6} xs={12} onClick={() => toggleDropdown('possession_status')}>
                 {/* <Form.Select
                   className={`${errors.possession_status ? "is-invalid" : ""}`}
                   name="possession_status"
@@ -742,7 +742,7 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
                 </Dropdown>
 
               </Col>
-              <Col className="col-lg-2 col-sm-6 col-12" onClick={() => toggleDropdown("budget")}>
+              <Col lg sm={6} xs={12} onClick={() => toggleDropdown("budget")}>
                 <Dropdown
                   className="select-dropdown d-grid mb-3"
                   show={dropdownState?.budget}
@@ -822,7 +822,7 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
                   </Dropdown.Menu>
                 </Dropdown>
               </Col>
-              {/* <Col className="col-lg-auto col-sm-2 col-auto">
+              {/* <Col lg='auto' sm={2} xs='auto'>
                 <Button style={{ backgroundColor: '#fff', color: '#007bff', border: '1px solid #007bff' }} onClick={() => setShowMapView(!showMapView)}>
                   {showMapView ? (
                     <>
@@ -836,16 +836,12 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
                 </Button>
               </Col> */}
 
-              <Col className="col-lg-auto col-6 mb-3">
-                <div className="d-grid">
+              <Col lg='auto' xs={6} className="mb-3">
+                <div className="d-grid columns-2">
                   <Button variant="primary" type="submit">
                     {translation?.search || "Search"}
                   </Button>
-                </div>
-              </Col>
-
-              <Col className="col-lg-auto col-6 mb-3">
-                <div className="d-grid">
+                
                   <Button
                     variant="primary"
                     onClick={() => {

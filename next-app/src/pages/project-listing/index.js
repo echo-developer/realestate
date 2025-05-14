@@ -263,15 +263,15 @@ const Index = () => {
         {isMobile ? (
           <>
             <React.Fragment>
-              <div className="d-md-none bg-primary p-3">
+              <div className="d-md-none p-3 pb-0">
                 <div className="position-relative">
                   <input
                     type="text"
                     placeholder={translation?.search_locality || "Search Locality"}
                     className="form-control ps-5"
                   />
-                  <Search
-                    size={18}
+                  <GeoAlt
+                    size={16}
                     className="position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"
                   />
                 </div>

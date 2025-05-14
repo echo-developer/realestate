@@ -79,7 +79,7 @@ export default function PropertyMapMobileView({
     return (
         <>
             {/* Full Screen Map Wrapper */}
-            <div className="position-relative" style={{ height: '100vh', width: '100vw', overflow: 'hidden' }}>
+            <div className="position-relative" style={{ height: '75vh', width: '100vw', overflow: 'hidden' }}>
                 {isLoaded ? (<>
                     <GoogleMap
                         mapContainerStyle={containerStyle}
@@ -176,7 +176,7 @@ export default function PropertyMapMobileView({
             {!showFullList && (
                 <div
                     className="position-fixed bottom-0 start-0 end-0 bg-white shadow-lg rounded-top"
-                    style={{ zIndex: 1030, padding: '1rem', height: '220px' }}
+                    style={{ zIndex: 1030, padding: '1rem', height: '200px' }}
                 >
                     <div className="d-flex justify-content-between align-items-center mb-2">
                         <h5 className="fw-bold mb-0">Properties for sale in UAE</h5>

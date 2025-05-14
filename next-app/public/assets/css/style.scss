@@ -3561,7 +3561,6 @@ input::-webkit-inner-spin-button {
 }
 .page-overlay{
 	position: fixed;
-	background-color: #000;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -5452,8 +5451,13 @@ fieldset{
 }
 #searchfilter{
 	position: relative;
+	.select-dropdown{
+		.btn-form-control{
+			border-color: transparent;
+		}		
+	}
 	.form-field{	
-		.form-control, .form-select, .select-dropdown .btn-form-control{
+		.form-control, .form-select{
 			border-color: transparent;
 		}
 	}

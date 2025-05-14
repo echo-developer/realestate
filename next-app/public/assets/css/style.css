@@ -35412,7 +35412,6 @@ input::-webkit-inner-spin-button {
 
 .page-overlay {
   position: fixed;
-  background-color: #000;
   top: 0;
   left: 0;
   width: 100%;
@@ -37105,7 +37104,10 @@ fieldset .btn-delete {
 #searchfilter {
   position: relative;
 }
-#searchfilter .form-field .form-control, #searchfilter .form-field .form-select, #searchfilter .form-field .select-dropdown .btn-form-control {
+#searchfilter .select-dropdown .btn-form-control {
+  border-color: transparent;
+}
+#searchfilter .form-field .form-control, #searchfilter .form-field .form-select {
   border-color: transparent;
 }
 

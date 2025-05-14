@@ -1027,15 +1027,15 @@ const index = () => {
 
         {isMobile ? (
           <React.Fragment>
-            <div className="d-md-none bg-primary p-3">
+            <div className="d-md-none p-3 pb-0">
               <div className="position-relative">
                 <input
                   type="text"
                   placeholder={translation?.search_locality || "Search Locality"}
                   className="form-control ps-5"
                 />
-                <Search
-                  size={18}
+                <GeoAlt
+                  size={16}
                   className="position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"
                 />
               </div>
@@ -1049,7 +1049,7 @@ const index = () => {
                 <div className="search-form">
                   <form id="searchfilter">
                     <div className="row gx-3">
-                      <Col className="col-lg-auto col-sm-2 col-auto" onClick={() => toggleDropdown('buy_sell')}>
+                      <Col lg='auto' className="col-lg-auto col-sm-2 col-auto" onClick={() => toggleDropdown('buy_sell')}>
                         <Dropdown className="d-grid select-dropdown" show={dropdownState?.buy_sell}>
                           <Dropdown.Toggle
                             variant="light"
@@ -1083,14 +1083,13 @@ const index = () => {
                           })}
                         </select>
                       </Col> */}
-                      <Col className="col-lg col-10">
+                      <Col lg>
                         <Locality onSelectLocality={onSelectLocality} />
                       </Col>
                       {/* {postFor === "sell" ||
-                  postFor === "rent" && ( */}
+                        postFor === "rent" && ( */}
                       <>
-                        <Col
-                          className="col-lg col-sm-4 col-12"
+                        <Col lg
                           data-id="parent"
                           // onClick={handlePropertyTypeDropDown}
                           onClick={() => toggleDropdown('property_type')}
@@ -1322,8 +1321,7 @@ const index = () => {
                             </Dropdown>
                           </Col>
                         )}
-                        <Col
-                          className="col-lg col-sm-4 col-12"
+                        <Col lg                          
                           data-id="parent"
                           // onClick={openBudgetDropDown}
                           onClick={() => toggleDropdown('budget')}
@@ -1414,15 +1412,11 @@ const index = () => {
                           )}
                         </Button>
                       </Col> */}
-                      <Col className="col-lg-auto col-6 mb-3">
-                        <div className="d-grid">
+                      <Col lg='auto' className="mb-3">
+                        <div className="d-grid columns-2">
                           <Button variant="primary" onClick={handleSearchClick}>
                             {translation?.search || "Search"}
-                          </Button>
-                        </div>
-                      </Col>
-                      <Col className="col-lg-auto col-6 mb-3">
-                        <div className="d-grid">
+                          </Button>                        
                           <Button
                             variant="primary"
                             // onClick={() => setAdvanceFilter((prev) => !prev)}

@@ -10,12 +10,14 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Collapse, Dropdown } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { useRouter, usePathname } from "next/navigation";
+import useIsMobile from "@/hooks/useIsMobile";
 // import useTranslation from "@/hooks/useTranslation";
 
 import { useAuth } from "@/context/AuthProvider";
 import MobileMenu from "../addtional/Mmenu";
 
 const Header = () => {
+  const isMobile = useIsMobile();
   const { callApi, isLogin, logout, GetMemberId } = AuthUser();
   const { defaultCity, handleDefaultCityChange, setGetAllCity, currency } = useAuth();
   const [isDesktopLogoLoaded, setIsDesktopLogoLoaded] = useState(false);
@@ -218,7 +220,7 @@ const Header = () => {
   return (
     <>
       <header id="header-container" className={scrollState}>
-        <nav className="navbar navbar-expand-xl">
+        <nav className="navbar navbar-expand-lg">
           <div className="container-fluid position-relative">
             <div className="d-flex align-items-center">
               <Link href="/" className="navbar-brand">
@@ -311,7 +313,7 @@ const Header = () => {
                 </Dropdown.Menu>
               </Dropdown>
             </div>
-            <div className="d-flex">
+            <div className="d-none d-lg-flex">
               <div id="navigation">
                 <ul
                   id="desk-nav"
@@ -930,9 +932,11 @@ const Header = () => {
                                 />
                               )}
                             </div>
-                            <p>{userData?.name || "Guest"}</p>
+                            
                           </Link>
                           <ul className="dropdown-menu dropdown-single dropdown-nav account-menu">
+                            <li><p className="text-italic">{userData?.name || "Guest"}</p></li>
+                            <Dropdown.Divider />
                             <li>
                               <Link href="/dashboard" class="dropdown-item">{translation.dashboard}</Link>
                             </li>
@@ -1006,7 +1010,7 @@ const Header = () => {
                       </React.Fragment>
                     )
                   ) : null}{" "}
-                  <li className="nav-item ms-3">
+                  <li className="nav-item">
                     <Link
                       href="/postproperty"
                       className="btn btn-primary btn-post"
@@ -1023,7 +1027,7 @@ const Header = () => {
                     </Link>
                   </li>
                   {/* language  */}
-                  <li className="nav-item ms-3 setlang">
+                  <li className="nav-item ms-xl-3 setlang">
                     <a className="nav-link dropdown-toggle" role="button">
                       <img
                         src={`/assets/images/flags/${currentLang === "ar"
@@ -1083,16 +1087,17 @@ const Header = () => {
                     </ul>
                   </li>
                 </ul>
-              </div>
-
-              <MobileMenu
+              </div>              
+            </div>
+            {isMobile && (
+            <MobileMenu
                 handleLogout={handleLogout}
                 selectedCity={selectedCity}
                 currentLang={currentLang}
                 changeLanguage={changeLanguage}
                 translation={translation}
               />
-            </div>
+            )}
           </div>
         </nav>
       </header>

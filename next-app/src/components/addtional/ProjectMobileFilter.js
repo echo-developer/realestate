@@ -298,7 +298,7 @@ export function ProjectMobileFilters({
     }
 
   return (
-    <div>      
+    <>      
       <Button size='sm' variant="outline-primary" onClick={() => setShow(true)}>
         <Funnel color="#1365CF" size={16} />  Filters
       </Button>             
@@ -308,9 +308,9 @@ export function ProjectMobileFilters({
         show={show}
         onHide={() => setShow(false)}
         placement="bottom"
-        style={{ height: "932px", maxHeight: "932px" }}
+        style={{ height: "100vh" }}
       >
-        <Offcanvas.Header className="d-block">
+        <Offcanvas.Header className="d-block border-bottom">
           <div className="d-flex justify-content-between mb-3">
             <Button
               variant="link"
@@ -650,7 +650,7 @@ export function ProjectMobileFilters({
           </Button>
         </div>
       </Offcanvas>
-    </div>
+    </>
   );
 }
 
