@@ -157,3 +157,4 @@ COMMIT;
 
 
 ALTER TABLE `pref_agent_additional_details` ADD `company_logo` TEXT NULL DEFAULT NULL AFTER `company_name`;
+ALTER TABLE `pref_agent_additional_details` ADD `language_speak` VARCHAR(255) NULL AFTER `specialization`;

@@ -306,13 +306,18 @@ class AgentDetailsController extends Controller
                 } else {
                     $item->image = null;
                 }
-
+                $company_logo_path = public_path('user_upload/company_logo/' . $item->agentAdditional->company_logo);
+                if (!empty($item->agentAdditional->company_logo) && file_exists($company_logo_path)) {
+                    $item->company_logo = asset('user_upload/company_logo/' . $item->agentAdditional->company_logo);
+                } else {
+                    $item->company_logo = null;
+                }
 
                 $item->forSell = UsersPropertyCount($item->id)['forSell'];
                 $item->forRent = UsersPropertyCount($item->id)['forRent'];
                 $item->is_verified_agent = (bool) $item->is_verified_agent;
                 $item->company_name = !empty($item->agentAdditional) ? $item->agentAdditional->company_name : null;
-                $item->company_logo = !empty($item->agentAdditional) ? asset('user_upload/company_logo/' . $item->agentAdditional->company_logo) : null;
+               
 
                 //$item->serviceArea ====> is $item->service_area in responce, [dont change!!]
                 $item->service_area = !empty($item->serviceArea) ? collect($item->serviceArea)->map(function ($area) use ($lang) {
@@ -435,7 +440,7 @@ class AgentDetailsController extends Controller
 
             if ($request->hasFile('company_logo')) {
 
-                $agent = AgentAdditional::find($agentid);
+                $agent = AgentAdditional::where('agent_id', $agentid)->first();
 
                 if (!$agent) {
                     return response()->json([
@@ -462,7 +467,7 @@ class AgentDetailsController extends Controller
                 if ($update) {
                     return response()->json([
                         'status' => 1,
-                        'message' => 'Profile image updated successfully.',
+                        'message' => 'Compnay logo updated successfully.',
                         'data' => [
                             'file_name' => $fileName,
                             'image_url' => asset('user_upload/company_logo/' . ltrim($fileName, '/')),
@@ -485,6 +490,55 @@ class AgentDetailsController extends Controller
                 'status' => 0,
                 'message' => 'File size limit exceeded. Max size 5 MB',
             ], 200);
+        } catch (\Throwable $e) {
+            // You may want to log the actual error here.
+            return response()->json([
+                'status' => 0,
+                'message' => 'Something went wrong.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function companyImageDelete(Request $request)
+    {
+        try {
+
+            if ($request->company_logo) {
+
+                $agent = AgentAdditional::where('agent_id', $request->agent_id)->first();
+
+                if (!$agent) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Agent not found.',
+                    ], 404);
+                }
+
+
+
+                if ($request->company_logo && file_exists(public_path('user_upload/company_logo/' . $request->company_logo))) {
+                    unlink(public_path('user_upload/company_logo/' . $request->company_logo));
+                }
+
+                $update = $agent->update(['company_logo' => '']);
+
+                if ($update) {
+                    return response()->json([
+                        'status' => 1,
+                        'message' => 'Compnay logo deleted successfully.',
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Failed to update the profile image in the database.',
+                    ]);
+                }
+            }
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'No image file found in the request.',
+            ], 400);
         } catch (\Throwable $e) {
             // You may want to log the actual error here.
             return response()->json([

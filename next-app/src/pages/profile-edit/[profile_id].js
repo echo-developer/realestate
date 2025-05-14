@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { toast } from "react-toastify";
@@ -18,6 +18,151 @@ import {
   Card
 } from "react-bootstrap";
 
+const languageOptions = [
+    "Afrikaans",
+    "Albanian",
+    "Amharic",
+    "Arabic",
+    "Aragonese",
+    "Armenian",
+    "Asturian",
+    "Azerbaijani",
+    "Basque",
+    "Belarusian",
+    "Bengali",
+    "Bosnian",
+    "Breton",
+    "Bulgarian",
+    "Catalan",
+    "Central Kurdish",
+    "Chinese",
+    "Chinese (Hong Kong)",
+    "Chinese (Simplified)",
+    "Chinese (Traditional)",
+    "Corsican",
+    "Croatian",
+    "Czech",
+    "Danish",
+    "Dutch",
+    "English",
+    "English (Australia)",
+    "English (Canada)",
+    "English (India)",
+    "English (New Zealand)",
+    "English (South Africa)",
+    "English (United Kingdom)",
+    "English (United States)",
+    "Esperanto",
+    "Estonian",
+    "Faroese",
+    "Filipino",
+    "Finnish",
+    "French",
+    "French (Canada)",
+    "French (France)",
+    "French (Switzerland)",
+    "Galician",
+    "Georgian",
+    "German",
+    "German (Austria)",
+    "German (Germany)",
+    "German (Liechtenstein)",
+    "German (Switzerland)",
+    "Greek",
+    "Guarani",
+    "Gujarati",
+    "Hausa",
+    "Hawaiian",
+    "Hebrew",
+    "Hindi",
+    "Hungarian",
+    "Icelandic",
+    "Indonesian",
+    "Interlingua",
+    "Irish",
+    "Italian",
+    "Italian (Italy)",
+    "Italian (Switzerland)",
+    "Japanese",
+    "Kannada",
+    "Kazakh",
+    "Khmer",
+    "Korean",
+    "Kurdish",
+    "Kyrgyz",
+    "Lao",
+    "Latin",
+    "Latvian",
+    "Lingala",
+    "Lithuanian",
+    "Macedonian",
+    "Malay",
+    "Malayalam",
+    "Maltese",
+    "Marathi",
+    "Mongolian",
+    "Nepali",
+    "Norwegian",
+    "Norwegian Bokmål",
+    "Norwegian Nynorsk",
+    "Occitan",
+    "Oriya",
+    "Oromo",
+    "Pashto",
+    "Persian",
+    "Polish",
+    "Portuguese",
+    "Portuguese (Brazil)",
+    "Portuguese (Portugal)",
+    "Punjabi",
+    "Quechua",
+    "Romanian",
+    "Romanian (Moldova)",
+    "Romansh",
+    "Russian",
+    "Scottish Gaelic",
+    "Serbian",
+    "Serbo",
+    "Shona",
+    "Sindhi",
+    "Sinhala",
+    "Slovak",
+    "Slovenian",
+    "Somali",
+    "Southern Sotho",
+    "Spanish",
+    "Spanish (Argentina)",
+    "Spanish (Latin America)",
+    "Spanish (Mexico)",
+    "Spanish (Spain)",
+    "Spanish (United States)",
+    "Sundanese",
+    "Swahili",
+    "Swedish",
+    "Tajik",
+    "Tamil",
+    "Tatar",
+    "Telugu",
+    "Thai",
+    "Tigrinya",
+    "Tongan",
+    "Turkish",
+    "Turkmen",
+    "Twi",
+    "Ukrainian",
+    "Urdu",
+    "Uyghur",
+    "Uzbek",
+    "Vietnamese",
+    "Walloon",
+    "Welsh",
+    "Western Frisian",
+    "Xhosa",
+    "Yiddish",
+    "Yoruba",
+    "Zulu"
+]
+
 const ProfileForm = () => {
   const { callApi, GetMemberId } = AuthUser();
   const [userData, setUserData] = useState(null);
@@ -30,7 +175,7 @@ const ProfileForm = () => {
   const [socialLinks, setSocialLinks] = useState([
     { key: "social_1", name: "", url: "" },
   ]);
-  
+
   const [uploadedFile, setUploadedFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [formData, setFormData] = useState({
@@ -49,8 +194,10 @@ const ProfileForm = () => {
     opening_hours: "",
     closing_hours: "",
     company_name: "",
+    company_logo: "",
     license_number: "",
     experience_years: "",
+    languages: [],
     specialization: "",
     specialization: "",
     business_phone: "",
@@ -58,16 +205,29 @@ const ProfileForm = () => {
     social_media: "",
     agent_document: "",
   });
-  
-  const [errors, setErrors] = useState({});
 
+  const [errors, setErrors] = useState({});
+  const [selectedCompanyLogo, setSelectedCompanyLogo] = useState(null);
   const memberId = GetMemberId();
+  const [input, setInput] = useState("");
+  const [languages, setLanguages] = useState(formData.languages || []);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const containerRef = useRef();
 
   useEffect(() => {
     if (memberId) {
       fetchUserData();
     }
   }, [memberId]);
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [])
 
   const fetchUserData = async () => {
     try {
@@ -93,9 +253,16 @@ const ProfileForm = () => {
           website_url: response.data.user.website_url || "",
           description: response.data.user.description || "",
           user_id: memberId,
+          company_logo: response.data?.user?.company_logo_name || ""
         };
 
         if (response.data.user.user_type === "A") {
+          if (response.data?.user?.company_logo) {
+            setSelectedCompanyLogo({
+              file_name: response.data?.user?.company_logo_name,
+              image_url: response.data?.user?.company_logo
+            })
+          }
           Object.assign(updatedFormData, {
             company_name: response.data.user.company_name || "",
             license_number: response.data.user.license_no || "",
@@ -108,6 +275,7 @@ const ProfileForm = () => {
             opening_hours: response.data.user.opening_hours || "",
             closing_hours: response.data.user.closing_hours || "",
             social_media: response.data.user.social_media || "",
+            company_logo: response.data?.user?.company_logo_name || ""
           });
           setPreview(response.data.user.agent_docucment || "");
           if (response?.data?.user?.service_area?.length > 0) {
@@ -138,7 +306,7 @@ const ProfileForm = () => {
         }
 
         setFormData(updatedFormData);
-      } 
+      }
     } catch (error) {
       console.error("An error occurred while fetching user data.");
     }
@@ -157,7 +325,7 @@ const ProfileForm = () => {
   };
   const handleSubmit = async (e) => {
     const service_area = addresses.map(item => {
-      if(typeof item.locality === 'object') {
+      if (typeof item.locality === 'object') {
         return {
           ...item,
           locality: item.locality?.locality_id
@@ -227,7 +395,7 @@ const ProfileForm = () => {
 
       if (response?.status === 1) {
         toast.success("File uploaded successfully!");
-      } 
+      }
     } catch (error) {
       console.error("An error occurred while uploading the file.");
     }
@@ -264,27 +432,98 @@ const ProfileForm = () => {
           user_id: memberId,
         },
       });
-      if(response&& response.status===1){
+      if (response && response.status === 1) {
         toast.success(response.message || 'Document Removed Successfully')
       }
-    } catch (error) {}
+    } catch (error) { }
   };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      const res = await callApi({
+        api: '/agent_company_image',
+        method: "UPLOAD",
+        data: {
+          agent_id: memberId,
+          company_logo: file
+        }
+      })
+      if (res && res?.status == 1) {
+        setSelectedCompanyLogo(res.data);
+        setFormData(prev => {
+          return {
+            ...prev,
+            company_logo: res.data.file_name
+          }
+        })
+      }
+    } catch (error) {
+      console.error(error.message)
+    }
+  }
+
+  const removeCompanyLogo = async () => {
+
+    try {
+      const res = await callApi({
+        api: `/agent_company_image_delete`,
+        method: "UPLOAD",
+        data: {
+          company_logo: formData.company_logo,
+          agent_id: memberId
+        }
+      })
+      if (res && res.status === 1) {
+        setSelectedCompanyLogo(null);
+        setFormData(prev => {
+          return {
+            ...prev,
+            company_logo: ""
+          }
+        })
+      }
+    } catch (error) {
+      console.error(error.message || "Something went wrong")
+    }
+  }
+
+  const filteredOptions = languageOptions
+    .filter((lang) => lang.toLowerCase().includes(input.toLowerCase()))
+    .filter((lang) => !languages.includes(lang));
+
+  const handleSelect = (lang) => {
+    const updated = [...languages, lang];
+    setLanguages(updated);
+    setFormData({ ...formData, languages: updated });
+    setInput("");
+    setShowDropdown(false);
+  };
+
+  const handleRemove = (langToRemove) => {
+    const updated = languages.filter((lang) => lang !== langToRemove);
+    setLanguages(updated);
+    setFormData({ ...formData, languages: updated });
+  };
+
+  console.log("form data", formData);
 
   return (
     <DashboardLayout>
       <div className="col-lg col-12">
         <div className="p-md-4 p-3">
-        <h1 className="h4 text-primary mb-4">
-          {translation?.profile_update || "Profile Update"}
-        </h1>
-        <Card>
-          <Card.Body className="pt-4">
-            <form
-              className="authentication-form"
-              autoComplete="off"
-              onSubmit={handleSubmit}
-            >
-              
+          <h1 className="h4 text-primary mb-4">
+            {translation?.profile_update || "Profile Update"}
+          </h1>
+          <Card>
+            <Card.Body className="pt-4">
+              <form
+                className="authentication-form"
+                autoComplete="off"
+                onSubmit={handleSubmit}
+              >
+
                 {/* Common Fields */}
                 <Row>
                   {/* Name */}
@@ -313,12 +552,12 @@ const ProfileForm = () => {
                   {/* Email */}
                   <div className="col-md-6 col-12">
                     <FloatingLabel
-                        controlId="floatingInput"
-                        label={
-                          translation?.your_email_address || "Your email address"
-                        }
-                        className="mb-4"
-                      >
+                      controlId="floatingInput"
+                      label={
+                        translation?.your_email_address || "Your email address"
+                      }
+                      className="mb-4"
+                    >
                       <Form.Control
                         type="email"
                         name="email"
@@ -336,14 +575,14 @@ const ProfileForm = () => {
 
                   {/* Phone Number */}
                   <div className="col-md-6 col-12">
-                    <div className="input-group mb-4">                  
+                    <div className="input-group mb-4">
                       <FloatingLabel controlId="floatingSelect" label={translation?.code || "Code"}
-                      style={{maxWidth: '120px'}}>
+                        style={{ maxWidth: '120px' }}>
                         <Form.Select
                           name="phone_code"
                           value={formData.phone_code}
                           onChange={handleChange}
-                          
+
                         >
                           <option value="">{translation?.code || "Code"}</option>
                           <option value="IND +91">IND +91</option>
@@ -352,7 +591,7 @@ const ProfileForm = () => {
                           <option value="+30">+30</option>
                         </Form.Select>
                       </FloatingLabel>
-                    
+
                       <FloatingLabel
                         controlId="floatingInput"
                         label={
@@ -373,7 +612,7 @@ const ProfileForm = () => {
                         {errors.phone && (
                           <small className="text-danger">{errors.phone}</small>
                         )}
-                      </FloatingLabel>                  
+                      </FloatingLabel>
                     </div>
                   </div>
 
@@ -398,6 +637,60 @@ const ProfileForm = () => {
                       />
                     </FloatingLabel>
                   </div>
+
+                  <div className="col-md-6 col-12" ref={containerRef}>
+                    <FloatingLabel
+                      controlId="floatingLanguages"
+                      label="Languages you can speak"
+                      className="mb-4"
+                    >
+                      <div className="form-control position-relative" style={{ minHeight: "58px" }}>
+                        <div className="d-flex flex-wrap gap-2">
+                          {languages.map((lang, idx) => (
+                            <span key={idx} className="badge bg-primary">
+                              {lang}
+                              <button
+                                type="button"
+                                className="btn-close btn-close-white btn-sm ms-1"
+                                onClick={() => handleRemove(lang)}
+                                style={{ fontSize: "0.6rem" }}
+                              ></button>
+                            </span>
+                          ))}
+                          <input
+                            type="text"
+                            value={input}
+                            onChange={(e) => {
+                              setInput(e.target.value);
+                              setShowDropdown(true);
+                            }}
+                            onFocus={() => setShowDropdown(true)}
+                            className="border-0 flex-grow-1"
+                            style={{ outline: "none", minWidth: "120px" }}
+                            placeholder="Type or select a language"
+                          />
+                        </div>
+                        {showDropdown && filteredOptions.length > 0 && (
+                          <ul
+                            className="list-group position-absolute w-100 mt-1"
+                            style={{ zIndex: 1000, maxHeight: "200px", overflowY: "auto" }}
+                          >
+                            {filteredOptions.map((lang, idx) => (
+                              <li
+                                key={idx}
+                                className="list-group-item list-group-item-action"
+                                onClick={() => handleSelect(lang)}
+                                style={{ cursor: "pointer" }}
+                              >
+                                {lang}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    </FloatingLabel>
+                  </div>
+
 
                   {/* Address */}
                   <div className="col-md-6 col-12">
@@ -447,7 +740,7 @@ const ProfileForm = () => {
                   <div className="col-md-6 col-12">
                     <FloatingLabel
                       controlId="floatingInput"
-                      label={translation?.website_title ||"Website Title"}
+                      label={translation?.website_title || "Website Title"}
                       className="mb-4"
                     >
                       <Form.Control
@@ -467,7 +760,7 @@ const ProfileForm = () => {
                   <div className="col-md-6 col-12">
                     <FloatingLabel
                       controlId="floatingInput"
-                      label={translation?.website_url ||"Website URL"}
+                      label={translation?.website_url || "Website URL"}
                       className="mb-4"
                     >
                       <Form.Control
@@ -489,188 +782,242 @@ const ProfileForm = () => {
                 {userType === "A" && (
 
                   <>
-                  <Row>
-                    <div className="col-md-6 col-12">
-                      <FloatingLabel
-                        controlId="floatingInput"
-                        label={translation?.company_name || "Company Name"}
-                        className="mb-4"
-                      >
-                        <Form.Control
-                          type="text"
-                          name="company_name"
-                          placeholder={translation?.company_name || "Company Name"}
-                          value={formData.company_name}
-                          onChange={handleChange}
-                        />
-                      </FloatingLabel>                  
-                    </div>
-                    <div className="col-md-6 col-12 mb-4">
-                      {/* File Upload Label */}
-                      <label
-                        htmlFor="agent_document"
-                        style={{
-                          display: "block",
-                          background: "#f8f9fa",
-                          border: "1px solid #ced4da",
-                          padding: "10px",
-                          borderRadius: "5px",
-                          textAlign: "center",
-                          cursor: "pointer",
-                          color: "#6c757d",
-                        }}
-                      >
-                        {uploadedFile
-                          ? uploadedFile.name
-                          : `${translation?.upload_document ||"Upload Document (PDF, DOC, JPG, PNG)" }`}
-                      </label>
+                    <Row>
+                      <div className="col-md-6 col-12">
+                        <FloatingLabel
+                          controlId="floatingInput"
+                          label={translation?.company_name || "Company Name"}
+                          className="mb-4"
+                        >
+                          <Form.Control
+                            type="text"
+                            name="company_name"
+                            placeholder={translation?.company_name || "Company Name"}
+                            value={formData.company_name}
+                            onChange={handleChange}
+                          />
+                        </FloatingLabel>
+                      </div>
+                      <div className="col-md-6 col-12">
+                        <FloatingLabel
+                          controlId="floatingFile"
+                          label={translation?.upload_company_logo || "Company Logo"}
+                          className="mb-4"
+                        >
+                          <Form.Control
+                            type="file"
+                            name="document"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                          />
 
-                      {/* Hidden File Input */}
-                      <input
-                        type="file"
-                        id="agent_document"
-                        name="agent_document"
-                        style={{ display: "none" }}
-                        accept=".pdf,.doc,.docx,.jpg,.png"
-                        onChange={handleFileUpload}
-                      />
-
-                      {/* Preview Section */}
-                      {preview && (
-                        <div className="mt-2 d-flex align-items-center gap-2">
-                          {preview.split(".").pop().toLowerCase() === "pdf" ? (
-                            // Show PDF Preview
-                            <div className="d-flex align-items-center">
-                              <i
-                                className="bi bi-file-earmark-pdf text-danger"
-                                style={{ fontSize: "2rem" }}
-                              ></i>
-                              <p className="mb-0 ms-2">{uploadedFile?.name}</p>
-                              <a
-                                href={preview}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="btn btn-primary btn-sm ms-2"
-                              >
-                                {translation?.view || "View"}
-                              </a>
-                              <button
-                                type="button"
-                                className="btn btn-danger btn-sm ms-2"
-                                onClick={removeFile}
-                              >
-                                <X size={14} />
-                              </button>
-                            </div>
-                          ) : (
-                            // Show Image Preview
-                            <div className="position-relative">
+                          {selectedCompanyLogo && (
+                            <div className="position-relative mt-3 d-inline-block">
                               <img
-                                src={preview}
-                                alt="Preview"
+                                src={selectedCompanyLogo.image_url}
+                                alt="Company Logo Preview"
                                 style={{
-                                  maxWidth: "100px",
+                                  maxWidth: "120px", // reduced size here
                                   height: "auto",
-                                  borderRadius: "5px",
+                                  borderRadius: "8px",
+                                  border: "1px solid #ddd",
                                 }}
                               />
                               <button
                                 type="button"
-                                className="btn btn-danger btn-sm position-absolute"
+                                onClick={removeCompanyLogo}
                                 style={{
-                                  top: "-5px",
-                                  right: "-5px",
+                                  position: "absolute",
+                                  top: "5px",
+                                  right: "5px",
+                                  background: "rgba(0,0,0,0.6)",
+                                  color: "#fff",
+                                  border: "none",
                                   borderRadius: "50%",
-                                  padding: "2px 5px",
+                                  width: "24px",
+                                  height: "24px",
+                                  cursor: "pointer",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  fontSize: "14px",
                                 }}
-                                onClick={removeFile}
                               >
-                                <X size={14} />
+                                ×
                               </button>
                             </div>
                           )}
-                        </div>
-                      )}
-                    </div>
-                    <div className="col-md-6 col-12">
-                      <FloatingLabel
-                        controlId="floatingInput"
-                        label={
-                          translation?.license_number || "License Number"
-                        }
-                        className="mb-4"
-                      >
-                        <Form.Control
-                          type="text"
-                          name="license_number"
-                          placeholder={translation?.license_number || "License Number"}
-                          value={formData.license_number}
-                          onChange={handleChange}
+
+                        </FloatingLabel>
+                      </div>
+
+
+                      <div className="col-md-6 col-12 mb-4">
+                        {/* File Upload Label */}
+                        <label
+                          htmlFor="agent_document"
+                          style={{
+                            display: "block",
+                            background: "#f8f9fa",
+                            border: "1px solid #ced4da",
+                            padding: "10px",
+                            borderRadius: "5px",
+                            textAlign: "center",
+                            cursor: "pointer",
+                            color: "#6c757d",
+                          }}
+                        >
+                          {uploadedFile
+                            ? uploadedFile.name
+                            : `${translation?.upload_document || "Upload Document (PDF, DOC, JPG, PNG)"}`}
+                        </label>
+
+                        {/* Hidden File Input */}
+                        <input
+                          type="file"
+                          id="agent_document"
+                          name="agent_document"
+                          style={{ display: "none" }}
+                          accept=".pdf,.doc,.docx,.jpg,.png"
+                          onChange={handleFileUpload}
                         />
-                      </FloatingLabel>
-                    </div>
-                    <div className="col-md-6 col-12">
-                      <FloatingLabel
-                        controlId="floatingInput"
-                        label={
-                          translation?.experience_years || "Experience (Years)"
-                        }
-                        className="mb-4"
-                      >
-                        <Form.Control
-                          type="text"
-                          name="experience_years"
-                          placeholder={translation?.experience_years || "Experience (Years)"}
-                          value={formData.experience_years}
-                          onChange={handleChange}
-                        />
-                      </FloatingLabel>
-                    </div>
-                    <div className="col-md-6 col-12">
-                      <FloatingLabel
-                        controlId="floatingInput"
-                        label={
-                          translation?.specialization || "Specialization"
-                        }
-                        className="mb-4"
-                      >
-                        <Form.Control
-                          type="text"
-                          name="specialization"
-                          placeholder={translation?.specialization || "Specialization"}
-                          value={formData.specialization}
-                          onChange={handleChange}
-                        />
-                      </FloatingLabel>
-                    </div>
-                    <div className="col-md-6 col-12">
-                      <label className="form-label">
-                        {translation?.broker_type || "Broker Type"}
-                      </label>
-                      {['radio'].map((type) => (
-                      <div key={`inline-${type}`} className="mb-3">
-                        
-                        <Form.Check
-                          inline
-                          type={type}
-                          label={translation?.independent || "Independent"}
-                          name="broker_type"
-                          value="I"
-                          checked={formData.broker_type === "I"}
-                          onChange={handleChange}
-                          id={`broker_type_1`}
-                        />                    
-                        <Form.Check
-                          inline
-                          type={type}
-                          label={translation?.agency || "Agency"}
-                          name="broker_type"
-                          value="A"
-                          checked={formData.broker_type === "A"}
-                          onChange={handleChange}
-                          id={`broker_type_2`}
-                        />                                          
-                        <Form.Check
+
+                        {/* Preview Section */}
+                        {preview && (
+                          <div className="mt-2 d-flex align-items-center gap-2">
+                            {preview.split(".").pop().toLowerCase() === "pdf" ? (
+                              // Show PDF Preview
+                              <div className="d-flex align-items-center">
+                                <i
+                                  className="bi bi-file-earmark-pdf text-danger"
+                                  style={{ fontSize: "2rem" }}
+                                ></i>
+                                <p className="mb-0 ms-2">{uploadedFile?.name}</p>
+                                <a
+                                  href={preview}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="btn btn-primary btn-sm ms-2"
+                                >
+                                  {translation?.view || "View"}
+                                </a>
+                                <button
+                                  type="button"
+                                  className="btn btn-danger btn-sm ms-2"
+                                  onClick={removeFile}
+                                >
+                                  <X size={14} />
+                                </button>
+                              </div>
+                            ) : (
+                              // Show Image Preview
+                              <div className="position-relative">
+                                <img
+                                  src={preview}
+                                  alt="Preview"
+                                  style={{
+                                    maxWidth: "100px",
+                                    height: "auto",
+                                    borderRadius: "5px",
+                                  }}
+                                />
+                                <button
+                                  type="button"
+                                  className="btn btn-danger btn-sm position-absolute"
+                                  style={{
+                                    top: "-5px",
+                                    right: "-5px",
+                                    borderRadius: "50%",
+                                    padding: "2px 5px",
+                                  }}
+                                  onClick={removeFile}
+                                >
+                                  <X size={14} />
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <div className="col-md-6 col-12">
+                        <FloatingLabel
+                          controlId="floatingInput"
+                          label={
+                            translation?.license_number || "License Number"
+                          }
+                          className="mb-4"
+                        >
+                          <Form.Control
+                            type="text"
+                            name="license_number"
+                            placeholder={translation?.license_number || "License Number"}
+                            value={formData.license_number}
+                            onChange={handleChange}
+                          />
+                        </FloatingLabel>
+                      </div>
+                      <div className="col-md-6 col-12">
+                        <FloatingLabel
+                          controlId="floatingInput"
+                          label={
+                            translation?.experience_years || "Experience (Years)"
+                          }
+                          className="mb-4"
+                        >
+                          <Form.Control
+                            type="text"
+                            name="experience_years"
+                            placeholder={translation?.experience_years || "Experience (Years)"}
+                            value={formData.experience_years}
+                            onChange={handleChange}
+                          />
+                        </FloatingLabel>
+                      </div>
+                      <div className="col-md-6 col-12">
+                        <FloatingLabel
+                          controlId="floatingInput"
+                          label={
+                            translation?.specialization || "Specialization"
+                          }
+                          className="mb-4"
+                        >
+                          <Form.Control
+                            type="text"
+                            name="specialization"
+                            placeholder={translation?.specialization || "Specialization"}
+                            value={formData.specialization}
+                            onChange={handleChange}
+                          />
+                        </FloatingLabel>
+                      </div>
+                      <div className="col-md-6 col-12">
+                        <label className="form-label">
+                          {translation?.broker_type || "Broker Type"}
+                        </label>
+                        {['radio'].map((type) => (
+                          <div key={`inline-${type}`} className="mb-3">
+
+                            <Form.Check
+                              inline
+                              type={type}
+                              label={translation?.independent || "Independent"}
+                              name="broker_type"
+                              value="I"
+                              checked={formData.broker_type === "I"}
+                              onChange={handleChange}
+                              id={`broker_type_1`}
+                            />
+                            <Form.Check
+                              inline
+                              type={type}
+                              label={translation?.agency || "Agency"}
+                              name="broker_type"
+                              value="A"
+                              checked={formData.broker_type === "A"}
+                              onChange={handleChange}
+                              id={`broker_type_2`}
+                            />
+                            {/* <Form.Check
                             inline
                             type={type}
                             label={translation?.franchise || "Franchise"}
@@ -679,20 +1026,20 @@ const ProfileForm = () => {
                             checked={formData.broker_type === "F"}
                             onChange={handleChange}
                             id={`broker_type_3`}
-                          />                      
+                          />                       */}
+                          </div>
+                        ))}
                       </div>
-                      ))}
-                    </div>
 
-                    <Col className="col-12">
-                      <BusinessAddressForm
-                        addresses={addresses}
-                        setAddresses={setAddresses}
-                      />
-                    </Col>
+                      <Col className="col-12">
+                        <BusinessAddressForm
+                          addresses={addresses}
+                          setAddresses={setAddresses}
+                        />
+                      </Col>
 
-                    <div className="col-md-6 col-12">
-                      <FloatingLabel
+                      <div className="col-md-6 col-12">
+                        <FloatingLabel
                           controlId="floatingInput"
                           label={
                             translation?.bussiness_phone || "Business Phone"
@@ -700,72 +1047,72 @@ const ProfileForm = () => {
                           className="mb-4"
                         >
                           <Form.Control
-                          type="text"
-                          name="business_phone"
-                          placeholder={translation?.bussiness_phone || "Business Phone" }
-                          value={formData.business_phone}
-                          onChange={handleChange}
-                        />
-                      </FloatingLabel>
-                    </div>
-                    <div className="col-md-6 col-12">
-                      <FloatingLabel
+                            type="text"
+                            name="business_phone"
+                            placeholder={translation?.bussiness_phone || "Business Phone"}
+                            value={formData.business_phone}
+                            onChange={handleChange}
+                          />
+                        </FloatingLabel>
+                      </div>
+                      <div className="col-md-6 col-12">
+                        <FloatingLabel
                           controlId="floatingInput"
-                          label={translation?.business_email ||"Business Email" }
+                          label={translation?.business_email || "Business Email"}
                           className="mb-4"
                         >
                           <Form.Control
-                          type="text"
-                          name="business_email"
-                          className="form-control"
-                          placeholder={translation?.business_email ||"Business Email" }
-                          value={formData.business_email}
-                          onChange={handleChange}
+                            type="text"
+                            name="business_email"
+                            className="form-control"
+                            placeholder={translation?.business_email || "Business Email"}
+                            value={formData.business_email}
+                            onChange={handleChange}
+                          />
+                        </FloatingLabel>
+                      </div>
+                      <Col className="col-12">
+                        <SocialMediaLinks
+                          socialLinks={socialLinks}
+                          setSocialLinks={setSocialLinks}
                         />
-                      </FloatingLabel>
-                    </div>
-                    <Col className="col-12">
-                      <SocialMediaLinks
-                        socialLinks={socialLinks}
-                        setSocialLinks={setSocialLinks}
-                      />
-                    </Col>                
+                      </Col>
 
-                    <Col className="col-sm-6 col-12">
-                      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                        <Form.Label>{translation?.opening_hours || "Opening Hours"}</Form.Label>
-                        <Form.Control 
-                          type="time"
-                          name="opening_hours"
-                          value={formData.opening_hours}
-                          placeholder=""
-                          onChange={handleChange}
-                        />
-                      </Form.Group>
-                    </Col>
+                      <Col className="col-sm-6 col-12">
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                          <Form.Label>{translation?.opening_hours || "Opening Hours"}</Form.Label>
+                          <Form.Control
+                            type="time"
+                            name="opening_hours"
+                            value={formData.opening_hours}
+                            placeholder=""
+                            onChange={handleChange}
+                          />
+                        </Form.Group>
+                      </Col>
 
-                    <Col className="col-sm-6 col-12">
-                      <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
-                        <Form.Label>{translation?.closing_hours || "Closing Hours"}</Form.Label>
-                        <Form.Control
-                          type="time" 
-                          name="closing_hours" 
-                          value={formData.closing_hours} 
-                          placeholder=""
-                          onChange={handleChange}
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
+                      <Col className="col-sm-6 col-12">
+                        <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
+                          <Form.Label>{translation?.closing_hours || "Closing Hours"}</Form.Label>
+                          <Form.Control
+                            type="time"
+                            name="closing_hours"
+                            value={formData.closing_hours}
+                            placeholder=""
+                            onChange={handleChange}
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
                   </>
                 )}
 
                 {/* Description */}
-              
+
                 <FloatingLabel controlId="floatingTextarea2"
-                  label={translation?.comments ||"Comments"}
+                  label={translation?.comments || "Comments"}
                   className="mb-4"
-                  >
+                >
                   <Form.Control
                     as="textarea"
                     name="description"
@@ -778,18 +1125,18 @@ const ProfileForm = () => {
                     onChange={handleChange}
                     style={{ height: '100px' }}
                   />
-                </FloatingLabel>              
-                
-              
+                </FloatingLabel>
 
-              <div className="d-grid d-sm-block">
-                <Button type="submit" variant="primary">
-                  {translation?.update || "Update"}
-                </Button>
-              </div>
-            </form>
-          </Card.Body>
-        </Card>
+
+
+                <div className="d-grid d-sm-block">
+                  <Button type="submit" variant="primary">
+                    {translation?.update || "Update"}
+                  </Button>
+                </div>
+              </form>
+            </Card.Body>
+          </Card>
         </div>
       </div>
     </DashboardLayout>

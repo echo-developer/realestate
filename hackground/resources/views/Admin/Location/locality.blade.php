@@ -108,7 +108,7 @@
                                         <td>{{ $item->locality_id }}</td>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->locality_key }}</td>
-                                        <td>{{ get_name_by_id('city_names', 'city_id', $item->city, 'en') }}</td>
+                                        <td>{{ get_name_by_id('city_names', 'city_id', $item->city, 'en') ?? 'N/A' }}</td>
                                         <td>
                                             <input data-id="{{ $item->locality_id }}" class="status d-none" type="checkbox"
                                                 data-toggle="toggle" data-on="Active" data-off="Inactive"
