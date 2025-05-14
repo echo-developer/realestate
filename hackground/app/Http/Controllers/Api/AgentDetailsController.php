@@ -435,7 +435,7 @@ class AgentDetailsController extends Controller
 
             if ($request->hasFile('company_logo')) {
 
-                $agent = AgentAdditional::find($agentid);
+                $agent = AgentAdditional::where('agent_id',$agentid)->first();
 
                 if (!$agent) {
                     return response()->json([
