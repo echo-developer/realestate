@@ -28,6 +28,7 @@ import {
   Nav,
   ProgressBar,
   FloatingLabel,
+  Badge
 } from "react-bootstrap";
 const Index = () => {
   const translation = useTranslation();
@@ -451,8 +452,15 @@ const Index = () => {
                                     className="img-fluid"
                                   />
                                 </a>
-                                {/* Static Company Logo Image Only */}
+                                <div className="rent-sale">
+                                  <Badge bg="warning" text="black" className="rounded-0 me-2">
+                                    {agent?.forSell} {translation?.sale || "SALE"}
+                                  </Badge>
 
+                                  <Badge bg="success" className="rounded-0 me-2">
+                                    {agent?.forRent} {translation?.rent || "RENT"}
+                                  </Badge>
+                                </div>
                               </div>
                             </Col>
                             <Col lg xs={9}>
@@ -504,15 +512,7 @@ const Index = () => {
                                 </p>
                                 <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">English, Arabic, French, Italian</span></p>
 
-                                <div className="mb-2">
-                                  <span className="badge badge-outline-secondary text-dark me-2">
-                                    {agent?.forSell} {translation?.sale || "SALE"}
-                                  </span>
-
-                                  <span className="badge badge-outline-secondary text-dark me-2">
-                                    {agent?.forRent} {translation?.rent || "RENT"}
-                                  </span>
-                                </div>
+                                
                                 {/* Phone
                                   <p className="mb-2">
                                     <i className="icon-feather-phone"></i>{" "}
@@ -527,15 +527,15 @@ const Index = () => {
 
                                 {/* Service Area */}
                                 {agent?.service_area?.length > 0 && (
-                                  <p className="mb-3">
+                                  <p className="mb-2">
                                     <GeoAlt color="#1365CF" size={18} /> {translation?.serve_in || "Serve in"}{": "}
                                     <span className="text-muted">
                                       {[...new Set(agent?.service_area?.map(area => area.locality?.locality_name))].join(", ")}
                                     </span>
                                   </p>
                                 )}
-                                <div className="d-grid d-sm-flex gap-2 mb-3">
-
+                                
+                                <div className="d-grid d-sm-flex gap-2">
                                   <Button
                                     variant="outline-primary"
                                     size="sm"
@@ -560,28 +560,29 @@ const Index = () => {
                                     {translation?.whatsapp || "whatsapp"}
                                   </Button>
 
-                                  {/* {agent?.user_id && (
-                                      <a
-                                        className="btn btn-primary btn-sm ms-auto"
-                                        href={`/agent-details/${agent.user_id}`}
-                                      >
-                                        {translation?.view_profile || "View Profile"}
-                                      </a>
-                                    )} */}
-
+                                  
                                 </div>
-
                               </div>
                             </Col>
-                            <Col lg='auto' className="p-3 align-self-end">
+                            <Col lg='auto' className="p-3 align-self-end text-lg-end">
                               <NextImage
                                 src="/assets/images/company-logo.png"
                                 alt="Company Logo"
                                 width={48}
                                 height={48}
-                                className="ms-auto"
+                                className="mb-3"
                                 priority
                               />
+                              {agent?.user_id && (
+                                <div>
+                                  <a
+                                    className="btn btn-primary btn-sm ms-auto"
+                                    href={`/agent-details/${agent.user_id}`}
+                                  >
+                                    {translation?.view_profile || "View Profile"}
+                                  </a>
+                                </div>
+                              )}
                             </Col>
                           </Row>
                         </div>

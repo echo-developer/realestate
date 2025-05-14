@@ -305,9 +305,9 @@ const Index = () => {
                           alt="Company Logo"
                           width={48}
                           height={48}
-                          className="c-logo"                                    
+                          className="c-logo"
                           priority
-                        />  
+                        />
                       </div>
                     </Col>
                     <Col className="col-sm col-12">
@@ -321,14 +321,14 @@ const Index = () => {
                       </p>
                       <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">English, Arabic, French, Italian</span></p>
                       {/* Service Area */}
-                      
-                        <p className="mb-3">
-                          <GeoAlt color="#1365CF" size={18} /> {translation?.serve_in || "Serve in"}{": "}
-                          <span className="text-muted">
-                            Garia, New Garia, Ajay Nager, Medica, Kalikapur, Ruby 
-                          </span>                                      
-                        </p>
-                      
+
+                      <p className="mb-3">
+                        <GeoAlt color="#1365CF" size={18} /> {translation?.serve_in || "Serve in"}{": "}
+                        <span className="text-muted">
+                          Garia, New Garia, Ajay Nager, Medica, Kalikapur, Ruby
+                        </span>
+                      </p>
+
 
                       {/* Email
                       <p className="mb-2">
@@ -385,7 +385,7 @@ const Index = () => {
                               {translation?.resopnse_broker || "Responsive Broker"}
                             </Button>
                           </div>
-                          
+
 
                           <div className="d-grid d-sm-flex gap-2">
                             <Button
@@ -417,94 +417,101 @@ const Index = () => {
                     </Col>
                   </Row>
                   <div className="d-none d-lg-block mb-2">
-                <h4>{translation?.about || "About"}
-                </h4>
-                <p>
-                  <span className="text-muted">{translation?.broker_type || "Broker Type:"}
-                  </span>
-                  {agentDetailsData?.broker_type === "I"
-                    ? "Indepedent"
-                    : agentDetailsData?.broker_type === "F"
-                      ? "Franchise"
-                      : agentDetailsData?.broker_type === "A"
-                        ? "Agent"
-                        : "Not Available"}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.expertise || "Expertise:"}
-                  </span>{" "}
-                  {agentDetailsData?.specialization || "Not Available"}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.address || "Address:"}
-                  </span>{" "}
-                  {agentDetailsData?.address || "Not Available"}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.service_areas || "Service Areas:"}
-                  </span>
-                  {[
-                    ...new Set(
-                      agentDetailsData?.service_area?.map((area) => area.city)
-                    ),
-                  ].join(", ")}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.social_media || "Social Media:"}
-                  </span>
-                  {[
-                    ...new Set(
-                      agentDetailsData?.social?.map(
-                        (area) => area.platform_name
-                      )
-                    ),
-                  ].join(", ")}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.properties_for_sale || "Properties For Sale"}
-                  </span>  (
-                  {agentDetailsData?.forSell}), {translation?.for_rent || "For Rent"}
-                  (
-                  {agentDetailsData?.forRent})
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.licence_number || "Licence Number:"}
-                  </span>{" "}
-                  {agentDetailsData?.license_no || "Not Available"}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.business_phone || "Business Phone:"}
-                  </span>{" "}
-                  {agentDetailsData?.bussiness_phone || "Not Available"}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.business_email || "Business Email:"}
-                  </span>{" "}
-                  {agentDetailsData?.bussiness_email || "Not Available"}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.company_name || "Company Name:"}
-                  </span>{" "}
-                  {agentDetailsData?.company_name || "Not Available"}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.working_hours || "Working Hours:"}
-                  </span>{" "}
-                  {agentDetailsData?.opening_hours} -{" "}
-                  {agentDetailsData?.closing_hours}
-                </p>
-                <p>
-                  <span className="text-muted d-block">{translation?.description || "Description:"}
-                  </span>
-                  {agentDetailsData?.description || "Not Available"}
-                </p>
-                <p>
-                  <span className="text-muted">{translation?.experience || "Experience:"}
-                  </span>{" "}
-                  {agentDetailsData?.experience_yr || "Not Available"}
-                  {agentDetailsData?.experience_yr && "Years"}
-                </p>
-              </div>
+                    <h4>{translation?.about || "About"}
+                    </h4>
+                    <Row>
+                      <Col>
+                        <p className="d-flex">
+                          <span className="text-muted">{translation?.broker_type || "Broker Type:"}
+                          </span>
+                          {agentDetailsData?.broker_type === "I"
+                            ? "Indepedent"
+                            : agentDetailsData?.broker_type === "F"
+                              ? "Franchise"
+                              : agentDetailsData?.broker_type === "A"
+                                ? "Agent"
+                                : "Not Available"}
+                        </p>
+                        <p>
+                          <span className="text-muted">{translation?.address || "Address:"}
+                          </span>{" "}
+                          {agentDetailsData?.address || "Not Available"}
+                        </p>
+                        <p>
+                          <span className="text-muted">{translation?.social_media || "Social Media:"}
+                          </span>
+                          {[
+                            ...new Set(
+                              agentDetailsData?.social?.map(
+                                (area) => area.platform_name
+                              )
+                            ),
+                          ].join(", ")}
+                        </p>
+                        <p>
+                          <span className="text-muted">{translation?.licence_number || "Licence Number:"}
+                          </span>{" "}
+                          {agentDetailsData?.license_no || "Not Available"}
+                        </p>
+                        <p>
+                          <span className="text-muted">{translation?.business_phone || "Business Phone:"}
+                          </span>{" "}
+                          {agentDetailsData?.bussiness_phone || "Not Available"}
+                        </p>
+                        <p>
+                          <span className="text-muted">{translation?.company_name || "Company Name:"}
+                          </span>{" "}
+                          {agentDetailsData?.company_name || "Not Available"}
+                        </p>
+                        
+                      </Col>
+                      <Col>
+                        <p>
+                          <span className="text-muted">{translation?.expertise || "Expertise:"}
+                          </span>{" "}
+                          {agentDetailsData?.specialization || "Not Available"}
+                        </p>
+                        <p>
+                          <span className="text-muted">{translation?.service_areas || "Service Areas:"}
+                          </span>
+                          {[
+                            ...new Set(
+                              agentDetailsData?.service_area?.map((area) => area.city)
+                            ),
+                          ].join(", ")}
+                        </p>
+                        <p>
+                          <span className="text-muted">{translation?.properties_for_sale || "Properties For Sale"}
+                          </span>  (
+                          {agentDetailsData?.forSell}), {translation?.for_rent || "For Rent"}
+                          (
+                          {agentDetailsData?.forRent})
+                        </p>
+                        <p>
+                          <span className="text-muted">{translation?.business_email || "Business Email:"}
+                          </span>{" "}
+                          {agentDetailsData?.bussiness_email || "Not Available"}
+                        </p>
+                        <p>
+                          <span className="text-muted">{translation?.working_hours || "Working Hours:"}
+                          </span>{" "}
+                          {agentDetailsData?.opening_hours} -{" "}
+                          {agentDetailsData?.closing_hours}
+                        </p>
+                        <p>
+                          <span className="text-muted">{translation?.experience || "Experience:"}
+                          </span>{" "}
+                          {agentDetailsData?.experience_yr || "Not Available"}
+                          {agentDetailsData?.experience_yr && "Years"}
+                        </p>
+                      </Col>
+                    </Row>
+                    <p>
+                      <span className="text-muted d-block">{translation?.description || "Description:"}
+                      </span>
+                      {agentDetailsData?.description || "Not Available"}
+                    </p>
+                  </div>
                 </div>
               </div>
               <form id="">
@@ -564,7 +571,7 @@ const Index = () => {
                                   Apartments / Flats
                                 </label>
                               </div>
-                              
+
                               <div className="me-2 mb-2">
                                 <input
                                   type="radio"
@@ -581,11 +588,11 @@ const Index = () => {
                               </div>
                               <div class="me-2 mb-2">
                                 <input
-                                 type="radio" 
-                                 class="btn-check" 
-                                 id="propertyFor-3" 
-                                 value="6" 
-                                 name="propertyForGroup"
+                                  type="radio"
+                                  class="btn-check"
+                                  id="propertyFor-3"
+                                  value="6"
+                                  name="propertyForGroup"
                                 />
                                 <label class="btn btn-outline-light btn-sm" for="propertyFor-3">Residential House</label>
                               </div>
@@ -605,7 +612,7 @@ const Index = () => {
                               </div>
                             </ButtonGroup>
                           </div>
-                          
+
                         </div>
 
                         <div className="d-flex justify-content-between mt-3">
@@ -1035,7 +1042,7 @@ const Index = () => {
               {/* )} */}
             </Col>
             <Col lg={4} xs={12}>
-              
+
               <>
                 {adsData.length > 0 ? (
                   adsData.map((ad) => (

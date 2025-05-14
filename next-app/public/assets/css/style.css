@@ -33214,6 +33214,11 @@ ul.list-agency-details > li > span:last-child {
   object-fit: cover;
   height: 250px;
 }
+.card-agent .card-image .rent-sale {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+}
 .card-agent .card-image .c-logo {
   position: absolute;
   right: 0;
