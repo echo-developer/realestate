@@ -207,19 +207,15 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("city", JSON.stringify(city));
   };
 
-  function getBadgeButtonClass(name) {
-  switch (name) {
-    case "Responsive Broker":
-      return "bg-info-subtle btn btn-sm";
-    case "Quality Lister":
-      return "bg-primary-subtle btn btn-sm";
-    case "TruBroker":
-      return "bg-warning-subtle btn btn-sm";
-    case "Great performar":
-      return "bg-success-subtle btn btn-sm";
-    default:
-      return "btn btn-secondary";
+  const badgesObject = {
+    'Responsive Broker': "btn btn-primary",
+    'Quality Lister': "bg-primary-subtle btn btn-sm",
+    'Tru broker': "bg-warning-subtle btn btn-sm",
+    'Great performar': "bg-success-subtle btn btn-sm"
   }
+
+  function getBadgeButtonClass(badgeName) {
+    return badgesObject[badgeName] || 'btn btn-primary'
 }
 
 
