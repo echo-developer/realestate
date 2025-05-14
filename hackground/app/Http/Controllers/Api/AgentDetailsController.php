@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\Api\ApiModel;
 use App\Models\User;
+use App\Models\Api\ApiModel;
 use Illuminate\Http\Request;
+use App\Models\AgentAdditional;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 
 class AgentDetailsController extends Controller
 {
@@ -153,7 +154,7 @@ class AgentDetailsController extends Controller
                 'locality' => $rq->input('locality'),
                 'min_budget' => $rq->input('min_budget'),
                 'max_budget' => $rq->input('max_budget'),
-               'bedrooms' => is_string($rq->input('bedrooms')) ? json_decode($rq->input('bedrooms'), true) : ($rq->input('bedrooms') ?? []),
+                'bedrooms' => is_string($rq->input('bedrooms')) ? json_decode($rq->input('bedrooms'), true) : ($rq->input('bedrooms') ?? []),
             ];
             $property_details = $this->apiModel->PropertyListforAgentPage($rq->agent_id, $filters);
 
@@ -409,6 +410,64 @@ class AgentDetailsController extends Controller
                     'message' => 'Agents ID not found',
                 ]);
             }
+        } catch (\Throwable $e) {
+            throw $e;
+        }
+    }
+
+    public function companyImage(Request $request)
+    {
+
+        try {
+            $request->validate([
+                'company_logo' => 'required|image|mimes:jpg,jpeg,png,gif|max:5120',
+            ]);
+
+            $agentid = $request->agent_id;
+
+            if ($request->hasFile('company_logo')) {
+
+                $agent = AgentAdditional::find($agentid);
+                $oldImage = $agent->company_logo;
+
+                $file = $request->file('company_logo');
+                $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $sanitizedName = preg_replace('/[^a-z0-9\-]/', '', strtolower(str_replace(' ', '-', $originalName)));
+                $extension = $file->getClientOriginalExtension();
+                $fileName = time() . '-' . $sanitizedName . '.' . $extension;
+                $file->move(public_path('user_upload/company_logo'), $fileName);
+
+
+
+                if ($oldImage && file_exists(public_path('user_upload/company_logo/' . $oldImage))) {
+                    unlink(public_path('user_upload/company_logo/' . $oldImage));
+                }
+
+
+                $update = $agent->update(['company_logo' => $fileName]);
+
+                if ($update) {
+                    return response()->json([
+                        'status' => 1,
+                        'message' => 'Profile image updated successfully.',
+                        'data' => [
+                            'file_name' => $fileName,
+                            'image_url' => asset('user_upload/company_logo/' . ltrim($fileName, '/')),
+                        ],
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Failed to update the profile image in the database.',
+                    ]);
+                }
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'File size limit exceeded. Max size 5 MB',
+                // 'errors' => $e->errors(),
+            ], 200);
         } catch (\Throwable $e) {
             throw $e;
         }

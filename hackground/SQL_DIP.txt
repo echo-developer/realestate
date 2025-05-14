@@ -154,3 +154,6 @@ ALTER TABLE `pref_area_locality_price`
 ALTER TABLE `pref_area_locality_price`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
+
+
+ALTER TABLE `pref_agent_additional_details` ADD `company_logo` TEXT NULL DEFAULT NULL AFTER `company_name`;

@@ -114,14 +114,25 @@ class ProjectDashboardController extends Controller
             $flattenedData['image_count'] = getGalleriesCount($flattenedData['id'], 'project');
 
             if (isset($flattenedData['gallery'])) {
-                foreach ($flattenedData['gallery'] as &$gallery) {
-                    if (isset($gallery['images'])) {
-                        foreach ($gallery['images'] as &$image) {
+                $filteredGallery = [];
+
+                foreach ($flattenedData['gallery'] as $gallery) {
+                    if (isset($gallery['image_type']) && $gallery['image_type'] === 'exterior') {
+                        if (isset($gallery['images']) && count($gallery['images']) > 0) {
+                            $image = $gallery['images'][0];
                             $image['file'] = asset('user_upload/project_images/' . $image['filename']);
                             unset($image['filename']);
+                            $gallery['images'] = [$image];
+                        } else {
+                            $gallery['images'] = [];
                         }
+
+                        $filteredGallery[] = $gallery;
+                        break;
                     }
                 }
+
+                $flattenedData['gallery'] = $filteredGallery;
             }
 
 

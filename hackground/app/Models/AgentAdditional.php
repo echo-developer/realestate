@@ -20,6 +20,7 @@ class AgentAdditional extends Model
         'bussiness_phone',
         'bussiness_email',
         'company_name',
+        'company_logo',
         'opening_hours',
         'closing_hours',
     ];
