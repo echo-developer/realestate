@@ -22,6 +22,7 @@ class AgentAdditional extends Model
         'company_name',
         'company_logo',
         'opening_hours',
+        'language_speak',
         'closing_hours',
     ];
 
