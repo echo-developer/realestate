@@ -2,31 +2,32 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\AgentAdditional;
-use App\Models\AgentSecviceLocationModel;
-use App\Models\AgentSocialPlatform;
-use App\Models\Api\ApiModel;
-use App\Models\CertificatesModel;
-use App\Models\PrefProject;
-use App\Models\PrefProperty;
-use App\Models\PrefPropertyAdditional;
-use App\Models\ProjectAdditional;
-use App\Models\ProjectFavorite;
-use App\Models\ProjectView;
-use App\Models\PropertyView;
 use App\Models\User;
-use App\Models\UserTransaction;
-use function Laravel\Prompts\table;
-use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
+use App\Models\PrefProject;
+use App\Models\ProjectView;
 use Illuminate\Support\Arr;
+use App\Models\Api\ApiModel;
+use App\Models\PrefProperty;
+use App\Models\PropertyView;
+use Illuminate\Http\Request;
+use App\Models\AgentAdditional;
+use App\Models\ProjectFavorite;
+use App\Models\UserTransaction;
+use App\Models\CertificatesModel;
+use App\Models\ProjectAdditional;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\AgentSocialPlatform;
+use function Laravel\Prompts\table;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Response;
+use App\Http\Controllers\Controller;
+use Illuminate\Pagination\Paginator;
+use App\Models\PrefPropertyAdditional;
+use App\Models\ProjectPropertyMapping;
+
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
+use App\Models\AgentSecviceLocationModel;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class DashboardController extends Controller
 {
@@ -152,29 +153,61 @@ class DashboardController extends Controller
                     $getGalleries = GetProperties_GalleryImages($property->property_id);
 
                     foreach ($getGalleries as $image) {
-
                         $galleryType = $image->image_type;
-                        if (!isset($galleries[$galleryType])) {
-                            $galleries[$galleryType] = [
-                                'gallery' => $galleryType,
-                                'images' => []
+
+                        // Only process the first exterior image and break
+                        if ($galleryType === 'exterior') {
+                            $imageUrl = asset('user_upload/property_images/' . $image->filename);
+
+                            $galleries[] = [
+                                'gallery' => 'exterior',
+                                'images' => [[
+                                    'image_id' => $image->image_id,
+                                    'image_name' => $image->filename,
+                                    'image_url' => $imageUrl,
+                                    'caption' => $image->caption
+                                ]]
                             ];
+
+                            break; // stop loop after first exterior image is added
                         }
+                    }
 
-                        $imageUrl = asset('user_upload/property_images/' . $image->filename);
+                    $transformedData = $galleries;
+                    $project_id = ProjectPropertyMapping::where('property_id', $property->property_id)
+                        ->value('project_id');
 
-                        $galleries[$galleryType]['images'][] = [
-                            'image_id' => $image->image_id,
-                            'image_name' => $image->filename,
-                            'image_url' => $imageUrl,
-                            'caption' => $image->caption
+                    $project = PrefProject::where('id', $project_id)
+                        ->with(
+                            'settings',
+                            'galleries:id,project_id,image_type',
+                            'galleries.images:id,gallary_id,filename,caption',
+                        )
+                        ->first();
+                    $baseImageUrl = asset('user_upload/project_images');
+
+                    $formattedProjectGalleries = [];
+
+                    $exteriorGallery = collect(optional($project)->galleries)->firstWhere('image_type', 'exterior');
+
+                    if ($exteriorGallery && !empty($exteriorGallery['images'])) {
+                        $firstImage = $exteriorGallery['images'][0]; // Get only the first image
+
+                        $formattedProjectGalleries[] = [
+                            'gallery' => 'exterior',
+                            'images' => [[
+                                'image_id' => $firstImage['id'] ?? null,
+                                'image_name' => $firstImage['filename'] ?? '',
+                                'image_url' => isset($firstImage['filename']) ? $baseImageUrl . '/' . $firstImage['filename'] : null,
+                                'caption' => $firstImage['caption'] ?? null,
+                            ]]
                         ];
                     }
-                    $transformedData = array_values($galleries);
+
 
                     return [
                         'property_id' => $property->property_id,
-                        'image_count' => getGalleriesCount($property->property_id, 'property'),
+                        'image_count' => getGalleriesCount($property->property_id, 'property') > 0 ? getGalleriesCount($property->property_id, 'property') : getGalleriesCount($project_id, 'project'),
                         'user' => get_user_name($property->uid),
                         'unit_type' => $property->unit_type,
                         'property_size' => $property->super_area,
@@ -196,7 +229,7 @@ class DashboardController extends Controller
                         'address' => $property->property_address,
                         'brochure_file' => $property->brochure_file,
                         'brochure_url' => !empty($property->brochure_file) ? asset('user_upload/property_brochure/' . $property->brochure_file) : '',
-                        'galleries' => $transformedData,
+                        'galleries' => $transformedData != null ? $transformedData : $formattedProjectGalleries,
                     ];
                 });
 
