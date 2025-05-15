@@ -768,7 +768,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
             </div> */}
             <div className="row gx-3">
               <div className="mb-3 col-lg-6 col-12">
-                <label className="form-label">
+                <label className="form-label d-block">
                   {translation?.is_corner_plot || "Is This A Corner Plot:"}
                 </label>
                 <div className="form-check form-check-inline">
@@ -801,27 +801,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 </div>
               </div>
 
-              <div className="col-lg-6 col-12 form-floating">
-                <input
-                  className="form-control"
-                  type="text"
-                  id="ceiling_height"
-                  name="ceiling_height"
-                  placeholder={
-                    translation?.enter_ceiling_height || "Enter Ceiling Height"
-                  }
-                  value={formData.ceiling_height || ""}
-                  onChange={handleChange}
-                />
-                <label htmlFor="ceiling_height">
-                  {translation?.celling_height || "Celling Height in ('feets')"}
-                </label>
-              </div>
-
-            </div>
-            {/* Is Allowed for Floor Construction */}
-            <div className="mb-3">
-              <label className="form-label">
+              {/* Is Allowed for Floor Construction */}
+            <div className="mb-3 col-lg-6 col-12">
+              <label className="form-label d-block">
                 {translation?.is_allowed_floor_construction ||
                   "Is Allowed for Floor Construction"}
               </label>
@@ -860,6 +842,26 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 </label>
               </div>
             </div>
+            <div className="mb-3 col-lg-6 col-12">
+                <div className="form-floating">
+                <input
+                  className="form-control"
+                  type="text"
+                  id="ceiling_height"
+                  name="ceiling_height"
+                  placeholder={
+                    translation?.enter_ceiling_height || "Enter Ceiling Height"
+                  }
+                  value={formData.ceiling_height || ""}
+                  onChange={handleChange}
+                />
+                <label htmlFor="ceiling_height">
+                  {translation?.celling_height || "Celling Height in ('feets')"}
+                </label>
+                </div>
+              </div>
+            </div>
+            
             {propertyFor !== "industrial-land" && (
               <div
                 className="btn-group btn-group-light btn-group-card d-flex flex-wrap mb-3"
