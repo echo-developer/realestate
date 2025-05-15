@@ -61,6 +61,8 @@ class GoogleLocalityController extends Controller
             $lang = $request->input('lang', 'en');
             $apiKey = get_setting('google-api-key');
 
+            $countryCode = env('GOOGLE_MAPS_COUNTRY_CODE');
+
             if (empty($apiKey)) {
                 return response()->json([
                     'status' => 0,
@@ -76,8 +78,8 @@ class GoogleLocalityController extends Controller
                 'radius' => 50000,
                 'language' => $lang,
                 'key' => $apiKey,
-                'components' => 'country:IN'
-            ]);
+                'components' => "country:IN"
+            ]).'&strictbounds';
             $autoResponse = Http::get($autocompleteUrl)->json();
 
 
