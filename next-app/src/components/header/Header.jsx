@@ -576,7 +576,7 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <Link href="/agent-list?page=1&broker_type=I&post_for=sale">
+                          <Link href="/agent-list?page=1&broker_type=I">
                             {translation?.find_an_agent || "Find an Agent"}
                           </Link>
                         </li>
@@ -599,7 +599,7 @@ const Header = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link href="/agent-list?page=1&broker_type=I&post_for=sale">
+                          <Link href="/agent-list?page=1&broker_type=I">
                             {translation?.top_agents || "Top Agents in"}{" "}
                             {selectedCity || "Kolkata"}
                           </Link>
@@ -877,7 +877,7 @@ const Header = () => {
                           </span>
                         </li>
                         <li>
-                          <Link href="/agent-list?page=1&broker_type=I&post_for=sale">
+                          <Link href="/agent-list?page=1&broker_type=I">
                             {translation?.find_an_agent || "Find an Agent"}
                           </Link>
                         </li>
@@ -892,7 +892,7 @@ const Header = () => {
 
                   {/* for agent  */}
                   <li className="nav-item">
-                    <Link href="/agent-list?page=1&broker_type=I&post_for=sale" className="nav-link">
+                    <Link href="/agent-list?page=1&broker_type=I" className="nav-link">
                       {translation?.agents || "Agents"}
                     </Link>
                   </li>
@@ -1216,7 +1216,7 @@ const Menu = () => {
         {
           name: "Explore",
           links: [
-            { text: "Find an Agent", url: "/agent-list?page=1&broker_type=I&post_for=sale" },
+            { text: "Find an Agent", url: "/agent-list?page=1&broker_type=I" },
             {
               text: `Projects in ${selectedCity || "Kolkata"}`,
               url: "/project-listing?post_for=sale",
@@ -1227,7 +1227,7 @@ const Menu = () => {
             },
             {
               text: `Top Agents in ${selectedCity || "Kolkata"}`,
-              url: "/agent-list?page=1&broker_type=I&post_for=sale",
+              url: "/agent-list?page=1&broker_type=I",
             },
           ],
         },
@@ -1333,7 +1333,7 @@ const Menu = () => {
         {
           name: "Explore",
           links: [
-            { text: "Find an Agent", url: "/agent-list?page=1&broker_type=I&post_for=sale" },
+            { text: "Find an Agent", url: "/agent-list?page=1&broker_type=I" },
             { text: "Localities", url: "/rent-agreement" },
           ],
         },
@@ -1362,7 +1362,7 @@ const Menu = () => {
           name: "Selling Tools",
           links: [
             { text: "Property Valuation", url: "/property-valuation" },
-            { text: "Find an Agent", url: "/agent-list?page=1&broker_type=I&post_for=sale" },
+            { text: "Find an Agent", url: "/agent-list?page=1&broker_type=I" },
           ],
         },
       ],
