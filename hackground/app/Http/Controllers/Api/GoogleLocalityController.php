@@ -52,7 +52,7 @@ class GoogleLocalityController extends Controller
     public function getGoogletLocalities(Request $request)
     {
         try {
-            DB::beginTransaction();
+            // DB::beginTransaction();
             $keyword = $request->keyWord;
             $cityId = $request->city_id;
             $cityName = $request->city_name;
@@ -103,14 +103,14 @@ class GoogleLocalityController extends Controller
 
             $message = !empty($savedData) ? 'Locality Retrived' : 'No Locality Found';
 
-            DB::commit();
+            // DB::commit();
             return response()->json([
                 'status' => 1,
                 'message' => $message,
                 'data' => !empty($savedData) ? $savedData : []
             ]);
         } catch (\Throwable $th) {
-            DB::rollBack();
+            // DB::rollBack();
             throw $th;
         }
     }
