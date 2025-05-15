@@ -152,7 +152,7 @@ class GoogleLocalityController extends Controller
                 })->values();
 
                 $savedData = $this->storeandReturnResult($filteredResults->toArray(), $lang, $cityId);
-                // cURL_request('saveLocalityLatLong', $savedData);
+                cURL_request('saveLocalityLatLong', $savedData);
 
 
 
@@ -180,7 +180,7 @@ class GoogleLocalityController extends Controller
         $response = [];
 
         foreach ($data as $locality) {
-            // $slug = Str::slug($locality['name'], '_');
+            $slug = Str::slug($locality['name'], '_');
 
             $existing = $this->checkIfLocalityExist($locality['place_id'], $lang);
 
@@ -188,6 +188,7 @@ class GoogleLocalityController extends Controller
                 $getId = DB::table('locality')->insertGetId([
                     'city' => $cityId ?? get_setting('other-city-id'),
                     'google_place_id' => $locality['place_id'],
+                    'locality_key' => $slug,
                 ]);
 
                 $langs = [
@@ -205,6 +206,7 @@ class GoogleLocalityController extends Controller
 
                 $response[] = [
                     'locality_id' => $getId,
+                    'place_id' => $locality['place_id'],
                     'name' => $locality['name'],
                 ];
             }
@@ -213,33 +215,36 @@ class GoogleLocalityController extends Controller
         return $response;
     }
 
-    public function saveLocalityLatLong($data)
+    public function saveLocalityLatLong(Request $request)
     {
+        $apiKey = get_setting('google-api-key');
+        $cURLRequest = collect($request->input('data'));
 
+        $cURLRequest->each(function ($item) use ($apiKey) {
+            $placeId = $item['place_id'] ?? null;
 
-        // $detailedResults = $filteredResults->map(function ($prediction) use ($apiKey) {
-        //     $placeId = $prediction['place_id'];
+            if (!$placeId) {
+                return;
+            }
 
-        //     $detailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?" . http_build_query([
-        //         'place_id' => $placeId,
-        //         'fields' => 'geometry,name,formatted_address',
-        //         'key' => $apiKey
-        //     ]);
+            $detailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?" . http_build_query([
+                'place_id' => $placeId,
+                'fields' => 'geometry',
+                'key' => $apiKey
+            ]);
 
-        //     $detailsResponse = Http::get($detailsUrl)->json();
+            $detailsResponse = Http::get($detailsUrl)->json();
 
-        //     if (isset($detailsResponse['result'])) {
-        //         return [
-        //             'place_id' => $placeId,
-        //             'name' => $detailsResponse['result']['name'] ?? null,
-        //             'address' => $detailsResponse['result']['formatted_address'] ?? null,
-        //             'latitude' => $detailsResponse['result']['geometry']['location']['lat'] ?? null,
-        //             'longitude' => $detailsResponse['result']['geometry']['location']['lng'] ?? null,
-        //         ];
-        //     }
+            if (isset($detailsResponse['result']['geometry']['location'])) {
+                DB::table('locality')
+                    ->where('google_place_id', $placeId)
+                    ->update([
+                        'latitude' => $detailsResponse['result']['geometry']['location']['lat'] ?? null,
+                        'longitude' => $detailsResponse['result']['geometry']['location']['lng'] ?? null,
+                    ]);
+            }
+        });
 
-        //     return null;
-        // })->filter()->values();
     }
 
     private function checkIfLocalityExist($place_id, $lang)

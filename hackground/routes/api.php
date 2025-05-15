@@ -348,7 +348,7 @@ Route::get('/stored-localities', [GoogleLocalityController::class, 'fetchLocalit
 Route::get('/global-localities', [GoogleLocalityController::class, 'getGoogletLocalities'])->name('get.localities');
 Route::get('/yearly-price-trend', [GoogleLocalityController::class, 'getYearlyPriceTrend']);
 Route::get('/landmark-list', [GoogleLocalityController::class, 'landmark']);
-Route::get('/saveLocalityLatLong', [GoogleLocalityController::class, 'saveLocalityLatLong']);
+Route::post('/saveLocalityLatLong', [GoogleLocalityController::class, 'saveLocalityLatLong']);
 
 
 Route::get('/badge-list', [BadgesController::class, 'getBadges']);
