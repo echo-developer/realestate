@@ -51,7 +51,6 @@ const Index = () => {
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   const [dropdownState, setDropdownState] = useState({});
   const [brokerType, setBrokerType] = useState("A");
-  const [postFor, setPostFor] = useState("sale");
   const [propertyType, setPropertyType] = useState("");
   const [propertyTypeDropDown, setPropertyTypeDropDown] = useState(false);
   const [selectedTab, setSelectedTab] = useState("sale");
@@ -108,7 +107,6 @@ const Index = () => {
 
       if (name) setName(name);
       if (broker_type) setBrokerType(broker_type);
-      if (post_for) setPostFor(post_for);
       if (property_type) setPropertyType(property_type);
       if (is_verified_agent) setIsVerified(JSON.parse(is_verified_agent));
       if (locality) setLocality(JSON.parse(locality))
@@ -357,9 +355,6 @@ const Index = () => {
                             </Dropdown.Item>
                             <Dropdown.Item onClick={() => handleSelect("A")}>
                               {"Agency"}
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleSelect("F")}>
-                              {"Franchise"}
                             </Dropdown.Item>
                           </Dropdown.Menu>
                         </Dropdown>
