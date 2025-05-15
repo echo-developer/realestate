@@ -3354,7 +3354,7 @@ textarea.form-control-lg {
   --re-dropdown-zindex: 1000;
   --re-dropdown-min-width: 10rem;
   --re-dropdown-padding-x: 0;
-  --re-dropdown-padding-y: 0.5rem;
+  --re-dropdown-padding-y: 0rem;
   --re-dropdown-spacer: 0.125rem;
   --re-dropdown-font-size: 1rem;
   --re-dropdown-color: var(--re-body-color);
@@ -3376,7 +3376,7 @@ textarea.form-control-lg {
   --re-dropdown-item-padding-y: 0.25rem;
   --re-dropdown-header-color: #6c757d;
   --re-dropdown-header-padding-x: 1rem;
-  --re-dropdown-header-padding-y: 0.5rem;
+  --re-dropdown-header-padding-y: 0rem;
   position: absolute;
   z-index: var(--re-dropdown-zindex);
   display: none;
@@ -37097,8 +37097,8 @@ fieldset .btn-delete {
   top: 50%;
   transform: translateY(-50%);
 }
-.select-dropdown .dropdown-menu {
-  max-height: 250px;
+.select-dropdown .dropdown-menu .scrollY {
+  max-height: 200px;
   overflow-y: auto;
   /* max-width: 100%; */
 }
