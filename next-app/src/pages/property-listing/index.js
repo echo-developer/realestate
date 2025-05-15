@@ -1122,9 +1122,9 @@ const index = () => {
                                 </Nav>
                               </div>
 
-                              <div className=" mt-3">
+                              <div className="scrollY mb-3">
                                 <div className="form-field">
-                                  <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                                  <ButtonGroup className="btn-group-light hide-tick d-flex flex-wrap">
                                     {subPropertyList?.length === 0 &&
                                       propertyForLoading && (
                                         <div
@@ -1182,12 +1182,14 @@ const index = () => {
                               </div>
                               <div className="d-flex justify-content-between mt-3">
                                 <Button
+                                  size="sm"
                                   variant="outline-secondary"
                                   onClick={handlePropertyForReset}
                                 >
                                   {translation?.reset || "Reset"}
                                 </Button>
                                 <Button
+                                  size="sm"
                                   variant="primary"
                                   onClick={handlePropertyForDone}
                                 >
@@ -1213,104 +1215,108 @@ const index = () => {
                                 {displayBedsBathKitchen()}
                               </Dropdown.Toggle>
 
-                              <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                                {/* Bedrooms Selection */}
-                                <div>
-                                  <label className="fw-bold mb-2">
-                                    {translation?.beds || "Beds"}
-                                  </label>
-                                  <ButtonGroup className="btn-group-light d-flex gap-2">
-                                    {bedrooms.map((bedroomItem, index) => (
-                                      <div key={`bedroom-${index}`}>
-                                        <input
-                                          type="checkbox"
-                                          id={`bedroom-${index}`}
-                                          className="btn-check"
-                                          value={bedroomItem}
-                                          onChange={() =>
-                                            handleBedRoomChange(bedroomItem)
-                                          }
-                                          checked={bedroom.includes(bedroomItem)}
-                                        />
-                                        <label
-                                          className="btn btn-outline-light btn-sm"
-                                          htmlFor={`bedroom-${index}`}
-                                        >
-                                          {bedroomItem}
-                                        </label>
-                                      </div>
-                                    ))}
-                                  </ButtonGroup>
-                                </div>
-
-                                {/* Bathrooms Selection */}
-                                <div className="mt-3">
-                                  <label className="fw-bold mb-2">
-                                    {translation?.baths || "Baths"}
-                                  </label>
-                                  <ButtonGroup className="btn-group-light d-flex gap-2">
-                                    {[1, 2, 3, 4, 5, 6, 7, "8+"].map(
-                                      (bath, index) => (
-                                        <div key={`bathroom-${index}`}>
+                              <Dropdown.Menu className="shadow bg-white rounded">
+                                <div className="scrollY p-3">
+                                  {/* Bedrooms Selection */}
+                                  <div>
+                                    <label className="fw-bold mb-2">
+                                      {translation?.beds || "Beds"}
+                                    </label>
+                                    <ButtonGroup className="btn-group-light hide-tick d-flex gap-2">
+                                      {bedrooms.map((bedroomItem, index) => (
+                                        <div key={`bedroom-${index}`}>
                                           <input
                                             type="checkbox"
-                                            id={`bathroom-${index}`}
+                                            id={`bedroom-${index}`}
                                             className="btn-check"
-                                            value={bath}
+                                            value={bedroomItem}
                                             onChange={() =>
-                                              handleBathChange(bath)
+                                              handleBedRoomChange(bedroomItem)
                                             }
-                                            checked={bathroom?.includes(bath)}
+                                            checked={bedroom.includes(bedroomItem)}
                                           />
                                           <label
                                             className="btn btn-outline-light btn-sm"
-                                            htmlFor={`bathroom-${index}`}
+                                            htmlFor={`bedroom-${index}`}
                                           >
-                                            {bath}
+                                            {bedroomItem}
                                           </label>
                                         </div>
-                                      )
-                                    )}
-                                  </ButtonGroup>
+                                      ))}
+                                    </ButtonGroup>
+                                  </div>
+
+                                  {/* Bathrooms Selection */}
+                                  <div className="mt-3">
+                                    <label className="fw-bold mb-2">
+                                      {translation?.baths || "Baths"}
+                                    </label>
+                                    <ButtonGroup className="btn-group-light hide-tick d-flex gap-2">
+                                      {[1, 2, 3, 4, 5, 6, 7, "8+"].map(
+                                        (bath, index) => (
+                                          <div key={`bathroom-${index}`}>
+                                            <input
+                                              type="checkbox"
+                                              id={`bathroom-${index}`}
+                                              className="btn-check"
+                                              value={bath}
+                                              onChange={() =>
+                                                handleBathChange(bath)
+                                              }
+                                              checked={bathroom?.includes(bath)}
+                                            />
+                                            <label
+                                              className="btn btn-outline-light btn-sm"
+                                              htmlFor={`bathroom-${index}`}
+                                            >
+                                              {bath}
+                                            </label>
+                                          </div>
+                                        )
+                                      )}
+                                    </ButtonGroup>
+                                  </div>
+
+                                  {/* Kitchens Selection */}
+                                  <div className="mt-3">
+                                    <label className="fw-bold mb-2">
+                                      {translation?.kitchens || "Kitchens"}
+                                    </label>
+                                    <ButtonGroup className="btn-group-light hide-tick d-flex gap-2">
+                                      {[1, 2, 3, 4, 5].map((kitchen, index) => (
+                                        <div key={`kitchen-${index}`}>
+                                          <input
+                                            type="checkbox"
+                                            id={`kitchen-${index}`}
+                                            className="btn-check"
+                                            value={kitchen}
+                                            onChange={() =>
+                                              handleKitchenChange(kitchen)
+                                            }
+                                            checked={kitchens?.includes(kitchen)}
+                                          />
+                                          <label
+                                            className="btn btn-outline-light btn-sm"
+                                            htmlFor={`kitchen-${index}`}
+                                          >
+                                            {kitchen}
+                                          </label>
+                                        </div>
+                                      ))}
+                                    </ButtonGroup>
+                                  </div>
                                 </div>
 
-                                {/* Kitchens Selection */}
-                                <div className="mt-3">
-                                  <label className="fw-bold mb-2">
-                                    {translation?.kitchens || "Kitchens"}
-                                  </label>
-                                  <ButtonGroup className="btn-group-light d-flex gap-2">
-                                    {[1, 2, 3, 4, 5].map((kitchen, index) => (
-                                      <div key={`kitchen-${index}`}>
-                                        <input
-                                          type="checkbox"
-                                          id={`kitchen-${index}`}
-                                          className="btn-check"
-                                          value={kitchen}
-                                          onChange={() =>
-                                            handleKitchenChange(kitchen)
-                                          }
-                                          checked={kitchens?.includes(kitchen)}
-                                        />
-                                        <label
-                                          className="btn btn-outline-light btn-sm"
-                                          htmlFor={`kitchen-${index}`}
-                                        >
-                                          {kitchen}
-                                        </label>
-                                      </div>
-                                    ))}
-                                  </ButtonGroup>
-                                </div>
-
-                                <div className="d-flex justify-content-between mt-3">
+                                <div className="d-flex justify-content-between p-3">
                                   <Button
+                                    size="sm"
                                     variant="outline-secondary"
                                     onClick={resetSelection}
                                   >
                                     {translation?.reset || "Reset"}
                                   </Button>
                                   <Button
+                                    size="sm"
                                     variant="primary"
                                     onClick={applySelection}
                                   >
@@ -1378,12 +1384,14 @@ const index = () => {
 
                               <div className="d-flex justify-content-between mt-3">
                                 <Button
+                                  size="sm"
                                   variant="outline-secondary"
                                   onClick={resetBudget}
                                 >
                                   {translation?.reset || "Reset"}
                                 </Button>
                                 <Button
+                                  size="sm"
                                   variant="primary"
                                   onClick={() => {
                                     applyBudget();

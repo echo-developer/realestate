@@ -626,7 +626,7 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
                   <Dropdown.Menu className="p-3">
                     <div className="mt-3">
                       <div className="form-filed">
-                        <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                        <ButtonGroup className="btn-group-light hide-tick d-flex flex-wrap">
                           {propertyTypeData?.map((project, i) => {
                             return (
                               <div className="me-2 mb-2">
@@ -697,7 +697,7 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
                   <Dropdown.Menu className="p-3">
                     <div className="mt-3">
                       <div className="form-field">
-                        <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                        <ButtonGroup className="btn-group-light hide-tick d-flex flex-wrap">
                           {possessionData.map((option, i) => (
                             <div key={option.status_id} className="me-2 mb-2">
                               <input

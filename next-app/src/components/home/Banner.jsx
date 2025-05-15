@@ -538,7 +538,7 @@ const Banner = ({ translation }) => {
 
                                   {/* Property For Selection as Radio Buttons */}
                                   <div className="scrollY mb-3">
-                                      <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                                      <ButtonGroup className="btn-group-light hide-tick d-flex flex-wrap">
                                         {PropertyForData.map(
                                           (property, index) => (
                                             <div
@@ -577,6 +577,7 @@ const Banner = ({ translation }) => {
                                   {/* Reset & Done Buttons */}
                                   <div className="d-flex justify-content-between">
                                     <Button
+                                      size="sm"
                                       variant="outline-secondary"
                                       onClick={(e) => {
                                         e.stopPropagation();
@@ -586,6 +587,7 @@ const Banner = ({ translation }) => {
                                       {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
+                                      size="sm"
                                       variant="primary"
                                       onClick={(e) => {
                                         e.stopPropagation();
@@ -717,6 +719,7 @@ const Banner = ({ translation }) => {
                                   {/* Buttons */}
                                   <div className="d-flex justify-content-between mt-3">
                                     <Button
+                                      size="sm"
                                       variant="outline-secondary"
                                       onClick={(e) => {
                                         e.stopPropagation();
@@ -726,6 +729,7 @@ const Banner = ({ translation }) => {
                                       {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
+                                      size="sm"
                                       variant="primary"
                                       onClick={(e) => {
                                         e.stopPropagation();
@@ -792,6 +796,7 @@ const Banner = ({ translation }) => {
                                   {/* Reset & Done Buttons */}
                                   <div className="d-flex justify-content-between mt-3">
                                     <Button
+                                      size="sm"
                                       variant="outline-secondary"
                                       onClick={(e) => {
                                         e.stopPropagation();
@@ -801,6 +806,7 @@ const Banner = ({ translation }) => {
                                       {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
+                                      size="sm"
                                       variant="primary"
                                       onClick={(e) => {
                                         e.stopPropagation();
@@ -835,7 +841,7 @@ const Banner = ({ translation }) => {
                                         <label className="fw-bold mb-2">
                                           {translation?.beds || "Beds"}
                                         </label>
-                                        <ButtonGroup className="btn-group-light d-flex gap-2">
+                                        <ButtonGroup className="btn-group-light hide-tick d-flex gap-2">
                                           {bedrooms.map((bedroomItem, index) => (
                                             <React.Fragment
                                               key={`bedroom-${index}`}
@@ -868,7 +874,7 @@ const Banner = ({ translation }) => {
                                         <label className="fw-bold mb-2">
                                           {translation?.baths || "Baths"}
                                         </label>
-                                        <ButtonGroup className="btn-group-light d-flex gap-2">
+                                        <ButtonGroup className="btn-group-light hide-tick d-flex gap-2">
                                           {[1, 2, 3, 4, 5, 6, 7, "8+"].map(
                                             (bath, index) => (
                                               <div key={`bathroom-${index}`}>
@@ -901,7 +907,7 @@ const Banner = ({ translation }) => {
                                         <label className="fw-bold mb-2">
                                           {translation?.kitchens || "Kitchens"}
                                         </label>
-                                        <ButtonGroup className="btn-group-light d-flex gap-2">
+                                        <ButtonGroup className="btn-group-light hide-tick d-flex gap-2">
                                           {[1, 2, 3, 4, 5].map(
                                             (kitchen, index) => (
                                               <div key={`kitchen-${index}`}>
@@ -933,6 +939,7 @@ const Banner = ({ translation }) => {
                                     {/* Reset & Done Buttons */}
                                     <div className="d-flex justify-content-between p-3">
                                       <Button
+                                        size="sm"
                                         variant="outline-secondary"
                                         onClick={(e) => {
                                           e.stopPropagation();
@@ -942,6 +949,7 @@ const Banner = ({ translation }) => {
                                         {translation?.reset || "Reset"}
                                       </Button>
                                       <Button
+                                        size="sm"
                                         variant="primary"
                                         onClick={(e) => {
                                           e.stopPropagation();
@@ -1070,6 +1078,7 @@ const Banner = ({ translation }) => {
                                   {/* Reset & Done Buttons */}
                                   <div className="d-flex justify-content-between mt-3">
                                     <Button
+                                      size="sm"
                                       variant="outline-secondary"
                                       onClick={(e) => {
                                         e.stopPropagation();
@@ -1079,6 +1088,7 @@ const Banner = ({ translation }) => {
                                       {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
+                                      size="sm"
                                       variant="primary"
                                       onClick={(e) => {
                                         e.stopPropagation();
@@ -1204,6 +1214,7 @@ const Banner = ({ translation }) => {
                                   {/* Buttons */}
                                   <div className="d-flex justify-content-between mt-3">
                                     <Button
+                                      size="sm"
                                       variant="outline-secondary"
                                       onClick={(e) => {
                                         e.stopPropagation();
@@ -1213,6 +1224,7 @@ const Banner = ({ translation }) => {
                                       {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
+                                      size="sm"
                                       variant="primary"
                                       onClick={(e) => {
                                         e.stopPropagation();
@@ -1282,6 +1294,7 @@ const Banner = ({ translation }) => {
                                   {/* Reset & Done Buttons */}
                                   <div className="d-flex justify-content-between mt-3">
                                     <Button
+                                      size="sm"
                                       variant="outline-secondary"
                                       onClick={(e) => {
                                         e.stopPropagation();
@@ -1291,6 +1304,7 @@ const Banner = ({ translation }) => {
                                       {translation?.reset || "Reset"}
                                     </Button>
                                     <Button
+                                      size="sm"
                                       variant="primary"
                                       onClick={(e) => {
                                         e.stopPropagation();
@@ -1417,12 +1431,14 @@ const Banner = ({ translation }) => {
                                     {/* Reset & Done Buttons */}
                                     <div className="d-flex justify-content-between mt-3">
                                       <Button
+                                        size="sm"
                                         variant="outline-secondary"
                                         onClick={resetSelection}
                                       >
                                         {translation?.reset || "Reset"}
                                       </Button>
                                       <Button
+                                        size="sm"
                                         variant="primary"
                                         onClick={applySelection}
                                       >

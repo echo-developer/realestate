@@ -1881,7 +1881,7 @@ h4 {
 			&::before{
 				content: '\f26a';
 				font-family: 'bootstrap-icons';
-				color: #0a0;
+				color: $primary;
 				position: absolute;
 				right: -8px;
 				top: -8px;
@@ -1951,6 +1951,12 @@ h4 {
 					}
 				}
 			}
+		}
+	}
+	&.hide-tick{
+		.btn-check:checked + .btn::before{
+			content: '';
+			display: none;
 		}
 	}
 }
