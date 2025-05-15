@@ -75,7 +75,8 @@ class GoogleLocalityController extends Controller
                 'location' => "$cityLat,$cityLang",
                 'radius' => 50000,
                 'language' => $lang,
-                'key' => $apiKey
+                'key' => $apiKey,
+                'components' => 'country:IN'
             ]);
             $autoResponse = Http::get($autocompleteUrl)->json();
 
