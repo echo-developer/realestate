@@ -81,7 +81,7 @@ class GoogleLocalityController extends Controller
                 'key' => $apiKey,
                 'components' => "country:$countryCode"
             ]) . '&strictbounds';
-            
+
             $autoResponse = Http::get($autocompleteUrl)->json();
 
 
@@ -158,7 +158,7 @@ class GoogleLocalityController extends Controller
     public function saveLocalityLatLong(Request $request)
     {
         try {
-            DB::transaction();
+            // DB::transaction();
 
             $apiKey = get_setting('google-api-key');
             $cURLRequest = collect($request->input('data'));
@@ -187,9 +187,9 @@ class GoogleLocalityController extends Controller
                         ]);
                 }
             });
-            DB::commit();
+            // DB::commit();
         } catch (\Throwable $th) {
-            DB::rollBack();
+            // DB::rollBack();
             throw $th;
         }
     }
