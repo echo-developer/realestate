@@ -34,6 +34,14 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     fetchCityData();
   }, []);
 
+  useEffect(() => {
+    if(cityData?.length > 0 && formData.city) {
+      const city = cityData.find(city => city.city_id == formData.city);
+      setSelectedCity(city)
+
+    }
+  }, [formData.city, cityData])
+
 
   const fetchCityData = async () => {
     try {
@@ -53,6 +61,11 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     const { name, value } = e.target;
     if(name == 'city') {
       const city = cityData.find(city => city.city_id == value);
+      setFormData(prev => {
+        return {
+          ...prev,
+        }
+      })
       setSelectedCity(city);
     }
     setFormData((prevData) => ({
@@ -110,7 +123,8 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
     setFormData(prev => {
       return {
         ...prev,
-        locality: locality?.locality_id
+        locality: locality?.locality_id,
+        locality_name: locality?.name
       }
     })
     setErrors(prev => {
@@ -169,7 +183,7 @@ const Step3Form = ({ formData, setFormData, nextStep, prevStep }) => {
             {selectedCity && (
               <>
               <label className="form-label">Locality <span className="text-danger">*</span></label>
-              <Locality onSelectLocality={onSelectLocality} errors={errors} city={selectedCity} type="post" />
+              <Locality onSelectLocality={onSelectLocality} errors={errors} defaultValue={{locality_name: formData.locality_name || ""}} city={selectedCity} type="post" />
               </>
             )}
           </div>
