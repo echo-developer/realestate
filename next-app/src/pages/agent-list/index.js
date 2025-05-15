@@ -8,6 +8,8 @@ import Locality from "@/components/Locality/Locality";
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthProvider";
 import useTranslation from "@/hooks/useTranslation";
+import AgentEnquiryForm from "@/components/addtional/AgentEnquiryForm";
+import { Modal } from "react-bootstrap"
 import {
   Search,
   GeoAlt,
@@ -32,6 +34,7 @@ import {
 } from "react-bootstrap";
 const Index = () => {
   const translation = useTranslation();
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const { callApi } = AuthUser();
   const router = useRouter();
@@ -53,6 +56,7 @@ const Index = () => {
   const [propertyTypeDropDown, setPropertyTypeDropDown] = useState(false);
   const [selectedTab, setSelectedTab] = useState("sale");
   const [selectedPropertyType, setSelectedPropertyType] = useState("");
+  const [selectedAgentId, setSelectedAgentId] = useState("");
   const [badgeList, setBadgeList] = useState([]);
 
   useEffect(() => {
@@ -287,6 +291,8 @@ const Index = () => {
     }
   };
 
+  const handleEnquiryClose = () => setShowEnquiryModal(false);
+
   return (
     <>
       {isOverlayVisible && (
@@ -441,6 +447,7 @@ const Index = () => {
                   <Row className="list-display ">
                     {agentList.map((agent) => (
                       <Col className="col-12" key={agent.id}>
+                        {console.log("agent loop", agent)}
                         <div className="card card-agent">
                           <Row className="gx-0">
                             <Col xs={3}>
@@ -510,7 +517,7 @@ const Index = () => {
                                     </>
                                   )}
                                 </p>
-                                <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">English, Arabic, French, Italian</span></p>
+                                <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">{agent?.languages ? agent.languages.replace(/,/g, ', ') : ""}</span></p>
 
                                 
                                 {/* Phone
@@ -539,14 +546,20 @@ const Index = () => {
                                   <Button
                                     variant="outline-primary"
                                     size="sm"
-                                    onClick={() => setShowEnquiryModal(true)}
+                                    onClick={() => {
+                                      setShowEnquiryModal(true);
+                                      setSelectedAgentId(agent.user_id)
+                                    }}
                                   >
                                     <EnvelopeFill color="#1365CF" size={16} /> {translation?.email || "Email"}
                                   </Button>
                                   <Button
                                     variant="outline-info"
                                     size="sm"
-                                    onClick={() => setShowEnquiryModal(true)}
+                                    onClick={() => {
+                                      setShowEnquiryModal(true);
+                                      setSelectedAgentId(agent.user_id)
+                                    }}
                                     style={{ minWidth: '72px' }}
                                   >
                                     <PhoneFill color="#0dcaf0" size={16} /> {translation?.call || "Call"}
@@ -662,6 +675,18 @@ const Index = () => {
           </div>
         </aside>
       </MainLayout>
+      <Modal show={showEnquiryModal} onHide={handleEnquiryClose}>
+              <Modal.Header closeButton>
+                <Modal.Title>{translation?.contact_agent || "Contact Agent"}
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <AgentEnquiryForm
+                  agentId={selectedAgentId}
+                  handleClose={handleEnquiryClose}
+                />
+              </Modal.Body>
+            </Modal>
     </>
   );
 };
