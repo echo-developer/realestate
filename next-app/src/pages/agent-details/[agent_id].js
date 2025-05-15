@@ -60,8 +60,13 @@ const Index = () => {
     setPropertyId(property_id);
     setShowContactModal(true);
   };
+  const [filters, setFilters] = useState({
+    post_for: "",
+    locality: "",
+    min_budget: "",
+    max_budget: ""
+  })
 
-  console.log("router query", router.query)
   useEffect(() => {
     if (agent_id) {
       fetchAgentDetails(agent_id, page);
@@ -187,6 +192,16 @@ const Index = () => {
     }));
   };
 
+  const handleFilterChange = (key, value) => {
+    setFilters(prev => {
+      return {
+        ...prev,
+        [key]: value
+      }
+    })
+  }
+
+  console.log("filters", filters);
   const handleSave = async (e) => {
     e.preventDefault();
     try {
@@ -528,8 +543,8 @@ const Index = () => {
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu>
-                        <Dropdown.Item href="#/action-1">Buy</Dropdown.Item>
-                        <Dropdown.Item href="#/action-2">Rent</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleFilterChange("post_for", "sale")}>Buy</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleFilterChange("post_for", "rent")}>Rent</Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>
                   </Col>
@@ -884,6 +899,7 @@ const Index = () => {
                               data={property}
                               showSq={true}
                               icons={true}
+                              showFavIcon={false}
                               addRemoveFav={() =>
                                 SaveFavouriteProperty(property.property_id)
                               }
