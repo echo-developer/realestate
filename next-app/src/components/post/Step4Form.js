@@ -202,8 +202,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
     }));
   };
 
-  const getUnitLabel = (key) =>
-    unitOptions.find((option) => option.key === key)?.label || `${translation?.not_available || "Not Available"}`;
+  const getUnitLabel = (key) => {
+    return unitOptions.find((option) => option.key.toLowerCase() === key.toLowerCase())?.label || `${translation?.not_available || "Not Available"}`;
+  }
 
   useEffect(() => {
     if (!formData.property_furnish) {
@@ -431,7 +432,9 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                 </div>
 
                 {/* Conditionally render room input fields */}
-                <fieldset className="">
+                {
+                  formData[key] && formData[key]?.length > 0 && (
+                    <fieldset className="">
                   <legend>{`${key.charAt(0).toLocaleUpperCase() + key.slice(1)
                     } (${getUnitLabel(formData?.unit_type)})`}</legend>
 
@@ -448,6 +451,8 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                     ))}
                   </div>
                 </fieldset>
+                  )
+                }
               </div>
             </div>
           ))}

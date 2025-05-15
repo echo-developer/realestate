@@ -12,9 +12,12 @@ import PropertyTypeDropdown from "../addtional/PropertyTypeDropdown";
 import SizeDropdown from "../addtional/SizeDropdown";
 import BudgetRangeSlider from "../addtional/BudgetRangeSlider";
 import LocalityOption from "../MapData/LocalitySelector";
+import Locality from "@/components/Locality/Locality"
+import { useAuth } from "@/context/AuthProvider";
 
 const PropertyRequirementForm = () => {
   const translation = useTranslation();
+  const { defaultCity } = useAuth();
   const [selectedPropertyType, setSelectedPropertyType] = useState("1");
   const [selectedPropertyFor, setSelectedPropertyFor] = useState(null);
   const [budget, setBudget] = useState(200);
@@ -25,7 +28,7 @@ const PropertyRequirementForm = () => {
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const [minBudget, setMinBudget] = useState("");
   const [maxBudget, setMaxBudget] = useState("");
-  const [locality, setLocality] = useState("");
+  const [locality, setLocality] = useState(null);
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [budgetDropdown, setBudgetDropdown] = useState(false);
@@ -93,7 +96,7 @@ const PropertyRequirementForm = () => {
             max_budget: maxBudget,
             min_size: minSize,
             max_size: maxSize,
-            locality: locality?.locality,
+            locality: locality?.locality_id,
           },
         });
 
@@ -109,6 +112,10 @@ const PropertyRequirementForm = () => {
         console.error(error?.message || "Something went wrong");
       }
   };
+
+    const onSelectLocality = (locality) => {
+    setLocality(locality)
+  }
   const handleClickOutside = (e) => {
     setIsOverlayVisible(false);
     setShowDropdown(false);
@@ -210,7 +217,8 @@ const PropertyRequirementForm = () => {
                         </div>
                       </Col>
                       <Col className="col-sm-6 col-12">
-                        <LocalityOption setLocationData={setLocality} />
+                        {/* <LocalityOption setLocationData={setLocality} /> */}
+                        <Locality onSelectLocality={onSelectLocality} city={defaultCity} />
                       </Col>
                     </Row>
                     <Row className="gx-3">

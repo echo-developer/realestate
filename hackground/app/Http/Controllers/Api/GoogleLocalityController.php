@@ -13,26 +13,6 @@ use SebastianBergmann\CodeUnit\FunctionUnit;
 
 class GoogleLocalityController extends Controller
 {
-    // public function getLocalityDropdownList(Request $request)
-    // {
-    //     try {
-    //         $keyword = $request->keyWord;
-    //         $lang = $request->input('lang', 'en');
-    //         $databaseReturn = $this->fetchLocalityfromDatabase($keyword, $lang);
-
-    //         // $googleApiReturn = [];
-    //         // if (count($databaseReturn) < 10) {
-    //         //     $googleApiReturn = $this->getGoogletLocalities($keyword, $lang);
-    //         // }
-
-    //         // $data = array_merge($databaseReturn, $googleApiReturn);
-
-    //         return $databaseReturn;
-    //     } catch (\Throwable $th) {
-    //         throw $th;
-    //     }
-    // }
-
     protected $localityModel;
 
 
@@ -44,10 +24,13 @@ class GoogleLocalityController extends Controller
     {
         try {
             $keyword = $request->keyWord;
+            $cityId = $request->city_id;
             $lang = $request->input('lang', 'en');
             $data = DB::table('locality_names')
-                ->select('locality_id', 'name')
+                ->leftJoin('locality', 'locality_names.locality_id', '=', 'locality.locality_id')
+                ->select('locality_names.locality_id', 'locality_names.name')
                 ->where('lang', $lang)
+                ->where('locality.city', $cityId)
                 ->where('name', 'LIKE', $keyword . '%')
                 ->limit(11)
                 ->get()
@@ -69,111 +52,66 @@ class GoogleLocalityController extends Controller
     public function getGoogletLocalities(Request $request)
     {
         try {
+            DB::beginTransaction();
             $keyword = $request->keyWord;
-            $cityId = 21 ?? $request->city_id;
-            $cityName = 'kolkata'  ?? $request->city_name;
-            $cityLat = 22.5744 ?? $request->city_name;
-            $cityLang = 88.3629 ?? $request->city_name;
+            $cityId = $request->city_id;
+            $cityName = $request->city_name;
+            $cityLat = $request->city_latitude;
+            $cityLang = $request->city_longitude;
             $lang = $request->input('lang', 'en');
             $apiKey = get_setting('google-api-key');
 
-            if (!empty($apiKey)) {
-                //     $autocompleteUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=" . urlencode($keyword) . "&key=$apiKey";
-                //     $autoResponse = Http::get($autocompleteUrl)->json();
-                //     $results = [];
+            $countryCode = env('GOOGLE_MAPS_COUNTRY_CODE');
 
-                //     if (($autoResponse['status'] ?? 'INVALID_REQUEST') !== 'OK') {
-                //         return response()->json(
-                //             [
-                //                 'status' => 1,
-                //                 'message' => $autoResponse['error_message'] ?? 'Autocomplete request failed'
-                //             ]
-                //         );
-                //     }
-
-                //     foreach ($autoResponse['predictions'] ?? [] as $prediction) {
-                //         $placeId = $prediction['place_id'];
-
-                //         $detailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&fields=name,geometry,address_components&key=$apiKey";
-                //         $detail = Http::get($detailsUrl)->json();
-                //         $loc = $detail['result']['geometry']['location'] ?? ['lat' => null, 'lng' => null];
-                //         $addressComponents = $detail['result']['address_components'] ?? [];
-
-                //         $city = collect($addressComponents)->firstWhere('types', ['locality', 'political'])['long_name'] ??
-                //             collect($addressComponents)->firstWhere('types', ['administrative_area_level_3', 'political'])['long_name'] ?? null;
-
-
-                //         $results[] = [
-                //             'name' => $detail['result']['name'] ?? $prediction['description'],
-                //             'lat' => $loc['lat'],
-                //             'lng' => $loc['lng'],
-                //             'city' => $city,
-                //         ];
-                //     }
-                //     $savedData = $this->storeandReturnResult($results, $lang);
-
-                //     $message = !empty($savedData) ? 'Locality Retrived' : 'No Locality Found';
-
-                //     
-
-
-                // $geoUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" . urlencode($cityName) . "&key=$apiKey";
-                // $geoResponse = Http::get($geoUrl)->json();
-
-                // if (empty($geoResponse['results'])) {
-                //     return response()->json(['success' => false, 'message' => 'City not found']);
-                // }
-
-                // $cityLocation = $geoResponse['results'][0]['geometry']['location'];
-                // $lat = $cityLocation['lat'];
-                // $lng = $cityLocation['lng'];
-
-
-                $autocompleteUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?" . http_build_query([
-                    'input' => $keyword,
-                    'types' => 'geocode',
-                    'location' => "$cityLat,$cityLang",
-                    'radius' => 50000,
-                    'language' => $lang,
-                    'key' => $apiKey
-                ]);
-                $autoResponse = Http::get($autocompleteUrl)->json();
-
-
-                $filteredResults = collect($autoResponse['predictions'])->filter(function ($prediction) {
-                    return collect($prediction['types'])->contains(function ($type) {
-                        return in_array($type, ['sublocality', 'sublocality_level_1']);
-                    });
-                })->map(function ($prediction) {
-                    return [
-                        'name' => $prediction['structured_formatting']['main_text'],
-                        'place_id'   => $prediction['place_id'],
-                    ];
-                })->values();
-
-                $savedData = $this->storeandReturnResult($filteredResults->toArray(), $lang, $cityId);
-                cURL_request('saveLocalityLatLong', $savedData);
-
-
-
-                $message = !empty($savedData) ? 'Locality Retrived' : 'No Locality Found';
-                return response()->json([
-                    'status' => 1,
-                    'message' => $message,
-                    'data' => !empty($savedData) ? $savedData : []
-                ]);
-            } else {
+            if (empty($apiKey)) {
                 return response()->json([
                     'status' => 0,
                     'message' => 'API key not found',
                     'data' =>  []
                 ]);
             }
+
+            $autocompleteUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?" . http_build_query([
+                'input' => $keyword,
+                'types' => 'geocode',
+                'location' => "$cityLat,$cityLang",
+                'radius' => 50000,
+                'language' => $lang,
+                'key' => $apiKey,
+                'components' => "country:IN"
+            ]).'&strictbounds';
+            $autoResponse = Http::get($autocompleteUrl)->json();
+
+
+            $filteredResults = collect($autoResponse['predictions'])->filter(function ($prediction) {
+                return collect($prediction['types'])->contains(function ($type) {
+                    return in_array($type, ['sublocality', 'sublocality_level_1']);
+                });
+            })->map(function ($prediction) {
+                return [
+                    'name' => $prediction['structured_formatting']['main_text'],
+                    'place_id'   => $prediction['place_id'],
+                ];
+            })->values();
+
+
+
+            $savedData = $this->storeandReturnResult($filteredResults->toArray(), $lang, $cityId);
+            cURL_request('saveLocalityLatLong', $savedData);
+
+            $message = !empty($savedData) ? 'Locality Retrived' : 'No Locality Found';
+
+            DB::commit();
+            return response()->json([
+                'status' => 1,
+                'message' => $message,
+                'data' => !empty($savedData) ? $savedData : []
+            ]);
         } catch (\Throwable $th) {
+            DB::rollBack();
             throw $th;
         }
     }
-
 
     private function storeandReturnResult(array $data, $lang, $cityId)
     {
@@ -182,7 +120,7 @@ class GoogleLocalityController extends Controller
         foreach ($data as $locality) {
             $slug = Str::slug($locality['name'], '_');
 
-            $existing = $this->checkIfLocalityExist($locality['place_id'], $lang);
+            $existing = $this->checkIfLocalityExist($slug, $locality['place_id'], $cityId, $lang);
 
             if (!$existing) {
                 $getId = DB::table('locality')->insertGetId([
@@ -217,45 +155,63 @@ class GoogleLocalityController extends Controller
 
     public function saveLocalityLatLong(Request $request)
     {
-        $apiKey = get_setting('google-api-key');
-        $cURLRequest = collect($request->input('data'));
+        try {
+            DB::transaction();
 
-        $cURLRequest->each(function ($item) use ($apiKey) {
-            $placeId = $item['place_id'] ?? null;
+            $apiKey = get_setting('google-api-key');
+            $cURLRequest = collect($request->input('data'));
 
-            if (!$placeId) {
-                return;
-            }
+            $cURLRequest->each(function ($item) use ($apiKey) {
+                $placeId = $item['place_id'] ?? null;
 
-            $detailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?" . http_build_query([
-                'place_id' => $placeId,
-                'fields' => 'geometry',
-                'key' => $apiKey
-            ]);
+                if (!$placeId) {
+                    return;
+                }
 
-            $detailsResponse = Http::get($detailsUrl)->json();
+                $detailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?" . http_build_query([
+                    'place_id' => $placeId,
+                    'fields' => 'geometry',
+                    'key' => $apiKey
+                ]);
 
-            if (isset($detailsResponse['result']['geometry']['location'])) {
-                DB::table('locality')
-                    ->where('google_place_id', $placeId)
-                    ->update([
-                        'latitude' => $detailsResponse['result']['geometry']['location']['lat'] ?? null,
-                        'longitude' => $detailsResponse['result']['geometry']['location']['lng'] ?? null,
-                    ]);
-            }
-        });
+                $detailsResponse = Http::get($detailsUrl)->json();
 
+                if (isset($detailsResponse['result']['geometry']['location'])) {
+                    DB::table('locality')
+                        ->where('google_place_id', $placeId)
+                        ->update([
+                            'latitude' => $detailsResponse['result']['geometry']['location']['lat'] ?? null,
+                            'longitude' => $detailsResponse['result']['geometry']['location']['lng'] ?? null,
+                        ]);
+                }
+            });
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 
-    private function checkIfLocalityExist($place_id, $lang)
+    private function checkIfLocalityExist($slug, $place_id, $cityId, $lang)
     {
         return DB::table('locality')
-            ->leftJoin('locality_names', 'locality.locality_id', '=', 'locality_names.locality_id')
-            ->select('locality.locality_id', 'locality_names.name')
-            ->where('locality.google_place_id', $place_id)
-            ->where('locality_names.lang', $lang)
+            ->join('locality_names', function ($join) use ($lang) {
+                $join->on('locality.locality_id', '=', 'locality_names.locality_id')
+                    ->where('locality_names.lang', '=', $lang);
+            })
+            ->where([
+                ['locality.city', '=', $cityId],
+                ['locality.locality_key', '=', $slug],
+                ['locality.google_place_id', '=', $place_id],
+            ])
+            ->select('locality.locality_id')
+            ->limit(1)
             ->exists();
     }
+
+
+
+
     public function getYearlyPriceTrend(Request $req)
     {
         $data = (new LocalityAreaPrice())->getYearlyTrendData($req->input('locality_id'));

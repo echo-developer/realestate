@@ -1084,7 +1084,7 @@ const index = () => {
                         </select>
                       </Col> */}
                       <Col lg>
-                        <Locality onSelectLocality={onSelectLocality} />
+                        <Locality onSelectLocality={onSelectLocality} city={defaultCity} />
                       </Col>
                       {/* {postFor === "sell" ||
                         postFor === "rent" && ( */}

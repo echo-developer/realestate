@@ -19,10 +19,10 @@ const BusinessAddressForm = ({ addresses, setAddresses }) => {
   const { callApi } = AuthUser();
   const [cityData, setCityData] = useState([]);
   
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-    libraries,
-  });
+  // const { isLoaded, loadError } = useLoadScript({
+  //   googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+  //   libraries,
+  // });
 const translation = useTranslation();
   const inputRefs = useRef({});
 
@@ -46,65 +46,65 @@ const translation = useTranslation();
     }
   };
 
-  useEffect(() => {
-    if (!isLoaded || loadError) return;
+  // useEffect(() => {
+  //   if (!isLoaded || loadError) return;
 
-    addresses.forEach((address) => {
-      if (!inputRefs.current[address.key]) return;
+  //   addresses.forEach((address) => {
+  //     if (!inputRefs.current[address.key]) return;
 
-      const options = {
-        componentRestrictions: { country: "IN" },
-        fields: ["formatted_address", "geometry"],
-      };
+  //     const options = {
+  //       componentRestrictions: { country: "IN" },
+  //       fields: ["formatted_address", "geometry"],
+  //     };
 
-      const autocomplete = new window.google.maps.places.Autocomplete(
-        inputRefs.current[address.key],
-        options
-      );
+  //     const autocomplete = new window.google.maps.places.Autocomplete(
+  //       inputRefs.current[address.key],
+  //       options
+  //     );
 
-      autocomplete.addListener("place_changed", () =>
-        handlePlaceChanged(autocomplete, address.key)
-      );
-    });
-  }, [isLoaded, loadError, addresses]);
+  //     autocomplete.addListener("place_changed", () =>
+  //       handlePlaceChanged(autocomplete, address.key)
+  //     );
+  //   });
+  // }, [isLoaded, loadError, addresses]);
 
-  const handlePlaceChanged = (autocomplete, key) => {
-    const place = autocomplete.getPlace();
-    if (!place || !place.geometry) {
-      handleChange(key, "locality", "");
-      return;
-    }
+  // const handlePlaceChanged = (autocomplete, key) => {
+  //   const place = autocomplete.getPlace();
+  //   if (!place || !place.geometry) {
+  //     handleChange(key, "locality", "");
+  //     return;
+  //   }
 
-    const formattedAddress = place.formatted_address || "";
-    const latitude = place.geometry.location.lat();
-    const longitude = place.geometry.location.lng();
+  //   const formattedAddress = place.formatted_address || "";
+  //   const latitude = place.geometry.location.lat();
+  //   const longitude = place.geometry.location.lng();
 
-    const addressParts = formattedAddress.split(",").map((part) => part.trim());
+  //   const addressParts = formattedAddress.split(",").map((part) => part.trim());
 
-    const addressLine1 = addressParts[0] || "";
-    const addressLine2 = addressParts[1] || "";
-    const town = addressParts[2] || "";
+  //   const addressLine1 = addressParts[0] || "";
+  //   const addressLine2 = addressParts[1] || "";
+  //   const town = addressParts[2] || "";
 
-    const localityData = [addressLine1, addressLine2]
-      .filter(Boolean)
-      .join(", ");
+  //   const localityData = [addressLine1, addressLine2]
+  //     .filter(Boolean)
+  //     .join(", ");
 
-    setAddresses((prev) =>
-      prev.map((addr) =>
-        addr.key === key
-          ? {
-              ...addr,
-              locality: localityData,
-              latitude,
-              longitude,
-              addressLine1,
-              addressLine2,
-              town,
-            }
-          : addr
-      )
-    );
-  };
+  //   setAddresses((prev) =>
+  //     prev.map((addr) =>
+  //       addr.key === key
+  //         ? {
+  //             ...addr,
+  //             locality: localityData,
+  //             latitude,
+  //             longitude,
+  //             addressLine1,
+  //             addressLine2,
+  //             town,
+  //           }
+  //         : addr
+  //     )
+  //   );
+  // };
   const onSelectLocality = (locality, key) => {
     if(!locality || key == null) return;
     const state = addresses;
@@ -167,7 +167,7 @@ const translation = useTranslation();
             </Form.Select>
           </FloatingLabel>
           {address && (
-            <Locality onSelectLocality={onSelectLocality} index={i} defaultValue={address?.locality} /> 
+            <Locality onSelectLocality={onSelectLocality} index={i} defaultValue={address?.locality} address={address} cityData={cityData} /> 
           )}
 
           {/* Remove Button (Hidden for the first address) */}

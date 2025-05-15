@@ -14,7 +14,7 @@ import { useAuth } from "@/context/AuthProvider";
 import Locality from "../Locality/Locality";
 
 const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dropdownState, setIsOverlayVisible, showMapView, setShowMapView }) => {
-  const { currency, currencyCode } = useAuth();
+  const { currency, currencyCode, defaultCity } = useAuth();
   const { callApi } = AuthUser();
   const router = useRouter();
   const subFilterRef = useRef({});
@@ -615,7 +615,7 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
                   locality={localityData}
                   setLocalityData={setLocalityData}
                 /> */}
-                <Locality onSelectLocality={onSelectLocality} />
+                <Locality onSelectLocality={onSelectLocality} city={defaultCity} />
               </Col>
               <Col lg sm={6} xs={12} onClick={() => toggleDropdown('project_type')}>
                 <Dropdown className="select-dropdown mb-3 d-grid" show={dropdownState?.project_type}>

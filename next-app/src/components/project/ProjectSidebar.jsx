@@ -28,7 +28,7 @@ const ProjectSidebar = ({
   displayNumber,
 }) => {
   const [showAll, setShowAll] = useState(false);
-  const { defaultCity } = useAuth();
+  const { defaultCity, buildAgentUrl } = useAuth();
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const [formData, setFormData] = useState({
     name: "",
@@ -480,7 +480,7 @@ const ProjectSidebar = ({
                 />
                 <div className="flex-grow-1 ps-3">
                   <h5 className="mb-0">
-                    <Link href={`/agent-details/${agent?.id}`}>{agent?.name}</Link>{" "}
+                    <Link href={buildAgentUrl(agent)}>{agent?.name}</Link>{" "}
                     <i
                       className="icon-img-check ms-2"
                       data-bs-toggle="tooltip"
