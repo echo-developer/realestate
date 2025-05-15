@@ -147,6 +147,7 @@ const Header = () => {
       });
       if (response && response.status === 1) {
         setCityData(response.data);
+        handleDefaultCityChange(response.data?.[0])
         setGetAllCity(response.data);
       } 
     } catch (error) { }

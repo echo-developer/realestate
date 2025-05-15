@@ -38,10 +38,10 @@ const Locality = ({ onSelectLocality, errors, defaultValue, city, type }) => {
         method: 'GET',
         data: {
           keyWord: keyWord,
-          city_id: city.city_id,
-          city_name: city.name,
-          city_latitude: city.latitude,
-          city_longitude: city.longitude
+          city_id: city?.city_id || "",
+          city_name: city?.name || "",
+          city_latitude: city?.latitude || "",
+          city_longitude: city?.longitude || ""
         }
       })
 
@@ -65,8 +65,8 @@ const Locality = ({ onSelectLocality, errors, defaultValue, city, type }) => {
           method: 'GET',
           data: {
             keyWord: debouncedValue,
-            city_id: city.city_id,
-            city_name: city.name
+            city_id: city?.city_id || "",
+            city_name: city?.name || ""
           }
         })
         if (res && res?.status == 1) {
@@ -79,9 +79,9 @@ const Locality = ({ onSelectLocality, errors, defaultValue, city, type }) => {
         console.error(error?.message || "Something went wrong")
       }
     }
-    if (city) {
+    // if (city) {
       getLocalityList();
-    }
+    // }
   }, [debouncedValue, city])
 
 

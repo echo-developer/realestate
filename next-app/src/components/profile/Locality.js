@@ -4,7 +4,7 @@ import AuthUser from '../Authentication/AuthUser';
 import { useSearchParams } from 'next/navigation';
 import { Form, FloatingLabel } from 'react-bootstrap'
 
-const Locality = ({ onSelectLocality, errors, defaultValue, index }) => {
+const Locality = ({ onSelectLocality, errors, defaultValue, index, address, cityData }) => {
     const { callApi } = AuthUser();
     const searchParams = useSearchParams();
     const [localitySearchInput, setLocalitySearchInput] = useState(defaultValue?.locality_name || '');
@@ -33,12 +33,24 @@ const Locality = ({ onSelectLocality, errors, defaultValue, index }) => {
     }, [locality])
 
     const getGlobalLocalities = async (keyWord) => {
+        const city = cityData.find(city => city.city_id == address.city);
+        let data = {
+            keyWord: keyWord,
+        };
+
+        if(city) {
+            data.city_id = address.city;
+            data.city_latitude = city.latitude;
+            data.city_longitude = city.longitude;
+        }
+
         try {
             const res = await callApi({
                 api: `/global-localities`,
                 method: 'GET',
                 data: {
-                    keyWord: keyWord
+                    ...data
+                    
                 }
             })
 
@@ -61,7 +73,8 @@ const Locality = ({ onSelectLocality, errors, defaultValue, index }) => {
                     api: `/stored-localities`,
                     method: 'GET',
                     data: {
-                        keyWord: debouncedValue
+                        keyWord: debouncedValue,
+                        city_id: address.city || ""
                     }
                 })
                 if (res && res?.status == 1) {
