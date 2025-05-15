@@ -14,7 +14,6 @@ import {
 import { useRouter } from "next/navigation";
 
 const AgentEnquiryForm = ({agentId,handleClose }) => {
-    console.log(agentId)
     const router=useRouter();
     const translation = useTranslation();
     const { callApi, isLogin } = AuthUser();
@@ -100,7 +99,7 @@ const validationSchema = Yup.object({
 
 
             const response = await callApi({
-                api: `/add_property_enquery`,
+                api: `/buyer_property_enquery`,
                 method: "UPLOAD",
                 data,
             });
