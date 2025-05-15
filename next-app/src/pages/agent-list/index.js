@@ -21,6 +21,7 @@ import {
   Form,
   Row,
   Col,
+  Card,
   ListGroup,
   Button,
   Dropdown,
@@ -441,7 +442,7 @@ const Index = () => {
                   <Row className="list-display ">
                     {agentList.map((agent) => (
                       <Col className="col-12" key={agent.id}>
-                        <div className="card card-agent">
+                        <Card className="card-agent">
                           <Row className="gx-0">
                             <Col xs={3}>
                               <div className="card-image">
@@ -464,55 +465,54 @@ const Index = () => {
                               </div>
                             </Col>
                             <Col lg xs={9}>
-                              <div className="card-body">
-                                <div className="card-title">
-                                  <h4>
-                                    <a href={buildAgentUrl(agent)}>{agent?.name || "Not Available"}</a>
-                                    {agent?.is_verified_agent && (
-                                      <span title="Verified">
-                                        <i className="icon-img-check ms-1"></i>
-                                      </span>
-                                    )}
-                                  </h4>
+                              <Card.Body>
+                                <Card.Title as='h4' className="mb-2">
+                                  <a href={buildAgentUrl(agent)}>{agent?.name || "Not Available"}</a>
+                                  {agent?.is_verified_agent && (
+                                    <span title="Verified">
+                                      <i className="icon-img-check ms-1"></i>
+                                    </span>
+                                  )} 
+                                </Card.Title>                                 
 
-                                  {/* 🏅 Badges Section */}
-                                  {agent?.userbadges?.length > 0 && (
-                                    <div className="d-flex flex-wrap gap-2 mb-2">
-                                      {agent.userbadges.map((badge) => (
-                                        <>
-                                          <Button
-                                            variant=""
-                                            className={getBadgeButtonClass(badge.name)}
-                                            size="sm"
-                                            title={badge.description}
-                                            key={badge.badge_id}
-                                          >
-                                            <img
-                                              src={badge.icon}
-                                              alt={badge.name}
-                                              className="me-1"
-                                              height={20}
-                                              width={20}
-                                            />{" "}{badge.name}
-                                          </Button>
-                                        </>
-                                      ))}
-                                    </div>
-                                  )}
-                                </div>
+                                {/* 🏅 Badges Section */}
+                                {agent?.userbadges?.length > 0 && (
+                                  <div className="d-flex flex-wrap gap-2 mb-2">
+                                    {agent.userbadges.map((badge) => (
+                                      <>
+                                        <Button
+                                          variant=""
+                                          className={getBadgeButtonClass(badge.name)}
+                                          size="sm"
+                                          title={badge.description}
+                                          key={badge.badge_id}
+                                        >
+                                          <img
+                                            src={badge.icon}
+                                            alt={badge.name}
+                                            className="me-1"
+                                            height={18}
+                                            width={18}
+                                          />{" "}{badge.name}
+                                        </Button>
+                                      </>
+                                    ))}
+                                  </div>
+                                )}
+                                
 
                                 {/* Company Name */}
-                                <p className="mb-1 d-flex align-items-center gap-2">
-                                  {agent?.company_name && (
-                                    <>
-                                      <i className="icon-img-company"></i>
-                                      <span>{agent?.company_name || ""}</span>
-                                    </>
-                                  )}
-                                </p>
-                                <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">English, Arabic, French, Italian</span></p>
-
                                 
+                                {agent?.company_name && (
+                                  <>
+                                  <p className="mb-1 d-flex align-items-center gap-2">
+                                    <i className="icon-img-company"></i>
+                                    <span>{agent?.company_name || ""}</span>
+                                  </p>
+                                  </>
+                                )}
+                                
+                                <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">English, Arabic, French, Italian</span></p>                                
                                 {/* Phone
                                   <p className="mb-2">
                                     <i className="icon-feather-phone"></i>{" "}
@@ -535,7 +535,7 @@ const Index = () => {
                                   </p>
                                 )}
                                 
-                                <div className="d-grid d-sm-flex gap-2">
+                                <div className="d-flex gap-2">
                                   <Button
                                     variant="outline-primary"
                                     size="sm"
@@ -562,7 +562,7 @@ const Index = () => {
 
                                   
                                 </div>
-                              </div>
+                              </Card.Body>
                             </Col>
                             <Col lg='auto' className="p-3 align-self-end text-lg-end">
                               <NextImage
@@ -585,7 +585,7 @@ const Index = () => {
                               )}
                             </Col>
                           </Row>
-                        </div>
+                        </Card>
                       </Col>
                     ))}
 

@@ -5695,6 +5695,28 @@ fieldset{
 	height: calc(100vh - 238px);
 	width: 100%;
 }
+.about-tasker{
+	p{
+		display: flex;
+		span{
+			flex: 0 0 50%;
+		}
+	}
+}
+.coverPhoto{
+	background-size: cover;
+	position: relative;
+	overflow: hidden;
+	&::before{
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		height: 100%;
+		width: 100%;
+		background-color: rgba($black, 50%);
+	}
+}
 
 /* Media Start */
 @media (min-width: 576px) {

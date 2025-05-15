@@ -208,14 +208,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const badgesObject = {
-    'Responsive Broker': "btn btn-primary",
-    'Quality Lister': "bg-primary-subtle btn btn-sm",
-    'Tru broker': "bg-warning-subtle btn btn-sm",
-    'Great performar': "bg-success-subtle btn btn-sm"
+    'Responsive Broker': "bg-success-subtle text-success",
+    'Quality Lister': "bg-primary-subtle text-primary",
+    'Tru broker': "bg-warning-subtle text-warning",
+    'Great performar': "bg-info-subtle text-info"
   }
 
   function getBadgeButtonClass(badgeName) {
-    return badgesObject[badgeName] || 'btn btn-primary'
+    return badgesObject[badgeName] || 'bg-primary-subtle text-primary'
 }
 
 

@@ -19,7 +19,7 @@ import {
   Whatsapp,
 } from "react-bootstrap-icons";
 import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
-import { Row, Col, Button, Modal, Dropdown, ButtonGroup, Form, Nav } from "react-bootstrap";
+import { Row, Col, Card, Button, Modal, Dropdown, ButtonGroup, Form, Nav } from "react-bootstrap";
 import AgentEnquiryForm from "@/components/addtional/AgentEnquiryForm";
 import { useAuth } from "@/context/AuthProvider";
 import useAdvertisement from "@/hooks/useAdvertisement";
@@ -275,46 +275,82 @@ const Index = () => {
 
   return (
     <MainLayout>
-      <div className="short-banner">
+      {/* <div className="short-banner">
         <div className="container">
           <h1>{translation?.agent_details || "Agent Details"}</h1>
         </div>
-      </div>
+      </div> */}
 
       <section className="section profile">
         <div className="container-fluid">
+          <div className="coverPhoto" style={{ backgroundImage: "url('/assets/images/tasker-cover-photo.jpg')", minHeight: '200px' }}>
+          </div>
           <Row>
-            <Col lg={8} xs={12}>
+            <Col xl={9} lg={8} xs={12}>
               <div className="search-form">
 
               </div>
-              <div className="card card-agent h-auto border-0 shadow-sm mb-4">
-                <div className="card-body">
-                  <Row className="gx-3 text-center text-sm-start">
-                    <Col className="col-sm-auto col-12 mb-3 mb-sm-0">
+              <Card className="card-agent h-auto border-0 shadow-sm mb-4">
+                <Card.Body>
+                  <Row className="gx-3 mb-3">
+                    <Col xs={3}>
                       <div className="card-image">
                         <img
                           src={
                             agentDetailsData?.image || "/assets/images/user.jpg"
                           }
                           alt="Agent Logo"
-                          height={"180"}
-                        />
-                        <NextImage
-                          src="/assets/images/company-logo.png"
-                          alt="Company Logo"
-                          width={48}
-                          height={48}
-                          className="c-logo"
-                          priority
-                        />
+                          className="img-fluid rounded-3"
+                          height={"240"}
+                        />                        
                       </div>
                     </Col>
-                    <Col className="col-sm col-12">
-                      <h4 className="mb-1">
+                    <Col lg xs={9}>
+                      <Card.Title as='h4' className="mb-2">
                         {agentDetailsData?.name}{" "}
                         <i className="icon-img-check ms-1"></i>
-                      </h4>
+                      </Card.Title>
+                      <div className="d-flex gap-2 mb-3">
+                        <Button
+                          className="bg-warning-subtle text-warning"
+                          size="sm"
+                          variant=""
+                        >
+                          <img
+                            src="/assets/images/icons/badge-award.png"
+                            alt="Badges"
+                            height={18}
+                            width={18}
+                          />{" "}
+                          {translation?.trubroker || "TruBrok"}
+                        </Button>
+                        <Button
+                          className="bg-primary-subtle text-primary"
+                          size="sm"
+                          variant=""
+                        >
+                          <img
+                            src="/assets/images/icons/408472.png"
+                            alt="Badges"
+                            height={18}
+                            width={18}
+                          />{" "}
+                          {translation?.quality_listner || "Quality Listner"}
+                        </Button>
+                        <Button
+                          className="bg-success-subtle text-success"
+                          size="sm"
+                          variant=""
+                        >
+                          <img
+                            src="/assets/images/icons/7644063.png"
+                            alt="Badges"
+                            height={18}
+                            width={18}
+                          />{" "}
+                          {translation?.resopnse_broker || "Responsive Broker"}
+                        </Button>
+                      </div>
                       <p className="mb-2 ">
                         <i className="icon-img-company"></i>
                         {agentDetailsData?.company_name || "Not Available"}
@@ -322,7 +358,7 @@ const Index = () => {
                       <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">English, Arabic, French, Italian</span></p>
                       {/* Service Area */}
 
-                      <p className="mb-3">
+                      <p className="mb-2">
                         <GeoAlt color="#1365CF" size={18} /> {translation?.serve_in || "Serve in"}{": "}
                         <span className="text-muted">
                           Garia, New Garia, Ajay Nager, Medica, Kalikapur, Ruby
@@ -342,52 +378,9 @@ const Index = () => {
                         {agentDetailsData?.phone ||
                           `${translation?.not_available || "Not available"}`}
                       </p> */}
-                      <Row className="">
+                      <Row>
                         <Col className="col-xl col-12">
-                          <div className="d-flex gap-2 mb-3">
-                            <Button
-                              variant=""
-                              className="bg-warning-subtle"
-                              size="sm"
-                            >
-                              <img
-                                src="/assets/images/icons/badge-award.png"
-                                alt="Badges"
-                                height={20}
-                                width={20}
-                              />{" "}
-                              {translation?.trubroker || "TruBrok"}
-                            </Button>
-                            <Button
-                              variant=""
-                              className="bg-primary-subtle"
-                              size="sm"
-                            >
-                              <img
-                                src="/assets/images/icons/408472.png"
-                                alt="Badges"
-                                height={20}
-                                width={20}
-                              />{" "}
-                              {translation?.quality_listner || "Quality Listner"}
-                            </Button>
-                            <Button
-                              variant=""
-                              className="bg-success-subtle"
-                              size="sm"
-                            >
-                              <img
-                                src="/assets/images/icons/7644063.png"
-                                alt="Badges"
-                                height={20}
-                                width={20}
-                              />{" "}
-                              {translation?.resopnse_broker || "Responsive Broker"}
-                            </Button>
-                          </div>
-
-
-                          <div className="d-grid d-sm-flex gap-2">
+                          <div className="d-flex gap-2">
                             <Button
                               variant="outline-primary"
                               size="sm"
@@ -415,31 +408,40 @@ const Index = () => {
                         </Col>
                       </Row>
                     </Col>
+                    <Col lg='auto' className="py-3 align-self-end text-lg-end">
+                      <NextImage
+                          src="/assets/images/company-logo.png"
+                          alt="Company Logo"
+                          width={48}
+                          height={48}
+                          className="c-logo"
+                          priority
+                        />
+                    </Col>
                   </Row>
-                  <div className="d-none d-lg-block mb-2">
-                    <h4>{translation?.about || "About"}
-                    </h4>
+                  <div className="about-tasker">
+                    <h4>{translation?.about || "About"}</h4>
                     <Row>
                       <Col>
-                        <p className="d-flex">
-                          <span className="text-muted">{translation?.broker_type || "Broker Type:"}
-                          </span>
+                        <p className="mb-2">
+                          <span>{translation?.broker_type || "Broker Type:"}{': '}</span>
+                          <span className="text-muted">                          
                           {agentDetailsData?.broker_type === "I"
                             ? "Indepedent"
                             : agentDetailsData?.broker_type === "F"
-                              ? "Franchise"
-                              : agentDetailsData?.broker_type === "A"
-                                ? "Agent"
-                                : "Not Available"}
-                        </p>
-                        <p>
-                          <span className="text-muted">{translation?.address || "Address:"}
-                          </span>{" "}
-                          {agentDetailsData?.address || "Not Available"}
-                        </p>
-                        <p>
-                          <span className="text-muted">{translation?.social_media || "Social Media:"}
+                            ? "Franchise"
+                            : agentDetailsData?.broker_type === "A"
+                            ? "Agent"
+                            : "Not Available"}
                           </span>
+                        </p>
+                        <p className="mb-2">
+                          <span>{translation?.address || "Address:"}{': '}</span>
+                          <span className="text-muted">{agentDetailsData?.address || "Not Available"}</span>
+                        </p>
+                        <p className="mb-2">
+                          <span>{translation?.social_media || "Social Media:"}{': '}</span>
+                          <span className="text-muted">
                           {[
                             ...new Set(
                               agentDetailsData?.social?.map(
@@ -447,73 +449,72 @@ const Index = () => {
                               )
                             ),
                           ].join(", ")}
+                          </span>
                         </p>
-                        <p>
-                          <span className="text-muted">{translation?.licence_number || "Licence Number:"}
-                          </span>{" "}
-                          {agentDetailsData?.license_no || "Not Available"}
+                        <p className="mb-2">
+                          <span>{translation?.licence_number || "Licence Number:"}{': '}</span>
+                          <span className="text-muted">{agentDetailsData?.license_no || "Not Available"}</span>
                         </p>
-                        <p>
-                          <span className="text-muted">{translation?.business_phone || "Business Phone:"}
-                          </span>{" "}
-                          {agentDetailsData?.bussiness_phone || "Not Available"}
+                        <p className="mb-2">
+                          <span>{translation?.business_phone || "Business Phone:"}{': '}</span>
+                          <span className="text-muted">{agentDetailsData?.bussiness_phone || "Not Available"}</span>
                         </p>
-                        <p>
-                          <span className="text-muted">{translation?.company_name || "Company Name:"}
-                          </span>{" "}
-                          {agentDetailsData?.company_name || "Not Available"}
-                        </p>
-                        
+                        <p className="mb-2">
+                          <span>{translation?.company_name || "Company Name:"}{': '}</span>
+                          <span className="text-muted">{agentDetailsData?.company_name || "Not Available"}</span>
+                        </p>                        
                       </Col>
                       <Col>
-                        <p>
-                          <span className="text-muted">{translation?.expertise || "Expertise:"}
-                          </span>{" "}
-                          {agentDetailsData?.specialization || "Not Available"}
+                        <p className="mb-2">
+                          <span>{translation?.expertise || "Expertise:"}{': '}</span>
+                          <span className="text-muted">{agentDetailsData?.specialization || "Not Available"}</span>
                         </p>
-                        <p>
-                          <span className="text-muted">{translation?.service_areas || "Service Areas:"}
-                          </span>
+                        <p className="mb-2">
+                          <span>{translation?.service_areas || "Service Areas:"}{': '}</span>
+                          <span className="text-muted">
                           {[
                             ...new Set(
                               agentDetailsData?.service_area?.map((area) => area.city)
                             ),
                           ].join(", ")}
+                          </span>
                         </p>
-                        <p>
-                          <span className="text-muted">{translation?.properties_for_sale || "Properties For Sale"}
-                          </span>  (
+                        <p className="mb-2">
+                          <span>{translation?.properties_for_sale || "Properties For Sale"}{': '}</span>
+                          <span className="text-muted">
+                          (
                           {agentDetailsData?.forSell}), {translation?.for_rent || "For Rent"}
                           (
                           {agentDetailsData?.forRent})
+                          </span>
                         </p>
-                        <p>
-                          <span className="text-muted">{translation?.business_email || "Business Email:"}
-                          </span>{" "}
-                          {agentDetailsData?.bussiness_email || "Not Available"}
+                        <p className="mb-2">
+                          <span>{translation?.business_email || "Business Email:"}{': '}</span>
+                          <span className="text-muted">{agentDetailsData?.bussiness_email || "Not Available"}</span>
                         </p>
-                        <p>
-                          <span className="text-muted">{translation?.working_hours || "Working Hours:"}
-                          </span>{" "}
+                        <p className="mb-2">
+                          <span>{translation?.working_hours || "Working Hours:"}{': '}</span>
+                          <span className="text-muted">
                           {agentDetailsData?.opening_hours} -{" "}
                           {agentDetailsData?.closing_hours}
+                          </span>
                         </p>
-                        <p>
-                          <span className="text-muted">{translation?.experience || "Experience:"}
-                          </span>{" "}
+                        <p className="mb-2">
+                          <span>{translation?.experience || "Experience:"}{': '}</span>
+                          <span className="text-muted">
                           {agentDetailsData?.experience_yr || "Not Available"}
                           {agentDetailsData?.experience_yr && "Years"}
+                          </span>
                         </p>
                       </Col>
                     </Row>
-                    <p>
-                      <span className="text-muted d-block">{translation?.description || "Description:"}
-                      </span>
+                    <p className="mb-2">{translation?.description || "Description:"}</p>
+                    <p className="text-muted"> 
                       {agentDetailsData?.description || "Not Available"}
                     </p>
                   </div>
-                </div>
-              </div>
+                </Card.Body>
+              </Card>
               <form id="">
                 <Row className="gx-3">
                   <Col lg='auto' sm={2} xs='auto'>
@@ -1041,7 +1042,7 @@ const Index = () => {
               )}
               {/* )} */}
             </Col>
-            <Col lg={4} xs={12}>
+            <Col xl={3} lg={4} xs={12}>
 
               <>
                 {adsData.length > 0 ? (
