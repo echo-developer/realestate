@@ -30,7 +30,7 @@ const Index = () => {
   const translation = useTranslation();
   const { defaultCity } = useAuth();
   const { callApi, GetMemberId, isLogin } = AuthUser();
-  const { agent_id } = router.query;
+  const { id: agent_id } = router.query;
   const formRef = useRef(null);
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const memberId = GetMemberId();
@@ -61,6 +61,7 @@ const Index = () => {
     setShowContactModal(true);
   };
 
+  console.log("router query", router.query)
   useEffect(() => {
     if (agent_id) {
       fetchAgentDetails(agent_id, page);
