@@ -560,9 +560,6 @@ bottom: -5px;
 /* Media Queries Menu */
 @media (max-width: 1199.98px) {
 /* Header Responsive Styles */
-ul#desk-nav {
-	display: none;
-}
 .mmenu-trigger {
 	display: inline-block !important;
 }

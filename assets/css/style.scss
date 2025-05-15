@@ -54,7 +54,6 @@ body {
 a{
 	color: $primary;
 	text-decoration: none;
-
 	&:hover {
 		color: var(--siteColorHover);
 	}
@@ -69,7 +68,22 @@ b,
 strong {
 	font-weight: 500;
 }
-
+.btn-outline-danger,
+.btn-outline-primary,
+.btn-outline-success{
+	&:hover, &.active{
+		svg{
+			filter: brightness(0) invert(1);
+		}
+	}
+}
+.btn-outline-info{
+	&:hover{
+		svg{
+			filter: invert(1) brightness(0);
+		}
+	}
+}
 .card {
 	--#{$prefix}card-cap-bg: rgba(0, 0, 0, 0);
 
@@ -160,7 +174,9 @@ strong {
 		color: $white;
 	}
 }
-
+.text-blur{
+	filter: blur(3px);
+}
 .text-indigo {
 	color: var(--#{$prefix}indigo) !important;
 }
@@ -412,10 +428,6 @@ ul#desk-nav {
 			filter: brightness(0) invert(1);
 		}
 	}
-}
-
-.navbar {
-	padding: 0;
 }
 
 .setlang {
@@ -805,6 +817,8 @@ ul {
 		}
 	}
 	&.list-none {
+		list-style: none;
+		padding: 0;
 		&>li {
 			padding: 0;
 		}
@@ -1047,9 +1061,21 @@ ul {
 
 .card-agent {
 	.card-image {
+		position: relative;
 		.img-fluid {
-			max-height: 100px;
 			object-fit: cover;
+			height: 250px;
+		}
+		.rent-sale{
+			position: absolute;
+			left: 1rem;
+			top: 1rem;
+		}
+		.c-logo{
+			position: absolute;
+			right: 0;
+    		bottom: 0;
+			border-start-start-radius: 0.25rem;
 		}
 	}
 }
@@ -1222,6 +1248,11 @@ ul {
 			.card-img-overlay{
 				background-color: rgba(var(--#{$prefix}black-rgb), 0.5);
 			}
+		}
+	}
+	.card-footer{
+		.rounded-circle{
+			object-fit: cover;
 		}
 	}
 }
@@ -1427,6 +1458,7 @@ ul {
 		}
 	}
 }
+
 .card-agent {
 	h4{
 		a{
@@ -1443,9 +1475,6 @@ ul {
 	}
 }
 .card-title {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
 	margin-bottom: 0;
 }
 
@@ -2408,6 +2437,7 @@ h4 {
 		width: 100px;
 		height: 100px;
 		margin: auto;
+		object-fit: cover;
 		position: relative;
 
 		&>img {
@@ -3064,10 +3094,6 @@ ul.list-property-feature>li i {
 	}
 }
 
-.grid-display {
-	display: none;
-}
-
 .my-assets {
 	.total-ad-pic {
 		top: 1rem;
@@ -3539,7 +3565,6 @@ input::-webkit-inner-spin-button {
 }
 .page-overlay{
 	position: fixed;
-	background-color: #000;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -5418,9 +5443,11 @@ fieldset{
 		}
 	}
 	.dropdown-menu{
-		max-height: 250px;
-    	overflow-y: auto;
-		/* max-width: 100%; */
+		.scrollY{
+			max-height: 200px;
+			overflow-y: auto;
+			/* max-width: 100%; */
+		}
 		.btn-group.column-2{
 			.btn{
 				width: calc(50% - 1rem);
@@ -5430,8 +5457,13 @@ fieldset{
 }
 #searchfilter{
 	position: relative;
+	.select-dropdown{
+		.btn-form-control{
+			border-color: transparent;
+		}		
+	}
 	.form-field{	
-		.form-control, .form-select, .select-dropdown .btn-form-control{
+		.form-control, .form-select{
 			border-color: transparent;
 		}
 	}
@@ -5646,7 +5678,46 @@ fieldset{
 	height: calc(100% - 1.5rem);
 	margin-bottom: 1.5rem;
 }
+.mapViewScroll{
+	.grid-display {
+		/* display: none; */
+		&.scroll{
+			height: calc(100vh - 238px);
+			overflow-y: auto;
+			overflow-x: hidden;
+			&::-webkit-scrollbar { width: 17px; }
+		}
+	}
+}
 
+.googleMap{
+	border-radius: 0.5rem;
+    overflow: hidden;
+	height: calc(100vh - 238px);
+	width: 100%;
+}
+.about-tasker{
+	p{
+		display: flex;
+		span{
+			flex: 0 0 50%;
+		}
+	}
+}
+.coverPhoto{
+	background-size: cover;
+	position: relative;
+	overflow: hidden;
+	&::before{
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		height: 100%;
+		width: 100%;
+		background-color: rgba($black, 50%);
+	}
+}
 
 /* Media Start */
 @media (min-width: 576px) {
@@ -5709,6 +5780,20 @@ fieldset{
 }
 
 @media (min-width: 992px) {
+	html {
+		font-size: 16px;
+	}
+	#wrapper {
+		padding-top: 76px;
+	}
+	.navbar-brand {
+		padding: 0;
+		& > div{
+			& >img {
+				max-height: 64px;
+			}
+		}		
+	}
 	.container-fluid {
 		--#{$prefix}gutter-x: 4rem;
 	}
@@ -5724,19 +5809,6 @@ fieldset{
 				height: 215px;
 			}
 		}
-	}
-	html {
-		font-size: 16px;
-	}
-	#wrapper {
-		padding-top: 74px;
-	}
-	.navbar-brand {
-		& > div{
-			& >img {
-				max-height: 64px;
-			}
-		}		
 	}
 	.short-banner {
 		min-height: 80px;
@@ -5926,13 +5998,18 @@ fieldset{
 		padding-top: 58px;
 		padding-bottom: 60px;
 	}
-	.navbar-brand {
-		& > div{
-			& >img {
-				max-height: 48px;
-			}
-		}		
+	.navbar{
+		padding: 0;
+		.navbar-brand {
+			& > div{
+				& >img {
+					height: 48px;
+					width: 130px;
+				}
+			}		
+		}
 	}
+	
 	.short-banner {
 		min-height: 64px;
 	}
@@ -5999,6 +6076,14 @@ fieldset{
 }
 
 @media only screen and (max-width: 767.98px) {
+	.offcanvas, .property-card-wrapper{
+		.card-ads{
+			.col{
+				max-width: calc(100% - 120px);
+			}
+		}
+	}
+	
 	.large-footer{
 		display: none;
 	}
