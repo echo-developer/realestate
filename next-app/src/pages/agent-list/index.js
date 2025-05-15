@@ -8,6 +8,7 @@ import Locality from "@/components/Locality/Locality";
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthProvider";
 import useTranslation from "@/hooks/useTranslation";
+import AgentEnquiryForm from "@/components/addtional/AgentEnquiryForm";
 import {
   Search,
   GeoAlt,
@@ -29,7 +30,8 @@ import {
   Nav,
   ProgressBar,
   FloatingLabel,
-  Badge
+  Badge,
+  Modal
 } from "react-bootstrap";
 const Index = () => {
   const translation = useTranslation();
@@ -55,6 +57,8 @@ const Index = () => {
   const [selectedTab, setSelectedTab] = useState("sale");
   const [selectedPropertyType, setSelectedPropertyType] = useState("");
   const [badgeList, setBadgeList] = useState([]);
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
+  const [selectedAgentId, setSelectedAgentId] = useState("");
 
   useEffect(() => {
     FetchPropertyTypeData();
@@ -216,6 +220,9 @@ const Index = () => {
     const newUrl = `${window.location?.pathname}?${params.toString()}`;
     router.push(newUrl);
   };
+
+  const handleEnquiryClose = () => setShowEnquiryModal(false);
+
   const handleSelect = (agent) => {
     setBrokerType(agent);
   };
@@ -472,8 +479,8 @@ const Index = () => {
                                     <span title="Verified">
                                       <i className="icon-img-check ms-1"></i>
                                     </span>
-                                  )} 
-                                </Card.Title>                                 
+                                  )}
+                                </Card.Title>
 
                                 {/* 🏅 Badges Section */}
                                 {agent?.userbadges?.length > 0 && (
@@ -499,20 +506,20 @@ const Index = () => {
                                     ))}
                                   </div>
                                 )}
-                                
+
 
                                 {/* Company Name */}
-                                
+
                                 {agent?.company_name && (
                                   <>
-                                  <p className="mb-1 d-flex align-items-center gap-2">
-                                    <i className="icon-img-company"></i>
-                                    <span>{agent?.company_name || ""}</span>
-                                  </p>
+                                    <p className="mb-1 d-flex align-items-center gap-2">
+                                      <i className="icon-img-company"></i>
+                                      <span>{agent?.company_name || ""}</span>
+                                    </p>
                                   </>
                                 )}
-                                
-                                <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">English, Arabic, French, Italian</span></p>                                
+
+                                <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">{agent?.languages ? agent.languages.replace(/,/g, ', ') : ''}</span></p>
                                 {/* Phone
                                   <p className="mb-2">
                                     <i className="icon-feather-phone"></i>{" "}
@@ -534,19 +541,26 @@ const Index = () => {
                                     </span>
                                   </p>
                                 )}
-                                
+
                                 <div className="d-flex gap-2">
                                   <Button
                                     variant="outline-primary"
                                     size="sm"
-                                    onClick={() => setShowEnquiryModal(true)}
+                                    onClick={() => {
+                                      setSelectedAgentId(agent.user_id)
+                                      setShowEnquiryModal(true)
+                                    } 
+                                    }
                                   >
                                     <EnvelopeFill color="#1365CF" size={16} /> {translation?.email || "Email"}
                                   </Button>
                                   <Button
                                     variant="outline-info"
                                     size="sm"
-                                    onClick={() => setShowEnquiryModal(true)}
+                                    onClick={() => {
+                                      setSelectedAgentId(agent.user_id)
+                                      setShowEnquiryModal(true)
+                                    } }
                                     style={{ minWidth: '72px' }}
                                   >
                                     <PhoneFill color="#0dcaf0" size={16} /> {translation?.call || "Call"}
@@ -560,7 +574,7 @@ const Index = () => {
                                     {translation?.whatsapp || "whatsapp"}
                                   </Button>
 
-                                  
+
                                 </div>
                               </Card.Body>
                             </Col>
@@ -662,6 +676,19 @@ const Index = () => {
           </div>
         </aside>
       </MainLayout>
+
+      <Modal show={showEnquiryModal} onHide={handleEnquiryClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>{translation?.contact_agent || "Contact Agent"}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <AgentEnquiryForm
+            agentId={selectedAgentId}
+            handleClose={handleEnquiryClose}
+          />
+        </Modal.Body>
+      </Modal>
     </>
   );
 };
