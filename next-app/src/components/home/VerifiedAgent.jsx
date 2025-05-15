@@ -8,7 +8,7 @@ import { useAuth } from '@/context/AuthProvider'
 
 const VerifiedAgent = ({ translation }) => {
   const { callApi } = AuthUser();
-  const { defaultCity } = useAuth();
+  const { defaultCity, buildAgentUrl } = useAuth();
   const [verifiedAgentList, setVerifiedAgentList] = useState([]);
 
   useEffect(() => {
@@ -121,7 +121,7 @@ const VerifiedAgent = ({ translation }) => {
                       </div>
                       <div className='mt-auto'>
                         <a
-                          href={`/agent-details/${agent?.id}`}
+                          href={buildAgentUrl(agent)}
                           className="btn btn-primary w-100"
                         >
                           {translation?.view_profile || "View Profile"}

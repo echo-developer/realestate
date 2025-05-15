@@ -577,7 +577,7 @@ const Index = () => {
                                 <div>
                                   <a
                                     className="btn btn-primary btn-sm ms-auto"
-                                    href={`/agent-details/${agent.user_id}`}
+                                    href={buildAgentUrl(agent)}
                                   >
                                     {translation?.view_profile || "View Profile"}
                                   </a>

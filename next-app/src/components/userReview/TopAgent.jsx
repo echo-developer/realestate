@@ -1,9 +1,11 @@
 import Link from "next/link";
 import React from "react";
 import useTranslation from "@/hooks/useTranslation";
+import { useAuth } from "@/context/AuthProvider";
 
 const TopAgentList = ({ agents }) => {
   const translation = useTranslation();
+  const { buildAgentUrl } = useAuth();
   return (
     <>
       {agents?.map((agent, index) => (
@@ -17,7 +19,7 @@ const TopAgentList = ({ agents }) => {
           />
           <div className="flex-grow-1 ps-3">
             <h5 className="mb-0">
-              <Link href={`/agent-details/${agent?.id}`}>{agent?.name}</Link>{" "}
+              <Link href={buildAgentUrl(agent)}>{agent?.name}</Link>{" "}
               <i
                 className="icon-img-check ms-2"
                 data-bs-toggle="tooltip"
