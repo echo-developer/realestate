@@ -94,6 +94,11 @@ class AgentDetailsController extends Controller
                     : null;
             }
             if ($data->agentAdditional) {
+                $data->agentAdditional->agent_cover_photo = !empty($data->agentAdditional->agent_cover_photo)
+                    ? asset('user_upload/agent_cover_photo/' . $data->agentAdditional->agent_cover_photo)
+                    : null;
+            }
+            if ($data->agentAdditional) {
                 $data->agentAdditional->languages = !empty($data->agentAdditional->language_speak) ? $data->agentAdditional->language_speak : null;
                 unset($data->agentAdditional->language_speak);
             }
@@ -536,6 +541,127 @@ class AgentDetailsController extends Controller
                     return response()->json([
                         'status' => 1,
                         'message' => 'Compnay logo deleted successfully.',
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Failed to update the profile image in the database.',
+                    ]);
+                }
+            }
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'No image file found in the request.',
+            ], 400);
+        } catch (\Throwable $e) {
+            // You may want to log the actual error here.
+            return response()->json([
+                'status' => 0,
+                'message' => 'Something went wrong.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function saveCoverPhoto(Request $request)
+    {
+        try {
+            $request->validate([
+                'agent_cover_photo' => 'required|image|mimes:jpg,jpeg,png,gif',
+            ]);
+
+            $agentid = $request->agent_id;
+
+            if ($request->hasFile('agent_cover_photo')) {
+
+                $agent = AgentAdditional::where('agent_id', $agentid)->first();
+
+                if (!$agent) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Agent not found.',
+                    ], 404);
+                }
+
+                $oldImage = $agent->agent_cover_photo;
+
+                $file = $request->file('agent_cover_photo');
+                $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $sanitizedName = preg_replace('/[^a-z0-9\-]/', '', strtolower(str_replace(' ', '-', $originalName)));
+                $extension = $file->getClientOriginalExtension();
+                $fileName = time() . '-' . $sanitizedName . '.' . $extension;
+                $file->move(public_path('user_upload/agent_cover_photo'), $fileName);
+
+                if ($oldImage && file_exists(public_path('user_upload/agent_cover_photo/' . $oldImage))) {
+                    unlink(public_path('user_upload/agent_cover_photo/' . $oldImage));
+                }
+
+                $update = $agent->update(['agent_cover_photo' => $fileName]);
+
+                if ($update) {
+                    return response()->json([
+                        'status' => 1,
+                        'message' => 'cover photo updated successfully.',
+                        'data' => [
+                            'file_name' => $fileName,
+                            'image_url' => asset('user_upload/agent_cover_photo/' . ltrim($fileName, '/')),
+                        ],
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Failed to update the profile image in the database.',
+                    ]);
+                }
+            }
+
+            return response()->json([
+                'status' => 0,
+                'message' => 'No image file found in the request.',
+            ], 400);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'File size limit exceeded. Max size 5 MB',
+            ], 200);
+        } catch (\Throwable $e) {
+            // You may want to log the actual error here.
+            return response()->json([
+                'status' => 0,
+                'message' => 'Something went wrong.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+      public function agentCoverImageDelete(Request $request)
+    {
+        try {
+
+            if ($request->agent_cover_photo) {
+
+                $agent = AgentAdditional::where('agent_id', $request->agent_id)->first();
+
+                if (!$agent) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'Agent not found.',
+                    ], 404);
+                }
+
+
+
+                if ($request->agent_cover_photo && file_exists(public_path('user_upload/agent_cover_photo/' . $request->agent_cover_photo))) {
+                    unlink(public_path('user_upload/agent_cover_photo/' . $request->agent_cover_photo));
+                }
+
+                $update = $agent->update(['agent_cover_photo' => '']);
+
+                if ($update) {
+                    return response()->json([
+                        'status' => 1,
+                        'message' => 'Cover Photo deleted successfully.',
                     ], 200);
                 } else {
                     return response()->json([
