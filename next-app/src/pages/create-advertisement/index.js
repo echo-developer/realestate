@@ -131,7 +131,7 @@ const CreateAdvertisement = () => {
   const initialValues = {
     name: userData?.name || '',
     email: userData?.email || '',
-    phone_code: userData?.phone_code || '', 
+    phone_code: userData?.phone_code || '',
     phone: userData?.phone || '',
     city_id: '',
     locality_id: '',
@@ -401,6 +401,9 @@ const CreateAdvertisement = () => {
                                 <div className="mb-3">
                                   <label htmlFor="phone_code" className="form-label">Country Code</label>
                                   <Field as="select" name="phone_code" className="form-select">
+                                    <option value="" disabled hidden>
+                                      Select country code
+                                    </option>
                                     {phoneCodes.map(({ code, country }) => (
                                       <option key={code} value={code}>
                                         +{code} ({country})
@@ -595,34 +598,34 @@ const CreateAdvertisement = () => {
 
                         {values?.has_banner == "1" && (
                           <>
-                          <div className="mb-3">
-                            <label htmlFor="image" className="form-label">Desktop Banner Image</label>
-                            <input
-                              type="file"
-                              name="image"
-                              className="form-control"
-                              // accept="image/jpeg, image/png"
-                              onChange={(e) => {
-                                uploadImage(e, setFieldValue, "ad_image")
-                              }}
-                            />
-                            <ErrorMessage name="banner_image" component="div" className="text-danger small" />
-                            <div className="form-text">Accepted formats: JPEG, PNG (Max 2MB)</div>
-                          </div>
-                           <div className="mb-3">
-                           <label htmlFor="mobile_image" className="form-label">mobile Banner Image</label>
-                           <input
-                             type="file"
-                             name="mobile_image"
-                             className="form-control"
-                             // accept="image/jpeg, image/png"
-                             onChange={(e) => {
-                               uploadImage(e, setFieldValue, "ad_image_mobile")
-                             }}
-                           />
-                           {/* <ErrorMessage name="banner_image" component="div" className="text-danger small" /> */}
-                           <div className="form-text">Accepted formats: JPEG, PNG (Max 2MB)</div>
-                         </div>
+                            <div className="mb-3">
+                              <label htmlFor="image" className="form-label">Desktop Banner Image</label>
+                              <input
+                                type="file"
+                                name="image"
+                                className="form-control"
+                                // accept="image/jpeg, image/png"
+                                onChange={(e) => {
+                                  uploadImage(e, setFieldValue, "ad_image")
+                                }}
+                              />
+                              <ErrorMessage name="banner_image" component="div" className="text-danger small" />
+                              <div className="form-text">Accepted formats: JPEG, PNG (Max 2MB)</div>
+                            </div>
+                            <div className="mb-3">
+                              <label htmlFor="mobile_image" className="form-label">mobile Banner Image</label>
+                              <input
+                                type="file"
+                                name="mobile_image"
+                                className="form-control"
+                                // accept="image/jpeg, image/png"
+                                onChange={(e) => {
+                                  uploadImage(e, setFieldValue, "ad_image_mobile")
+                                }}
+                              />
+                              {/* <ErrorMessage name="banner_image" component="div" className="text-danger small" /> */}
+                              <div className="form-text">Accepted formats: JPEG, PNG (Max 2MB)</div>
+                            </div>
                           </>
                         )}
 
