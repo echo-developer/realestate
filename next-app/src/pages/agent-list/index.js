@@ -140,10 +140,10 @@ const Index = () => {
   };
 
   useEffect(() => {
-    if (router?.isReady && defaultCity) {
+    if (router?.isReady) {
       FetchAgentList();
     }
-  }, [router?.query, defaultCity]);
+  }, [router?.query]);
 
   const FetchAgentList = async (loadMore = false, newPage = 1) => {
     const {
@@ -607,9 +607,9 @@ const Index = () => {
                               <NextImage
                                 src={agent?.company_logo}
                                 alt="Company Logo"
-                                width={48}
+                                width={64}
                                 height={48}
-                                className="mb-3"
+                                className="c-logo mb-3"
                                 priority
                               />
                             )}
