@@ -471,7 +471,7 @@ const Index = () => {
           <h1>{translation?.agent_details || "Agent Details"}</h1>
         </div>
         </div> */}
-        <div className="coverPhoto" style={{ backgroundImage: "url('/assets/images/tasker-cover-photo.jpg')" }}></div>          
+        <div className="coverPhoto" style={{ backgroundImage: `url(${agentDetailsData.agent_cover_photo || '/assets/images/tasker-cover-photo.jpg'})` }}></div>          
         <div className="container-fluid">
           <Card className="card-agent card-agent-page h-auto mb-0">  
                     
