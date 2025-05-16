@@ -11,6 +11,7 @@ import { Offcanvas } from "react-bootstrap";
 import AgentReview from "@/components/userReview/AgentReview";
 import useTranslation from "@/hooks/useTranslation";
 import EnquiryForm from "@/components/charts/EnquiryForm";
+import Head from "next/head";
 import {
   Mic,
   GeoAlt,
@@ -66,6 +67,7 @@ const Index = () => {
     "right",
     defaultCity?.city_id
   );
+  const [adminWhatsapp, setAdminWhatsapp] = useState("");
 
 
   const [filters, setFilters] = useState({
@@ -76,6 +78,20 @@ const Index = () => {
     min_budget: "",
     max_budget: ""
   })
+
+  const fetchAdminWhatsapp = async () => {
+    try {
+      const res = await callApi({
+        api: `/get-settings-value/admin-whatsapp-number`,
+        method: "GET",
+      })
+      if (res && res?.status == 1) {
+        setAdminWhatsapp(res.value || "")
+      }
+    } catch (error) {
+      console.error(error.message || "Something went wrong")
+    }
+  }
 
   const handleClick = (property_id) => {
     setPropertyId(property_id);
@@ -113,6 +129,7 @@ const Index = () => {
       }
     };
     fetchPropertyTypeList();
+    fetchAdminWhatsapp();
   }, [])
 
 
@@ -457,8 +474,25 @@ const Index = () => {
     })
   }
 
+  const handleWhatsappClick = (agent) => {
+    const phoneNumber = adminWhatsapp;
+    const message = `Agent Name = ${agent.name} \nAgent Id = ${agent.user_id}`;
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+    window.open(whatsappURL, '_blank');
+  };
+
+  const metaTitle = `${agentDetailsData?.name ?? 'Agent'} – Real Estate Agent in ${agentDetailsData?.city ?? 'Unknown City'} | ${agentDetailsData?.forSell ?? 0} Properties for Sale & ${agentDetailsData?.forRent ?? 0} for Rent`;
+
+  const metaDescription = `Connect with ${agentDetailsData?.name ?? 'our real estate expert'}, an experienced real estate agent based in ${agentDetailsData?.city ?? 'your area'}. Explore ${agentDetailsData?.forSell ?? 0} properties for sale and ${agentDetailsData?.forRent ?? 0} for rent. Trusted service with over ${agentDetailsData?.experience_yr ?? 0} years of real estate experience.`;
+
   return (
     <>
+      <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+      </Head>
       {isOverlayVisible && (
         <div
           className="page-overlay"
@@ -471,20 +505,20 @@ const Index = () => {
           <h1>{translation?.agent_details || "Agent Details"}</h1>
         </div>
         </div> */}
-        <div className="coverPhoto" style={{ backgroundImage: "url('/assets/images/tasker-cover-photo.jpg')" }}></div>          
+        <div className="coverPhoto" style={{ backgroundImage: `url(${agentDetailsData?.agent_cover_photo || '/assets/images/tasker-cover-photo.jpg'})` }}></div>
         <div className="container-fluid">
-          <Card className="card-agent card-agent-page h-auto mb-0">  
-                    
+          <Card className="card-agent card-agent-page h-auto mb-0">
+
             <Row className="gx-0 position-relative">
               <Col xxl={2} lg='auto' sm={3} xs={12}>
                 <div className="card-image">
                   <Card.Img src={
-                      agentDetailsData?.image || "/assets/images/user.jpg"
-                    }
+                    agentDetailsData?.image || "/assets/images/user.jpg"
+                  }
                     variant="top"
                     alt="Agent Logo"
                     height={"250"}
-                  />                    
+                  />
                   <div className="rent-sale">
                     <Badge bg="warning" text="black" className="rounded-0 me-2">
                       {agentDetailsData?.forSell} {translation?.sale || "SALE"}
@@ -522,14 +556,14 @@ const Index = () => {
                       })}
                     </div>
                   </div>
-                  <div className="outCover">                      
+                  <div className="outCover">
                     <Row className="align-items-end">
                       <Col className="col-lg col-12">
                         <p className="mb-2 ">
                           <i className="icon-img-company"></i>
                           {agentDetailsData?.company_name || "Not Available"}
                         </p>
-                        <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">{agentDetailsData?.languages ?agentDetailsData.languages.replace(/,/g, ', ') : ''}</span></p>
+                        <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">{agentDetailsData?.languages ? agentDetailsData.languages.replace(/,/g, ', ') : ''}</span></p>
                         {/* Service Area */}
 
                         {agentDetailsData?.service_area?.length > 0 && (
@@ -559,7 +593,7 @@ const Index = () => {
                           <Button
                             variant="outline-success"
                             size="sm"
-                            onClick={() => setShowEnquiryModal(true)}
+                            onClick={() => handleWhatsappClick(agentDetailsData)}
                           >
                             <Whatsapp color="#198754" size={16} />{" "}
                             {translation?.whatsapp || "whatsapp"}
@@ -581,17 +615,17 @@ const Index = () => {
                     </Row>
                   </div>
                 </Card.Body>
-              </Col>                
-            </Row>            
+              </Col>
+            </Row>
           </Card>
-        </div>        
-        
+        </div>
+
         <section className="section profile">
           <div className="container-fluid">
             <Row>
-              <Col xl={9} lg={9} xs={12}>                                
+              <Col xl={9} lg={9} xs={12}>
                 <Card className="card-agent h-auto border-0 shadow-sm mb-4">
-                  <Card.Body>                    
+                  <Card.Body>
                     <div className="about-tasker">
                       <h4>{translation?.about || "About"}</h4>
                       <Row>
@@ -655,8 +689,8 @@ const Index = () => {
                           <p className="mb-2">
                             <span>{translation?.properties_for_sale || "Properties For Sale"}{': '}</span>
                             <span className="text-muted">
-                              
-                              {translation?.for_sale || "For Sale"} ({agentDetailsData?.forSell}),{' '} 
+
+                              {translation?.for_sale || "For Sale"} ({agentDetailsData?.forSell}),{' '}
                               {translation?.for_rent || "For Rent"} ({agentDetailsData?.forRent})
                             </span>
                           </p>
@@ -867,7 +901,7 @@ const Index = () => {
                       </Col>
                     </Row>
                   </form>
-                </div>                
+                </div>
 
                 <div className="list-display">
                   {property_loading ? (
