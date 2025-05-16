@@ -207,7 +207,7 @@ export const AuthProvider = ({ children }) => {
   const badgesObject = {
     'Responsive Broker': "bg-success-subtle text-success",
     'Quality Lister': "bg-primary-subtle text-primary",
-    'Tru broker': "bg-warning-subtle text-warning",
+    'TruBroker': "bg-warning-subtle text-warning",
     'Great performar': "bg-info-subtle text-info"
   }
 
