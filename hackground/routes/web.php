@@ -492,6 +492,11 @@ Route::middleware('admin_auth')->group(function () {
         Route::get('/enquiry/general-assign-list/{id?}', 'general_unassign_list');
         Route::get('/enquiry/general-assign-list/assigned/{id?}', 'general_assigned_list');
         Route::post('/enquiry/general-save-assign-list', 'general_save_assign_list');
+
+        //general agent leads
+        Route::get('/enquiry/general-agent-leads-assign-list/{id?}', 'general_agent_leads_assign_list');
+        Route::get('/enquiry/general-agent-leads-assign-list/assigned/{id?}', 'general_agent_leads_assigned');
+
     });
 
 

@@ -409,6 +409,8 @@ class HomeController extends Controller
             $datatoInsert = $req->only([
                 'name',
                 'phone',
+                'agent_id',
+                'messsage',
                 'email',
                 'locality',
                 'purchase_timeline',
@@ -422,10 +424,19 @@ class HomeController extends Controller
             ]);
 
             $datatoInsert['flat_type'] = $req->input('bhk_type');
+            $datatoInsert['messsage'] = $req->input('message');
             $datatoInsert['created_at'] = now();
             $datatoInsert['updated_at'] = now();
 
-            DB::table('buyer_property_enquery')->insert($datatoInsert);
+            $enq_id =  DB::table('buyer_property_enquery')->insertGetId($datatoInsert);
+
+            if (!empty($datatoInsert['agent_id']) && !empty($enq_id)) {
+                DB::table('leads_assigned')->insert([
+                    'lead_type' => 'G',
+                    'user_id' => $datatoInsert['agent_id'],
+                    'enquery_id' => $enq_id,
+                ]);
+            }
 
             return response()->json([
                 'status' => 1,

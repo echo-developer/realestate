@@ -18,7 +18,7 @@ class Enquiry extends Model
             ->leftJoin('users as u', 'u.id', '=', 'e.assign_to')
             ->leftJoin('customer as c', 'c.cid', '=', 'e.cid')
             ->leftJoin('leads_assigned as l_a', 'l_a.enquery_id', '=', 'e.enquery_id')
-            ->select('e.*', 'u.name as owner', 'c.name as customer', 'c.Phone as customer_phone', 'c.Email as customer_email' ,'p.name as property_name', 'pj.project_name', DB::raw('COUNT(DISTINCT pref_l_a.assign_id) AS assigned_count'));
+            ->select('e.*', 'u.name as owner', 'c.name as customer', 'c.Phone as customer_phone', 'c.Email as customer_email', 'p.name as property_name', 'pj.project_name', DB::raw('COUNT(DISTINCT pref_l_a.assign_id) AS assigned_count'));
 
         $query->groupBy('e.enquery_id');
         if (!empty($srch['lead_for']) && $srch['lead_for'] == 'project') {
@@ -159,14 +159,14 @@ class Enquiry extends Model
                 ->leftJoin('properties_location as p_l', 'p.id', '=', 'p_l.pid')
                 ->leftJoin('users as u', 'p.uid', '=', 'u.id')
                 ->leftJoin('user_membership as u_m', 'p.uid', '=', 'u_m.user_id')
-                ->select('u.id as user_id', 'u.name as member_name','u_m.leads','u_m.leads_used');
+                ->select('u.id as user_id', 'u.name as member_name', 'u_m.leads', 'u_m.leads_used');
         } elseif ($srch['enquiry_type'] == 'project') {
             $query = DB::table('project as p')
                 ->leftJoin('project_settings as p_s', 'p.id', '=', 'p_s.project_id')
                 ->leftJoin('project_location as p_l', 'p.id', '=', 'p_l.project_id')
                 ->leftJoin('users as u', 'p.uid', '=', 'u.id')
                 ->leftJoin('user_membership as u_m', 'p.uid', '=', 'u_m.user_id')
-                ->select('u.id as user_id', 'u.name as member_name','u_m.leads','u_m.leads_used');
+                ->select('u.id as user_id', 'u.name as member_name', 'u_m.leads', 'u_m.leads_used');
         }
 
         if (array_key_exists('city', $srch) && $srch['city']) {
@@ -198,7 +198,7 @@ class Enquiry extends Model
         $query = DB::table('leads_assigned as l_a')
             ->leftJoin('users as u', 'l_a.user_id', '=', 'u.id')
             ->leftJoin('user_membership as u_m', 'u.id', '=', 'u_m.user_id')
-            ->select('l_a.assign_id', 'l_a.created_at', 'u.id as user_id', 'u.name as member_name','u_m.leads','u_m.leads_used')
+            ->select('l_a.assign_id', 'l_a.created_at', 'u.id as user_id', 'u.name as member_name', 'u_m.leads', 'u_m.leads_used')
             ->where(['lead_type' => $srch['lead_type'], 'l_a.enquery_id' => $srch['enquery_id']]);
         return $query->paginate($paginate);
     }
@@ -206,17 +206,14 @@ class Enquiry extends Model
     public function save_assign_member($data)
     {
         DB::table('leads_assigned')->insert($data);
-        if($data)
-        {
-            foreach($data as $k=>$d)
-            {
+        if ($data) {
+            foreach ($data as $k => $d) {
                 $user_id = $d['user_id'];
-                $check_membership = DB::table('user_membership as u_m')->where('u_m.user_id',$user_id)->select('u_m.leads','u_m.leads_used')->first();
-                if($check_membership)
-                {
+                $check_membership = DB::table('user_membership as u_m')->where('u_m.user_id', $user_id)->select('u_m.leads', 'u_m.leads_used')->first();
+                if ($check_membership) {
                     $prev_leads_used = $check_membership->leads_used;
-                    $curr_leads_used = $prev_leads_used+1;
-                    DB::table('user_membership as u_m')->where('u_m.user_id',$user_id)->update(array('u_m.leads_used'=>$curr_leads_used));
+                    $curr_leads_used = $prev_leads_used + 1;
+                    DB::table('user_membership as u_m')->where('u_m.user_id', $user_id)->update(array('u_m.leads_used' => $curr_leads_used));
                 }
             }
         }
@@ -228,19 +225,7 @@ class Enquiry extends Model
         $query = DB::table('buyer_property_enquery as e')
             ->select('e.*');
 
-        // $query->where('e.project_id', '!=' ,'');
-
-        // if(!empty($srch['enquery_date'])) {
-        //     $query->whereDate('e.created_at',date('Y-m-d',strtotime($srch['enquery_date'])));
-        // }
-        // if(!empty($srch['member_name'])) {
-        //     $query->where('u.name', 'LIKE', '%'.$srch['member_name'].'%');
-        // }
-        // if(!empty($srch['project_id'])) {
-        //     $query->where('e.project_id', $srch['project_id']);
-        // }
-        // $query->orderBy('e.enquery_id', 'desc');
-        return $query->paginate($paginate);
+        return $query->orderByDesc('created_at')->paginate($paginate);
     }
 
     public function general_unassign_member_list($srch = array(), $paginate)
@@ -261,7 +246,7 @@ class Enquiry extends Model
             //->leftJoin('property_budget as p_b', 'p.id', '=', 'p_b.pid')
             ->leftJoin('users as u', 'p.uid', '=', 'u.id')
             ->leftJoin('user_membership as u_m', 'p.uid', '=', 'u_m.user_id')
-            ->select('u.id as user_id', 'u.name as member_name','u_m.leads','u_m.leads_used');
+            ->select('u.id as user_id', 'u.name as member_name', 'u_m.leads', 'u_m.leads_used');
 
         if (array_key_exists('property_type_for', $srch) && $srch['property_type_for']) {
             $query->where('p_s.property_type_for', $srch['property_type_for']);
@@ -276,5 +261,64 @@ class Enquiry extends Model
 
         $query->groupBy('p.uid');
         return $query->paginate($paginate);
+    }
+
+    public function get_agents_of_common_service_area($agent_id, $enquery_id, $paginate)
+    {
+        $agents_already_assigned = DB::table('leads_assigned')
+            ->where('enquery_id', $enquery_id)
+            ->where('lead_type', 'G')
+            ->pluck('user_id');
+
+
+        $agent = User::with('serviceArea')->find($agent_id);
+        $cityIds = [];
+        $localityIds = [];
+
+        foreach ($agent->serviceArea as $area) {
+            if (!empty($area->city)) {
+                $cityIds[] = $area->city;
+            }
+
+            if (!empty($area->locality['locality_id'])) {
+                $localityIds[] = $area->locality['locality_id'];
+            }
+        }
+
+        $cityIds = array_unique($cityIds);
+        $localityIds = array_unique($localityIds);
+
+        $agent_query = User::select('id', 'name', 'image')
+            ->where('user_type', 'A');
+        if ($agents_already_assigned->isNotEmpty()) {
+
+            $agent_query->whereNotIn('id', $agents_already_assigned);
+        }
+        $agent_list = $agent_query->whereHas('serviceArea', function ($query) use ($cityIds, $localityIds) {
+            $query->whereIn('city', $cityIds)
+                ->whereIn(DB::raw('`locality`'), $localityIds);
+        })
+            ->with([
+                'serviceArea:agent_id,city,locality',
+                'membership:user_id,leads,leads_used'
+            ])
+            ->paginate($paginate);
+
+        return $agent_list;
+    }
+
+    public function get_assigned_agent_list(array $data, $paginate)
+    {
+
+        $data = DB::table('leads_assigned')
+            ->select('leads_assigned.assign_id', 'users.id', 'users.name', 'user_membership.leads', 'user_membership.leads_used', 'leads_assigned.created_at')
+            ->leftJoin('users', 'leads_assigned.user_id', '=', 'users.id')
+            ->leftJoin('user_membership', 'user_membership.user_id', '=', 'users.id')
+            ->where([
+                'leads_assigned.enquery_id' => $data['enquery_id'],
+                'leads_assigned.lead_type' => $data['lead_type'],
+            ])->paginate($paginate);
+
+        return $data;
     }
 }

@@ -1316,7 +1316,7 @@ if (!function_exists('get_property_category_name')) {
             ->where('p_c.id', $id)
             ->first();
 
-        return $result->name;
+        return $result?->name;
     }
 }
 

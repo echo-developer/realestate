@@ -626,3 +626,11 @@ ALTER TABLE `pref_city` ADD `laitude` FLOAT NULL DEFAULT NULL AFTER `state`, ADD
 ALTER TABLE `pref_city` CHANGE `laitude` `latitude` FLOAT NULL DEFAULT NULL;
 
 ALTER TABLE `pref_locality` ADD `google_place_id` VARCHAR(70) NULL DEFAULT NULL AFTER `locality_key`;
+
+
+
+
+15/05/2025
+
+ALTER TABLE `pref_buyer_property_enquery` ADD `agent_id` BIGINT NULL DEFAULT NULL AFTER `name`, ADD `messsage` TEXT NULL DEFAULT NULL AFTER `agent_id`;
+ALTER TABLE `pref_buyer_property_enquery` CHANGE `created_at` `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP, CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;
