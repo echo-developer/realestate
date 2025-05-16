@@ -294,6 +294,7 @@ const Index = () => {
                                                     <div class="row">
                                                         <div className="col-lg mb-2 mb-lg-0">
                                                             <div className="d-flex d-md-block gap-2">
+                                                                {console.log("lead loop", lead)}
                                                                 <button class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" onClick={() => handleModalOpen(lead?.phone, lead?.email, lead.assign_id, lead.enquery_id, lead.lead_type, lead?.is_blur)}>{translation?.contact || "Contact"}
                                                                 </button>
                                                                 {!lead?.is_blur && (
@@ -382,7 +383,7 @@ const Index = () => {
                                                     <div class="row">
                                                         <div className="col-lg mb-2 mb-lg-0">
                                                             <div className="d-flex d-md-block gap-2">
-                                                                <button class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" onClick={() => handleModalOpen(lead?.Phone, lead?.Email, lead.assign_id, lead.enquery_id, lead.lead_type, lead?.is_blur)}>{translation?.contact || "Contact"}
+                                                                <button class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" onClick={() => handleModalOpen(lead?.phone, lead?.email, lead.assign_id, lead.enquery_id, lead.lead_type, lead?.is_blur)}>{translation?.contact || "Contact"}
                                                                 </button>
                                                                 {!lead?.is_blur && (
                                                                     <Link class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" href={`/property-crm-timeline?assign_id=${lead?.assign_id}`}>{translation?.contact_history || "Contact History"}
