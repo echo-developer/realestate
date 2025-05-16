@@ -140,10 +140,10 @@ const Index = () => {
   };
 
   useEffect(() => {
-    if (router?.isReady && defaultCity) {
+    if (router?.isReady) {
       FetchAgentList();
     }
-  }, [router?.query, defaultCity]);
+  }, [router?.query]);
 
   const FetchAgentList = async (loadMore = false, newPage = 1) => {
     const {
