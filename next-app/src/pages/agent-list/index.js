@@ -140,8 +140,6 @@ const Index = () => {
   };
 
   useEffect(() => {
-    console.log("router query", router.query) 
-    console.log("defaultCity", defaultCity)
     if (router?.isReady && defaultCity) {
       FetchAgentList();
     }
