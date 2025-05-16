@@ -8,7 +8,7 @@ export default function MobileFooter() {
   const pathname = usePathname();
 
   // Check for both property-details and project-details routes
-  const isDetailsPage = pathname.startsWith('/property-details') || pathname.startsWith('/project-details');
+  const isDetailsPage = pathname?.startsWith('/property-details') || pathname?.startsWith('/project-details');
   const { translation } = useTranslation();
 
   // if (isDetailsPage) {

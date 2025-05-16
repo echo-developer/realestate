@@ -87,6 +87,9 @@ const Locality = ({ onSelectLocality, errors, defaultValue, city, type }) => {
 
   const handleLocalityInputChange = (e) => {
     const { value } = e.target;
+    if(!value) {
+      onSelectLocality({locality_id: ""})
+    }
     setLocalitySearchInput(value);
     setLocalityDropdown(value ? true : false);
   }
