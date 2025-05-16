@@ -211,6 +211,8 @@ Route::post('agent_company_image', [AgentDetailsController::class, 'companyImage
 Route::post('agent_company_image_delete', [AgentDetailsController::class, 'companyImageDelete']);
 Route::post('save_agent_review', [AgentDetailsController::class, 'agentsRating']);
 Route::post('save_contact_agent', [AgentDetailsController::class, 'agentsContact']);
+Route::post('save-cover-photo', [AgentDetailsController::class, 'saveCoverPhoto']);
+Route::post('delete-cover-photo', [AgentDetailsController::class, 'agentCoverImageDelete']);
 
 // Enquiry and CRM Routes
 Route::controller(Enquery_CRM_Controller::class)->group(function () {
