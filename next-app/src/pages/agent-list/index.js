@@ -509,7 +509,7 @@ const Index = () => {
                                   <div className="d-flex flex-wrap gap-2 mb-2">
                                     {agent.userbadges.map((badge) => (
                                       <>
-                                        <Button
+                                        <Badge
                                           variant=""
                                           className={getBadgeButtonClass(badge.name)}
                                           size="sm"
@@ -523,7 +523,7 @@ const Index = () => {
                                             height={18}
                                             width={18}
                                           />{" "}{badge.name}
-                                        </Button>
+                                        </Badge>
                                       </>
                                     ))}
                                   </div>

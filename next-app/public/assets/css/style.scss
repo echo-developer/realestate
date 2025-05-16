@@ -996,7 +996,6 @@ ul {
 		margin-bottom: 0;
 	}
 }
-
 .small-footer {
 	background-color: $white;
 	box-shadow: 0 -3px 5px rgba($black, 10%);
@@ -1050,7 +1049,6 @@ ul {
 		}
 	}
 }
-
 .card-ads,
 .card-agent {
 	border: none;
@@ -1058,18 +1056,17 @@ ul {
 	margin-bottom: 1.25rem;
 	height: calc(100% - 1.25rem);
 }
-
-.card-agent {
+.card-agent{
 	.card-image {
 		position: relative;
-		.img-fluid {
+		.img-fluid, .card-img-top {
 			object-fit: cover;
-			height: 250px;
+			height: 225px;
 		}
 		.rent-sale{
 			position: absolute;
 			left: 1rem;
-			top: 1rem;
+			top: 0.75rem;
 		}
 		.c-logo{
 			position: absolute;
@@ -1078,13 +1075,26 @@ ul {
 			border-start-start-radius: 0.25rem;
 		}
 	}
-}
-
-.card-agent-page {
-	.card-image {
-		.img-fluid {
-			max-height: 220px;
-			object-fit: cover;
+	.c-logo{
+		object-fit: contain;
+	}
+	&.card-agent-page{	
+		background: none;	
+		border-radius: 0.5rem;
+    	overflow: hidden;
+		margin-top: -90px;
+		.onCover{			
+			padding: 1rem;
+		}
+		.outCover{
+			background-color: $white;
+			padding: 1rem;
+		}
+		.card-image{
+			max-width: 250px;
+			.card-img-top{
+				height: 100%;
+			}
 		}
 	}
 }
@@ -5706,12 +5716,19 @@ fieldset{
 	p{
 		display: flex;
 		span{
-			flex: 0 0 50%;
-		}
+			&:first-child{
+				flex: 0 0 auto;
+				min-width: 150px;
+			}
+			&:last-child{
+				flex: 0 0 1;
+			}
+		}		
 	}
 }
 .coverPhoto{
 	background-size: cover;
+	height: 120px;
 	position: relative;
 	overflow: hidden;
 	&::before{
@@ -5721,12 +5738,13 @@ fieldset{
 		top: 0;
 		height: 100%;
 		width: 100%;
-		background-color: rgba($black, 50%);
+		background-color: rgba($black, 75%);
 	}
 }
 
 /* Media Start */
 @media (min-width: 576px) {
+	
 	.card-ads{
 		.row {
 			.card-img-top{
@@ -5868,6 +5886,9 @@ fieldset{
 }
 
 @media (min-width: 1200px) {
+	.coverPhoto{
+		height: 150px;
+	}
 	.is-sticky{
 		.one-page-menu {
 			box-shadow: 0 1px 5px rgba(var(--#{$prefix}body-color-rgb), 0.1);
@@ -5944,6 +5965,9 @@ fieldset{
 }
 
 @media (min-width: 1440px) {
+	.coverPhoto{
+		height: 180px;
+	}
 	.select-dropdown{
 		.dropdown-menu{
 			max-height: 300px;
@@ -6163,6 +6187,18 @@ fieldset{
 }
 
 @media only screen and (max-width: 575.98px) {
+	.card-agent{
+		&.card-agent-page{
+			.onCover{
+				background: $white;
+			}
+			.card-image{
+				height: 200px;
+				width: 200px;
+				margin: auto;
+			}
+		}
+	}
 	.search-form {
 		.nav-justified > .nav-link, .nav-justified .nav-item {
 			flex-basis: auto;

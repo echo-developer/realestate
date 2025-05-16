@@ -250,7 +250,7 @@
 
 @endsection
 
-@push('custom-js')
+<!-- @push('custom-js')
 <script>
     const saleData = [<?php echo implode(
                             ',',
@@ -317,4 +317,4 @@
         }
     });
 </script>
-@endpush
+@endpush -->

@@ -19,7 +19,7 @@ import {
   Whatsapp,
 } from "react-bootstrap-icons";
 import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
-import { Row, Col, Card, Button, Modal, Dropdown, ButtonGroup, Form, Nav } from "react-bootstrap";
+import { Row, Col, Card, Button, Modal, Dropdown, ButtonGroup, Badge, Form, Nav } from "react-bootstrap";
 import AgentEnquiryForm from "@/components/addtional/AgentEnquiryForm";
 import { useAuth } from "@/context/AuthProvider";
 import useAdvertisement from "@/hooks/useAdvertisement";
@@ -470,56 +470,61 @@ const Index = () => {
         <div className="container">
           <h1>{translation?.agent_details || "Agent Details"}</h1>
         </div>
-      </div> */}
+        </div> */}
+        <div className="coverPhoto" style={{ backgroundImage: "url('/assets/images/tasker-cover-photo.jpg')" }}></div>          
+        <div className="container-fluid">
+          <Card className="card-agent card-agent-page h-auto mb-0">  
+                    
+            <Row className="gx-0 position-relative">
+              <Col xxl={2} lg='auto' sm={3} xs={12}>
+                <div className="card-image">
+                  <Card.Img src={
+                      agentDetailsData?.image || "/assets/images/user.jpg"
+                    }
+                    variant="top"
+                    alt="Agent Logo"
+                    height={"250"}
+                  />                    
+                  <div className="rent-sale">
+                    <Badge bg="warning" text="black" className="rounded-0 me-2">
+                      {agentDetailsData?.forSell} {translation?.sale || "SALE"}
+                    </Badge>
 
-        <section className="section profile">
-          <div className="container-fluid">
-            <div className="coverPhoto" style={{ backgroundImage: "url('/assets/images/tasker-cover-photo.jpg')", minHeight: '200px' }}>
-            </div>
-            <Row>
-              <Col xl={9} lg={8} xs={12}>
-                <div className="search-form">
-
+                    <Badge bg="success" className="rounded-0 me-2">
+                      {agentDetailsData?.forRent} {translation?.rent || "RENT"}
+                    </Badge>
+                  </div>
                 </div>
-                <Card className="card-agent h-auto border-0 shadow-sm mb-4">
-                  <Card.Body>
-                    <Row className="gx-3 mb-3">
-                      <Col xs={3}>
-                        <div className="card-image">
-                          <img
-                            src={
-                              agentDetailsData?.image || "/assets/images/user.jpg"
-                            }
-                            alt="Agent Logo"
-                            className="img-fluid rounded-3"
-                            height={"240"}
-                          />
-                        </div>
-                      </Col>
-                      <Col lg xs={9}>
-                        <Card.Title as='h4' className="mb-2">
-                          {agentDetailsData?.name}{" "}
-                          <i className="icon-img-check ms-1"></i>
-                        </Card.Title>
-                        <div className="d-flex gap-2 mb-3">
-                          {agentDetailsData?.userbadges && agentDetailsData?.userbadges?.map((badge, i) => {
-                            return (
-                              <Button
-                                className={getBadgeButtonClass(badge.name)}
-                                size="sm"
-                                variant=""
-                              >
-                                <img
-                                  src={badge.icon}
-                                  alt="Badges"
-                                  height={18}
-                                  width={18}
-                                />{" "}
-                                {badge.name}
-                              </Button>
-                            )
-                          })}
-                        </div>
+              </Col>
+              <Col lg sm={9} xs={12}>
+                <Card.Body className="p-0">
+                  <div className="onCover">
+                    <Card.Title as='h4' className="mb-2 text-sm-white">
+                      {agentDetailsData?.name}{" "}
+                      <i className="icon-img-check ms-1"></i>
+                    </Card.Title>
+                    <div className="d-flex gap-2">
+                      {agentDetailsData?.userbadges && agentDetailsData?.userbadges?.map((badge, i) => {
+                        return (
+
+                          <Badge
+                            className={getBadgeButtonClass(badge.name)}
+                          >
+                            <img
+                              src={badge.icon}
+                              alt="Badges"
+                              height={18}
+                              width={18}
+                            />{" "}
+                            {badge.name}
+                          </Badge>
+                        )
+                      })}
+                    </div>
+                  </div>
+                  <div className="outCover">                      
+                    <Row className="align-items-end">
+                      <Col className="col-lg col-12">
                         <p className="mb-2 ">
                           <i className="icon-img-company"></i>
                           {agentDetailsData?.company_name || "Not Available"}
@@ -535,43 +540,38 @@ const Index = () => {
                             </span>
                           </p>
                         )}
-
-                        <Row>
-                          <Col className="col-xl col-12">
-                            <div className="d-flex gap-2">
-                              <Button
-                                variant="outline-primary"
-                                size="sm"
-                                onClick={() => setShowEnquiryModal(true)}
-                              >
-                                <EnvelopeFill color="#1365CF" size={16} /> {translation?.email || "Email"}
-                              </Button>
-                              <Button
-                                variant="outline-info"
-                                size="sm"
-                                onClick={() => setShowEnquiryModal(true)}
-                                style={{ minWidth: '72px' }}
-                              >
-                                <PhoneFill color="#0dcaf0" size={16} /> {translation?.call || "Call"}
-                              </Button>
-                              <Button
-                                variant="outline-success"
-                                size="sm"
-                                onClick={() => setShowEnquiryModal(true)}
-                              >
-                                <Whatsapp color="#198754" size={16} />{" "}
-                                {translation?.whatsapp || "whatsapp"}
-                              </Button>
-                            </div>
-                          </Col>
-                        </Row>
+                        <div className="d-flex gap-2">
+                          <Button
+                            variant="outline-primary"
+                            size="sm"
+                            onClick={() => setShowEnquiryModal(true)}
+                          >
+                            <EnvelopeFill color="#1365CF" size={16} /> {translation?.email || "Email"}
+                          </Button>
+                          <Button
+                            variant="outline-info"
+                            size="sm"
+                            onClick={() => setShowEnquiryModal(true)}
+                            style={{ minWidth: '72px' }}
+                          >
+                            <PhoneFill color="#0dcaf0" size={16} /> {translation?.call || "Call"}
+                          </Button>
+                          <Button
+                            variant="outline-success"
+                            size="sm"
+                            onClick={() => setShowEnquiryModal(true)}
+                          >
+                            <Whatsapp color="#198754" size={16} />{" "}
+                            {translation?.whatsapp || "whatsapp"}
+                          </Button>
+                        </div>
                       </Col>
-                      <Col lg='auto' className="py-3 align-self-end text-lg-end">
+                      <Col lg='auto' className="pe-3 text-lg-end bg-white">
                         {agentDetailsData?.company_logo && (
                           <NextImage
                             src={agentDetailsData.company_logo}
                             alt="Company Logo"
-                            width={48}
+                            width={64}
                             height={48}
                             className="c-logo"
                             priority
@@ -579,10 +579,23 @@ const Index = () => {
                         )}
                       </Col>
                     </Row>
+                  </div>
+                </Card.Body>
+              </Col>                
+            </Row>            
+          </Card>
+        </div>        
+        
+        <section className="section profile">
+          <div className="container-fluid">
+            <Row>
+              <Col xl={9} lg={9} xs={12}>                                
+                <Card className="card-agent h-auto border-0 shadow-sm mb-4">
+                  <Card.Body>                    
                     <div className="about-tasker">
                       <h4>{translation?.about || "About"}</h4>
                       <Row>
-                        <Col>
+                        <Col lg={6} >
                           <p className="mb-2">
                             <span>{translation?.broker_type || "Broker Type:"}{': '}</span>
                             <span className="text-muted">
@@ -624,7 +637,7 @@ const Index = () => {
                             <span className="text-muted">{agentDetailsData?.company_name || "Not Available"}</span>
                           </p>
                         </Col>
-                        <Col>
+                        <Col lg={6}>
                           <p className="mb-2">
                             <span>{translation?.expertise || "Expertise:"}{': '}</span>
                             <span className="text-muted">{agentDetailsData?.specialization || "Not Available"}</span>
@@ -642,10 +655,9 @@ const Index = () => {
                           <p className="mb-2">
                             <span>{translation?.properties_for_sale || "Properties For Sale"}{': '}</span>
                             <span className="text-muted">
-                              (
-                              {agentDetailsData?.forSell}), {translation?.for_rent || "For Rent"}
-                              (
-                              {agentDetailsData?.forRent})
+                              
+                              {translation?.for_sale || "For Sale"} ({agentDetailsData?.forSell}),{' '} 
+                              {translation?.for_rent || "For Rent"} ({agentDetailsData?.forRent})
                             </span>
                           </p>
                           {/* <p className="mb-2">
@@ -662,7 +674,7 @@ const Index = () => {
                           <p className="mb-2">
                             <span>{translation?.experience || "Experience:"}{': '}</span>
                             <span className="text-muted">
-                              {agentDetailsData?.experience_yr || "Not Available"}
+                              {agentDetailsData?.experience_yr || "Not Available"}{' '}
                               {agentDetailsData?.experience_yr && "Years"}
                             </span>
                           </p>
@@ -675,277 +687,187 @@ const Index = () => {
                     </div>
                   </Card.Body>
                 </Card>
-                <form id="">
-                  <Row className="gx-3">
-                    <Col lg='auto' sm={2} xs='auto' onClick={() => toggleDropdown('buy_sell')}>
-                      <Dropdown className="mb-2" show={dropdownState?.buy_sell}>
-                        <Dropdown.Toggle
-                          variant="outline-secondary"
-                          className="btn-form-control"
-                        >
-                          {filters.post_for ? filters.post_for == 'sale' ? 'Buy' : 'Rent' : "Select"}
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                          <Dropdown.Item onClick={() => handleFilterChange("post_for", "")}>Select</Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleFilterChange("post_for", "sale")}>Buy</Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleFilterChange("post_for", "rent")}>Rent</Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </Col>
-                    <Col lg xs={10}>
-                      <Locality onSelectLocality={onSelectLocality} />
-                    </Col>
-                    <Col className="col-lg col-sm-4 col-12" onClick={() => toggleDropdown('property_type')}>
-                      <Dropdown className="select-dropdown mb-3 d-grid" show={dropdownState?.property_type}>
-                        <Dropdown.Toggle className="btn-form-control">
-                          {displayPropertyTyep()}
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu className="p-3">
-                          <div className="form-field">
-                            <Nav
-                              variant="underline"
-                              activeKey={selectedPropertyType}
-                            >
-                              {propertyTypeList.map((type) => (
-                                <Nav.Item key={type.category_id} >
-                                  <Nav.Link
-                                    role="button"
-                                    eventKey={type.category_id}
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      e.stopPropagation();
-                                      setSelectedPropertyType(type.category_id)
-                                    }}
-                                  >
-                                    {type.category_name}
-                                  </Nav.Link>
-                                </Nav.Item>
-                              ))}
-                            </Nav>
-                          </div>
-
-                          <div className="mt-3">
+                <div className="search-form">
+                  <form id="">
+                    <Row className="gx-3">
+                      <Col lg='auto' xs='auto' onClick={() => toggleDropdown('buy_sell')}>
+                        <Dropdown className="mb-2" show={dropdownState?.buy_sell}>
+                          <Dropdown.Toggle
+                            variant="outline-secondary"
+                            className="btn-form-control bg-white border"
+                          >
+                            {filters.post_for ? filters.post_for == 'sale' ? 'Buy' : 'Rent' : "Select"}
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                            <Dropdown.Item onClick={() => handleFilterChange("post_for", "")}>Select</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleFilterChange("post_for", "sale")}>Buy</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleFilterChange("post_for", "rent")}>Rent</Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </Col>
+                      <Col lg xs>
+                        <Locality onSelectLocality={onSelectLocality} />
+                      </Col>
+                      <Col className="col-lg col-sm-4 col-12" onClick={() => toggleDropdown('property_type')}>
+                        <Dropdown className="select-dropdown mb-3 d-grid" show={dropdownState?.property_type}>
+                          <Dropdown.Toggle className="btn-form-control">
+                            {displayPropertyTyep()}
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu className="p-3">
                             <div className="form-field">
-                              <ButtonGroup className="btn-group-light d-flex flex-wrap">
-                                {subPropertyList?.length === 0 &&
-                                  propertyForLoading && (
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        height: "200px",
-                                        width: "100%", // Ensure full width
+                              <Nav
+                                variant="underline"
+                                activeKey={selectedPropertyType}
+                              >
+                                {propertyTypeList.map((type) => (
+                                  <Nav.Item key={type.category_id} >
+                                    <Nav.Link
+                                      role="button"
+                                      eventKey={type.category_id}
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setSelectedPropertyType(type.category_id)
                                       }}
-                                      className="d-flex justify-content-center align-items-center w-100"
                                     >
-                                      <div
-                                        className="spinner-border text-primary"
-                                        role="status"
-                                      >
-                                        <span className="visually-hidden">
-                                          {translation?.loading ||
-                                            "Loading...."}{" "}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  )}
-                                {subPropertyList.map((property, index) => (
-                                  <div
-                                    key={property.sub_category_id}
-                                    className="me-2 mb-2"
-                                  >
-                                    <input
-                                      type="radio"
-                                      className="btn-check"
-                                      name="propertyForGroup"
-                                      id={`propertyFor-${index}`}
-                                      value={property.sub_category_id}
-                                      checked={
-                                        selectedProeprtyFor ==
-                                        property.sub_category_id
-                                      }
-                                      // checked={property.sub_category_id === 1}
-                                      onChange={() => setSelectedProeprtyFor(property.sub_category_id)}
-                                    />
-                                    <label
-                                      className="btn btn-outline-light btn-sm"
-                                      htmlFor={`propertyFor-${index}`}
-                                    >
-                                      {property.sub_category_name}
-                                    </label>
-                                  </div>
+                                      {type.category_name}
+                                    </Nav.Link>
+                                  </Nav.Item>
                                 ))}
-                                {subPropertyList?.length == 0 && !propertyForLoading && (
-                                  <div>Choose a property Type</div>
-                                )}
-                              </ButtonGroup>
+                              </Nav>
                             </div>
 
-                          </div>
+                            <div className="mt-3">
+                              <div className="form-field">
+                                <ButtonGroup className="btn-group-light d-flex flex-wrap">
+                                  {subPropertyList?.length === 0 &&
+                                    propertyForLoading && (
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                          height: "200px",
+                                          width: "100%", // Ensure full width
+                                        }}
+                                        className="d-flex justify-content-center align-items-center w-100"
+                                      >
+                                        <div
+                                          className="spinner-border text-primary"
+                                          role="status"
+                                        >
+                                          <span className="visually-hidden">
+                                            {translation?.loading ||
+                                              "Loading...."}{" "}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    )}
+                                  {subPropertyList.map((property, index) => (
+                                    <div
+                                      key={property.sub_category_id}
+                                      className="me-2 mb-2"
+                                    >
+                                      <input
+                                        type="radio"
+                                        className="btn-check"
+                                        name="propertyForGroup"
+                                        id={`propertyFor-${index}`}
+                                        value={property.sub_category_id}
+                                        checked={
+                                          selectedProeprtyFor ==
+                                          property.sub_category_id
+                                        }
+                                        // checked={property.sub_category_id === 1}
+                                        onChange={() => setSelectedProeprtyFor(property.sub_category_id)}
+                                      />
+                                      <label
+                                        className="btn btn-outline-light btn-sm"
+                                        htmlFor={`propertyFor-${index}`}
+                                      >
+                                        {property.sub_category_name}
+                                      </label>
+                                    </div>
+                                  ))}
+                                  {subPropertyList?.length == 0 && !propertyForLoading && (
+                                    <div>Choose a property Type</div>
+                                  )}
+                                </ButtonGroup>
+                              </div>
 
-                          <div className="d-flex justify-content-between mt-3">
-                            <Button variant="outline-secondary" onClick={handlePropertyForReset}>Reset</Button>
-                            <Button variant="primary" onClick={() => {
-                              setFilters(prev => {
-                                return {
-                                  ...prev,
-                                  property_type: selectedPropertyType || "",
-                                  property_for: selectedProeprtyFor || ""
-                                }
-                              })
-                            }}>Done</Button>
-                          </div>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </Col>
+                            </div>
 
-                    <Col className="col-lg col-sm-4 col-12" onClick={() => toggleDropdown('budget')}>
-                      <Dropdown className="select-dropdown d-grid mb-3" show={dropdownState?.budget}>
-                        <Dropdown.Toggle className="btn-form-control">
-                          {displayBudget()}
-                        </Dropdown.Toggle>
+                            <div className="d-flex justify-content-between mt-3">
+                              <Button variant="outline-secondary" onClick={handlePropertyForReset}>Reset</Button>
+                              <Button variant="primary" onClick={() => {
+                                setFilters(prev => {
+                                  return {
+                                    ...prev,
+                                    property_type: selectedPropertyType || "",
+                                    property_for: selectedProeprtyFor || ""
+                                  }
+                                })
+                              }}>Done</Button>
+                            </div>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </Col>
 
-                        <Dropdown.Menu className="p-3 shadow bg-white rounded">
-                          <Row className="gx-2">
-                            <Col className="col-6">
-                              <Form.Group className="dropdown minMax">
-                                <Form.Label>Min</Form.Label>
-                                <input
-                                  type="number"
-                                  className="form-control"
-                                  placeholder="00"
-                                  value={minBudget}
-                                  onChange={handleMinChange}
-                                  onClick={(e) => e.stopPropagation()}
-                                />
-                              </Form.Group>
-                            </Col>
-                            <Col className="col-6">
-                              <Form.Group className="dropdown minMax">
-                                <Form.Label>Max</Form.Label>
-                                <input
-                                  type="number"
-                                  className="form-control"
-                                  placeholder="00"
-                                  value={maxBudget}
-                                  onChange={handleMaxBudgetChange}
-                                  onClick={(e) => e.stopPropagation()}
-                                />
-                              </Form.Group>
-                            </Col>
-                          </Row>
+                      <Col className="col-lg col-sm-4 col-12" onClick={() => toggleDropdown('budget')}>
+                        <Dropdown className="select-dropdown d-grid mb-3" show={dropdownState?.budget}>
+                          <Dropdown.Toggle className="btn-form-control">
+                            {displayBudget()}
+                          </Dropdown.Toggle>
 
-                          <div className="d-flex justify-content-between mt-3">
-                            <Button variant="outline-secondary" onClick={resetBudget}>Reset</Button>
-                            <Button variant="primary" onClick={(e) => {
-                              setFilters(prev => {
-                                return {
-                                  ...prev,
-                                  max_budget: maxBudget || "",
-                                  min_budget: minBudget || ""
-                                }
-                              })
-                              handleClickOutside(e);
-                            }}>Done</Button>
-                          </div>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </Col>
-                  </Row>
-                </form>
-                <div className="card border-0 shadow-sm d-lg-none mb-4">
-                  <div className="card-body">
-                    <h4>{translation?.about || "About"}
-                    </h4>
-                    <p>
-                      <span className="text-muted">{translation?.broker_type || "Broker Type"}:
-                      </span>
-                      {agentDetailsData?.broker_type === "I"
-                        ? "Indepedent"
-                        : agentDetailsData?.broker_type === "F"
-                          ? "Franchise"
-                          : agentDetailsData?.broker_type === "A"
-                            ? "Agent"
-                            : "Not Available"}
-                    </p>
-                    <p>
-                      <span className="text-muted">{translation?.expertise || "Expertise:"}
-                      </span>{" "}
-                      {agentDetailsData?.specialization || "Not Available"}
-                    </p>
-                    <p>
-                      <span className="text-muted">{translation?.address || "Address:"}
-                      </span>{" "}
-                      {agentDetailsData?.address || "Not Available"}
-                    </p>
-                    <p>
-                      <span className="text-muted">{translation?.service_areas || "Service Areas:"}
-                      </span>
-                      {[
-                        ...new Set(
-                          agentDetailsData?.service_area?.map((area) => area.city)
-                        ),
-                      ].join(", ")}
-                    </p>
-                    <p>
-                      <span className="text-muted">{translation?.social_media || "Social Media:"}
-                      </span>
-                      {[
-                        ...new Set(
-                          agentDetailsData?.social?.map(
-                            (area) => area.platform_name
-                          )
-                        ),
-                      ].join(", ")}
-                    </p>
-                    <p>
-                      <span className="text-muted">{translation?.properties_for_sale || "Properties For Sale"}
-                      </span> (
-                      {agentDetailsData?.forSell}), {translation?.for_rent || "For Rent"}
-                      (
-                      {agentDetailsData?.forRent})
-                    </p>
-                    <p>
-                      <span className="text-muted">{translation?.licence_number || "Licence Number:"}
-                      </span>{" "}
-                      {agentDetailsData?.license_no || "Not Available"}
-                    </p>
-                    {/* <p>
-                      <span className="text-muted">{translation?.business_phone || "Business Phone:"}
-                      </span>{" "}
-                      {agentDetailsData?.bussiness_phone || "Not Available"}
-                    </p> */}
-                    <p>
-                      <span className="text-muted">{translation?.business_email || "Business Email:"}
-                      </span>{" "}
-                      {agentDetailsData?.bussiness_email || "Not Available"}
-                    </p>
-                    <p>
-                      <span className="text-muted">{translation?.company_name || "Company Name:"}
-                      </span>{" "}
-                      {agentDetailsData?.company_name || "Not Available"}
-                    </p>
-                    <p>
-                      <span className="text-muted">{translation?.working_hours || "Working Hours:"}
-                      </span>{" "}
-                      {agentDetailsData?.opening_hours} -{" "}
-                      {agentDetailsData?.closing_hours}
-                    </p>
-                    <p>
-                      <span className="text-muted d-block">{translation?.description || "Description:"}
-                      </span>
-                      {agentDetailsData?.description || "Not Available"}
-                    </p>
-                    <p>
-                      <span className="text-muted">{translation?.experience || "Experience:"}
-                      </span>{" "}
-                      {agentDetailsData?.experience_yr || "Not Available"}
-                      {agentDetailsData?.experience_yr && "Years"}
-                    </p>
-                  </div>
-                </div>
+                          <Dropdown.Menu className="p-3 shadow bg-white rounded">
+                            <Row className="gx-2">
+                              <Col className="col-6">
+                                <Form.Group className="dropdown minMax">
+                                  <Form.Label>Min</Form.Label>
+                                  <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="00"
+                                    value={minBudget}
+                                    onChange={handleMinChange}
+                                    onClick={(e) => e.stopPropagation()}
+                                  />
+                                </Form.Group>
+                              </Col>
+                              <Col className="col-6">
+                                <Form.Group className="dropdown minMax">
+                                  <Form.Label>Max</Form.Label>
+                                  <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="00"
+                                    value={maxBudget}
+                                    onChange={handleMaxBudgetChange}
+                                    onClick={(e) => e.stopPropagation()}
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+
+                            <div className="d-flex justify-content-between mt-3">
+                              <Button variant="outline-secondary" onClick={resetBudget}>Reset</Button>
+                              <Button variant="primary" onClick={(e) => {
+                                setFilters(prev => {
+                                  return {
+                                    ...prev,
+                                    max_budget: maxBudget || "",
+                                    min_budget: minBudget || ""
+                                  }
+                                })
+                                handleClickOutside(e);
+                              }}>Done</Button>
+                            </div>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </Col>
+                    </Row>
+                  </form>
+                </div>                
 
                 <div className="list-display">
                   {property_loading ? (
@@ -1130,7 +1052,7 @@ const Index = () => {
                 )}
                 {/* )} */}
               </Col>
-              <Col xl={3} lg={4} xs={12}>
+              <Col xl={3} lg={3} xs={12}>
 
                 <>
                   {adsData.length > 0 ? (

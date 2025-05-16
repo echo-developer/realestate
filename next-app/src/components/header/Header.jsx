@@ -916,7 +916,7 @@ const Header = () => {
                             </li>
                           </ul>
                         </li> */}
-                        <li className="nav-item me-lg-3 userInitial">
+                        <li className="nav-item userInitial">
                           <Link
                             href={`/`}
                             className="nav-link dropdown-toggle d-flex align-items-center"
@@ -1011,7 +1011,7 @@ const Header = () => {
                       </React.Fragment>
                     )
                   ) : null}{" "}
-                  <li className="nav-item">
+                  <li className="nav-item ms-lg-3">
                     <Link
                       href="/postproperty"
                       className="btn btn-primary btn-post"
