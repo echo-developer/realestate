@@ -28,7 +28,7 @@ import Locality from "@/components/Locality/Locality";
 const Index = () => {
   const router = useRouter();
   const translation = useTranslation();
-  const { defaultCity, currency } = useAuth();
+  const { defaultCity, currency, getBadgeButtonClass } = useAuth();
   const { callApi, GetMemberId, isLogin } = AuthUser();
   const { id: agent_id } = router.query;
   const formRef = useRef(null);
@@ -67,7 +67,6 @@ const Index = () => {
     defaultCity?.city_id
   );
 
-  console.log("adsData", adsData);
 
   const [filters, setFilters] = useState({
     post_for: "",
@@ -115,6 +114,7 @@ const Index = () => {
     };
     fetchPropertyTypeList();
   }, [])
+
 
   useEffect(() => {
     if (selectedPropertyType) {
@@ -502,60 +502,38 @@ const Index = () => {
                           <i className="icon-img-check ms-1"></i>
                         </Card.Title>
                         <div className="d-flex gap-2 mb-3">
-                          <Button
-                            className="bg-warning-subtle text-warning"
-                            size="sm"
-                            variant=""
-                          >
-                            <img
-                              src="/assets/images/icons/badge-award.png"
-                              alt="Badges"
-                              height={18}
-                              width={18}
-                            />{" "}
-                            {translation?.trubroker || "TruBrok"}
-                          </Button>
-                          <Button
-                            className="bg-primary-subtle text-primary"
-                            size="sm"
-                            variant=""
-                          >
-                            <img
-                              src="/assets/images/icons/408472.png"
-                              alt="Badges"
-                              height={18}
-                              width={18}
-                            />{" "}
-                            {translation?.quality_listner || "Quality Listner"}
-                          </Button>
-                          <Button
-                            className="bg-success-subtle text-success"
-                            size="sm"
-                            variant=""
-                          >
-                            <img
-                              src="/assets/images/icons/7644063.png"
-                              alt="Badges"
-                              height={18}
-                              width={18}
-                            />{" "}
-                            {translation?.resopnse_broker || "Responsive Broker"}
-                          </Button>
+                          {agentDetailsData?.userbadges && agentDetailsData?.userbadges?.map((badge, i) => {
+                            return (
+                              <Button
+                                className={getBadgeButtonClass(badge.name)}
+                                size="sm"
+                                variant=""
+                              >
+                                <img
+                                  src={badge.icon}
+                                  alt="Badges"
+                                  height={18}
+                                  width={18}
+                                />{" "}
+                                {badge.name}
+                              </Button>
+                            )
+                          })}
                         </div>
                         <p className="mb-2 ">
                           <i className="icon-img-company"></i>
                           {agentDetailsData?.company_name || "Not Available"}
                         </p>
-                        <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">English, Arabic, French, Italian</span></p>
+                        <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">{agentDetailsData?.languages ?agentDetailsData.languages.replace(/,/g, ', ') : ''}</span></p>
                         {/* Service Area */}
 
                         {agentDetailsData?.service_area?.length > 0 && (
                           <p className="mb-2">
-                          <GeoAlt color="#1365CF" size={18} /> {translation?.serve_in || "Serve in"}{": "}
-                          <span className="text-muted">
-                            {[...new Set(agentDetailsData?.service_area?.map(area => area.locality?.locality_name))].join(", ")}
-                          </span>
-                        </p>
+                            <GeoAlt color="#1365CF" size={18} /> {translation?.serve_in || "Serve in"}{": "}
+                            <span className="text-muted">
+                              {[...new Set(agentDetailsData?.service_area?.map(area => area.locality?.locality_name))].join(", ")}
+                            </span>
+                          </p>
                         )}
 
                         <Row>
@@ -840,7 +818,7 @@ const Index = () => {
                                   placeholder="00"
                                   value={minBudget}
                                   onChange={handleMinChange}
-                                  onClick={(e) => e.stopPropagation()} 
+                                  onClick={(e) => e.stopPropagation()}
                                 />
                               </Form.Group>
                             </Col>
@@ -1169,11 +1147,7 @@ const Index = () => {
                       </a>
                     ))
                   ) : (
-                    <img
-                      src="/assets/images/ads/houseSaleFlyerGREEN.jpg"
-                      alt="Advertisement"
-                      className="img-fluid"
-                    />
+                    <></>
                   )}
                 </>
               </Col>
