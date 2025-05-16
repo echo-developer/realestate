@@ -25,10 +25,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       setDefaultCity(
-        JSON.parse(localStorage.getItem("city")) || {
-          city_id: 21,
-          name: "Kolkata",
-        }
+        JSON.parse(localStorage.getItem("city"))
       );
     }
   }, []);
