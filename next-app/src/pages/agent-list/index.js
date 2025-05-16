@@ -310,6 +310,16 @@ const Index = () => {
     }
   };
 
+  const handleWhatsappClick = (agent) => {
+    const phoneNumber = adminWhatsapp;
+    const message = `Agent Name = ${agent.name} \nAgent Id = ${agent.user_id}`;
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+    window.open(whatsappURL, '_blank');
+  };
+
+
   return (
     <>
       {isOverlayVisible && (
@@ -580,7 +590,9 @@ const Index = () => {
                                   <Button
                                     variant="outline-success"
                                     size="sm"
-                                    onClick={() => setShowEnquiryModal(true)}
+                                    onClick={() => {
+                                      handleWhatsappClick(agent)
+                                    }}
                                   >
                                     <Whatsapp color="#198754" size={16} />{" "}
                                     {translation?.whatsapp || "whatsapp"}
