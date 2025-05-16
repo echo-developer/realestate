@@ -58,11 +58,28 @@ const Index = () => {
   const [badgeList, setBadgeList] = useState([]);
   const [showEnquiryModal, setShowEnquiryModal] = useState(false);
   const [selectedAgentId, setSelectedAgentId] = useState("");
+  const [adminWhatsapp, setAdminWhatsapp] = useState("");
 
   useEffect(() => {
     FetchPropertyTypeData();
     getBagesDetails();
+    fetchAdminWhatsapp();
   }, []);
+
+
+  const fetchAdminWhatsapp = async () => {
+    try {
+      const res = await callApi({
+        api: `/get-settings-value/admin-whatsapp-number`,
+        method: "GET",
+      })
+      if(res && res?.status == 1) {
+        setAdminWhatsapp(res.value || "")
+      }
+    } catch (error) {
+      console.error(error.message || "Something went wrong")
+    }
+  }
 
   const FetchPropertyTypeData = async () => {
     let response;
@@ -574,14 +591,16 @@ const Index = () => {
                               </Card.Body>
                             </Col>
                             <Col lg='auto' className="p-3 align-self-end text-lg-end">
+                            {agent?.company_logo && (
                               <NextImage
-                                src="/assets/images/company-logo.png"
+                                src={agent?.company_logo}
                                 alt="Company Logo"
                                 width={48}
                                 height={48}
                                 className="mb-3"
                                 priority
                               />
+                            )}
                               {agent?.user_id && (
                                 <div>
                                   <a
