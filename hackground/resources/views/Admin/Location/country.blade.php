@@ -81,7 +81,6 @@
                             <tr>
                                 <th style="width:32px;">ID</th>
                                 <th>Name </th>
-                                <th>Order</th>
                                 <th>Status</th>
                                 <th style="min-width:60px;" class="text-right">Action</th>
                             </tr>
@@ -92,7 +91,6 @@
                                     <tr>
                                         <td>{{ $item->id }}</td>
                                         <td>{{ $item->name }}</td>
-                                        <td>{{ $item->order }}</td>
 
                                         <td>
                                             <input data-id="{{ $item->id }}" class="status d-none" type="checkbox"

@@ -46,7 +46,6 @@ class CityController extends Controller
 
         return view('Admin.Location.city', compact('country_data', 'data'));
     }
-
     public function AddCity(Request $req)
     {
 

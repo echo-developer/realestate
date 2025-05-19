@@ -31,7 +31,6 @@ class GoogleLocalityController extends Controller
                 ->select('locality_names.locality_id', 'locality_names.name')
                 ->where('lang', $lang)
                 ->where('locality.city', $cityId)
-                ->orWhere('locality.city', get_setting('other-city-id'))
                 ->where('name', 'LIKE', $keyword . '%')
                 ->limit(11)
                 ->get()

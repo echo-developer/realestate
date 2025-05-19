@@ -59,6 +59,7 @@ class City extends Model
                 $this->cityTable . '.city_id',
                 $this->cityNamesTable . '.name',
                 $this->cityTable . '.order',
+                $this->cityTable . '.state',
                 $this->cityTable . '.status',
             );
 

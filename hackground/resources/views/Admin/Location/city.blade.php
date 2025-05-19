@@ -1,5 +1,5 @@
 @extends('Admin.layouts.app')
-
+{{-- @dd($data) --}}
 @section('content')
 
 <div class="body-page-loader d-none">
@@ -94,7 +94,7 @@
                         <tr>
                             <th style="width:32px">ID</th>
                             <th> Name</th>
-                            <th>Order</th>
+                            <th>State</th>
                             <th>Status</th>
                             <th style="min-width:60px;" class="text-right">Action</th>
                         </tr>
@@ -105,7 +105,7 @@
                         <tr>
                             <td>{{ $item->city_id }}</td>
                             <td>{{ $item->name }}</td>
-                            <td>{{ $item->order }}</td>
+                            <td>{{ get_name_by_id('state_names', 'state_id', $item->state, 'en') ?? 'N/A' }}</td>
                             <td>
                                 <input data-id="{{ $item->city_id }}" class="status d-none" type="checkbox"
                                     data-toggle="toggle" data-on="Active" data-off="Inactive"

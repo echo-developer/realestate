@@ -260,8 +260,8 @@ class AgentDetailsController extends Controller
             $name = $request->input('name');
 
             $broker_type = $request->input('broker_type');
-            $post_for = $request->input('post_for');
-            $property_type = $request->input('property_type');
+            // $post_for = $request->input('post_for');
+            // $property_type = $request->input('property_type');
 
             $perPage = $request->input('per_page', 10);
             $currentPage = $request->input('page', 1);
@@ -270,7 +270,7 @@ class AgentDetailsController extends Controller
             $filters = [
                 'serviceArea' => ['locality' => $locality, 'city' => $city_id],
                 'agentAdditional' => ['broker_type' => $broker_type],
-                'properties.settings' => ['post_for' => $post_for, 'property_type' => $property_type]
+                // 'properties.settings' => ['post_for' => $post_for, 'property_type' => $property_type]
             ];
 
             $agentIdsQuery = User::with(['serviceArea:agent_id,loc_key,city,locality', 'agentAdditional:agent_id,company_name,company_logo,language_speak', 'userbadges' => function ($q) {
@@ -285,7 +285,6 @@ class AgentDetailsController extends Controller
                         $agentIdsQuery->whereHas($relation, function ($query) use ($column, $value) {
                             if ($column === 'locality') {
                                 $query->where($column, $value);
-                                $query->orWhere($column, 'like', "%{$value}%");
                             } else {
                                 $query->where($column, $value);
                             }

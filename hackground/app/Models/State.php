@@ -65,6 +65,7 @@ class State extends Model
                 'state.id',
                 'state_names.name',
                 'state.order',
+                'state.country',
                 'state.status',
             );
         if ($term) {
@@ -73,7 +74,7 @@ class State extends Model
        
         // dd($query->toSql(), $query->getBindings());
 
-        return $query->paginate($peginate);
+        return $query->orderByDesc('state.created_at')->paginate($peginate);
     }
     public function getStateDetails($id)
     {
