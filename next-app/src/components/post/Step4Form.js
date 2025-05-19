@@ -85,10 +85,10 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
       if (response && response.status === 1) {
         setBudgetData(response.data);
       } else {
-        toast.error(response.message);
+        console.error(response.message);
       }
     } catch (error) {
-      toast.error(response.message);
+      console.error(response.message);
     }
   };
 

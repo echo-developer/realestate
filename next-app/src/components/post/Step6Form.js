@@ -70,12 +70,12 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
             image_url: uploadedImageUrl,
           });
 
-          toast.success("File Uploaded Successfully");
+          // toast.success("File Uploaded Successfully");
         } else {
-          toast.error("File upload failed.");
+          console.error("File upload failed.");
         }
       } catch (error) {
-        toast.error("Error uploading file");
+        console.error("Error uploading file");
       }
     }
 

@@ -14,7 +14,6 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
   const [loading, setLoading] = useState(false);
   const translation = useTranslation();
 
-  console.log("step 5 ran")
    useEffect(()=>{
      if(formData.possession_status == 2){
       setShowConstructionDate(true)
@@ -36,10 +35,10 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       if (response && response.status === 1) {
         setPossessionData(response.data);
       } else {
-        toast.error(response.message);
+        console.error(response.message);
       }
     } catch (error) {
-      toast.error("Failed to fetch possession status data.");
+      console.error("Failed to fetch possession status data.");
     } finally {
       setTimeout(() => {
         setLoading(false);
@@ -117,7 +116,8 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       }`;
     }
 
-    if (!formData.launch_date) {
+    if(formData.possession_status !== "3") {
+      if (!formData.launch_date) {
       newErrors.launch_date =
         translation?.enter_launch_date || "Please enter a valid launch date.";
     } else {
@@ -129,6 +129,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
           translation?.future_launch_date ||
           "Launch date must be today or in the future.";
       }
+    }
     }
 
     setErrors(newErrors);
@@ -286,8 +287,8 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
           </div>
         </div>
       )}
-
-      <div className="col-lg-12 col-12 form-floating mb-3">
+      {formData.possession_status !== "3" && (
+        <div className="col-lg-12 col-12 form-floating mb-3">
         <input
           className="form-control"
           type="date"
@@ -304,6 +305,8 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
           <small className="text-danger">{errors.launch_date}</small>
         )}
       </div>
+      )}
+      
 
       {/* Expected Price */}
       <div className="row gx-3">
