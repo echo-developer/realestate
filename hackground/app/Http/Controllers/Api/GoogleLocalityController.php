@@ -86,8 +86,8 @@ class GoogleLocalityController extends Controller
 
             $autoResponse = Http::get($autocompleteUrl)->json();
 
-            log_anything($autocompleteUrl);
-            log_anything($autoResponse);
+            // log_anything($autocompleteUrl);
+            // log_anything($autoResponse);
 
 
             $filteredResults = collect($autoResponse['predictions'])->filter(function ($prediction) {
