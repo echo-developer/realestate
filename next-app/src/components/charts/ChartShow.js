@@ -158,21 +158,6 @@ const ChartsRow = ({ dashboardList }) => {
   }, [dashboardList?.propPieChart]);
 
 
-  const lineData = {
-    labels: ["January", "February", "March", "April", "May"],
-    datasets: [
-      {
-        label: "Active Buyers",
-        data: [50, 80, 70, 90, 120],
-        borderColor: "rgba(232, 82, 124, 0.8)",
-        backgroundColor: "rgba(232, 82, 124, 0.2)",
-        tension: 0.4,
-        fill: true,
-      },
-    ],
-  };
-
-  const dropdownOptions = ["Weekly", "Monthly", "Yearly"];
 
   return (
     <>
@@ -186,16 +171,24 @@ const ChartsRow = ({ dashboardList }) => {
                 className={`mx-auto ${doughnutData?.labels?.length > 0 ? '' : 'd-flex flex-column justify-content-center align-items-center'}`}
                 style={{ width: "320px", height: "320px" }}
               >
-                {doughnutData && doughnutData?.labels?.length > 0 ? (<>
-                  <Doughnut data={doughnutData} options={doughnutOptions} /></>) : (<><img
-                    alt="Icon"
-                    height="48"
-                    width="48"
-                    className="mb-2"
-                    loading="lazy"
-                    src="/assets/images/icons/9939447.png"
-                  />
-                    <p className="text-muted">No Record Found</p></>)}
+                {dashboardList?.propPieChart === undefined ? (
+                  <p className="text-muted"></p>
+                ) : doughnutData?.labels?.length > 0 ? (
+                  <Doughnut data={doughnutData} options={doughnutOptions} />
+                ) : (
+                  <>
+                    <img
+                      alt="Icon"
+                      height="48"
+                      width="48"
+                      className="mb-2"
+                      loading="lazy"
+                      src="/assets/images/icons/9939447.png"
+                    />
+                    <p className="text-muted">No Record Found</p>
+                  </>
+                )}
+
               </div>
             </div>
           </div>
@@ -234,31 +227,6 @@ const ChartsRow = ({ dashboardList }) => {
       </Row>
 
       <Row>
-        {/* Sale Summary */}
-        {/* <Col lg={6} xs={12}>
-          <div className="card border-0 mb-4">
-            <div className="card-header d-flex justify-content-between align-items-center">
-              <h4 className="text-primary">{translation?.sale_summary || 'Sale Summary'}
-              </h4>
-            </div>
-            <div className="card-body">
-              <Line data={lineData} options={chartOptions} />
-            </div>
-          </div>
-        </Col> */}
-
-        {/* Active Buyers */}
-        {/* <Col lg={6} xs={12}>
-          <div className="card border-0 mb-4">
-            <div className="card-header d-flex justify-content-between align-items-center">
-              <h4 className="text-primary">{translation?.active_buyers || 'Active Buyers'}
-              </h4>
-            </div>
-            <div className="card-body">
-              <Line data={lineData} options={chartOptions} />
-            </div>
-          </div>
-        </Col> */}
       </Row>
     </>
   );

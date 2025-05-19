@@ -16,7 +16,7 @@ const Index = () => {
   const translation = useTranslation();
   const router = useRouter();
   const { callApi, GetMemberId } = AuthUser();
-  const [dashboardList, setDashboardList] = useState({});
+  const [dashboardList, setDashboardList] = useState(null);
   const memberId = GetMemberId();
   const [customerReviews, setCustomerReviews] = useState([])
   const [facts, setFacts] = useState([]);
@@ -252,41 +252,10 @@ const Index = () => {
                       </small>
                     </h3>
                   </div>
-                  {/* <Link target="_blank" href="/property-listing" className="">
-                    <i className="bi bi-box-arrow-up-right"></i>
-                  </Link> */}
                 </div>
               </div>
             </article>
 
-            {/* Your Reviews Card */}
-            {/* <article className="col-xxl-3 col-lg-4 col-sm-6 col-12">
-              <div className="card card-summary">
-                <div className="card-body d-flex align-items-center">
-                  <div className="iconx">
-                    <img
-                      src="/assets/images/icons/review.png"
-                      alt="Icon"
-                      height="48"
-                      width="48"
-                    />
-                  </div>
-                  <div className="flex-grow-1 ms-3">
-                    <h5>{translation?.your_reviews || 'Your Reviews'}
-                    </h5>
-                    <h3>
-                      {dashboardList?.counters?.propertyTotalReviews?.totalCount || "0"}{" "}
-                      <small>
-                        (<span className="text-site">{dashboardList?.counters?.propertyTotalReviews?.lastweekCount || "0"}{" "}</span> this week)
-                      </small>
-                    </h3>
-                  </div>
-                  <Link target="_blank" href="/review-list" className="">
-                    <i className="bi bi-box-arrow-up-right"></i>
-                  </Link>
-                </div>
-              </div>
-            </article> */}
           </div>
 
           {/* Customer Reviews Section */}
@@ -294,36 +263,6 @@ const Index = () => {
             <div className="card-header d-flex">
               <h4 className="text-primary">{translation?.customer_reviews || 'Customer Reviews'}
               </h4>
-              {/* <div className="dropdown dots-only">
-                <a
-                  className="btn btn-link dropdown-toggle p-1"
-                  href="#"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <i className="bi bi-three-dots-vertical"></i>
-                </a>
-                <ul className="dropdown-menu dropdown-menu-end">
-                  <li>
-                    <a className="dropdown-item" href="#">
-                    {translation?.action || 'Action'}
-
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                    {translation?.another_action || 'Another Action'}
-
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                    {translation?.something_else_here || 'Something Else Here'}
-
-                    </a>
-                  </li>
-                </ul>
-              </div> */}
             </div>
 
             <div data-simplebar="init">
