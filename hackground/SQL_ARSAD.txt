@@ -634,3 +634,8 @@ ALTER TABLE `pref_locality` ADD `google_place_id` VARCHAR(70) NULL DEFAULT NULL 
 
 ALTER TABLE `pref_buyer_property_enquery` ADD `agent_id` BIGINT NULL DEFAULT NULL AFTER `name`, ADD `messsage` TEXT NULL DEFAULT NULL AFTER `agent_id`;
 ALTER TABLE `pref_buyer_property_enquery` CHANGE `created_at` `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP, CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;
+
+
+19/05/2025
+
+ALTER TABLE `pref_country` ADD `country_code` VARCHAR(5) NULL DEFAULT NULL COMMENT 'ISO 3166-1 alpha-2 country code' AFTER `id`;

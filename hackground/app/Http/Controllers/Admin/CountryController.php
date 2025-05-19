@@ -27,13 +27,14 @@ class CountryController extends Controller
     }
     public function AddCountry(Request $req)
     {
-
+        // dd($req->all());
         $langs = array_keys($req->input('name', []));
 
 
         $rules = [
 
             'status' => 'required|boolean',
+            'country_code' => 'required|string',
         ];
 
         foreach ($langs as $lang) {
@@ -42,6 +43,8 @@ class CountryController extends Controller
         $messages = [
 
             'status.required' => 'The Status field is required.',
+            'country_code.required' => 'Country Code is required.',
+            'country_code.string' => 'Country Code must be a string.',
         ];
 
         foreach ($langs as $lang) {
@@ -86,6 +89,7 @@ class CountryController extends Controller
         $rules = [
 
             'status' => 'required|boolean',
+            'country_code' => 'required|string',
         ];
 
         foreach ($langs as $lang) {
@@ -93,8 +97,9 @@ class CountryController extends Controller
         }
 
         $messages = [
-
-            'status.required' => 'The Status field is required.'
+            'status.required' => 'The Status field is required.',
+            'country_code.required' => 'Country Code is required.',
+            'country_code.string' => 'Country Code must be a string.',
         ];
 
         foreach ($langs as $lang) {

@@ -151,8 +151,14 @@
                         @endforeach
 
                         <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="country_code" name="country_code" placeholder=""
+                                >
+                            <label for="country_code">Country Code <small>(ISO 3166-1 alpha-2 country code)</small></label>
+                            <div class="invalid-feedback" id="country_code_error"></div>
+                        </div>
+                        <div class="form-floating mb-3">
                             <input type="Order" class="form-control" id="order" name="order" placeholder=""
-                                required>
+                                >
                             <label for="Order">Order</label>
                             <div class="invalid-feedback" id="Order_error"></div>
                         </div>
@@ -200,6 +206,7 @@
                 $.get(`{{ url('/country/details') }}/${id}`, function(data) {
                     $('#countryId').val(data[0].country_id);
                     data.forEach(function(country) {
+                        $('#country_code').val(country.country_code);
                         $('#name_' + country.lang).val(country.name);
                         if (country.lang === 'en') {
                             $('#order').val(country.order);

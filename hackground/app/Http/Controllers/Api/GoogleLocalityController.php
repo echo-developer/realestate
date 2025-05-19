@@ -53,17 +53,18 @@ class GoogleLocalityController extends Controller
     {
         try {
             // DB::beginTransaction();
+            // $cityName = $request->city_name;
+
             $keyword = $request->keyWord;
             $cityId = $request->city_id;
-            $cityName = $request->city_name;
             $cityLat = $request->city_latitude;
             $cityLang = $request->city_longitude;
+            $radius = $request->input('radius', 50000);
+
             $lang = $request->input('lang', 'en');
             $apiKey = get_setting('google-api-key');
 
-            $countryCode = get_setting('google-country-code');
-
-            log_anything($countryCode);
+            $countryCode = !empty($cityId) ? $this->get_country_code($cityId) : 'in';
 
 
             if (empty($apiKey)) {
@@ -77,19 +78,21 @@ class GoogleLocalityController extends Controller
             $autocompleteUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?" . http_build_query([
                 'input' => $keyword,
                 'types' => 'geocode',
-                'location' => "$cityLat,$cityLang",
-                'radius' => 50000,
                 'language' => $lang,
                 'key' => $apiKey,
-                'components' => "country:$countryCode"
-            ]) . '&strictbounds';
+                'components' => "country:$countryCode",
+                'locationbias' => "circle:$radius@$cityLat,$cityLang"
+            ]);
 
             $autoResponse = Http::get($autocompleteUrl)->json();
+
+            log_anything($autocompleteUrl);
+            log_anything($autoResponse);
 
 
             $filteredResults = collect($autoResponse['predictions'])->filter(function ($prediction) {
                 return collect($prediction['types'])->contains(function ($type) {
-                    return in_array($type, ['sublocality', 'sublocality_level_1']);
+                    return in_array($type, ['sublocality', 'sublocality_level_1','locality']);
                 });
             })->map(function ($prediction) {
                 return [
@@ -119,6 +122,7 @@ class GoogleLocalityController extends Controller
 
     private function storeandReturnResult(array $data, $lang, $cityId)
     {
+        log_anything($data);
         $response = [];
 
         foreach ($data as $locality) {
@@ -212,6 +216,18 @@ class GoogleLocalityController extends Controller
             ->limit(1)
             ->exists();
     }
+
+    public function get_country_code($cityID)
+    {
+        return DB::table('city')
+            ->leftJoin('country', 'city.country', '=', 'country.id')
+            ->where('city.city_id', $cityID)
+            ->value('country.country_code');
+    }
+
+
+
+    /* ==================================================================================================================================*/
 
     public function getYearlyPriceTrend(Request $req)
     {

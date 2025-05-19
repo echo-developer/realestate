@@ -15,6 +15,7 @@ class Country extends Model
 
         $countryId = DB::table('country')->insertGetId([
             'order' => $data['order'],
+            'country_code' => $data['country_code'],
             'status' => $data['status'],
             'created_at' => now(),
             'updated_at' => now(),
@@ -67,6 +68,7 @@ class Country extends Model
                 'country_names.name',
                 'country.id as country_id',
                 'country.order',
+                'country.country_code',
                 'country.status',
                 'country_names.lang'  
             )
@@ -85,6 +87,7 @@ class Country extends Model
         
             $countryData = [
                 'order' => $data['order'],
+                'country_code' => $data['country_code'],
                 'status' => $data['status'],
                 'updated_at' => now(),
             ];
