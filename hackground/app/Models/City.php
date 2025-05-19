@@ -25,6 +25,8 @@ class City extends Model
         $cityId = DB::table($this->cityTable)->insertGetId([
             'country' => $data['country_id'],
             'state' => $data['state_id'],
+            'latitude' => $data['latitude'],
+            'longitude' => $data['longitude'],
             'order' => $data['order'],
             'status' => $data['status'],
             'created_at' => now(),
@@ -57,6 +59,8 @@ class City extends Model
             ])
             ->select(
                 $this->cityTable . '.city_id',
+                $this->cityTable . '.latitude',
+                $this->cityTable . '.longitude',
                 $this->cityNamesTable . '.name',
                 $this->cityTable . '.order',
                 $this->cityTable . '.state',
@@ -81,6 +85,8 @@ class City extends Model
                 $this->cityNamesTable . '.name',
                 $this->cityTable . '.city_id as city_id',
                 $this->cityTable . '.order',
+                $this->cityTable . '.latitude',
+                $this->cityTable . '.longitude',
                 $this->cityTable . '.state',
                 $this->cityTable . '.status',
                 $this->cityNamesTable . '.lang'
@@ -162,6 +168,7 @@ class City extends Model
                 'status' => config('constants.STATUS_DELETE'),
                 'updated_at' => now(),
             ]);
+            set_flash_message('delete');
         return [
             'message' => 'City deleted successfully.',
         ];
@@ -217,7 +224,7 @@ class City extends Model
                         'country' => $stateData?->country ?? get_setting('other-country-id'),
                         'state'   => $stateData?->id ?? get_setting('other-state-id'),
                         'order'   => rand(1, 4),
-                        'status'  => config('constants.STATUS_ACTIVE'),
+                        'status'  => config('constants.STATUS_INACTIVE'),
                     ]);
 
                     $nameByLang = [

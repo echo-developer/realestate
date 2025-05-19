@@ -55,6 +55,8 @@ class CityController extends Controller
         $rules = [
             'country_id' => 'required',
             'state_id' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
 
             'status' => 'required|boolean',
         ];
@@ -65,6 +67,8 @@ class CityController extends Controller
         $messages = [
             'country_id.required' => 'Choose Country',
             'state_id.required' => 'Choose State',
+            'latitude.required' => 'Add latitude',
+            'longitude.required' => 'Add longitude',
 
             'status.required' => 'The Status field is required.',
         ];
@@ -106,6 +110,8 @@ class CityController extends Controller
         $rules = [
             'country_id' => 'required',
             'state_id' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
 
             'status' => 'required|boolean',
         ];
@@ -117,6 +123,8 @@ class CityController extends Controller
         $messages = [
             'country_id.required' => 'Choose Country',
             'state_id.required' => 'Choose State',
+            'latitude.required' => 'Add latitude',
+            'longitude.required' => 'Add longitude',
 
             'status.required' => 'The Status field is required.',
         ];
