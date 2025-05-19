@@ -31,6 +31,7 @@ class GoogleLocalityController extends Controller
                 ->select('locality_names.locality_id', 'locality_names.name')
                 ->where('lang', $lang)
                 ->where('locality.city', $cityId)
+                ->orWhere('locality.city', get_setting('other-city-id'))
                 ->where('name', 'LIKE', $keyword . '%')
                 ->limit(11)
                 ->get()
@@ -61,7 +62,9 @@ class GoogleLocalityController extends Controller
             $lang = $request->input('lang', 'en');
             $apiKey = get_setting('google-api-key');
 
-            $countryCode = env('GOOGLE_MAPS_COUNTRY_CODE');
+            $countryCode = get_setting('google-country-code');
+
+            log_anything($countryCode);
 
 
             if (empty($apiKey)) {
@@ -210,9 +213,6 @@ class GoogleLocalityController extends Controller
             ->limit(1)
             ->exists();
     }
-
-
-
 
     public function getYearlyPriceTrend(Request $req)
     {
