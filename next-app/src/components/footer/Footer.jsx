@@ -1,11 +1,18 @@
 "use client"
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useTranslation from '@/hooks/useTranslation';
 import { People, House, HouseAddFill, Person, Search } from 'react-bootstrap-icons';
 import MobileFooter from '../addtional/MobileFooter';
+import AuthUser from '../Authentication/AuthUser';
 
 const Footer = () => {
+  const { callApi } = AuthUser();
+  const [adminData, setAdminData] = useState({
+    address: "",
+    phone: "",
+    email: "",
+  })
   const [dropDowns, setDropDowns] = useState({
     propertyByCity: false,
     propertyTypes: false,
@@ -14,6 +21,12 @@ const Footer = () => {
   });
 
   const translation = useTranslation();
+
+  useEffect(() => {
+    getAdminPhone();
+    getAdminEmail();
+    getAdminAddress();
+  }, [])
   
   const openCloseDropDowns = (key) => {
     setDropDowns((prev) => {
@@ -24,6 +37,64 @@ const Footer = () => {
       };
     });
   };
+
+  const getAdminPhone = async () => {
+    try {
+      const res = await callApi({
+        api: `/get-settings-value/admin-whatsapp-number`,
+        method: "GET",
+      })
+      if(res && res.status == 1) {
+        setAdminData(prev => {
+          return {
+            ...prev,
+            phone: res.value
+          }
+        })
+      }
+    } catch (error) {
+      console.error(error.message)
+    }
+  }
+
+  const getAdminEmail = async () => {
+    try {
+      const res = await callApi({
+        api: `/get-settings-value/admin-email`,
+        method: "GET"
+      })
+      if(res && res.status == 1) {
+        setAdminData(prev => {
+          return {
+            ...prev,
+            email: res.value
+          }
+        })
+      }
+    } catch (error) {
+      console.error(error.message)
+    }
+  }
+
+  const getAdminAddress = async () => {
+    try {
+      const res = await callApi({
+        api: `/get-settings-value/admin-email`,
+        method: "GET"
+      })
+      if(res && res.status == 1) {
+        setAdminData(prev => {
+          return {
+            ...prev,
+            address: res?.value
+          }
+        })
+      }
+    } catch (error) {
+      console.error(error.message)
+    }
+  }
+
   
   return (
     
@@ -101,9 +172,9 @@ const Footer = () => {
                     <img src="/assets/images/logo-mobile.png" alt="Logo" className="d-md-none" loading="lazy"/>
                   </a>
                   <address>
-                    <p><i className="icon-feather-map-pin"></i> 112 Salam Street, Abu Dhabi, UAE</p>
-                    <p><i className="icon-feather-smartphone"></i> 9714-8833744</p>
-                    <p><i className="icon-feather-mail"></i> info@companyname.com</p>
+                    <p><i className="icon-feather-map-pin"></i> {adminData?.address ? adminData.address : ""}</p>
+                    <p><i className="icon-feather-smartphone"></i> {adminData?.phone ? adminData.phone : ''}</p>
+                    <p><i className="icon-feather-mail"></i> {adminData?.email ? adminData.email : ''}</p>
                   </address>
                 </ul>
               </div>
