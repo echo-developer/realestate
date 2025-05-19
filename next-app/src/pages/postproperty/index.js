@@ -429,12 +429,15 @@ const Index = () => {
                 </h1>
 
                 <p>
-                  {translation?.posting_for ||
-                    "You are posting this property for"}{" "}
-                  <b className="text-green h4">
-                    {" "}
-                    {translation?.free || "FREE!"}
-                  </b>
+                  {remainingData > 0 ? (
+                    <>
+                      {translation?.posting_for || "You are posting this property for"}{" "}
+                      <b className="text-green h4">
+                        {translation?.free || "FREE!"}
+                      </b>
+                    </>
+                  ) : ""}
+
                 </p>
               </div>
               <ProgressBar step={currentStep} totalSteps={6} />

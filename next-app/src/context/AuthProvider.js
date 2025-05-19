@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }) => {
   const [localityInputSearch, setLocalityInputSearch] = useState("");
   const [debouncedValue, setDebouncedValue] = useState("");
   const [localityDropdown, setLocalityDropdown] = useState(false);
+  const [listingAllowed, setListingAllowed] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -29,6 +30,34 @@ export const AuthProvider = ({ children }) => {
       );
     }
   }, []);
+
+    useEffect(() => {
+    if(memberId) {
+      fetchUserData();
+      fetchRemainPosting();
+    }
+    getCurrencyCode();
+    getCurrency();
+  }, [memberId])
+
+
+    const fetchRemainPosting = async () => {
+    try {
+      const response = await callApi({
+        api: `/get_remaining_value`,
+        method: "GET",
+        data: {
+          user_id: memberId,
+        },
+      });
+      if (response && response.status === 1) {
+        setListingAllowed(response.remaining_listings_allowed);
+      } else {
+        setListingAllowed(response.remaining_listings_allowed);
+
+      }
+    } catch (error) { }
+  };
 
 
   // const currencies = ["USD", "EUR", "GBP", "INR", "JPY", "AUD", "CAD", "CHF", "CNY", "AED"];
@@ -73,14 +102,6 @@ export const AuthProvider = ({ children }) => {
 
   
 
-
-  useEffect(() => {
-    if(memberId) {
-      fetchUserData();
-    }
-    getCurrencyCode();
-    getCurrency();
-  }, [memberId])
 
   // useEffect(() => {
   //   if(defaultCity?.city_id) {
@@ -244,7 +265,8 @@ const buildAgentUrl = (agent) => {
         localityDropdown,
         setLocalityDropdown, 
         getBadgeButtonClass,
-        buildAgentUrl
+        buildAgentUrl,
+        listingAllowed
       }}
     >
       {children}

@@ -19,7 +19,7 @@ import MobileMenu from "../addtional/Mmenu";
 const Header = () => {
   const isMobile = useIsMobile();
   const { callApi, isLogin, logout, GetMemberId } = AuthUser();
-  const { defaultCity, handleDefaultCityChange, setGetAllCity, currency } = useAuth();
+  const { defaultCity, handleDefaultCityChange, setGetAllCity, currency, listingAllowed } = useAuth();
   const [isDesktopLogoLoaded, setIsDesktopLogoLoaded] = useState(false);
   const [isMobileLogoLoaded, setIsMobileLogoLoaded] = useState(false);
   const [showLocationDrop, setShowLocationDrop] = useState(false);
@@ -54,19 +54,6 @@ const Header = () => {
     }
   }, []);
 
-  // const getCurrency = async () => {
-  //   try {
-  //     const res = await callApi({
-  //       api: `/get-settings-value/site-currency`,
-  //       method: "GET",
-  //     })
-  //     if(res && res?.status == 1) {
-  //       setCurrency(res?.value);
-  //     }
-  //   } catch (error) {
-  //     console.error(error?.message)
-  //   }
-  // }
 
   const FetchUserData = async (memberId) => {
     let response;
@@ -81,7 +68,7 @@ const Header = () => {
       if (response && response.success === 1) {
         setUserData(response.data);
         setUserLogo(response?.data?.image);
-      } 
+      }
     } catch (error) { }
   };
 
@@ -149,7 +136,7 @@ const Header = () => {
         setCityData(response.data);
         handleDefaultCityChange(response.data?.[0])
         setGetAllCity(response.data);
-      } 
+      }
     } catch (error) { }
   };
 
@@ -241,12 +228,12 @@ const Header = () => {
                     />
                   )} */}
                   <NextImage
-  src="/assets/images/logo.png"
-  alt="Logo"
-  width={151}
-  height={56}
-  priority
-/>
+                    src="/assets/images/logo.png"
+                    alt="Logo"
+                    width={151}
+                    height={56}
+                    priority
+                  />
 
                 </div>
 
@@ -933,7 +920,7 @@ const Header = () => {
                                 />
                               )}
                             </div>
-                            
+
                           </Link>
                           <ul className="dropdown-menu dropdown-single dropdown-nav account-menu">
                             <li><p className="text-italic">{userData?.name || "Guest"}</p></li>
@@ -1017,14 +1004,28 @@ const Header = () => {
                       className="btn btn-primary btn-post"
                     >
                       <i className="icon-line-awesome-mouse-pointer"></i>{" "}
-                      {translation?.post_property || "Post Property"}{" "}
-                      <img
-                        src="/assets/images/icons/free-badge.png"
-                        alt="Free Badge"
-                        height="28"
-                        width="28"
-                        loading="lazy"
-                      />
+                      {/* {translation?.post_property || "Post Property"}{" "} {Number(listingAllowed) > 0 && "for Free"} */}
+                      {listingAllowed > 0 ? 'Post Property for Free' : 'Post Property'}
+                      {Number(listingAllowed) && listingAllowed > 0 ? (
+                        <img
+                          src="/assets/images/icons/free-badge.png"
+                          alt="Free Badge"
+                          height="28"
+                          width="28"
+                          loading="lazy"
+                        />
+                      ) : ""}
+                      {!listingAllowed && listingAllowed !== 0 ? (
+                        (
+                        <img
+                          src="/assets/images/icons/free-badge.png"
+                          alt="Free Badge"
+                          height="28"
+                          width="28"
+                          loading="lazy"
+                        />
+                      )
+                      ) : ""}
                     </Link>
                   </li>
                   {/* language  */}
@@ -1032,10 +1033,10 @@ const Header = () => {
                     <a className="nav-link dropdown-toggle" role="button">
                       <img
                         src={`/assets/images/flags/${currentLang === "ar"
-                            ? "ae"
-                            : currentLang === "de"
-                              ? "de"
-                              : "gb"
+                          ? "ae"
+                          : currentLang === "de"
+                            ? "de"
+                            : "gb"
                           }.svg`}
                         alt={currentLang.toUpperCase()}
                         height="20"
@@ -1088,10 +1089,10 @@ const Header = () => {
                     </ul>
                   </li>
                 </ul>
-              </div>              
+              </div>
             </div>
             {isMobile && (
-            <MobileMenu
+              <MobileMenu
                 handleLogout={handleLogout}
                 selectedCity={selectedCity}
                 currentLang={currentLang}
@@ -1345,7 +1346,7 @@ const Menu = () => {
         {
           name: "For Owner",
           links: [
-            { text: "Post Property", url: "/postproperty" },
+            { text: `Post Property ${listingAllowed > 0 && "for Free"}`, url: "/postproperty" },
             { text: "My Dashboard", url: "/dashboard" },
             { text: "sale / Rent Ad Packages", url: "/membership" },
           ],

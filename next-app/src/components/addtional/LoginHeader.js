@@ -56,7 +56,7 @@ const LoginHeader = () => {
                       className="btn btn-primary btn-post"
                     >
                       <i className="icon-line-awesome-mouse-pointer"></i>{" "}
-                      {translation?.post_property_free || "Post Property"}{" "}
+                      {translation?.post_property || "Post Property"}{" "}
                       <img
                         src="/assets/images/icons/free-badge.png"
                         alt="Free Badge"
