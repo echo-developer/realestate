@@ -60,12 +60,11 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
             caption: "",
           });
 
-          toast.success("File Uploaded Successfully");
         } else {
-          toast.error("File upload failed.");
+          console.error("File upload failed.");
         }
       } catch (error) {
-        toast.error("Error uploading file");
+        console.error("Error uploading file");
       }
     }
 
@@ -145,10 +144,10 @@ const projectForm6 = ({ formData, setFormData, prevStep }) => {
           router.push("/login");
         }
       } else {
-        toast.error(response.message || "project post failed");
+        console.error(response.message || "project post failed");
       }
     } catch (error) {
-      toast.error("Error posting project");
+      console.error("Error posting project");
     }
   };
 

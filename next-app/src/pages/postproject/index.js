@@ -374,10 +374,10 @@ const Index = () => {
       if (response && response.success === 1) {
         setUserData(response.data);
       } else {
-        toast.error(response.message);
+        console.error(response.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      console.error(error.message);
     } finally {
       setLoading(false);
     }
