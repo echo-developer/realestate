@@ -312,18 +312,25 @@ class HomeController extends Controller
                 ['status', '=', config('constants.STATUS_ACTIVE')]
             ])
                 ->with(
-                    'settings',
-                    'additional',
-                    'location',
-                    'gallery',
+                    'settings:id,project_id,project_budget',
+                    'additional:id,project_id,currency',
+                    'location:id,project_id,city,address',
                     'gallery.images'
                 )
-                ->wherehas('location',  function ($query) use ($city_id) {
-                    $query->where('city', $city_id);
+                ->get()
+                ->map(function ($item) {
+                    $item->location->city = isset($item->location->city) ? get_name_by_id('city_names', 'city_id', $item->location->city, 'en') : null;
+                    return $item;
                 })
-                ->get();
-            // log::info(json_encode($searchResults,JSON_PRETTY_PRINT));
-
+                ->groupBy(function ($item) {
+                    return $item->location->city;
+                })
+                ->sortByDesc(function ($group) {
+                    return $group->count();
+                })
+                ->take(5);
+            // log::info(json_encode($searchResults, JSON_PRETTY_PRINT));
+            // return  $searchResults;
             if ($searchResults->isEmpty()) {
                 return response()->json([
                     'status' => 1,
@@ -332,33 +339,36 @@ class HomeController extends Controller
                 ]);
             }
 
-            $customArray = $searchResults->map(function ($project) {
+            $customArray = [];
+            foreach ($searchResults as $city => $projects) {
+                $customArray[$city] = $projects->map(function ($project) {
 
+                    return [
+                        'id' => $project->id,
+                        'project_name' => $project->project_name,
+                        'slug' => $project->slug,
+                        'created_at' => $project->created_at->toISOString(),
+                        'gallery' => $project->gallery->map(function ($gallery) {
+                            return [
+                                'id' => $gallery->id,
+                                'image_type' => $gallery->image_type,
+                                'images' => $gallery->images->map(function ($image) {
+                                    return [
+                                        'caption' => $image->caption,
+                                        'file' => asset('user_upload/project_images/' . $image->filename),
+                                    ];
+                                }),
+                            ];
+                        }),
+                        'project_budget' => $project->settings->project_budget ?? null,
+                        'currency' => $project->additional->currency ?? null,
+                        'city' => $project->location->city ?? null,
+                        'address' => $project->location->address ?? null,
+                        'uname' => get_user_name($project->uid) ?? null,
+                    ];
+                })->values();
+            }
 
-                return [
-                    'id' => $project->id,
-                    'project_name' => $project->project_name,
-                    'slug' => $project->slug,
-                    'created_at' => $project->created_at->toISOString(),
-                    'gallery' => $project->gallery->map(function ($gallery) {
-                        return [
-                            'id' => $gallery->id,
-                            'image_type' => $gallery->image_type,
-                            'images' => $gallery->images->map(function ($image) {
-                                return [
-                                    'caption' => $image->caption,
-                                    'file' => asset('user_upload/project_images/' . $image->filename),
-                                ];
-                            }),
-                        ];
-                    }),
-                    'project_budget' => $project->settings->project_budget ?? null,
-                    'currency' => $project->additional->currency ?? null,
-                    'city' => $project->location->city ?? null,
-                    'address' => $project->location->address ?? null,
-                    'uname' => get_user_name($project->uid) ?? null,
-                ];
-            });
 
             return response()->json([
                 'status' => 1,

@@ -1027,7 +1027,7 @@ class DashboardController extends Controller
                 unset($agentAdditional->agent_doc);
             }
             if ($agentAdditional) {
-                $agentAdditional->languages = !empty($agentAdditional->language_speak) ?$agentAdditional->language_speak: null;
+                $agentAdditional->languages = !empty($agentAdditional->language_speak) ? $agentAdditional->language_speak : null;
                 unset($agentAdditional->language_speak);
             }
             if ($agentAdditional) {
@@ -1721,7 +1721,7 @@ class DashboardController extends Controller
                 'total_views' => $prt->total_views ?? null,
                 'name' => $prt->name ?? null,
                 'slug' => $prt->slug ?? null,
-                'locality' => $prt->location->locality ?? null,
+                'locality' => get_name_by_id('locality_names', 'locality_id', $prt->location->locality, 'en') ?? null,
                 'address' => $prt->location->property_address ?? null,
                 'property_type' => isset($prt->settings) ? get_name_by_id('property_category_names', 'category_id', $prt->settings->property_type, 'en') : null,
                 'post_for' => $prt->settings->post_for ?? null,
