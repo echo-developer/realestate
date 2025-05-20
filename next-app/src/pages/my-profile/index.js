@@ -8,22 +8,14 @@ import useTranslation from "@/hooks/useTranslation";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Envelope, Phone, Share, Whatsapp } from 'react-bootstrap-icons';
 import { AuthProvider, useAuth } from "@/context/AuthProvider";
-import { Modal, Button, Form } from 'react-bootstrap'
 
 const Index = () => {
   const { callApi, GetMemberId } = AuthUser();
   const { userData, userLoading, currency } = useAuth();
   const [dashboardList, setDashboardList] = useState({});
   const [facts, setFacts] = useState([]);
-  const [socialModal, setSocialModal] = useState(false);
   const memberId = GetMemberId();
   const translation = useTranslation();
-  const [formData, setFormData] = useState({
-    facebook: userData?.facebook || "",
-    linkedin: userData?.linkedin || "",
-    instagram: userData?.instagram || "",
-    youtube: userData?.youtube || "",
-  });
 
   const fetchDashboardListData = async () => {
     try {
@@ -99,36 +91,8 @@ const Index = () => {
     }
   }, [dashboardList]);
 
-  const handleEditSocialLinks = () => {
-    setSocialModal(true);
-  }
-
-   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async () => {
-    try {
-      const res = await callApi({
-        api: '/update_social_links',
-        method: "UPLOAD",
-        data: {
-          user_id: memberId,
-          ...formData
-        }
-      })
-    } catch (error) {
-      console.error(error.message)
-    }
-  };
-
-  const handleClose = () => {
-    setSocialModal(false)
-  }
 
   return (
-    <>
     <DashboardLayout>
       <div className="col-lg">
         <div className="p-4">
@@ -198,11 +162,6 @@ const Index = () => {
                             <li><a href="" role="button"><i class="icon-brand-linkedin-in"></i></a></li>
                             <li><a href="" role="button"><i class="icon-brand-instagram"></i></a></li>
                             <li><a href="" role="button"><i class="icon-brand-youtube"></i></a></li>
-                            <li>
-                              <a role="button" onClick={handleEditSocialLinks}>
-                              <i className="icon-feather-edit"></i>
-                            </a>
-                            </li>
                           </ul>
 
                         </div>
@@ -220,6 +179,146 @@ const Index = () => {
                   </div>
                 </div>
               </div>
+              {/* {Object.keys(counters).length > 0 && (
+                <div className="row g-4 mt-3">
+                  {counters.totalSpending && (
+                    <div className="col-md-3">
+                      <div className="card p-3 text-center">
+                        <h6>Total Spending</h6>
+                        <strong>{`${currency}${counters.totalSpending}`}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {counters.favProperty && (
+                    <div className="col-md-3">
+                      <div className="card p-3 text-center">
+                        <h6>Favourite Properties</h6>
+                        <strong>{counters.favProperty}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {counters.forSell && (
+                    <div className="col-md-3">
+                      <div className="card p-3 text-center">
+                        <h6>Properties for Sale</h6>
+                        <strong>{counters.forSell}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {counters.forRent && (
+                    <div className="col-md-3">
+                      <div className="card p-3 text-center">
+                        <h6>Properties for Rent</h6>
+                        <strong>{counters.forRent}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {counters.allProperty && (
+                    <div className="col-md-3">
+                      <div className="card p-3 text-center">
+                        <h6>All Properties</h6>
+                        <strong>{counters.allProperty}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {counters.allProject && (
+                    <div className="col-md-3">
+                      <div className="card p-3 text-center">
+                        <h6>All Projects</h6>
+                        <strong>{counters.allProject}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {counters.propertyEnquery && (
+                    <div className="col-md-3">
+                      <div className="card p-3 text-center">
+                        <h6>Property Enquiries</h6>
+                        <strong>{counters.propertyEnquery}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {counters.projectEnquery && (
+                    <div className="col-md-3">
+                      <div className="card p-3 text-center">
+                        <h6>Project Enquiries</h6>
+                        <strong>{counters.projectEnquery}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {counters.propertyTotalViews?.totalViews && (
+                    <div className="col-md-3">
+                      <div className="card p-3 text-center">
+                        <h6>Property Views (Total)</h6>
+                        <strong>{counters.propertyTotalViews.totalViews}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {counters.propertyTotalViews?.lastWeekViews && (
+                    <div className="col-md-3">
+                      <div className="card p-3 text-center">
+                        <h6>Property Views (Last Week)</h6>
+                        <strong>{counters.propertyTotalViews.lastWeekViews}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {counters.projectTotalViews?.totalViews && (
+                    <div className="col-md-3">
+                      <div className="card p-3 text-center">
+                        <h6>Project Views (Total)</h6>
+                        <strong>{counters.projectTotalViews.totalViews}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {counters.projectTotalViews?.lastWeekViews && (
+                    <div className="col-md-3">
+                      <div className="card p-3 text-center">
+                        <h6>Project Views (Last Week)</h6>
+                        <strong>{counters.projectTotalViews.lastWeekViews}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {counters.propertyTotalReviews?.totalCount && (
+                    <div className="col-md-3">
+                      <div className="card p-3 text-center">
+                        <h6>Property Reviews</h6>
+                        <strong>{counters.propertyTotalReviews.totalCount}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {counters.propertyTotalReviews?.lastweekCount && (
+                    <div className="col-md-3">
+                      <div className="card p-3 text-center">
+                        <h6>Property Reviews (Last Week)</h6>
+                        <strong>{counters.propertyTotalReviews.lastweekCount}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {counters.projectTotalReviews?.totalCount && (
+                    <div className="col-md-3">
+                      <div className="card p-3 text-center">
+                        <h6>Project Reviews</h6>
+                        <strong>{counters.projectTotalReviews.totalCount}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {counters.projectTotalReviews?.lastweekCount && (
+                    <div className="col-md-3">
+                      <div className="card p-3 text-center">
+                        <h6>Project Reviews (Last Week)</h6>
+                        <strong>{counters.projectTotalReviews.lastweekCount}</strong>
+                      </div>
+                    </div>
+                  )}
+                  {counters.activeListing && (
+                    <div className="col-md-3">
+                      <div className="card p-3 text-center">
+                        <h6>Active Listings</h6>
+                        <strong>{counters.activeListing}</strong>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )} */}
 
               <div className="row">
                 {facts.map((fact, index) => (
@@ -254,64 +353,6 @@ const Index = () => {
         </div>
       </div>
     </DashboardLayout>
-    <Modal show={socialModal} onHide={handleClose} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Edit Social Links</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          <Form.Group controlId="facebook">
-            <Form.Label>Facebook URL</Form.Label>
-            <Form.Control
-              type="url"
-              name="facebook"
-              value={formData.facebook}
-              onChange={handleChange}
-              placeholder="https://facebook.com/yourprofile"
-            />
-          </Form.Group>
-          <Form.Group controlId="linkedin" className="mt-3">
-            <Form.Label>LinkedIn URL</Form.Label>
-            <Form.Control
-              type="url"
-              name="linkedin"
-              value={formData.linkedin}
-              onChange={handleChange}
-              placeholder="https://linkedin.com/in/yourprofile"
-            />
-          </Form.Group>
-          <Form.Group controlId="instagram" className="mt-3">
-            <Form.Label>Instagram URL</Form.Label>
-            <Form.Control
-              type="url"
-              name="instagram"
-              value={formData.instagram}
-              onChange={handleChange}
-              placeholder="https://instagram.com/yourprofile"
-            />
-          </Form.Group>
-          <Form.Group controlId="youtube" className="mt-3">
-            <Form.Label>YouTube URL</Form.Label>
-            <Form.Control
-              type="url"
-              name="youtube"
-              value={formData.youtube}
-              onChange={handleChange}
-              placeholder="https://youtube.com/yourchannel"
-            />
-          </Form.Group>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Cancel
-        </Button>
-        <Button variant="primary" onClick={handleSubmit}>
-          Save Changes
-        </Button>
-      </Modal.Footer>
-    </Modal>
-    </>
   );
 };
 

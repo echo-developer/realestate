@@ -128,7 +128,7 @@ const Index = () => {
                                                         <div className="d-grid">
                                                             {step === 'password' && (
                                                                 <Button type="submit" variant="primary" disabled={isSubmitting}>
-                                                                    Update Password
+                                                                    Send OTP
                                                                 </Button>
                                                             )}
 

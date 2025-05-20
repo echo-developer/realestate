@@ -591,7 +591,7 @@ const Index = () => {
                   placeholder="Carpet Area"
                 />
               </FloatingLabel>
-              <span className="input-group-text">{projectData?.unit_type || 'sqft'}</span>
+              <span className="input-group-text">{translation?.sqft || "Sqft"}</span>
             </div>
 
             <div className="input-group">
@@ -603,7 +603,7 @@ const Index = () => {
                   placeholder="Super Area"
                 />
               </FloatingLabel>
-              <span className="input-group-text">{projectData?.unit_type || 'sqft'}</span>
+              <span className="input-group-text">{translation?.sqft || "Sqft"}</span>
             </div>
           </>
         );

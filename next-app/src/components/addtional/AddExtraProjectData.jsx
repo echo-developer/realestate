@@ -36,7 +36,7 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
     project_id: propId,
   });
 
-console.log("propertyData", propertyData)
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -64,7 +64,6 @@ console.log("propertyData", propertyData)
                 : prev[key];
             return acc;
           }, {}),
-          water_available: data.water_availability || ""
         }));
 
       } 

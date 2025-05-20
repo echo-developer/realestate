@@ -78,7 +78,7 @@ const CardImageSlider = ({
           )}
         </div>
 
-        {allImages?.length > 1 ? (
+        {allImages?.length > 1 && (
           <>
             <button className="carousel-control-prev" type="button" onClick={handlePrev}>
               <span className="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -93,17 +93,17 @@ const CardImageSlider = ({
               </span>
             </button>
           </>
-        ) : (<></>)}
+        )}
       </div>
 
-      {data?.post_for ? (
+      {data?.post_for && (
         <span className={`ads-type ${data?.post_for}`}>
           for {data?.post_for || `${translation?.not_available || "Not available"}`}
         </span>
-      ) : (<></>)}
+      )}
 
       {
-        showFavIcon ? (
+        showFavIcon && (
           <span
         className={`ads-fav ${
           data?.is_favorite || data?.is_fav || data?.is_favourite ? "active" : ""
@@ -112,13 +112,13 @@ const CardImageSlider = ({
       >
         <i className="icon-line-awesome-heart-o"></i>
       </span>
-        ) : (<></>)
+        )
       }
       {showImgCount && data.image_count && (
         <span className="total-ad-pic">
         <i className="bi bi-camera"></i>{data.image_count}
       </span>
-      ) || (<></>)}
+      )}
     </div>
   );
 };

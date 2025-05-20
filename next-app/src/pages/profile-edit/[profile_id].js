@@ -1123,10 +1123,10 @@ const ProfileForm = () => {
                           </FloatingLabel>
                         </div>
                         <Col className="col-12">
-                          {/* <SocialMediaLinks
+                          <SocialMediaLinks
                             socialLinks={socialLinks}
                             setSocialLinks={setSocialLinks}
-                          /> */}
+                          />
                         </Col>
 
                         <Col className="col-sm-6 col-12">
