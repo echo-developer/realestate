@@ -68,7 +68,6 @@ class ProjectEditController extends Controller
             'project_type' => $request->project_type ?? $project->project_type,
             'project_name' => $request->project_name ?? $project->project_name,
             'project_desc' => $request->description ?? $project->project_desc,
-            'status' => config('constants.STATUS_INACTIVE'),
         ])->save();
 
         $encodedId = base64_encode($project->id);

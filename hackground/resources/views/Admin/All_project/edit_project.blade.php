@@ -312,7 +312,7 @@
             </ul>
           </div>
         </div>
-
+        {{--
         <div class="card mb-4">
           <div class="card-header d-flex">
             <h4 class="card-title">Project Landmark </h4>
@@ -324,64 +324,66 @@
               @if (!empty($items))
               <div class="list-category">
                 <b>{{ ucfirst($category) }}:</b>
-                <ul>
-                  @foreach ($items as $item)
-                  <li>{{ $item['name'] }} - {{ $item['distance'] }} meters</li>
-                  @endforeach
-                </ul>
-              </div>
-              @endif
-              @endforeach
-            </div>
-
-          </div>
-        </div>
+        <ul>
+          @foreach ($items as $item)
+          <li>{{ $item['name'] }} - {{ $item['distance'] }} meters</li>
+          @endforeach
+        </ul>
       </div>
+      @endif
+      @endforeach
     </div>
 
-    <div class="tab-pane fade{{ request('tab') == 'project-photos' || !request('tab') ? 'show active' : '' }} "
-      id="project-photos" role="tabpanel" style="{{ request('tab') == '' ? 'display: none;' : 'display: block;' }}">
-      <div class="card mb-4">
-        <div class="card-header d-flex">
-          <h4 class="card-title">Project Photos</h4>
-          <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(5, <?php echo $projectData->id ?>,'Photos')"><i class="bi bi-pencil-square"></i></a>
+</div>
+</div>
+--}}
 
+</div>
+</div>
+
+<div class="tab-pane fade{{ request('tab') == 'project-photos' || !request('tab') ? 'show active' : '' }} "
+  id="project-photos" role="tabpanel" style="{{ request('tab') == '' ? 'display: none;' : 'display: block;' }}">
+  <div class="card mb-4">
+    <div class="card-header d-flex">
+      <h4 class="card-title">Project Photos</h4>
+      <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit_project_modal(5, <?php echo $projectData->id ?>,'Photos')"><i class="bi bi-pencil-square"></i></a>
+
+    </div>
+    <div class="card-body">
+      <div class="form-field">
+        <div class="image-tab-content">
+          <ul class="nav nav-underline nav-custom">
+            @foreach($groupedGallery as $type => $images)
+            <li class="nav-item">
+              <a class="nav-link {{ $loop->first ? 'active' : '' }}" data-tab="{{ $type }}" href="javascript:void(0)">
+                {{ ucfirst($type) }}
+              </a>
+            </li>
+            @endforeach
+          </ul>
         </div>
-        <div class="card-body">
-          <div class="form-field">
-            <div class="image-tab-content">
-              <ul class="nav nav-underline nav-custom">
-                @foreach($groupedGallery as $type => $images)
-                <li class="nav-item">
-                  <a class="nav-link {{ $loop->first ? 'active' : '' }}" data-tab="{{ $type }}" href="javascript:void(0)">
-                    {{ ucfirst($type) }}
-                  </a>
-                </li>
-                @endforeach
-              </ul>
-            </div>
-          </div>
+      </div>
 
-          @foreach($groupedGallery as $type => $images)
-          <div class="img-content" id="tab-content-{{ $type }}" style="{{ $loop->first ? '' : 'display: none;' }}">
-            <div class="upload-gallery" id="preview-{{ $type }}">
-              @foreach($images as $galleryItem)
-              @foreach($galleryItem->images as $image)
-              <div class="image-box pic">
-                <img src="{{ asset('user_upload/project_images/' . $image->filename) }}" alt="Image" class="img-fluid">
-                <p class="image-caption">{{ $image->caption ?? 'No caption available' }}</p>
-              </div>
-              @endforeach
-              @endforeach
-            </div>
+      @foreach($groupedGallery as $type => $images)
+      <div class="img-content" id="tab-content-{{ $type }}" style="{{ $loop->first ? '' : 'display: none;' }}">
+        <div class="upload-gallery" id="preview-{{ $type }}">
+          @foreach($images as $galleryItem)
+          @foreach($galleryItem->images as $image)
+          <div class="image-box pic">
+            <img src="{{ asset('user_upload/project_images/' . $image->filename) }}" alt="Image" class="img-fluid">
+            <p class="image-caption">{{ $image->caption ?? 'No caption available' }}</p>
           </div>
           @endforeach
-
+          @endforeach
         </div>
-
       </div>
+      @endforeach
+
     </div>
-  </section>
+
+  </div>
+</div>
+</section>
 </div>
 
 @endsection
