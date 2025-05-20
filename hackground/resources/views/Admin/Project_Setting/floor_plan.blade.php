@@ -47,7 +47,7 @@
     <div class="alert alert-{{ session('message_type') }}">
         {{ session('success_msg') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert">
-            
+
         </button>
     </div>
     @endif
@@ -72,7 +72,7 @@
 
     <div class="main-card mb-3 card">
         <div class="card-body">
-        <div class="card-header d-flex">
+            <div class="card-header d-flex">
                 <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> Property floor plan
 
                 <div class="btn-actions-pane-right">
@@ -139,7 +139,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="prop_floor_planAddEditModalLabel"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    
+
                 </button>
             </div>
             <div class="modal-body">
@@ -242,7 +242,7 @@
                 })
                 .then(data => {
                     if (data.success) {
-                        alert(data.message);
+                        localStorage.setItem('successMessage', data.message);
                         modalInstance.hide();
                         location.reload();
                     } else {

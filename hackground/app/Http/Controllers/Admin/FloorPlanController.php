@@ -20,7 +20,7 @@ class FloorPlanController extends Controller
             $query->where('lang', 'en');
         }])->get();
 
-        $floorPlan = FloorPlan::where('status','!=',-1)->with(['names' => function ($query) {
+        $floorPlan = FloorPlan::where('status', '!=', -1)->with(['names' => function ($query) {
             $query->where('lang', 'en');
         }])->get();
 
@@ -32,22 +32,22 @@ class FloorPlanController extends Controller
     {
         try {
             Log::info($req->all());
-    
+
             // Validate input
             $validated = $req->validate([
                 'type' => 'required|integer',
                 'title' => 'required|array',
                 'status' => 'required|boolean',
             ]);
-    
+
             Log::info($validated);
-    
+
             DB::beginTransaction();
             $floorPlan = FloorPlan::create([
                 'status' => $req->status,
                 'fp_type' => $req->type,
             ]);
-    
+
             foreach ($req->title as $lang => $title) {
                 FloorPlanName::create([
                     'fp_id' => $floorPlan->id,
@@ -55,7 +55,7 @@ class FloorPlanController extends Controller
                     'lang' => $lang
                 ]);
             }
-    
+
             DB::commit();
             return response()->json([
                 'success' => true,
@@ -63,14 +63,62 @@ class FloorPlanController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-    
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error: ' . $e->getMessage(),
             ], 500);
         }
     }
-    
+    public function updateFloorPlan(Request $req, $id)
+    {
+        try {
+            Log::info($req->all());
+
+            // Validate input
+            $validated = $req->validate([
+                'type' => 'required|integer',
+                'title' => 'required|array',
+                'status' => 'required|boolean',
+            ]);
+
+            DB::beginTransaction();
+
+            // Find existing FloorPlan
+            $floorPlan = FloorPlan::findOrFail($id);
+
+            // Update fields
+            $floorPlan->status = $req->status;
+            $floorPlan->fp_type = $req->type;
+            $floorPlan->save();
+
+            // Option 1: Delete old titles and recreate (safe and simple)
+            FloorPlanName::where('fp_id', $floorPlan->id)->delete();
+
+            foreach ($req->title as $lang => $title) {
+                FloorPlanName::create([
+                    'fp_id' => $floorPlan->id,
+                    'item' => $title,
+                    'lang' => $lang,
+                ]);
+            }
+
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'Floor Plan updated successfully!',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
 
     public function getFloorPlan($id)
     {
@@ -134,5 +182,4 @@ class FloorPlanController extends Controller
             'message' => 'Floor plan not found.'
         ]);
     }
-    }
-
+}

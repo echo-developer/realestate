@@ -448,6 +448,7 @@ Route::middleware('admin_auth')->group(function () {
     Route::get('floor_plan', [FloorPlanController::class, 'view']);
     Route::post('add_floor_plan', [FloorPlanController::class, 'addFloorPlan']);
     Route::get('get_floor_plan/{id}', [FloorPlanController::class, 'getFloorPlan']);
+    Route::post('update_floor_plan/{id}', [FloorPlanController::class, 'updateFloorPlan']);
     Route::post('update_floor_plan_status', [FloorPlanController::class, 'updateStatus'])->name('update.floor.plan.status');
     Route::post('/delete_floor_plan', [FloorPlanController::class, 'floorPlanDelete'])->name('floor.delete');
 
