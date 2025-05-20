@@ -101,6 +101,7 @@ const AuthUser = () => {
         default:
           throw new Error("Unsupported HTTP method");
       }
+      console.log("hdlfs")
 
       return response.data;
     } catch (error) {
