@@ -320,15 +320,16 @@ class LocalityModel extends Model
                 'name',
                 'id',
                 DB::raw("(
-                    6371 * acos(
-                        cos(radians($latitude)) *
-                        cos(radians(`lat`)) *
-                        cos(radians(`long`) - radians($longitude)) +
-                        sin(radians($latitude)) *
-                        sin(radians(`lat`))
-                    )
-                ) AS distance")
+                6371 * acos(
+                    cos(radians(?)) *
+                    cos(radians(`lat`)) *
+                    cos(radians(`long`) - radians(?)) +
+                    sin(radians(?)) *
+                    sin(radians(`lat`))
+                )
+            ) AS distance")
             )
+            ->addBinding([$latitude, $longitude, $latitude], 'select') // Bind safely
             ->having('distance', '<=', $radius)
             ->orderBy('distance')
             ->get();
