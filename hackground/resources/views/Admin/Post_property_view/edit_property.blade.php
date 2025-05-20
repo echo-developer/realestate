@@ -1,8 +1,8 @@
 @extends('Admin.layouts.app')
 @push('custom-css')
 
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/select2.css')}}"> 
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/select2-bootstrap-5-theme.css')}}"> 
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/select2.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/select2-bootstrap-5-theme.css')}}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/style.css') }}">
 
 
@@ -14,7 +14,7 @@
         <div class="page-title-wrapper">
             <div class="page-title-heading">
                 <div class="page-title-icon">
-                <i class="bi bi-house-gear"></i>
+                    <i class="bi bi-house-gear"></i>
                 </div>
                 <div>Property Edit <div class="page-title-subheading">Property <i class="bi bi-chevron-right"></i> Property Edit
                     </div>
@@ -30,18 +30,18 @@
         </div>
     </div>
 
-<!-- <select class="form-select" multiple>   
+    <!-- <select class="form-select" multiple>   
   <option value="1">One</option>
   <option value="2">Two</option>
   <option value="3">Three</option>
 </select> -->
 
     {{-- {{ $propertyData->settings }} --}}
-    <section class="content">        
+    <section class="content">
         <ul id="myTab" class="nav nav-underline mb-3" role="tablist">
             <li class="nav-item"><a class="nav-link active" href="{{ url('property/edit/'.$property_id) }}" aria-expanded="false">Property Details</a> </li>
 
-            <li class="nav-item"><a class="nav-link" href="{{ url('property/edit-photos/'.$property_id) }}"  aria-expanded="true">Property Photos</a> </li>
+            <li class="nav-item"><a class="nav-link" href="{{ url('property/edit-photos/'.$property_id) }}" aria-expanded="true">Property Photos</a> </li>
         </ul>
 
         <div class="card mb-3">
@@ -72,17 +72,17 @@
                         <b>Price:</b>
                         <span>{{ $propertyData->settings->price_currency ?? 'N/A'}}{{ $propertyData->settings->expected_price ?? 'N/A'}}</span>
                     </li>
-                    
-                    
+
+
                     <li>
                         <b>Project/Society Name:</b>
                         <span>{{$propertyData->settings->project_name ?? 'N/A'}}</span>
                     </li>
                 </ul>
-                
+
                 <h5>Message to Buyer:</h5>
                 <p>{{ $propertyData->additional->buyer_message ?? 'N/A'}}</p>
-                
+
             </div>
         </div>
 
@@ -119,47 +119,47 @@
                 <h4>Configuration:</h4>
                 <ul class="list-info">
                     <li>
-                        <b>Bedrooms:</b>  
+                        <b>Bedrooms:</b>
                         <span>{{$propertyData->settings->bedrooms ?? 'N/A'}}
                             @if($propertyData->dimensions)
-                                @foreach($propertyData->dimensions as $k=>$d)
-                                @if($d->room_type == 'bedroom')
-                                @php
-                                    $size = json_decode($d->size);
-                                @endphp
-                                <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
-                                @endif
-                                @endforeach
+                            @foreach($propertyData->dimensions as $k=>$d)
+                            @if($d->room_type == 'bedroom')
+                            @php
+                            $size = json_decode($d->size);
+                            @endphp
+                            <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
+                            @endif
+                            @endforeach
                             @endif
                         </span>
                     </li>
                     <li>
-                        <b>Bathrooms:</b>  
+                        <b>Bathrooms:</b>
                         <span>{{$propertyData->settings->bathrooms ?? 'N/A'}}
                             @if($propertyData->dimensions)
-                                @foreach($propertyData->dimensions as $k=>$d)
-                                @if($d->room_type == 'bathroom')
-                                @php
-                                    $size = json_decode($d->size);
-                                @endphp
-                                <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
-                                @endif
-                                @endforeach
+                            @foreach($propertyData->dimensions as $k=>$d)
+                            @if($d->room_type == 'bathroom')
+                            @php
+                            $size = json_decode($d->size);
+                            @endphp
+                            <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
+                            @endif
+                            @endforeach
                             @endif
                         </span>
                     </li>
                     <li>
-                        <b>Balcony:</b>  
+                        <b>Balcony:</b>
                         <span>{{$propertyData->additional->balcony ?? 'N/A'}}
                             @if($propertyData->dimensions)
-                                @foreach($propertyData->dimensions as $k=>$d)
-                                @if($d->room_type == 'balcony')
-                                @php
-                                    $size = json_decode($d->size);
-                                @endphp
-                                <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
-                                @endif
-                                @endforeach
+                            @foreach($propertyData->dimensions as $k=>$d)
+                            @if($d->room_type == 'balcony')
+                            @php
+                            $size = json_decode($d->size);
+                            @endphp
+                            <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
+                            @endif
+                            @endforeach
                             @endif
                         </span>
                     </li>
@@ -170,10 +170,10 @@
                     <li>
                         <b>Flooring Types:</b>
                         <span>
-                            <?php 
-                                $types = get_floor_types();
-                                $style_arr = json_decode($propertyData->additional->flooring_style);
-                                print_r($propertyData->additional->flooring_style);
+                            <?php
+                            $types = get_floor_types();
+                            $style_arr = json_decode($propertyData->additional->flooring_style);
+                            print_r($propertyData->additional->flooring_style);
                             ?>
                         </span>
                     </li>
@@ -193,7 +193,7 @@
                         <b>Lifts in the Tower:</b>
                         <span>{{$propertyData->additional->lifts_in_tower ?? 'N/A'}}</span>
                     </li>
-                    
+
                     <li>
                         <b>Carpet Area:</b>
                         <span>{{$propertyData->settings->carpet_area??'N/A'}}</span>
@@ -202,12 +202,12 @@
                         <b>Super Area:</b>
                         <span>{{$propertyData->settings->super_area??'N/A'}}</span>
                     </li>
-                    
+
                     <li>
                         <b>Furnished:</b>
                         <span>{{get_name_by_id('property_furnish_names','furnish_id',$propertyData->additional->property_furnish,'en')??'N/A'}}</span>
                     </li>
-                    
+
                 </ul>
             </div>
         </div>
@@ -244,9 +244,9 @@
                     @endif
                     @if($propertyData->additional->possession_status == '2')
                     @php
-                        $month_arr = explode('-',$propertyData->additional->expected_possesion_month_year);
-                        $construction_month = $month_arr[0];
-                        $construction_year = $month_arr[1];
+                    $month_arr = explode('-',$propertyData->additional->expected_possesion_month_year);
+                    $construction_month = $month_arr[0];
+                    $construction_year = $month_arr[1];
                     @endphp
                     <li>
                         <b>Expected Possesion Month Year: </b>
@@ -259,9 +259,9 @@
                         <span>
                             @php
                             $parkingStatus = [
-                                'av' => 'Available',
-                                'na' => 'Not Available',
-                                'uc' => 'Under Construction'
+                            'av' => 'Available',
+                            'na' => 'Not Available',
+                            'uc' => 'Under Construction'
                             ];
                             @endphp
                             {{ $parkingStatus[$propertyData->settings->parking_ability] ?? 'N/A' }}
@@ -277,7 +277,7 @@
                             @php
                             $overlooking = $propertyData->additional->overlooking ?? '';
                             $overlookingArray = !empty($overlooking) ? json_decode($overlooking, true) : '';
-                        
+
                             // echo $overlookingArray ? implode(', ', $overlookingArray) : 'N/A';
                             // if($overlookingArray)
                             // {
@@ -290,7 +290,7 @@
                 </ul>
             </div>
         </div>
-
+        {{--
         <div class="card mb-3">
             <div class="card-header d-flex">
                 <h4 class="card-title">Property Landmark </h4>
@@ -303,18 +303,19 @@
                     @if (!empty($items))
                     <div class="list-category col-lg-6">
                         <b>{{ ucfirst($category) }}:</b>
-                        <ul>
-                            @foreach ($items as $item)
-                            <li>{{ $item['name'] }} - {{ $item['distance'] }} meters</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    @endif
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </section>
+        <ul>
+            @foreach ($items as $item)
+            <li>{{ $item['name'] }} - {{ $item['distance'] }} meters</li>
+            @endforeach
+        </ul>
+</div>
+@endif
+@endforeach
+</div>
+</div>
+</div>
+--}}
+</section>
 </div>
 
 @endsection
@@ -323,7 +324,7 @@
 @push('custom-js')
 
 <script>
-    function edit(type){
+    function edit(type) {
         let property_id = "{{ $property_id }}";
         let url = `{{ url('property/load_ajax_page') }}?page=${type}&id=${property_id}`;
         $.get(url, function(data) {
