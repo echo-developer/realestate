@@ -286,7 +286,7 @@ export default function Home() {
           />
 
           <VerifiedAgent translation={translation} />
-          {/* <PopularLocalities translation={translation} /> */}
+          <PopularLocalities translation={translation} />
           <MainSlider
             data={projectData?.featured_project}
             title={translation?.featured_projects || "Featured Projects"}

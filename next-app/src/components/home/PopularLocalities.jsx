@@ -4,10 +4,11 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import AuthUser from '../Authentication/AuthUser';
 import Link from 'next/link';
+ 
 
-const PopularLocalities = ({ translation }) => {
+const PopularLocalities = ({translation}) => {
   const { callApi } = AuthUser();
-  const [activeTab, setActiveTab] = useState(null);
+  const [activeTab, setActiveTab] = useState('');
   const [projectListData, setProjectListData] = useState(null);
 
   const responsive = {
@@ -15,6 +16,7 @@ const PopularLocalities = ({ translation }) => {
     tablet: { breakpoint: { max: 1024, min: 768 }, items: 2, slidesToSlide: 1 },
     mobile: { breakpoint: { max: 768, min: 0 }, items: 1, slidesToSlide: 1 },
   };
+
 
 
 
@@ -35,6 +37,7 @@ const PopularLocalities = ({ translation }) => {
         })
         if (res && res?.status === 1) {
           setProjectListData(res?.data);
+
         }
       } catch (error) {
         console.error(error?.message || "Something went wrong")
@@ -44,6 +47,8 @@ const PopularLocalities = ({ translation }) => {
 
     getProjectList();
   }, [])
+
+
 
 
   return (
@@ -64,13 +69,6 @@ const PopularLocalities = ({ translation }) => {
             <div className="card h-100">
               <div className="card-header p-0">
                 <ul className="nav nav-underline nav-fill">
-                  {/* {cityTabs?.length > 0 && cityTabs.map((locality, index) => (
-                    <li className="nav-item" key={index} onClick={() => setActiveTab(locality)}>
-                      <a className={`nav-link ${activeTab?.name === locality?.name ? "active" : ""}`} role="button">
-                        {locality?.name}
-                      </a>
-                    </li>
-                  ))} */}
                   {projectListData && Object.keys(projectListData).map((key, i) => {
                     return (
                       <li className="nav-item" key={i} onClick={() => setActiveTab(key)}>
@@ -80,11 +78,10 @@ const PopularLocalities = ({ translation }) => {
                       </li>
                     );
                   })}
-
                 </ul>
               </div>
               <div className="card-body px-2">
-                {projectListData ? (
+                {projectListData?.[activeTab] && projectListData?.[activeTab]?.length > 0 ? (
                   <Carousel
                     responsive={responsive}
                     swipeable={true}
