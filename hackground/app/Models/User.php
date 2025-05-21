@@ -157,7 +157,7 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
                 $query->where('users.user_type', 'like', $typeKey);
             }
 
-            return $query->paginate($paginate);
+          return $query->orderByDesc('created_at')->paginate($paginate);
         } catch (\Exception $e) {
             Log::error('Error in getMemberUsers: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
