@@ -46,7 +46,7 @@ class ProjectDetailsController extends Controller
             ])
                 ->with([
                     'settings:project_id,project_budget,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type,area_in_sqft',
-                    'additional:project_id,main_road_facing,project_amenity,possession_status,construct_year,possesion_month_possesion_year,currency,token_amount,expected_price,developer_details,developer_name,overlooking,flooring_style,water_availability,electric_availability,type_of_ownership as ownership_type',
+                    'additional:project_id,main_road_facing,project_amenity,possession_status,construct_year,possesion_month_possesion_year,currency,token_amount,expected_price,developer_details,developer_name,developer_experience,overlooking,flooring_style,water_availability,electric_availability,type_of_ownership as ownership_type',
                     'location:project_id,locality,city,address,longitude,latitude',
                     'gallery:id,project_id,image_type',
                     'gallery.images:gallary_id,filename,caption',

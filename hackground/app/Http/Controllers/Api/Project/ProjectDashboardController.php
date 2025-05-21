@@ -43,7 +43,7 @@ class ProjectDashboardController extends Controller
             'pending' => 0,
             'published' => 1,
             'draft' => 2,
-            'expired' => 3,
+            'expired' => -1,
         ];
 
 
