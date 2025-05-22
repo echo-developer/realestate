@@ -283,6 +283,7 @@ class PropertyDetailsController extends Controller
 
                     /* ------------------------------------------------------ Get similar properties Start---------------------------------------------------------*/
                     $similarProperties = PrefProperty::where('properties.id', '!=', $property->property_id)
+                        ->where('properties.is_deleted', '!=', config('constants.STATUS_ACTIVE'))
                         ->when(!empty($user_id), function ($query) use ($user_id) {
                             $query->where('properties.uid', '!=', $user_id);
                         })

@@ -237,6 +237,7 @@ class ApiModel extends Model
                 'properties.id as property_id',
                 'properties.name as property_name',
                 'properties.slug',
+                'properties.is_deleted',
                 'properties_settings.property_type',
                 'properties.uid',
                 'properties.status',
@@ -270,6 +271,7 @@ class ApiModel extends Model
                 'properties_settings.plot_area',
                 'properties.name',
                 'properties.slug',
+                'properties.is_deleted',
                 'properties_settings.property_type',
                 'properties_settings.post_for',
                 'properties.status',
@@ -290,7 +292,7 @@ class ApiModel extends Model
     }
     public function GetProperties()
     {
-        return $this->basePropertyQuery()
+        $query = $this->basePropertyQuery()
             ->leftJoin('property_additional', 'properties.id', '=', 'property_additional.pid')
             ->leftJoin('users', 'properties.uid', '=', 'users.id')
             ->addSelect(
@@ -304,14 +306,14 @@ class ApiModel extends Model
                 'property_additional.is_corner_shop',
                 'property_additional.faces_main_road',
                 'property_additional.washroom',
-
+                
                 'property_additional.construction_done',
                 'property_additional.is_gated_colony',
                 'property_additional.boundary_wall',
                 'property_additional.road_width',
                 'property_additional.total_open_sides',
                 'property_additional.approved_by',
-
+                
                 'property_additional.flooring_style',
                 'property_additional.possession_status',
                 'property_additional.construct_year',
@@ -367,7 +369,9 @@ class ApiModel extends Model
                 'users.image',
             )
             ->where('properties.status', '=', config('constants.STATUS_ACTIVE'))
-            ->get();
+            ->where('properties.is_deleted', '!=', config('constants.STATUS_ACTIVE'));
+
+            return  $query->get();
     }
 
     public function getUser($id)
