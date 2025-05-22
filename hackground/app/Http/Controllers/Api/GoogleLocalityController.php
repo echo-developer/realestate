@@ -86,9 +86,6 @@ class GoogleLocalityController extends Controller
 
             $autoResponse = Http::get($autocompleteUrl)->json();
 
-            // log_anything($autocompleteUrl);
-            // log_anything($autoResponse);
-
 
             $filteredResults = collect($autoResponse['predictions'])->filter(function ($prediction) {
                 return collect($prediction['types'])->contains(function ($type) {
@@ -161,6 +158,23 @@ class GoogleLocalityController extends Controller
         return $response;
     }
 
+    private function checkIfLocalityExist($slug, $place_id, $cityId, $lang)
+    {
+        return DB::table('locality')
+            ->join('locality_names', function ($join) use ($lang) {
+                $join->on('locality.locality_id', '=', 'locality_names.locality_id')
+                    ->where('locality_names.lang', '=', $lang);
+            })
+            ->where([
+                ['locality.city', '=', $cityId],
+                ['locality.locality_key', '=', $slug],
+                ['locality.google_place_id', '=', $place_id],
+            ])
+            ->select('locality.locality_id')
+            ->limit(1)
+            ->exists();
+    }
+
     public function saveLocalityLatLong(Request $request)
     {
         try {
@@ -198,23 +212,6 @@ class GoogleLocalityController extends Controller
             // DB::rollBack();
             throw $th;
         }
-    }
-
-    private function checkIfLocalityExist($slug, $place_id, $cityId, $lang)
-    {
-        return DB::table('locality')
-            ->join('locality_names', function ($join) use ($lang) {
-                $join->on('locality.locality_id', '=', 'locality_names.locality_id')
-                    ->where('locality_names.lang', '=', $lang);
-            })
-            ->where([
-                ['locality.city', '=', $cityId],
-                ['locality.locality_key', '=', $slug],
-                ['locality.google_place_id', '=', $place_id],
-            ])
-            ->select('locality.locality_id')
-            ->limit(1)
-            ->exists();
     }
 
     public function get_country_code($cityID)
