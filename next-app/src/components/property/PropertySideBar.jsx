@@ -17,6 +17,7 @@ import Link from "next/link";
 import useTranslation from "@/hooks/useTranslation";
 import useAdvertisement from "@/hooks/useAdvertisement";
 import { useAuth } from "@/context/AuthProvider";
+import { useRouter } from "next/navigation";
 
 const PropertySidebar = ({
   propertyId,
@@ -31,7 +32,7 @@ const PropertySidebar = ({
   setShowPhoneNumber
 }) => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
-
+  const router = useRouter();
   const { defaultCity, buildAgentUrl } = useAuth();
   const [showReportModal, setShowReportModal] = useState(false);
   const [showAgentModal, setShowAgentModal] = useState(false);
@@ -39,6 +40,7 @@ const PropertySidebar = ({
   const memberId = GetMemberId();
   const categoryId = propertyDetails?.property_type_id;
   const [contactPhoneNumber, setContactPhoneNumber] = useState("");
+  const [nameLinkErrMessage, setNameLinkErrMessage] = useState('');
   const { adsData, logAdClick } = useAdvertisement(
     "detail-page",
     "right",
@@ -156,7 +158,7 @@ const PropertySidebar = ({
             propertyId: propertyId || "",
             countryCode: "IND +91",
           });
-          if(showPhoneNumber) {
+          if (showPhoneNumber) {
             displayPhoneNumber();
           }
         } else {
@@ -204,6 +206,15 @@ const PropertySidebar = ({
   };
   const [showAll, setShowAll] = useState(false);
 
+  const handleUserNameClick = (user) => {
+    if (user.user_type == 'A') {
+      const url = buildAgentUrl(user);
+      router.push(url)
+    } else {
+      setNameLinkErrMessage("You can only view Agent Profiles")
+    }
+  }
+
   return (
     <aside className="col-xl-3 col-12">
       <div className="sticky-top_ mb-4">
@@ -224,19 +235,30 @@ const PropertySidebar = ({
                     />
                   </div>
                   <div>
-                    <h4>
+                    <h4
+                      style={propertyDetails?.user_details?.user_type === 'A' ? { cursor: 'pointer', } : {}}
+                      onClick={() => handleUserNameClick(propertyDetails?.user_details)}>
                       {propertyDetails?.user_details?.name ||
                         `${translation?.not_available ||
                         `${translation?.not_available || "Not Available"}`
                         }`}
-                      <i
+                        {propertyDetails?.user_details?.user_type === 'A' && propertyDetails?.user_details?.is_verified_agent ? 
+                        (<>
+                        <i
                         className="icon-img-check ms-2"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
                         aria-label="Certified Agent"
                         data-bs-original-title="Certified Agent"
                       ></i>
+                        </>) 
+                        : 
+                        (<></>)}
                     </h4>
+                    {nameLinkErrMessage ? (
+                      <span className="text-danger small d-block mt-1">{nameLinkErrMessage}</span>
+                    ) : null}
+
                     <p className="mb-0">
                       <i>
                         {propertyDetails?.user_details?.totalProperty ||
@@ -317,7 +339,7 @@ const PropertySidebar = ({
                             : `${translation?.get_phone_number ||
                             "Get Phone Number"
                             }`} */}
-                            {viewNumber || "Get Phone Number"}
+                          {viewNumber || "Get Phone Number"}
                         </button>
                       )}
                       <button

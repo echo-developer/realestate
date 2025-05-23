@@ -7,9 +7,11 @@ import withAuth from "@/utils/withAuth";
 import useTranslation from "@/hooks/useTranslation";
 import AuthUser from "@/components/Authentication/AuthUser";
 import MembershipBox from "@/components/membership/MembershipBox";
+import { useAuth } from "@/context/AuthProvider";
 
 const Membership = () => {
   const { callApi } = AuthUser();
+  const { listingAllowed } = useAuth();
   const translation = useTranslation();
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [plans, setPlans] = useState([])
@@ -338,10 +340,12 @@ const Membership = () => {
                   </div>
                   <div className="row mb-2">
                     <div className="col-md-6">
-                      <strong>Leads:</strong> <span className="text-muted">{membershipDetails?.leads}</span>
+                      <strong>Leads:</strong> <span className="text-muted">
+                        {membershipDetails?.leads || 0}
+                      </span>
                     </div>
                     <div className="col-md-6">
-                      <strong>Listings Allowed:</strong> <span className="text-muted">{membershipDetails?.listings_allowed}</span>
+                      <strong>Listings Allowed:</strong> <span className="text-muted">{listingAllowed || 0}/{membershipDetails?.listings_allowed}</span>
                     </div>
                   </div>
                   <div className="row mb-2">

@@ -12,6 +12,7 @@ import useTranslation from "@/hooks/useTranslation";
 import { useAuth } from "@/context/AuthProvider";
 import { featureList } from "../post/PropertyData";
 import useAdvertisement from "@/hooks/useAdvertisement";
+import { useRouter } from "next/navigation";
 
 const ProjectSidebar = ({
   userDetails,
@@ -20,7 +21,7 @@ const ProjectSidebar = ({
   projectDetails,
   setShowLoginErrorModal,
   categoryId,
-  showCommunicationModal, 
+  showCommunicationModal,
   setShowCommunicationModal,
   showPhoneNumber,
   setShowPhoneNumber,
@@ -28,8 +29,10 @@ const ProjectSidebar = ({
   displayNumber,
 }) => {
   const [showAll, setShowAll] = useState(false);
+  const router = useRouter();
   const { defaultCity, buildAgentUrl } = useAuth();
   const { callApi, isLogin, GetMemberId } = AuthUser();
+  const [nameLinkErrMessage, setNameLinkErrMessage] = useState('');
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -123,7 +126,7 @@ const ProjectSidebar = ({
             message: "",
             countryCode: "IND +91",
           });
-          if(showPhoneNumber) {
+          if (showPhoneNumber) {
             displayNumber();
           }
         } else {
@@ -150,6 +153,16 @@ const ProjectSidebar = ({
   const latitude = projectDetails?.latitude ?? defaultLatitude;
   const longitude = projectDetails?.longitude ?? defaultLongitude;
 
+  const handleUserNameClick = (user) => {
+    if (user.user_type == 'A') {
+      const url = buildAgentUrl(user);
+      // router.push(url)
+      window.open(url, '_blank')
+    } else {
+      setNameLinkErrMessage("You can only view Agent Profiles")
+    }
+  }
+
   return (
     <aside className="col-xl-3 col-12">
       <div className="sticky-top_ mb-4">
@@ -164,29 +177,37 @@ const ProjectSidebar = ({
                       height="84"
                       width="84"
                       className="rounded-circle"
-                      src={`${
-                        projectDetails?.user_details?.image ||
+                      src={`${projectDetails?.user_details?.image ||
                         "/assets/images/agents/user.jpg"
-                      }`}
+                        }`}
                     />
                   </div>
                   <div>
-                    <h4>
+                    <h4
+                    style={projectDetails?.user_details?.user_type === 'A' ? { cursor: 'pointer', } : {}}
+                     onClick={() => handleUserNameClick(projectDetails?.user_details)}>
                       {projectDetails?.user_details?.name ||
                         `${translation?.not_available || "Not available"}`}
-                      <i
-                        className="icon-img-check ms-2"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        aria-label="Certified Agent"
-                        data-bs-original-title="Certified Agent"
-                      ></i>
+                      {projectDetails?.user_details?.user_type == 'A' && projectDetails?.user_details?.is_verified_agent ?
+                        (<>
+                          <i
+                            className="icon-img-check ms-2"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            aria-label="Certified Agent"
+                            data-bs-original-title="Certified Agent"
+                          ></i>
+                        </>)
+                        :
+                        (<></>)}
                     </h4>
+                    {nameLinkErrMessage ? (
+                      <span className="text-danger small d-block mt-1">{nameLinkErrMessage}</span>
+                    ) : null}
                     <p className="mb-0">
                       <i>
                         {projectDetails?.user_details?.totalProJect ||
-                          `${
-                            translation?.not_available || "Not available"
+                          `${translation?.not_available || "Not available"
                           }`}{" "}
                         {translation?.real_estate || "Buyer served"}
                       </i>
@@ -212,10 +233,10 @@ const ProjectSidebar = ({
                       {projectDetails?.user_details?.user_type === "A"
                         ? "Agent"
                         : projectDetails?.user_details?.user_type === "O"
-                        ? "Owner"
-                        : projectDetails?.user_details?.user_type === "B"
-                        ? "Builder"
-                        : `${translation?.not_available || "Not available"}`}
+                          ? "Owner"
+                          : projectDetails?.user_details?.user_type === "B"
+                            ? "Builder"
+                            : `${translation?.not_available || "Not available"}`}
                     </p>
 
                     <p>
@@ -410,9 +431,8 @@ const ProjectSidebar = ({
           {!projectDetails?.is_my_project && (
             <a
               role="button"
-              className={`btn me-2 ads-fav ${
-                projectDetails?.is_favourite ? "active" : ""
-              }`}
+              className={`btn me-2 ads-fav ${projectDetails?.is_favourite ? "active" : ""
+                }`}
               title="Save for Later"
               onClick={() => addRemoveFav(projectId)}
             >

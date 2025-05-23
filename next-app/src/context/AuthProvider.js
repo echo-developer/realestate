@@ -238,7 +238,7 @@ export const AuthProvider = ({ children }) => {
 
 
 const buildAgentUrl = (agent) => {
-  return `/agent-details/${agent.name.toLowerCase().replace(/\s+/g, '-')}?id=${agent.user_id}`;
+  return `/agent-details/${agent.name.toLowerCase().replace(/\s+/g, '-')}?id=${agent.user_id || agent.id}`;
 }
 
 
@@ -266,7 +266,7 @@ const buildAgentUrl = (agent) => {
         setLocalityDropdown, 
         getBadgeButtonClass,
         buildAgentUrl,
-        listingAllowed
+        listingAllowed,
       }}
     >
       {children}
