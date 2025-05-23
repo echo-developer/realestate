@@ -376,7 +376,6 @@
             var fileInput = event.target;
             var file = fileInput.files[0];
             var fileLabel = document.querySelector('.custom-file-label');
-            fileLabel.textContent = file.name;
 
             var reader = new FileReader();
             reader.onload = function(e) {
