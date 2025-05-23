@@ -533,7 +533,7 @@ const Index = () => {
               <Col lg sm={9} xs={12}>
                 <Card.Body className="p-0">
                   <div className="onCover">
-                    <Card.Title as='h4' className="mb-2 text-sm-white">
+                    <Card.Title as='h4' className="mb-2 agent-name text-sm-start text-center">
                       {agentDetailsData?.name}{" "}
                       <i className="icon-img-check ms-1"></i>
                     </Card.Title>

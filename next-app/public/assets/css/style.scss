@@ -5766,6 +5766,13 @@ fieldset{
 			}
 		}
 	}
+	.card-agent{
+		&.card-agent-page{
+			.agent-name{
+				color: $white;
+			}
+		}
+	}
 	.footer-links h4>a {
 		display: none;
 	}
@@ -5967,12 +5974,7 @@ fieldset{
 @media (min-width: 1440px) {
 	.coverPhoto{
 		height: 180px;
-	}
-	.select-dropdown{
-		.dropdown-menu{
-			max-height: 300px;
-		}
-	}
+	}	
 	.frontGallery-property{
 		height: 600px;
 	}

@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import withAuth from "@/utils/withAuth";
 import useTranslation from "@/hooks/useTranslation";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { Envelope, Phone, Share, Whatsapp } from 'react-bootstrap-icons';
+import { Envelope, GeoAlt, Phone, Share, Whatsapp } from 'react-bootstrap-icons';
 import { AuthProvider, useAuth } from "@/context/AuthProvider";
 
 const Index = () => {
@@ -107,11 +107,11 @@ const Index = () => {
             <>
               <div className="card card-agent-page mb-4">
                 <div className="row g-0">
-                  <div className="col-sm-auto col-4">
+                  <div className="col-xl-2 col-sm-3 col-4">
                     <div className="card-image">
                       <img
                         alt="Profile"
-                        className="img-fluid"
+                        className="img-fluid w-100"
                         src={userData?.image || "/assets/images/user.jpg"}
                         onError={(e) =>
                           (e.target.src = "/assets/images/user.jpg")
@@ -119,41 +119,46 @@ const Index = () => {
                       />
                     </div>
                   </div>
-                  <div className="col-sm col-8">
+                  <div className="col-xl-10 col-sm-9 col-8">
                     <div className="card-body">
-                      <div className="card-title">
-                        <h4 className="mb-1">
-                          {userData?.name || ""}
-                          <i className="icon-img-check ms-2"></i>
-                        </h4>
-                      </div>
-
-                      <p className="mb-1">
-                        <Envelope color="current" size={14} className="me-1" />
-                        <b>{userData?.email || ""}</b>
-                      </p>
-                      <p className="mb-2">
-                        <span>
-                          <Phone color="current" size={14} className="me-1" />
-                          <b>
-                            {userData?.phone && userData?.phone !== 0
-                              ? `${userData?.phone_code || "+91"}-${userData?.phone
-                              }`
-                              : "Not available"}
-                          </b>
-                        </span>
-                      </p>
-                      {userData?.whatsapp_no && (<p className="mb-1">
-                        <Whatsapp color="current" size={14} className="me-1" />
-                        <b>{userData?.whatsapp_no || ""}</b>
-                      </p>)}
-                      <p className="mb-2">
-                        <i className="icon-feather-pin"></i>{" "}
-                        <b>{userData?.address || ""}</b>
-                      </p>
-
                       <div className="d-sm-flex justify-content-between">
-                        <div className="social-share-wrap">
+                        <div>
+                          <div className="card-title">
+                            <h4 className="mb-1">
+                              {userData?.name || ""}
+                              <i className="icon-img-check ms-2"></i>
+                            </h4>
+                          </div>
+
+                          <p className="mb-1">
+                            <span className="text-primary"><Envelope color="currentColor" size={14} className="me-1" /></span>
+                            <span>{userData?.email || ""}</span>
+                          </p>
+                          
+                          <p className="mb-2">                           
+                            <span className="text-primary"><Phone color="currentColor" size={14} className="me-1" /></span>
+                            <span>
+                              {userData?.phone && userData?.phone !== 0
+                                ? `${userData?.phone_code || "+91"}-${userData?.phone
+                                }`
+                                : "Not available"}
+                            </span>                            
+                          </p>
+                          
+                          {userData?.whatsapp_no && (<p className="mb-1">
+                            <span className="text-primary"><Whatsapp color="currentColor" size={14} className="me-1" /></span>
+                            <span>{userData?.whatsapp_no || ""}</span>
+                          </p>)}
+                          {userData?.address && (
+                          <p className="mb-2">
+                            <span className="text-primary"><GeoAlt color="currentColor" size={14} className="me-1" />{" "}</span>
+                            <span>{userData?.address || ""}</span>
+                          </p>
+                          )}
+                        </div>
+
+                      
+                        {/* <div className="social-share-wrap">
                           <a className="btn btn-sm btn-outline-primary w-auto">
                             <i className="bi bi-share me-1"></i> {translation?.share || "Share"}
                           </a>
@@ -163,8 +168,7 @@ const Index = () => {
                             <li><a href="" role="button"><i class="icon-brand-instagram"></i></a></li>
                             <li><a href="" role="button"><i class="icon-brand-youtube"></i></a></li>
                           </ul>
-
-                        </div>
+                        </div> */}
                         <span className="edit-wrap">
                           <Link
                             href={`/profile-edit/${memberId}`}

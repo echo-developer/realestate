@@ -37393,6 +37393,9 @@ fieldset .btn-delete {
     bottom: 0;
     width: 100%;
   }
+  .card-agent.card-agent-page .agent-name {
+    color: #fff;
+  }
   .footer-links h4 > a, .footer-links .h4 > a {
     display: none;
   }
@@ -37540,9 +37543,6 @@ fieldset .btn-delete {
 @media (min-width: 1440px) {
   .coverPhoto {
     height: 180px;
-  }
-  .select-dropdown .dropdown-menu {
-    max-height: 300px;
   }
   .frontGallery-property {
     height: 600px;
