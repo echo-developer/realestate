@@ -122,8 +122,17 @@ class Enquery_CRM_Controller extends Controller
             ];
 
             if ($customer_id != null || $customer_id != '') {
+                $enquery_id = DB::table('property_enquiry')->insertGetId($dataToInsertEnqueryTable);
+            }
 
-                $saveEnquery = DB::table('property_enquiry')->insert($dataToInsertEnqueryTable);
+            if ($enquery_id && $getUserId_oftheProjectId) {
+                $assign_data = array(
+                    'lead_type' => 'P',
+                    'user_id' => $getUserId_oftheProjectId,
+                    'enquery_id' => $enquery_id
+                );
+
+                DB::table('leads_assigned')->insert($assign_data);
             }
 
             return response()->json([
