@@ -34,6 +34,7 @@ class ProjectPropertyController extends Controller
     {
         try {
             $tower_data = json_decode($request->input('tower_data'), true);
+            logger('tower data', $tower_data);
             $project_id = $request->input('project_id');
             $user_id = $request->input('user_id');
 
@@ -64,7 +65,7 @@ class ProjectPropertyController extends Controller
                         [
                             'project_id' => $project_id,
                             'slug' => $items['slug'],
-                            
+
                         ],
                         [
                             'tower_name' => $items['tower_name'],
@@ -135,7 +136,7 @@ class ProjectPropertyController extends Controller
 
 
                             PrefPropertyLocation::updateOrCreate(
-                                ['pid' => $prop_ID],  
+                                ['pid' => $prop_ID],
                                 ['property_address' => $items['projectLocation']]
                             );
 
@@ -211,7 +212,7 @@ class ProjectPropertyController extends Controller
 
 
             $project_name = PrefProject::where('id', $project_id)->value('project_name');
-            $project_location = ProjectLocation::where('project_id', $project_id)->value('locality');
+            $project_location = ProjectLocation::where('project_id', $project_id)->value('address');
 
             $result = [];
 
@@ -231,7 +232,7 @@ class ProjectPropertyController extends Controller
                                 'property_price' => $property->settings->expected_price ?? null,
                                 'property_facing' => $property->additional->facing_direction ?? null,
                                 'floor_plan_image' => $property->additional->floor_plan_image ?? null,
-                                'image_url'=> asset('user_upload/project_floor_plan/' . $property->additional->floor_plan_image)
+                                'image_url' => asset('user_upload/project_floor_plan/' . $property->additional->floor_plan_image)
                             ];
                         }
                     }
