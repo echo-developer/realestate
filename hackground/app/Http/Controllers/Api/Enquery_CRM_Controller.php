@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\Api\ApiModel;
+use App\Models\LeadsAssign;
 use App\Models\PrefProject;
-use App\Models\ProjectEnquery;
-use App\Models\ProjectProperties;
-use App\Models\ProjectPropertyMapping;
+use App\Models\Api\ApiModel;
 use Illuminate\Http\Request;
+use App\Models\ProjectEnquery;
+use App\Models\UserMembership;
 use Illuminate\Support\Carbon;
+use App\Models\ProjectProperties;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Models\ProjectPropertyMapping;
 use Illuminate\Support\Facades\Validator;
 
 class Enquery_CRM_Controller extends Controller
@@ -528,24 +530,21 @@ class Enquery_CRM_Controller extends Controller
                     if ($logData) {
                         $logData->enquery_status = $row->enquery_status;
                     }
-                    $is_blur = 1;
-                    if ($row->leads > $row->leads_used) {
-                        $is_blur = 0;
-                    }
+
                     $customArray[] = [
                         'assign_id' => $row->assign_id,
                         'log_data' => $logData ?? [],
                         'customer_id' => $row->customer_id,
                         'enquery_id' => $row->enquery_id,
                         'property_id' => $row->property_id,
-                        'message' => $is_blur ? blur_text($row->message, 1) : $row->message,
+                        'message' => $row->is_seen ?  $row->message : blur_text($row->message, 1),
                         'assign_to' => $row->assign_to,
                         'enquery_status' => $row->enquery_status,
                         'lead_status' => $row->lead_status,
                         'created_at' => $row->created_at,
-                        'phone' => $is_blur ? blur_text($row->Phone, 1) : $row->Phone,
-                        'customer_name' => $is_blur ? blur_text($row->Name, 1) : $row->Name,
-                        'email' => $is_blur ? blur_text($row->Email, 1) : $row->Email,
+                        'phone' => $row->is_seen ? $row->Phone : blur_text($row->Phone, 1),
+                        'customer_name' => $row->is_seen ?  $row->Name :  blur_text($row->Name, 1),
+                        'email' => $row->is_seen ? $row->Email :  blur_text($row->Email, 1),
                         'property_name' => $row->name,
                         'property_address' => $row->property_address,
                         'locality' => $row->locality,
@@ -557,7 +556,7 @@ class Enquery_CRM_Controller extends Controller
                         'size' => ($row->plot_area ?? 0) + ($row->super_area ?? 0) + ($row->carpet_area ?? 0),
                         'galleries' => $transformedData,
                         'lead_type' => 'P',
-                        'is_blur' => $is_blur
+                        'is_blur' => $row->is_seen == 0 ? 1 : 0,
                     ];
                 }
 
@@ -668,10 +667,6 @@ class Enquery_CRM_Controller extends Controller
                     if ($logData) {
                         $logData->enquery_status = $row->enquery_status;
                     }
-                    $is_blur = 1;
-                    if ($row->leads > $row->leads_used) {
-                        $is_blur = 0;
-                    }
                     //print_r($row);exit;
                     $customArray[] = [
                         'assign_id' => $row->assign_id,
@@ -679,14 +674,14 @@ class Enquery_CRM_Controller extends Controller
                         'customer_id' => $row->customer_id,
                         'enquery_id' => $row->enquery_id,
                         'project_id' => $row->project_id,
-                        'message' => $is_blur ? blur_text($row->message, 1) : $row->message,
+                        'message' => $row->is_seen ?  $row->message : blur_text($row->message, 1),
                         'assign_to' => $row->assign_to,
                         'enquery_status' => $row->enquery_status,
                         'lead_status' => $row->lead_status,
                         'created_at' => $row->created_at,
-                        'phone' => $is_blur ? blur_text($row->customer_phone, 1) : $row->customer_phone,
-                        'name' => $is_blur ? blur_text($row->customer_name, 1) : $row->customer_name,
-                        'email' => $is_blur ? blur_text($row->customer_email, 1) : $row->customer_email,
+                        'phone' => $row->is_seen ? $row->customer_phone : blur_text($row->customer_phone, 1),
+                        'name' => $row->is_seen ?  $row->customer_name :  blur_text($row->customer_name, 1),
+                        'email' => $row->is_seen ?  $row->customer_email : blur_text($row->customer_email, 1),
                         'project_name' => $row->project_name,
                         'project_address' => $row->address,
                         'locality' => $row->locality,
@@ -696,7 +691,7 @@ class Enquery_CRM_Controller extends Controller
                         //'size' => ($row->plot_area ?? 0) + ($row->super_area ?? 0) + ($row->carpet_area ?? 0),
                         'galleries' => $transformedData,
                         'lead_type' => 'P',
-                        'is_blur' => $is_blur
+                        'is_blur' => $row->is_seen == 0 ? 1 : 0
                     ];
                 }
 
@@ -791,15 +786,11 @@ class Enquery_CRM_Controller extends Controller
                 $customArray = [];
                 foreach ($leads as $row) {
                     $row = (object) $row;
-                    $is_blur = 1;
-                    if ($row->leads > $row->leads_used) {
-                        $is_blur = 0;
-                    }
                     $customArray[] = [
                         'assign_id' => $row->assign_id,
-                        'name' => $is_blur ? blur_text($row->name, 1) : $row->name,
-                        'phone' => $is_blur ? blur_text($row->phone, 1) : $row->phone,
-                        'email' => $is_blur ? blur_text($row->email, 1) : $row->email,
+                        'name' => $row->is_seen ?  $row->name :  blur_text($row->name, 1),
+                        'phone' => $row->is_seen ?  $row->phone :  blur_text($row->phone, 1),
+                        'email' => $row->is_seen ?  $row->email : blur_text($row->email, 1),
                         'locality' => $row->locality,
                         'purchase_timeline' => $row->purchase_timeline,
                         'property_type' => $row->property_type,
@@ -811,7 +802,7 @@ class Enquery_CRM_Controller extends Controller
                         'created_at' => $row->created_at,
                         'updated_at' => $row->updated_at,
                         'lead_type' => 'G',
-                        'is_blur' => $is_blur
+                        'is_blur' => $row->is_seen == 0 ? 1 : 0
                     ];
                 }
                 return response()->json([
@@ -1325,6 +1316,39 @@ class Enquery_CRM_Controller extends Controller
                 'status' => 0,
                 'message' => 'No assigned lead found.',
             ], 200);
+        }
+    }
+
+    public function updateLeads(Request $request)
+    {
+        $request->validate([
+            'enquery_id' => 'required|integer|exists:leads_assigned,enquery_id',
+        ]);
+        $userId = auth_user_id();
+        $membership = UserMembership::where('user_id', $userId)->first();
+
+        if (!$membership) {
+            return response()->json(['status' => 0, 'message' => 'Membership not found'], 404);
+        }
+
+        if ($membership->leads_used >= $membership->leads) {
+            return response()->json(['status' => 0, 'message' => 'No leads remaining Upradge Mmbership']);
+        }
+
+        DB::beginTransaction();
+        try {
+            LeadsAssign::where('enquery_id', $request->enquery_id)
+                ->update(['is_seen' => true]);
+
+            // Guaranteed working method
+            $membership->leads_used += 1;
+            $membership->save();
+
+            DB::commit();
+            return response()->json(['status' => 1, 'message' => 'Lead updated successfully.']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['status' => 0, 'message' => 'Error', 'error' => $e->getMessage()], 500);
         }
     }
 }

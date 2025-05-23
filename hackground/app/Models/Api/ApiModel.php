@@ -839,6 +839,7 @@ class ApiModel extends Model
             ->where('property_enquiry.property_id', '!=', '')
             ->select(
                 'leads_assigned.assign_id',
+                'leads_assigned.is_seen',
                 'leads_assigned.lead_status',
                 'property_enquiry.cid as customer_id',
                 'property_enquiry.enquery_id',
@@ -883,6 +884,7 @@ class ApiModel extends Model
             ->select(
                 'leads_assigned.assign_id',
                 'leads_assigned.lead_status',
+                'leads_assigned.is_seen',
                 'property_enquiry.cid as customer_id',
                 'property_enquiry.enquery_id',
                 'property_enquiry.project_id',
@@ -1370,7 +1372,7 @@ class ApiModel extends Model
     public function getGeneralLeadsList($user_id)
     {
         $query = DB::table('leads_assigned as l_a')
-            ->select('e.*', 'l_a.assign_id', 'l_a.lead_status', 'u_m.leads', 'u_m.leads_used')
+            ->select('e.*', 'l_a.assign_id', 'l_a.lead_status', 'u_m.leads', 'u_m.leads_used', 'l_a.is_seen')
             ->leftJoin('buyer_property_enquery as e', 'e.id', '=', 'l_a.enquery_id')
             ->leftJoin('user_membership as u_m', 'u_m.user_id', '=', 'l_a.user_id')
             ->where([

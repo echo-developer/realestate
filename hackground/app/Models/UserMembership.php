@@ -24,6 +24,8 @@ class UserMembership extends Model
         'prime_tag',
         'home_guarantee',
         'owner_contacted',
+        'leads_used',
+        'leads',
         'created_at',
         'updated_at'
     ];
@@ -47,5 +49,4 @@ class UserMembership extends Model
     {
         return $this->belongsTo(MembershipPlans::class, 'plan_id');
     }
-    
 }

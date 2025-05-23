@@ -231,7 +231,7 @@ Route::controller(Enquery_CRM_Controller::class)->group(function () {
     Route::get('user-general-leads', 'generalLeads');
     Route::post('property_CRM_logs', 'LogCRM')->name('log.crm');
     Route::post('save-lead-contact-status', 'saveLeadContactStatus');
-
+    Route::post('leads-update', 'updateLeads');
     Route::get('lead-details', 'leadDetails');
     Route::post('update-lead-status', 'updateLeadStatus');
     Route::get('lead-contact-history', 'leadContactHistory');
