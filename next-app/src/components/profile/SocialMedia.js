@@ -90,9 +90,9 @@ const translation = useTranslation();
       ))}
 
       {/* Add More Button */}
-      <button type="button" className="btn btn-primary" onClick={addMoreLinks}>
+      {/* <button type="button" className="btn btn-primary" onClick={addMoreLinks}>
       {translation?.add_more || "Add More"}
-      </button>
+      </button> */}
     </fieldset>
   );
 };

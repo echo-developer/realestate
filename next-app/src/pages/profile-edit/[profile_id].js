@@ -175,7 +175,10 @@ const ProfileForm = () => {
   const translation = useTranslation();
 
   const [socialLinks, setSocialLinks] = useState([
-    { key: "social_1", name: "", url: "" },
+    { key: "social_1", name: "Facebook", url: "" },
+    { key: "social_2", name: "LinkedIn", url: "" },
+    { key: "social_3", name: "Instragram", url: "" },
+    { key: "social_4", name: "YouTube", url: "" },
   ]);
 
   const [showCoverModal, setShowCoverModal] = useState(false);
@@ -305,7 +308,19 @@ const ProfileForm = () => {
                 url: item?.platform_url,
               });
             });
-            setSocialLinks(socialSTate);
+
+            const mergedSocialLinks = socialLinks.map((defaultItem) => {
+              const match = socialSTate.find((d) => d.key === defaultItem.key);
+              return match
+                ? {
+                  key: match.platform_key,
+                  name: defaultItem.name, 
+                  url: match.url.replace(/\\\//g, "/") 
+                }
+                : defaultItem;
+            });
+
+            setSocialLinks(mergedSocialLinks);
           }
         }
 
@@ -534,11 +549,11 @@ const ProfileForm = () => {
           agent_id: memberId
         }
       })
-      if(res && res?.status == 1) {
+      if (res && res?.status == 1) {
         toast.success("coverphoto Uploaded successfully")
       }
     } catch (error) {
-      console.error(error.message) 
+      console.error(error.message)
     }
   }
 
@@ -671,59 +686,60 @@ const ProfileForm = () => {
                         />
                       </FloatingLabel>
                     </div>
-
-                    <div className="col-md-6 col-12" ref={containerRef}>
-                      <FloatingLabel
-                        controlId="floatingLanguages"
-                        label="Languages you can speak"
-                        className="mb-4"
-                      >
-                        <div className="form-control position-relative" style={{ minHeight: "58px" }}>
-                          <div className="d-flex flex-wrap gap-2">
-                            {languages.map((lang, idx) => (
-                              <span key={idx} className="badge bg-primary">
-                                {lang}
-                                <button
-                                  type="button"
-                                  className="btn-close btn-close-white btn-sm ms-1"
-                                  onClick={() => handleRemove(lang)}
-                                  style={{ fontSize: "0.6rem" }}
-                                ></button>
-                              </span>
-                            ))}
-                            <input
-                              type="text"
-                              value={input}
-                              onChange={(e) => {
-                                setInput(e.target.value);
-                                setShowDropdown(true);
-                              }}
-                              onFocus={() => setShowDropdown(true)}
-                              className="border-0 flex-grow-1"
-                              style={{ outline: "none", minWidth: "120px" }}
-                              placeholder="Type or select a language"
-                            />
-                          </div>
-                          {showDropdown && filteredOptions.length > 0 && (
-                            <ul
-                              className="list-group position-absolute w-100 mt-1"
-                              style={{ zIndex: 1000, maxHeight: "200px", overflowY: "auto" }}
-                            >
-                              {filteredOptions.map((lang, idx) => (
-                                <li
-                                  key={idx}
-                                  className="list-group-item list-group-item-action"
-                                  onClick={() => handleSelect(lang)}
-                                  style={{ cursor: "pointer" }}
-                                >
+                    {userType === "A" ? (<>
+                      <div className="col-md-6 col-12" ref={containerRef}>
+                        <FloatingLabel
+                          controlId="floatingLanguages"
+                          label="Languages you can speak"
+                          className="mb-4"
+                        >
+                          <div className="form-control position-relative" style={{ minHeight: "58px" }}>
+                            <div className="d-flex flex-wrap gap-2">
+                              {languages.map((lang, idx) => (
+                                <span key={idx} className="badge bg-primary">
                                   {lang}
-                                </li>
+                                  <button
+                                    type="button"
+                                    className="btn-close btn-close-white btn-sm ms-1"
+                                    onClick={() => handleRemove(lang)}
+                                    style={{ fontSize: "0.6rem" }}
+                                  ></button>
+                                </span>
                               ))}
-                            </ul>
-                          )}
-                        </div>
-                      </FloatingLabel>
-                    </div>
+                              <input
+                                type="text"
+                                value={input}
+                                onChange={(e) => {
+                                  setInput(e.target.value);
+                                  setShowDropdown(true);
+                                }}
+                                onFocus={() => setShowDropdown(true)}
+                                className="border-0 flex-grow-1"
+                                style={{ outline: "none", minWidth: "120px" }}
+                                placeholder="Type or select a language"
+                              />
+                            </div>
+                            {showDropdown && filteredOptions.length > 0 && (
+                              <ul
+                                className="list-group position-absolute w-100 mt-1"
+                                style={{ zIndex: 1000, maxHeight: "200px", overflowY: "auto" }}
+                              >
+                                {filteredOptions.map((lang, idx) => (
+                                  <li
+                                    key={idx}
+                                    className="list-group-item list-group-item-action"
+                                    onClick={() => handleSelect(lang)}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    {lang}
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        </FloatingLabel>
+                      </div>
+                    </>) : null}
 
 
                     {/* Address */}
