@@ -89,7 +89,7 @@ class GoogleLocalityController extends Controller
 
             $filteredResults = collect($autoResponse['predictions'])->filter(function ($prediction) {
                 return collect($prediction['types'])->contains(function ($type) {
-                    return in_array($type, ['sublocality', 'sublocality_level_1','locality']);
+                    return in_array($type, ['sublocality', 'sublocality_level_1', 'locality']);
                 });
             })->map(function ($prediction) {
                 return [
@@ -165,10 +165,10 @@ class GoogleLocalityController extends Controller
                 $join->on('locality.locality_id', '=', 'locality_names.locality_id')
                     ->where('locality_names.lang', '=', $lang);
             })
-            ->where([
-                ['locality.locality_key', '=', $slug],
-                ['locality.google_place_id', '=', $place_id],
-            ])
+            ->where(function ($query) use ($slug, $place_id) {
+                $query->orWhere('locality.google_place_id', '=', $place_id)
+                    ->orWhere('locality.locality_key', '=', $slug);
+            })
             ->select('locality.locality_id')
             ->limit(1)
             ->exists();
@@ -178,7 +178,6 @@ class GoogleLocalityController extends Controller
     {
         try {
             // DB::transaction();
-
             $apiKey = get_setting('google-api-key');
             $cURLRequest = collect($request->input('data'));
 

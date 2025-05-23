@@ -20,8 +20,8 @@ use App\Http\Controllers\Api\FloorPlaningController;
 use App\Http\Controllers\Api\GoogleLocalityController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\OtpController;
-use App\Http\Controllers\Api\PaymentController;
 
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\Project\ImageEditController;
 use App\Http\Controllers\Api\Project\PostProjectController;
@@ -40,9 +40,12 @@ use App\Http\Controllers\Api\PropertyUpdateControler;
 use App\Http\Controllers\Api\SeachController;
 use App\Http\Controllers\Api\UserMembershipController;
 use App\Http\Controllers\Api\VerifyUserMailController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\CustomLandmarksAddController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+
 
 
 
