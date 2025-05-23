@@ -9,6 +9,7 @@ const ProjectDocumentModal = ({ propId, show, onClose }) => {
   const [documents, setDocuments] = useState([]);
   const [newDocuments, setNewDocuments] = useState([]); // Track new uploads
   const [fileUrl, setFileUrl] = useState("");
+  const [fileError, setFileError] = useState("");
   const [currentDoc, setCurrentDoc] = useState({
     certificate_number: "",
     certificate_name: "",
@@ -17,8 +18,9 @@ const ProjectDocumentModal = ({ propId, show, onClose }) => {
     property_id: "",
     project_id: propId,
   });
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-const translation = useTranslation();
+  const translation = useTranslation();
   // Fetch Previous Documents
   const fetchDocuments = async () => {
     try {
@@ -30,7 +32,7 @@ const translation = useTranslation();
 
       if (response?.status === 1) {
         setDocuments(response.data);
-      } 
+      }
     } catch (error) {
       console.error("Error fetching documents:", error);
     }
@@ -43,13 +45,18 @@ const translation = useTranslation();
   // Handle Input Change
   const handleChange = (field, value) => {
     setCurrentDoc((prev) => ({ ...prev, [field]: value }));
+    setErrors(prev => ({ ...prev, [field]: "" }));
   };
 
   // Handle File Change
   const handleFileChange = async (file) => {
     if (!file) return;
-    setCurrentDoc((prev) => ({ ...prev, file }));
+    if (file && file.type !== "application/pdf") {
+      setFileError("Only PDF files are allowed");
+    } else {
+      setCurrentDoc((prev) => ({ ...prev, file }));
     await uploadFile(file);
+    }
   };
 
   // Upload File API
@@ -65,7 +72,7 @@ const translation = useTranslation();
         setFileUrl(response.filename_url);
         setCurrentDoc((prev) => ({ ...prev, fileName: response.fileName }));
         toast.success(response.message || "File uploaded successfully.");
-      } 
+      }
     } catch (error) {
       console.error("Error during upload:", error);
     }
@@ -73,11 +80,22 @@ const translation = useTranslation();
 
   // Save Document to API
   const saveDocumentToAPI = async () => {
-    if (
-      !currentDoc.certificate_number ||
-      !currentDoc.certificate_name ||
-      !fileUrl
-    ) {
+    // if (
+    //   !currentDoc.certificate_number ||
+    //   !currentDoc.certificate_name ||
+    //   !fileUrl
+    // ) {
+    //   return;
+    // }
+    let newErrors = {};
+    if (!currentDoc.certificate_number) {
+      newErrors.certificate_number = "Registration Number is required";
+    }
+    if (!currentDoc.certificate_name) {
+      newErrors.certificate_name = "Document Name is required";
+    }
+    if (Object.keys(newErrors)) {
+      setErrors(newErrors);
       return;
     }
 
@@ -97,7 +115,7 @@ const translation = useTranslation();
         setNewDocuments((prev) => [...prev, newDocument]);
 
         resetForm();
-      } 
+      }
     } catch (error) {
       console.error("API Error:", error);
     } finally {
@@ -164,7 +182,7 @@ const translation = useTranslation();
 
         {/* Form for New Upload */}
         <h5 className="mb-3">{translation?.upload_new_document || "Upload New Document"}</h5>
-        <FloatingLabel 
+        <FloatingLabel
           label={translation?.registration_number || "Registration Number"}
           className="mb-3"
         >
@@ -173,9 +191,14 @@ const translation = useTranslation();
             value={currentDoc.certificate_number}
             onChange={(e) => handleChange("certificate_number", e.target.value)}
             placeholder={translation?.enter_registration_number || "Enter Registration Number"}
+            required
+            isInvalid={!!errors.certificate_number}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.certificate_number}
+          </Form.Control.Feedback>
         </FloatingLabel>
-        <FloatingLabel 
+        <FloatingLabel
           label={translation?.document_name || "Document Name"}
           className="mb-3"
         >
@@ -184,7 +207,12 @@ const translation = useTranslation();
             value={currentDoc.certificate_name}
             onChange={(e) => handleChange("certificate_name", e.target.value)}
             placeholder={translation?.enter_document_name || "Enter Document Name"}
+            required
+            isInvalid={!!errors.certificate_name}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.certificate_name}
+          </Form.Control.Feedback>
         </FloatingLabel>
         <Form.Group className="upload-area mb-3">
           <Form.Control
@@ -192,9 +220,15 @@ const translation = useTranslation();
             id="fileinput"
             accept="application/pdf"
             onChange={(e) => handleFileChange(e.target.files[0])}
+            isInvalid={!!fileError}
           />
           {translation?.upload_file || "Upload File"} <i class="bi bi-upload"></i>
           <p>Drag &amp; Drag &amp; Drop files here or <span class="text-site">Click</span> Click to select files</p>
+          {fileError && (
+            <div className="text-danger mt-1" style={{ fontSize: "0.875rem" }}>
+              {fileError}
+            </div>
+          )}
         </Form.Group>
 
         {/* File Preview */}
@@ -203,7 +237,7 @@ const translation = useTranslation();
             <p>
               <strong>{translation?.uploaded_file || "Uploaded File:"} </strong>
               <a href={fileUrl} target="_blank" rel="noopener noreferrer">
-              {translation?.view_pdf || "View PDF"}
+                {translation?.view_pdf || "View PDF"}
               </a>
             </p>
           ) : (
@@ -235,7 +269,7 @@ const translation = useTranslation();
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                       {translation?.view_pdf || "View PDF"}
+                      {translation?.view_pdf || "View PDF"}
                     </a>
                   ) : (
                     <img
@@ -261,7 +295,7 @@ const translation = useTranslation();
           onClick={saveDocumentToAPI}
           disabled={loading}
         >
-          {loading ? "Saving..." :`${translation?.save_document || "Save Document"}`}
+          {loading ? "Saving..." : `${translation?.save_document || "Save Document"}`}
         </Button>
       </Modal.Footer>
     </Modal>
