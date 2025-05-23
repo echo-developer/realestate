@@ -47,13 +47,10 @@ class Enquery_CRM_Controller extends Controller
                 ->where('id', $request->propertyId)
                 ->value('uid');
 
-            $ProjectId_ofProperty = ProjectPropertyMapping::where('property_id', $request->propertyId)
-                ->value('project_id');
-
             $dataToInsertEnqueryTable = [
                 'cid' => $customer_id ?? null,
                 'property_id' => $request->propertyId ?? null,
-                'project_id' => !empty($ProjectId_ofProperty)  ? $ProjectId_ofProperty : null,
+                'project_id' => null,
                 'message' => $request->message ?? null,
                 'assign_to' => $getUserId_ofthePropertyId ?? null,
                 'created_at' => now(),
@@ -65,17 +62,16 @@ class Enquery_CRM_Controller extends Controller
                     ->insertGetId($dataToInsertEnqueryTable);
             }
 
-            if($enquery_id && $getUserId_ofthePropertyId)
-            {
+            if ($enquery_id && $getUserId_ofthePropertyId) {
                 $assign_data = array(
-                    'lead_type'=> 'P',
-                    'user_id'=> $getUserId_ofthePropertyId,
-                    'enquery_id'=> $enquery_id
+                    'lead_type' => 'P',
+                    'user_id' => $getUserId_ofthePropertyId,
+                    'enquery_id' => $enquery_id
                 );
 
                 DB::table('leads_assigned')->insert($assign_data);
             }
-            
+
 
             return response()->json([
                 'status' => 1,
@@ -118,6 +114,7 @@ class Enquery_CRM_Controller extends Controller
             $dataToInsertEnqueryTable = [
                 'cid' => $customer_id ?? null,
                 'project_id' => $request->projectID ?? null,
+                'property_id' => null,
                 'message' => $request->message ?? null,
                 'assign_to' => $getUserId_oftheProjectId ?? null,
                 'created_at' => now(),
@@ -126,7 +123,7 @@ class Enquery_CRM_Controller extends Controller
 
             if ($customer_id != null || $customer_id != '') {
 
-                $saveEnquery = ProjectEnquery::create($dataToInsertEnqueryTable);
+                $saveEnquery = DB::table('property_enquiry')->insert($dataToInsertEnqueryTable);
             }
 
             return response()->json([
@@ -429,7 +426,7 @@ class Enquery_CRM_Controller extends Controller
                             'per_page' => $limit,
                             'total_pages' => ceil($totalEnqueries / $limit),
                         ],
-                        'enquery_can_show' => (int) get_remaining_values('owner_contacted',$user_id),
+                        'enquery_can_show' => (int) get_remaining_values('owner_contacted', $user_id),
                     ],
                     'options' => [
                         'project_list' => $project_list
@@ -483,7 +480,7 @@ class Enquery_CRM_Controller extends Controller
             if (!empty($user_id)) {
 
                 $crmData = $this->apiModel->GetCRMList($user_id);
-                
+
                 $totalRecords = count($crmData);
 
                 $crmData = collect($crmData)->slice(($recentPage - 1) * $limit, $limit)->values();
@@ -523,8 +520,7 @@ class Enquery_CRM_Controller extends Controller
                         $logData->enquery_status = $row->enquery_status;
                     }
                     $is_blur = 1;
-                    if($row->leads > $row->leads_used)
-                    {
+                    if ($row->leads > $row->leads_used) {
                         $is_blur = 0;
                     }
                     $customArray[] = [
@@ -533,14 +529,14 @@ class Enquery_CRM_Controller extends Controller
                         'customer_id' => $row->customer_id,
                         'enquery_id' => $row->enquery_id,
                         'property_id' => $row->property_id,
-                        'message' => $is_blur ? blur_text($row->message,1) : $row->message,
+                        'message' => $is_blur ? blur_text($row->message, 1) : $row->message,
                         'assign_to' => $row->assign_to,
                         'enquery_status' => $row->enquery_status,
-                        'lead_status'=>$row->lead_status,
+                        'lead_status' => $row->lead_status,
                         'created_at' => $row->created_at,
-                        'phone' => $is_blur ? blur_text($row->Phone,1) : $row->Phone,
-                        'customer_name' => $is_blur ? blur_text($row->Name,1) : $row->Name,
-                        'email' => $is_blur ? blur_text($row->Email,1) : $row->Email,
+                        'phone' => $is_blur ? blur_text($row->Phone, 1) : $row->Phone,
+                        'customer_name' => $is_blur ? blur_text($row->Name, 1) : $row->Name,
+                        'email' => $is_blur ? blur_text($row->Email, 1) : $row->Email,
                         'property_name' => $row->name,
                         'property_address' => $row->property_address,
                         'locality' => $row->locality,
@@ -561,12 +557,12 @@ class Enquery_CRM_Controller extends Controller
                         'status' => 0,
                         'message' => 'No result found.',
                         'data' => [],
-                        'lead_status_arr'=> [
-                            '0'=>'Pending',
-                            '1'=>'Lead',
-                            '2'=>'Closed',
-                            '3'=>'Proposal',
-                            '4'=>'Qualify'
+                        'lead_status_arr' => [
+                            '0' => 'Pending',
+                            '1' => 'Lead',
+                            '2' => 'Closed',
+                            '3' => 'Proposal',
+                            '4' => 'Qualify'
                         ],
                         'pagination' => [
                             'current_page' => $recentPage,
@@ -580,12 +576,12 @@ class Enquery_CRM_Controller extends Controller
                     'status' => 1,
                     'message' => 'Data retrieved successfully',
                     'data' => $customArray,
-                    'lead_status_arr'=> [
-                        '0'=>'Pending',
-                        '1'=>'Lead',
-                        '2'=>'Closed',
-                        '3'=>'Proposal',
-                        '4'=>'Qualify'
+                    'lead_status_arr' => [
+                        '0' => 'Pending',
+                        '1' => 'Lead',
+                        '2' => 'Closed',
+                        '3' => 'Proposal',
+                        '4' => 'Qualify'
                     ],
                     'pagination' => [
                         'current_page' => $recentPage,
@@ -622,7 +618,7 @@ class Enquery_CRM_Controller extends Controller
             $recentPage = $request->input('recent_page', 1);
             $limit = $request->input('limit', 10);
             $user_id = $request->input('user_id');
-            
+
             if (!empty($user_id)) {
                 $crmData = $this->apiModel->getProjectLeads($user_id);
                 $totalRecords = count($crmData);
@@ -656,7 +652,7 @@ class Enquery_CRM_Controller extends Controller
 
                     $logData = DB::table('crm_log')
                         ->select('schedule_date', 'remarks')
-                        ->where(['enquiry_id'=> $row->enquery_id, 'lead_type'=>'P'])
+                        ->where(['enquiry_id' => $row->enquery_id, 'lead_type' => 'P'])
                         ->orderBy('id', 'desc')
                         ->first();
 
@@ -664,8 +660,7 @@ class Enquery_CRM_Controller extends Controller
                         $logData->enquery_status = $row->enquery_status;
                     }
                     $is_blur = 1;
-                    if($row->leads > $row->leads_used)
-                    {
+                    if ($row->leads > $row->leads_used) {
                         $is_blur = 0;
                     }
                     //print_r($row);exit;
@@ -675,14 +670,14 @@ class Enquery_CRM_Controller extends Controller
                         'customer_id' => $row->customer_id,
                         'enquery_id' => $row->enquery_id,
                         'project_id' => $row->project_id,
-                        'message' => $is_blur ? blur_text($row->message,1) : $row->message,
+                        'message' => $is_blur ? blur_text($row->message, 1) : $row->message,
                         'assign_to' => $row->assign_to,
                         'enquery_status' => $row->enquery_status,
-                        'lead_status'=>$row->lead_status,
+                        'lead_status' => $row->lead_status,
                         'created_at' => $row->created_at,
-                        'phone' => $is_blur ? blur_text($row->customer_phone,1) : $row->customer_phone,
-                        'name' => $is_blur ? blur_text($row->customer_name,1) : $row->customer_name,
-                        'email' => $is_blur ? blur_text($row->customer_email,1) : $row->customer_email,
+                        'phone' => $is_blur ? blur_text($row->customer_phone, 1) : $row->customer_phone,
+                        'name' => $is_blur ? blur_text($row->customer_name, 1) : $row->customer_name,
+                        'email' => $is_blur ? blur_text($row->customer_email, 1) : $row->customer_email,
                         'project_name' => $row->project_name,
                         'project_address' => $row->address,
                         'locality' => $row->locality,
@@ -701,12 +696,12 @@ class Enquery_CRM_Controller extends Controller
                         'status' => 0,
                         'message' => 'No result found.',
                         'data' => [],
-                        'lead_status_arr'=> [
-                            '0'=>'Pending',
-                            '1'=>'Lead',
-                            '2'=>'Closed',
-                            '3'=>'Proposal',
-                            '4'=>'Qualify'
+                        'lead_status_arr' => [
+                            '0' => 'Pending',
+                            '1' => 'Lead',
+                            '2' => 'Closed',
+                            '3' => 'Proposal',
+                            '4' => 'Qualify'
                         ],
                         'pagination' => [
                             'current_page' => $recentPage,
@@ -721,12 +716,12 @@ class Enquery_CRM_Controller extends Controller
                     'status' => 1,
                     'message' => 'Data retrieved successfully',
                     'data' => $customArray,
-                    'lead_status_arr'=> [
-                        '0'=>'Pending',
-                        '1'=>'Lead',
-                        '2'=>'Closed',
-                        '3'=>'Proposal',
-                        '4'=>'Qualify'
+                    'lead_status_arr' => [
+                        '0' => 'Pending',
+                        '1' => 'Lead',
+                        '2' => 'Closed',
+                        '3' => 'Proposal',
+                        '4' => 'Qualify'
                     ],
                     'pagination' => [
                         'current_page' => $recentPage,
@@ -762,8 +757,7 @@ class Enquery_CRM_Controller extends Controller
         $limit = $request->input('limit', 10);
         $user_id = $request->input('user_id');
 
-        if($user_id)
-        {
+        if ($user_id) {
             $leads = $this->apiModel->getGeneralLeadsList($user_id);
             $totalRecords = count($leads);
             if (empty($leads)) {
@@ -771,12 +765,12 @@ class Enquery_CRM_Controller extends Controller
                     'status' => 0,
                     'message' => 'No result found.',
                     'data' => [],
-                    'lead_status_arr'=> [
-                        '0'=>'Pending',
-                        '1'=>'Lead',
-                        '2'=>'Closed',
-                        '3'=>'Proposal',
-                        '4'=>'Qualify'
+                    'lead_status_arr' => [
+                        '0' => 'Pending',
+                        '1' => 'Lead',
+                        '2' => 'Closed',
+                        '3' => 'Proposal',
+                        '4' => 'Qualify'
                     ],
                     'pagination' => [
                         'current_page' => $recentPage,
@@ -784,20 +778,19 @@ class Enquery_CRM_Controller extends Controller
                         'total_pages' => ceil($totalRecords / $limit),
                     ]
                 ]);
-            }else{
+            } else {
                 $customArray = [];
                 foreach ($leads as $row) {
                     $row = (object) $row;
                     $is_blur = 1;
-                    if($row->leads > $row->leads_used)
-                    {
+                    if ($row->leads > $row->leads_used) {
                         $is_blur = 0;
                     }
                     $customArray[] = [
                         'assign_id' => $row->assign_id,
-                        'name' => $is_blur ? blur_text($row->name,1) : $row->name,
-                        'phone'=> $is_blur ? blur_text($row->phone,1) : $row->phone,
-                        'email'=> $is_blur ? blur_text($row->email,1) : $row->email,
+                        'name' => $is_blur ? blur_text($row->name, 1) : $row->name,
+                        'phone' => $is_blur ? blur_text($row->phone, 1) : $row->phone,
+                        'email' => $is_blur ? blur_text($row->email, 1) : $row->email,
                         'locality' => $row->locality,
                         'purchase_timeline' => $row->purchase_timeline,
                         'property_type' => $row->property_type,
@@ -816,12 +809,12 @@ class Enquery_CRM_Controller extends Controller
                     'status' => 1,
                     'message' => 'Data retrieved successfully',
                     'data' => $customArray,
-                    'lead_status_arr'=> [
-                        '0'=>'Pending',
-                        '1'=>'Lead',
-                        '2'=>'Closed',
-                        '3'=>'Proposal',
-                        '4'=>'Qualify'
+                    'lead_status_arr' => [
+                        '0' => 'Pending',
+                        '1' => 'Lead',
+                        '2' => 'Closed',
+                        '3' => 'Proposal',
+                        '4' => 'Qualify'
                     ],
                     'pagination' => [
                         'current_page' => $recentPage,
@@ -831,7 +824,7 @@ class Enquery_CRM_Controller extends Controller
                     //'enquery_can_show' => (int) get_remaining_values('owner_contacted',$user_id),
                 ]);
             }
-        }else{
+        } else {
             return response()->json([
                 'status' => 0,
                 'message' => 'No user id found.',
@@ -886,23 +879,21 @@ class Enquery_CRM_Controller extends Controller
                 'remark_type' => 'required',
                 'lead_type' => 'required',
             ]);
-    
-            if($validator->fails()) {
+
+            if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()], 422);
             }
-            
+
             $user_id = $request->user_id;
             $assign_id = $request->assign_id;
-            $checkAssignedLead = DB::table('leads_assigned')->where(['assign_id'=>$assign_id,'user_id'=>$user_id])->first();
-            if($checkAssignedLead)
-            {
-                if($request->is_schedule)
-                {
+            $checkAssignedLead = DB::table('leads_assigned')->where(['assign_id' => $assign_id, 'user_id' => $user_id])->first();
+            if ($checkAssignedLead) {
+                if ($request->is_schedule) {
                     $formattedDateTime = Carbon::parse($request->schedule_date)->format('Y-m-d H:i:s');
-                }else{
+                } else {
                     $formattedDateTime = '';
                 }
-                
+
                 $data = [
                     'enquiry_id' => $request->enquery_id,
                     'assign_id' => $request->assign_id,
@@ -921,7 +912,6 @@ class Enquery_CRM_Controller extends Controller
                     'message' => 'Data saved successfully !',
                 ]);
             }
-            
         } catch (\Exception $e) {
             Log::error('Error in PropertyEnquiry: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
@@ -943,34 +933,31 @@ class Enquery_CRM_Controller extends Controller
             'lead_status' => 'required'
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
         $user_id = $request->user_id;
         $assign_id = $request->assign_id;
-        $checkAssignedLead = DB::table('leads_assigned')->where(['assign_id'=>$assign_id,'user_id'=>$user_id])->first();
-        if($checkAssignedLead)
-        {
+        $checkAssignedLead = DB::table('leads_assigned')->where(['assign_id' => $assign_id, 'user_id' => $user_id])->first();
+        if ($checkAssignedLead) {
             $up = $this->apiModel->updateUserLeadStatus($request->all());
-            if($up)
-            {
+            if ($up) {
                 return response()->json([
-                        'status' => 1,
-                        'message' => 'Status updated .',
-                    ], 200);  
-            }else{
+                    'status' => 1,
+                    'message' => 'Status updated .',
+                ], 200);
+            } else {
                 return response()->json([
                     'status' => 0,
                     'message' => 'Failed to update.',
                 ], 200);
             }
-        }else{
+        } else {
             return response()->json([
                 'status' => 0,
                 'message' => 'No assigned lead found.',
             ], 200);
         }
-       
     }
 
     public function leadContactHistory(Request $request)
@@ -982,7 +969,7 @@ class Enquery_CRM_Controller extends Controller
             ]);
             $assign_id = $request->input('assign_id');
             $user_id = $request->input('user_id');
-            $checkAssignedLead = DB::table('leads_assigned')->where(['assign_id'=>$assign_id,'user_id'=>$user_id])->first();
+            $checkAssignedLead = DB::table('leads_assigned')->where(['assign_id' => $assign_id, 'user_id' => $user_id])->first();
             $assign_data = [];
             $enquiry_id = "";
             $lead_type = "";
@@ -991,15 +978,14 @@ class Enquery_CRM_Controller extends Controller
             if ($checkAssignedLead) {
                 $enquiry_id = $checkAssignedLead->enquery_id;
                 $lead_type = $checkAssignedLead->lead_type;
-                $enquiry = $this->apiModel->getLeadDetails($enquiry_id,$lead_type);
-                if($enquiry)
-                {
+                $enquiry = $this->apiModel->getLeadDetails($enquiry_id, $lead_type);
+                if ($enquiry) {
                     $phone = $enquiry->phone;
                     $email = $enquiry->email;
                 }
                 $eq_timeline = DB::table('crm_log')
                     ->leftJoin('property_enquiry', 'crm_log.enquiry_id', '=', 'property_enquiry.enquery_id')
-                    ->where(['crm_log.assign_id'=> $assign_id,'crm_log.user_id'=>$user_id])
+                    ->where(['crm_log.assign_id' => $assign_id, 'crm_log.user_id' => $user_id])
                     ->select(
                         'crm_log.enquiry_id',
                         'crm_log.status as enquery_status',
@@ -1015,11 +1001,11 @@ class Enquery_CRM_Controller extends Controller
                         'status' => 1,
                         'message' => 'No result found.',
                         'data' => [],
-                        'assign_id'=>$assign_id,
-                        'enquiry_id'=>$enquiry_id,
-                        'lead_type'=> $lead_type,
-                        'phone'=>$phone,
-                        'email'=>$email
+                        'assign_id' => $assign_id,
+                        'enquiry_id' => $enquiry_id,
+                        'lead_type' => $lead_type,
+                        'phone' => $phone,
+                        'email' => $email
                     ]);
                 }
 
@@ -1027,11 +1013,11 @@ class Enquery_CRM_Controller extends Controller
                     'status' => 1,
                     'message' => 'data retrived successfully',
                     'data' => $eq_timeline,
-                    'assign_id'=>$assign_id,
-                    'enquiry_id'=>$enquiry_id,
-                    'lead_type'=> $lead_type,
-                    'phone'=>$phone,
-                    'email'=>$email
+                    'assign_id' => $assign_id,
+                    'enquiry_id' => $enquiry_id,
+                    'lead_type' => $lead_type,
+                    'phone' => $phone,
+                    'email' => $email
                 ]);
 
                 // Log::info('eq_timeline :\n' . json_encode($eq_timeline, JSON_PRETTY_PRINT));
@@ -1040,11 +1026,11 @@ class Enquery_CRM_Controller extends Controller
                     'status' => 0,
                     'message' => 'No Enquery id found.',
                     'data' => [],
-                    'assign_id'=>$assign_id,
-                    'enquiry_id'=>$enquiry_id,
-                    'lead_type'=> $lead_type,
-                    'phone'=>$phone,
-                    'email'=>$email
+                    'assign_id' => $assign_id,
+                    'enquiry_id' => $enquiry_id,
+                    'lead_type' => $lead_type,
+                    'phone' => $phone,
+                    'email' => $email
                 ]);
             }
         } catch (\Exception $e) {
@@ -1114,19 +1100,18 @@ class Enquery_CRM_Controller extends Controller
         $assign_id = $request->input('assign_id');
         try {
             if ($assign_id) {
-                $lead = DB::table('leads_assigned')->where('assign_id',$assign_id)->first();
-                if($lead)
-                {
+                $lead = DB::table('leads_assigned')->where('assign_id', $assign_id)->first();
+                if ($lead) {
                     $enquiry_id = $lead->enquery_id;
                     $lead_type = $lead->lead_type;
-                    $data = $this->apiModel->getLeadDetails($enquiry_id,$lead_type);
+                    $data = $this->apiModel->getLeadDetails($enquiry_id, $lead_type);
                     if (empty($data)) {
                         return response()->json([
                             'status' => 0,
                             'message' => 'No data found.',
                             'data' => [],
                         ]);
-                    }else{
+                    } else {
                         return response()->json([
                             'status' => 1,
                             'message' => 'Lead details fetched successfully.',
@@ -1134,15 +1119,13 @@ class Enquery_CRM_Controller extends Controller
                             'data' => $data
                         ]);
                     }
-
-                }else{
+                } else {
                     return response()->json([
                         'status' => 0,
                         'message' => 'No data found.',
                         'data' => [],
                     ]);
                 }
-                
             } else {
                 return response()->json([
                     'status' => 0,
@@ -1166,7 +1149,7 @@ class Enquery_CRM_Controller extends Controller
         $end_date = $request->input('end_date');
         try {
             if ($user_id) {
-                $data = $this->apiModel->getLeadsScheduleList($user_id,$start_date,$end_date);
+                $data = $this->apiModel->getLeadsScheduleList($user_id, $start_date, $end_date);
                 //print_r($data);exit;
                 if ($data->isEmpty()) {
                     return response()->json([
@@ -1219,8 +1202,8 @@ class Enquery_CRM_Controller extends Controller
         $schedule_date = $request->input('schedule_date');
         try {
             if ($user_id) {
-                $data = $this->apiModel->getScheduleMeetingList($user_id,$schedule_date);
-                
+                $data = $this->apiModel->getScheduleMeetingList($user_id, $schedule_date);
+
                 if ($data->isEmpty()) {
                     return response()->json([
                         'status' => 0,
@@ -1230,11 +1213,13 @@ class Enquery_CRM_Controller extends Controller
                 }
 
                 $customArr = [];
-                foreach($data as $k=>$item)
-                {
-                    if($item->status == '0'){$status_text = "Pending";}elseif($item->status == '1'){$status_text = "Completed";}
-                    if($item->lead_type == 'P')
-                    {
+                foreach ($data as $k => $item) {
+                    if ($item->status == '0') {
+                        $status_text = "Pending";
+                    } elseif ($item->status == '1') {
+                        $status_text = "Completed";
+                    }
+                    if ($item->lead_type == 'P') {
                         $customArr[] = array(
                             'id' => $item->id,
                             'assign_id' => $item->assign_id,
@@ -1254,7 +1239,7 @@ class Enquery_CRM_Controller extends Controller
                             'schedule_date' => $item->schedule_date,
                             'created_at' => $item->created_at
                         );
-                    }else{
+                    } else {
                         $customArr[] = array(
                             'id' => $item->id,
                             'assign_id' => $item->assign_id,
@@ -1271,9 +1256,8 @@ class Enquery_CRM_Controller extends Controller
                             'created_at' => $item->created_at
                         );
                     }
-                    
                 }
-        
+
                 return response()->json([
                     'status' => 1,
                     'message' => 'Data retrieved successfully.',
@@ -1307,35 +1291,31 @@ class Enquery_CRM_Controller extends Controller
             'status' => 'required'
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
-        
+
         $id = $request->id;
-        $checkMeetingLog = DB::table('crm_log')->where(['id'=>$id])->first();
-        if($checkMeetingLog)
-        {
+        $checkMeetingLog = DB::table('crm_log')->where(['id' => $id])->first();
+        if ($checkMeetingLog) {
             //print_r($request->all());exit;
             $up = $this->apiModel->updateMeetingStatus($request->all());
-            if($up)
-            {
+            if ($up) {
                 return response()->json([
-                        'status' => 1,
-                        'message' => 'Status updated .',
-                    ], 200);  
-            }else{
+                    'status' => 1,
+                    'message' => 'Status updated .',
+                ], 200);
+            } else {
                 return response()->json([
                     'status' => 0,
                     'message' => 'Failed to update.',
                 ], 200);
             }
-        }else{
+        } else {
             return response()->json([
                 'status' => 0,
                 'message' => 'No assigned lead found.',
             ], 200);
         }
-       
     }
-
 }
