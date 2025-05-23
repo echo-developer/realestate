@@ -96,6 +96,15 @@ class UserMembershipController extends Controller
         ])->pluck('plan_name')->first();
 
         $membershipData->plan_name = $planName;
+        $membershipData->listings_allowed =  $membershipData->listings_allowed == null ? 'Unlimited' : $membershipData->listings_allowed;
+        if ($membershipData->leads === null) {
+            $membershipData->makeHidden(['leads_used']);
+        }
+        $membershipData->leads =  $membershipData->leads == null ? 'Unlimited' : $membershipData->leads;
+        if ($membershipData->remaining_listings_allowed === null) {
+            $membershipData->makeHidden(['remaining_listings_allowed']);
+        }
+
         $membershipData->makeHidden(['plan']);
         return response()->json([
             'status' => 1,
