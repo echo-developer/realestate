@@ -163,7 +163,7 @@ const ResidentialProjectDetails = ({
                         <img
                           className="w-100"
                           src={
-                            detailsData?.gallery?.[0]?.images?.[0]?.file ||
+                            imageList?.[0]?.file ||
                             "/assets/images/property/default-property-1.jpg"
                           }
                           alt="First Property Image"
