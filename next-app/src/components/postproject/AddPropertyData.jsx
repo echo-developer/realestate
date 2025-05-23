@@ -267,9 +267,11 @@ const AddPropertyData = ({
 
     setValidationErrors(errors);
     setIsFormValid(isValid);
+    return errors;
   };
 
   const handleTowerChange = (towerIndex, field, value) => {
+    validateForm();
     setTowers((prev) =>
       prev.map((tower, idx) =>
         idx === towerIndex ? { ...tower, [field]: value } : tower
@@ -306,6 +308,7 @@ const AddPropertyData = ({
   };
 
   const handleFlatChange = (towerIndex, flatIndex, field, value) => {
+    validateForm();
     setTowers((prev) =>
       prev.map((tower, tIdx) => {
         if (tIdx !== towerIndex) return tower;
@@ -320,6 +323,7 @@ const AddPropertyData = ({
   };
 
   const handleBHKChange = (towerIndex, flatIndex, bhkIndex, field, value) => {
+    validateForm();
     setTowers((prev) =>
       prev.map((tower, tIdx) => {
         if (tIdx !== towerIndex) return tower;
@@ -372,6 +376,10 @@ const AddPropertyData = ({
   };
 
   const handleSave = async () => {
+    const err = validateForm();
+    if(Object.keys(err)?.length > 0) {
+      return;
+    }
     const payload = towers.map((tower, i) => ({
       ...tower,
       slug: `tower${i + 1}`,
@@ -410,7 +418,7 @@ const AddPropertyData = ({
     }
   };
 
-  useEffect(() => validateForm(), [towers]);
+  // useEffect(() => validateForm(), [towers]);
 
   if (loading) {
     return <CustomLoading />;
@@ -851,7 +859,7 @@ const AddPropertyData = ({
           {translation?.close || "Close"}
 
         </Button>
-        <Button variant="primary" onClick={handleSave} disabled={!isFormValid}>
+        <Button variant="primary" onClick={handleSave} >
           {translation?.save || "Save"}
 
         </Button>
