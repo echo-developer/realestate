@@ -353,26 +353,7 @@ header {
 	}
 	&.transparentH{
 		background: none;
-		ul#desk-nav>li>a:not(.btn) {
-			color: #fff;
-		}	
-		ul#desk-nav > li .btn-outline-primary {
-			border-color: var(--whiteColor);
-			color: var(--whiteColor);
-			&:hover{
-				border-color: var(--siteColor);
-				background-color: var(--siteColor);
-				color: var(--whiteColor);
-			}
-		}	
-		.navbar .dropdown .btn-link {
-			color: #fff;
-		}
-		.navbar-brand > div > img {
-			filter: brightness(0) invert(1);
-		}
 	}
-	
 }
 .hidden-menu {
 	top: -100px !important;
@@ -5744,7 +5725,28 @@ fieldset{
 
 /* Media Start */
 @media (min-width: 576px) {
-	
+	.header-sticky {
+		&.transparentH{
+			ul#desk-nav>li>a:not(.btn) {
+				color: #fff;
+			}
+			ul#desk-nav > li .btn-outline-primary {
+				border-color: var(--whiteColor);
+				color: var(--whiteColor);
+				&:hover{
+					border-color: var(--siteColor);
+					background-color: var(--siteColor);
+					color: var(--whiteColor);
+				}
+			}
+			.navbar .dropdown .btn-link {
+				color: #fff;
+			}
+			.navbar-brand > div > img {
+				filter: brightness(0) invert(1);
+			}
+		}
+	}
 	.card-ads{
 		.row {
 			.card-img-top{
@@ -6189,6 +6191,16 @@ fieldset{
 }
 
 @media only screen and (max-width: 575.98px) {
+	.banner{
+		background-image: none !important;
+		background-color: $white;
+		&::before{
+			display: none;
+		}
+		.headline{
+			color: $dark;
+		}
+	}
 	.card-agent{
 		&.card-agent-page{
 			.onCover{

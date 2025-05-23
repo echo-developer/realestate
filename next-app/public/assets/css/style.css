@@ -32650,24 +32650,6 @@ header {
 .header-sticky.transparentH {
   background: none;
 }
-.header-sticky.transparentH ul#desk-nav > li > a:not(.btn) {
-  color: #fff;
-}
-.header-sticky.transparentH ul#desk-nav > li .btn-outline-primary {
-  border-color: var(--whiteColor);
-  color: var(--whiteColor);
-}
-.header-sticky.transparentH ul#desk-nav > li .btn-outline-primary:hover {
-  border-color: var(--siteColor);
-  background-color: var(--siteColor);
-  color: var(--whiteColor);
-}
-.header-sticky.transparentH .navbar .dropdown .btn-link {
-  color: #fff;
-}
-.header-sticky.transparentH .navbar-brand > div > img {
-  filter: brightness(0) invert(1);
-}
 
 .hidden-menu {
   top: -100px !important;
@@ -37378,6 +37360,24 @@ fieldset .btn-delete {
 
 /* Media Start */
 @media (min-width: 576px) {
+  .header-sticky.transparentH ul#desk-nav > li > a:not(.btn) {
+    color: #fff;
+  }
+  .header-sticky.transparentH ul#desk-nav > li .btn-outline-primary {
+    border-color: var(--whiteColor);
+    color: var(--whiteColor);
+  }
+  .header-sticky.transparentH ul#desk-nav > li .btn-outline-primary:hover {
+    border-color: var(--siteColor);
+    background-color: var(--siteColor);
+    color: var(--whiteColor);
+  }
+  .header-sticky.transparentH .navbar .dropdown .btn-link {
+    color: #fff;
+  }
+  .header-sticky.transparentH .navbar-brand > div > img {
+    filter: brightness(0) invert(1);
+  }
   .card-ads .row .card-img-top {
     height: 180px;
     border-top-right-radius: 0;
@@ -37714,6 +37714,16 @@ fieldset .btn-delete {
   }
 }
 @media only screen and (max-width: 575.98px) {
+  .banner {
+    background-image: none !important;
+    background-color: #fff;
+  }
+  .banner::before {
+    display: none;
+  }
+  .banner .headline {
+    color: #333;
+  }
   .card-agent.card-agent-page .onCover {
     background: #fff;
   }
