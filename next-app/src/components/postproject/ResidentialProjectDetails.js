@@ -857,30 +857,24 @@ const ResidentialProjectDetails = ({
                     <h4 className="mb-3 text-primary">
                       {translation?.about_developer || "About Developer"}
                     </h4>
-                    <div className="row">
+                    <div className="row align-items-start">
                       {/* Developer Info */}
-                      <article className="col-xxl-4 col-lg-5 col-sm-7 mb-3">
-                        <h4>
-                          {detailsData?.developer_name ||
-                            `${translation?.not_available || "Not Available"}`}
-                        </h4>
-                        <p>
-                          {detailsData?.developer_experience}
-                        </p>
+                      <article className="col-xxl-3 col-lg-4 col-md-6 mb-3">
+                        <h5 className="mb-2">
+                          {detailsData?.developer_name || translation?.not_available || "Not available"}
+                        </h5>
+                        {detailsData?.developer_experience && (
+                          <p className="text-muted mb-0">
+                            <strong>Experience:</strong> {detailsData.developer_experience} Years
+                          </p>
+                        )}
                       </article>
 
-                      {/* Operating In Info */}
-                      <article className="col-lg-auto col-sm-5">
-                        <h4>{translation?.operating_in || "Operating In"}</h4>
-                        <p></p>
-                      </article>
-
-                      {/* Description */}
-                      <article className="col-lg">
-                        <p>
-                          {detailsData?.developer_details ||
-                            `${translation?.not_available || "Not Available"}`}
-                          {/* <a>Read more</a> */}
+                      {/* Developer Description */}
+                      <article className="col">
+                        <h5 className="mb-2">{translation?.operating_in || "Operating In"}</h5>
+                        <p className="text-muted mb-0">
+                          {detailsData?.developer_details || translation?.not_available || "Not available"}
                         </p>
                       </article>
                     </div>

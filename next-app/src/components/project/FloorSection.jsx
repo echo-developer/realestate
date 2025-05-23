@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Offcanvas, Button } from "react-bootstrap";
 import "./OffcanvasStyle.css";
+import { useAuth } from "@/context/AuthProvider";
 
 const FloorSection = ({ detailsData }) => {
     const [show, setShow] = useState(false);
+    const { currency } = useAuth();
     const [selectedBhk, setSelectedBhk] = useState("");
     const [selectedSqft, setSelectedSqft] = useState("");
     const [selectedProperty, setSelectedProperty] = useState(null);
@@ -69,7 +71,7 @@ const FloorSection = ({ detailsData }) => {
                                                 {card.min_area} Sq-ft - {card.max_area} Sq-ft
                                             </p>
                                             <p className="card-text">
-                                                <span className="fw-bold">Price: </span>₹ {card.min_price} - {card.max_price}
+                                                <span className="fw-bold">Price: </span>{currency} {card.min_price} - {card.max_price}
                                             </p>
                                         </div>
                                     </div>
