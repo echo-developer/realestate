@@ -190,6 +190,7 @@ const translation = useTranslation();
           <Form.Control
             type="file"
             id="fileinput"
+            accept="application/pdf"
             onChange={(e) => handleFileChange(e.target.files[0])}
           />
           {translation?.upload_file || "Upload File"} <i class="bi bi-upload"></i>
