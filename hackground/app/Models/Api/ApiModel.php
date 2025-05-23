@@ -103,7 +103,7 @@ class ApiModel extends Model
     {
         return getTableData(
             'city',
-            ['city.city_id', 'city_names.name','city.latitude','city.longitude'],
+            ['city.city_id', 'city_names.name', 'city.latitude', 'city.longitude'],
             [
                 [
                     'table' => 'city_names',
@@ -306,14 +306,14 @@ class ApiModel extends Model
                 'property_additional.is_corner_shop',
                 'property_additional.faces_main_road',
                 'property_additional.washroom',
-                
+
                 'property_additional.construction_done',
                 'property_additional.is_gated_colony',
                 'property_additional.boundary_wall',
                 'property_additional.road_width',
                 'property_additional.total_open_sides',
                 'property_additional.approved_by',
-                
+
                 'property_additional.flooring_style',
                 'property_additional.possession_status',
                 'property_additional.construct_year',
@@ -371,7 +371,7 @@ class ApiModel extends Model
             ->where('properties.status', '=', config('constants.STATUS_ACTIVE'))
             ->where('properties.is_deleted', '!=', config('constants.STATUS_ACTIVE'));
 
-            return  $query->get();
+        return  $query->get();
     }
 
     public function getUser($id)
@@ -392,25 +392,29 @@ class ApiModel extends Model
 
 
 
-    public function getUserPropertyList($user_id)
+    public function getUserPropertyList($user_id, $post_for = null)
     {
-        return $this->basePropertyQuery()
+        $query = $this->basePropertyQuery()
             ->addSelect(
                 'properties_settings.unit_type',
                 'properties_settings.super_area',
                 'properties_settings.area_in_sqft',
-                'property_additional.brochure_file',
+                'property_additional.brochure_file'
             )
             ->leftJoin('property_additional', 'properties.id', '=', 'property_additional.pid')
             ->groupBy(
                 'properties_settings.unit_type',
                 'properties_settings.super_area',
                 'properties_settings.area_in_sqft',
-                'property_additional.brochure_file',
+                'property_additional.brochure_file'
             )
-            ->where('properties.uid', '=', $user_id)
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->where('properties.uid', '=', $user_id);
+
+        if (!empty($post_for)) {
+            $query->where('properties_settings.post_for', '=', $post_for);
+        }
+
+        return $query->orderBy('created_at', 'desc')->get();
     }
 
     public function getUserPropertyDetails($p_id)
@@ -427,7 +431,6 @@ class ApiModel extends Model
                 'property_additional.is_corner_shop',
                 'property_additional.faces_main_road',
                 'property_additional.washroom',
-
                 'property_additional.construction_done',
                 'property_additional.is_gated_colony',
                 'property_additional.boundary_wall',
@@ -436,7 +439,6 @@ class ApiModel extends Model
                 'property_additional.approved_by',
                 'property_additional.launch_date',
                 'property_additional.ceiling_height',
-
                 'property_additional.flooring_style',
                 'property_additional.possession_status',
                 'property_additional.construct_year',
@@ -464,7 +466,6 @@ class ApiModel extends Model
                 'properties_settings.unit_type',
                 'property_additional.is_personal_washroom',
                 'property_additional.washroom',
-
                 'property_additional.construction_done',
                 'property_additional.is_gated_colony',
                 'property_additional.boundary_wall',
@@ -473,7 +474,6 @@ class ApiModel extends Model
                 'property_additional.approved_by',
                 'property_additional.launch_date',
                 'property_additional.ceiling_height',
-
                 'property_additional.pantry_cafeteria_status',
                 'property_additional.is_corner_shop',
                 'property_additional.faces_main_road',

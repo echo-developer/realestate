@@ -136,8 +136,8 @@ class DashboardController extends Controller
         try {
 
             if (!empty($request->user_id)) {
-
-                $properties = $this->apiModel->getUserPropertyList($request->user_id);
+                $post_for = $request->post_for ?? null;
+                $properties = $this->apiModel->getUserPropertyList($request->user_id, $post_for);
 
                 if ($properties->isEmpty()) {
                     return response()->json([
