@@ -643,7 +643,7 @@
             success: function(data) {
                 if (data.status == 'OK') {
                     var html = '';
-                    html += '<img id="image_preview2" src="'+data.file_path+'" style="width: 100px; height: auto;" /><input type="hidden" class="filename" name="ad_image" id="ad_image" value="'+data.file_name+'" />';
+                    html += '<img id="image_preview2" src="'+data.file_path+'" style="width: 100px; height: auto;" /><input type="hidden" class="filename" name="ad_image_mobile" id="ad_image_mobile" value="'+data.file_name+'" />';
                     html +=  '<button type="button" id="delete_image_btn2" class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>';
                     $("#ad_image_mobile_con").html(html);
                 }
