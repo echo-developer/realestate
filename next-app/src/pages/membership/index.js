@@ -8,6 +8,7 @@ import useTranslation from "@/hooks/useTranslation";
 import AuthUser from "@/components/Authentication/AuthUser";
 import MembershipBox from "@/components/membership/MembershipBox";
 import { useAuth } from "@/context/AuthProvider";
+import DOMPurify from 'dompurify';
 
 const Membership = () => {
   const { callApi } = AuthUser();
@@ -18,6 +19,7 @@ const Membership = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [mDetailsLoader, setMDetailsLoader] = useState(true);
+  const [faqList, setFaqList] = useState(null);
   const [membershipDetails, setMembershipDetails] = useState(null);
 
   useEffect(() => {
@@ -59,9 +61,27 @@ const Membership = () => {
         setMDetailsLoader(false);
       }
     }
+    const getFaqList = async () => {
+      setLoading(true);
+      try {
+        const res = await callApi({
+          api: `/faq-lists`,
+          method: "GET",
+        });
+        if (res && res?.status == 1) {
+          const bilingFaqArr = res?.data?.filter((item) => item.slug == 'billing-payments') || [];
+          setFaqList(bilingFaqArr?.[0]?.faq_list || [])
+        }
+      } catch (error) {
+        console.error(error?.message || "Something Went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
 
     getMembershipPlans();
     getMembershipDetails();
+    getFaqList();
   }, [])
   const faqs = [
     {
@@ -141,7 +161,6 @@ const Membership = () => {
 
     router.push('/membership/credit')
 
-    console.log(plan)
   };
 
   const convertPlans = (data) => {
@@ -429,11 +448,11 @@ const Membership = () => {
           <section className="section">
             <h4 className="text-primary mb-3">{translation?.frequently_asked_questions || "Frequently Asked Questions"}</h4>
             <Accordion flush>
-              {faqs.map((faq, index) => (
+              {faqList && faqList?.length > 0 && faqList?.map((faq, index) => (
                 <Accordion.Item eventKey={index.toString()} key={index}>
                   <Accordion.Header>{faq.question}</Accordion.Header>
                   <Accordion.Body>
-                    <p>{faq.answer}</p>
+                    <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(faq.answer) }} />
                   </Accordion.Body>
                 </Accordion.Item>
               ))}
