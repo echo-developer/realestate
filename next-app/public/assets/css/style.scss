@@ -6199,7 +6199,10 @@ fieldset{
 		}
 		.headline{
 			color: $dark;
-		}
+		}		
+	}
+	.banner-form .search-form .nav > li > .nav-link{
+		background-color: $primary;
 	}
 	.card-agent{
 		&.card-agent-page{

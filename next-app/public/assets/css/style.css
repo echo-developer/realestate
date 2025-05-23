@@ -37724,6 +37724,9 @@ fieldset .btn-delete {
   .banner .headline {
     color: #333;
   }
+  .banner-form .search-form .nav > li > .nav-link {
+    background-color: #1365CF;
+  }
   .card-agent.card-agent-page .onCover {
     background: #fff;
   }
