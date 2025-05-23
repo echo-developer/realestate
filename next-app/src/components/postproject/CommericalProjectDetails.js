@@ -52,7 +52,7 @@ const CommercialProjectDetails = ({
   viewNumber,
   propertyPriceTrends
 }) => {
-  const { defaultCity, currencyCode, formatPrice } = useAuth();
+  const { defaultCity, currencyCode, currency, formatPrice } = useAuth();
   const [visible, setVisible] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [projectId, setprojectId] = useState();
@@ -73,7 +73,6 @@ const CommercialProjectDetails = ({
   };
 
 
-  console.log("commercial details data", detailsData)
   const minPrice = minBudgetOptions?.find(
     (item) => item?.value == detailsData?.minBudget
   );
@@ -502,7 +501,7 @@ const CommercialProjectDetails = ({
                                 {translation?.booking_price || "Booking Price"}
                               </span>
                               <h5>
-                                {detailsData.currency || "Not Available"} {detailsData.token_amount}
+                                {currency || ""} {detailsData.token_amount}
                               </h5>
                             </div>
                           </div>
