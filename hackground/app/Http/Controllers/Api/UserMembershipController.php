@@ -85,10 +85,10 @@ class UserMembershipController extends Controller
     public function getMembershipDetails(Request $request)
     {
         $lang = $request->input('lang', 'en');
-        $user_id =  auth_user_id();
+        $user_id =   auth_user_id();
 
         // Fetch user membership data
-        $membershipData = UserMembership::select('plan_id', 'user_id', 'subcription_date', 'subcription_date', 'expire_date', 'relationship_manager', 'leads', 'listings_allowed', 'verified_badge', 'listing_visibility', 'social_media_promotion')->with('plan:id,plan_type_id')->where('user_id', $user_id)->first();
+        $membershipData = UserMembership::select('plan_id', 'user_id', 'subcription_date', 'subcription_date', 'expire_date', 'relationship_manager', 'leads', 'listings_allowed', 'remaining_listings_allowed', 'leads_used', 'verified_badge', 'listing_visibility', 'social_media_promotion')->with('plan:id,plan_type_id')->where('user_id', $user_id)->first();
 
         $planName = MembershipPlanTypeNames::where([
             ['id', $membershipData->plan->plan_type_id],
