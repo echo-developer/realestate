@@ -466,7 +466,8 @@ class HomeController extends Controller
                 ->where([
                     ['status', config('constants.STATUS_ACTIVE')],
                     ['user_type', 'A'],
-                    ['is_verified_agent', config('constants.STATUS_ACTIVE')]
+                    ['is_verified_agent', config('constants.STATUS_ACTIVE')],
+                    ['id', '!=', auth_user_id()]
                 ]);
 
             if (!empty($city_id)) {
