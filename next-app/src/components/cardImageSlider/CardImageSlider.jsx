@@ -96,11 +96,11 @@ const CardImageSlider = ({
         )}
       </div>
 
-      {data?.post_for && (
+      {data?.post_for ? (
         <span className={`ads-type ${data?.post_for}`}>
           for {data?.post_for || `${translation?.not_available || "Not available"}`}
         </span>
-      )}
+      ):(<></>)}
 
       {
         showFavIcon && (
@@ -114,11 +114,11 @@ const CardImageSlider = ({
       </span>
         )
       }
-      {showImgCount && data.image_count && (
+      {showImgCount && data.image_count ?  (
         <span className="total-ad-pic">
         <i className="bi bi-camera"></i>{data.image_count}
       </span>
-      )}
+      ):(<></>)}
     </div>
   );
 };
