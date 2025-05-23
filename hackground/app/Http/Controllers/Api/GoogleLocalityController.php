@@ -166,7 +166,6 @@ class GoogleLocalityController extends Controller
                     ->where('locality_names.lang', '=', $lang);
             })
             ->where([
-                ['locality.city', '=', $cityId],
                 ['locality.locality_key', '=', $slug],
                 ['locality.google_place_id', '=', $place_id],
             ])
