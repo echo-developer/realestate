@@ -147,14 +147,14 @@ const AddExtraProjectData = ({ show, handleClose, propId }) => {
       <Modal.Body>
         {loading && (<CustomLoader />)}
         {!loading && (<Tab.Container defaultActiveKey="main">
-          <Nav variant="underline border-bottom mb-3">
+          {/* <Nav variant="underline border-bottom mb-3">
             <Nav.Item>
               <Nav.Link eventKey="main">{translation?.main_details || "Main Details"}</Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="landmark">{translation?.landmark || "Landmark"}</Nav.Link>
             </Nav.Item>
-          </Nav>
+          </Nav> */}
           <Tab.Content>
             <Tab.Pane eventKey="main">
               <Form>
