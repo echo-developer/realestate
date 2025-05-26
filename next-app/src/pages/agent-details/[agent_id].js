@@ -650,18 +650,31 @@ const Index = () => {
                             <span>{translation?.address || "Address:"}{': '}</span>
                             <span className="text-muted">{agentDetailsData?.address || "Not Available"}</span>
                           </p>
-                          <p className="mb-2">
-                            <span>{translation?.social_media || "Social Media:"}{': '}</span>
-                            <span className="text-muted">
-                              {[
-                                ...new Set(
-                                  agentDetailsData?.social?.map(
-                                    (area) => area.platform_name
+                          {agentDetailsData?.social?.length > 0 && (
+                            <p className="mb-2">
+                              <span>{translation?.social_media || "Social Media:"}{': '}</span>
+                              <span className="text-muted">
+                                {agentDetailsData.social
+                                  .filter((item, index, self) =>
+                                    index === self.findIndex((t) => t.platform_name === item.platform_name)
                                   )
-                                ),
-                              ].join(", ")}
-                            </span>
-                          </p>
+                                  .map((item, index, array) => (
+                                    <span key={item.platform_key}>
+                                      <a
+                                        href={item.platform_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary underline hover:opacity-80"
+                                      >
+                                        {item.platform_name}
+                                      </a>
+                                      {index < array.length - 1 && ", "}
+                                    </span>
+                                  ))}
+                              </span>
+                            </p>
+                          )}
+
                           <p className="mb-2">
                             <span>{translation?.licence_number || "Licence Number:"}{': '}</span>
                             <span className="text-muted">{agentDetailsData?.license_no || "Not Available"}</span>
