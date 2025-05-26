@@ -23,6 +23,7 @@ const CreateAdvertisement = () => {
   const [isOtpValid, setOtpValid] = useState(false);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [validatedOtp, setValidatedOtp] = useState("");
+  const [selectedCity, setSelectedCity] = useState(null);
 
 
   useEffect(() => {
@@ -55,7 +56,14 @@ const CreateAdvertisement = () => {
         method: "GET",
       });
       if (response && response.status === 1) {
-        setCityList(response.data)
+        const cityList = response.data.map((city) => {
+          return {
+            ...city,
+            value: city.name,
+            label: city.name
+          }
+        })
+        setCityList(cityList)
       }
     } catch (error) {
       console.error(error?.message || "Something went wrong")
@@ -248,19 +256,10 @@ const CreateAdvertisement = () => {
   ]
   const durations = [2, 4, 8, 12]
 
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' },
-  { value: 'kolkata', label: 'Kolkata' },
-  { value: 'mumbai', label: 'Mumbai' },
-  { value: 'delhi', label: 'Delhi' },
-  { value: 'chennai', label: 'Chennai' },
-  { value: 'hyderabad', label: 'Hyderabad' },
-  { value: 'pune', label: 'Pune' },
-  { value: 'patna', label: 'Patna' },
-];
-
+const handleCityChange = (city, setFieldValue) => {
+  setFieldValue('city_id', city.city_id);
+  setSelectedCity(city);
+}
 
   return (
     
@@ -277,8 +276,6 @@ const options = [
               onSubmit={handleSubmit}
             >
               {({ isSubmitting, values, setFieldValue, errors, setFieldError, isValid, dirty }) => {
-                console.log("errors", errors)
-                // console.log("values", values);
                 useEffect(() => {
                   if (values?.city_id) {
                     fetchLocalityData(values.city_id)
@@ -510,11 +507,13 @@ const options = [
                         <div className="mb-3">
                           <label htmlFor="city_id" className="form-label">City</label>
                           <Select
-                            //value={selectedOption}
-                            //onChange={this.handleChange}
-                            options={options}
+                            value={selectedCity}
+                            onChange={(city) => {
+                              handleCityChange(city, setFieldValue)
+                            }}
+                            options={cityList}
                           />
-                          <Field as="select" name="city_id" className="form-select">
+                          {/* <Field as="select" name="city_id" className="form-select">
                             <option value="">
                               select an options
                             </option>
@@ -525,7 +524,7 @@ const options = [
                                 </option>
                               )
                             })}
-                          </Field>
+                          </Field> */}
                           <ErrorMessage name="city_id" component="div" className="text-danger small" />
                         </div>
 
