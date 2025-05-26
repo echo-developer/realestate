@@ -593,8 +593,8 @@ const options = [
                         </div>
 
                         <div className="mb-3">
-                          <label className="form-label">Do You Have Banner?</label>
-                          <div className="form-check">
+                          <label className="form-label d-block">Do You Have Banner?</label>
+                          <div className="form-check form-check-inline">
                             <Field
                               type="radio"
                               name="has_banner"
@@ -604,7 +604,7 @@ const options = [
                             />
                             <label htmlFor="has_banner_yes" className="form-check-label">Yes</label>
                           </div>
-                          <div className="form-check">
+                          <div className="form-check form-check-inline">
                             <Field
                               type="radio"
                               name="has_banner"
