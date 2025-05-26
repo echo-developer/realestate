@@ -1806,9 +1806,10 @@ if (!function_exists('cURL_request')) {
 
     function cURL_request($apiName = '', $data = [])
     {
+        log::info('cURL_request', $data);
         if (!empty($apiName)) {
             $apiEndpoint = env('APP_URL') . '/api/' . $apiName;
-            // logger($apiEndpoint);
+            logger($apiEndpoint);
             $ch = curl_init($apiEndpoint);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
             curl_setopt($ch, CURLOPT_TIMEOUT, 1);

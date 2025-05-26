@@ -1,5 +1,5 @@
 module.exports = {
-  output: 'export',
+  output: '',
   images: {
     unoptimized: true,
   },

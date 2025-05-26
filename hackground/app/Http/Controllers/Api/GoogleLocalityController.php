@@ -119,7 +119,6 @@ class GoogleLocalityController extends Controller
 
     private function storeandReturnResult(array $data, $lang, $cityId)
     {
-        log_anything($data);
         $response = [];
 
         foreach ($data as $locality) {
@@ -165,19 +164,24 @@ class GoogleLocalityController extends Controller
                 $join->on('locality.locality_id', '=', 'locality_names.locality_id')
                     ->where('locality_names.lang', '=', $lang);
             })
-            ->where(function ($query) use ($slug, $place_id) {
-                $query->orWhere('locality.google_place_id', '=', $place_id)
-                    ->orWhere('locality.locality_key', '=', $slug);
+            ->where(function ($query) use ($place_id, $slug) {
+                if ($place_id) {
+                    $query->where('locality.google_place_id', '=', $place_id)
+                        ->orWhere(function ($q) use ($slug) {
+                            $q->whereNull('locality.google_place_id')
+                                ->where('locality.locality_key', '=', $slug);
+                        });
+                } else {
+                    $query->where('locality.locality_key', '=', $slug);
+                }
             })
-            ->select('locality.locality_id')
-            ->limit(1)
             ->exists();
     }
 
     public function saveLocalityLatLong(Request $request)
     {
         try {
-            // DB::transaction();
+            log_anything($request->all());
             $apiKey = get_setting('google-api-key');
             $cURLRequest = collect($request->input('data'));
 
@@ -195,7 +199,7 @@ class GoogleLocalityController extends Controller
                 ]);
 
                 $detailsResponse = Http::get($detailsUrl)->json();
-
+                log_anything($detailsResponse);
                 if (isset($detailsResponse['result']['geometry']['location'])) {
                     DB::table('locality')
                         ->where('google_place_id', $placeId)
