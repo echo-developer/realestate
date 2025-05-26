@@ -634,21 +634,28 @@ const Index = () => {
                       <h4>{translation?.about || "About"}</h4>
                       <Row>
                         <Col lg={6} >
+                          {agentDetailsData?.broker_type && (
+                            <p className="mb-2">
+                              <span>{translation?.broker_type || "Broker Type:"}{': '}</span>
+                              <span className="text-muted">
+                                {agentDetailsData?.broker_type === "I"
+                                  ? "Indepedent"
+                                  : agentDetailsData?.broker_type === "F"
+                                    ? "Franchise"
+                                    : agentDetailsData?.broker_type === "A"
+                                      ? "Agent"
+                                      : "Not Available"}
+                              </span>
+                            </p>
+                          ) || null}
+
                           <p className="mb-2">
-                            <span>{translation?.broker_type || "Broker Type:"}{': '}</span>
-                            <span className="text-muted">
-                              {agentDetailsData?.broker_type === "I"
-                                ? "Indepedent"
-                                : agentDetailsData?.broker_type === "F"
-                                  ? "Franchise"
-                                  : agentDetailsData?.broker_type === "A"
-                                    ? "Agent"
-                                    : "Not Available"}
-                            </span>
-                          </p>
-                          <p className="mb-2">
-                            <span>{translation?.address || "Address:"}{': '}</span>
-                            <span className="text-muted">{agentDetailsData?.address || "Not Available"}</span>
+                            {agentDetailsData?.address && (
+                              <>
+                                <span>{translation?.address || "Address:"}{': '}</span>
+                                <span className="text-muted">{agentDetailsData?.address || "Not Available"}</span>
+                              </>
+                            ) || null}
                           </p>
                           {agentDetailsData?.social?.length > 0 && (
                             <p className="mb-2">
@@ -676,39 +683,55 @@ const Index = () => {
                           )}
 
                           <p className="mb-2">
-                            <span>{translation?.licence_number || "Licence Number:"}{': '}</span>
-                            <span className="text-muted">{agentDetailsData?.license_no || "Not Available"}</span>
+                            {agentDetailsData?.license_no && (
+                              <>
+                                <span>{translation?.licence_number || "Licence Number:"}{': '}</span>
+                                <span className="text-muted">{agentDetailsData?.license_no || "Not Available"}</span>
+                              </>
+                            ) || null}
                           </p>
                           {/* <p className="mb-2">
                             <span>{translation?.business_phone || "Business Phone:"}{': '}</span>
                             <span className="text-muted">{agentDetailsData?.bussiness_phone || "Not Available"}</span>
                           </p> */}
                           <p className="mb-2">
-                            <span>{translation?.company_name || "Company Name:"}{': '}</span>
-                            <span className="text-muted">{agentDetailsData?.company_name || "Not Available"}</span>
+                            {agentDetailsData?.company_name && (
+                              <>
+                                <span>{translation?.company_name || "Company Name:"}{': '}</span>
+                                <span className="text-muted">{agentDetailsData?.company_name || "Not Available"}</span>
+                              </>
+                            ) || null}
                           </p>
                         </Col>
                         <Col lg={6}>
                           <p className="mb-2">
-                            <span>{translation?.expertise || "Expertise:"}{': '}</span>
-                            <span className="text-muted">{agentDetailsData?.specialization || "Not Available"}</span>
+                            {agentDetailsData?.specialization && (
+                              <>
+                                <span>{translation?.expertise || "Expertise:"}{': '}</span>
+                                <span className="text-muted">{agentDetailsData?.specialization || "Not Available"}</span>
+                              </>
+                            ) || null}
                           </p>
                           <p className="mb-2">
-                            <span>{translation?.service_areas || "Service Areas:"}{': '}</span>
-                            <span className="text-muted">
-                              {[
-                                ...new Set(
-                                  agentDetailsData?.service_area?.map((area) => area.city)
-                                ),
-                              ].join(", ")}
-                            </span>
+                            {agentDetailsData?.service_area && agentDetailsData?.service_area?.length > 0 && (
+                              <>
+                                <span>{translation?.service_areas || "Service Areas:"}{': '}</span>
+                                <span className="text-muted">
+                                  {[
+                                    ...new Set(
+                                      agentDetailsData?.service_area?.map((area) => area.city)
+                                    ),
+                                  ].join(", ")}
+                                </span>
+                              </>
+                            ) || null}
                           </p>
                           <p className="mb-2">
                             <span>{translation?.properties_for_sale || "Properties For Sale"}{': '}</span>
                             <span className="text-muted">
 
-                              {translation?.for_sale || "For Sale"} ({agentDetailsData?.forSell}),{' '}
-                              {translation?.for_rent || "For Rent"} ({agentDetailsData?.forRent})
+                              {translation?.for_sale || "For Sale"} ({agentDetailsData?.forSell || 0}),{' '}
+                              {translation?.for_rent || "For Rent"} ({agentDetailsData?.forRent || 0})
                             </span>
                           </p>
                           {/* <p className="mb-2">
@@ -716,25 +739,37 @@ const Index = () => {
                             <span className="text-muted">{agentDetailsData?.bussiness_email || "Not Available"}</span>
                           </p> */}
                           <p className="mb-2">
-                            <span>{translation?.working_hours || "Working Hours:"}{': '}</span>
-                            <span className="text-muted">
-                              {agentDetailsData?.opening_hours} -{" "}
-                              {agentDetailsData?.closing_hours}
-                            </span>
+                            {agentDetailsData?.opening_hours && (
+                              <>
+                                <span>{translation?.working_hours || "Working Hours:"}{': '}</span>
+                                <span className="text-muted">
+                                  {agentDetailsData?.opening_hours} -{" "}
+                                  {agentDetailsData?.closing_hours}
+                                </span>
+                              </>
+                            ) || null}
                           </p>
                           <p className="mb-2">
-                            <span>{translation?.experience || "Experience:"}{': '}</span>
-                            <span className="text-muted">
-                              {agentDetailsData?.experience_yr || "Not Available"}{' '}
-                              {agentDetailsData?.experience_yr && "Years"}
-                            </span>
+                            {agentDetailsData?.experience && (
+                              <>
+                                <span>{translation?.experience || "Experience:"}{': '}</span>
+                                <span className="text-muted">
+                                  {agentDetailsData?.experience_yr || "Not Available"}{' '}
+                                  {agentDetailsData?.experience_yr && "Years"}
+                                </span>
+                              </>
+                            ) || null}
                           </p>
                         </Col>
                       </Row>
-                      <p className="mb-2">{translation?.description || "Description:"}</p>
-                      <p className="text-muted">
-                        {agentDetailsData?.description || "Not Available"}
-                      </p>
+                      {agentDetailsData?.description && (
+                        <>
+                          <p className="mb-2">{translation?.description || "Description:"}</p>
+                          <p className="text-muted">
+                            {agentDetailsData?.description || "Not Available"}
+                          </p>
+                        </>
+                      ) || null}
                     </div>
                   </Card.Body>
                 </Card>

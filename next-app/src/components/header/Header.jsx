@@ -17,18 +17,6 @@ import { useAuth } from "@/context/AuthProvider";
 import MobileMenu from "../addtional/Mmenu";
 import Select from 'react-select';
 
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' },
-  { value: 'kolkata', label: 'Kolkata' },
-  { value: 'mumbai', label: 'Mumbai' },
-  { value: 'delhi', label: 'Delhi' },
-  { value: 'chennai', label: 'Chennai' },
-  { value: 'hyderabad', label: 'Hyderabad' },
-  { value: 'pune', label: 'Pune' },
-  { value: 'patna', label: 'Patna' },
-];
 const Header = () => {
   const isMobile = useIsMobile();
   const { callApi, isLogin, logout, GetMemberId } = AuthUser();
@@ -146,8 +134,15 @@ const Header = () => {
         method: "GET",
       });
       if (response && response.status === 1) {
-        setCityData(response.data);
-        handleDefaultCityChange(response.data?.[0])
+        const cityList = response.data.map((city) => {
+          return {
+            ...city,
+            value: city.name,
+            label: city.name
+          }
+        })
+        setCityData(cityList);
+        handleDefaultCityChange(cityList?.[0])
         setGetAllCity(response.data);
       }
     } catch (error) { }
@@ -217,6 +212,15 @@ const Header = () => {
     mobileImage.onload = () => setIsMobileLogoLoaded(true);
     mobileImage.onerror = () => setIsMobileLogoLoaded(false);
   }, []);
+
+
+
+  const customStyles = {
+  container: (provided) => ({
+    ...provided,
+    width: "175px", // Change to your desired width
+  }),
+};
 
   return (
     <>
@@ -295,7 +299,7 @@ const Header = () => {
 
               </Link>
               {/* show={showLocationDrop} onToggle={handleShowLocationDropDown} */}
-              <Dropdown className="ms-3 ms-xxl-4">
+              {/* <Dropdown className="ms-3 ms-xxl-4">
                 <Dropdown.Toggle variant="link" className="text-decoration-none" id="dropdown-basic">
                   {selectedCity}
                 </Dropdown.Toggle>
@@ -312,11 +316,13 @@ const Header = () => {
                     </Dropdown.Item>
                   ))}
                 </Dropdown.Menu>
-              </Dropdown>
+              </Dropdown> */}
               <Select
-                //value={selectedOption}
-                //onChange={this.handleChange}
-                options={options}
+                value={defaultCity}
+                onChange={handleDefaultCityChange}
+                options={cityData}
+                className="ms-3 ms-xxl-4"
+                styles={customStyles}
               />
             </div>
             <div className="d-none d-lg-flex">

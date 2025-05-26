@@ -36,8 +36,17 @@ const translation = useTranslation();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        submitHandler(formData);
+        submitHandler(formData, handleReset);
     };
+
+    const handleReset = () => {
+        setFormData({
+        remark_type: "",
+        is_schedule: 0,
+        schedule_date: "",
+        remarks: ""
+    })
+    }
 
     return (
         <Modal show={show} onHide={handleClose}>

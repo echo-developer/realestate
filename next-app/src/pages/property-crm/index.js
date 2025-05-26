@@ -153,7 +153,7 @@ const Index = () => {
         setActiveModalData(null)
     }
 
-    const contactSave = async (data) => {
+    const contactSave = async (data, formReset) => {
         const newData = {
             ...data,
             user_id: memberId,
@@ -171,6 +171,7 @@ const Index = () => {
             if (res && res?.status === 1) {
                 toast.success("Contact form submitted successfully");
                 handleClose();
+                formReset();
             }
         } catch (error) {
             console.log(error.message || "Something went wrong")

@@ -370,11 +370,12 @@ const Index = () => {
     switch (selectedItem) {
       case "buyer_message":
       case "project_name":
+        const value = items.find(item => item.key == selectedItem)?.name;
         return (
           <>
             <FloatingLabel
               controlId=""
-              label={`Enter the value for ${selectedItem}`}
+              label={`${value}`}
             >
               <Form.Control
                 type="text"

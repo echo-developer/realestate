@@ -134,7 +134,7 @@ const Timeline = () => {
     }
   }
 
-  const submitHandler = async (data) => {
+  const submitHandler = async (data, resetForm) => {
     const newData = {
       ...data,
       user_id: member_id,
@@ -160,6 +160,7 @@ const Timeline = () => {
             "remarks": data.remarks
           }]
         })
+        resetForm();
       }
     } catch (error) {
       console.log(error.message || "Something went wrong")
