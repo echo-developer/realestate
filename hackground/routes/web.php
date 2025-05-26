@@ -456,9 +456,9 @@ Route::middleware('admin_auth')->group(function () {
     Route::get('/payment-methods', [PaymentMethodController::class, 'paymentMethodView'])->name('set.payment.method');
     Route::post('/save-payment-methods', [PaymentMethodController::class, 'updatePaymentMethod'])->name('save.payment.method');
 
-    /*
-    |--------------------------------------------------------------------------
-    | POST PROPERTY ROUTES
+/*
+|--------------------------------------------------------------------------
+| POST PROPERTY ROUTES
 |--------------------------------------------------------------------------
 | These routes handle the Notification Template management.
 | Created By: Soumyadip
@@ -497,7 +497,6 @@ Route::middleware('admin_auth')->group(function () {
         //general agent leads
         Route::get('/enquiry/general-agent-leads-assign-list/{id?}', 'general_agent_leads_assign_list');
         Route::get('/enquiry/general-agent-leads-assign-list/assigned/{id?}', 'general_agent_leads_assigned');
-
     });
 
 
