@@ -37379,6 +37379,12 @@ fieldset .btn-delete {
   .header-sticky.transparentH .navbar-brand > div > img {
     filter: brightness(0) invert(1);
   }
+  .header-sticky.transparentH .css-13cymwt-control {
+    background: none;
+  }
+  .header-sticky.transparentH .css-13cymwt-control .css-1jqq78o-placeholder, .header-sticky.transparentH .css-13cymwt-control .css-1dimb5e-singleValue {
+    color: #fff;
+  }
   .card-ads .row .card-img-top {
     height: 180px;
     border-top-right-radius: 0;

@@ -5739,10 +5739,16 @@ fieldset{
 				}
 			}
 			.navbar .dropdown .btn-link {
-				color: #fff;
+				color: $white;
 			}
 			.navbar-brand > div > img {
 				filter: brightness(0) invert(1);
+			}
+			.css-13cymwt-control{
+				background: none;				
+				.css-1jqq78o-placeholder, .css-1dimb5e-singleValue{
+					color: $white;
+				}
 			}
 		}
 	}
@@ -6021,7 +6027,6 @@ fieldset{
 		}
 	}
 }
-
 
 @media only screen and (max-width: 991.98px) {
 	html {
