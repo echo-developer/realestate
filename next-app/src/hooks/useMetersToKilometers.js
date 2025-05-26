@@ -1,15 +1,16 @@
-// src/hooks/useMetersToKilometers.js
-
 const useMetersToKilometers = () => {
-    const convert = (meters) => {
-      if (typeof meters !== 'number' || isNaN(meters)) {
-        return 'Invalid input';
-      }
-      return (meters / 1000).toFixed(2) + ' km';
-    };
-  
-    return { convert };
+  const convert = (meters) => {
+    if (typeof meters !== 'number' || isNaN(meters)) {
+      return 'Invalid input';
+    }
+
+    const kilometers = meters / 1000;
+    const precision = kilometers < 1 ? 4 : 2;
+    
+    return kilometers.toFixed(precision) + ' km';
   };
-  
-  export default useMetersToKilometers;
-  
+
+  return { convert };
+};
+
+export default useMetersToKilometers;

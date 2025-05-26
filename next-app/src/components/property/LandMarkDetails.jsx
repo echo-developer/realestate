@@ -15,6 +15,8 @@ const PropertyLandmarkData = ({ detailsData }) => {
     }));
   }; 
   const translation = useTranslation();
+
+
   if(!detailsData?.landmarks) {
     return null;
   } else {
