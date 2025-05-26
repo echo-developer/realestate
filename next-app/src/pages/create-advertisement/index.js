@@ -8,6 +8,7 @@ import OtpField from '@/components/otp/OtpField'
 import { toast } from "react-toastify";
 import useTranslation from '@/hooks/useTranslation'
 import MainLayout from '@/components/layout/MainLayout'
+import Select from 'react-select';
 
 const CreateAdvertisement = () => {
   const { callApi } = AuthUser();
@@ -247,12 +248,26 @@ const CreateAdvertisement = () => {
   ]
   const durations = [2, 4, 8, 12]
 
+const options = [
+  { value: 'chocolate', label: 'Chocolate' },
+  { value: 'strawberry', label: 'Strawberry' },
+  { value: 'vanilla', label: 'Vanilla' },
+  { value: 'kolkata', label: 'Kolkata' },
+  { value: 'mumbai', label: 'Mumbai' },
+  { value: 'delhi', label: 'Delhi' },
+  { value: 'chennai', label: 'Chennai' },
+  { value: 'hyderabad', label: 'Hyderabad' },
+  { value: 'pune', label: 'Pune' },
+  { value: 'patna', label: 'Patna' },
+];
 
 
   return (
+    
     <MainLayout>
       <div className="container py-4">
         <h3 className="mb-4">Create Advertisement</h3>
+        
 
         <div className="card shadow-sm">
           <div className="card-body">
@@ -298,6 +313,7 @@ const CreateAdvertisement = () => {
                   }
                 }, [values?.has_banner])
                 return (
+
                   <Form>
                     <div className="row">
                       {/* Personal Information */}
@@ -493,6 +509,11 @@ const CreateAdvertisement = () => {
 
                         <div className="mb-3">
                           <label htmlFor="city_id" className="form-label">City</label>
+                          <Select
+                            //value={selectedOption}
+                            //onChange={this.handleChange}
+                            options={options}
+                          />
                           <Field as="select" name="city_id" className="form-select">
                             <option value="">
                               select an options

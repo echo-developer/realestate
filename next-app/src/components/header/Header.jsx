@@ -15,7 +15,20 @@ import useIsMobile from "@/hooks/useIsMobile";
 
 import { useAuth } from "@/context/AuthProvider";
 import MobileMenu from "../addtional/Mmenu";
+import Select from 'react-select';
 
+const options = [
+  { value: 'chocolate', label: 'Chocolate' },
+  { value: 'strawberry', label: 'Strawberry' },
+  { value: 'vanilla', label: 'Vanilla' },
+  { value: 'kolkata', label: 'Kolkata' },
+  { value: 'mumbai', label: 'Mumbai' },
+  { value: 'delhi', label: 'Delhi' },
+  { value: 'chennai', label: 'Chennai' },
+  { value: 'hyderabad', label: 'Hyderabad' },
+  { value: 'pune', label: 'Pune' },
+  { value: 'patna', label: 'Patna' },
+];
 const Header = () => {
   const isMobile = useIsMobile();
   const { callApi, isLogin, logout, GetMemberId } = AuthUser();
@@ -300,6 +313,11 @@ const Header = () => {
                   ))}
                 </Dropdown.Menu>
               </Dropdown>
+              <Select
+                //value={selectedOption}
+                //onChange={this.handleChange}
+                options={options}
+              />
             </div>
             <div className="d-none d-lg-flex">
               <div id="navigation">
