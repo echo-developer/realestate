@@ -1324,7 +1324,8 @@ class Enquery_CRM_Controller extends Controller
         $request->validate([
             'enquery_id' => 'required|integer|exists:leads_assigned,enquery_id',
         ]);
-        $userId = auth_user_id();
+        $enquery_type = $request->enquery_type;
+        $userId = 26;
         $membership = UserMembership::where('user_id', $userId)->first();
 
         if (!$membership) {
@@ -1345,7 +1346,46 @@ class Enquery_CRM_Controller extends Controller
             $membership->save();
 
             DB::commit();
-            return response()->json(['status' => 1, 'message' => 'Lead updated successfully.']);
+            if ($enquery_type === 'P') {
+                $enquery = DB::table('leads_assigned')
+                    ->leftJoin('property_enquiry', 'property_enquiry.enquery_id', '=', 'leads_assigned.enquery_id')
+                    ->leftJoin('customer', 'property_enquiry.cid', '=', 'customer.cid')
+                    ->leftJoin('project', 'property_enquiry.project_id', '=', 'project.id')
+                    ->leftJoin('project_location', 'project.id', '=', 'project_location.project_id')
+                    ->leftJoin('project_settings', 'project.id', '=', 'project_settings.project_id')
+                    ->where([
+                        'property_enquiry.enquery_id' => $request->enquery_id,
+                        'property_enquiry.is_deleted' => config('constants.STATUS_INACTIVE'),
+                    ])
+                    //->where('property_enquiry.project_id','!=','')
+                    ->select(
+                        'property_enquiry.cid as customer_id',
+                        'property_enquiry.enquery_id',
+                        'property_enquiry.message',
+                        'property_enquiry.assign_to',
+                        'property_enquiry.created_at',
+                        'customer.Phone as customer_phone',
+                        'customer.Name as customer_name',
+                        'customer.Email as customer_email'
+                    )
+                    ->orderBy('property_enquiry.created_at', 'desc')
+                    ->get();
+            }
+
+            if ($enquery_type === 'G') {
+
+
+                $enquery = DB::table('leads_assigned as l_a')
+                    ->select('e.name','e.messsage','e.phone','e.email','e.created_at','l_a.assign_id')
+                    ->leftJoin('buyer_property_enquery as e', 'e.id', '=', 'l_a.enquery_id')
+                    ->leftJoin('user_membership as u_m', 'u_m.user_id', '=', 'l_a.user_id')
+                    ->where([
+                        'e.id' => $request->enquery_id
+                    ])
+                    ->orderBy('e.id', 'desc')
+                    ->get();
+            }
+            return response()->json(['status' => 1, 'message' => 'Lead updated successfully.', 'data' => $enquery]);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['status' => 0, 'message' => 'Error', 'error' => $e->getMessage()], 500);
