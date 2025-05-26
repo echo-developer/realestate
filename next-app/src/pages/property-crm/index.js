@@ -185,7 +185,7 @@ const Index = () => {
     }
 
     const handleShowLead = async (enquery_id, enquery_type, activeTab) => {
-        console.log("handle show lead run");
+        if(!enquery_id || !enquery_type) return;
         try {
             const res = await callApi({
                 api: '/leads-update',
@@ -201,6 +201,7 @@ const Index = () => {
                         return item;
                     } else {
                         return {
+                            ...item,
                             ...res.data
                         }
                     }
@@ -302,17 +303,17 @@ const Index = () => {
                                                     <p className="d-flex flex-column flex-md-row mb-2">
                                                         {lead?.phone && (
                                                             <span className="me-3">
-                                                                <i className={`bi bi-telephone ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead.phone}
+                                                                <i className={`bi bi-telephone`}></i> <span className={`${lead?.is_blur ? 'text-blur' : ''}`}>{lead.phone}</span>
                                                             </span>
                                                         )}
                                                         {lead?.email && (
                                                             <span className="me-3">
-                                                                <i className={`bi bi-envelope ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead.email}
+                                                                <i className={`bi bi-envelope`}></i> <span className={`${lead?.is_blur ? 'text-blur' : ''}`}>{lead.email}</span>
                                                             </span>
                                                         )}
                                                         {lead?.created_at && (
                                                             <span className="me-3">
-                                                                <i className={`bi bi-clock ${lead?.is_blur ? 'text-blur' : ''}`}></i> {lead.created_at}
+                                                                <i className={`bi bi-clock`}></i> <span className={`${lead?.is_blur ? 'text-blur' : ''}`}>{lead.created_at}</span>
                                                             </span>
                                                         )}
                                                     </p>
@@ -413,9 +414,16 @@ const Index = () => {
                                                             <div className="d-flex d-md-block gap-2">
                                                                 <button class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" onClick={() => handleModalOpen(lead?.phone, lead?.email, lead.assign_id, lead.enquery_id, lead.lead_type, lead?.is_blur)}>{translation?.contact || "Contact"}
                                                                 </button>
-                                                                {!lead?.is_blur && (
+                                                                {!lead?.is_blur ? (
                                                                     <Link class="btn btn-sm btn-outline-primary flex-grow-1 me-md-2" href={`/property-crm-timeline?assign_id=${lead?.assign_id}`}>{translation?.contact_history || "Contact History"}
                                                                     </Link>
+                                                                ) : (
+                                                                    <button
+                                                                        className="btn btn-sm btn-outline-primary flex-grow-1 me-md-2"
+                                                                        onClick={() => handleShowLead(lead?.enquery_id, lead?.lead_type, activeTab)}
+                                                                    >
+                                                                        Show Lead
+                                                                    </button>
                                                                 )}
 
                                                             </div>
