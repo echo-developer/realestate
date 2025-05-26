@@ -210,6 +210,7 @@ const AddExtraProjectData = ({ show, handleClose, propertyId }) => {
                       <Form.Check
                         //inline
                         key={feature.key}
+                        id={`flooring-${feature.key}`}
                         type="checkbox"
                         label={feature.value}
                         name={feature.key}

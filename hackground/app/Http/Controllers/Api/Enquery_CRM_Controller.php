@@ -491,7 +491,7 @@ class Enquery_CRM_Controller extends Controller
             if (!empty($user_id)) {
 
                 $crmData = $this->apiModel->GetCRMList($user_id);
-
+              
                 $totalRecords = count($crmData);
 
                 $crmData = collect($crmData)->slice(($recentPage - 1) * $limit, $limit)->values();
@@ -1367,7 +1367,7 @@ class Enquery_CRM_Controller extends Controller
                         'customer.Email as customer_email'
                     )
                     ->orderBy('property_enquiry.created_at', 'desc')
-                    ->get();
+                    ->first();
             }
 
             if ($enquery_type === 'G') {

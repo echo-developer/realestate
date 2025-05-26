@@ -13,7 +13,7 @@ const PropertyLandmarkData = ({ detailsData }) => {
       ...prev,
       [key]: !prev[key],
     }));
-  };
+  }; 
   const translation = useTranslation();
   if(!detailsData?.landmarks) {
     return null;

@@ -184,6 +184,35 @@ const Index = () => {
         setMembershipModal(false);
     }
 
+    const handleShowLead = async (enquery_id, enquery_type, activeTab) => {
+        console.log("handle show lead run");
+        try {
+            const res = await callApi({
+                api: '/leads-update',
+                method: 'UPLOAD',
+                data: {
+                    enquery_id: enquery_id,
+                    enquery_type: enquery_type
+                }
+            })
+            if(res && res.status == 1) {
+                const newList = list.map((item, i) => {
+                    if(item.enquery_id !== enquery_id) {
+                        return item;
+                    } else {
+                        return {
+                            ...res.data
+                        }
+                    }
+                })
+                setList(newList)
+
+            }
+        } catch (error) {
+            console.error(error.message)
+        }
+    }
+
 
     return (
         <DashboardLayout>
@@ -303,9 +332,9 @@ const Index = () => {
                                                                 {lead?.is_blur ? (
                                                                     <button
                                                                         className="btn btn-sm btn-outline-primary flex-grow-1 me-md-2"
-                                                                        onClick={() => handleOpenModal()}
+                                                                        onClick={() => handleShowLead(lead?.enquery_id, lead?.lead_type, activeTab)}
                                                                     >
-                                                                        {translation?.lead_details || "Lead Details"}
+                                                                        Show Lead
                                                                     </button>
                                                                 ) : (
                                                                     <Link
