@@ -559,10 +559,14 @@ const Index = () => {
                   <div className="outCover">
                     <Row className="align-items-end">
                       <Col className="col-lg col-12">
-                        <p className="mb-2 ">
-                          <i className="icon-img-company"></i>
-                          {agentDetailsData?.company_name || "Not Available"}
-                        </p>
+                        {agentDetailsData?.company_name && (
+                          <>
+                            <p className="mb-2 ">
+                              <i className="icon-img-company"></i>
+                              {agentDetailsData?.company_name}
+                            </p>
+                          </>
+                        )}
                         <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">{agentDetailsData?.languages ? agentDetailsData.languages.replace(/,/g, ', ') : ''}</span></p>
                         {/* Service Area */}
 

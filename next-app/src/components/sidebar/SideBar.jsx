@@ -162,12 +162,12 @@ const SideBar = () => {
                 <span>{translation?.dashboard || "Dashboard"}</span>
               </a>
             </li>
-            <li>
+            {/* <li>
               <Link href="/my-profile">
                 <i className="bi bi-person"></i>{" "}
                 <span>{translation?.profile || "Profile"}</span>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link href="/review-list">
                 <i className="bi bi-chat-right-quote"></i>{" "}
