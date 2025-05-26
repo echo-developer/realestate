@@ -1325,11 +1325,11 @@ class Enquery_CRM_Controller extends Controller
             'enquery_id' => 'required|integer|exists:leads_assigned,enquery_id',
         ]);
         $enquery_type = $request->enquery_type;
-        $userId = 26;
+        $userId = auth_user_id();
         $membership = UserMembership::where('user_id', $userId)->first();
 
         if (!$membership) {
-            return response()->json(['status' => 0, 'message' => 'Membership not found'], 404);
+            return response()->json(['status' => 0, 'message' => 'Membership not found']);
         }
 
         if ($membership->leads_used >= $membership->leads) {
@@ -1341,7 +1341,6 @@ class Enquery_CRM_Controller extends Controller
             LeadsAssign::where('enquery_id', $request->enquery_id)
                 ->update(['is_seen' => true]);
 
-            // Guaranteed working method
             $membership->leads_used += 1;
             $membership->save();
 
@@ -1357,7 +1356,6 @@ class Enquery_CRM_Controller extends Controller
                         'property_enquiry.enquery_id' => $request->enquery_id,
                         'property_enquiry.is_deleted' => config('constants.STATUS_INACTIVE'),
                     ])
-                    //->where('property_enquiry.project_id','!=','')
                     ->select(
                         'property_enquiry.cid as customer_id',
                         'property_enquiry.enquery_id',
@@ -1376,7 +1374,7 @@ class Enquery_CRM_Controller extends Controller
 
 
                 $enquery = DB::table('leads_assigned as l_a')
-                    ->select('e.name','e.messsage','e.phone','e.email','e.created_at','l_a.assign_id')
+                    ->select('e.name', 'e.messsage', 'e.phone', 'e.email', 'e.created_at', 'l_a.assign_id')
                     ->leftJoin('buyer_property_enquery as e', 'e.id', '=', 'l_a.enquery_id')
                     ->leftJoin('user_membership as u_m', 'u_m.user_id', '=', 'l_a.user_id')
                     ->where([
