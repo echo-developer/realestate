@@ -491,7 +491,7 @@ class Enquery_CRM_Controller extends Controller
             if (!empty($user_id)) {
 
                 $crmData = $this->apiModel->GetCRMList($user_id);
-              
+
                 $totalRecords = count($crmData);
 
                 $crmData = collect($crmData)->slice(($recentPage - 1) * $limit, $limit)->values();
@@ -680,7 +680,7 @@ class Enquery_CRM_Controller extends Controller
                         'lead_status' => $row->lead_status,
                         'created_at' => $row->created_at,
                         'phone' => $row->is_seen ? $row->customer_phone : blur_text($row->customer_phone, 1),
-                        'name' => $row->is_seen ?  $row->customer_name :  blur_text($row->customer_name, 1),
+                        'customer_name' => $row->is_seen ?  $row->customer_name :  blur_text($row->customer_name, 1),
                         'email' => $row->is_seen ?  $row->customer_email : blur_text($row->customer_email, 1),
                         'project_name' => $row->project_name,
                         'project_address' => $row->address,
@@ -787,6 +787,7 @@ class Enquery_CRM_Controller extends Controller
                 foreach ($leads as $row) {
                     $row = (object) $row;
                     $customArray[] = [
+                        'enquery_id' => $row->id,
                         'assign_id' => $row->assign_id,
                         'name' => $row->is_seen ?  $row->name :  blur_text($row->name, 1),
                         'phone' => $row->is_seen ?  $row->phone :  blur_text($row->phone, 1),
@@ -1331,18 +1332,20 @@ class Enquery_CRM_Controller extends Controller
         if (!$membership) {
             return response()->json(['status' => 0, 'message' => 'Membership not found']);
         }
-
-        if ($membership->leads_used >= $membership->leads) {
+        if ($membership->leads_used >= $membership->leads  && $membership->leads != NULL) {
             return response()->json(['status' => 0, 'message' => 'No leads remaining Upradge Mmbership']);
         }
+
 
         DB::beginTransaction();
         try {
             LeadsAssign::where('enquery_id', $request->enquery_id)
                 ->update(['is_seen' => true]);
 
-            $membership->leads_used += 1;
-            $membership->save();
+            if ($membership->leads != NULL) {
+                $membership->leads_used += 1;
+                $membership->save();
+            }
 
             DB::commit();
             if ($enquery_type === 'P') {
@@ -1381,7 +1384,7 @@ class Enquery_CRM_Controller extends Controller
                         'e.id' => $request->enquery_id
                     ])
                     ->orderBy('e.id', 'desc')
-                    ->get();
+                    ->first();
             }
             return response()->json(['status' => 1, 'message' => 'Lead updated successfully.', 'data' => $enquery]);
         } catch (\Exception $e) {
