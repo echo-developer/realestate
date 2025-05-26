@@ -74,7 +74,7 @@ const ProjectedProperty = ({ projectProperties, title }) => {
       {/* BHK Filter Section */}
       <div className="row align-items-center mb-3 mt-2">
         <div className="col-sm">
-          <div className="btn-group btn-group-light mb-2">
+          <div className="btn-group btn-group-light hide-tick mb-2">
             {["All", "1BHK", "2BHK", "3BHK", "4BHK", "5BHK"].map((bhk, index) => (
               <React.Fragment key={index}>
                 <input

@@ -378,14 +378,14 @@ const Index = () => {
                                 return (
                                     <div className="card card-ads" key={i}>
                                         <div className="row g-0">
-                                            <div className="col-lg-3 col-sm-4">
+                                            {/* <div className="col-lg-3 col-sm-4">
                                                 <CardImageSlider
                                                     data={lead}
                                                     icons={false}
                                                     showFavIcon={false}
                                                 />
-                                            </div>
-                                            <div className="col-lg-9 col-sm-8 position-relative">
+                                            </div> */}
+                                            <div className="col-12 position-relative">
                                                 <div className="card-body">
                                                     <div className="d-flex justify-content-between">
                                                         <h4 className={lead?.is_blur ? 'text-blur' : ''}>{lead?.name || "Not available"}</h4>
