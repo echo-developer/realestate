@@ -278,7 +278,7 @@ const SideBar = () => {
             
             <li>
               <Link href="/create-advertisement">
-                <i className="bi bi-flag"></i>{" "}
+                <i class="bi bi-mouse2"></i>{" "}
                 <span>Create Advertisement</span>
               </Link>
             </li>
