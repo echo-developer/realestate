@@ -51,6 +51,7 @@ const translation = useTranslation();
                 placeholder={translation?.social_media_name || "Social Media Name"}
                 value={link.name}
                 onChange={(e) => handleChange(link.key, "name", e.target.value)}
+                readOnly
               />
             </FloatingLabel>
           </Col>

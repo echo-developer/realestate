@@ -175,10 +175,10 @@ const ProfileForm = () => {
   const translation = useTranslation();
 
   const [socialLinks, setSocialLinks] = useState([
-    { key: "social_1", name: "Facebook", url: "" },
-    { key: "social_2", name: "LinkedIn", url: "" },
-    { key: "social_3", name: "Instragram", url: "" },
-    { key: "social_4", name: "YouTube", url: "" },
+    { key: "facebook", name: "Facebook", url: "" },
+    { key: "linkedin", name: "LinkedIn", url: "" },
+    { key: "instagram", name: "Instragram", url: "" },
+    { key: "youtube", name: "YouTube", url: "" },
   ]);
 
   const [showCoverModal, setShowCoverModal] = useState(false);
@@ -270,6 +270,9 @@ const ProfileForm = () => {
               image_url: response.data?.user?.company_logo
             })
           }
+          if(response.data?.user?.languages) {
+            setLanguages(response.data.user.languages?.split(","))
+          }
           Object.assign(updatedFormData, {
             company_name: response.data.user.company_name || "",
             license_number: response.data.user.license_no || "",
@@ -282,7 +285,8 @@ const ProfileForm = () => {
             opening_hours: response.data.user.opening_hours || "",
             closing_hours: response.data.user.closing_hours || "",
             social_media: response.data.user.social_media || "",
-            company_logo: response.data?.user?.company_logo_name || ""
+            company_logo: response.data?.user?.company_logo_name || "",
+            languages: response.data?.user?.languages
           });
           setPreview(response.data.user.agent_docucment || "");
           if (response?.data?.user?.service_area?.length > 0) {
@@ -356,6 +360,7 @@ const ProfileForm = () => {
       }
     })
     e.preventDefault();
+    const newSocialLinks = socialLinks.map((item, i) => ({key: item.key, url: item.url}));
     try {
       const response = await callApi({
         api: `/update_my_profile`,
@@ -363,7 +368,7 @@ const ProfileForm = () => {
         data: {
           ...formData,
           service_area: JSON.stringify(service_area),
-          social_media: JSON.stringify(socialLinks),
+          social_media: JSON.stringify(newSocialLinks),
           user_id: memberId,
         },
       });

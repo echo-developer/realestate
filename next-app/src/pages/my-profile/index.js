@@ -126,7 +126,7 @@ const Index = () => {
                           <div className="card-title">
                             <h4 className="mb-1">
                               {userData?.name || ""}
-                              <i className="icon-img-check ms-2"></i>
+                              {userData?.user_type == 'A' && userData?.is_verified_agent == '1' && (<i className="icon-img-check ms-2"></i>) || null}
                             </h4>
                           </div>
 
