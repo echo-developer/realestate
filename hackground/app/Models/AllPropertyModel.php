@@ -62,7 +62,7 @@ class AllPropertyModel extends Model
         }
         $query->orderBy('pt.id','desc');
         if ($paginate) {
-            return $query->paginate($paginate);
+            return $query->paginate($paginate)->appends($srch);
         }
         return $query->get();
     }

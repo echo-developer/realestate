@@ -789,8 +789,8 @@ class PostPropertyController extends Controller
             }
             if($gallary_id)
             {
-                DB::table('property_gallary_images as i')->whereIn('i.gallary_id',$gallary_id)->delete();
-                DB::table('property_gallary as g')->where('g.pid',$propertyId)->delete();
+                DB::table('property_gallary_images')->whereIn('gallary_id',$gallary_id)->delete();
+                DB::table('property_gallary')->where('pid',$propertyId)->delete();
             }
             
         }

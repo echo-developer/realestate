@@ -48,7 +48,7 @@ class AllProjectController extends Controller
             'user_id'
         ]);
         
-        $project = PrefProject::filter($filters)->paginate($paginate);
+        $project = PrefProject::filter($filters)->paginate($paginate)->appends($request->all());
 
         $amenities = new ProjectAmenityModel();
         $projectAmenities = $amenities->getProjectAmenities();
