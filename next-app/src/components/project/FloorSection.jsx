@@ -78,8 +78,8 @@ const FloorSection = ({ detailsData }) => {
                                     <div className="col-md-4 d-flex align-items-center">
                                         <div className="position-relative w-100">
                                             <img alt="" className="img-fluid rounded-end w-100" src={card.image_url} />
-                                            <span className="position-absolute top-50 start-50 translate-middle p-2 bg-dark bg-opacity-75 text-white rounded-circle zoom-icon">
-                                                🔍
+                                            <span className="position-absolute top-50 start-50 translate-middle bg-dark bg-opacity-75 text-white rounded-circle zoom-icon">
+                                                <i class="ri-search-line"></i>
                                             </span>
                                         </div>
                                     </div>

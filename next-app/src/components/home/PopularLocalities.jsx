@@ -52,11 +52,11 @@ const PopularLocalities = ({translation}) => {
 
 
   return (
-    <section className="section">
+    <section className="section pb-0">
       <div className="container-fluid">
         <div className="row gx-3">
-          <aside className="col-xl-3 col-lg-4 col-12 mb-3">
-            <div className="card card-v-agent h-100">
+          <aside className="col-xl-3 col-lg-4 col-12">
+            <div className="card h-100-mb-3">
               <div className="card-body d-flex align-items-center">
                 <div className="Name">
                   <h2>{translation?.explore || "Explore"}</h2>
@@ -66,7 +66,7 @@ const PopularLocalities = ({translation}) => {
             </div>
           </aside>
           <aside className="col-xl-9 col-lg-8 col-12">
-            <div className="card h-100">
+            <div className="card h-100-mb-3">
               <div className="card-header p-0">
                 <ul className="nav nav-underline nav-fill">
                   {projectListData && Object.keys(projectListData).map((key, i) => {
@@ -90,7 +90,7 @@ const PopularLocalities = ({translation}) => {
                     arrows={true}
                     infinite={true}
                     keyBoardControl={true}
-                    containerClass="carousel-container"
+                    containerClass="carousel-container pb-0"
                     itemClass="px-2"
                   >
                     {projectListData[activeTab]?.map((project, i) => {
@@ -98,7 +98,7 @@ const PopularLocalities = ({translation}) => {
                       return (
                         <div key={i} className="card card-city">
                           <div className="card-body">
-                            <div className="d-flex">
+                            <div className="d-flex align-items-center">
                               <img
                                 src={firstImage?.file}
                                 alt="Locality Name"

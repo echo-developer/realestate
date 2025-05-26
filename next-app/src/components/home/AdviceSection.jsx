@@ -72,6 +72,10 @@ const AdviceSection = ({ translation }) => {
     },
     mobile: {
       breakpoint: { max: 768, min: 0 },
+      items: 2,
+    },
+    smallMobile: {
+      breakpoint: { max: 576, min: 0 },
       items: 1,
     },
   };
@@ -102,7 +106,7 @@ const AdviceSection = ({ translation }) => {
           autoPlaySpeed={3000}
         >
           {adviceTools.map((tool, index) => (
-            <div key={index} className="card mb-3 mx-2">
+            <div key={index} className="card mb-3 mx-2 h-100-mb-3">
               <div className="card-body">
                 <div className="d-flex align-items-center mb-2">
                   <Image
@@ -115,7 +119,7 @@ const AdviceSection = ({ translation }) => {
                     <h4>{tool.title}</h4>
                   </div>
                 </div>
-                <p>{tool.description}</p>
+                <p style={{minHeight: '96px'}}>{tool.description}</p>
                 <Link href={tool.link} className="btn btn-primary">
                   {translation?.know_more || "Know More"}
                 </Link>

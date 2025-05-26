@@ -57,18 +57,16 @@ const Feedback = () => {
   return (
     <section className="section feedback">
       <div className="container">
+        <div className="section-headline text-white">
+          <h2 className="text-white">{translation?.take_a_look_what_our_client_say || "Take A Look What Our Client Say"}</h2>
+          <p>{translation?.clients_testimonials_description || "Read what our clients have to say about their experiences, showcasing trust, satisfaction, and exceptional service."}</p>
+        </div>
         <div className="bg-box">
           <div className="quote">
             <img src="/assets/images/icons/quote.png" alt="Quote" height="72" width="72" />
           </div>
           <div className="row gx-lg-5 align-items-center justify-content-between">
-            <aside className="col-lg-4 col-12">
-              <div className="section-headline text-white">
-                <h2 className="text-white">{translation?.take_a_look_what_our_client_say || "Take A Look What Our Client Say"}</h2>
-                <p>{translation?.clients_testimonials_description || "Read what our clients have to say about their experiences, showcasing trust, satisfaction, and exceptional service."}</p>
-              </div>
-            </aside>
-            <aside className="col-lg-7 col-12">
+            <aside className="col-12">
               {testimonialData?.length > 0 && (
                 <Carousel
                 responsive={responsive}
@@ -85,17 +83,17 @@ const Feedback = () => {
                   <div
                     key={index}
                     className="card"
-                  >
-                    <div className="card-image">
-                      <img
-                        src={testimonial?.image || "/assets/images/user.jpg"}
-                        alt="Feedback"
-                        height="200"
-                        width="300"
-                        className="card-img-top"
-                      />
-                    </div>
+                  >                    
                     <div className="card-body">
+                      <div className="card-image text-center mb-3">
+                        <img
+                          src={testimonial?.image || "/assets/images/user.jpg"}
+                          alt="Feedback"
+                          height="150"
+                          width="150"
+                          className="rounded-circle"
+                        />
+                      </div>
                       <p>{testimonial?.description}</p>
                       <h4>{testimonial?.name}</h4>
                       <p className="small">{testimonial?.designation}</p>

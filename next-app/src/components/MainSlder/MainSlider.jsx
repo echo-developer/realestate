@@ -29,7 +29,7 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemo
     return (
         <>
             {data?.length > 0 && (
-                <section className="section">
+                <section className="section pb-0">
                     <div className="container-fluid">
                         <div className="section-headline text-center">
                             <h5>
@@ -95,11 +95,11 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
             {
                 breakpoint: 768, // Small tablets and large phones
                 settings: {
-                    slidesToShow: 1, // Show 1 slide on smaller screens
+                    slidesToShow: 2, // Show 1 slide on smaller screens
                 }
             },
             {
-                breakpoint: 600, // Mobile
+                breakpoint: 576, // Mobile
                 settings: {
                     slidesToShow: 1, // Show 1 slide on mobile
                 }
@@ -149,7 +149,7 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                     return (
                         <div className="owl-item" key={i}>
                             <article className="item">
-                                <div className="card card-ads card-overlay mb-0">
+                                <div className="card card-ads card-overlay mb-3 mb-sm-0">
                                     <div className="card-image">
                                         <a href={`${url}/${item?.slug}`} target='_blank'>
                                             <Image alt="" height="300" width="300" className="card-img" src={firstImage} loading="lazy" />
@@ -259,7 +259,7 @@ const CardTypeComponent = ({ isMobile, data, url, addRemoveFav, mainType, listKe
             arrows={isMobile ? false : true}
             customTransition="all 0.5s"
             transitionDuration={500}
-            itemClass="px-3"
+            itemClass="px-2"
         >
             {data?.length > 0 && data?.map((item, i) => {
                 const id = mainType === "property" ? "property_id" : "project_id";

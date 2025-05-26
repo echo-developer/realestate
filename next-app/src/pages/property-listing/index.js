@@ -1971,7 +1971,7 @@ const index = () => {
                             logAdClick(ad.advertisement_id, ad.ad_url);
                           }}
                         >
-                          <img src={ad.ad_image} alt="Ad" />
+                          <img src={ad.ad_image} alt="Ad" className="img-fluid" />
                         </a>
                       ))
                     ) : (

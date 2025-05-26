@@ -233,7 +233,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       {/* Conditional Month and Year Input */}
       {showConstructionDate && (
         <div className="row gx-3">
-          <div className="col-lg-6 col-12">
+          <div className="col-lg-6 col-12 mb-4">
             <label className="form-label">
               {translation?.expected_month_of_possession ||
                 "Expected Month of Possession"}
@@ -262,7 +262,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
               </div>
             )}
           </div>
-          <div className="col-lg-6 col-12">
+          <div className="col-lg-6 col-12 mb-4">
             <label className="form-label">
               {translation?.expected_year_of_possession ||
                 "Expected Year of Possession"}

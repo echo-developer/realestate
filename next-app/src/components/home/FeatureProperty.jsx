@@ -85,7 +85,7 @@ const transition = useTranslation();
 const FeatureProperty = () => {
 
   const settings = {
-    dots: false,
+    //dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 4,

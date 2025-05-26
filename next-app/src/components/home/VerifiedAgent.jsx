@@ -48,14 +48,18 @@ const VerifiedAgent = ({ translation }) => {
     },
     mobile: {
       breakpoint: { max: 768, min: 0 },
-      items: 1
-    }
+      items: 2
+    },
+    smallMobile: {
+      breakpoint: { max: 576, min: 0 },
+      items: 1,
+    },
   };
 
   return (
     <>
       {Array.isArray(verifiedAgentList) && verifiedAgentList.length > 0 && (
-        <section className="section">
+        <section className="section pb-0">
           <div className="container-fluid">
             <div className="section-headline text-center">
               <h5>
@@ -69,10 +73,10 @@ const VerifiedAgent = ({ translation }) => {
               </p>
             </div>
 
-            <Carousel responsive={responsive} infinite autoPlay={false} arrows={true} keyBoardControl containerClass="py-4">
+            <Carousel responsive={responsive} infinite autoPlay={false} arrows={true} keyBoardControl containerClass="pb-0" itemClass="px-2">
               {verifiedAgentList?.slice(0, 8)?.map((agent, i) => (
-                <div className="p-2" key={i}>
-                  <div className="card card-agent card-v-agent h-100">
+                
+                  <div className="card card-agent card-v-agent h-100" key={i}>
                     <div className="card-body d-flex flex-column">
                       <div className="mb-3 text-center">
                         <img
@@ -128,7 +132,7 @@ const VerifiedAgent = ({ translation }) => {
                         </a>
                       </div>
                     </div>
-                  </div>
+                  
                 </div>
               ))}
             </Carousel>

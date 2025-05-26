@@ -15,7 +15,7 @@ const FindPropertySection = ({translation}) => {
   return (
     <>
     <section
-      className="section post-req"
+      className="section post-req mt-4"
       style={{ backgroundImage: "url('assets/images/building.jpg')" }}
     >
       <div className="container-fluid position-relative">
