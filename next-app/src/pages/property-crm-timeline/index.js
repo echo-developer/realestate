@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
+import Link from "next/link";
 import {
   BsPlusLg,
   BsClock,
@@ -175,9 +176,9 @@ const Timeline = () => {
 
               <ul className="nav mb-3">
                 <li className="nav-item">
-                  <a className="nav-link" href={`/lead-details/${assign_id}`}>
+                  <Link className="nav-link" href={`/lead-details/${assign_id}`}>
                     CRM Lead Details
-                  </a>
+                  </Link>
                 </li>
                 <li className="nav-item nav-underline">
                   <a
