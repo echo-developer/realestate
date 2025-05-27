@@ -22,6 +22,10 @@ class AllPropertyController extends Controller
         $user_id = $request->route('id');
         $srch = $request->query();
         $srch['user_id'] = $user_id;
+
+        $property_slug = $request->input('slug').'&id='.$request->input('id');
+        $srch['prop_slug'] = $property_slug;
+        
         $paginate = 10;
         $statusMapping = config('property_status.status');
         //$srch['term'] = $request->input('term');

@@ -60,6 +60,10 @@ class AllPropertyModel extends Model
         if (array_key_exists('post_date',$srch) && $srch['post_date']) {
             $query->whereDate('pt.created_at', $srch['post_date']);
         }
+
+        if (!empty($srch['prop_slug'])) {
+            $query->where('pt.slug', $srch['prop_slug']);
+        }
         $query->orderBy('pt.id','desc');
         if ($paginate) {
             return $query->paginate($paginate)->appends($srch);

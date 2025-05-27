@@ -75,7 +75,7 @@
                                     <tr>
                                         <td>{{ $item->id }}</td>
                                         <td>
-                                            {{ $item->property_name ?? 'N/A' }} <br>
+                                            <a href="{{ url('allproperties/all-property-view') . '?slug=' . $item?->property_slug }}">{{ $item->property_name ?? 'N/A' }}</a> <br>
                                             <small>{{ $item->posted_by_name ?? 'N/A' }}</small>
                                         </td>
                                         <td>{{ $item->reporter_name ?? 'N/A' }}</td>
@@ -235,7 +235,6 @@
 
         function Delete(id) {
             var result = confirm('Are you sure you want to delete this?');
-            console.log(id);
             if (result) {
                 $.ajaxSetup({
                     headers: {
@@ -244,12 +243,11 @@
                 });
                 $.ajax({
                     type: 'POST',
-                    url: `{{ url('/Property Reports/delete') }}`,
+                    url: `{{ url('reports/property-delete') }}`,
                     data: {
                         'id': id
                     },
                     success: function(response) {
-                        // localStorage.setItem('successMessage', response.message);
                         window.location.reload(true);
                     },
                     error: function(msg) {

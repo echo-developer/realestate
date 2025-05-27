@@ -30,4 +30,13 @@ class PropertyReportsController extends Controller
             return response()->json(['status' => true]);
         }
     }
+
+    public function deleteReport(Request $req)
+    {
+        if (!empty($req->id)) {
+            PropertyReports::where('id', $req->id)->update(['status' => config('constants.STATUS_DELETE')]);
+            set_flash_message('delete');
+            return response()->json(['status' => true]);
+        }
+    }
 }
