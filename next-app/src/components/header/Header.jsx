@@ -41,7 +41,6 @@ const Header = () => {
   const [userData, setUserData] = useState();
   const memberId = GetMemberId();
   const [currentLang, setCurrentLang] = useState("en");
-  // const [currency, setCurrency] = useState("");
 
   useEffect(() => {
     const storedLang = localStorage.getItem("lang") || "en";

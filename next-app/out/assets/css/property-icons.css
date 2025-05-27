@@ -1,0 +1,656 @@
+@font-face {
+  font-family: 'property-icons';
+  src:  url('../fonts/property-icons.eot?o0bd8w');
+  src:  url('../fonts/property-icons.eot?o0bd8w#iefix') format('embedded-opentype'),
+  url('../fonts/property-icons.ttf?o0bd8w') format('truetype'),
+  url('../fonts/property-icons.woff?o0bd8w') format('woff'),
+  url('../fonts/property-icons.svg?o0bd8w#property-icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="property-icon"], [class*=" property-icon"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'property-icons' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.property-icon-ban:before {
+  content: "\e9d0";
+}
+.property-icon-hourglass-half:before {
+  content: "\e9d1";
+}
+.property-icon-check-circle:before {
+  content: "\e9cd";
+}
+.property-icon-pause-circle:before {
+  content: "\e9ce";
+}
+.property-icon-pause:before {
+  content: "\e9cf";
+}
+.property-icon-tag-solid:before {
+  content: "\e9cc";
+}
+.property-icon-link:before {
+  content: "\e9cb";
+}
+.property-icon-map-solid-style:before {
+  content: "\e9c9";
+}
+.property-icon-panorama:before {
+  content: "\e9ca";
+}
+.property-icon-minus:before {
+  content: "\e9c8";
+}
+.property-icon-plus:before {
+  content: "\e9c7";
+}
+.property-icon-check-solid:before {
+  content: "\e9c3";
+}
+.property-icon-map-default:before {
+  content: "\e9c4";
+}
+.property-icon-map-full:before {
+  content: "\e9c5";
+}
+.property-icon-map-style:before {
+  content: "\e9c6";
+}
+.property-icon-location:before {
+  content: "\e9c2";
+}
+.property-icon-bath_v2:before {
+  content: "\e9b7";
+}
+.property-icon-bed_v2:before {
+  content: "\e9b8";
+}
+.property-icon-sqft_v2:before {
+  content: "\e9b9";
+}
+.property-icon-compare_v2:before {
+  content: "\e9ba";
+}
+.property-icon-cup:before {
+  content: "\e9bb";
+}
+.property-icon-handshake:before {
+  content: "\e9bc";
+}
+.property-icon-home_v3:before {
+  content: "\e9bd";
+}
+.property-icon-key_on_hand:before {
+  content: "\e9be";
+}
+.property-icon-like_v2:before {
+  content: "\e9bf";
+}
+.property-icon-user_v2:before {
+  content: "\e9c0";
+}
+.property-icon-trigon:before {
+  content: "\e9c1";
+}
+.property-icon-testimonial_grid:before {
+  content: "\e9b6";
+}
+.property-icon-calendar-check:before {
+  content: "\e9b5";
+}
+.property-icon-calculator:before {
+  content: "\e9b3";
+}
+.property-icon-calculator2:before {
+  content: "\e9b4";
+}
+.property-icon-arrow-down-circle:before {
+  content: "\e9af";
+}
+.property-icon-arrow-left-circle:before {
+  content: "\e9b0";
+}
+.property-icon-arrow-up-circle:before {
+  content: "\e9b1";
+}
+.property-icon-arrow-right-circle:before {
+  content: "\e9b2";
+}
+.property-icon-marker:before {
+  content: "\e9ac";
+}
+.property-icon-phone-handset:before {
+  content: "\e9ad";
+}
+.property-icon-printer:before {
+  content: "\e9ae";
+}
+.property-icon-financing:before {
+  content: "\e9a7";
+}
+.property-icon-furniture:before {
+  content: "\e9a8";
+}
+.property-icon-management:before {
+  content: "\e9a9";
+}
+.property-icon-service_certificate:before {
+  content: "\e9aa";
+}
+.property-icon-service_reload:before {
+  content: "\e9ab";
+}
+.property-icon-image-add-button:before {
+  content: "\e9a5";
+}
+.property-icon-image:before {
+  content: "\e9a6";
+}
+.property-icon-add_listing_solid:before {
+  content: "\e9a4";
+}
+.property-icon-reload:before {
+  content: "\e9a3";
+}
+.property-icon-info-circle:before {
+  content: "\e9a2";
+}
+.property-icon-home_for_rent:before {
+  content: "\e9a1";
+}
+.property-icon-exchange:before {
+  content: "\e9a0";
+}
+.property-icon-reply:before {
+  content: "\e990";
+}
+.property-icon-security:before {
+  content: "\e99e";
+}
+.property-icon-conference_hall:before {
+  content: "\e99f";
+}
+.property-icon-cctv:before {
+  content: "\e99d";
+}
+.property-icon-keyhole:before {
+  content: "\e99b";
+}
+.property-icon-metro:before {
+  content: "\e99c";
+}
+.property-icon-homeservices:before {
+  content: "\e99a";
+}
+.property-icon-education:before {
+  content: "\e998";
+}
+.property-icon-food:before {
+  content: "\e999";
+}
+.property-icon-phone:before {
+  content: "\e995";
+}
+.property-icon-clock:before {
+  content: "\e996";
+}
+.property-icon-key:before {
+  content: "\e997";
+}
+.property-icon-add_listing:before {
+  content: "\e994";
+}
+.property-icon-icon-chevron-check:before {
+  content: "\e993";
+}
+.property-icon-home-rent:before {
+  content: "\e992";
+}
+.property-icon-home_for_available:before {
+  content: "\e98f";
+}
+.property-icon-home_for_sale:before {
+  content: "\e991";
+}
+.property-icon-certificate:before {
+  content: "\e98b";
+}
+.property-icon-globe:before {
+  content: "\e98c";
+}
+.property-icon-language:before {
+  content: "\e98d";
+}
+.property-icon-tag:before {
+  content: "\e98e";
+}
+.property-icon-info:before {
+  content: "\e98a";
+}
+.property-icon-close-circle:before {
+  content: "\e985";
+}
+.property-icon-like-down:before {
+  content: "\e986";
+}
+.property-icon-like-up:before {
+  content: "\e987";
+}
+.property-icon-notification:before {
+  content: "\e988";
+}
+.property-icon-warning:before {
+  content: "\e989";
+}
+.property-icon-bullhorn:before {
+  content: "\e982";
+}
+.property-icon-edit:before {
+  content: "\e983";
+}
+.property-icon-trash-alt:before {
+  content: "\e984";
+}
+.property-icon-close-small:before {
+  content: "\e980";
+}
+.property-icon-star-solid:before {
+  content: "\e981";
+}
+.property-icon-map-marker-alt:before {
+  content: "\e97f";
+}
+.property-icon-exchange-alt:before {
+  content: "\e97e";
+}
+.property-icon-home-plus-shadow:before {
+  content: "\e97a";
+}
+.property-icon-home-plus:before {
+  content: "\e97b";
+}
+.property-icon-heart-outline:before {
+  content: "\e97c";
+}
+.property-icon-heart-solid:before {
+  content: "\e97d";
+}
+.property-icon-list-grid:before {
+  content: "\e978";
+}
+.property-icon-list-list:before {
+  content: "\e979";
+}
+.property-icon-built:before {
+  content: "\e972";
+}
+.property-icon-cooling:before {
+  content: "\e973";
+}
+.property-icon-heating:before {
+  content: "\e974";
+}
+.property-icon-price-sqft:before {
+  content: "\e975";
+}
+.property-icon-status:before {
+  content: "\e976";
+}
+.property-icon-swimming:before {
+  content: "\e977";
+}
+.property-icon-type:before {
+  content: "\e971";
+}
+.property-icon-pin-marker:before {
+  content: "\e970";
+}
+.property-icon-share2:before {
+  content: "\e96f";
+}
+.property-icon-shield:before {
+  content: "\e96e";
+}
+.property-icon-bath:before {
+  content: "\e960";
+}
+.property-icon-bed:before {
+  content: "\e961";
+}
+.property-icon-chevron-left-2:before {
+  content: "\e962";
+}
+.property-icon-chevron-right-2:before {
+  content: "\e963";
+}
+.property-icon-clock-square:before {
+  content: "\e964";
+}
+.property-icon-envelope2:before {
+  content: "\e965";
+}
+.property-icon-garage:before {
+  content: "\e966";
+}
+.property-icon-multi-family:before {
+  content: "\e967";
+}
+.property-icon-photo:before {
+  content: "\e968";
+}
+.property-icon-print:before {
+  content: "\e969";
+}
+.property-icon-share1:before {
+  content: "\e96a";
+}
+.property-icon-sqft:before {
+  content: "\e96b";
+}
+.property-icon-star:before {
+  content: "\e96c";
+}
+.property-icon-video:before {
+  content: "\e96d";
+}
+.property-icon-user-1:before {
+  content: "\e95e";
+}
+.property-icon-user-2:before {
+  content: "\e95f";
+}
+.property-icon-home-notebook:before {
+  content: "\e95a";
+}
+.property-icon-home-agent:before {
+  content: "\e95b";
+}
+.property-icon-home-agents:before {
+  content: "\e95c";
+}
+.property-icon-home-calc:before {
+  content: "\e95d";
+}
+.property-icon-banner-human:before {
+  content: "\e959";
+}
+.property-icon-testimonials-quote:before {
+  content: "\e958";
+}
+.property-icon-phone-small:before {
+  content: "\e957";
+}
+.property-icon-home-sale:before {
+  content: "\e955";
+}
+.property-icon-home-search:before {
+  content: "\e956";
+}
+.property-icon-contact-address:before {
+  content: "\e951";
+}
+.property-icon-contact-email:before {
+  content: "\e952";
+}
+.property-icon-contact-phone:before {
+  content: "\e953";
+}
+.property-icon-contact-schedule:before {
+  content: "\e954";
+}
+.property-icon-about-blog:before {
+  content: "\e94e";
+}
+.property-icon-about-contact-us:before {
+  content: "\e94f";
+}
+.property-icon-about-services:before {
+  content: "\e950";
+}
+.property-icon-envelope-solid:before {
+  content: "\e94d";
+}
+.property-icon-envelope:before {
+  content: "\e94c";
+}
+.property-icon-clock-small:before {
+  content: "\e949";
+}
+.property-icon-comment-small:before {
+  content: "\e94a";
+}
+.property-icon-user-small:before {
+  content: "\e94b";
+}
+.property-icon-comment:before {
+  content: "\e945";
+}
+.property-icon-share:before {
+  content: "\e946";
+}
+.property-icon-time:before {
+  content: "\e947";
+}
+.property-icon-views:before {
+  content: "\e948";
+}
+.property-icon-chevron-circle-down:before {
+  content: "\e904";
+}
+.property-icon-chevron-circle-left:before {
+  content: "\e905";
+}
+.property-icon-chevron-circle-right:before {
+  content: "\e906";
+}
+.property-icon-chevron-circle-up:before {
+  content: "\e907";
+}
+.property-icon-chevron-down:before {
+  content: "\e941";
+}
+.property-icon-chevron-left:before {
+  content: "\e942";
+}
+.property-icon-chevron-right:before {
+  content: "\e943";
+}
+.property-icon-chevron-up:before {
+  content: "\e944";
+}
+.property-icon-search:before {
+  content: "\e902";
+}
+.property-icon-file-alt:before {
+  content: "\e903";
+}
+.property-icon-arrow-down:before {
+  content: "\e908";
+}
+.property-icon-arrow-left:before {
+  content: "\e909";
+}
+.property-icon-arrow-right:before {
+  content: "\e90a";
+}
+.property-icon-arrow-up:before {
+  content: "\e90b";
+}
+.property-icon-whatsapp-square:before {
+  content: "\e90c";
+}
+.property-icon-whatsapp:before {
+  content: "\e90d";
+}
+.property-icon-tumblr-square:before {
+  content: "\e90e";
+}
+.property-icon-tumblr:before {
+  content: "\e90f";
+}
+.property-icon-youtube-square:before {
+  content: "\e910";
+}
+.property-icon-youtube:before {
+  content: "\e911";
+}
+.property-icon-skype:before {
+  content: "\e912";
+}
+.property-icon-google-drive:before {
+  content: "\e913";
+}
+.property-icon-google-play:before {
+  content: "\e914";
+}
+.property-icon-google-plus-g:before {
+  content: "\e915";
+}
+.property-icon-google-plus-square:before {
+  content: "\e916";
+}
+.property-icon-google-plus:before {
+  content: "\e917";
+}
+.property-icon-google-wallet:before {
+  content: "\e918";
+}
+.property-icon-google:before {
+  content: "\e919";
+}
+.property-icon-soundcloud:before {
+  content: "\e91a";
+}
+.property-icon-reddit-alien:before {
+  content: "\e91b";
+}
+.property-icon-reddit-square:before {
+  content: "\e91c";
+}
+.property-icon-reddit:before {
+  content: "\e91d";
+}
+.property-icon-dropbox:before {
+  content: "\e91e";
+}
+.property-icon-delicious:before {
+  content: "\e91f";
+}
+.property-icon-deploydog:before {
+  content: "\e920";
+}
+.property-icon-deskpro:before {
+  content: "\e921";
+}
+.property-icon-dev:before {
+  content: "\e922";
+}
+.property-icon-deviantart:before {
+  content: "\e923";
+}
+.property-icon-digg:before {
+  content: "\e924";
+}
+.property-icon-digital-ocean:before {
+  content: "\e925";
+}
+.property-icon-discord:before {
+  content: "\e926";
+}
+.property-icon-yahoo:before {
+  content: "\e927";
+}
+.property-icon-yandex-international:before {
+  content: "\e928";
+}
+.property-icon-yandex:before {
+  content: "\e929";
+}
+.property-icon-pinterest-p:before {
+  content: "\e92a";
+}
+.property-icon-pinterest-square:before {
+  content: "\e92b";
+}
+.property-icon-pinterest:before {
+  content: "\e92c";
+}
+.property-icon-linkedin-in:before {
+  content: "\e92d";
+}
+.property-icon-linkedin:before {
+  content: "\e92e";
+}
+.property-icon-git-square:before {
+  content: "\e92f";
+}
+.property-icon-git:before {
+  content: "\e930";
+}
+.property-icon-github-alt:before {
+  content: "\e931";
+}
+.property-icon-github-square:before {
+  content: "\e932";
+}
+.property-icon-github:before {
+  content: "\e933";
+}
+.property-icon-flickr:before {
+  content: "\e934";
+}
+.property-icon-dribbble-square:before {
+  content: "\e935";
+}
+.property-icon-dribbble:before {
+  content: "\e936";
+}
+.property-icon-behance-square:before {
+  content: "\e937";
+}
+.property-icon-behance:before {
+  content: "\e938";
+}
+.property-icon-twitter-square:before {
+  content: "\e939";
+}
+.property-icon-twitter:before {
+  content: "\e93a";
+}
+.property-icon-vk:before {
+  content: "\e93b";
+}
+.property-icon-instagram:before {
+  content: "\e93c";
+}
+.property-icon-facebook-f:before {
+  content: "\e93d";
+}
+.property-icon-facebook-messenger:before {
+  content: "\e93e";
+}
+.property-icon-facebook-square:before {
+  content: "\e93f";
+}
+.property-icon-facebook:before {
+  content: "\e940";
+}
+.property-icon-play-audio:before {
+  content: "\e901";
+}
+.property-icon-checkbox:before {
+  content: "\e900";
+}
