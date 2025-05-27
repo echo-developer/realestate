@@ -1031,6 +1031,11 @@ class DashboardController extends Controller
                 unset($agentAdditional->language_speak);
             }
             if ($agentAdditional) {
+                $agentAdditional->agent_cover_photo = !empty($agentAdditional->agent_cover_photo)
+                    ? asset('user_upload/agent_cover_photo/' . $agentAdditional->agent_cover_photo)
+                    : null;
+            }
+            if ($agentAdditional) {
                 $agentAdditional->company_logo_name = $agentAdditional->company_logo;
                 $agentAdditional->company_logo = !empty($agentAdditional->company_logo)
                     ? asset('user_upload/company_logo/' . $agentAdditional->company_logo)
