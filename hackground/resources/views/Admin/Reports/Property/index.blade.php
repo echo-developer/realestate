@@ -76,7 +76,7 @@
                                         <td>{{ $item->id }}</td>
                                         <td>
                                             <a href="{{ url('allproperties/all-property-view') . '?slug=' . $item?->property_slug }}">{{ $item->property_name ?? 'N/A' }}</a> <br>
-                                            <small>{{ $item->posted_by_name ?? 'N/A' }}</small>
+                                            <a href="{{ url('member/memberUser') . '?term=' . $item?->posted_by_name }}"><small>{{ $item->posted_by_name ?? 'N/A' }}</small></a>
                                         </td>
                                         <td>{{ $item->reporter_name ?? 'N/A' }}</td>
                                         <td class="text-center">
