@@ -269,8 +269,14 @@ const ProfileForm = () => {
               file_name: response.data?.user?.company_logo_name,
               image_url: response.data?.user?.company_logo
             })
+            if (response.data.user?.agent_cover_photo) {
+              updatedFormData.agent_cover_photo = response.data.user?.agent_cover_photo
+            }
+            if (response.data?.user?.agent_cover_photo_name) {
+              updatedFormData.agent_cover_photo_name = response.data?.user?.agent_cover_photo_name
+            }
           }
-          if(response.data?.user?.languages) {
+          if (response.data?.user?.languages) {
             setLanguages(response.data.user.languages?.split(","))
           }
           Object.assign(updatedFormData, {
@@ -318,8 +324,8 @@ const ProfileForm = () => {
               return match
                 ? {
                   key: match.platform_key,
-                  name: defaultItem.name, 
-                  url: match.url.replace(/\\\//g, "/") 
+                  name: defaultItem.name,
+                  url: match.url.replace(/\\\//g, "/")
                 }
                 : defaultItem;
             });
@@ -360,7 +366,7 @@ const ProfileForm = () => {
       }
     })
     e.preventDefault();
-    const newSocialLinks = socialLinks.map((item, i) => ({key: item.key, url: item.url}));
+    const newSocialLinks = socialLinks.map((item, i) => ({ key: item.key, url: item.url }));
     try {
       const response = await callApi({
         api: `/update_my_profile`,
@@ -418,6 +424,7 @@ const ProfileForm = () => {
       });
 
       if (response?.status === 1) {
+        fetchUserData();
         toast.success("File uploaded successfully!");
       }
     } catch (error) {
@@ -555,6 +562,13 @@ const ProfileForm = () => {
         }
       })
       if (res && res?.status == 1) {
+        setFormData(prev => {
+          return {
+            ...prev,
+            agent_cover_photo: res.data?.image_url,
+            agent_cover_photo_name: res.data?.file_name
+          }
+        })
         toast.success("coverphoto Uploaded successfully")
       }
     } catch (error) {
@@ -562,6 +576,30 @@ const ProfileForm = () => {
     }
   }
 
+  const handleRemoveCoverPhoto = async () => {
+    try {
+      const res = await callApi({
+        api: `/delete-cover-photo`,
+        method: 'UPLOAD',
+        data: {
+          agent_id: memberId,
+          agent_cover_photo: formData?.agent_cover_photo_name
+        }
+      })
+
+      if (res && res.status == 1) {
+        setFormData(prev => {
+          return {
+            ...prev,
+            agent_cover_photo: "",
+            agent_cover_photo_name: ""
+          }
+        })
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
   return (
     <>
       <DashboardLayout>
@@ -846,8 +884,64 @@ const ProfileForm = () => {
                             accept="image/*"
                             onChange={handleUploadCoverPic}
                           />
+                          {formData?.agent_cover_photo && (
+                            <div className="position-relative mt-1 mb-4" style={{ display: 'inline-block', width: '100%' }}>
+                              <img
+                                src={formData.agent_cover_photo}
+                                alt="Cover Preview"
+                                style={{
+                                  width: '100%',
+                                  maxHeight: '200px',
+                                  objectFit: 'cover',
+                                  borderRadius: '8px',
+                                  display: 'block'
+                                }}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => window.open(formData.agent_cover_photo, '_blank')}
+                                style={{
+                                  position: 'absolute',
+                                  top: '50%',
+                                  right: '50px',
+                                  transform: 'translateY(-50%)',
+                                  backgroundColor: '#0d6efd',
+                                  color: '#fff',
+                                  border: 'none',
+                                  padding: '4px 10px',
+                                  borderRadius: '4px',
+                                  cursor: 'pointer',
+                                  fontSize: '12px'
+                                }}
+                              >
+                                Preview
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveCoverPhoto()}
+                                style={{
+                                  position: 'absolute',
+                                  top: '10px',
+                                  right: '10px',
+                                  background: 'rgba(0,0,0,0.6)',
+                                  color: '#fff',
+                                  border: 'none',
+                                  borderRadius: '50%',
+                                  width: '24px',
+                                  height: '24px',
+                                  fontSize: '16px',
+                                  lineHeight: '24px',
+                                  textAlign: 'center',
+                                  cursor: 'pointer'
+                                }}
+                              >
+                                ×
+                              </button>
+                            </div>
+                          )}
 
                         </FloatingLabel>
+
                       </div>
                     )}
                   </Row>
@@ -941,7 +1035,7 @@ const ProfileForm = () => {
                           >
                             {uploadedFile
                               ? uploadedFile.name
-                              : `${translation?.upload_document || "Upload Document (PDF, DOC, JPG, PNG)"}`}
+                              : " Attach Document (PDF, DOC, JPG, PNG)"}
                           </label>
 
                           {/* Hidden File Input */}

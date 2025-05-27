@@ -1030,6 +1030,7 @@ class DashboardController extends Controller
                 $agentAdditional->languages = !empty($agentAdditional->language_speak) ? $agentAdditional->language_speak : null;
                 unset($agentAdditional->language_speak);
             }
+            $agentAdditional->agent_cover_photo_name = $agentAdditional->agent_cover_photo;
             if ($agentAdditional) {
                 $agentAdditional->agent_cover_photo = !empty($agentAdditional->agent_cover_photo)
                     ? asset('user_upload/agent_cover_photo/' . $agentAdditional->agent_cover_photo)
