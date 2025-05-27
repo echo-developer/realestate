@@ -8,6 +8,7 @@ import withAuth from "@/utils/withAuth";
 import useTranslation from "@/hooks/useTranslation";
 import {
   flat_image_tab,
+  Commerical_image_tab,
   parkingOptions,
   facingOptions,
   flooringOptions,
@@ -154,6 +155,7 @@ const Index = () => {
       });
     }
   }, [propertyData]);
+
 
   const openModal = (item) => {
 
@@ -555,7 +557,7 @@ const Index = () => {
       case "galleries":
         return (
           <EditImageGallery
-            flatImageTab={flat_image_tab}
+            flatImageTab={propertyData.property_type == "Commercial" ? Commerical_image_tab : flat_image_tab}
             inputValue={inputValue}
             selectedItem={activeTab}
             propertyData={propertyData}
