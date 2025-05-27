@@ -639,3 +639,7 @@ ALTER TABLE `pref_buyer_property_enquery` CHANGE `created_at` `created_at` TIMES
 19/05/2025
 
 ALTER TABLE `pref_country` ADD `country_code` VARCHAR(5) NULL DEFAULT NULL COMMENT 'ISO 3166-1 alpha-2 country code' AFTER `id`;
+
+27/05/2025
+
+ALTER TABLE `pref_property_report` ADD `actions` TINYINT NULL DEFAULT '0' COMMENT ' 0 = No action, 1 = Request changes , 2 = Delete Property, 3 = Publish Property' AFTER `feedback`;
