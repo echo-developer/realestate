@@ -24,7 +24,7 @@ import Locality from "../Locality/Locality";
 const Banner = ({ translation }) => {
   const { callApi } = AuthUser();
   const router = useRouter();
-  const { currency, } = useAuth();
+  const { currency, defaultCity } = useAuth();
   const [locationData, setLocationData] = useState(null);
   const [PropertyTypeData, setPropertyTypeData] = useState([]);
   const [PropertyForData, setPropertyForData] = useState([]);
@@ -493,7 +493,7 @@ const Banner = ({ translation }) => {
                                 setLocationData={setLocationData}
                                 translation={translation}
                               /> */}
-                            <Locality onSelectLocality={onSelectLocality} />
+                            <Locality onSelectLocality={onSelectLocality} city={defaultCity} />
                             </Col>
 
                             {/* Property Type List */}

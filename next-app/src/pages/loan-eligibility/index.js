@@ -21,7 +21,7 @@ import AuthUser from "@/components/Authentication/AuthUser";
 
 const LoanEligibility = () => {
   const { callApi } = AuthUser();
-  const [loanAmount, setLoanAmount] = useState(0);
+  const [loanAmount, setLoanAmount] = useState('');
   const [tenure, setTenure] = useState(0);
   const [interestRate, setInterestRate] = useState(8.5);
   const [emi, setEmi] = useState(0);
@@ -128,6 +128,7 @@ const LoanEligibility = () => {
                         type="text"
                         value={loanAmount}
                         onChange={handleLoadAmountChange}
+                        placeholder="Enter loan amount"
 
                       />
                     </Col>

@@ -1,9 +1,11 @@
 "use client";
 import MainLayout from "@/components/layout/MainLayout";
+import { useAuth } from "@/context/AuthProvider";
 import Link from "next/link";
 import { useEffect } from "react";
 
 const PaymentSuccess = () => {
+  const { currencyCode } = useAuth();
   let creditValue;
   useEffect(() => {
     creditValue = localStorage.getItem("credit");
@@ -25,16 +27,16 @@ const PaymentSuccess = () => {
                       width="128"
                       className="mb-3"
                     />
-                    <p>Available Credit : {creditValue} AED</p>
+                    <p>Available Credit : {creditValue} {currencyCode}</p>
                     <h1 className="h3 text-success">Payment Successful!</h1>
                     <p>
                       Thank you for your payment. Your transaction has been
                       successfully completed. You can now access your premium
                       features or manage your purchases from the dashboard.
                     </p>
-                    <Link href="/membership" className="btn btn-primary">
+                    <Link href="/postproperty" className="btn btn-primary">
                       <i className="icon-line-awesome-shopping-basket"></i>{" "}
-                      Continue Shopping
+                      Post New Property
                     </Link>
                     <Link href="/dashboard" className="btn btn-success ms-2">
                       <i className="icon-line-awesome-dashboard"></i> Go to

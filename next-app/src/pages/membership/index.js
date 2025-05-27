@@ -12,7 +12,7 @@ import DOMPurify from 'dompurify';
 
 const Membership = () => {
   const { callApi } = AuthUser();
-  const { listingAllowed } = useAuth();
+  const { listingAllowed, currency, currencyCode } = useAuth();
   const translation = useTranslation();
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [plans, setPlans] = useState([])
@@ -364,7 +364,7 @@ const Membership = () => {
                       </span>
                     </div>
                     <div className="col-md-6">
-                      <strong>Listings Allowed:</strong> <span className="text-muted">{listingAllowed || 0}/{membershipDetails?.listings_allowed}</span>
+                      <strong>Listings Allowed:</strong> <span className="text-muted">{membershipDetails?.listings_allowed == 'Unlimited' ? membershipDetails?.listings_allowed : `${listingAllowed}/${membershipDetails?.listings_allowed}`}</span>
                     </div>
                   </div>
                   <div className="row mb-2">
@@ -420,7 +420,7 @@ const Membership = () => {
             </h1>
           </div>
           {loading && (<PlansLoadingSkeleton />)}
-          {plans?.length > 0 && <MembershipBox data={plans} handleSelectPlan={handleSelectPlan} />}
+          {plans?.length > 0 && <MembershipBox data={plans} handleSelectPlan={handleSelectPlan} currency={currency} currencyCode={currencyCode} />}
 
 
           <section className="section banner-box-4 mt-0 pb-0">

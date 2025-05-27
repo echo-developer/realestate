@@ -63,10 +63,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       [name]: value,
     }));
 
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: "",
-    }));
+    setErrors({})
   };
 
   const validateForm = () => {
@@ -116,7 +113,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       }`;
     }
 
-    if(formData.possession_status !== "3") {
+    if(formData.possession_status == '1') {
       if (!formData.launch_date) {
       newErrors.launch_date =
         translation?.enter_launch_date || "Please enter a valid launch date.";
@@ -141,6 +138,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       nextStep();
     }
   };
+
 
   if (loading) {
     return <ShimmerText line={10} gap={10} />;
@@ -287,7 +285,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
           </div>
         </div>
       )}
-      {formData.possession_status !== "3" && (
+      {formData.possession_status !== "3" || formData.possession_status !== '2' && (
         <div className="col-lg-12 col-12 form-floating mb-3">
         <input
           className="form-control"

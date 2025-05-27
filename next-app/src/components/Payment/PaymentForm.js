@@ -5,8 +5,9 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import AuthUser from "../Authentication/AuthUser";
 
-const PaymentForm = ({ planId, amount, gift, profileId }) => {
+const PaymentForm = ({ planId, amount, gift, profileId, handleClose }) => {
   const { callApi ,GetMemberId} = AuthUser();
+  const [paymentLoading, setPaymentLoading] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
@@ -36,6 +37,7 @@ const PaymentForm = ({ planId, amount, gift, profileId }) => {
     if (error) {
       toast.error(error.message);
     } else {
+      setPaymentLoading(true);
       try {
         const response = await callApi({
           api: "/make_payment_stripe",
@@ -45,6 +47,7 @@ const PaymentForm = ({ planId, amount, gift, profileId }) => {
 
         if (response && response.status === 1) {
           toast.success("Payment successfull");
+          handleClose();
           router.push("/payment-success");
           localStorage.setItem('credit',response.amount)
         } else {
@@ -53,6 +56,8 @@ const PaymentForm = ({ planId, amount, gift, profileId }) => {
       } catch (error) {
         console.error("Error during payment:", error);
         toast.error("Payment failed");
+      } finally {
+        setPaymentLoading(false);
       }
     }
   };
@@ -92,8 +97,9 @@ const PaymentForm = ({ planId, amount, gift, profileId }) => {
                     type="submit"
                     id="submitButton"
                     className="btn btn-primary"
+                    disabled={paymentLoading}
                   >
-                    Pay ${amount}
+                    {paymentLoading ? 'Processing...' : `Pay $${amount}`}
                     <div
                       className="spinnerContainer"
                       style={{

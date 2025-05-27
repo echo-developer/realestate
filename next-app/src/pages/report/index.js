@@ -90,7 +90,7 @@ const index = () => {
                   setPage(1);
                 }}
               >
-                {translation?.property || "Property"} Reviews
+                {translation?.property || "Property"} Reports
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
@@ -101,17 +101,17 @@ const index = () => {
                   setPage(1);
                 }}
               >
-                {translation?.project || "Project"} Reviews
+                {translation?.project || "Project"} Reports
               </Nav.Link>
             </Nav.Item>
           </Nav>
 
           <div className="d-flex justify-content-between mb-3">
-            <h4>
+            {/* <h4>
               {activeTab === "property"
                 ? `${translation?.reported_properties || "Reported Properties"}`
                 : `${translation?.reported_projects || "Reported Projects"}`}
-            </h4>
+            </h4> */}
           </div>
 
           <div className="dashboard-listing mb-4">

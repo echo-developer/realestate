@@ -3,7 +3,7 @@ import React from 'react'
 import useTranslation from '@/hooks/useTranslation';
 import { Button, Card} from "react-bootstrap";
 
-const MembershipBox = ({ data, handleSelectPlan }) => {
+const MembershipBox = ({ data, handleSelectPlan, currency, currencyCode }) => {
     const planGroups = data.reduce((acc, item) => {
         if (!acc[item.plan_name]) {
             acc[item.plan_name] = [];
@@ -27,7 +27,7 @@ const MembershipBox = ({ data, handleSelectPlan }) => {
     };
 
     const formatPrice = (price) => {
-        return `AED${parseFloat(price).toFixed(2)}`;
+        return `${currencyCode}${parseFloat(price).toFixed(2)}`;
     };
     const getPlanColumnClass = (planName, index) => {
         if (planName === 'Gold') return 'bg-warning-subtle';
