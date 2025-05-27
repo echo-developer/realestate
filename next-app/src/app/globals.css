@@ -23,7 +23,6 @@
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
 }
 
 body {
@@ -95,8 +94,4 @@ a {
 
 .hamburger {
   font-size: 24px;
-}
-.modal-open{
-  position: fixed;
-  width: 100%;
 }

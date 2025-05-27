@@ -56,11 +56,7 @@ const Testimonials = ({translation}) => {
           <h2 className="text-white">{translation?.take_a_look_what_our_client_say || "Take A Look What Our Client Say"}</h2>
           <p>{translation?.clients_testimonials_description || "See what our clients are saying about their experiences, highlighting trust, satisfaction, and our commitment to exceptional service."}</p>
         </div>
-        <div className="bg-box">
-          <div className="quote">
-            <img src="/assets/images/icons/quote.png" alt="Quote" height="64" width="64" loading="lazy"/>
-          </div>
-          
+        <div className="bg-box">                    
           {testimonialData?.length > 0 && (
             <Carousel
             responsive={responsive}
@@ -75,6 +71,9 @@ const Testimonials = ({translation}) => {
           >
             {testimonialData?.map((testimonial, index) => (
               <div key={index} className="card">
+                <div className="quote">
+                  <img src="/assets/images/icons/quote.png" alt="Quote" height="64" width="64" loading="lazy"/>
+                </div>
                 <div className="card-body">
                   <div className="card-image text-center mb-3">
                     <img

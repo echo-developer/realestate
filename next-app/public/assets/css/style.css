@@ -33846,11 +33846,13 @@ h4 .icon-img-check, .h4 .icon-img-check {
   color: #F58F00;
 }
 .feedback .bg-box .quote {
-  background-color: #559EFE;
-  border-radius: 50%;
-  padding: 1rem;
+  opacity: 0.5;
   position: absolute;
-  top: -2rem;
+  top: 1rem;
+}
+.feedback .bg-box .quote img {
+  height: 48px;
+  width: 48px;
 }
 .feedback:before {
   content: "";
@@ -37650,13 +37652,9 @@ fieldset .btn-delete {
   .footer-post {
     text-align: center;
   }
-  .feedback .bg-box .quote {
-    top: -2.5rem;
-    padding: 0.75rem;
-  }
   .feedback .bg-box .quote img {
-    height: 48px;
-    width: 48px;
+    height: 32px;
+    width: 32px;
   }
 }
 @media only screen and (max-width: 767.98px) {

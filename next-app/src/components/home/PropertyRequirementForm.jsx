@@ -131,7 +131,7 @@ const PropertyRequirementForm = () => {
           onClick={handleClickOutside}
         ></div>
       )}
-    <aside className="col-lg-6 col-12">
+    <aside className="col-lg-8 col-xl-6 col-12">
       <div className="card">
         <div className="card-body p-lg-4">
           <div className="section-headline">

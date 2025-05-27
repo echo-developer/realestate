@@ -25,8 +25,8 @@ const FindPropertySection = ({translation}) => {
           {translation?.real_estate_marketplace_intro || "At [Real Estate Marketplace Name], we’re dedicated to helping you find your perfect property. Fill out the form below."}
           </p>
         </div>
-        <div className="row align-items-center">
-          <aside className="col-lg-6 col-12 d-none d-lg-block">
+        <div className="row align-items-center justify-content-center">
+          <aside className="col-xl-6 col-12 d-none d-xl-block">
             <div className="row justify-content-center align-items-center mb-4">
               <article className="col-lg col-sm-6 col-12" data-aos="fade-right">
                 <div className="post-info text-center">
