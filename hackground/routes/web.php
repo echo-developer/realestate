@@ -456,7 +456,7 @@ Route::middleware('admin_auth')->group(function () {
     Route::get('/payment-methods', [PaymentMethodController::class, 'paymentMethodView'])->name('set.payment.method');
     Route::post('/save-payment-methods', [PaymentMethodController::class, 'updatePaymentMethod'])->name('save.payment.method');
 
-/*
+    /*
 |--------------------------------------------------------------------------
 | POST PROPERTY ROUTES
 |--------------------------------------------------------------------------
@@ -561,9 +561,9 @@ Route::middleware('admin_auth')->group(function () {
             Route::post('delete', 'destroy')->name('delete');
         });
 
-    Route::prefix('bank/loan')->controller(LoanEnqueryController::class)->group(function () {
+    Route::prefix('bank/')->controller(LoanEnqueryController::class)->group(function () {
 
-        Route::get('enquery_list', 'loanEnquery')->name('delete');
+        Route::get('enquery_list', 'loanEnquery')->name('bank.enquery');
     });
 
     Route::get('feedback', [FeedbackController::class, 'getFeedbackList']);

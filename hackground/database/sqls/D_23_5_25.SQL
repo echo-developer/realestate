@@ -1,1 +1,0 @@
-ALTER TABLE `pref_leads_assigned` ADD `is_seen` INT NOT NULL DEFAULT '0' AFTER `lead_status`;
