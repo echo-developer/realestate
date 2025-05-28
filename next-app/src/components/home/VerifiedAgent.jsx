@@ -6,34 +6,34 @@ import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
 import { useAuth } from '@/context/AuthProvider'
 
-const VerifiedAgent = ({ translation }) => {
+const VerifiedAgent = ({ translation, verifiedAgentList }) => {
   const { callApi } = AuthUser();
   const { defaultCity, buildAgentUrl } = useAuth();
-  const [verifiedAgentList, setVerifiedAgentList] = useState([]);
+  // const [verifiedAgentList, setVerifiedAgentList] = useState([]);
 
-  useEffect(() => {
-    const getVerifiedAgentList = async () => {
-      try {
-        const res = await callApi({
-          api: "/verified_agents",
-          method: "GET",
-          data: {
-            city_id: defaultCity.city_id
-          }
-        })
+  // useEffect(() => {
+  //   const getVerifiedAgentList = async () => {
+  //     try {
+  //       const res = await callApi({
+  //         api: "/verified_agents",
+  //         method: "GET",
+  //         data: {
+  //           city_id: defaultCity.city_id
+  //         }
+  //       })
 
-        if (res && res?.status === 1) {
-          setVerifiedAgentList(res?.data);
-        }
-      } catch (error) {
-        console.error(error?.message || "Something went wrong")
-      }
-    }
+  //       if (res && res?.status === 1) {
+  //         setVerifiedAgentList(res?.data);
+  //       }
+  //     } catch (error) {
+  //       console.error(error?.message || "Something went wrong")
+  //     }
+  //   }
   
-    if(defaultCity?.city_id) {
-      getVerifiedAgentList();
-    }
-  }, [defaultCity?.city_id])
+  //   if(defaultCity?.city_id) {
+  //     getVerifiedAgentList();
+  //   }
+  // }, [defaultCity?.city_id])
 
   const responsive = {
     superLargeDesktop: {

@@ -2,12 +2,13 @@
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import useTranslation from '@/hooks/useTranslation';
-import { People, House, HouseAddFill, Person, Search } from 'react-bootstrap-icons';
 import MobileFooter from '../addtional/MobileFooter';
 import AuthUser from '../Authentication/AuthUser';
+import { useAuth } from '@/context/AuthProvider';
 
 const Footer = () => {
   const { callApi } = AuthUser();
+  const { adminDetails } = useAuth();
   const [adminData, setAdminData] = useState({
     address: "",
     phone: "",
@@ -20,13 +21,23 @@ const Footer = () => {
     contactUs: false,
   });
 
+  useEffect(() => {
+    if(adminDetails) {
+      setAdminData({
+        address: adminDetails?.admin_address,
+        phone: adminDetails?.admin_whatsapp_number, 
+        email: adminDetails?.admin_email
+      })
+    }
+  }, [adminDetails])
+
   const translation = useTranslation();
 
-  useEffect(() => {
-    getAdminPhone();
-    getAdminEmail();
-    getAdminAddress();
-  }, [])
+  // useEffect(() => {
+  //   getAdminPhone();
+  //   getAdminEmail();
+  //   getAdminAddress();
+  // }, [])
   
   const openCloseDropDowns = (key) => {
     setDropDowns((prev) => {
@@ -38,62 +49,62 @@ const Footer = () => {
     });
   };
 
-  const getAdminPhone = async () => {
-    try {
-      const res = await callApi({
-        api: `/get-settings-value/admin-whatsapp-number`,
-        method: "GET",
-      })
-      if(res && res.status == 1) {
-        setAdminData(prev => {
-          return {
-            ...prev,
-            phone: res.value
-          }
-        })
-      }
-    } catch (error) {
-      console.error(error.message)
-    }
-  }
+  // const getAdminPhone = async () => {
+  //   try {
+  //     const res = await callApi({
+  //       api: `/get-settings-value/admin-whatsapp-number`,
+  //       method: "GET",
+  //     })
+  //     if(res && res.status == 1) {
+  //       setAdminData(prev => {
+  //         return {
+  //           ...prev,
+  //           phone: res.value
+  //         }
+  //       })
+  //     }
+  //   } catch (error) {
+  //     console.error(error.message)
+  //   }
+  // }
 
-  const getAdminEmail = async () => {
-    try {
-      const res = await callApi({
-        api: `/get-settings-value/admin-email`,
-        method: "GET"
-      })
-      if(res && res.status == 1) {
-        setAdminData(prev => {
-          return {
-            ...prev,
-            email: res.value
-          }
-        })
-      }
-    } catch (error) {
-      console.error(error.message)
-    }
-  }
+  // const getAdminEmail = async () => {
+  //   try {
+  //     const res = await callApi({
+  //       api: `/get-settings-value/admin-email`,
+  //       method: "GET"
+  //     })
+  //     if(res && res.status == 1) {
+  //       setAdminData(prev => {
+  //         return {
+  //           ...prev,
+  //           email: res.value
+  //         }
+  //       })
+  //     }
+  //   } catch (error) {
+  //     console.error(error.message)
+  //   }
+  // }
 
-  const getAdminAddress = async () => {
-    try {
-      const res = await callApi({
-        api: `/get-settings-value/admin-email`,
-        method: "GET"
-      })
-      if(res && res.status == 1) {
-        setAdminData(prev => {
-          return {
-            ...prev,
-            address: res?.value
-          }
-        })
-      }
-    } catch (error) {
-      console.error(error.message)
-    }
-  }
+  // const getAdminAddress = async () => {
+  //   try {
+  //     const res = await callApi({
+  //       api: `/get-settings-value/admin-email`,
+  //       method: "GET"
+  //     })
+  //     if(res && res.status == 1) {
+  //       setAdminData(prev => {
+  //         return {
+  //           ...prev,
+  //           address: res?.value
+  //         }
+  //       })
+  //     }
+  //   } catch (error) {
+  //     console.error(error.message)
+  //   }
+  // }
 
   
   return (

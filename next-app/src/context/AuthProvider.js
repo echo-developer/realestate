@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
   const [debouncedValue, setDebouncedValue] = useState("");
   const [localityDropdown, setLocalityDropdown] = useState(false);
   const [listingAllowed, setListingAllowed] = useState("");
+  const [adminDetails, setAdminDetails] = useState(null);
 
 
   useEffect(() => {
@@ -40,11 +41,11 @@ export const AuthProvider = ({ children }) => {
       fetchRemainPosting();
     }
 
-    if (!hasFetchedCurrency.current) {
-      hasFetchedCurrency.current = true;
-      getCurrencyCode();
-      getCurrency();
-    }
+    // if (!hasFetchedCurrency.current) {
+    //   hasFetchedCurrency.current = true;
+    //   getCurrencyCode();
+    //   getCurrency();
+    // }
   }, [memberId]);
 
 
@@ -122,33 +123,33 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const getCurrency = async () => {
-    try {
-      const res = await callApi({
-        api: `/get-settings-value/site-currency`,
-        method: "GET",
-      })
-      if (res && res?.status == 1) {
-        setCurrency(res?.value);
-      }
-    } catch (error) {
-      console.error(error?.message)
-    }
-  }
+  // const getCurrency = async () => {
+  //   try {
+  //     const res = await callApi({
+  //       api: `/get-settings-value/site-currency`,
+  //       method: "GET",
+  //     })
+  //     if (res && res?.status == 1) {
+  //       setCurrency(res?.value);
+  //     }
+  //   } catch (error) {
+  //     console.error(error?.message)
+  //   }
+  // }
 
-  const getCurrencyCode = async () => {
-    try {
-      const res = await callApi({
-        api: `/get-settings-value/site-currency-code`,
-        method: "GET",
-      })
-      if (res && res?.status == 1) {
-        setCurrencyCode(res?.value);
-      }
-    } catch (error) {
-      console.error(error?.message)
-    }
-  }
+  // const getCurrencyCode = async () => {
+  //   try {
+  //     const res = await callApi({
+  //       api: `/get-settings-value/site-currency-code`,
+  //       method: "GET",
+  //     })
+  //     if (res && res?.status == 1) {
+  //       setCurrencyCode(res?.value);
+  //     }
+  //   } catch (error) {
+  //     console.error(error?.message)
+  //   }
+  // }
 
   const fetchUserData = async () => {
     setUserLoading(true);
@@ -215,6 +216,8 @@ export const AuthProvider = ({ children }) => {
       uploadUserImage,
       currency,
       currencyCode,
+      setCurrency,
+      setCurrencyCode,
       formatPrice,
       localityList,
       localityInputSearch,
@@ -224,6 +227,8 @@ export const AuthProvider = ({ children }) => {
       getBadgeButtonClass,
       buildAgentUrl,
       listingAllowed,
+      adminDetails, 
+      setAdminDetails
     }}>
       {children}
     </AuthContext.Provider>

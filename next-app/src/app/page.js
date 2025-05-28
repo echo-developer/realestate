@@ -62,7 +62,9 @@ export default function Home() {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const [propertyData, setPropertyData] = useState(null);
   const [projectData, setProjectData] = useState(null);
-  const { defaultCity } = useAuth();
+  const [testimonialList, setTestimonialList] = useState([]);
+  const [verifiedAgentList, setVerifiedAgentList] = useState([]);
+  const { defaultCity, adminDetails, setAdminDetails, setCurrency, setCurrencyCode } = useAuth();
   const router = useRouter();
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
   const { adsData, logAdClick } = useAdvertisement(
@@ -75,50 +77,11 @@ export default function Home() {
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
   const translation = useTranslation();
 
-    useEffect(() => {
-    getPropertyData();
-    getProjectData();
-  }, [memberId,]);
 
   useEffect(() => {
     getHomeData();
   }, [])
 
-  const getPropertyData = async () => {
-    try {
-      const args = {
-        api: "/get_properties",
-        method: "GET",
-        data: {
-          user_id: memberId || "",
-        },
-      };
-      const response = await callApi(args);
-      if (response?.status === 1) {
-        setPropertyData(response?.data);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const getProjectData = async () => {
-    try {
-      const response = await callApi({
-        api: `/all-projects-list`,
-        method: "GET",
-        data: {
-          user_id: memberId || "",
-        },
-      });
-
-      if (response?.status === 1) {
-        setProjectData(response?.data);
-      }
-    } catch (error) {
-      console.error(error?.message || "Something went wrong");
-    }
-  };
 
   const getHomeData = async () => {
     try {
@@ -128,6 +91,13 @@ export default function Home() {
       })
       if(res && res.status == 1) {
         console.log("res", res);
+        setPropertyData(res.data?.properties || {});
+        setProjectData(res?.data?.projects || {});
+        setTestimonialList(res.data?.testimonial || [])
+        setVerifiedAgentList(res.data?.verified_agents || [])
+        setAdminDetails(res.data?.admin_details || {})
+        setCurrency(res.data?.currancy || "$");
+        setCurrencyCode(res.data?.currancy_code || "USD")
       }
     } catch (error) {
       console.error(error.message)
@@ -302,7 +272,7 @@ export default function Home() {
             translation={translation}
           />
 
-          <VerifiedAgent translation={translation} />
+          <VerifiedAgent translation={translation} verifiedAgentList={verifiedAgentList} />
           <PopularLocalities translation={translation} />
           <MainSlider
             data={projectData?.featured_project}
@@ -338,7 +308,7 @@ export default function Home() {
             translation={translation}
           />
 
-          <Testimonials translation={translation} />
+          <Testimonials testimonialData={testimonialList} translation={translation} />
 
           <AdviceSection translation={translation} />
           <TotolUserRecord translation={translation} />

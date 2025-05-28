@@ -4,11 +4,11 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import AuthUser from '../Authentication/AuthUser';
 
-const Testimonials = ({translation}) => {
+const Testimonials = ({translation, testimonialData}) => {
 
   const { callApi } = AuthUser();
   const [isMobile, setIsMobile] = useState(false);
-  const [testimonialData, setTestimonialData] = useState([]);
+  // const [testimonialData, setTestimonialData] = useState([]);
 
   const checkMobileView = () => {
     setIsMobile(window.innerWidth <= 768);
@@ -30,24 +30,24 @@ const Testimonials = ({translation}) => {
   };
 
 
-  const getTestimonials = async () => {
-    try {
-      const res = await callApi({
-        api: "/get_testimonial_list",
-        method: "GET"
-      })
+  // const getTestimonials = async () => {
+  //   try {
+  //     const res = await callApi({
+  //       api: "/get_testimonial_list",
+  //       method: "GET"
+  //     })
 
-      if(res && res?.status === 1) {
-        setTestimonialData(res?.data || []);
-      }
-    } catch (error) {
-      console.error(error?.message || "Something went Wrong")
-    }
-  }
+  //     if(res && res?.status === 1) {
+  //       setTestimonialData(res?.data || []);
+  //     }
+  //   } catch (error) {
+  //     console.error(error?.message || "Something went Wrong")
+  //   }
+  // }
 
-  useEffect(() => {
-    getTestimonials();
-  }, [])
+  // useEffect(() => {
+  //   getTestimonials();
+  // }, [])
 
   return (
     <section className="section feedback">
