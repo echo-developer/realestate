@@ -49,4 +49,9 @@ class PropertyReports extends Model
     {
         return Attribute::get(fn () => User::where('id', $this->user_id)->value('name'));
     }
+
+    public function property()
+    {
+        return $this->belongsTo(PrefProperty::class, 'property_id', 'id');
+    }
 }

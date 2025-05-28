@@ -47,4 +47,9 @@ class ProjectReports extends Model
     {
         return Attribute::get(fn () => User::where('id', $this->user_id)->value('name'));
     }
+
+    public function project()
+    {
+        return $this->belongsTo(PrefProject::class, 'project_id', 'id');
+    }
 }

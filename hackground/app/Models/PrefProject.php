@@ -261,7 +261,7 @@ class PrefProject extends Model
 
     public function reports()
     {
-        return $this->hasMany(PrefProjectReport::class, 'project_id', 'id');
+        return $this->hasMany(ProjectReports::class, 'project_id', 'id');
     }
 
     public function propertyMapping()

@@ -8,10 +8,10 @@ use App\Models\FloorPlan;
 use App\Models\PrefFloorPlanType;
 use App\Models\PrefFloorPlanValue;
 use App\Models\PrefProject;
-use App\Models\PrefProjectReport;
 use App\Models\PrefProperty;
 use App\Models\ProjectAdditional;
 use App\Models\ProjectFavorite;
+use App\Models\ProjectReports;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -709,12 +709,12 @@ class ProjectDetailsController extends Controller
     public function getReportListofProject(Request $request)
     {
         try {
-            $user_id = $request->input('user_id');
+            $user_id = $request->input('user_id') ?? auth_user_id();
             $current_page = $request->input('current_page');
             $limit = $request->input('limit', 10);
             $offset = ($current_page - 1) * $limit;
 
-            $projectsReports = PrefProjectReport::with(['project', 'project.gallery', 'project.gallery.images'])
+            $projectsReports = ProjectReports::with(['project', 'project.gallery', 'project.gallery.images'])
                 ->where('project_posted_by', $user_id)
                 ->orderBy('created_at', 'desc')
                 ->skip($offset)
@@ -750,13 +750,11 @@ class ProjectDetailsController extends Controller
                         'name' => $report->project->project_name ?? null,
                         'slug' => $report->project->slug  ?? null,
                         'image' => $imgURL,
-                        'reported_by' => $reported_by ?? null,
                         'reason' => $report->reason ?? null,
-                        'description' => $report->feedback ?? null,
                     ];
             }
 
-            $totalReports = PrefProjectReport::where('project_posted_by', $user_id)->count();
+            $totalReports = ProjectReports::where('project_posted_by', $user_id)->count();
             $totalPages = ceil($totalReports / $limit);
 
             // log::info(json_encode($projectsReports, JSON_PRETTY_PRINT));

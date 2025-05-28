@@ -14,7 +14,7 @@ use App\Models\PrefProject;
 use App\Models\PrefProperty;
 
 use App\Models\PrefPropertyAdditional;
-use App\Models\PrefPropertyReport;
+use App\Models\PropertyReports;
 use App\Models\ProjectPropertyMapping;
 use App\Models\User;
 use function Laravel\Prompts\table;
@@ -733,7 +733,7 @@ class PropertyDetailsController extends Controller
                 ]);
             }
 
-            $propertyReports = PrefPropertyReport::with(['property', 'property.gallery', 'property.gallery.images'])
+            $propertyReports = PropertyReports::with(['property', 'property.gallery', 'property.gallery.images'])
                 ->where('property_posted_by', $user_id)
                 ->orderBy('created_at', 'desc')
                 ->skip($offset)
@@ -769,13 +769,11 @@ class PropertyDetailsController extends Controller
                         'name' => $report->property->name ?? null,
                         'slug' => $report->property->slug  ?? null,
                         'image' => $imgURL,
-                        'reported_by' => $reported_by ?? null,
                         'reason' => $report->reason ?? null,
-                        'description' => $report->feedback ?? null,
                     ];
             }
 
-            $totalReports = PrefPropertyReport::where('property_posted_by', $user_id)->count();
+            $totalReports = PropertyReports::where('property_posted_by', $user_id)->count();
             $totalPages = ceil($totalReports / $limit);
 
             // log::info(json_encode($propertyReports, JSON_PRETTY_PRINT));
