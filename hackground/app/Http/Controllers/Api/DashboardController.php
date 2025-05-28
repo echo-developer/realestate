@@ -1076,7 +1076,7 @@ class DashboardController extends Controller
     public function update_my_profile(Request $req)
     {
         try {
-            log::info($req->all());
+            // log::info($req->all());
             $user_id = $req->user_id;
 
             $requestData = [
@@ -1249,29 +1249,24 @@ class DashboardController extends Controller
     {
         try {
             $mediaPlatform = json_decode($req->input('social_media'), true);
-
             $inputKeys = array_column($mediaPlatform, 'key');
 
             $existingKeys = AgentSocialPlatform::where('agent_id', $user_id)->pluck('platform_key')->toArray();
 
 
             foreach ($mediaPlatform as $media) {
-                if (!empty($media['name']) && !empty($media['url'])) {
+                if (!empty($media['key']) && !empty($media['url'])) {
                     AgentSocialPlatform::updateOrCreate(
                         [
                             'platform_key' => $media['key'],
                             'agent_id' => $user_id
                         ],
                         [
-                            'platform_name' => $media['name'] ?? null,
+                            'platform_key' => $media['key'] ?? null,
                             'platform_url' => $media['url'] ?? null,
                         ]
                     );
                 }
-            }
-            $keysToDelete = array_diff($existingKeys, $inputKeys);
-            if (!empty($keysToDelete)) {
-                AgentSocialPlatform::whereIn('platform_key', $keysToDelete)->delete();
             }
         } catch (\Throwable $e) {
             throw $e;

@@ -23,6 +23,7 @@ class AgentSocialPlatform extends Model
     protected $hidden = [
         'id',
         'agent_id',
+        'platform_name',
     ];
 
     public function agent()
