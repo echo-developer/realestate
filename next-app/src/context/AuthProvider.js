@@ -47,6 +47,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [memberId]);
 
+
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedValue(localityInputSearch)

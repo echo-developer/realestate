@@ -19,8 +19,8 @@ import Select from 'react-select';
 
 const Header = () => {
   const isMobile = useIsMobile();
-  const { callApi, isLogin, logout, GetMemberId, userData } = AuthUser();
-  const { defaultCity, handleDefaultCityChange, setGetAllCity, currency, listingAllowed } = useAuth();
+  const { callApi, isLogin, logout, GetMemberId } = AuthUser();
+  const { defaultCity, handleDefaultCityChange, setGetAllCity, currency, userData, listingAllowed } = useAuth();
   const [isDesktopLogoLoaded, setIsDesktopLogoLoaded] = useState(false);
   const [isMobileLogoLoaded, setIsMobileLogoLoaded] = useState(false);
   const [showLocationDrop, setShowLocationDrop] = useState(false);

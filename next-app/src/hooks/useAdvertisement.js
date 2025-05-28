@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AuthUser from "@/components/Authentication/AuthUser";
 import { useAuth } from "@/context/AuthProvider";
 
@@ -10,7 +10,10 @@ const useAdvertisement = (page, position, city, category) => {
   const [error, setError] = useState(null);
   const { defaultCity } = useAuth();
 
+  const prevParams = useRef();
+
   useEffect(() => {
+
     const fetchAdvertisementData = async () => {
       setLoading(true);
       setError(null);
@@ -18,7 +21,7 @@ const useAdvertisement = (page, position, city, category) => {
         page, position, city: defaultCity.city_id
       }
 
-      if(category) {
+      if (category) {
         data.category = category
       }
       try {
@@ -40,10 +43,23 @@ const useAdvertisement = (page, position, city, category) => {
       }
     };
 
-    if(defaultCity) {
-      fetchAdvertisementData();
+    if (defaultCity) {
+      const currentParams = JSON.stringify({
+        page,
+        position,
+        category,
+        city_id: defaultCity.city_id,
+      });
+
+      if (prevParams.current == currentParams) {
+        return;
+      } else {
+        prevParams.current = currentParams;
+        fetchAdvertisementData();
+      }
     }
-  }, [page, position, defaultCity, category]);
+
+  }, [defaultCity, category, page, position]);
 
   const logAdClick = async (advertisement_id, ad_url) => {
     try {
