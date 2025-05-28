@@ -7,6 +7,7 @@ use App\Models\PrefProject;
 use App\Models\Api\ApiModel;
 use App\Models\PrefProperty;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class HomeService
 {
@@ -22,68 +23,110 @@ class HomeService
         $limit = 10;
         $user_id = auth_user_id() ?? null;
 
-        $properties = $this->apiModel->GetProperties();
+        $properties = PrefProperty::select('id', 'slug', 'uid', 'name', 'created_at', 'is_featured', 'is_populer', 'is_top')
+            ->with([
+                'settings:pid,bedrooms,bathrooms,area_in_sqft,unit_type,super_area,property_type_for,post_for,expected_price,parking_ability',
+                'location:pid,property_address',
+                'user:id,image'
+            ])
+            ->where('is_deleted', 0)
+            ->where('status', 1)
+            ->latest()
+            ->take($limit)
+            ->get();
 
-        $formattedProperties = $properties->map(function ($property) use ($user_id) {
-            $is_favorite = !empty($user_id) && DB::table('my_favorite_property')
+        $propertyIds = $properties->pluck('id')->toArray();
+
+        // Fetch favorites in one query
+        $favoritePropertyIds = [];
+        if ($user_id) {
+            $favoritePropertyIds = DB::table('my_favorite_property')
                 ->where('uid', $user_id)
-                ->where('propID', $property->property_id)
-                ->value('status') == config('constants.STATUS_ACTIVE');
+                ->whereIn('propID', $propertyIds)
+                ->where('status', config('constants.STATUS_ACTIVE'))
+                ->pluck('propID')
+                ->toArray();
+        }
 
-            $galleryImages = GetProperties_GalleryImages($property->property_id);
+        $formattedProperties = $properties->map(function ($property) use ($user_id, $favoritePropertyIds) {
+            $is_favorite = in_array($property->id, $favoritePropertyIds);
+
+            // Get gallery images for property
+            $galleryImages = GetProperties_GalleryImages([$property->id]);
             $galleries = [];
 
             if ($galleryImages->isNotEmpty()) {
-                $image = $galleryImages->first();
-                $galleries[] = [
-                    'gallery' => $image?->image_type,
-                    'images' => [[
-                        'image_id'   => $image?->image_id,
-                        'image_name' => $image?->filename,
-                        'image_url'  => asset('user_upload/property_images/' . $image?->filename),
-                        'caption'    => $image?->caption,
-                    ]]
-                ];
+                $grouped = $galleryImages->groupBy('image_type');
+
+                // Prefer 'exterior' type image
+                if ($grouped->has('exterior') && $grouped['exterior']->isNotEmpty()) {
+                    $image = $grouped['exterior']->first();
+                    $galleries[] = [
+                        'gallery' => 'exterior',
+                        'images' => [[
+                            'image_id'   => $image->image_id,
+                            'image_name' => $image->filename,
+                            'image_url'  => asset('user_upload/property_images/' . $image->filename),
+                            'caption'    => $image->caption,
+                        ]]
+                    ];
+                } else {
+                    // Fallback: use the first image from any type
+                    $firstImage = $galleryImages->first();
+                    $galleries[] = [
+                        'gallery' => $firstImage->image_type ?? 'default',
+                        'images' => [[
+                            'image_id'   => $firstImage->image_id,
+                            'image_name' => $firstImage->filename,
+                            'image_url'  => asset('user_upload/property_images/' . $firstImage->filename),
+                            'caption'    => $firstImage->caption,
+                        ]]
+                    ];
+                }
             }
 
+
             return [
-                'property_id'       => $property->property_id,
+                'property_id'       => $property->id,
                 'is_favourite'      => $is_favorite,
                 'user'              => get_user_name($property->uid ?? null),
-                'logo'              => !empty($property->image) && file_exists(public_path('user_upload/profile_image/' . $property->image))
-                    ? asset('user_upload/profile_image/' . $property->image) : '',
-                'property_size'     => $property->super_area ?? '',
-                'unit_type'         => $property->unit_type ?? '',
-                'area_in_sqft'      => $property->area_in_sqft ?? '',
-                'property_name'     => $property->property_name ?? '',
+                'logo'              => (!empty($property->user?->image) && file_exists(public_path('user_upload/profile_image/' . $property->user->image)))
+                    ? asset('user_upload/profile_image/' . $property->user->image) : '',
+                'property_size'     => $property->settings->super_area ?? '',
+                'unit_type'         => $property->settings->unit_type ?? '',
+                'area_in_sqft'      => $property->settings->area_in_sqft ?? '',
+                'property_name'     => $property->name ?? '',
                 'slug'              => $property->slug ?? '',
-                'views'             => $property->views ?? 0,
-                'is_featured'       => $property->is_featured ?? false,
-                'is_populer'        => $property->is_populer ?? false,
-                'is_top'            => $property->is_top ?? false,
-                'post_for'          => $property->post_for ?? '',
-                'parking_ability'   => $property->parking_ability ?? '',
-                'property_type_for' => get_name_by_id('property_sub_category_names', 'sub_category_id', $property->property_type_for ?? null, 'en'),
-                'bedrooms'          => $property->bedrooms ?? '',
-                'bathroom'          => $property->bathrooms ?? '',
-                'price'             => $property->expected_price ?? '',
+                'post_for'          => $property->settings->post_for ?? '',
+                'parking_ability'   => $property->settings->parking_ability ?? '',
+                'property_type_for' => get_name_by_id('property_sub_category_names', 'sub_category_id', $property->settings->property_type_for ?? null, 'en'),
+                'bedrooms'          => $property->settings->bedrooms ?? '',
+                'bathroom'          => $property->settings->bathrooms ?? '',
+                'price'             => $property->settings->expected_price ?? '',
                 'created_at'        => $property->created_at ?? '',
-                'address'           => $property->property_address ?? '',
-                'image_count'       => getGalleriesCount($property->property_id, 'property'),
+                'address'           => $property->location->property_address ?? '',
+                'image_count'       => getGalleriesCount($property->id, 'property'),
                 'galleries'         => array_values($galleries),
+                'is_featured'       => $property->is_featured,
+                'is_populer'        => $property->is_populer,
+                'is_top'            => $property->is_top,
             ];
         });
 
         return [
-            'recent_properties' => $formattedProperties->sortByDesc('created_at')->take($limit)->values(),
+            'recent_properties'   => $formattedProperties->sortByDesc('created_at')->take($limit)->values(),
             'featured_properties' => $formattedProperties->where('is_featured', true)->take($limit)->values(),
-            'popular_properties' => $formattedProperties->where('is_populer', true)->take($limit)->values(),
-            'top_properties' => $formattedProperties->where('is_top', true)->take($limit)->values(),
+            'popular_properties'  => $formattedProperties->where('is_populer', true)->take($limit)->values(),
+            'top_properties'      => $formattedProperties->where('is_top', true)->take($limit)->values(),
         ];
     }
+
+
     public function getProjectsByType(): array
     {
+        DB::enableQueryLog();
         $user_id = auth_user_id() ?? null;
+
         $projectTypes = [
             'featured_project' => ['is_featured', true],
             'new_project'      => ['created_at', '>=', now()->subDays(7)],
@@ -101,14 +144,13 @@ class HomeService
             ])
                 ->with(['settings', 'additional', 'location', 'galleries.images'])
                 ->orderBy('created_at', 'desc')
-                ->limit(12)
+                ->limit(10)
                 ->get();
 
             $projectsData[$key] = $query->map(function ($project) use ($user_id) {
                 return $this->flattenProject($project, $user_id);
             });
         }
-
         return $projectsData;
     }
 

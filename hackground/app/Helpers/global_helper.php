@@ -769,14 +769,12 @@ if (!function_exists('getGalleryWithImagesProject')) {
         return $gallery;
     }
 }
-
 if (!function_exists('GetProperties_GalleryImages')) {
     function GetProperties_GalleryImages($property_id)
     {
-
-        $galleryImages = DB::table('property_gallary')
+        return DB::table('property_gallary')
             ->join('property_gallary_images', 'property_gallary.id', '=', 'property_gallary_images.gallary_id')
-            ->where('property_gallary.pid', $property_id)
+            ->where('property_gallary.pid', $property_id) // fixed here
             ->select(
                 'property_gallary.image_type',
                 'property_gallary.description',
@@ -786,9 +784,6 @@ if (!function_exists('GetProperties_GalleryImages')) {
                 'property_gallary_images.caption',
             )
             ->get();
-
-
-        return $galleryImages;
     }
 }
 
