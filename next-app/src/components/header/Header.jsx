@@ -19,7 +19,7 @@ import Select from 'react-select';
 
 const Header = () => {
   const isMobile = useIsMobile();
-  const { callApi, isLogin, logout, GetMemberId } = AuthUser();
+  const { callApi, isLogin, logout, GetMemberId, userData } = AuthUser();
   const { defaultCity, handleDefaultCityChange, setGetAllCity, currency, listingAllowed } = useAuth();
   const [isDesktopLogoLoaded, setIsDesktopLogoLoaded] = useState(false);
   const [isMobileLogoLoaded, setIsMobileLogoLoaded] = useState(false);
@@ -38,7 +38,7 @@ const Header = () => {
   const router = useRouter();
   const translation = useTranslation();
   const [validLogin, setValidLogin] = useState(false);
-  const [userData, setUserData] = useState();
+  // const [userData, setUserData] = useState();
   const memberId = GetMemberId();
   const [currentLang, setCurrentLang] = useState("en");
 
@@ -49,28 +49,28 @@ const Header = () => {
 
   useEffect(() => {
     if (memberId) {
-      FetchUserData(memberId);
+      // FetchUserData(memberId);
       setValidLogin(true);
     }
   }, []);
 
 
-  const FetchUserData = async (memberId) => {
-    let response;
-    try {
-      response = await callApi({
-        api: `/get_user_data`,
-        method: "GET",
-        data: {
-          member_id: memberId,
-        },
-      });
-      if (response && response.success === 1) {
-        setUserData(response.data);
-        setUserLogo(response?.data?.image);
-      }
-    } catch (error) { }
-  };
+  // const FetchUserData = async (memberId) => {
+  //   let response;
+  //   try {
+  //     response = await callApi({
+  //       api: `/get_user_data`,
+  //       method: "GET",
+  //       data: {
+  //         member_id: memberId,
+  //       },
+  //     });
+  //     if (response && response.success === 1) {
+  //       setUserData(response.data);
+  //       setUserLogo(response?.data?.image);
+  //     }
+  //   } catch (error) { }
+  // };
 
   useEffect(() => {
     if (defaultCity) {

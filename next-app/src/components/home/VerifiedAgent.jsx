@@ -29,8 +29,10 @@ const VerifiedAgent = ({ translation }) => {
         console.error(error?.message || "Something went wrong")
       }
     }
-
-    getVerifiedAgentList();
+  
+    if(defaultCity?.city_id) {
+      getVerifiedAgentList();
+    }
   }, [defaultCity?.city_id])
 
   const responsive = {

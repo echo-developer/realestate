@@ -1,15 +1,16 @@
 "use client";
 import AuthUser from "@/components/Authentication/AuthUser";
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { toast } from "react-toastify";
+import React, { createContext, useContext, useState, useEffect, useRef } from "react";
 
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const { callApi, GetMemberId } = AuthUser()
+  const { callApi, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
+  const hasFetchedUserData = useRef(false);
+  const hasFetchedCurrency = useRef(false);
   const [propertyFor, setPropertyFor] = useState(null);
   const [defaultCity, setDefaultCity] = useState(null);
   const [getAllCity, setGetAllCity] = useState([]);
@@ -23,6 +24,7 @@ export const AuthProvider = ({ children }) => {
   const [localityDropdown, setLocalityDropdown] = useState(false);
   const [listingAllowed, setListingAllowed] = useState("");
 
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       setDefaultCity(
@@ -31,17 +33,39 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-    useEffect(() => {
-    if(memberId) {
+  useEffect(() => {
+    if (memberId && !hasFetchedUserData.current) {
+      hasFetchedUserData.current = true;
       fetchUserData();
       fetchRemainPosting();
     }
-    getCurrencyCode();
-    getCurrency();
-  }, [memberId])
+
+    if (!hasFetchedCurrency.current) {
+      hasFetchedCurrency.current = true;
+      getCurrencyCode();
+      getCurrency();
+    }
+  }, [memberId]);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(localityInputSearch)
+    }, 500)
+
+    return () => {
+      clearTimeout(handler);
+    }
+  }, [localityInputSearch])
 
 
-    const fetchRemainPosting = async () => {
+  useEffect(() => {
+    if (debouncedValue?.length >= 3) {
+      fetchLocalityList();
+    }
+  }, [debouncedValue])
+
+
+  const fetchRemainPosting = async () => {
     try {
       const response = await callApi({
         api: `/get_remaining_value`,
@@ -59,30 +83,27 @@ export const AuthProvider = ({ children }) => {
     } catch (error) { }
   };
 
-
-  // const currencies = ["USD", "EUR", "GBP", "INR", "JPY", "AUD", "CAD", "CHF", "CNY", "AED"];
-
   function formatPrice(price) {
-    if(!price) return;
-    if (!currencyCode) return price?.toString();  
-  
+    if (!price) return;
+    if (!currencyCode) return price?.toString();
+
     const upperCurrency = currencyCode?.toUpperCase();
-  
+
     switch (upperCurrency) {
-  
+
       case "INR":
         if (price >= 10000000) return `${upperCurrency} ${(price / 10000000).toFixed(1)} Cr`;
         if (price >= 100000) return `${upperCurrency} ${(price / 100000).toFixed(1)} Lac`;
         if (price >= 1000) return `${upperCurrency} ${(price / 1000).toFixed(1)}K`;
         return `${upperCurrency} ${price.toString()}`;
-  
+
       case "JPY":
       case "CNY":
         if (price >= 1000000000) return `${upperCurrency} ${(price / 1000000000).toFixed(1)}B`;
         if (price >= 1000000) return `${upperCurrency} ${(price / 1000000).toFixed(1)}M`;
         if (price >= 1000) return `${upperCurrency} ${(price / 1000).toFixed(1)}K`;
         return `${upperCurrency} ${price.toString()}`;
-  
+
       case "USD":
       case "EUR":
       case "GBP":
@@ -94,70 +115,10 @@ export const AuthProvider = ({ children }) => {
         if (price >= 1000000) return `${upperCurrency} ${(price / 1000000).toFixed(1)}M`;
         if (price >= 1000) return `${upperCurrency} ${(price / 1000).toFixed(1)}K`;
         return `${upperCurrency} ${price.toString()}`;
-  
+
       default:
         return `${upperCurrency} ${price.toString()}`;
     }
-}
-
-  
-
-
-  // useEffect(() => {
-  //   if(defaultCity?.city_id) {
-  //     const getLocalityList = async () => {
-  //       try {
-  //         const res = await callApi({
-  //           api: `/locality-list`,
-  //           method: "GET",
-  //           data: {
-  //             city_id: defaultCity.city_id
-  //           }
-  //         })
-  //         if(res && res?.status == 1) {
-  //           setLocalityList(res?.data || []);
-  //         } 
-  //       } catch (error) {
-  //         console.error(error.message || 'Something went wrong')
-  //       }
-
-  //     }
-
-  //     getLocalityList();
-  //   }
-  // }, [defaultCity?.city_id])
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(localityInputSearch)
-    }, 500)
-
-    return () => {
-      clearTimeout(handler);
-    }
-  }, [localityInputSearch])
-
-
-  useEffect(() => {
-    if(debouncedValue?.length >= 3) {
-      fetchLocalityList();
-    }
-  }, [debouncedValue])
-
-
-  const fetchLocalityList = async () => {
-    setLocalityList([
-      { id: 1, name: "Salt Lake" },
-      { id: 2, name: "New Town" },
-      { id: 3, name: "Behala" },
-      { id: 4, name: "Dum Dum" },
-      { id: 5, name: "Garia" },
-      { id: 6, name: "Tollygunge" },
-      { id: 7, name: "Park Street" },
-      { id: 8, name: "Jadavpur" },
-      { id: 9, name: "Ballygunge" },
-      { id: 10, name: "Howrah" }
-    ])
   }
 
   const getCurrency = async () => {
@@ -166,7 +127,7 @@ export const AuthProvider = ({ children }) => {
         api: `/get-settings-value/site-currency`,
         method: "GET",
       })
-      if(res && res?.status == 1) {
+      if (res && res?.status == 1) {
         setCurrency(res?.value);
       }
     } catch (error) {
@@ -180,45 +141,43 @@ export const AuthProvider = ({ children }) => {
         api: `/get-settings-value/site-currency-code`,
         method: "GET",
       })
-      if(res && res?.status == 1) {
+      if (res && res?.status == 1) {
         setCurrencyCode(res?.value);
       }
     } catch (error) {
       console.error(error?.message)
     }
   }
-  // site-currency-code
-    const fetchUserData = async () => {
-      setUserLoading(true);
-      try {
-        const response = await callApi({
-          api: '/get_user_data',
-          method: "GET",
-          data: {
-            member_id: memberId,
-          },
-        });
-  
-        if(response?.success == 1) {
-          setUserData(response?.data);
-        }
-      } catch (error) {
-        console.error(error.message || "Failed to get User Data");
-      } finally {
-        setUserLoading(false);
+
+  const fetchUserData = async () => {
+    setUserLoading(true);
+    try {
+      const response = await callApi({
+        api: '/get_user_data',
+        method: "GET",
+        data: {
+          member_id: memberId,
+        },
+      });
+
+      if (response?.success == 1) {
+        setUserData(response?.data);
       }
-    };
-
-    // console.log("user data", userData);f
-
-    const uploadUserImage = (imageUrl) => {
-      setUserData(prev => {
-        return {
-          ...prev,
-          image: imageUrl
-        }
-      })
+    } catch (error) {
+      console.error(error.message || "Failed to get User Data");
+    } finally {
+      setUserLoading(false);
     }
+  };
+
+  const uploadUserImage = (imageUrl) => {
+    setUserData(prev => {
+      return {
+        ...prev,
+        image: imageUrl
+      }
+    })
+  }
 
   const handleDefaultCityChange = (city) => {
     setDefaultCity(city);
@@ -234,42 +193,38 @@ export const AuthProvider = ({ children }) => {
 
   function getBadgeButtonClass(badgeName) {
     return badgesObject[badgeName] || 'bg-primary-subtle text-primary'
-}
+  }
 
 
-const buildAgentUrl = (agent) => {
-  return `/agent-details/${agent.name.toLowerCase().replace(/\s+/g, '-')}?id=${agent.user_id || agent.id}`;
-}
-
-
+  const buildAgentUrl = (agent) => {
+    return `/agent-details/${agent.name.toLowerCase().replace(/\s+/g, '-')}?id=${agent.user_id || agent.id}`;
+  }
 
   return (
-    <AuthContext.Provider
-      value={{
-        propertyFor,
-        setPropertyFor,
-        defaultCity,
-        handleDefaultCityChange,
-        getAllCity,
-        setGetAllCity,
-        userData,
-        userLoading,
-        setUserData,
-        uploadUserImage,
-        currency,
-        currencyCode,
-        formatPrice,
-        localityList,
-        localityInputSearch,
-        setLocalityInputSearch,
-        localityDropdown,
-        setLocalityDropdown, 
-        getBadgeButtonClass,
-        buildAgentUrl,
-        listingAllowed,
-      }}
-    >
+    <AuthContext.Provider value={{
+      propertyFor,
+      setPropertyFor,
+      defaultCity,
+      handleDefaultCityChange,
+      getAllCity,
+      setGetAllCity,
+      userData,
+      userLoading,
+      setUserData,
+      uploadUserImage,
+      currency,
+      currencyCode,
+      formatPrice,
+      localityList,
+      localityInputSearch,
+      setLocalityInputSearch,
+      localityDropdown,
+      setLocalityDropdown,
+      getBadgeButtonClass,
+      buildAgentUrl,
+      listingAllowed,
+    }}>
       {children}
     </AuthContext.Provider>
-  );
+  )
 }

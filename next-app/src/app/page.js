@@ -115,7 +115,7 @@ export default function Home() {
   useEffect(() => {
     getPropertyData();
     getProjectData();
-  }, [memberId, defaultCity]);
+  }, [memberId,]);
 
   const addRemoveFav = async (id, type, listKey) => {
     if (isLogin()) {
