@@ -63,8 +63,9 @@
                                 <th style="width:10%;">Report ID</th>
                                 <th style="width:25%;">Property Name <br> <small>(User)</small></th>
                                 <th style="width:15%;">Reported by</th>
-                                <th style="width:20%;" class="text-center">Report Details</th>
-                                <th style="width:20%;" class="text-center">Status</th>
+                                <th style="width:10%;" class="text-center">Report Details</th>
+                                <th style="width:20%;" class="text-center">Reported on</th>
+                                <th style="width:10%;" class="text-center">Status</th>
                                 {{-- <th style="width:15%;">Action</th> --}}
                                 <th style="width:15%;"class="text-right">Delete</th>
                             </tr>
@@ -75,8 +76,11 @@
                                     <tr>
                                         <td>{{ $item->id }}</td>
                                         <td>
-                                            <a href="{{ url('allproperties/all-property-view') . '?slug=' . $item?->property_slug }}">{{ $item->property_name ?? 'N/A' }}</a> <br>
-                                            <a href="{{ url('member/memberUser') . '?term=' . $item?->posted_by_name }}"><small>{{ $item->posted_by_name ?? 'N/A' }}</small></a>
+                                            <a
+                                                href="{{ url('allproperties/all-property-view') . '?slug=' . $item?->property_slug }}">{{ $item->property_name ?? 'N/A' }}</a>
+                                            <br>
+                                            <a href="{{ url('member/memberUser') . '?term=' . $item?->posted_by_name }}"
+                                                style="color:rgb(182, 117, 42) ; font-weight:bold"><small>({{ $item->posted_by_name ?? 'N/A' }})</small></a>
                                         </td>
                                         <td>{{ $item->reporter_name ?? 'N/A' }}</td>
                                         <td class="text-center">
@@ -93,6 +97,7 @@
 
                                             </i>
                                         </td>
+                                        <td class="text-center">{{ $item->created_at->format('j M, Y') }}</td>
                                         <td class="text-center">
                                             <input data-id="{{ $item->id }}" class="status d-none" type="checkbox"
                                                 data-toggle="toggle" data-on="Read" data-off="Unread" data-onstyle="success"
@@ -147,16 +152,16 @@
                 <div class="modal-body">
                     <dl class="row">
                         <dt class="col-sm-4 fw-semibold">Posted By</dt>
-                        <dd class="col-sm-8" id="reported_by"></dd>
+                        <dd class="col-sm-8 text-break" id="reported_by"></dd>
 
                         <dt class="col-sm-4 fw-semibold">Reason</dt>
-                        <dd class="col-sm-8" id="reason"></dd>
+                        <dd class="col-sm-8 text-break" id="reason"></dd>
 
                         <dt class="col-sm-4 fw-semibold">Feedback</dt>
-                        <dd class="col-sm-8" id="feedback"></dd>
+                        <dd class="col-sm-8 text-break" id="feedback"></dd>
 
                         <dt class="col-sm-4 fw-semibold">Reported On</dt>
-                        <dd class="col-sm-8" id="posted_on"></dd>
+                        <dd class="col-sm-8 text-break" id="posted_on"></dd>
                     </dl>
                 </div>
             </div>
@@ -273,7 +278,7 @@
                     },
                     {
                         "orderable": false,
-                        "targets": [2, 3, 4]
+                        "targets": [1, 2, 3, 4, 5, 6]
                     }
                 ]
             });
