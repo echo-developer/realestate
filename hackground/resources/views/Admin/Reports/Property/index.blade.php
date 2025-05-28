@@ -82,7 +82,7 @@
                                         <td class="text-center">
                                             @php
                                                 $details = [
-                                                    'posted_by_name' => $item?->posted_by_name,
+                                                    'reporter_name' => $item?->reporter_name,
                                                     'reason' => $item?->reason,
                                                     'feedback' => $item?->feedback,
                                                     'posted_on' => $item->created_at->format('j M, Y h:i A'),
@@ -172,9 +172,9 @@
 
             const details = $(this).data('report-details');
 
-            $('#reported_by').text(details.posted_by_name);
-            $('#reason').text(details.reason ?? 'N/A');
-            $('#feedback').text(details.feedback ?? 'N/A');
+            $('#reported_by').text(details.reporter_name || 'N/A');
+            $('#reason').text(details.reason || 'N/A');
+            $('#feedback').text(details.feedback || 'N/A');
             $('#posted_on').text(details.posted_on);
 
             $detailsModal.modal('show')

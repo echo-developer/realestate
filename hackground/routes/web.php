@@ -40,6 +40,7 @@ use App\Http\Controllers\Admin\PostPropertyController;
 use App\Http\Controllers\Admin\ProjectAmenityController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\ProjectEditController;
+use App\Http\Controllers\Admin\ProjectReportController;
 use App\Http\Controllers\Admin\Property_SubCategoryController;
 use App\Http\Controllers\Admin\PropertyBudgetController;
 use App\Http\Controllers\Admin\PropertyCategory;
@@ -62,6 +63,7 @@ use App\Http\Controllers\Api\FloorPlaningController;
 use App\Http\Controllers\Api\Project\ProjectImageUploade;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
+
 
 
 /*
@@ -713,4 +715,10 @@ Route::prefix('reports')->name('reports.')->controller(PropertyReportsController
     Route::get('/property', 'index')->name('property');
     Route::post('/status-property', 'changeStatus')->name('property.status');
     Route::post('/property-delete', 'deleteReport')->name('property.delete');
+});
+
+Route::prefix('reports')->name('reports.')->controller(ProjectReportController::class)->group(function () {
+    Route::get('/project', 'index')->name('project');
+    Route::post('/status-project', 'changeStatus')->name('project.status');
+    Route::post('/project-delete', 'deleteReport')->name('project.delete');
 });
