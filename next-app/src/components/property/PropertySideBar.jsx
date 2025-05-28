@@ -18,6 +18,7 @@ import useTranslation from "@/hooks/useTranslation";
 import useAdvertisement from "@/hooks/useAdvertisement";
 import { useAuth } from "@/context/AuthProvider";
 import { useRouter } from "next/navigation";
+import SiteVisitModal from "./SiteVisitModal";
 
 const PropertySidebar = ({
   propertyId,
@@ -33,7 +34,7 @@ const PropertySidebar = ({
 }) => {
   const { callApi, isLogin, GetMemberId } = AuthUser();
   const router = useRouter();
-  const { defaultCity, buildAgentUrl } = useAuth();
+  const { defaultCity, buildAgentUrl, userData } = useAuth();
   const [showReportModal, setShowReportModal] = useState(false);
   const [showAgentModal, setShowAgentModal] = useState(false);
   const translation = useTranslation();
@@ -41,6 +42,7 @@ const PropertySidebar = ({
   const categoryId = propertyDetails?.property_type_id;
   const [contactPhoneNumber, setContactPhoneNumber] = useState("");
   const [nameLinkErrMessage, setNameLinkErrMessage] = useState('');
+  const [siteVisitModal, setSiteVisitModal] = useState(false);
   const { adsData, logAdClick } = useAdvertisement(
     "detail-page",
     "right",
@@ -215,6 +217,12 @@ const PropertySidebar = ({
     }
   }
 
+  const handleSiteVisit = async () => {
+    console.log("propertyDetails?.user_details", propertyDetails?.user_details);
+    console.log("handle site visit ran");
+    setSiteVisitModal(true);
+  }
+
   return (
     <aside className="col-xl-3 col-12">
       <div className="sticky-top_ mb-4">
@@ -347,6 +355,11 @@ const PropertySidebar = ({
                         onClick={() => setShowCommunicationModal(true)}
                       >
                         {translation?.contact_now || "Contact Now"}
+                      </button>
+                      <button 
+                      className="btn btn-primary mt-2"
+                      onClick={() => handleSiteVisit()}>
+                        Book Site Visit
                       </button>
                     </div>
                   </div>
@@ -686,6 +699,8 @@ const PropertySidebar = ({
           />
         </Modal.Body>
       </Modal>
+
+      <SiteVisitModal siteVisitModal={siteVisitModal} setSiteVisitModal={setSiteVisitModal} handleSiteVisit={handleSiteVisit} loggedInUser={userData} property_id={propertyDetails?.property_id} />
 
       <>
         <Offcanvas
