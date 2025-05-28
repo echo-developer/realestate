@@ -39,6 +39,7 @@ class AllProjectController extends Controller
         $projectStatus = json_decode($postController->status($request)->getContent(), true)['data'] ?? [];
         $filters = $request->only([
             'term',
+            'slug',
             'project_type',
             'address',
             'occupied_area',

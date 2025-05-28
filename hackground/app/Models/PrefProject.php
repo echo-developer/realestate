@@ -36,6 +36,10 @@ class PrefProject extends Model
             $query->where('project_name', 'like', '%' . $filters['term'] . '%');
         }
 
+        if (!empty($filters['slug'])) {
+            $query->where('slug', $filters['slug']);
+        }
+
 
         $query->when(!empty($filters['user_id']), fn($q) => $q->where('uid', $filters['user_id']));
 
@@ -75,7 +79,7 @@ class PrefProject extends Model
         return $query;
     }
 
-    
+
     // public function searchProject($data, $user_id, $hasLatLang)
     // {
     //     // log::info($data);
