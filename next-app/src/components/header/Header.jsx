@@ -936,7 +936,7 @@ const Header = () => {
                                 userData.name.charAt(0).toUpperCase()
                               ) : (
                                 <img
-                                  src="/assets/images/user.jpg"
+                                  src={userData?.image || "/assets/images/user.jpg"} 
                                   alt="Default User"
                                   height={30}
                                   loading="lazy"
