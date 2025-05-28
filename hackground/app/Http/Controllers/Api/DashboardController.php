@@ -1021,29 +1021,30 @@ class DashboardController extends Controller
             $agentAdditional = $get_user->agentAdditional ?? null;
             if ($agentAdditional) {
                 $agentAdditional->agent_docucment = !empty($agentAdditional->agent_doc)
-                    ? asset('user_upload/agent_docs/' . $agentAdditional->agent_doc)
+                    ? asset('user_upload/agent_docs/' . $agentAdditional?->agent_doc)
                     : null;
                 $agentAdditional->docName = !empty($agentAdditional->agent_doc) ? $agentAdditional->agent_doc : null;
                 unset($agentAdditional->agent_doc);
-            }
-            if ($agentAdditional) {
-                $agentAdditional->languages = !empty($agentAdditional->language_speak) ? $agentAdditional->language_speak : null;
+
+
+                $agentAdditional->languages = !empty($agentAdditional->language_speak) ?
+                    $agentAdditional?->language_speak : null;
                 unset($agentAdditional->language_speak);
-            }
-            $agentAdditional->agent_cover_photo_name = $agentAdditional->agent_cover_photo;
-            if ($agentAdditional) {
+
+
+                $agentAdditional->agent_cover_photo_name = $agentAdditional?->agent_cover_photo;
                 $agentAdditional->agent_cover_photo = !empty($agentAdditional->agent_cover_photo)
-                    ? asset('user_upload/agent_cover_photo/' . $agentAdditional->agent_cover_photo)
+                    ? asset('user_upload/agent_cover_photo/' . $agentAdditional?->agent_cover_photo)
                     : null;
-            }
-            if ($agentAdditional) {
+
+
                 $agentAdditional->company_logo_name = $agentAdditional->company_logo;
                 $agentAdditional->company_logo = !empty($agentAdditional->company_logo)
-                    ? asset('user_upload/company_logo/' . $agentAdditional->company_logo)
+                    ? asset('user_upload/company_logo/' . $agentAdditional?->company_logo)
                     : null;
             }
             if (!empty($get_user?->image)) {
-                $get_user->image = asset('user_upload/profile_image/' . $get_user->image);
+                $get_user->image = asset('user_upload/profile_image/' . $get_user?->image);
             }
 
 
