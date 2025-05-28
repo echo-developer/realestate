@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
 use App\Models\TestimonialModel;
 use App\Models\UserFeedbackModel;
 
+use App\Services\Api\HomeService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -25,11 +26,13 @@ use App\Models\ProjectPropertyMapping;
 class HomeController extends Controller
 {
     protected $apiModel;
+    protected $homeService;
 
     public function __construct()
     {
         $apiModel = new ApiModel;
         $this->apiModel = $apiModel;
+        $this->homeService = new HomeService;
     }
 
     public function getPropertyType(Request $request)
@@ -146,15 +149,40 @@ class HomeController extends Controller
         }
     }
 
+    public function getHomeData(Request $request)
+    {
+        try {
+            $city_id = $request->input('city_id');
+            $data['properties'] = $this->homeService->get_properties();
+            $data['projects'] = $this->homeService->getProjectsByType();
+            $data['testimonial'] = $this->homeService->getTestimonialList();
+            $data['verified_agents'] = $this->homeService->getVerifiedAgents($city_id);
+            $data['admin_details'] = $this->homeService->getAdminData();
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Properties fetched successfully',
+                'data' => $data
+            ]);
+        } catch (\Throwable $e) {
+            // Optional: log error
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed to fetch properties',
+                'error' => $e->getMessage(), // For debugging, remove in production
+            ], 500);
+        }
+    }
+
     public function get_properties(Request $request)
     {
-        $recentPage = $request->input('recent_page', 1);
-        $featuredPage = $request->input('featured_page', 1);
-        $popularPage = $request->input('popular_page', 1);
-        $topPage = $request->input('top_page', 1);
-        $user_id = $request->user_id ?? null;
+        $recentPage = 1;
+        $featuredPage = 1;
+        $popularPage = 1;
+        $topPage = 1;
+        $user_id = auth_user_id() ?? null;
 
-        $limit = $request->input('limit', 10);
+        $limit = 10;
 
 
         $recentOffset = ($recentPage - 1) * $limit;
@@ -638,119 +666,6 @@ class HomeController extends Controller
         }
     }
 
-    // public function propertyInTrendsandRates(Request $request)
-    // {
-    //     try {
-    //         $cityId = $request->input('city_id');
-
-    //         // Optional Caching
-    //         // $cacheKey = 'price_trends_' . $cityId;
-    //         // return Cache::remember($cacheKey, 600, function () use ($cityId) {
-
-    //         $startMonth = Carbon::now()->subMonths(8)->startOfMonth(); // 9 months including current
-    //         $endMonth = Carbon::now()->endOfMonth();
-
-    //         $allMonths = collect();
-    //         $current = $startMonth->copy();
-    //         while ($current <= $endMonth) {
-    //             $allMonths->push($current->format("M'y"));
-    //             $current->addMonth();
-    //         }
-
-    //         /** TOP LOCALITIES **/
-    //         $topLocalities = PrefPropertyLocation::whereNotNull('city')
-    //             ->whereNotNull('locality')
-    //             ->where('city', $cityId)
-    //             ->selectRaw('locality, COUNT(pid) as total_properties')
-    //             ->groupBy('locality')
-    //             ->orderByDesc('total_properties')
-    //             ->limit(5)
-    //             ->get();
-
-    //         $priceDataforLocalities = [];
-    //         $localitiesMeta = [];
-
-    //         foreach ($topLocalities as $loc) {
-    //             $monthlyPrices = DB::table('properties as p')
-    //                 ->join('properties_location as pl', 'pl.pid', '=', 'p.id')
-    //                 ->join('properties_settings as ps', 'ps.pid', '=', 'p.id')
-    //                 ->where('pl.city', $cityId)
-    //                 ->where('pl.locality', $loc->locality)
-    //                 ->whereBetween('p.created_at', [$startMonth, $endMonth])
-    //                 ->selectRaw("DATE_FORMAT(pref_p.created_at, '%b\\'%y') as month, ROUND(AVG(pref_ps.expected_price), 2) as avg_price")
-    //                 ->groupBy('month')
-    //                 ->pluck('avg_price', 'month');
-
-
-    //             $localityPrices = $allMonths->map(function ($month) use ($monthlyPrices) {
-    //                 return $monthlyPrices[$month] ?? 0;
-    //             });
-
-    //             $priceDataforLocalities[$loc->locality] = $localityPrices->values()->toArray();
-    //             $localitiesMeta[] = [
-    //                 'name' => $loc->locality,
-    //                 'total_properties' => $loc->total_properties ?? 0,
-    //             ];
-    //         }
-
-    //         /** TOP PROJECTS **/
-    //         $topProjects = PrefProject::with(['propertyMapping' => function ($q) {
-    //             $q->select('project_id', 'property_id');
-    //         }])
-    //             ->whereHas('propertyMapping')
-    //             ->select('id', 'project_name')
-    //             ->limit(5)
-    //             ->get()
-    //             ->map(function ($topProject) {
-    //                 return [
-    //                     'project_id' => $topProject->id,
-    //                     'projectName' => $topProject->project_name,
-    //                     'total_properties' => count($topProject->propertyMapping),
-    //                 ];
-    //             });
-
-    //         $priceDataforProjects = [];
-
-    //         foreach ($topProjects as $proj) {
-    //             $monthlyPrices = DB::table('properties as p')
-    //                 ->join('project_property_mapping as ppm', 'ppm.property_id', '=', 'p.id')
-    //                 ->join('properties_settings as ps', 'ps.pid', '=', 'p.id')
-    //                 ->where('ppm.project_id', $proj['project_id'])
-    //                 ->whereBetween('p.created_at', [$startMonth, $endMonth])
-    //                 ->selectRaw("DATE_FORMAT(pref_p.created_at, '%b\\'%y') as month, ROUND(AVG(pref_ps.expected_price), 2) as avg_price")
-    //                 ->groupBy('month')
-    //                 ->pluck('avg_price', 'month');
-
-
-    //             $projectPrices = $allMonths->map(function ($month) use ($monthlyPrices) {
-    //                 return $monthlyPrices[$month] ?? 0;
-    //             });
-
-    //             $priceDataforProjects[$proj['projectName']] = $projectPrices->values()->toArray();
-    //         }
-
-    //         $response = [
-    //             'months' => $allMonths->toArray(),
-    //             'priceDataforLocalities' => $priceDataforLocalities,
-    //             'localities' => $localitiesMeta,
-    //             'priceDataforProjects' => $priceDataforProjects,
-    //             'projects' => $topProjects,
-    //         ];
-
-    //         return response()->json([
-    //             'status' => 1,
-    //             'data' => $response,
-    //         ]);
-
-    //         // }); // end cache
-    //     } catch (\Exception $e) {
-    //         logError($e);
-    //         return response()->json([
-    //             'status' => 0,
-    //             'message' => 'An Error has occured.Try again' . $e,
-    //         ]);
-    //     }
-    // }
 
     public function saveLoanEnquery(Request $request)
     {

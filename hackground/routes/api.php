@@ -109,6 +109,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('get_property_cities', 'city');
     Route::get('get_city_locality/{id?}', 'getCityLocality');
     Route::get('get_properties', 'get_properties');
+    Route::get('get-home-data', 'getHomeData');
     Route::get('project_list_by_city', 'getProjectListbyCity');
     Route::get('get_testimonial_list', 'getTestimonialList');
     Route::post('buyer_property_enquery', 'buyerEnquerytoAdmin');
