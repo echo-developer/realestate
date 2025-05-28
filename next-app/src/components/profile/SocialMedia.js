@@ -75,7 +75,7 @@ const translation = useTranslation();
           </Col>
 
           {/* Remove Button (Hidden for the first link) */}
-          {socialLinks.length > 1 && (
+          {/* {socialLinks.length > 1 && (
             <Col className="col-md-auto col-12 text-end">
               <button
                 type="button"
@@ -86,7 +86,7 @@ const translation = useTranslation();
                 <Trash color="white" size={16} />                
               </button>
             </Col>
-          )}
+          )} */}
         </Row>
       ))}
 

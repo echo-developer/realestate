@@ -221,6 +221,7 @@ const ProfileForm = () => {
   const [selectedCoverPhoto, setSelectedCoverPhoto] = useState("")
   const containerRef = useRef();
 
+
   useEffect(() => {
     if (memberId) {
       fetchUserData();
@@ -318,9 +319,11 @@ const ProfileForm = () => {
                 url: item?.platform_url,
               });
             });
-
+            console.log("socialSTate", socialSTate)
             const mergedSocialLinks = socialLinks.map((defaultItem) => {
-              const match = socialSTate.find((d) => d.key === defaultItem.key);
+              console.log("defaultItem", defaultItem)
+              const match = socialSTate.find((d) => d.name === defaultItem.name);
+              console.log("match", match)
               return match
                 ? {
                   key: match.platform_key,
