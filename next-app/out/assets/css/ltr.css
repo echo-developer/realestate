@@ -191,5 +191,7 @@ em.mm-counter {
 .bootstrap-select.btn-group .dropdown-menu li a span.check-mark{
 	right: 1rem;
 }
-
+.feedback .bg-box .quote{
+	right: 1rem;
+}
 

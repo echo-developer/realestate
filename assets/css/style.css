@@ -32665,6 +32665,9 @@ ul#desk-nav > li > a.btn-post {
 ul#desk-nav > li > a.btn-post:hover {
   background-color: var(--re-btn-hover-bg);
 }
+ul#desk-nav > li > a.btn {
+  margin-top: 0.5rem;
+}
 
 .navbar-expand-lg .navbar-nav .nav-link.btn-outline-primary {
   color: #1365CF;
@@ -32674,7 +32677,7 @@ ul#desk-nav > li > a.btn-post:hover {
 }
 
 .transparentH ul#desk-nav > li:hover > a:not(.btn) {
-  background-color: #fff;
+  /* background-color: $white; */
   color: #1365CF;
 }
 
@@ -33386,6 +33389,10 @@ ul.list-agency-details > li > span:last-child {
   overflow: hidden;
   padding-inline-start: 0.75rem;
 }
+.card-ads .rounded-circle,
+.card-v-agent .rounded-circle {
+  object-fit: cover;
+}
 
 .card-advertiser .rounded-3 {
   border: 1px solid var(--re-border-color-translucent);
@@ -33824,25 +33831,28 @@ h4 .icon-img-check, .h4 .icon-img-check {
   padding: 5rem 0 !important;
 }
 .feedback .bg-box {
-  border-radius: 1rem;
-  background-color: #1365CF;
-  padding: 1.5rem;
-  padding-top: 3rem;
+  /* border-radius: 1rem;
+  background-color: $primary;		
+  padding: 1.5rem; */
 }
 .feedback .bg-box .card {
   border: none;
-  margin-bottom: 1rem;
+  height: 100%;
+}
+.feedback .bg-box .card .rounded-circle {
+  object-fit: cover;
 }
 .feedback .bg-box .card h4, .feedback .bg-box .card .h4 {
   color: #F58F00;
 }
 .feedback .bg-box .quote {
-  background-color: #559EFE;
-  border-radius: 50%;
-  padding: 1rem;
+  opacity: 0.5;
   position: absolute;
-  top: -3rem;
-  left: 3rem;
+  top: 1rem;
+}
+.feedback .bg-box .quote img {
+  height: 48px;
+  width: 48px;
 }
 .feedback:before {
   content: "";
@@ -36425,8 +36435,8 @@ ul.account-menu li a i {
 }
 
 .card-v-agent {
-  height: calc(100% - 1.25rem);
-  margin-bottom: 1.25rem;
+  height: 100%;
+  margin-bottom: 0;
 }
 .card-v-agent .icon {
   border: 1px solid var(--re-border-color-translucent);
@@ -37196,9 +37206,6 @@ fieldset .btn-delete {
   font-size: 1.125rem;
 }
 
-.react-multi-carousel-list {
-  padding-bottom: 20px;
-}
 .react-multi-carousel-list .react-multi-carousel-dot button {
   border: none;
   background-color: #bbb;
@@ -37294,10 +37301,6 @@ fieldset .btn-delete {
   border-bottom: 1px solid #333;
 }
 
-.feedback .card .card-img-top {
-  object-fit: contain;
-}
-
 .help-center .accordion-button {
   font-size: 1rem;
 }
@@ -37378,6 +37381,12 @@ fieldset .btn-delete {
   .header-sticky.transparentH .navbar-brand > div > img {
     filter: brightness(0) invert(1);
   }
+  .header-sticky.transparentH .css-13cymwt-control {
+    background: none;
+  }
+  .header-sticky.transparentH .css-13cymwt-control .css-1jqq78o-placeholder, .header-sticky.transparentH .css-13cymwt-control .css-1dimb5e-singleValue {
+    color: #fff;
+  }
   .card-ads .row .card-img-top {
     height: 180px;
     border-top-right-radius: 0;
@@ -37441,7 +37450,7 @@ fieldset .btn-delete {
     max-height: 64px;
   }
   .container-fluid, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
-    --re-gutter-x: 4rem;
+    --re-gutter-x: 3rem;
   }
   .page-fluid-container {
     padding: 1.5rem;
@@ -37643,17 +37652,15 @@ fieldset .btn-delete {
   .footer-post {
     text-align: center;
   }
-  .feedback .bg-box .quote {
-    top: -2.5rem;
-    left: 2.5rem;
-    padding: 0.75rem;
-  }
   .feedback .bg-box .quote img {
-    height: 48px;
-    width: 48px;
+    height: 32px;
+    width: 32px;
   }
 }
 @media only screen and (max-width: 767.98px) {
+  .react-multi-carousel-list {
+    padding-bottom: 25px;
+  }
   .offcanvas .card-ads .col, .property-card-wrapper .card-ads .col {
     max-width: calc(100% - 120px);
   }
