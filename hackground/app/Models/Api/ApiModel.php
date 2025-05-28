@@ -370,7 +370,8 @@ class ApiModel extends Model
             )
             ->where('properties.status', '=', config('constants.STATUS_ACTIVE'))
             ->where('properties.is_deleted', '!=', config('constants.STATUS_ACTIVE'));
-
+        Log::info('SQL Query: ' . json_encode($query->toSql(), JSON_PRETTY_PRINT));
+        Log::info('Query Bindings: ', $query->getBindings());
         return  $query->get();
     }
 

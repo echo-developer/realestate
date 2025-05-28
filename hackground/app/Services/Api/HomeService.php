@@ -36,42 +36,41 @@ class HomeService
             if ($galleryImages->isNotEmpty()) {
                 $image = $galleryImages->first();
                 $galleries[] = [
-                    'gallery' => $image->image_type,
+                    'gallery' => $image?->image_type,
                     'images' => [[
-                        'image_id'   => $image->image_id,
-                        'image_name' => $image->filename,
-                        'image_url'  => asset('user_upload/property_images/' . $image->filename),
-                        'caption'    => $image->caption,
+                        'image_id'   => $image?->image_id,
+                        'image_name' => $image?->filename,
+                        'image_url'  => asset('user_upload/property_images/' . $image?->filename),
+                        'caption'    => $image?->caption,
                     ]]
                 ];
             }
 
             return [
-                'property_id'      => $property->property_id,
-                'is_favourite'     => $is_favorite,
-                'user'             => get_user_name($property->uid),
-                'logo'             => !empty($property->image) && file_exists(public_path('user_upload/profile_image/' . $property->image))
-                    ? asset('user_upload/profile_image/' . $property->image)
-                    : '',
-                'property_size'    => $property->super_area,
-                'unit_type'        => $property->unit_type,
-                'area_in_sqft'     => $property->area_in_sqft,
-                'property_name'    => $property->property_name,
-                'slug'             => $property->slug,
-                'views'            => $property->views,
-                'is_featured'      => $property->is_featured,
-                'is_populer'       => $property->is_populer,
-                'is_top'           => $property->is_top,
-                'post_for'         => $property->post_for,
-                'parking_ability'  => $property->parking_ability,
-                'property_type_for' => get_name_by_id('property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
-                'bedrooms'         => $property->bedrooms,
-                'bathroom'         => $property->bathrooms,
-                'price'            => $property->expected_price,
-                'created_at'       => $property->created_at,
-                'address'          => $property->property_address,
-                'image_count'      => getGalleriesCount($property->property_id, 'property'),
-                'galleries'        => array_values($galleries),
+                'property_id'       => $property->property_id,
+                'is_favourite'      => $is_favorite,
+                'user'              => get_user_name($property->uid ?? null),
+                'logo'              => !empty($property->image) && file_exists(public_path('user_upload/profile_image/' . $property->image))
+                    ? asset('user_upload/profile_image/' . $property->image) : '',
+                'property_size'     => $property->super_area ?? '',
+                'unit_type'         => $property->unit_type ?? '',
+                'area_in_sqft'      => $property->area_in_sqft ?? '',
+                'property_name'     => $property->property_name ?? '',
+                'slug'              => $property->slug ?? '',
+                'views'             => $property->views ?? 0,
+                'is_featured'       => $property->is_featured ?? false,
+                'is_populer'        => $property->is_populer ?? false,
+                'is_top'            => $property->is_top ?? false,
+                'post_for'          => $property->post_for ?? '',
+                'parking_ability'   => $property->parking_ability ?? '',
+                'property_type_for' => get_name_by_id('property_sub_category_names', 'sub_category_id', $property->property_type_for ?? null, 'en'),
+                'bedrooms'          => $property->bedrooms ?? '',
+                'bathroom'          => $property->bathrooms ?? '',
+                'price'             => $property->expected_price ?? '',
+                'created_at'        => $property->created_at ?? '',
+                'address'           => $property->property_address ?? '',
+                'image_count'       => getGalleriesCount($property->property_id, 'property'),
+                'galleries'         => array_values($galleries),
             ];
         });
 
@@ -84,7 +83,7 @@ class HomeService
     }
     public function getProjectsByType(): array
     {
-        $user_id = auth_user_id();
+        $user_id = auth_user_id() ?? null;
         $projectTypes = [
             'featured_project' => ['is_featured', true],
             'new_project'      => ['created_at', '>=', now()->subDays(7)],
@@ -100,7 +99,7 @@ class HomeService
                 ['status', '=', config('constants.STATUS_ACTIVE')],
                 ['is_deleted', '=', false]
             ])
-                ->with(['settings', 'additional', 'location', 'galleries', 'galleries.images'])
+                ->with(['settings', 'additional', 'location', 'galleries.images'])
                 ->orderBy('created_at', 'desc')
                 ->limit(12)
                 ->get();
@@ -122,70 +121,95 @@ class HomeService
             ->where('project_id', $project->id)
             ->value('status') == config('constants.STATUS_ACTIVE');
 
+        $project->uid = get_user_name($project->uid ?? '');
+        $project->is_favourite = $is_favourite;
+        $project->image_count = getGalleriesCount($project->id ?? 0, 'project');
 
-
-        // Safely retrieve values
-        $project['uid'] = get_user_name($project['uid'] ?? '');
-        $project['is_favourite'] = $is_favourite;
-        $project['image_count'] = getGalleriesCount($project->id, 'project');
-
+        // Location
         if (!empty($project->location)) {
             $project->location->city = get_name_by_id('city_names', 'city_id', $project->location->city ?? null, 'en');
         }
 
+        // Additional Info
         if (!empty($project->additional)) {
-            $project->additional->possession_status = get_name_by_id('property_status_names', 'status_id', $project->additional->possession_status ?? null, 'en');
-            $projectAmenities = $this->sanitizeAmenityIds($project->additional->project_amenity ?? []);
+            $project->additional->possession_status = get_name_by_id(
+                'property_status_names',
+                'status_id',
+                $project->additional->possession_status ?? null,
+                'en'
+            );
+
+            $projectAmenities = $this->sanitizeAmenityIds($project->additional->project_amenity ?? '[]');
             $project->additional->project_amenity = $this->apiModel->getPropertyAmnitybyID($projectAmenities);
         }
 
+        // Settings Info
         if (!empty($project->settings)) {
-            $project->settings->project_type = get_name_by_id('property_category_names', 'category_id', $project->settings->project_type ?? null, 'en');
-            $project->settings->project_furnish = get_name_by_id('property_furnish_names', 'furnish_id', $project->settings->project_furnish ?? null, 'en');
+            $project->settings->project_type = get_name_by_id(
+                'property_category_names',
+                'category_id',
+                $project->settings->project_type ?? null,
+                'en'
+            );
+            $project->settings->project_furnish = get_name_by_id(
+                'property_furnish_names',
+                'furnish_id',
+                $project->settings->project_furnish ?? null,
+                'en'
+            );
         }
 
-        if (!empty($project->galleries)) {
-            $firstGallery = collect($project->galleries)->first();
+        // Galleries
+        if (!empty($project->galleries) && $project->galleries->isNotEmpty()) {
+            $firstGallery = $project->galleries->first();
+            $firstImage = $firstGallery->images->first() ?? null;
 
-            if (!empty($firstGallery) && !empty($firstGallery['images'])) {
-                $firstImage = collect($firstGallery['images'])->first();
-
+            if (!empty($firstImage)) {
                 $project->gallery = [[
-                    'id' => $firstGallery['id'],
-                    'image_type' => $firstGallery['image_type'],
-                    'description' => $firstGallery['description'],
+                    'id' => $firstGallery->id,
+                    'image_type' => $firstGallery->image_type,
+                    'description' => $firstGallery->description,
                     'images' => [[
-                        'id' => $firstImage['id'],
-                        'file' => asset('user_upload/project_images/' . $firstImage['filename']),
-                        'caption' => $firstImage['caption'] ?? '',
+                        'id' => $firstImage->id,
+                        'file' => !empty($firstImage->filename) ? asset('user_upload/project_images/' . $firstImage->filename) : '',
+                        'caption' => $firstImage->caption ?? '',
                     ]]
                 ]];
-
-                unset($project->galleries);
             }
+
+            unset($project->galleries);
         }
 
+        // Merge nested objects into root
         if (!empty($project->settings)) {
             $flattened = array_merge($flattened, $project->settings->toArray());
             unset($project->settings);
         }
+
         if (!empty($project->additional)) {
             $flattened = array_merge($flattened, $project->additional->toArray());
             unset($project->additional);
         }
+
         if (!empty($project->location)) {
             $flattened = array_merge($flattened, $project->location->toArray());
             unset($project->location);
         }
 
+        // Final merge
         $flattened = array_merge($flattened, $project->toArray());
 
         return $flattened;
     }
+
     function sanitizeAmenityIds($idsString)
     {
-        return array_map('trim', explode(',', trim($idsString, '[]"')));
+        // Handles empty, null, or non-array strings like '[]'
+        if (is_array($idsString)) return $idsString;
+
+        return array_filter(array_map('trim', explode(',', trim($idsString, '[]"'))));
     }
+
     public function getTestimonialList()
     {
         $result = DB::table('testimonial')
@@ -256,7 +280,7 @@ class HomeService
             'currancy' => get_setting('site-currency'),
             'currancy_code' => get_setting('site-currency-code'),
             'admin_email' => get_setting('admin-email'),
-            'admin_address' => get_setting('admin_address'),
+            'admin_address' => get_setting('admin-address'),
             'admin_whatsapp_number' => get_setting('admin-whatsapp-number')
         ];
 
