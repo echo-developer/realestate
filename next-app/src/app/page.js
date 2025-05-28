@@ -75,6 +75,15 @@ export default function Home() {
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
   const translation = useTranslation();
 
+    useEffect(() => {
+    getPropertyData();
+    getProjectData();
+  }, [memberId,]);
+
+  useEffect(() => {
+    getHomeData();
+  }, [])
+
   const getPropertyData = async () => {
     try {
       const args = {
@@ -111,11 +120,19 @@ export default function Home() {
     }
   };
 
-
-  useEffect(() => {
-    getPropertyData();
-    getProjectData();
-  }, [memberId,]);
+  const getHomeData = async () => {
+    try {
+      const res = await callApi({
+        api: '/get-home-data',
+        method: "GET",
+      })
+      if(res && res.status == 1) {
+        console.log("res", res);
+      }
+    } catch (error) {
+      console.error(error.message)
+    }
+  }
 
   const addRemoveFav = async (id, type, listKey) => {
     if (isLogin()) {
