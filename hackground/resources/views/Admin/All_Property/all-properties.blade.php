@@ -1,4 +1,6 @@
 @extends('Admin.layouts.app')
+
+{{-- @dd($data) --}}
 @section('content')
 <div class="body-page-loader d-none">
     <div class="loader">

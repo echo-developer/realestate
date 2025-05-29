@@ -19,18 +19,20 @@ class AllPropertyController extends Controller
 
     public function AllPropertyView(Request $request)
     {
+
         $user_id = $request->route('id');
         $srch = $request->query();
         $srch['user_id'] = $user_id;
 
-        $property_slug = $request->input('slug').'&id='.$request->input('id');
-        $srch['prop_slug'] = $property_slug;
-        
+        if (!empty($request->input('slug')) && !empty($request->input('id'))) {
+            $property_slug = $request->input('slug') . '&id=' . $request->input('id');
+            $srch['prop_slug'] = $property_slug;
+        }
         $paginate = 10;
         $statusMapping = config('property_status.status');
         //$srch['term'] = $request->input('term');
         $data = $this->allpropertymodel->getallProperties($srch, $paginate);
-        return view('Admin.All_Property.all-properties', compact('data','statusMapping','srch','user_id'));
+        return view('Admin.All_Property.all-properties', compact('data', 'statusMapping', 'srch', 'user_id'));
     }
 
     public function FeaturedStatus(Request $req)
@@ -52,7 +54,7 @@ class AllPropertyController extends Controller
 
     public function PropStatusupdate(Request $req)
     {
-      
+
         $status = $req->status;
 
         $statusMapping = config('property_status.status');
@@ -67,7 +69,8 @@ class AllPropertyController extends Controller
         return response()->json($response);
     }
 
-    public function TopStatus(Request $req){
+    public function TopStatus(Request $req)
+    {
         $data = [
             'id' => $req->id,
             'status' => $req->status

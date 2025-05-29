@@ -49,4 +49,9 @@ class UserMembership extends Model
     {
         return $this->belongsTo(MembershipPlans::class, 'plan_id');
     }
+
+    public function siteVisits()
+    {
+        return $this->hasMany(SiteVisit::class, 'property_posted_by', 'user_id');
+    }
 }

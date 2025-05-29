@@ -643,3 +643,6 @@ ALTER TABLE `pref_country` ADD `country_code` VARCHAR(5) NULL DEFAULT NULL COMME
 27/05/2025
 
 ALTER TABLE `pref_property_report` ADD `actions` TINYINT NULL DEFAULT '0' COMMENT ' 0 = No action, 1 = Request changes , 2 = Delete Property, 3 = Publish Property' AFTER `feedback`;
+
+
+CREATE TABLE `pref_site_visit` (`id` BIGINT NOT NULL AUTO_INCREMENT , `property_id` BIGINT NULL DEFAULT NULL , `customer_id` BIGINT NULL DEFAULT NULL , `visit_date` DATE NULL DEFAULT NULL , `visit_time` TIME NULL DEFAULT NULL , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
