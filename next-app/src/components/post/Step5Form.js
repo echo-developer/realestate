@@ -113,7 +113,7 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       }`;
     }
 
-    if(formData.possession_status == '1') {
+    if(formData.possession_status == '3') {
       if (!formData.launch_date) {
       newErrors.launch_date =
         translation?.enter_launch_date || "Please enter a valid launch date.";
@@ -128,7 +128,6 @@ const Step5From = ({ formData, setFormData, nextStep, prevStep }) => {
       }
     }
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
