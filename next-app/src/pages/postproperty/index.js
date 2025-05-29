@@ -384,7 +384,7 @@ const Index = () => {
         },
       });
       if (response && response.success === 1) {
-        setUserData(response.data);
+        setUserData(response.data?.user);
       } else {
         toast.error(response.message);
       }

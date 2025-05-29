@@ -170,7 +170,7 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (response?.success == 1) {
-        setUserData(response?.data);
+        setUserData(response?.data?.user);
       }
     } catch (error) {
       console.error(error.message || "Failed to get User Data");
