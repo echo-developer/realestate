@@ -20,6 +20,12 @@ const TabComponent = () => {
     const [currentPages, setCurrentPages] = useState(0);
     const translation = useTranslation();
     const memberId = GetMemberId();
+    const [tabCounts, setTabCounts] = useState({
+        published: 0,
+        pending: 0,
+        expired: 0,
+        draft: 0
+    })
 
     useEffect(() => {
         if (memberId) {
@@ -55,6 +61,12 @@ const TabComponent = () => {
                     setProjectData(response.data);
                     setCurrentPages(response?.pagination?.current_page);
                     setTotalPages(response?.pagination?.total_pages)
+                    setTabCounts({
+                        published: response?.projects_counts?.publish || 0,
+                        pending: response?.projects_counts?.pending || 0,
+                        expired: response?.projects_counts?.expired || 0,
+                        draft: response?.projects_counts?.draft || 0
+                    })
                 } else {
                     updateLoadMoreState(response)
                 }
@@ -132,44 +144,56 @@ const TabComponent = () => {
                         <li className="nav-item">
                             <a
                                 role="button"
-                                className={`nav-link ${activeTab === "published" ? "active" : ""
-                                    }`}
+                                className={`nav-link ${activeTab === "published" ? "active" : ""}`}
                                 onClick={() => handleTabChange("published")}
                             >
-                                {translation?.publish || "Publish"}
+                                {translation?.publish || "Publish"}{" "}
+                                {tabCounts?.published > 0 && (
+                                    <span className="badge bg-success">{tabCounts.published}</span>
+                                )}
                             </a>
                         </li>
+
                         <li className="nav-item">
                             <a
                                 role="button"
-                                className={`nav-link ${activeTab === "pending" ? "active" : ""
-                                    }`}
+                                className={`nav-link ${activeTab === "pending" ? "active" : ""}`}
                                 onClick={() => handleTabChange("pending")}
                             >
-                                {translation?.pending || "Pending"}
+                                {translation?.pending || "Pending"}{" "}
+                                {tabCounts?.pending > 0 && (
+                                    <span className="badge bg-warning text-dark">{tabCounts.pending}</span>
+                                )}
                             </a>
                         </li>
+
                         <li className="nav-item">
                             <a
                                 role="button"
-                                className={`nav-link ${activeTab === "expired" ? "active" : ""
-                                    }`}
+                                className={`nav-link ${activeTab === "expired" ? "active" : ""}`}
                                 onClick={() => handleTabChange("expired")}
                             >
-                                {translation?.expired || "Expired"}
+                                {translation?.expired || "Expired"}{" "}
+                                {tabCounts?.expired > 0 && (
+                                    <span className="badge bg-danger">{tabCounts.expired}</span>
+                                )}
                             </a>
                         </li>
+
                         <li className="nav-item">
                             <a
                                 role="button"
-                                className={`nav-link ${activeTab === "draft" ? "active" : ""
-                                    }`}
+                                className={`nav-link ${activeTab === "draft" ? "active" : ""}`}
                                 onClick={() => handleTabChange("draft")}
                             >
-                                {translation?.draft || "Draft"}
+                                {translation?.draft || "Draft"}{" "}
+                                {tabCounts?.draft > 0 && (
+                                    <span className="badge bg-secondary">{tabCounts.draft}</span>
+                                )}
                             </a>
                         </li>
                     </ul>
+
                     {!loading && renderTabContent()}
                     {loading && (
                         <>
