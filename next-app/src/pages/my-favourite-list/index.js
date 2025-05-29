@@ -78,7 +78,6 @@ const Index = () => {
       });
 
       if (response && response.status === 1) {
-        toast.success("Property deleted successfully");
         setFavList((prevProperties) =>
           prevProperties.filter(
             (property) => property.property_id !== propertyIdToDelete
