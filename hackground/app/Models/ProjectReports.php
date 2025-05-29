@@ -31,12 +31,12 @@ class ProjectReports extends Model
 
     public function projectName(): Attribute
     {
-        return Attribute::get(fn() => Prefproject::where('id', $this->project_id)->value('project_name'));
+        return Attribute::get(fn() => PrefProject::where('id', $this->project_id)->value('project_name'));
     }
 
     public function projectSlug(): Attribute
     {
-        return Attribute::get(fn() => Prefproject::where('id', $this->project_id)->value('slug'));
+        return Attribute::get(fn() => PrefProject::where('id', $this->project_id)->value('slug'));
     }
 
     protected function postedByName(): Attribute
