@@ -1,12 +1,16 @@
 "use client";
 import AuthUser from "@/components/Authentication/AuthUser";
 import React, { createContext, useContext, useState, useEffect, useRef } from "react";
+import { usePathname } from 'next/navigation';
+
+
 
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
+  const pathname = usePathname();
   const { callApi, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
   const hasFetchedUserData = useRef(false);
@@ -41,12 +45,16 @@ export const AuthProvider = ({ children }) => {
       fetchRemainPosting();
     }
 
-    // if (!hasFetchedCurrency.current) {
-    //   hasFetchedCurrency.current = true;
-    //   getCurrencyCode();
-    //   getCurrency();
-    // }
   }, [memberId]);
+
+  useEffect(() => {
+
+    if (pathname !== '/') {
+      getCurrencyCode();
+      getCurrency();
+    }
+
+  }, [pathname])
 
 
   useEffect(() => {
@@ -123,33 +131,33 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  // const getCurrency = async () => {
-  //   try {
-  //     const res = await callApi({
-  //       api: `/get-settings-value/site-currency`,
-  //       method: "GET",
-  //     })
-  //     if (res && res?.status == 1) {
-  //       setCurrency(res?.value);
-  //     }
-  //   } catch (error) {
-  //     console.error(error?.message)
-  //   }
-  // }
+  const getCurrency = async () => {
+    try {
+      const res = await callApi({
+        api: `/get-settings-value/site-currency`,
+        method: "GET",
+      })
+      if (res && res?.status == 1) {
+        setCurrency(res?.value);
+      }
+    } catch (error) {
+      console.error(error?.message)
+    }
+  }
 
-  // const getCurrencyCode = async () => {
-  //   try {
-  //     const res = await callApi({
-  //       api: `/get-settings-value/site-currency-code`,
-  //       method: "GET",
-  //     })
-  //     if (res && res?.status == 1) {
-  //       setCurrencyCode(res?.value);
-  //     }
-  //   } catch (error) {
-  //     console.error(error?.message)
-  //   }
-  // }
+  const getCurrencyCode = async () => {
+    try {
+      const res = await callApi({
+        api: `/get-settings-value/site-currency-code`,
+        method: "GET",
+      })
+      if (res && res?.status == 1) {
+        setCurrencyCode(res?.value);
+      }
+    } catch (error) {
+      console.error(error?.message)
+    }
+  }
 
   const fetchUserData = async () => {
     setUserLoading(true);
@@ -227,7 +235,7 @@ export const AuthProvider = ({ children }) => {
       getBadgeButtonClass,
       buildAgentUrl,
       listingAllowed,
-      adminDetails, 
+      adminDetails,
       setAdminDetails
     }}>
       {children}

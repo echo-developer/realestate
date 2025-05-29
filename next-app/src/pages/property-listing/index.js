@@ -1953,7 +1953,7 @@ const index = () => {
                     {/* LOAD MORE  */}
                     {!loading && currentPage < totalPage && (
                       <button
-                        className="btn btn-primary d-block mx-auto mt-4"
+                        className="btn btn-primary d-block mx-auto mt-4 mb-4"
                         onClick={() => handleLoadMoreClick(page + 1)}
                       >
                         {translation?.load_more || "Load More"}
