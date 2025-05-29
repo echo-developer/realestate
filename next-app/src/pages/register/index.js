@@ -318,7 +318,7 @@ const Index = () => {
                                   height="32"
                                   width="32"
                                 />{" "}
-                                {translation?.owner || "Owner"}
+                                {translation?.user || "User"}
                               </label>
 
                               <Field
@@ -358,7 +358,7 @@ const Index = () => {
                                   height="32"
                                   width="32"
                                 />{" "}
-                                {translation?.builder || "Builder"}
+                                {translation?.builder_developer || "Builder"}
                               </label>
                             </div>
 
