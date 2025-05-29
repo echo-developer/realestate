@@ -73,6 +73,11 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
         return $this->belongsToMany(Badges::class, 'user_badges', 'user_id', 'badge_id')->with('names');
     }
 
+    public function visitRequests()
+    {
+        return $this->hasMany(SiteVisit::class,'property_posted_by');
+    }
+
 
 
     /**
@@ -157,7 +162,7 @@ class User extends Authenticatable implements JWTSubject // Implement JWTSubject
                 $query->where('users.user_type', 'like', $typeKey);
             }
 
-          return $query->orderByDesc('created_at')->paginate($paginate);
+            return $query->orderByDesc('created_at')->paginate($paginate);
         } catch (\Exception $e) {
             Log::error('Error in getMemberUsers: ' . $e->getMessage(), [
                 'file' => $e->getFile(),

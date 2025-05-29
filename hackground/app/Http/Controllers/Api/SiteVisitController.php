@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\PrefProperty;
 use App\Models\SiteVisit;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -63,7 +64,7 @@ class SiteVisitController extends Controller
 
         $userId = $request->user_id ?? auth_user_id();
 
-        $getVisitList  = SiteVisit::with(['userMembership'])->where('property_posted_by', 17)->get();
+        $getVisitList  = User::select('id','name')->with(['visitRequests'])->where('id', 17)->get();
         return response()->json([
                 'status' => 1,
                 'message' => 'visit request sent',
