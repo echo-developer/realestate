@@ -396,7 +396,6 @@ const AddPropertyData = ({
       })),
     }));
 
-
     try {
       const res = await callApi({
         api: "/save-project-property",

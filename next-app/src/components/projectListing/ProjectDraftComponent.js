@@ -178,7 +178,7 @@ const ProjectDraftComponent = ({ projectData }) => {
                           handleShowPropertyModal(
                             project.id,
                             project?.project_name,
-                            project?.locality,
+                            project?.address,
                             project?.total_towers
                           )
                         }
