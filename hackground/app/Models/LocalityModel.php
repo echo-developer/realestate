@@ -11,9 +11,13 @@ class LocalityModel extends Model
 {
     use HasFactory;
 
+    protected $table = 'locality';
+    protected $primaryKey = 'locality_id';
+    
+    
+    
     // Define table prefix constant
     const TABLE_PREFIX = '';
-    protected $table = 'locality';
     // Define the tables with the prefix appended
     protected $localityTable = self::TABLE_PREFIX . 'locality';
     protected $localityNamesTable = self::TABLE_PREFIX . 'locality_names';

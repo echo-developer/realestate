@@ -23,10 +23,6 @@ class ProjectListandSearchController extends Controller
     public function getSearchedProjects(Request $req)
     {
         // log::info($req->all());
-        $currentpage = (int) $req->input('currentpage', 1);
-        $limit = (int) $req->input('limit', 10);
-        $offset = ($currentpage - 1) * $limit;
-
         $hasLatLang = $req->input('hasLatLng', 0);
 
         $user_id = $req->user_id ?? null;
@@ -53,10 +49,12 @@ class ProjectListandSearchController extends Controller
             ]);
 
 
-            $searchResults = $this->apiModel->searchProject($filters, $user_id,$hasLatLang);
-            // log::info(json_encode($searchResults, JSON_PRETTY_PRINT));
+            // $searchResults = $this->apiModel->searchProject($filters, $user_id,$hasLatLang);
+            $searchResults1 = $this->apiModel->searchProject1($filters, $user_id, $hasLatLang, $req);
+            
+            // return [];
 
-            if ($searchResults->isEmpty()) {
+            if ($searchResults1->isEmpty()) {
                 return response()->json([
                     'status' => 0,
                     'message' => 'No data found.',
@@ -64,7 +62,7 @@ class ProjectListandSearchController extends Controller
                 ]);
             }
 
-            $customArray = $searchResults->map(function ($project) use ($user_id) {
+            $customArray = $searchResults1->map(function ($project) use ($user_id) {
 
                 $is_fav =  !empty($user_id) && ProjectFavorite::where([
                     'uid' => $user_id,
@@ -125,8 +123,8 @@ class ProjectListandSearchController extends Controller
                     'locality' => $project->location->locality ?? null,
                     'city' => $project->location->city ?? null,
                     'address' => $project->location->address ?? null,
-                    'address_lat' => $project->location->latitude ?? null,
-                    'address_lan' => $project->location->longitude ?? null,
+                    'address_lat' => $project->location->locality_det->latitude ?? null,
+                    'address_lan' => $project->location->locality_det->longitude ?? null,
                     'uname' => get_user_name($project->uid) ?? null,
                 ];
             });
@@ -141,23 +139,16 @@ class ProjectListandSearchController extends Controller
                 $customArray = $sortOrder === 'desc' ? $customArray->sortByDesc($sortKey) : $customArray->sortBy($sortKey);
             }
 
-
-            $totalProperties = $customArray->count();
-            $totalPages = ceil($totalProperties / $limit);
-
-
-            $searchedProperties = $customArray->slice($offset, $limit)->values();
-
-
             return response()->json([
                 'status' => 1,
                 'message' => 'Data retrieved successfully.',
                 'data' => [
-                    'searched_projects' => $searchedProperties,
+                    'searched_projects' => $customArray->values(),
+                    // 'searched_projects' => $searchResults1,
                     'pagination' => [
-                        'total_properties' => $totalProperties,
-                        'total_pages' => $totalPages,
-                        'current_page' => $currentpage,
+                        'total_properties' => $searchResults1->total(),
+                        'total_pages' => $searchResults1->lastPage(),
+                        'current_page' => $searchResults1->currentPage(),
                     ],
                 ],
             ]);
@@ -171,6 +162,7 @@ class ProjectListandSearchController extends Controller
             return response()->json([
                 'status' => 0,
                 'message' => 'Something went wrong. Please try again later.',
+                'error' => $e->getMessage(),
             ]);
         }
     }

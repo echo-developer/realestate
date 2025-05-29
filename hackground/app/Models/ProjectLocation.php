@@ -19,5 +19,10 @@ class ProjectLocation extends Model
         'longitude'
     ];
     public $timestamps = false;
+
+    public function locality_det()
+    {
+        return $this->belongsTo(LocalityModel::class, 'locality');
+    }
     use HasFactory;
 }

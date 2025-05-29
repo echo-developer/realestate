@@ -1186,19 +1186,20 @@ class ApiModel extends Model
             ['status', '=', config('constants.STATUS_ACTIVE')],
         ])
             ->with([
-                'settings:project_id,project_budget,post_for,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type,area_in_sqft',
-                'additional:project_id,main_road_facing,project_amenity,possession_status,construct_year,possesion_month_possesion_year,currency,token_amount,expected_price,developer_details,developer_name,developer_experience',
-                'location:project_id,locality,city,address,latitude,longitude',
+                'settings:id,project_id,project_budget,post_for,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type,area_in_sqft',
+                'additional:id,project_id,main_road_facing,project_amenity,possession_status,construct_year,possesion_month_possesion_year,currency,token_amount,expected_price,developer_details,developer_name,developer_experience',
+                'location:id,project_id,locality,city,address',
+                'location.locality:locality_id,latitude,longitude',
                 'gallery:id,project_id,image_type',
                 'gallery.images:gallary_id,filename,caption'
             ]);
 
-        // Now call get() and filter right after
         $filteredData = $query->cursor()->filter(function ($project) use ($data, $hasLatLang) {
 
             $settings = $project->settings;
             $location = $project->location;
             $additional = $project->additional;
+            $locality = $location->locality;
 
             if (!empty($data['city_id'])) {
                 $cityIds = array_map('intval', explode(',', $data['city_id']));
@@ -1209,9 +1210,9 @@ class ApiModel extends Model
 
             if ($hasLatLang == 1) {
                 if (
-                    !$location ||
-                    empty($location->latitude) ||
-                    empty($location->longitude)
+                    !$locality ||
+                    empty($locality->latitude) ||
+                    empty($locality->longitude)
                 ) {
                     return false;
                 }
@@ -1309,6 +1310,147 @@ class ApiModel extends Model
         });
 
         return $filteredData;
+    }
+
+    public function searchProject1($data, $user_id, $hasLatLang, $req)
+    {
+
+        $currentpage = (int) $req->input('currentpage', 2);
+        $limit = (int) $req->input('limit', 10);
+        $offset = ($currentpage - 1) * $limit;
+
+        $query = PrefProject::where([
+            ['uid', '!=', $this->auth_user_id],
+            ['is_deleted', '!=', config('constants.STATUS_ACTIVE')],
+            ['status', '=', config('constants.STATUS_ACTIVE')]
+        ])
+            ->has('settings')
+            ->has('additional')
+            ->has('location')
+            ->has('location.locality_det')
+            ->with([
+                'settings:project_id,project_budget,post_for,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type,area_in_sqft',
+                'additional:project_id,main_road_facing,project_amenity,possession_status,construct_year,possesion_month_possesion_year,currency,token_amount,expected_price,developer_details,developer_name,developer_experience',
+                'location:id,project_id,locality,city,address',
+                'location.locality_det:locality_id,latitude,longitude',
+                'gallery:id,project_id,image_type',
+                'gallery.images:id,gallary_id,filename,caption',
+            ]);
+
+        // log_anything($query);return collect();
+        // Now call get() and filter right after
+        if (!empty($data['city_id'])) {
+            $cityIds = array_map('intval', explode(',', $data['city_id']));
+            $query->whereHas('location', fn($q) => $q->whereIn('city', $cityIds));
+        }
+
+        if (!empty($data['locality'])) {
+            $query->whereHas('location', fn($q) => $q->where('locality', $data['locality']));
+        }
+
+        if ($hasLatLang == 1) {
+            $query->whereHas(
+                'location.locality_det',
+                fn($q) =>
+                $q->whereNotNull('latitude')->whereNotNull('longitude')
+            );
+        }
+
+        if (!empty($data['project_name'])) {
+            $query->where('project_name', 'like', '%' . $data['project_name'] . '%');
+        }
+
+        if (!empty($data['project_amenity'])) {
+            $amenities = array_map('intval', $data['project_amenity']);
+            $query->whereHas(
+                'additional',
+                fn($q) =>
+                $q->where(function ($subQ) use ($amenities) {
+                    foreach ($amenities as $amenity) {
+                        $subQ->orWhereJsonContains('project_amenity', $amenity);
+                    }
+                })
+            );
+        }
+
+        if (!empty($data['project_furnish'])) {
+            $query->whereHas(
+                'settings',
+                fn($q) =>
+                $q->whereIn('project_furnish', array_map('intval', $data['project_furnish']))
+            );
+        }
+
+        if (!empty($data['parking_availability'])) {
+            $query->whereHas(
+                'settings',
+                fn($q) =>
+                $q->whereIn(DB::raw('LOWER(parking_availability)'), array_map('strtolower', $data['parking_availability']))
+            );
+        }
+
+        if (!empty($data['project_facing'])) {
+            $query->whereHas(
+                'settings',
+                fn($q) =>
+                $q->whereIn(DB::raw('LOWER(project_facing)'), array_map('strtolower', $data['project_facing']))
+            );
+        }
+
+        if (!empty($data['total_towers'])) {
+            $query->whereHas(
+                'settings',
+                fn($q) =>
+                $q->whereIn('total_towers', array_map('intval', $data['total_towers']))
+            );
+        }
+
+        if (!empty($data['project_type'])) {
+            $query->whereHas(
+                'settings',
+                fn($q) =>
+                $q->where('project_type', $data['project_type'])
+            );
+        }
+
+        if (!empty($data['project_for'])) {
+            $query->whereHas(
+                'settings',
+                fn($q) =>
+                $q->where('post_for', $data['project_for'])
+            );
+        }
+
+        if (!empty($data['possession_status'])) {
+            $query->whereHas(
+                'additional',
+                fn($q) =>
+                $q->where('possession_status', $data['possession_status'])
+            );
+        }
+
+        if (!empty($data['min_price']) || !empty($data['max_price'])) {
+            $min = $data['min_price'] ?? 0;
+            $max = $data['max_price'] ?? PHP_INT_MAX;
+            $query->whereHas(
+                'additional',
+                fn($q) =>
+                $q->whereBetween('expected_price', [$min, $max])
+            );
+        }
+
+        if (!empty($data['occupied_area[min]']) || !empty($data['occupied_area[max]'])) {
+            $min = $data['occupied_area[min]'] ?? 0;
+            $max = $data['occupied_area[max]'] ?? PHP_INT_MAX;
+            $query->whereHas(
+                'settings',
+                fn($q) =>
+                $q->whereBetween('occupied_area', [$min, $max])
+            );
+        }
+
+        $projects = $query->paginate($limit, ['*'], 'currentpage', $currentpage);
+        return $projects;
     }
 
 
