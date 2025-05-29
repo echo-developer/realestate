@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Jobs\SendPasswordResetEmail;
 use App\Models\User;
 use App\Services\SmsService;
+use Illuminate\Cache\RateLimiting\Unlimited;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -163,11 +164,14 @@ class AuthController extends Controller
             $user->image = !empty($user->image)
                 ? asset('user_upload/profile_image/' . $user->image)
                 : '';
-
+            $post_remaining_value = get_remaining_values('remaining_listings_allowed', $request->member_id) == null ? 'Unlimited' : get_remaining_values('remaining_listings_allowed', $request->member_id);
             return response()->json([
                 'success' => 1,
                 'message' => 'User retrieved successfully.',
-                'data' => $user
+                'data' => [
+                    'user' => $user,
+                    'remaining_listings_allowed' => $post_remaining_value,
+                ]
             ]);
         } else {
             return response()->json([
@@ -200,7 +204,7 @@ class AuthController extends Controller
         $resetUrl = config('app.frontend_url') . '/reset-password?token=' . urlencode($token) . '&email=' . urlencode($user->email);
 
         $mail_unique_title = 'reset-password';
-        SendPasswordResetEmail::dispatch($user->email,$mail_unique_title,['RESET_A_LINK' =>  $resetUrl]);
+        SendPasswordResetEmail::dispatch($user->email, $mail_unique_title, ['RESET_A_LINK' =>  $resetUrl]);
 
         return response()->json([
             'status' => 1,
