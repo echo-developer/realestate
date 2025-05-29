@@ -31,6 +31,8 @@
   "agent": "الوكيل",
   "builder": "المطور",
   "name": "الاسم",
+  "user": "مستخدم",
+  "builder_developer": "منشئ / مطوّر",
   "by_signing_up": "من خلال التسجيل، فإنك توافق على",
   "terms_condition": "الشروط والأحكام",
   "and": "و",

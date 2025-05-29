@@ -119,6 +119,8 @@
   "packages": "Packages",
   "enquiries": "Enquiries",
   "user_report": "User Report",
+  "user": "User",
+  "builder_developer": "Builder / Developer",
   "change_password": "Change Password",
   "property_type": "Property Type",
   "residential": "Residential",
