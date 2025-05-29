@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { jwtDecode } from "jwt-decode";
 import AuthUser from "@/components/Authentication/AuthUser";
 const spinnerStyles = {
   container: {
@@ -28,13 +29,19 @@ const spinnerStyles = {
 };
 
 const withAuth = (WrappedComponent) => {
-  const{isLogin}=AuthUser();
+  const{isLogin, getToken, logout}=AuthUser();
   return (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
       const token = isLogin();
+      const decodedToken = jwtDecode(getToken())
+      const currentTime = Math.floor(Date.now() / 1000);
+      if(decodedToken.exp < currentTime) {
+        logout();
+        router.push('/login');
+      }
       if (!token) {
         router.push("/login");
       } else {
