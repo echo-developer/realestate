@@ -54,6 +54,16 @@ class ProjectDashboardController extends Controller
             ], 400);
         }
 
+        $statusCounts = PrefProject::where('uid', $req->uid)
+            ->where('is_deleted', false)
+            ->get()
+            ->groupBy('status')
+            ->map->count(); 
+        $publish_projects_count = $statusCounts[1] ?? 0;
+        $pending_projects_count = $statusCounts[0] ?? 0;
+        $draft_projects_count   = $statusCounts[2] ?? 0;
+        $expired_projects_count = $statusCounts[-1] ?? 0;
+
         $projects = PrefProject::where([
             ['uid', $req->uid],
             ['status', $statusMapping[$type]],
@@ -143,6 +153,12 @@ class ProjectDashboardController extends Controller
             'status' => 1,
             'message' => ucfirst($type) . ' projects successfully fetched',
             'data' => $formattedProjects,
+            'projects_counts' => [
+                'publish' => $publish_projects_count,
+                'pending' =>  $pending_projects_count,
+                'draft' => $draft_projects_count,
+                'expired' =>  $expired_projects_count,
+            ],
             'pagination' => [
                 'current_page' => $projects->currentPage(),
                 'total_pages' => $projects->lastPage(),
