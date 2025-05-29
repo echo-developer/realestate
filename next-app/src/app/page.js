@@ -15,15 +15,17 @@ import useAdvertisement from "@/hooks/useAdvertisement";
 import { useAuth } from "@/context/AuthProvider";
 import Head from "next/head";
 
+import Banner from "@/components/home/Banner";
+import QuickSection from "@/components/home/QuickSection";
 
-const Banner = dynamic(() => import("@/components/home/Banner"), {
-  ssr: false,
-  loading: () => <MyLoader />,
-});
-const QuickSection = dynamic(() => import("@/components/home/QuickSection"), {
-  ssr: false,
-  loading: () => <MyLoader />,
-});
+// const Banner = dynamic(() => import("@/components/home/Banner"), {
+//   ssr: false,
+//   loading: () => <MyLoader />,
+// });
+// const QuickSection = dynamic(() => import("@/components/home/QuickSection"), {
+//   ssr: false,
+//   loading: () => <MyLoader />,
+// });
 const FindPropertySection = dynamic(
   () => import("@/components/home/FindPropertySection"),
   { ssr: false, loading: () => <MyLoader /> }
