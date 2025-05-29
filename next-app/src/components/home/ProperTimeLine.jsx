@@ -12,7 +12,7 @@ const ProperTimeLine = ({ translation }) => {
   }, []);
 
   return (
-    <section className="section">
+    <section className="section overflow-hidden">
       <div className="container">
         <div className="timeline-container">
           <div className="row gx-lg-5 align-items-center timeline">
