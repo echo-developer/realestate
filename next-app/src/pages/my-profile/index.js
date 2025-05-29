@@ -44,7 +44,7 @@ const Index = () => {
           iconBgColor: "rgb(19, 101, 207)",
           iconSrc: "/assets/images/icons/home-2.png",
           number: dashboardList?.counters?.allProperty,
-          url: '/my-property-listing',
+          url: '/my-property-listing?post_for=sale',
           title: `${translation?.all_property || 'All Property'}`,
         },
         {

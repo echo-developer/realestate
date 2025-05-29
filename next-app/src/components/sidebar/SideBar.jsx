@@ -228,7 +228,7 @@ const SideBar = () => {
               </ul>
             </li>
             <li>
-              <Link href="/my-property-listing">
+              <Link href="/my-property-listing?post_for=sale">
                 <i className="bi bi-house"></i>{" "}
                 <span>{translation?.my_properties || "My Properties"}</span>
               </Link>

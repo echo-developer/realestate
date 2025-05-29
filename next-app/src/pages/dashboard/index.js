@@ -76,7 +76,7 @@ const Index = () => {
           iconBgColor: "rgb(19, 101, 207)",
           iconSrc: "/assets/images/icons/home-2.png",
           number: dashboardList?.counters?.allProperty,
-          url: '/my-property-listing',
+          url: '/my-property-listing?post_for=sale',
           title: `${translation?.all_property || 'All Property'}`,
         },
         {
@@ -200,7 +200,7 @@ const Index = () => {
                     </h5>
                     <h3>{dashboardList?.counters?.activeListing || "0"}</h3>
                   </div>
-                  <Link target="_blank" href="/my-property-listing" className="">
+                  <Link target="_blank" href="/my-property-listing?post_for=sale" className="">
                     <i className="bi bi-box-arrow-up-right"></i>
                   </Link>
                 </div>
@@ -375,7 +375,7 @@ const Index = () => {
               <h4 className="text-primary">{translation?.property_overview || 'Property Overview'}
               </h4>
               <Link
-                href="/my-property-listing"
+                href="/my-property-listing?post_for=sale"
                 className="btn btn-link text-decoration-none"
               >
                 {translation?.see_all_properties || 'See All Properties'}

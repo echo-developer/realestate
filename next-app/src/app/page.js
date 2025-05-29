@@ -92,7 +92,6 @@ export default function Home() {
         method: "GET",
       })
       if(res && res.status == 1) {
-        console.log("res", res);
         setPropertyData(res.data?.properties || {});
         setProjectData(res?.data?.projects || {});
         setTestimonialList(res.data?.testimonial || [])

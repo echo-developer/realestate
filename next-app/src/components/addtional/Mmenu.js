@@ -363,7 +363,7 @@ const MobileMenu = ({
                   </Link>
                 </li>
                 <li>
-                  <Link href="/my-property-listing">
+                  <Link href="/my-property-listing?post_for=sale">
                     <House color="currentColor" size={18} />{" "}
                     {translation?.my_properties || "My Properties"}
                   </Link>

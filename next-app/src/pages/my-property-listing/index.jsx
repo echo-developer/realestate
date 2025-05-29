@@ -125,7 +125,6 @@ const TabComponent = () => {
         setPostFor("");
     
         const { pathname, query } = router;
-        delete query.post_for; 
     
         router.push({
             pathname,
@@ -195,15 +194,13 @@ const TabComponent = () => {
     const handleFilterSelect = (queryVal) => {
         if (queryVal) {
             const { pathname, query } = router;
-            query.post_for = queryVal;  // set or update your query param
+            query.post_for = queryVal;  
 
             router.push({
                 pathname,
                 query
             }, undefined, { shallow: true });
-        } else {
-            router.push('/my-property-listing');
-        }
+        } 
     }
 
 
@@ -257,13 +254,10 @@ const TabComponent = () => {
                         <Col sm="auto">
                             <Dropdown className="mb-3 mb-sm-0">
                                 <Dropdown.Toggle variant="outline-primary" size="sm" id="dropdown-basic">
-                                     {postFor || "Select Option"}
+                                     {postFor ? postFor.charAt(0).toUpperCase() + postFor.slice(1) : "Select Option"}
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu className="dropdown-menu-end">
-                                    <Dropdown.Item onClick={() => handleFilterSelect('')}>
-                                        Select Option
-                                    </Dropdown.Item>
                                     <Dropdown.Item onClick={() => handleFilterSelect('rent')}>
                                         Rent
                                     </Dropdown.Item>
