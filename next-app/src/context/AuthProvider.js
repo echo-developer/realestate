@@ -48,13 +48,12 @@ export const AuthProvider = ({ children }) => {
   }, [memberId]);
 
   useEffect(() => {
-
     if (pathname !== '/') {
       getCurrencyCode();
       getCurrency();
     }
 
-  }, [pathname])
+  }, [])
 
 
   useEffect(() => {

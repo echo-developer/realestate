@@ -319,15 +319,12 @@ const ProfileForm = () => {
                 url: item?.platform_url,
               });
             });
-            console.log("socialSTate", socialSTate)
             const mergedSocialLinks = socialLinks.map((defaultItem) => {
-              console.log("defaultItem", defaultItem)
-              const match = socialSTate.find((d) => d.name === defaultItem.name);
-              console.log("match", match)
+              const match = socialSTate.find((d) => d.key === defaultItem.key);
               return match
                 ? {
-                  key: match.platform_key,
-                  name: defaultItem.name,
+                  key: match.key,
+                  name: match.key.charAt(0).toUpperCase() + match.key.slice(1),
                   url: match.url.replace(/\\\//g, "/")
                 }
                 : defaultItem;

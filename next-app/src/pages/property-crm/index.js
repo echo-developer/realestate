@@ -203,7 +203,8 @@ const Index = () => {
                     } else {
                         return {
                             ...item,
-                            ...res.data
+                            ...res.data,
+                            is_blur: 0
                         }
                     }
                 })
