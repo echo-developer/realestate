@@ -20,10 +20,17 @@ const TabComponent = () => {
     const [propertyData, setPropertyData] = useState([]);
     const [postFor, setPostFor] = useState("");
     const [isOpen, setIsOpen] = useState(false);
+    const [tabCounts, setTabCounts] = useState({
+        published_properties: 0,
+        pending_properties: 0,
+        expired_properties: 0,
+        draft_properties: 0
+    })
 
     const handleToggle = () => {
         setIsOpen(prev => !prev);
     };
+
     const memberId = GetMemberId();
     const [publishPagination, setPublishPagination] = useState({
 
@@ -53,7 +60,7 @@ const TabComponent = () => {
 
     useEffect(() => {
         if (memberId && router.isReady) {
-            if(router?.query?.post_for) {
+            if (router?.query?.post_for) {
                 setPostFor(router.query.post_for)
                 FetchPropertyData(null, null, router.query.post_for);
             } else {
@@ -80,10 +87,16 @@ const TabComponent = () => {
             if (response && response?.status === 1) {
                 if (!loadMore) {
                     setPropertyData(response?.data);
+                    setTabCounts({
+                        published_properties: response?.data.published_properties?.data?.length || 0,
+                        pending_properties: response?.data.pending_properties?.data?.length || 0,
+                        expired_properties: response?.data.expired_properties?.data?.length || 0,
+                        draft_properties: response?.data.draft_properties?.data?.length || 0,
+                    })
                 } else {
                     updateLoadMoreState(response?.data);
                 }
-            } 
+            }
         } catch (error) {
             console.error("An error occurred while loading data.");
         } finally {
@@ -107,7 +120,7 @@ const TabComponent = () => {
     }
 
     const handleTabChange = (tab) => {
-        if(activeTab !== tab) {
+        if (activeTab !== tab) {
             setLoading(true);
             setPropertyData(prev => {
                 return {
@@ -123,33 +136,33 @@ const TabComponent = () => {
         }
         setActiveTab(tab);
         setPostFor("");
-    
+
         const { pathname, query } = router;
-    
+
         router.push({
             pathname,
             query
-        }, undefined, { shallow: true });  
+        }, undefined, { shallow: true });
     };
 
     const renderTabContent = () => {
         if (loading) {
             return (
                 <>
-                <ShimmerContentBlock
-                    title
-                    text
-                    cta
-                    thumbnailWidth={350}
-                    thumbnailHeight={50}
-                />
-                <ShimmerContentBlock
-                    title
-                    text
-                    cta
-                    thumbnailWidth={350}
-                    thumbnailHeight={50}
-                />
+                    <ShimmerContentBlock
+                        title
+                        text
+                        cta
+                        thumbnailWidth={350}
+                        thumbnailHeight={50}
+                    />
+                    <ShimmerContentBlock
+                        title
+                        text
+                        cta
+                        thumbnailWidth={350}
+                        thumbnailHeight={50}
+                    />
                 </>
             );
         }
@@ -194,13 +207,13 @@ const TabComponent = () => {
     const handleFilterSelect = (queryVal) => {
         if (queryVal) {
             const { pathname, query } = router;
-            query.post_for = queryVal;  
+            query.post_for = queryVal;
 
             router.push({
                 pathname,
                 query
             }, undefined, { shallow: true });
-        } 
+        }
     }
 
 
@@ -219,42 +232,66 @@ const TabComponent = () => {
                                         role="button"
                                         onClick={() => handleTabChange("published_properties")}
                                     >
-                                        {translation?.publish || "Publish"}
+                                        {translation?.publish || "Publish"}{" "}
+                                        {tabCounts.published_properties > 0 && (
+                                            <span className="badge bg-success">
+                                                {tabCounts.published_properties}
+                                            </span>
+                                        )}
                                     </a>
                                 </li>
+
                                 <li className="nav-item">
                                     <a
                                         className={`nav-link ${activeTab === "pending_properties" ? "active" : ""}`}
                                         role="button"
                                         onClick={() => handleTabChange("pending_properties")}
                                     >
-                                        {translation?.pending || "Pending"}
+                                        {translation?.pending || "Pending"}{" "}
+                                        {tabCounts.pending_properties > 0 && (
+                                            <span className="badge bg-warning text-dark">
+                                                {tabCounts.pending_properties}
+                                            </span>
+                                        )}
                                     </a>
                                 </li>
+
                                 <li className="nav-item">
                                     <a
                                         className={`nav-link ${activeTab === "expired_properties" ? "active" : ""}`}
                                         role="button"
                                         onClick={() => handleTabChange("expired_properties")}
                                     >
-                                        {translation?.expired || "Expired"}
+                                        {translation?.expired || "Expired"}{" "}
+                                        {tabCounts.expired_properties > 0 && (
+                                            <span className="badge bg-danger">
+                                                {tabCounts.expired_properties}
+                                            </span>
+                                        )}
                                     </a>
                                 </li>
+
                                 <li className="nav-item">
                                     <a
                                         className={`nav-link ${activeTab === "draft_properties" ? "active" : ""}`}
                                         role="button"
                                         onClick={() => handleTabChange("draft_properties")}
                                     >
-                                        {translation?.draft || "Draft"}
+                                        {translation?.draft || "Draft"}{" "}
+                                        {tabCounts.draft_properties > 0 && (
+                                            <span className="badge bg-secondary">
+                                                {tabCounts.draft_properties}
+                                            </span>
+                                        )}
                                     </a>
                                 </li>
                             </ul>
+
                         </Col>
                         <Col sm="auto">
                             <Dropdown className="mb-3 mb-sm-0">
                                 <Dropdown.Toggle variant="outline-primary" size="sm" id="dropdown-basic">
-                                     {postFor ? postFor.charAt(0).toUpperCase() + postFor.slice(1) : "Select Option"}
+                                    {postFor ? postFor.charAt(0).toUpperCase() + postFor.slice(1) : "Select Option"}
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu className="dropdown-menu-end">
