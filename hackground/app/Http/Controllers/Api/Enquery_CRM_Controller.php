@@ -1395,6 +1395,7 @@ class Enquery_CRM_Controller extends Controller
                     ->with(['siteVisit'])
                     ->where('user_id', $userId)
                     ->where('lead_type', 'SV')
+                    ->where('enquery_id', $request->enquery_id)
                     ->get()->map(function ($items) {
                         $items->is_blur = $items->is_seen == 0 ? 1 : 0;
                         if ($items->is_blur == 1) {

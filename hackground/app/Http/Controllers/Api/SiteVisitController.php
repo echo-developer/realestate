@@ -16,7 +16,7 @@ class SiteVisitController extends Controller
     {
         try {
             DB::beginTransaction();
-            log_anything($request->all());
+            // log_anything($request->all());
             if (empty($request->phone)) {
                 return response()->json([
                     'status' => 0,
@@ -48,18 +48,12 @@ class SiteVisitController extends Controller
             ];
 
 
-            log_anything($siteVisitData, 'siteVisitData');
-
-
             $siteVisitEnquery = SiteVisit::create($siteVisitData);
             $siteVisitLeadData = [
                 'lead_type' => 'SV',
                 'user_id' => $property_posted_by,
                 'enquery_id' =>  $siteVisitEnquery->id,
             ];
-
-
-            log_anything($siteVisitLeadData, 'siteVisitLeadData');
 
 
             LeadAssigned::create($siteVisitLeadData);
