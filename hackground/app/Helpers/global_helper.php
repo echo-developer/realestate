@@ -508,6 +508,28 @@ if (!function_exists('extractProjectIdFromSlug')) {
         throw new \Exception("Invalid slug format");
     }
 }
+if (!function_exists('get_field_by_model')) {
+    /**
+     * Retrieve any field value from a model based on a column match and optional language.
+     *
+     * @param string $model The full class name of the Eloquent model.
+     * @param string $column The column to search by (e.g., 'id', 'category_id').
+     * @param mixed $value The value to search for in the column.
+     * @param string $field The field name to return.
+     * @param string|null $lang Optional language code (e.g., 'en').
+     * @return mixed The field value if found, or null.
+     */
+    function get_field_by_model($model, $column, $value, $field, $lang = null)
+    {
+        $query = $model::where($column, $value);
+
+        if ($lang !== null) {
+            $query->where('lang', $lang);
+        }
+
+        return $query->value($field);
+    }
+}
 if (!function_exists('get_slug_name')) {
 
     function get_slug_name($insertedPropertyId, $bedrooms_count, $carpet_area, $super_area, $post_for, $locality, $city, $property_type)
@@ -539,12 +561,24 @@ if (!function_exists('get_slug_name')) {
                     ? ($carpet_area * $super_area)
                     : "NA",
                 ucfirst($post_for ?? "Sale"),
-                ucfirst(get_name_by_id('locality_names', 'locality_id', $locality, 'en') ?? "Unknown"),
+                ucfirst(get_field_by_model(\App\Models\LocalityModel::class, 'locality_id', $locality, 'locality_key') ?? "Unknown"),
+                ucfirst(get_name_by_id('city_names', 'city_id', $city, 'en') ?? "Unknown"),
+                $hexEncodedId
+            );
+        } else if (!empty($carpet_area) && !empty($super_area) && !empty($locality) && !empty($city)) {
+
+            $slug = sprintf(
+                "%s-%s-Sq-ft-FOR-%s-%s-in-%s&id=%s",
+                ucfirst(get_name_by_id('property_sub_category_names', 'sub_category_id', $property_type, 'en') ?? "Unknown"),
+                is_numeric($carpet_area) && is_numeric($super_area)
+                    ? ($carpet_area * $super_area)
+                    : "NA",
+                ucfirst($post_for ?? "Sale"),
+                ucfirst(get_field_by_model(\App\Models\LocalityModel::class, 'locality_id', $locality, 'locality_key') ?? "Unknown"),
                 ucfirst(get_name_by_id('city_names', 'city_id', $city, 'en') ?? "Unknown"),
                 $hexEncodedId
             );
         } else {
-
             $slug = sprintf(
                 "%s-FOR-%s&id=%s",
                 ucfirst(get_name_by_id('property_sub_category_names', 'sub_category_id', $property_type, 'en') ?? "Unknown"),
@@ -552,7 +586,7 @@ if (!function_exists('get_slug_name')) {
                 $hexEncodedId
             );
         }
-
+        logger($slug);
         return $slug;
     }
 }
