@@ -15,6 +15,7 @@ import { Modal, Button, Nav } from "react-bootstrap";
 import ContactModal from "@/components/property-crm/ContactModal";
 
 
+
 const ITEMS_PER_PAGE = 10;
 
 const Index = () => {
@@ -186,7 +187,7 @@ const Index = () => {
     }
 
     const handleShowLead = async (enquery_id, enquery_type, activeTab) => {
-        if(!enquery_id || !enquery_type) return;
+        if (!enquery_id || !enquery_type) return;
         try {
             const res = await callApi({
                 api: '/leads-update',
@@ -196,9 +197,10 @@ const Index = () => {
                     enquery_type: enquery_type
                 }
             })
-            if(res && res.status == 1) {
+            if (res && res.status == 1) {
                 const newList = list.map((item, i) => {
-                    if(item.enquery_id !== enquery_id) {
+
+                    if (item.enquery_id !== enquery_id) {
                         return item;
                     } else {
                         return {
@@ -232,6 +234,9 @@ const Index = () => {
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link role="button" className={`${activeTab == 'general' ? 'active' : ''}`} onClick={() => handleActiveTabChange("general")}>{translation?.genral_leads || "General Leads"}</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link role="button" className={`${activeTab == 'site_visit' ? 'active' : ''}`} onClick={() => handleActiveTabChange("site_visit")}>Visitor List</Nav.Link>
                         </Nav.Item>
                     </Nav>
 
@@ -275,7 +280,7 @@ const Index = () => {
                             </div>
                         </>
                     )}
-                    {activeTab !== 'general' && list?.length > 0 && !loading && (
+                    {activeTab !== 'general' || activeTab !== 'site_visit' && list?.length > 0 && !loading && (
                         <div className="list-display mt-4">
                             {list.map((lead, i) => {
                                 return (
@@ -454,6 +459,64 @@ const Index = () => {
                         </div>
                     )}
 
+                    {activeTab === 'site_visit' && (
+                        <div className="list-display mt-4">
+                            {list?.map((item, i) => (
+                                <div className="card card-ads mb-3" key={i}>
+                                    <div className="row g-0">
+                                        <div className="col-md-8">
+                                            <div className="card-body">
+                                                <h5 className="card-title mb-1">
+                                                    <Link href={`/property-details/${item?.site_visit?.property_details?.slug}`}>
+                                                    {item?.site_visit?.property_details?.name || "Property Name"}
+                                                    </Link>
+                                                </h5>
+
+                                                <div className={item?.is_blur ? "text-blur" : ""}>
+                                                    <p className="card-text mb-1">
+                                                        <strong>Visit Date:</strong> {item?.site_visit?.visit_date}
+                                                    </p>
+                                                    <p className="card-text mb-1">
+                                                        <strong>Visit Time:</strong> {item?.site_visit?.visit_time}
+                                                    </p>
+
+                                                    {item?.site_visit?.customer_details &&
+                                                        Object.keys(item.site_visit.customer_details).map((key, index) => (
+                                                            <p className="card-text mb-1" key={index}>
+                                                                <strong>{key}:</strong>{" "}
+                                                                {key.toLowerCase() === "phone" ? (
+                                                                    <span className="text-primary">{item.site_visit.customer_details[key]}</span>
+                                                                ) : (
+                                                                    item.site_visit.customer_details[key]
+                                                                )}
+                                                            </p>
+                                                        ))}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="col-md-4 d-flex flex-column align-items-center justify-content-center p-3 gap-2">
+                                            {item?.is_blur === 1 && (
+                                                <button
+                                                    className="btn btn-sm btn-primary w-100"
+                                                    onClick={() =>
+                                                        handleShowLead(item?.enquery_id, item?.lead_type, activeTab)
+                                                    }
+                                                >
+                                                    Show Lead
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            ))}
+                        </div>
+                    )}
+
+
+
+
                     {currentPage < totalPage && (
                         <button
                             className="btn btn-primary btn-lg d-block mx-auto mt-4"
@@ -494,6 +557,8 @@ const generateUrl = (leadType) => {
             return '/user-project-leads';
         case 'general':
             return '/user-general-leads';
+        case 'site_visit':
+            return '/get-site-visits';
         default:
             return '/my_property_CRMS';
     }

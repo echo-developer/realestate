@@ -1,1 +1,0 @@
-{showAgentPhone?.show && showAgentPhone?.user_id == agent?.user_id ? agent.phone : `${translation?.email || "Email"}`}
