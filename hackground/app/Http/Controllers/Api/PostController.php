@@ -170,7 +170,7 @@ class PostController extends Controller
     {
         $slug = get_slug_name(
             $property->id,
-            $this->countRooms($request->bedrooms),
+            $this->countRooms($request->bedroom),
             $request->carpet_area,
             $request->super_area,
             $request->post_for,
@@ -180,7 +180,7 @@ class PostController extends Controller
         );
 
         $name = get_property_name(
-            $this->countRooms($request->bedrooms),
+            $this->countRooms($request->bedroom),
             $request->carpet_area,
             $request->super_area,
             $request->post_for,
