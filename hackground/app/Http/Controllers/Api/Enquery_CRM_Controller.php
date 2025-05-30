@@ -1391,21 +1391,24 @@ class Enquery_CRM_Controller extends Controller
             if ($enquery_type === 'SV') {
                 // $userId = $request->user_id ?? auth_user_id();
 
-                $enquery  = LeadAssigned::select('assign_id', 'lead_type', 'enquery_id', 'lead_status', 'is_seen')
+                $enquery = LeadAssigned::select('assign_id', 'lead_type', 'enquery_id', 'lead_status', 'is_seen')
                     ->with(['siteVisit'])
                     ->where('user_id', $userId)
                     ->where('lead_type', 'SV')
                     ->where('enquery_id', $request->enquery_id)
-                    ->get()->map(function ($items) {
-                        $items->is_blur = $items->is_seen == 0 ? 1 : 0;
-                        if ($items->is_blur == 1) {
-                            $items->siteVisit->property_posted_by = blur_text($items->siteVisit->property_posted_by, 1);
-                            $items->siteVisit->visit_date = blur_text($items->siteVisit->visit_date, 1);
-                            $items->siteVisit->visit_time = blur_text($items->siteVisit->visit_time, 1);
-                        }
-                        $items->siteVisit->customer_details = $items->siteVisit->getCustomerDetails($items->is_blur);
-                        return $items;
-                    });
+                    ->first();
+
+                if ($enquery) {
+                    $enquery->is_blur = $enquery->is_seen == 0 ? 1 : 0;
+
+                    if ($enquery->is_blur == 1) {
+                        $enquery->siteVisit->property_posted_by = blur_text($enquery->siteVisit->property_posted_by, 1);
+                        $enquery->siteVisit->visit_date = blur_text($enquery->siteVisit->visit_date, 1);
+                        $enquery->siteVisit->visit_time = blur_text($enquery->siteVisit->visit_time, 1);
+                    }
+
+                    $enquery->siteVisit->customer_details = $enquery->siteVisit->getCustomerDetails($enquery->is_blur);
+                }
             }
             return response()->json(['status' => 1, 'message' => 'Lead updated successfully.', 'data' => $enquery]);
         } catch (\Exception $e) {
