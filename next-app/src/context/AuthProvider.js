@@ -202,7 +202,6 @@ export const AuthProvider = ({ children }) => {
     'Great performar': "bg-info-subtle text-info"
   }
 
-  console.log("listing allowed", listingAllowed);
   
   function getBadgeButtonClass(badgeName) {
     return badgesObject[badgeName] || 'bg-primary-subtle text-primary'

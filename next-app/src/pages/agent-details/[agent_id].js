@@ -48,6 +48,7 @@ const Index = () => {
   const [subPropertyList, setSubPropertyList] = useState([]);
   const [selectedPropertyType, setSelectedPropertyType] = useState("");
   const [selectedProeprtyFor, setSelectedProeprtyFor] = useState("");
+  const [showPhone, setShowPhone] = useState(null);
   const [contactDetails, setContactDetails] = useState({
     name: "",
     email: "",
@@ -476,12 +477,31 @@ const Index = () => {
 
   const handleWhatsappClick = (agent) => {
     const phoneNumber = adminWhatsapp;
-    const message = `Agent Name = ${agent.name} \nAgent Id = ${agent.user_id}`;
+    const message = `Agent Name = ${agent.name} \nAgent Id = ${agent.user_id || agent.id}`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 
     window.open(whatsappURL, '_blank');
   };
+
+  const handleEmailPhoneClick = (type) => {
+    setShowEnquiryModal(true);
+    if(type == 'phone') {
+      setShowPhone({
+        show: false,
+        value: agentDetailsData?.bussiness_phone
+      })
+    }
+  }
+
+  const callSuccessfuntion = () => {
+    setShowPhone(prev => {
+      return {
+        ...prev,
+        show: true,
+      }
+    })
+  }
 
   const metaTitle = `${agentDetailsData?.name ?? 'Agent'} – Real Estate Agent in ${agentDetailsData?.city ?? 'Unknown City'} | ${agentDetailsData?.forSell ?? 0} Properties for Sale & ${agentDetailsData?.forRent ?? 0} for Rent`;
 
@@ -582,17 +602,19 @@ const Index = () => {
                           <Button
                             variant="outline-primary"
                             size="sm"
-                            onClick={() => setShowEnquiryModal(true)}
+                            onClick={() => handleEmailPhoneClick('email')}
                           >
                             <EnvelopeFill color="#1365CF" size={16} /> {translation?.email || "Email"}
                           </Button>
                           <Button
                             variant="outline-info"
                             size="sm"
-                            onClick={() => setShowEnquiryModal(true)}
+                            className={showPhone?.show && showPhone?.value ? 'text-info' : ''}
+                            onClick={() => handleEmailPhoneClick('phone')}
+                            disabled={showPhone?.show}
                             style={{ minWidth: '72px' }}
                           >
-                            <PhoneFill color="#0dcaf0" size={16} /> {translation?.call || "Call"}
+                            <PhoneFill color="#0dcaf0" size={16} /> {showPhone?.show && showPhone?.value ? showPhone.value : `${translation?.call || 'Call'}`} 
                           </Button>
                           <Button
                             variant="outline-success"
@@ -1205,6 +1227,7 @@ const Index = () => {
             <AgentEnquiryForm
               agentId={agent_id}
               handleClose={handleEnquiryClose}
+              callSuccessfuntion={callSuccessfuntion}
             />
           </Modal.Body>
         </Modal>

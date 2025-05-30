@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useTranslation from "@/hooks/useTranslation";
 import "./favourite.css";
+import Image from "next/image";
 
 
 const CardImageSlider = ({
@@ -10,8 +11,8 @@ const CardImageSlider = ({
   addRemoveFav,
   mainType,
   listKey,
-  showFavIcon=true,
-  showImgCount=true
+  showFavIcon = true,
+  showImgCount = true
 }) => {
   const translation = useTranslation();
   const [allImages, setAllImages] = useState([]);
@@ -57,21 +58,25 @@ const CardImageSlider = ({
                 key={i}
                 className={`carousel-item ${i === currentIndex ? "active" : ""}`}
               >
-                <img
+                <Image
                   alt=""
-                  className="card-img-top"
                   src={img || "/assets/images/property/default-property-1.jpg"}
-                  loading="lazy"
+                  width={600}
+                  height={400}
+                  className="card-img-top"
+                  loading="eager"
                 />
-                
+
               </div>
             ))
           ) : (
             <div className="carousel-item active">
-              <img
+              <Image
                 alt=""
-                className="card-img-top"
                 src="/assets/images/property/default-property-1.jpg"
+                width={600}
+                height={400}
+                className="card-img-top"
                 loading="lazy"
               />
             </div>
@@ -100,25 +105,24 @@ const CardImageSlider = ({
         <span className={`ads-type ${data?.post_for}`}>
           for {data?.post_for || `${translation?.not_available || "Not available"}`}
         </span>
-      ):(<></>)}
+      ) : (<></>)}
 
       {
         showFavIcon && (
           <span
-        className={`ads-fav ${
-          data?.is_favorite || data?.is_fav || data?.is_favourite ? "active" : ""
-        }`}
-        onClick={() => addRemoveFav(data?.[id], mainType, listKey)}
-      >
-        <i className="icon-line-awesome-heart-o"></i>
-      </span>
+            className={`ads-fav ${data?.is_favorite || data?.is_fav || data?.is_favourite ? "active" : ""
+              }`}
+            onClick={() => addRemoveFav(data?.[id], mainType, listKey)}
+          >
+            <i className="icon-line-awesome-heart-o"></i>
+          </span>
         )
       }
-      {showImgCount && data.image_count ?  (
+      {showImgCount && data.image_count ? (
         <span className="total-ad-pic">
-        <i className="bi bi-camera"></i>{data.image_count}
-      </span>
-      ):(<></>)}
+          <i className="bi bi-camera"></i>{data.image_count}
+        </span>
+      ) : (<></>)}
     </div>
   );
 };

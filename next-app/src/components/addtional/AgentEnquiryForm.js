@@ -13,7 +13,7 @@ import {
 } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 
-const AgentEnquiryForm = ({agentId,handleClose }) => {
+const AgentEnquiryForm = ({agentId, handleClose, callSuccessfuntion }) => {
     const router=useRouter();
     const translation = useTranslation();
     const { callApi, isLogin } = AuthUser();
@@ -108,6 +108,7 @@ const validationSchema = Yup.object({
                 handleClose();
                 resetForm();
                 toast.success(response.message || "Enquiry Send Success");
+                callSuccessfuntion();
             } 
         } catch (error) {
             
