@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
     if (memberId && !hasFetchedUserData.current) {
       hasFetchedUserData.current = true;
       fetchUserData();
-      fetchRemainPosting();
+      // fetchRemainPosting();
     }
 
   }, [memberId]);
@@ -74,23 +74,23 @@ export const AuthProvider = ({ children }) => {
   }, [debouncedValue])
 
 
-  const fetchRemainPosting = async () => {
-    try {
-      const response = await callApi({
-        api: `/get_remaining_value`,
-        method: "GET",
-        data: {
-          user_id: memberId,
-        },
-      });
-      if (response && response.status === 1) {
-        setListingAllowed(response.remaining_listings_allowed);
-      } else {
-        setListingAllowed(response.remaining_listings_allowed);
+  // const fetchRemainPosting = async () => {
+  //   try {
+  //     const response = await callApi({
+  //       api: `/get_remaining_value`,
+  //       method: "GET",
+  //       data: {
+  //         user_id: memberId,
+  //       },
+  //     });
+  //     if (response && response.status === 1) {
+  //       setListingAllowed(response.remaining_listings_allowed);
+  //     } else {
+  //       setListingAllowed(response.remaining_listings_allowed);
 
-      }
-    } catch (error) { }
-  };
+  //     }
+  //   } catch (error) { }
+  // };
 
   function formatPrice(price) {
     if (!price) return;
@@ -170,6 +170,8 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (response?.success == 1) {
+        // console.log("response", response)
+        setListingAllowed(response.data?.remaining_listings_allowed || 0);
         setUserData(response?.data?.user);
       }
     } catch (error) {
@@ -200,6 +202,8 @@ export const AuthProvider = ({ children }) => {
     'Great performar': "bg-info-subtle text-info"
   }
 
+  console.log("listing allowed", listingAllowed);
+  
   function getBadgeButtonClass(badgeName) {
     return badgesObject[badgeName] || 'bg-primary-subtle text-primary'
   }
@@ -235,7 +239,7 @@ export const AuthProvider = ({ children }) => {
       buildAgentUrl,
       listingAllowed,
       adminDetails,
-      setAdminDetails
+      setAdminDetails,
     }}>
       {children}
     </AuthContext.Provider>
