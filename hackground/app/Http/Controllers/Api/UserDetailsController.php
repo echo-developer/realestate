@@ -20,10 +20,10 @@ class UserDetailsController extends Controller
                 if (file_exists($imagePath)) {
                     $user->image = asset('user_upload/profile_image/' . $user->image);
                 } else {
-                    $user->image = asset('user_upload/defaults/user.png');
+                    $user->image = '';
                 }
             } else {
-                $user->image = asset('user_upload/defaults/user.png');
+                $user->image = '';
             }
         }
 
