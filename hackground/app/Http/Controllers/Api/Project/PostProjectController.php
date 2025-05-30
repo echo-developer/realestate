@@ -107,12 +107,8 @@ class PostProjectController extends Controller
         $encodedId = base64_encode($project->id);
         $localityKey = get_field_by_model(\App\Models\LocalityModel::class, 'locality_id', $request->locality, 'locality_key') ?? 'unknown';
         $cityName = get_name_by_id('city_names', 'city_id', $request->city, 'en') ?? 'unknown';
-
         $slugBase = Str::slug($request->project_name . '-' . $localityKey . '-' . $cityName . '-prjDtId-' . $encodedId);
-
         $project->slug = $slugBase;
-
-        logger($slugBase);
         $project->save();
         return $project;
     }
