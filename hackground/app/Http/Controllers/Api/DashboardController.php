@@ -1130,13 +1130,13 @@ class DashboardController extends Controller
                 'company_name' => $req->company_name,
             ];
 
-            $data = array_filter($dataNotFiltered, function ($value) {
-                return !is_null($value) && $value !== '';
-            });
+            // $data = array_filter($dataNotFiltered, function ($value) {
+            //     return !is_null($value) && $value !== '';
+            // });
 
             $insert = AgentAdditional::updateOrCreate(
                 ['agent_id' => $req->user_id],
-                $data
+                $dataNotFiltered
             );
         } catch (\Throwable $e) {
             throw $e;
@@ -1256,7 +1256,6 @@ class DashboardController extends Controller
 
 
             foreach ($mediaPlatform as $media) {
-                if (!empty($media['key']) && !empty($media['url'])) {
                     AgentSocialPlatform::updateOrCreate(
                         [
                             'platform_key' => $media['key'],
@@ -1267,7 +1266,6 @@ class DashboardController extends Controller
                             'platform_url' => $media['url'] ?? null,
                         ]
                     );
-                }
             }
         } catch (\Throwable $e) {
             throw $e;
