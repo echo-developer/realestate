@@ -99,7 +99,7 @@ class SiteVisitController extends Controller
 
         return response()->json([
             'status' => 1,
-            'message' => 'visit request sent',
+            'message' => 'Visit request retrived',
             'data' => $getVisitList,
         ]);
     }

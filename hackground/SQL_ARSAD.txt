@@ -649,6 +649,10 @@ ALTER TABLE `pref_property_report` ADD `actions` TINYINT NULL DEFAULT '0' COMMEN
 
 CREATE TABLE `pref_site_visit` (`id` BIGINT NOT NULL AUTO_INCREMENT , `property_id` BIGINT NULL DEFAULT NULL , `customer_id` BIGINT NULL DEFAULT NULL , `visit_date` DATE NULL DEFAULT NULL , `visit_time` TIME NULL DEFAULT NULL , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
+ALTER TABLE `pref_site_visit` ADD `property_posted_by` BIGINT NULL DEFAULT NULL AFTER `property_id`;
+
 30/05/2025
 
 ALTER TABLE `pref_leads_assigned` CHANGE `lead_type` `lead_type` CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'P = Project/Property G = GENERAL , SV = SITE VISIT';
+
+
