@@ -32,7 +32,7 @@ class PostProjectController extends Controller
 
         try {
 
-           
+
             $this->UserId = $this->handleUser($request);
             $can_post = get_remaining_values('remaining_listings_allowed', $this->UserId);
             if ($can_post != null) {
@@ -105,11 +105,14 @@ class PostProjectController extends Controller
             'status' => config('constants.STATUS_INACTIVE'),
         ]);
         $encodedId = base64_encode($project->id);
-        $project->slug = is_string($request->project_name)
-            ? Str::slug($request->project_name) . '-prjDtId-' . $encodedId
-            : null;
+        $localityKey = get_field_by_model(\App\Models\LocalityModel::class, 'locality_id', $request->locality, 'locality_key') ?? 'unknown';
+        $cityName = get_name_by_id('city_names', 'city_id', $request->city, 'en') ?? 'unknown';
 
+        $slugBase = Str::slug($request->project_name . '-' . $localityKey . '-' . $cityName . '-prjDtId-' . $encodedId);
 
+        $project->slug = $slugBase;
+
+        logger($slugBase);
         $project->save();
         return $project;
     }
