@@ -13,7 +13,7 @@ const spinnerStyles = {
   spinner: {
     width: "50px",
     height: "50px",
-    border: "5px solid #f3f3f3", 
+    border: "5px solid #f3f3f3",
     borderTop: "5px solidrgb(80, 116, 141)",
     borderRadius: "50%",
     animation: "spin 1s linear infinite",
@@ -29,7 +29,7 @@ const spinnerStyles = {
 };
 
 const withAuth = (WrappedComponent) => {
-  const{isLogin, getToken, logout}=AuthUser();
+  const { isLogin, getToken, logout } = AuthUser();
   return (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
@@ -38,9 +38,9 @@ const withAuth = (WrappedComponent) => {
       const token = isLogin();
       const decodedToken = jwtDecode(getToken())
       const currentTime = Math.floor(Date.now() / 1000);
-      if(decodedToken.exp < currentTime) {
+      if (decodedToken.exp < currentTime) {
         logout();
-        router.push('/login');
+        window.location.href = '/login';
       }
       if (!token) {
         router.push("/login");
