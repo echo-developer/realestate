@@ -405,7 +405,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
               <div className="form-field">
                 <div className="d-flex flex-column justify-content-center align-items-center">
                   <h5 className="text-primary fw-bold">
-                    {key.charAt(0).toUpperCase() + key.slice(1)}
+                    {key.charAt(0)?.toUpperCase() + key.slice(1)}
                   </h5>
                   <div className="cart-plus-minus mb-2">
                     <input
@@ -436,7 +436,7 @@ const Step4Form = ({ formData, setFormData, nextStep, prevStep }) => {
                   formData[key] && formData[key]?.length > 0 && (
                     <fieldset className="">
                   <legend>{`${key.charAt(0).toLocaleUpperCase() + key.slice(1)
-                    } (${getUnitLabel(formData?.unit_type)})`}</legend>
+                    } (${getUnitLabel(formData?.unit_type || "sqft")})`}</legend>
 
                   <div className="row gx-3 -mb-3">
                     {(formData[key] || []).map((room, index) => (

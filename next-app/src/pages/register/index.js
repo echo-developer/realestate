@@ -358,7 +358,7 @@ const Index = () => {
                                   height="32"
                                   width="32"
                                 />{" "}
-                                {translation?.builder_developer || "Builder"}
+                                {translation?.builder_developer || "Builder / Developer"}
                               </label>
                             </div>
 

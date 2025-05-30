@@ -235,7 +235,7 @@ const Step1Form = ({ formData, setFormData, nextStep, userData, memberId }) => {
                 height="24"
                 width="24"
               />
-              {type === "O" ? "Owner" : type === "A" ? "Agent" : "Builder"}
+              {type === "O" ? "User" : type === "A" ? "Agent" : "Builder / Developer"}
             </label>
           </React.Fragment>
         ))}
