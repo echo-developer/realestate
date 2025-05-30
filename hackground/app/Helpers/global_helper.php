@@ -1513,7 +1513,7 @@ if (!function_exists('assign_free_plan')) {
 
         DB::transaction(function () use ($user_id, $transactionId, $subscriptionDate, $expireDate, $planDetails) {
             $features = $planDetails->plan_features;
-
+            logger($features);
             DB::table('user_membership')->where('user_id', $user_id)->delete();
 
             DB::table('user_membership')->insert([
@@ -1522,7 +1522,7 @@ if (!function_exists('assign_free_plan')) {
                 'plan_id'               => 10,
                 'subcription_date'      => $subscriptionDate,
                 'expire_date'           => $expireDate,
-                'leads'       => $features->ownerleads_contacted ?? null,
+                'leads'                 => $features->leads ?? null,
                 'listings_allowed'      => $features->listings_allowed ?? null,
                 'relationship_manager'  => $features->relationship_manager ?? 'N',
                 'verified_badge'        => $features->verified_badge ?? 'N',

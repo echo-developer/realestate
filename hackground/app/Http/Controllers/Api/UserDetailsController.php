@@ -11,24 +11,32 @@ class UserDetailsController extends Controller
 {
     public function details(Request $req)
     {
-
-        $user =  User::select('name', 'email', 'phone', 'image', 'whatsapp_no')->where('id', $req->uid)->first();
-
-        if ($user->image) {
-            $user->image = asset('user_upload/profile_image/' . $user->image);
+        $user = User::select('name', 'email', 'phone', 'image', 'whatsapp_no')
+            ->where('id', $req->uid)
+            ->first();
+        if ($user) {
+            if (!empty($user->image)) {
+                $imagePath = public_path('user_upload/profile_image/' . $user->image);
+                if (file_exists($imagePath)) {
+                    $user->image = asset('user_upload/profile_image/' . $user->image);
+                } else {
+                    $user->image = asset('user_upload/defaults/user.png');
+                }
+            } else {
+                $user->image = asset('user_upload/defaults/user.png');
+            }
         }
 
         $data = PrefProperty::with([
             'settings:pid,bedrooms,bathrooms,area_in_sqft',
             'additional:pid',
             'location:pid,property_address',
-        ])->get();
+        ])->paginate(10);
 
-        $properties = $data->map(function ($property) {
+        $properties = $data->getCollection()->map(function ($property) {
             $galleries = [];
-            $getGalleries = GetProperties_GalleryImages($property->id);
-
-            foreach ($getGalleries as $image) {
+            $galleryImages = GetProperties_GalleryImages($property->id);
+            foreach ($galleryImages as $image) {
                 $galleryType = $image->image_type;
                 if (!isset($galleries[$galleryType])) {
                     $galleries[$galleryType] = [
@@ -37,29 +45,37 @@ class UserDetailsController extends Controller
                     ];
                 }
 
-                $imageUrl = asset('user_upload/property_images/' . $image->filename);
-
                 $galleries[$galleryType]['images'][] = [
-                    'image_id' => $image->image_id,
+                    'image_id'   => $image->image_id,
                     'image_name' => $image->filename,
-                    'image_url' => $imageUrl,
+                    'image_url'  => asset('user_upload/property_images/' . $image->filename),
                 ];
             }
-            $transformedGallaryData = array_values($galleries);
             return [
-                'id' => $property->id,
-                'slug' => $property->slug,
-                'name' => $property->name,
-                'bedrooms' => optional($property->settings)->bedrooms,
-                'bathrooms' => optional($property->settings)->bathrooms,
-                'area_in_sqft' => optional($property->settings)->area_in_sqft,
+                'id'              => $property->id,
+                'slug'            => $property->slug,
+                'name'            => $property->name,
+                'bedrooms'        => optional($property->settings)->bedrooms,
+                'bathrooms'       => optional($property->settings)->bathrooms,
+                'area_in_sqft'    => optional($property->settings)->area_in_sqft,
                 'property_address' => optional($property->location)->property_address,
-                'galleries' => $transformedGallaryData,
+                'galleries'       => array_values($galleries),
             ];
         });
-
-
-
-        return response()->json(['status' => 1, compact('user', 'properties')]);
+        $paginated = $data->setCollection($properties);
+        return response()->json([
+            'status'  => 1,
+            'message' => 'success',
+            'data'    => [
+                'user_details'    => $user,
+                'user_properties' => $paginated->items(),
+            ],
+            'meta'    => [
+                'current_page' => $paginated->currentPage(),
+                'last_page'    => $paginated->lastPage(),
+                'per_page'     => $paginated->perPage(),
+                'total'        => $paginated->total(),
+            ]
+        ]);
     }
 }
