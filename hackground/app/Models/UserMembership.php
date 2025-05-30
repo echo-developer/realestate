@@ -10,6 +10,7 @@ class UserMembership extends Model
     use HasFactory;
 
     protected $table = 'user_membership'; // Define table name
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'user_id',

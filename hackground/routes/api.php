@@ -366,7 +366,7 @@ Route::get('user_details', [UserDetailsController::class, 'details']);
 
 
 Route::post('property-site-visit',[SiteVisitController::class, 'saveSiteVisit']);
-Route::get('get-site-visit-req',[SiteVisitController::class, 'getSiteVisitreq']);
+Route::get('get-site-visits',[SiteVisitController::class, 'getSiteVisitreq']);
 
 
 Route::controller(DummyController::class)->group(function () {

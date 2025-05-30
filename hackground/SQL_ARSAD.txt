@@ -645,4 +645,10 @@ ALTER TABLE `pref_country` ADD `country_code` VARCHAR(5) NULL DEFAULT NULL COMME
 ALTER TABLE `pref_property_report` ADD `actions` TINYINT NULL DEFAULT '0' COMMENT ' 0 = No action, 1 = Request changes , 2 = Delete Property, 3 = Publish Property' AFTER `feedback`;
 
 
+29/05/2025
+
 CREATE TABLE `pref_site_visit` (`id` BIGINT NOT NULL AUTO_INCREMENT , `property_id` BIGINT NULL DEFAULT NULL , `customer_id` BIGINT NULL DEFAULT NULL , `visit_date` DATE NULL DEFAULT NULL , `visit_time` TIME NULL DEFAULT NULL , `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+
+30/05/2025
+
+ALTER TABLE `pref_leads_assigned` CHANGE `lead_type` `lead_type` CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'P = Project/Property G = GENERAL , SV = SITE VISIT';
