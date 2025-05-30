@@ -549,12 +549,14 @@ class HomeController extends Controller
             $cityId = $request->input('city_id');
             $locality = $request->input('locality');
 
-            $topLocalities = PrefPropertyLocation::whereNotNull('city')
-                ->whereNotNull('locality')
-                ->whereNotNull('pid')
-                ->where('city', $cityId)
-                ->selectRaw('locality, COUNT(pid) as total_properties')
-                ->groupBy('locality')
+            $topLocalities = PrefPropertyLocation::join('locality_names', 'properties_location.locality', '=', 'locality_names.locality_id')
+                ->whereNotNull('properties_location.city')
+                ->whereNotNull('properties_location.locality')
+                ->whereNotNull('properties_location.pid')
+                ->where('locality_names.lang', 'en')
+                ->where('properties_location.city', $cityId)
+                ->selectRaw('pref_properties_location.locality,pref_locality_names.name, COUNT(pref_properties_location.pid) as total_properties')
+                ->groupBy('locality_names.name')
                 ->orderByDesc('total_properties')
                 ->limit(5)
                 ->get();
@@ -599,10 +601,10 @@ class HomeController extends Controller
                     return $monthlyPrices[$month] ?? 0;
                 });
 
-                $priceDataforLocalities[$locality['locality']] = $localityPrices->values()->toArray();
+                $priceDataforLocalities[$locality['name']] = $localityPrices->values()->toArray();
 
                 $localitiesMeta[] = [
-                    'name' => $locality['locality'],
+                    'name' => $locality['name'],
                     'total_properties' => $locality['total_properties'] ?? 0,
                 ];
             }

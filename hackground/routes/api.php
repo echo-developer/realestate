@@ -370,5 +370,5 @@ Route::get('get-site-visits',[SiteVisitController::class, 'getSiteVisitreq']);
 
 
 Route::controller(DummyController::class)->group(function () {
-    Route::post('fill_city_latLang', 'cityLatlang');
+    Route::post('insertSlug', 'insertSlug');
 });

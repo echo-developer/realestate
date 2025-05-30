@@ -168,46 +168,11 @@ class City extends Model
                 'status' => config('constants.STATUS_DELETE'),
                 'updated_at' => now(),
             ]);
-            set_flash_message('delete');
+        set_flash_message('delete');
         return [
             'message' => 'City deleted successfully.',
         ];
     }
-
-    // public function cityAddfromExcel(array $data)
-    // {
-    //     try {
-    //         $langs = explode(',', admin_default_lang());
-    //         foreach ($data as $row) {
-
-    //             $stateData = $this->get_state_data($row[1]);
-    //             $newCityId =  DB::table($this->cityTable)->insertGetId([
-    //                 'country' => $stateData?->country ?? get_setting('other-country-id'),
-    //                 'state' =>  $stateData?->id ?? get_setting('other-state-id'),
-    //                 'order'  => rand(1, 4),
-    //                 'status' => config('constants.STATUS_ACTIVE'),
-    //             ]);
-
-    //             $nameByLang = [
-    //                 'en' => $row[2] ?? null,
-    //                 'ar' => $row[3] ?? null,
-    //             ];
-
-    //             foreach ($langs as $lang) {
-    //                 DB::table($this->cityNamesTable)->insert([
-    //                     'city_id' => $newCityId,
-    //                     'lang'        => $lang,
-    //                     'name'        => $nameByLang[$lang] ?? null,
-    //                 ]);
-    //             }
-    //         }
-    //         return [
-    //             'message' => 'City added successfully.',
-    //         ];
-    //     } catch (\Throwable $th) {
-    //         throw $th;
-    //     }
-    // }
 
     public function cityAddfromExcel(array $data, $perChunck = 100)
     {
@@ -220,31 +185,34 @@ class City extends Model
                 foreach ($chunk as $row) {
                     $stateData = $this->get_state_data($row[1]);
 
-                    $newCityId = DB::table($this->cityTable)->insertGetId([
-                        'country' => $stateData?->country ?? get_setting('other-country-id'),
-                        'state'   => $stateData?->id ?? get_setting('other-state-id'),
-                        'order'   => rand(1, 4),
-                        'status'  => config('constants.STATUS_INACTIVE'),
-                    ]);
+                    $slugCity = Str::slug($row[2]);
+                    $exsistingCity = $this->checkSlug($slugCity);
+                    if (!$exsistingCity) {
+                        $newCityId = DB::table($this->cityTable)->insertGetId([
+                            'country' => $stateData?->country ?? get_setting('other-country-id'),
+                            'state'   => $stateData?->id ?? get_setting('other-state-id'),
+                            'order'   => rand(1, 4),
+                            'status'  => config('constants.STATUS_INACTIVE'),
+                        ]);
 
-                    $nameByLang = [
-                        'en' => $row[2] ?? null,
-                        'ar' => $row[3] ?? null,
-                    ];
-
-                    $cityNames = [];
-                    foreach ($langs as $lang) {
-                        $cityNames[] = [
-                            'city_id' => $newCityId,
-                            'lang'    => $lang,
-                            'name'    => $nameByLang[$lang] ?? null,
+                        $nameByLang = [
+                            'en' => $row[2] ?? null,
+                            'ar' => $row[3] ?? null,
                         ];
+
+                        $cityNames = [];
+                        foreach ($langs as $lang) {
+                            $cityNames[] = [
+                                'city_id' => $newCityId,
+                                'lang'    => $lang,
+                                'name'    => $nameByLang[$lang] ?? null,
+                            ];
+                        }
+
+                        DB::table($this->cityNamesTable)->insert($cityNames);
                     }
-
-                    DB::table($this->cityNamesTable)->insert($cityNames); // Bulk insert for languages
                 }
-
-                DB::commit();
+                DB::commit(); 
             }
             return ['message' => 'City added successfully.'];
         } catch (\Throwable $th) {
@@ -268,5 +236,16 @@ class City extends Model
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+    private function checkSlug($citySlug)
+    {
+        $citySlug = trim($citySlug);
+
+        if ($citySlug === '') {
+            return false;
+        }
+
+        return DB::table('city')->where('slug', $citySlug)->exists();
     }
 }
