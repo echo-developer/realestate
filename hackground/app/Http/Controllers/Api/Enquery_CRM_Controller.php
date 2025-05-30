@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\LeadsAssign;
-use App\Models\PrefProject;
+use App\Http\Controllers\Controller;
 use App\Models\Api\ApiModel;
-use Illuminate\Http\Request;
+use App\Models\LeadAssigned;
+use App\Models\PrefProject;
 use App\Models\ProjectEnquery;
-use App\Models\UserMembership;
-use Illuminate\Support\Carbon;
 use App\Models\ProjectProperties;
+use App\Models\ProjectPropertyMapping;
+use App\Models\UserMembership;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use App\Models\ProjectPropertyMapping;
 use Illuminate\Support\Facades\Validator;
 
 class Enquery_CRM_Controller extends Controller
@@ -1339,7 +1339,8 @@ class Enquery_CRM_Controller extends Controller
 
         DB::beginTransaction();
         try {
-            LeadsAssign::where('enquery_id', $request->enquery_id)
+            LeadAssigned::where('enquery_id', $request->enquery_id)
+                ->where('lead_type', $enquery_type)
                 ->update(['is_seen' => true]);
 
             if ($membership->leads != NULL) {
