@@ -83,7 +83,7 @@ class SiteVisitController extends Controller
 
         $getVisitList  = LeadAssigned::select('assign_id', 'lead_type', 'enquery_id', 'lead_status', 'is_seen')
             ->with(['siteVisit'])
-            ->where('user_id', 58)
+            ->where('user_id', $userId)
             ->where('lead_type', 'SV')
             ->get()->map(function ($items) {
                 $items->is_blur = $items->is_seen == 0 ? 1 : 0;
