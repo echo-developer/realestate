@@ -59,6 +59,7 @@ const Index = () => {
   const [showEnquiryModal, setShowEnquiryModal] = useState(false);
   const [selectedAgentId, setSelectedAgentId] = useState("");
   const [adminWhatsapp, setAdminWhatsapp] = useState("");
+  const [showAgentPhone, setShowAgentPhone] = useState(null);
 
   useEffect(() => {
     FetchPropertyTypeData();
@@ -73,7 +74,7 @@ const Index = () => {
         api: `/get-settings-value/admin-whatsapp-number`,
         method: "GET",
       })
-      if(res && res?.status == 1) {
+      if (res && res?.status == 1) {
         setAdminWhatsapp(res.value || "")
       }
     } catch (error) {
@@ -320,6 +321,25 @@ const Index = () => {
   };
 
 
+  const handleEmailPhoneClick = (type, agent_id) => {
+    setShowEnquiryModal(true);
+    if (type == 'phone') {
+      setShowAgentPhone({
+        user_id: agent_id,
+        show: false,
+      })
+    }
+  }
+
+  const callSuccessfuntion = () => {
+    setShowAgentPhone(prev => {
+      return {
+        ...prev,
+        show: true,
+      }
+    })
+  }
+
   return (
     <>
       {isOverlayVisible && (
@@ -541,7 +561,12 @@ const Index = () => {
                                   </>
                                 )}
 
-                                <p className="mb-2"><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">{agent?.languages ? agent.languages.replace(/,/g, ', ') : ''}</span></p>
+                                <p className="mb-2">
+                                  {agent?.languages && (
+                                    <><Mic color="#1365CF" size={18} /> Speak: <span className="text-muted">{agent?.languages ? agent.languages.replace(/,/g, ', ') : ''}</span></>
+                                  ) || null}
+
+                                </p>
                                 {/* Phone
                                   <p className="mb-2">
                                     <i className="icon-feather-phone"></i>{" "}
@@ -570,10 +595,11 @@ const Index = () => {
                                     size="sm"
                                     onClick={() => {
                                       setSelectedAgentId(agent.user_id)
-                                      setShowEnquiryModal(true)
-                                    } 
+                                      handleEmailPhoneClick('project', agent.user_id)
+                                    }
                                     }
                                   >
+                                    {console.log("agent", agent)}
                                     <EnvelopeFill color="#1365CF" size={16} /> {translation?.email || "Email"}
                                   </Button>
                                   <Button
@@ -581,11 +607,11 @@ const Index = () => {
                                     size="sm"
                                     onClick={() => {
                                       setSelectedAgentId(agent.user_id)
-                                      setShowEnquiryModal(true)
-                                    } }
+                                      handleEmailPhoneClick('phone', agent.user_id)
+                                    }}
                                     style={{ minWidth: '72px' }}
                                   >
-                                    <PhoneFill color="#0dcaf0" size={16} /> {translation?.call || "Call"}
+                                    <PhoneFill color="#0dcaf0" size={16} /> {showAgentPhone?.show && showAgentPhone?.user_id == agent?.user_id ? agent.phone : `${translation?.call || "Call"}`}
                                   </Button>
                                   <Button
                                     variant="outline-success"
@@ -603,16 +629,16 @@ const Index = () => {
                               </Card.Body>
                             </Col>
                             <Col lg='auto' className="p-3 align-self-end text-lg-end">
-                            {agent?.company_logo && (
-                              <NextImage
-                                src={agent?.company_logo}
-                                alt="Company Logo"
-                                width={64}
-                                height={48}
-                                className="c-logo mb-3"
-                                priority
-                              />
-                            )}
+                              {agent?.company_logo && (
+                                <NextImage
+                                  src={agent?.company_logo}
+                                  alt="Company Logo"
+                                  width={64}
+                                  height={48}
+                                  className="c-logo mb-3"
+                                  priority
+                                />
+                              )}
                               {agent?.user_id && (
                                 <div>
                                   <a
@@ -712,6 +738,7 @@ const Index = () => {
           <AgentEnquiryForm
             agentId={selectedAgentId}
             handleClose={handleEnquiryClose}
+            callSuccessfuntion={callSuccessfuntion}
           />
         </Modal.Body>
       </Modal>
