@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use App\Models\PrefProperty;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 
@@ -27,8 +28,23 @@ class UserDetailsController extends Controller
                 $user->image = '';
             }
         }
+    
         $userData = new UserResource($user);
-        $filters = [
+      
+
+       
+        
+        return response()->json([
+            'status'  => 1,
+            'message' => 'success',
+            'data'    => [
+                'user_details'    => $userData,
+            ]
+        ]);
+    }
+    public function userPropertyDetails(Request $req)
+    {
+          $filters = [
             'post_for'      => $req->input('post_for'),
             'property_type' => $req->input('property_type'),
             'property_for'  => $req->input('property_for'),
@@ -37,8 +53,6 @@ class UserDetailsController extends Controller
             'max_budget'    => $req->input('max_budget'),
             'bedrooms'      => is_string($req->input('bedrooms')) ? json_decode($req->input('bedrooms'), true) : ($req->input('bedrooms') ?? []),
         ];
-
-        // Start query with relationships and base conditions
         $query = PrefProperty::with([
             'settings:pid,bedrooms,bathrooms,area_in_sqft',
             'additional:pid',
@@ -88,6 +102,7 @@ class UserDetailsController extends Controller
                 $q->whereIn('bedrooms', $filters['bedrooms']);
             });
         }
+
         $data = $query->paginate(10);
 
         $properties = $data->getCollection()->map(function ($property) {
@@ -124,7 +139,6 @@ class UserDetailsController extends Controller
             'status'  => 1,
             'message' => 'success',
             'data'    => [
-                'user_details'    => $userData,
                 'user_properties' => $paginated->items(),
             ],
             'meta'    => [

@@ -363,6 +363,7 @@ Route::post('/saveLocalityLatLong', [GoogleLocalityController::class, 'saveLocal
 Route::get('/badge-list', [BadgesController::class, 'getBadges']);
 Route::get('/sync-landmark', [CustomLandmarksAddController::class, 'insertLandmarks']);
 Route::get('user_details', [UserDetailsController::class, 'details']);
+Route::get('user_proprties', [UserDetailsController::class, 'userPropertyDetails']);
 
 
 Route::post('property-site-visit',[SiteVisitController::class, 'saveSiteVisit']);
