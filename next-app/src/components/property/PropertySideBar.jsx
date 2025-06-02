@@ -212,14 +212,17 @@ const PropertySidebar = ({
     if (user.user_type == 'A') {
       const url = buildAgentUrl(user);
       router.push(url)
-    } else {
+    } else if(user.user_type == 'O') {
+      router.push(`/user-details/${user.id}`)
+      console.log("user", user);
+    } else if (user.user_type == "B") {
+      router.push(`/builder-details/${user.id}`)
+    }else {
       setNameLinkErrMessage("You can only view Agent Profiles")
     }
   }
 
   const handleSiteVisit = async () => {
-    console.log("propertyDetails?.user_details", propertyDetails?.user_details);
-    console.log("handle site visit ran");
     setSiteVisitModal(true);
   }
 
@@ -244,7 +247,7 @@ const PropertySidebar = ({
                   </div>
                   <div>
                     <h4
-                      style={propertyDetails?.user_details?.user_type === 'A' ? { cursor: 'pointer', } : {}}
+                      style={propertyDetails?.user_details?.user_type === 'A' ? { cursor: 'pointer', } : { cursor: 'pointer'}}
                       onClick={() => handleUserNameClick(propertyDetails?.user_details)}>
                       {propertyDetails?.user_details?.name ||
                         `${translation?.not_available ||

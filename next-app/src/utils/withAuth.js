@@ -36,12 +36,12 @@ const withAuth = (WrappedComponent) => {
 
     useEffect(() => {
       const token = isLogin();
-      const decodedToken = jwtDecode(getToken())
-      const currentTime = Math.floor(Date.now() / 1000);
-      if (decodedToken.exp < currentTime) {
-        logout();
-        window.location.href = '/login';
-      }
+      // const decodedToken = jwtDecode(getToken())
+      // const currentTime = Math.floor(Date.now() / 1000);
+      // if (decodedToken.exp < currentTime) {
+      //   logout();
+      //   window.location.href = '/login';
+      // }
       if (!token) {
         router.push("/login");
       } else {

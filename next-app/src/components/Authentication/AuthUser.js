@@ -48,13 +48,25 @@ const AuthUser = () => {
     }
   };
 
-  const GetMemberId = () => {
-    const token = getToken();
-    if (token) {
-      return getMemberIdFromToken(token);
+const GetMemberId = () => {
+  if (typeof window === "undefined") return null; // Prevents SSR crash
+
+  const token = getToken();
+
+  if (!token || typeof token !== "string") return null;
+
+  try {
+    const decodedToken = jwtDecode(token);
+    const currentTime = Math.floor(Date.now() / 1000);
+    if (decodedToken?.exp < currentTime) {
+      return null;
     }
+    return getMemberIdFromToken(token);
+  } catch (error) {
+    console.error("Invalid token:", error);
     return null;
-  };
+  }
+};
 
   const logout = () => {
     if (isClient) {
