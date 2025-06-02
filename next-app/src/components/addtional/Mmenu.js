@@ -6,7 +6,7 @@ import "mmenu-js/dist/mmenu.css";
 import AuthUser from "../Authentication/AuthUser";
 import { ImMenu } from "react-icons/im";
 import './mmenu.css'
-import { Cart, ChatRightQuote, People, Speedometer, Tag, List, Key, ChatSquareText, House, Building, HouseHeart, BookmarkStar, Box, Mic, Flag, Lock, BoxArrowRight, BoxArrowLeft, Person } from 'react-bootstrap-icons';
+import { Cursor, Cart, ChatRightQuote, People, Speedometer, Tag, List, Key, ChatSquareText, House, Building, HouseHeart, BookmarkStar, Box, Mic, Flag, Lock, BoxArrowRight, BoxArrowLeft, Person } from 'react-bootstrap-icons';
 
 const MobileMenu = ({
   translation,
@@ -386,6 +386,12 @@ const MobileMenu = ({
                     <BookmarkStar color="currentColor" size={18} />{" "}
                     {translation?.my_project_favourites ||
                       "My Project Favourites"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/postproperty">
+                    <Cursor color="currentColor" size={18} />{" "}
+                    {translation?.post_property || "Post Property"}
                   </Link>
                 </li>
                 <li>

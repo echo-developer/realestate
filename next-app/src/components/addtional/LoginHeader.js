@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import useTranslation from "@/hooks/useTranslation";
 import Link from "next/link";
+import NextImage from "next/image";
 import MobileMenu from "./Mmenu";
+import useIsMobile from "@/hooks/useIsMobile";
 
 const LoginHeader = () => {
   const translation = useTranslation();
   const [selectedCity, setSelectedCity] = useState("Kolkata");
   const [currentLang, setCurrentLang] = useState("en");
   const [scrollState, setScrollState] = useState("header-sticky");
+  const [isDesktopLogoLoaded, setIsDesktopLogoLoaded] = useState(false);
+  const [isMobileLogoLoaded, setIsMobileLogoLoaded] = useState(false);
+  const [mobileView, setMobileView] = useState(false);
 
   useEffect(() => {
     const storedLang = localStorage.getItem("lang") || "en";
@@ -24,6 +29,17 @@ const LoginHeader = () => {
     logout();
     setMobileView(false);
   };
+  useEffect(() => {
+      // const desktopImage = new Image();
+      // desktopImage.src = "/assets/images/logo.png";
+      // desktopImage.onload = () => setIsDesktopLogoLoaded(true);
+      // desktopImage.onerror = () => setIsDesktopLogoLoaded(false);
+  
+      const mobileImage = new Image();
+      mobileImage.src = "/assets/images/logo-mobile.png";
+      mobileImage.onload = () => setIsMobileLogoLoaded(true);
+      mobileImage.onerror = () => setIsMobileLogoLoaded(false);
+    }, []);
 
   return (
     <>
@@ -32,19 +48,77 @@ const LoginHeader = () => {
           <div className="container-fluid position-relative">
             <div className="d-flex align-items-center">
               <Link href="/" className="navbar-brand">
-                <img
-                  src="/assets/images/logo.png"
-                  alt="Logo"
-                  className="d-none d-md-block"
-                />
-                <img
-                  src="/assets/images/logo-mobile.png"
-                  alt="Logo"
-                  className="d-md-none"
-                />
-              </Link>
+                              {/* Desktop Logo with Shimmer */}
+                              <div
+                                className="d-none d-md-block"
+                              >
+                                {/* {!isDesktopLogoLoaded && (
+                                  <div className="shimmer-placeholder"></div>
+                                )} */}
+                                {/* {isDesktopLogoLoaded && (
+                                  <img
+                                    src="/assets/images/logo.png"
+                                    alt="Logo"
+                                    loading="lazy"
+                                    style={{ opacity: isDesktopLogoLoaded ? 1 : 0, transition: 'opacity 0.3s ease-in-out' }}
+                                  />
+                                )} */}
+                                <NextImage
+                                  src="/assets/images/logo.png"
+                                  alt="Logo"
+                                  width={151}
+                                  height={56}
+                                  priority
+                                />
+              
+                              </div>
+              
+                              {/* Mobile Logo with Shimmer */}
+                              <div
+                                className="d-md-none"
+                              >
+                                {!isMobileLogoLoaded && (
+                                  <div className="shimmer-placeholder"></div>
+                                )}
+                                {isMobileLogoLoaded && (
+                                  <img
+                                    src="/assets/images/logo-mobile.png"
+                                    alt="Logo"
+                                    loading="lazy"
+                                  />
+                                )}
+                              </div>
+              
+                              <style jsx>{`
+                                  .shimmer-placeholder {
+                                    display: block;
+                                    width: 100%;
+                                    height: 100%;
+                                    border-radius: 8px;
+                                    background: linear-gradient(
+                                      90deg,
+                                      #f0f0f0 25%,
+                                      #e0e0e0 50%,
+                                      #f0f0f0 75%
+                                    );
+                                    background-size: 200% 100%;
+                                    animation: shimmer 2s infinite;
+                                  }
+                                
+                                  @keyframes shimmer {
+                                    0% {
+                                      background-position: -200% 0;
+                                    }
+                                    100% {
+                                      background-position: 200% 0;
+                                    }
+                                  }
+                                `}</style>
+              
+              
+                            </Link>
             </div>
-            <div className="d-flex">
+            <div className="d-none d-lg-flex">
               <div id="navigation">
                 <ul
                   id="desk-nav"
@@ -124,6 +198,7 @@ const LoginHeader = () => {
                   </li>
                 </ul>
               </div>
+            </div>
 
               <MobileMenu
                 translation={translation}
@@ -132,7 +207,7 @@ const LoginHeader = () => {
                 currentLang={currentLang}
                 changeLanguage={changeLanguage}
               />
-            </div>
+            
           </div>
         </nav>
       </header>
