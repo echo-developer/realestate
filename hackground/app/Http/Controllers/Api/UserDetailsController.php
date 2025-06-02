@@ -28,12 +28,12 @@ class UserDetailsController extends Controller
                 $user->image = '';
             }
         }
-    
-        $userData = new UserResource($user);
-      
 
-       
-        
+        $userData = new UserResource($user);
+
+
+
+
         return response()->json([
             'status'  => 1,
             'message' => 'success',
@@ -44,7 +44,7 @@ class UserDetailsController extends Controller
     }
     public function userPropertyDetails(Request $req)
     {
-          $filters = [
+        $filters = [
             'post_for'      => $req->input('post_for'),
             'property_type' => $req->input('property_type'),
             'property_for'  => $req->input('property_for'),
@@ -54,8 +54,8 @@ class UserDetailsController extends Controller
             'bedrooms'      => is_string($req->input('bedrooms')) ? json_decode($req->input('bedrooms'), true) : ($req->input('bedrooms') ?? []),
         ];
         $query = PrefProperty::with([
-            'settings:pid,bedrooms,bathrooms,area_in_sqft',
-            'additional:pid',
+            'settings:pid,bedrooms,bathrooms,area_in_sqft,expected_price',
+            'additional:pid,possession_status',
             'location:pid,property_address',
         ])->where('uid', $req->uid)
             ->where('status', 1);
@@ -131,6 +131,8 @@ class UserDetailsController extends Controller
                 'bathrooms'       => optional($property->settings)->bathrooms,
                 'area_in_sqft'    => optional($property->settings)->area_in_sqft,
                 'property_address' => optional($property->location)->property_address,
+                'possession_status' => get_name_by_id('property_status_names', 'status_id',$property->additional->possession_status, 'en'),
+                'property_price' => optional($property->settings)->expected_price,
                 'galleries'       => array_values($galleries),
             ];
         });

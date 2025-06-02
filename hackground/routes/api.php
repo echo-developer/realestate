@@ -368,7 +368,7 @@ Route::get('user_proprties', [UserDetailsController::class, 'userPropertyDetails
 
 Route::post('property-site-visit',[SiteVisitController::class, 'saveSiteVisit']);
 Route::get('get-site-visits',[SiteVisitController::class, 'getSiteVisitreq']);
-
+ 
 
 Route::controller(DummyController::class)->group(function () {
     Route::post('insertSlug', 'insertSlug');
