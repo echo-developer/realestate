@@ -298,7 +298,7 @@ const Index = () => {
                               {translation?.register_an || "Register as a/an"}
                             </label>
                             <div
-                              className="btn-group btn-group-light d-flex mb-3"
+                              className="btn-group btn-group-light hide-tick d-flex mb-3"
                               role="group"
                             >
                               <Field

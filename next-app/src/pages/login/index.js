@@ -149,7 +149,8 @@ const { callApi } = AuthUser();
                               />
                             </div>
 
-                            <div className="form-floating mb-4 with-icon-end">
+                            <div className="mb-4">
+                              <div className="form-floating with-icon-end">
                               <Field
                                 type={passwordType}
                                 id="password"
@@ -173,6 +174,7 @@ const { callApi } = AuthUser();
                                     }`}
                                 ></i>
                               </a>
+                              </div>
                               <ErrorMessage
                                 name="password"
                                 component="div"
