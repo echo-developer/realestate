@@ -238,7 +238,7 @@ class PropertyEditController extends Controller
                 'total_floor' => $key->total_floor ?? null,
                 'floor_number' => $key->floor_nnumber ?? null,
                 'buyer_message' => $key->buyer_message ?? null,
-                'property_video' => !empty($key->property_video) ? asset('user_upload/property_videos'.$key->property_video) : '',
+                'property_video' => !empty($key->property_video) ? asset('user_upload/property_videos/'.$key->property_video) : '',
             ];
         }
     }
