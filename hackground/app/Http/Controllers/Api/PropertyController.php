@@ -233,4 +233,26 @@ class PropertyController extends Controller
             throw $th;
         }
     }
+
+    public function delete_property_video(Request $req)
+    {
+        try {
+
+            $fileName = $req->video_file_name;
+            $propertyID = $req->property_id;
+
+            PrefPropertyAdditional::where('pid', $propertyID)->update(['property_video' => null]);
+
+            $filePath = public_path('user_upload/property_videos/' . $fileName);
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+            return response()->json([
+                'status' => 1,
+                'message' => 'Video Deleted',
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

@@ -211,7 +211,7 @@ Route::post('property_image_delete', [PropertyController::class, 'deleteImage'])
 Route::post('property_image_caption', [PropertyController::class, 'captionImage']);
 
 Route::post('property_video_update', [PropertyController::class, 'property_video_update'])->name('propertyVideo.update');
-// Route::post('property_video_delete', [PropertyController::class, ''])->name('propertyvideo.delete');
+Route::post('delete-property-video', [PropertyController::class, 'delete_property_video'])->name('propertyvideo.delete');
 
 // Agent Routes
 Route::get('agent_details_page', [AgentDetailsController::class, 'AgentDetailsPage']);
