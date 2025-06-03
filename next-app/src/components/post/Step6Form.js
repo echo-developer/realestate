@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 import { useRouter } from "next/router";
@@ -14,6 +14,8 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
   const [activeTab, setActiveTab] = useState("");
   const [imageTabData, setImageTabData] = useState(flat_image_tab);
   const translation = useTranslation();
+  const videoInputRef = useRef();
+  const [uploadedVideoDetails, setUploadedVideoDetails] = useState(null);
 
 
   useEffect(() => {
@@ -38,7 +40,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
       setActiveTab(imageTabData[0].key);
     }
   }, [imageTabData]);
-  
+
 
   const Login = isLogin();
 
@@ -151,19 +153,60 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
     setActiveTab(tabKey);
   };
 
+  const handleVideoDrop = (e) => {
+    console.log("handle view drop ran", e);
+  }
+
+
+
+  const handleVideoSelect = async (e) => {
+    const file = e.target.files[0];
+    console.log("file", file);
+    if (file) {
+      const videoUrl = URL.createObjectURL(file);
+
+      try {
+        const res = await callApi({
+          api: '/property-video-upload',
+          method: "UPLOAD",
+          data: {
+            video: file
+          }
+        })
+
+        if (res && res.status == 1) {
+          setUploadedVideoDetails(res.data);
+          setFormData(prev => {
+            return {
+              ...prev,
+              property_video: res.data?.file_name
+            }
+          })
+        } else {
+          const errMsg = res?.errors?.video?.[0] || "";
+          if(errMsg) {
+            toast.error(errMsg);
+          }
+        }
+      } catch (error) {
+        console.error(error.message)
+      }
+
+    }
+  }
+
   return (
     <div id="step-6">
       {/* Tabs for image categories */}
       <div className="image-tab-content">
         {imageTabData && imageTabData.length > 0 && (
-          <ul className="nav nav-underline nav-custom mb-3"> 
+          <ul className="nav nav-underline nav-custom mb-3">
             {imageTabData.map((tab, index) => (
               <li className="nav-item" key={index}>
                 <a
                   role="button"
-                  className={`nav-link ${
-                    activeTab === tab.key ? "active" : ""
-                  }`}
+                  className={`nav-link ${activeTab === tab.key ? "active" : ""
+                    }`}
                   onClick={() => handleTabChange(tab.key)}
                 >
                   {tab.name}
@@ -175,49 +218,125 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
       </div>
 
       {/* File Upload Section */}
-      <div className="form-field">
-        <div className="upload-area" id="uploadfile">
-          <input
-            type="file"
-            name="fileinput"
-            id="fileinput"
-            multiple
-            onChange={handleFileChange}
-            disabled={!activeTab}
-          />
-          <i className="bi bi-upload"></i>
-          <p>
-          {translation?.drag || "Drag"} &amp; {translation?.drop_files_here || "drop files here or"}{" "}
-            <span className="text-site">{translation?.click || "click"}</span> {translation?.to_select_files || "to select files"}
-          </p>
-        </div>
-        <p className="text-help">
-        {translation?.accepted_formats || ""}
-        </p>
-      </div>
+      {activeTab == 'property_video' ? (
+        <>
+          <div className="form-field">
+            <div
+              className="upload-area"
+              id="uploadvideo"
+              onClick={() => videoInputRef.current?.click()}
+              style={{ cursor: 'pointer' }}
+            >
+              <input
+                type="file"
+                name="videoinput"
+                id="videoinput"
+                accept="video/mp4,video/webm,video/ogg"
+                onChange={handleVideoSelect}
+                ref={videoInputRef}
+                disabled={!activeTab}
+                style={{ display: 'none' }}
+              />
+              <i className="bi bi-upload"></i>
+              <p>
+                {translation?.drag || "Drag"} &amp; {translation?.drop_files_here || "drop files here or"}{" "}
+                <span className="text-site">{translation?.click || "click"}</span> {translation?.to_select_files || "to select a video"}
+              </p>
+            </div>
+            <p className="text-help">
+              {translation?.accepted_video_formats || "Accepted formats: .mp4, .webm, .ogg"}
+            </p>
+          </div>
+
+        </>
+      ) : (
+        <>
+          <div className="form-field">
+            <div className="upload-area" id="uploadfile">
+              <input
+                type="file"
+                name="fileinput"
+                id="fileinput"
+                multiple
+                onChange={handleFileChange}
+                disabled={!activeTab}
+              />
+              <i className="bi bi-upload"></i>
+              <p>
+                {translation?.drag || "Drag"} &amp; {translation?.drop_files_here || "drop files here or"}{" "}
+                <span className="text-site">{translation?.click || "click"}</span> {translation?.to_select_files || "to select files"}
+              </p>
+            </div>
+            <p className="text-help">
+              {translation?.accepted_formats || ""}
+            </p>
+          </div>
+        </>
+      )}
 
       {/* Image Gallery Section */}
-      <div className="upload-gallery">
-        {tabData[activeTab]?.images?.map((fileData, index) => (
-          <div className="pic" key={index}>
-            <img
-              src={fileData.image_url}
-              alt={`Uploaded Preview ${index + 1}`}
-            />
-            <p className="small">{fileData.image_name}</p>
-            <a
-              href="#"
-              className="btn-trash"
-              onClick={(e) => {
-                e.preventDefault();
-                handleRemoveFile(index);
-              }}
-            >
-              <i className="icon-feather-trash"></i>
-            </a>
+      {activeTab === 'property_video' ? (
+        uploadedVideoDetails ? (
+          <div className="upload-gallery">
+            <div className="pic">
+              <video
+                width="100%"
+                height="auto"
+                controls
+                src={uploadedVideoDetails.file_url}
+                style={{ borderRadius: '8px' }}
+              />
+              <p className="small">
+                <a
+                  href={uploadedVideoDetails.file_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ textDecoration: 'underline', color: '#007bff' }}
+                >
+                  {uploadedVideoDetails.file_name}
+                </a>
+              </p>
+              <a
+                href="#"
+                role="button"
+                className="btn-trash"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setUploadedVideoDetails(null);
+                }}
+              >
+                <i className="icon-feather-trash" />
+              </a>
+            </div>
           </div>
-        ))}
-      </div>
+        ) : (
+          <p style={{ fontStyle: 'italic', color: '#888' }}>No video uploaded yet.</p>
+        )
+
+      ) : (
+        <div className="upload-gallery">
+          {tabData[activeTab]?.images?.map((fileData, index) => (
+            <div className="pic" key={index}>
+              <img
+                src={fileData.image_url}
+                alt={`Uploaded Preview ${index + 1}`}
+              />
+              <p className="small">{fileData.image_name}</p>
+              <a
+                href="#"
+                className="btn-trash"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleRemoveFile(index);
+                }}
+              >
+                <i className="icon-feather-trash"></i>
+              </a>
+            </div>
+          ))}
+        </div>
+      )}
+
 
       {/* Description Section */}
       <div className="form-field">
@@ -225,13 +344,13 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
         <textarea
           rows="3"
           className="form-control"
-          placeholder={translation?.write_something_about_gallery || "Write something about this gallery..."} 
+          placeholder={translation?.write_something_about_gallery || "Write something about this gallery..."}
           value={tabData[activeTab]?.caption || ""}
           onChange={handleDescriptionChange}
         />
       </div>
 
-      
+
 
       {/* Navigation Buttons */}
       <div className="d-grid columns-2">
@@ -240,7 +359,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
           className="btn btn-secondary"
           onClick={prevStep}
         >
-          <i className="bi bi-arrow-left"></i>{translation?.back || "Back"} 
+          <i className="bi bi-arrow-left"></i>{translation?.back || "Back"}
         </button>
         <button
           type="button"
@@ -248,7 +367,7 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
           onClick={handleSubmit}
           disabled={!activeTab}
         >
-         {translation?.post_property || "Post Property"} 
+          {translation?.post_property || "Post Property"}
         </button>
       </div>
     </div>

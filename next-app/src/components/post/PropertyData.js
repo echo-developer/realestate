@@ -13,6 +13,7 @@ export const flat_image_tab = [
     { id: 5, key: "floor", name: "Floor Plan" },
     { id: 6, key: "master", name: "Master Plan" },
     { id: 7, key: "other", name: "Others" },
+    { id: 8, key: "property_video", name: "Video"}
 ];
 
 export const Commerical_image_tab = [
@@ -23,6 +24,7 @@ export const Commerical_image_tab = [
     { id: 5, key: "master", name: "Master Plan" },
     { id: 7, key: "location", name: "Location" },
     { id: 8, key: "other", name: "Others" },
+    { id: 8, key: "property_video", name: "Video"}
 ];
 export const defalut_img_tab = [
     { id: 1, key: "exterior", name: "Exterior View" },
@@ -31,6 +33,7 @@ export const defalut_img_tab = [
     { id: 4, key: "floor", name: "Floor Plan" },
     { id: 5, key: "master", name: "Master Plan" },
     { id: 6, key: "other", name: "Others" },
+    { id: 8, key: "property_video", name: "Video"}
 ];
 export const Agricultural_image_tab = [
     { id: 1, key: "site", name: "Site_View" },

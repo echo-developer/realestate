@@ -7,5 +7,4 @@ module.exports = {
   experimental: {
     serverActions: false
   },
-  swcMinify: true
 };

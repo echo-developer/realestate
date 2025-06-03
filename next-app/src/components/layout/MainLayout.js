@@ -11,7 +11,7 @@ const translation = useTranslation();
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(true);
-    }, 500); 
+    }, 300); 
 
     return () => clearTimeout(timer);
   }, []);
