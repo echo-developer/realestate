@@ -208,6 +208,7 @@ class PropertyEditController extends Controller
                 'possession_status',
                 'construct_year',
                 'buyer_message',
+                'property_video'
             ],
             [],
             ['property_additional.pid' => $propertyID],
@@ -237,6 +238,7 @@ class PropertyEditController extends Controller
                 'total_floor' => $key->total_floor ?? null,
                 'floor_number' => $key->floor_nnumber ?? null,
                 'buyer_message' => $key->buyer_message ?? null,
+                'property_video' => !empty($key->property_video) ? asset($key->property_video) : '',
             ];
         }
     }

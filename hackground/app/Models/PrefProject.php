@@ -11,7 +11,7 @@ class PrefProject extends Model
     protected $hidden = ['updated_at'];
 
     protected $fillable = [
-        'uid',
+        'uid',        
         'project_name',
         'slug',
         'project_desc',
