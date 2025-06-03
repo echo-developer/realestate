@@ -106,9 +106,9 @@ const Index = () => {
 
 
   const FetchProjectListData = async (loadMore, page) => {
-    if (!loadMore) {
-      setLoading(true);
-    }
+    // if (!loadMore) {
+    //   setLoading(true);
+    // }
     let params = { ...router?.query };
     if (params?.locality) {
       const locality = JSON.parse(params?.locality)

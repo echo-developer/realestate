@@ -97,6 +97,7 @@ export default function Home() {
         setTestimonialList(res.data?.testimonial || [])
         setVerifiedAgentList(res.data?.verified_agents || [])
         setAdminDetails(res.data?.admin_details || {})
+        localStorage.setItem('admin', JSON.stringify(res.data?.admin_details));
         setCurrency(res.data?.currancy || "$");
         setCurrencyCode(res.data?.currancy_code || "USD")
       }

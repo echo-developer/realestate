@@ -3,7 +3,7 @@ import { useState } from "react";
 import AuthUser from "../Authentication/AuthUser";
 import { toast } from "react-toastify";
 import useTranslation from "@/hooks/useTranslation";
-import { Row, Col, Button} from "react-bootstrap";
+import { Row, Col, Button } from "react-bootstrap";
 
 const EditImageGallery = ({
     flatImageTab,
@@ -21,7 +21,7 @@ const EditImageGallery = ({
     const [currentImage, setCurrentImage] = useState(null);
     const [newCaption, setNewCaption] = useState("");
     const [isCaptionEditing, setIsCaptionEditing] = useState(false);
-const translation = useTranslation();
+    const translation = useTranslation();
     const galleryData = Array.isArray(inputState?.galleries)
         ? inputState.galleries.find((gallery) => gallery.gallery === activeTab)
         : null;
@@ -301,8 +301,67 @@ const translation = useTranslation();
         ...(tabData[activeTab]?.images || []),
     ])
 
+    const handleUploadVideo = async (e) => {
+        const file = e.target?.files[0];
+        if (file) {
+            try {
+                const res = await callApi({
+                    api: "/property_video_update",
+                    method: "UPLOAD",
+                    data: {
+                        property_id: propertyId,
+                        video: file
+                    }
+                })
+                if (res && res.status == 1) {
+                    setPropertyData(prev => {
+                        return {
+                            ...prev,
+                            video_file_name: res?.data?.file_name || "",
+                            property_video: res?.data?.file_url || ""
+                        }
+                    })
+                }
+            } catch (error) {
+                console.error(error?.message)
+            }
+        }
+    }
 
+    const handleRemoveVideo = async (e) => {
+        try {
+            const res = await callApi({
+                api: "/delete-property-video",
+                method: "UPLOAD",
+                data: {
+                    property_id: propertyId,
+                    video_file_name: propertyData?.video_file_name || ""
 
+                }
+
+            })
+            if (res && res.status == 1) {
+                setPropertyData(prev => {
+                    return {
+                        ...prev,
+                        file_name: "",
+                        property_video: "",
+                    }
+                })
+            }
+            else {
+                toast.error(res.error?.message || res?.message || "Failed to delete video")
+            }
+        } catch (error) {
+            console.error(error?.message);
+        }
+        setPropertyData(prev => {
+            return {
+                ...prev,
+                property_video: ""
+            }
+        })
+    }
 
     return (
         <>
@@ -324,88 +383,215 @@ const translation = useTranslation();
                     </ul>
                 )}
             </div>
+            {activeTab === 'property_video' ? (
+                propertyData?.property_video ? (
+                    <div className="video-preview position-relative" style={{ maxWidth: '600px', margin: '0 auto' }}>
+                        <video
+                            width="100%"
+                            height="auto"
+                            style={{ borderRadius: '8px' }}
+                            controls
+                        >
+                            <source src={propertyData.property_video} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
 
-            {/* File Upload Area */}
-            <div className="form-field">
-                <div className="upload-area" id="uploadfile">
-                    <input
-                        type="file"
-                        name="fileinput"
-                        id="fileinput"
-                        multiple
-                        onChange={handleFileChange}
-                        disabled={!activeTab}
-                    />
-                    <i className="bi bi-upload"></i>
-                    <p>
-                        {translation?.drag || "Drag"} &amp;{translation?.drop_files_here || "drop files here or"}  {" "}
-                        <span className="text-site">{translation?.click || "click"}</span> {translation?.to_select_files || "to select files"}
-                    </p>
-                </div>
-                <p className="text-help">
-                    {translation?.accepted_formats_are || "Accepted formats are .jpg, .gif, .bmp &amp; .png. Maximum size allowed is 20 MB. Minimum dimensions allowed are 600 x 400 pixels."}
-                </p>
-            </div>
-
-            {/* Gallery Images Display */}
-            <div className="upload-gallery">
-                {combinedGalleryData.map((fileData, index) => (
-                    <div className="pic" key={index}>
-                        <img
-                            src={fileData.image_url}
-                            alt={`Uploaded Preview ${index + 1}`}
-                            className="mb-2"
-                        />
-
-                        {/* Caption Section */}
-                        <div className="caption-section">
-                            {isCaptionEditing && currentImage.image_id === fileData.image_id ? (
-                                <>
-                                    <input
-                                        type="text"
-                                        value={newCaption}
-                                        onChange={(e) => setNewCaption(e.target.value)}
-                                        className="form-control form-control-sm mb-2"
-                                    />
-                                    <Button variant="success" size="sm"
-                                        className="me-2"
-                                        onClick={handleCaptionChange}
-                                    >
-                                        <i className="bi bi-check-circle"></i>
-                                    </Button>
-                                    <Button variant="danger" size="sm"
-                                        onClick={handleCancelCaptionEdit}
-                                    >
-                                        <i className="bi bi-x-circle"></i>
-                                    </Button>
-                                </>
-                            ) : (
-                                <>
-                                    <p className="text-help mb-2">{fileData.caption || "No caption available"}</p>
-                                    <Button variant="primary" size="sm"
-                                        onClick={() => handleAddCaption(fileData)}
-                                    >
-                                        {fileData.caption ? "Edit Caption" : "Add Caption"}
-                                    </Button>
-                                </>
-                            )}
-                        </div>
-
-                        <a
-                            href="#"
-                            className="btn-trash"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                handleRemoveFile(fileData?.image_id);
+                        <button
+                            type="button"
+                            className="btn btn-sm btn-danger position-absolute"
+                            style={{
+                                top: '10px',
+                                right: '10px',
+                                zIndex: 10,
+                                borderRadius: '50%',
+                                width: '32px',
+                                height: '32px',
+                                padding: 0,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
                             }}
+                            onClick={handleRemoveVideo}
+                            title="Delete Video"
                         >
                             <i className="bi bi-trash3-fill"></i>
-                        </a>
+                        </button>
                     </div>
-                ))}
-            </div>
+
+                ) : (
+                    <>
+                        <div className="form-field">
+                            <div className="upload-area" id="uploadfile">
+                                <input
+                                    type="file"
+                                    name="fileinput"
+                                    id="fileinput"
+                                    multiple
+                                    onChange={handleUploadVideo}
+                                    disabled={!activeTab}
+                                />
+                                <i className="bi bi-upload"></i>
+                                <p>
+                                    {translation?.drag || "Drag"} &amp; {translation?.drop_files_here || "drop files here or"}{" "}
+                                    <span className="text-site">{translation?.click || "click"}</span>{" "}
+                                    {translation?.to_select_files || "to select files"}
+                                </p>
+                            </div>
+                            <p className="text-help">
+                                {translation?.accepted_formats_are ||
+                                    "Accepted formats are .jpg, .gif, .bmp & .png. Maximum size allowed is 20 MB. Minimum dimensions allowed are 600 x 400 pixels."}
+                            </p>
+                        </div>
+
+                        <div className="upload-gallery">
+                            {combinedGalleryData.map((fileData, index) => (
+                                <div className="pic" key={index}>
+                                    <img
+                                        src={fileData.image_url}
+                                        alt={`Uploaded Preview ${index + 1}`}
+                                        className="mb-2"
+                                    />
+
+                                    <div className="caption-section">
+                                        {isCaptionEditing && currentImage.image_id === fileData.image_id ? (
+                                            <>
+                                                <input
+                                                    type="text"
+                                                    value={newCaption}
+                                                    onChange={(e) => setNewCaption(e.target.value)}
+                                                    className="form-control form-control-sm mb-2"
+                                                />
+                                                <Button
+                                                    variant="success"
+                                                    size="sm"
+                                                    className="me-2"
+                                                    onClick={handleCaptionChange}
+                                                >
+                                                    <i className="bi bi-check-circle"></i>
+                                                </Button>
+                                                <Button
+                                                    variant="danger"
+                                                    size="sm"
+                                                    onClick={handleCancelCaptionEdit}
+                                                >
+                                                    <i className="bi bi-x-circle"></i>
+                                                </Button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <p className="text-help mb-2">
+                                                    {fileData.caption || "No caption available"}
+                                                </p>
+                                                <Button
+                                                    variant="primary"
+                                                    size="sm"
+                                                    onClick={() => handleAddCaption(fileData)}
+                                                >
+                                                    {fileData.caption ? "Edit Caption" : "Add Caption"}
+                                                </Button>
+                                            </>
+                                        )}
+                                    </div>
+
+                                    <a
+                                        href="#"
+                                        className="btn-trash"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            handleRemoveFile(fileData?.image_id);
+                                        }}
+                                    >
+                                        <i className="bi bi-trash3-fill"></i>
+                                    </a>
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                )
+            ) : (<>
+                <div className="form-field">
+                    <div className="upload-area" id="uploadfile">
+                        <input
+                            type="file"
+                            name="fileinput"
+                            id="fileinput"
+                            multiple
+                            onChange={handleFileChange}
+                            disabled={!activeTab}
+                        />
+                        <i className="bi bi-upload"></i>
+                        <p>
+                            {translation?.drag || "Drag"} &amp;{translation?.drop_files_here || "drop files here or"}  {" "}
+                            <span className="text-site">{translation?.click || "click"}</span> {translation?.to_select_files || "to select files"}
+                        </p>
+                    </div>
+                    <p className="text-help">
+                        {translation?.accepted_formats_are || "Accepted formats are .jpg, .gif, .bmp &amp; .png. Maximum size allowed is 20 MB. Minimum dimensions allowed are 600 x 400 pixels."}
+                    </p>
+                </div>
+
+                <div className="upload-gallery">
+                    {combinedGalleryData.map((fileData, index) => (
+                        <div className="pic" key={index}>
+                            <img
+                                src={fileData.image_url}
+                                alt={`Uploaded Preview ${index + 1}`}
+                                className="mb-2"
+                            />
+
+                            <div className="caption-section">
+                                {isCaptionEditing && currentImage.image_id === fileData.image_id ? (
+                                    <>
+                                        <input
+                                            type="text"
+                                            value={newCaption}
+                                            onChange={(e) => setNewCaption(e.target.value)}
+                                            className="form-control form-control-sm mb-2"
+                                        />
+                                        <Button variant="success" size="sm"
+                                            className="me-2"
+                                            onClick={handleCaptionChange}
+                                        >
+                                            <i className="bi bi-check-circle"></i>
+                                        </Button>
+                                        <Button variant="danger" size="sm"
+                                            onClick={handleCancelCaptionEdit}
+                                        >
+                                            <i className="bi bi-x-circle"></i>
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <p className="text-help mb-2">{fileData.caption || "No caption available"}</p>
+                                        <Button variant="primary" size="sm"
+                                            onClick={() => handleAddCaption(fileData)}
+                                        >
+                                            {fileData.caption ? "Edit Caption" : "Add Caption"}
+                                        </Button>
+                                    </>
+                                )}
+                            </div>
+
+                            <a
+                                href="#"
+                                className="btn-trash"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    handleRemoveFile(fileData?.image_id);
+                                }}
+                            >
+                                <i className="bi bi-trash3-fill"></i>
+                            </a>
+                        </div>
+                    ))}
+                </div>
+            </>)}
+
+
         </>
     );
 };
 
 export default EditImageGallery;
+
+
