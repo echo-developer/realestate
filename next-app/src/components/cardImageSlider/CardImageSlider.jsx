@@ -64,7 +64,7 @@ const CardImageSlider = ({
                   width={600}
                   height={400}
                   className="card-img-top"
-                  loading="eager"
+                  loading="lazy"
                 />
 
               </div>

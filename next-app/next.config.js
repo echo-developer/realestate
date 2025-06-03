@@ -6,5 +6,6 @@ module.exports = {
   generateBuildId: async () => 'my-build-id',
   experimental: {
     serverActions: false
-  }
+  },
+  swcMinify: true
 };
