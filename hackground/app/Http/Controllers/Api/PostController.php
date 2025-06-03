@@ -308,6 +308,7 @@ class PostController extends Controller
             'allowed_construction' => $request->allowed_construction,
             'construction_done' => $request->construction_done,
             'is_gated_colony' => $request->is_gated_colony,
+            'property_video' => $request->property_video,
             'boundary_wall' => $request->boundary_wall,
             'road_width' => $request->road_width,
             'total_open_sides' => $request->total_open_sides,
@@ -362,7 +363,7 @@ class PostController extends Controller
             'metro' => 'metro_station',
             'rail' => 'railway_station',
             'bus' => 'bus_stand',
-            'healthcare' => 'hospital', 
+            'healthcare' => 'hospital',
             'others' => 'others_landmarks'
         ];
 

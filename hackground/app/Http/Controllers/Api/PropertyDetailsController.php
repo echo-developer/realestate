@@ -505,6 +505,7 @@ class PropertyDetailsController extends Controller
                         'overlooking' => $overlooking_array,
                         'ownership_type' => $property->ownership_type,
                         'property_project' => $property_project,
+                        'property_video' => asset('user_upload/property_videos/' . $property->property_video),
                         'floor_plans' => $mergedFloorPlans,
                         'nearby_properties' => $flattenedNearbyProperties ?? null,
                         'similar_properties' => $flattenedSimilarProperties,

@@ -453,6 +453,7 @@ class ApiModel extends Model
                 'property_additional.car_parking',
                 'property_additional.overlooking',
                 'property_additional.ownership_type',
+                'property_additional.property_video',
                 'property_additional.property_desc',
                 'properties_location.locality',
 
@@ -492,6 +493,7 @@ class ApiModel extends Model
                 'property_additional.overlooking',
                 'property_additional.ownership_type',
                 'property_additional.property_desc',
+                'property_additional.property_video',
                 'properties_location.locality',
 
             )

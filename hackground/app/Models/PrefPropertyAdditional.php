@@ -35,6 +35,7 @@ class PrefPropertyAdditional extends Model
         'bhk_id',
         'facing_direction',
         'brochure_file',
+        'property_video',
         'ownership_type',
         'flooring_style',
         'buyer_message',
