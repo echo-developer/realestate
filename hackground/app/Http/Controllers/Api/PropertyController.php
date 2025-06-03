@@ -132,4 +132,46 @@ class PropertyController extends Controller
             ]);
         }
     }
+    public function uploadVideo(Request $req)
+    {
+        try {
+            if ($req->hasFile('video')) {
+                $video = $req->file('video');
+
+                // Validate manually if needed
+                $allowedExtensions = ['mp4', 'mov', 'ogg', 'webm'];
+                if (!in_array($video->getClientOriginalExtension(), $allowedExtensions)) {
+                    return response()->json(['status' => false, 'message' => 'Invalid video format.'], 400);
+                }
+
+                $fileName = time() . '-' . $video->getClientOriginalName();
+                $destination = public_path('user_upload/property_videos');
+
+                // Ensure the directory exists
+                if (!file_exists($destination)) {
+                    mkdir($destination, 0755, true);
+                }
+
+                $video->move($destination, $fileName);
+
+                $videoUrl = asset('user_upload/property_videos/' . $fileName);
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Video uploaded successfully',
+                    'data' => [
+                        'file_name' => $fileName,
+                        'file_url' => $videoUrl,
+                    ]
+                ]);
+            } else {
+                return response()->json(['status' => 0, 'message' => 'No video file found in request.']);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Upload failed: ' . $e->getMessage()
+            ]);
+        }
+    }
 }
