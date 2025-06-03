@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class PropertyController extends Controller
 {
@@ -135,43 +136,45 @@ class PropertyController extends Controller
     public function uploadVideo(Request $req)
     {
         try {
-            if ($req->hasFile('video')) {
-                $video = $req->file('video');
+            // ✅ Step 1: Validate the video input
+            $validator = Validator::make($req->all(), [
+                'video' => 'required|file|mimes:mp4,mov,ogg,webm|max:51200',
+            ]);
 
-                // Validate manually if needed
-                $allowedExtensions = ['mp4', 'mov', 'ogg', 'webm'];
-                if (!in_array($video->getClientOriginalExtension(), $allowedExtensions)) {
-                    return response()->json(['status' => false, 'message' => 'Invalid video format.'], 400);
-                }
-
-                $fileName = time() . '-' . $video->getClientOriginalName();
-                $destination = public_path('user_upload/property_videos');
-
-                // Ensure the directory exists
-                if (!file_exists($destination)) {
-                    mkdir($destination, 0755, true);
-                }
-
-                $video->move($destination, $fileName);
-
-                $videoUrl = asset('user_upload/property_videos/' . $fileName);
-
+            if ($validator->fails()) {
                 return response()->json([
-                    'status' => 1,
-                    'message' => 'Video uploaded successfully',
-                    'data' => [
-                        'file_name' => $fileName,
-                        'file_url' => $videoUrl,
-                    ]
-                ]);
-            } else {
-                return response()->json(['status' => 0, 'message' => 'No video file found in request.']);
+                    'status' => 0,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
             }
+
+            // ✅ Step 2: Store the file
+            $video = $req->file('video');
+            $fileName = time() . '-' . $video->getClientOriginalName();
+            $destination = public_path('user_upload/property_videos');
+
+            if (!file_exists($destination)) {
+                mkdir($destination, 0755, true);
+            }
+
+            $video->move($destination, $fileName);
+
+            $videoUrl = asset('user_upload/property_videos/' . $fileName);
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Video uploaded successfully',
+                'data' => [
+                    'file_name' => $fileName,
+                    'file_url' => $videoUrl,
+                ]
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 0,
                 'message' => 'Upload failed: ' . $e->getMessage()
-            ]);
+            ], 500);
         }
     }
 }

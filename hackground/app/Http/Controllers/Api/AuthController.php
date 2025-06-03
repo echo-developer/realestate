@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
+
 use random;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -22,7 +23,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'sendPasswordResetLink', 'forgot-password', 'resetPassword', 'user']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'sendPasswordResetLink', 'forgot-password', 'resetPassword', 'user', 'handleProviderCallback']]);
     }
 
     public function login(Request $request)
@@ -363,4 +364,43 @@ class AuthController extends Controller
     //         ]
     //     ], 200);
     // }
+    public function handleProviderCallback(Request $request, $provider)
+    {
+        $accessToken = $request->input('access_token');
+
+        if (!$accessToken) {
+            return response()->json(['error' => 'Access token is required'], 400);
+        }
+
+        try {
+            // Get user info from social provider using access token
+            $socialUser = Socialite::driver($provider)
+                ->stateless()
+                ->userFromToken($accessToken);
+
+            // Find or create user in your DB
+            $user = User::updateOrCreate(
+                ['email' => $socialUser->getEmail()],
+                [
+                    'name' => $socialUser->getName(),
+                    'email' => $socialUser->getEmail()
+                ]
+            );
+
+            // Create JWT token for your user
+            $token = JWTAuth::fromUser($user);
+
+            return response()->json([
+                'status' => 1,
+                'token' => $token,
+                'user' => $user
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'error' => 'Failed to authenticate',
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
 }

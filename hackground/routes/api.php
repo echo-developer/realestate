@@ -367,7 +367,8 @@ Route::get('user_proprties', [UserDetailsController::class, 'userPropertyDetails
 Route::get('user_proprties', [UserDetailsController::class, 'userPropertyDetails']);
 Route::post('property-site-visit',[SiteVisitController::class, 'saveSiteVisit']);
 Route::post('property-video-upload',[PropertyController::class, 'uploadVideo']);
- 
+Route::get('/auth/{provider}/callback', [AuthController::class, 'handleProviderCallback']);
+
 
 Route::controller(DummyController::class)->group(function () {
     Route::post('insertSlug', 'insertSlug');
