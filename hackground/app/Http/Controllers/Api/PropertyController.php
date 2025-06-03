@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\PrefPropertyAdditional;
 use Illuminate\Support\Facades\Validator;
 
 class PropertyController extends Controller
@@ -175,6 +176,61 @@ class PropertyController extends Controller
                 'status' => 0,
                 'message' => 'Upload failed: ' . $e->getMessage()
             ]);
+        }
+    }
+
+    public function property_video_update(Request $req)
+    {
+        try {
+
+            $validator = Validator::make($req->all(), [
+                'video' => 'required|file|mimes:mp4,mov,ogg,webm|max:51200',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ]);
+            }
+
+            $property_id = $req->property_id;
+            $newVideoFile = $req->file('video');
+            $oldVideoFile = PrefPropertyAdditional::where('pid', $property_id)->value('property_video');
+
+
+            $fileName = time() . '-' . $newVideoFile->getClientOriginalName();
+            $destination = public_path('user_upload/property_videos');
+
+            if (!file_exists($destination)) {
+                mkdir($destination, 0755, true);
+            }
+
+            $newVideoFile->move($destination, $fileName);
+            $videoUrl = asset('user_upload/property_videos/' . $fileName);
+
+            DB::transaction(function () use ($property_id, $fileName) {
+                PrefPropertyAdditional::updateOrCreate(
+                    ['pid' => $property_id],
+                    ['property_video' => $fileName]
+                );
+            });
+
+            if (!empty($oldVideoFile)) {
+                unlink(public_path('user_upload/property_videos/' . $oldVideoFile));
+            }
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Video Updated successfully',
+                'data' => [
+                    'file_name' => $fileName,
+                    'file_url' => $videoUrl,
+                ]
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 }
