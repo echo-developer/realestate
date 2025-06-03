@@ -146,7 +146,7 @@ class PropertyController extends Controller
                     'status' => 0,
                     'message' => 'Validation failed',
                     'errors' => $validator->errors()
-                ], 422);
+                ]);
             }
 
             // ✅ Step 2: Store the file
@@ -174,7 +174,7 @@ class PropertyController extends Controller
             return response()->json([
                 'status' => 0,
                 'message' => 'Upload failed: ' . $e->getMessage()
-            ], 500);
+            ]);
         }
     }
 }
