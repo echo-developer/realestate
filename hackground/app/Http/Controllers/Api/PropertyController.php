@@ -138,7 +138,7 @@ class PropertyController extends Controller
         try {
             // ✅ Step 1: Validate the video input
             $validator = Validator::make($req->all(), [
-                'video' => 'required|file|mimes:mp4,mov,ogg,webm|max:51200',
+                'video' => 'required|file|mimes:mp4,mov,ogg,webm|max:511200',
             ]);
 
             if ($validator->fails()) {
