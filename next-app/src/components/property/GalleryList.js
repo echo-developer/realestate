@@ -25,10 +25,10 @@ import {
   XLg,
 } from "react-bootstrap-icons";
 
-const GalleryList = ({ setVisible, propertyId, userDetails }) => {
+const GalleryList = ({ setVisible, propertyId, userDetails, video }) => {
   const { callApi } = AuthUser();
   const [visibleImage, setVisibleImage] = useState(0);
-  const [activeTab, setActiveTab] = useState("exterior");
+  const [activeTab, setActiveTab] = useState("");
   const [data, setData] = useState([]);
   const isMobile = useIsMobile();
   const [showContactForm, setShowContactForm] = useState(false);
@@ -37,23 +37,23 @@ const GalleryList = ({ setVisible, propertyId, userDetails }) => {
     FetchImageData(propertyId);
   }, [propertyId]);
 
+  // Set activeTab based on visibleImage (including visibleImage=0)
   useEffect(() => {
-    if (visibleImage) {
-      const activeImage = data?.filter((item, i) => i === visibleImage);
-      if (activeImage?.length > 0) {
-        setActiveTab(activeImage[0]?.gallery_type);
-      }
+    const activeImage = data?.filter((item, i) => i === visibleImage);
+    if (activeImage?.length > 0) {
+      setActiveTab(activeImage[0]?.gallery_type);
     }
   }, [visibleImage, data]);
 
+  // Initialize activeTab once when data loads, only if not already set
   useEffect(() => {
     const galleryTypes = Array.from(
       new Set(data.map((item) => item.gallery_type))
     );
-    if (galleryTypes.length > 0 && !galleryTypes.includes(activeTab)) {
+    if (galleryTypes.length > 0 && !activeTab) {
       setActiveTab(galleryTypes[0]);
     }
-  }, [data, activeTab]);
+  }, [data]);
 
   const FetchImageData = async (propertyId) => {
     try {
@@ -79,9 +79,7 @@ const GalleryList = ({ setVisible, propertyId, userDetails }) => {
 
   const handleRightClick = () => {
     setVisibleImage((prevVisibleImage) =>
-      prevVisibleImage < data.length - 1
-        ? prevVisibleImage + 1
-        : prevVisibleImage
+      prevVisibleImage < data.length - 1 ? prevVisibleImage + 1 : prevVisibleImage
     );
   };
 
@@ -102,6 +100,9 @@ const GalleryList = ({ setVisible, propertyId, userDetails }) => {
   const galleryTypes = Array.from(
     new Set(data.map((item) => item.gallery_type))
   );
+  if (video) {
+    galleryTypes.unshift("Video");
+  }
   const currentGallery = data.filter((tab) => tab.gallery_type === activeTab);
   const totalImages = data.length;
 
@@ -132,7 +133,14 @@ const GalleryList = ({ setVisible, propertyId, userDetails }) => {
               <Card className="contact-form-section bg-light">
                 <Card.Header className="d-flex justify-content-between">
                   <h4 className="">Contact Us</h4>
-                  <Button variant="light p-1" role="button" onClick={()=>setShowContactForm(false)} title="Back to Gallery"><XLg size={20} color="currentColor" /> </Button>
+                  <Button
+                    variant="light p-1"
+                    role="button"
+                    onClick={() => setShowContactForm(false)}
+                    title="Back to Gallery"
+                  >
+                    <XLg size={20} color="currentColor" />{" "}
+                  </Button>
                 </Card.Header>
                 <Card.Body>
                   <EnquiryForm
@@ -170,7 +178,7 @@ const GalleryList = ({ setVisible, propertyId, userDetails }) => {
                             }`}
                             onClick={() => handleKey(tab)}
                           >
-                            {formatTabName(tab)} ({imageCount})
+                            {formatTabName(tab)} ({tab === "Video" ? 1 : imageCount})
                           </Nav.Link>
                         </Nav.Item>
                       );
@@ -178,79 +186,73 @@ const GalleryList = ({ setVisible, propertyId, userDetails }) => {
                   </Nav>
                 </div>
 
-                <div id="myGallery " className="mt-3">
+                <div id="myGallery" className="mt-3">
                   <div className="photoGallery">
-                    <a
-                      className="left-arrow"
-                      onClick={visibleImage > 0 ? handleLeftClick : undefined}
-                      style={{
-                        pointerEvents: visibleImage === 0 ? "none" : "auto",
-                        opacity: visibleImage === 0 ? 0.5 : 1,
-                        cursor:
-                          visibleImage + 1 === totalImages
-                            ? "default"
-                            : "pointer",
-                      }}
-                    >
-                      <ChevronLeft size={24} color="black" />
-                    </a>
-                    <div className="imageContainer">
-                      <div className="sliderImages text-center mb-2 d-flex justify-content-center">
-                        {data.map((image, index) => (
-                          <img
-                            key={image.image_id}
-                            className="img-fluid img-2 active"
-                            src={image.image_url || "/placeholder.svg"}
-                            alt={image.caption}
-                            style={{
-                              display:
-                                index === visibleImage ? "block" : "none",
-                            }}
-                          />
-                        ))}
+                    {activeTab === "Video" && video ? (
+                      <div className="videoContainer text-center mb-2">
+                        <video
+                          src={video}
+                          controls
+                          style={{ maxWidth: "100%", maxHeight: "400px", borderRadius: 8 }}
+                        />
                       </div>
-                    </div>
-                    <a
-                      className="right-arrow"
-                      onClick={
-                        visibleImage + 1 < totalImages
-                          ? handleRightClick
-                          : undefined
-                      }
-                      style={{
-                        pointerEvents:
-                          visibleImage + 1 === totalImages ? "none" : "auto",
-                        opacity: visibleImage + 1 === totalImages ? 0.5 : 1,
-                        cursor:
-                          visibleImage + 1 === totalImages
-                            ? "default"
-                            : "pointer",
-                      }}
-                    >
-                      <ChevronRight size={24} color="black" />
-                    </a>
+                    ) : (
+                      <>
+                        <a
+                          className="left-arrow"
+                          onClick={visibleImage > 0 ? handleLeftClick : undefined}
+                          style={{
+                            pointerEvents: visibleImage === 0 ? "none" : "auto",
+                            opacity: visibleImage === 0 ? 0.5 : 1,
+                            cursor:
+                              visibleImage + 1 === totalImages
+                                ? "default"
+                                : "pointer",
+                          }}
+                        >
+                          <ChevronLeft size={24} color="black" />
+                        </a>
+                        <div className="imageContainer">
+                          <div className="sliderImages text-center mb-2 d-flex justify-content-center">
+                            {data.map((image, index) => (
+                              <img
+                                key={image.image_id}
+                                className="img-fluid img-2 active"
+                                src={image.image_url || "/placeholder.svg"}
+                                alt={image.caption}
+                                style={{
+                                  display: index === visibleImage ? "block" : "none",
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                        <a
+                          className="right-arrow"
+                          onClick={
+                            visibleImage + 1 < totalImages
+                              ? handleRightClick
+                              : undefined
+                          }
+                          style={{
+                            pointerEvents:
+                              visibleImage + 1 === totalImages ? "none" : "auto",
+                            opacity: visibleImage + 1 === totalImages ? 0.5 : 1,
+                            cursor:
+                              visibleImage + 1 === totalImages
+                                ? "default"
+                                : "pointer",
+                          }}
+                        >
+                          <ChevronRight size={24} color="black" />
+                        </a>
+                      </>
+                    )}
                   </div>
                 </div>
-
                 {/* Thumbnails Gallery */}
-                <div className="thumbnails-gallery">
-                  {/* {isMobile && (
-                    <a
-                      className="left-arrow"
-                      onClick={visibleImage > 0 ? handleLeftClick : undefined}
-                      style={{
-                        pointerEvents: visibleImage === 0 ? "none" : "auto",
-                        opacity: visibleImage === 0 ? 0.5 : 1,
-                        cursor:
-                          visibleImage + 1 === totalImages
-                            ? "default"
-                            : "pointer",
-                      }}
-                    >
-                      <ChevronLeft size={24} color="white" />
-                    </a>
-                  )} */}
-
+                {activeTab !== 'Video' && (
+                  <div className="thumbnails-gallery">
                   {data.map((image, index) => (
                     <div
                       key={index}
@@ -265,7 +267,6 @@ const GalleryList = ({ setVisible, propertyId, userDetails }) => {
                             ? "2px solid #3498db"
                             : "2px solid transparent",
                         transition: "all 0.2s ease",
-                        //boxShadow: visibleImage === index ? "0 0 10px rgba(52, 152, 219, 0.7)" : "none",
                       }}
                     >
                       <img
@@ -292,29 +293,8 @@ const GalleryList = ({ setVisible, propertyId, userDetails }) => {
                       )}
                     </div>
                   ))}
-
-                  {/* {isMobile && (
-                    <a
-                      className="right-arrow"
-                      onClick={
-                        visibleImage + 1 < totalImages
-                          ? handleRightClick
-                          : undefined
-                      }
-                      style={{
-                        pointerEvents:
-                          visibleImage + 1 === totalImages ? "none" : "auto",
-                        opacity: visibleImage + 1 === totalImages ? 0.5 : 1,
-                        cursor:
-                          visibleImage + 1 === totalImages
-                            ? "default"
-                            : "pointer",
-                      }}
-                    >
-                      <ChevronRight size={24} color="white" />
-                    </a>
-                  )} */}
                 </div>
+                ) || null}
 
                 <div
                   className="bottomIndicator text-light"

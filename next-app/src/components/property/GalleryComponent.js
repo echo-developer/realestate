@@ -9,7 +9,7 @@ const GalleryComponent = ({ propertyDetails, setVisible }) => {
   const [totalImage, setTotalImage] = useState(0);
 
   const defaultImage = `/assets/images/property/default_property.jpg`;
-const translation = useTranslation();
+  const translation = useTranslation();
   useEffect(() => {
     if (propertyDetails) {
       setLoading(true); // Start loading on new data
@@ -29,14 +29,14 @@ const translation = useTranslation();
 
 
   useEffect(() => {
-    if(propertyDetails?.galleries?.length > 0) {
+    if (propertyDetails?.galleries?.length > 0) {
       let imgArr;
-      if(propertyDetails?.galleries?.length < 3) {
+      if (propertyDetails?.galleries?.length < 3) {
         imgArr = propertyDetails?.galleries?.flatMap((item) => item?.images);
       } else {
         imgArr = propertyDetails?.galleries?.slice(0, 3).map((item) => item?.images[0]);
       }
-      
+
       setDisplayImages(imgArr);
       const noOfImages = propertyDetails?.galleries?.reduce((total, item) => total + item?.images?.length, 0);
       setTotalImage(noOfImages);
@@ -44,62 +44,74 @@ const translation = useTranslation();
     }
   }, [propertyDetails?.galleries])
 
+  const videoUrl = propertyDetails?.property_video || "";
 
   return (
     <div className='frontGallery-property mb-4'>
-    <div className="row gx-3" onClick={(e) => {
-      e.preventDefault();
-      setVisible(true);
-    }}>
-      {loading ? (
-        <ShimmerFeaturedGallery row={2} col={2} card frameHeight={600} />
-      ) : propertyDetails?.galleries?.length > 0 ? (
-        <>
-        <article className="col-md-8" >
-            <a className="d-block mb-3" href="#" data-bs-toggle="modal" data-bs-target="#galleryModal">
-              <img 
-              src={displayImages[0]?.image_url}
-               alt="Property Image" className="rounded-2 w-100" /></a>
-          </article>
-          {displayImages?.length > 1 && (
-            <article className="col-md-4">
-            <div className="row gx-3">
-              <article className="col-md-12 col-6">
-                <a className="d-block mb-3" href="#" data-bs-toggle="modal" data-bs-target="#galleryModal">
-                  <img 
-                  src={displayImages[1]?.image_url}
-                   alt="Property Image" className="rounded-2 w-100"/></a>            
-              </article>
-              {displayImages?.length > 2 && (
-                <article className="col-md-12 col-6">
-                <a className="d-block more-photos" href="#" data-bs-toggle="modal" data-bs-target="#galleryModal">
-                  <img 
-                  src={displayImages[1]?.image_url}
-                   alt="Property Image" className="rounded-2 w-100" />
-                  {totalImage > 3 && (
-                    <span className="photo-overlay">
-                    <h4><i className="bi bi-plus-lg"></i> {totalImage - 3} {translation?.photos || "Photos"}</h4>
-                  </span>
+      <div className="row gx-3" onClick={(e) => {
+        e.preventDefault();
+        setVisible(true);
+      }}>
+
+
+        {loading ? (
+          <ShimmerFeaturedGallery row={2} col={2} card frameHeight={600} />
+        ) : propertyDetails?.galleries?.length > 0 ? (
+          <>
+            <article className="col-md-8">
+              <a className="d-block mb-3" href="#" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                {videoUrl ? (
+                  <video controls className="rounded-2 w-100" style={{ maxHeight: '100%', objectFit: 'cover' }}>
+                    <source src={videoUrl} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <img
+                    src={displayImages[0]?.image_url}
+                    alt="Property Image" className="rounded-2 w-100" />
+                )}
+              </a>
+            </article>
+
+            {displayImages?.length > 1 && (
+              <article className="col-md-4">
+                <div className="row gx-3">
+                  <article className="col-md-12 col-6">
+                    <a className="d-block mb-3" href="#" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                      <img
+                        src={displayImages[1]?.image_url}
+                        alt="Property Image" className="rounded-2 w-100" /></a>
+                  </article>
+                  {displayImages?.length > 2 && (
+                    <article className="col-md-12 col-6">
+                      <a className="d-block more-photos" href="#" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <img
+                          src={displayImages[1]?.image_url}
+                          alt="Property Image" className="rounded-2 w-100" />
+                        {totalImage > (videoUrl ? 2 : 3) && (
+                          <span className="photo-overlay">
+                            <h4><i className="bi bi-plus-lg"></i> {totalImage - (videoUrl ? 2 : 3)} {translation?.photos || "Photos"}</h4>
+                          </span>
+                        )}
+                      </a>
+                    </article>
                   )}
-                </a>
+                </div>
               </article>
-              )}
-            </div>
-          </article>
-          )}
-          
-        </>
-      ) : (
-        <div className="col-md-6 text-center">
-          <img
-            src={defaultImage}
-            alt="No data available"
-            className="rounded-2 w-100 mb-3"
-          />
-          <p className="text-muted">{translation?.no_data_available || "No data available"}</p>
-        </div>
-      )}
-    </div>
+            )}
+
+          </>
+        ) : (
+          <div className="col-md-6 text-center">
+            <img
+              src={defaultImage}
+              alt="No data available"
+              className="rounded-2 w-100 mb-3"
+            />
+            <p className="text-muted">{translation?.no_data_available || "No data available"}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

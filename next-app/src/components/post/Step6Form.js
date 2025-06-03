@@ -153,15 +153,11 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
     setActiveTab(tabKey);
   };
 
-  const handleVideoDrop = (e) => {
-    console.log("handle view drop ran", e);
-  }
 
 
 
   const handleVideoSelect = async (e) => {
     const file = e.target.files[0];
-    console.log("file", file);
     if (file) {
       const videoUrl = URL.createObjectURL(file);
 
@@ -187,6 +183,9 @@ const Step6Form = ({ formData, setFormData, prevStep }) => {
           if(errMsg) {
             toast.error(errMsg);
           }
+          if (videoInputRef.current) {
+          videoInputRef.current.value = "";
+        }
         }
       } catch (error) {
         console.error(error.message)

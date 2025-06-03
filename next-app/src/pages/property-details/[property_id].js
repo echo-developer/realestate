@@ -262,6 +262,7 @@ const index = () => {
       }
     })
   };
+
   const title = `${propertyDetails?.property_name || ''}, ${propertyDetails?.locality || ''}, ${propertyDetails?.address || ''}. Priced at ${formatPrice(propertyDetails?.price)} | https://realestate.scriptlisting.com`
   const description = `${propertyDetails?.property_name || ''}, ${propertyDetails?.locality || ''}, ${propertyDetails?.address || ''}. Priced at ${formatPrice(propertyDetails?.price)}, this ${propertyDetails?.property_features?.area_in_sqft ? `${propertyDetails?.property_features?.area_in_sqft} sqft` : ''} ${propertyDetails?.ownership_type || 'property'} offers modern amenities like ${propertyDetails?.property_amenities?.slice(0, 5).map(a => a.amenity_name).join(', ')} `;
 
@@ -352,6 +353,7 @@ const index = () => {
                   setVisible={setVisible}
                   propertyId={property_id}
                   userDetails={userDetails}
+                  video={propertyDetails?.property_video}
                 />
               )}
 
