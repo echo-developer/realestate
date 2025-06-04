@@ -208,16 +208,19 @@ const PropertySidebar = ({
   };
   const [showAll, setShowAll] = useState(false);
 
+
   const handleUserNameClick = (user) => {
+
     if (user.user_type == 'A') {
       const url = buildAgentUrl(user);
       router.push(url)
-    } else if(user.user_type == 'O') {
-      router.push(`/user-details/${user.id}`)
-      console.log("user", user);
+    } else if (user.user_type == 'O') {
+      const url = buildNormalUrl(user)
+      router.push(`/user/${url}`)
     } else if (user.user_type == "B") {
-      router.push(`/builder-details/${user.id}`)
-    }else {
+      const url = buildNormalUrl(user);
+      router.push(`/builder/${url}`)
+    } else {
       setNameLinkErrMessage("You can only view Agent Profiles")
     }
   }
@@ -247,23 +250,23 @@ const PropertySidebar = ({
                   </div>
                   <div>
                     <h4
-                      style={propertyDetails?.user_details?.user_type === 'A' ? { cursor: 'pointer', } : { cursor: 'pointer'}}
+                      style={propertyDetails?.user_details?.user_type === 'A' ? { cursor: 'pointer', } : { cursor: 'pointer' }}
                       onClick={() => handleUserNameClick(propertyDetails?.user_details)}>
                       {propertyDetails?.user_details?.name ||
                         `${translation?.not_available ||
                         `${translation?.not_available || "Not Available"}`
                         }`}
-                        {propertyDetails?.user_details?.user_type === 'A' && propertyDetails?.user_details?.is_verified_agent ? 
+                      {propertyDetails?.user_details?.user_type === 'A' && propertyDetails?.user_details?.is_verified_agent ?
                         (<>
-                        <i
-                        className="icon-img-check ms-2"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="top"
-                        aria-label="Certified Agent"
-                        data-bs-original-title="Certified Agent"
-                      ></i>
-                        </>) 
-                        : 
+                          <i
+                            className="icon-img-check ms-2"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            aria-label="Certified Agent"
+                            data-bs-original-title="Certified Agent"
+                          ></i>
+                        </>)
+                        :
                         (<></>)}
                     </h4>
                     {nameLinkErrMessage ? (
@@ -359,9 +362,9 @@ const PropertySidebar = ({
                       >
                         {translation?.contact_now || "Contact Now"}
                       </button>
-                      <button 
-                      className="btn btn-primary mt-2"
-                      onClick={() => handleSiteVisit()}>
+                      <button
+                        className="btn btn-primary mt-2"
+                        onClick={() => handleSiteVisit()}>
                         Book Site Visit
                       </button>
                     </div>
@@ -727,3 +730,12 @@ const PropertySidebar = ({
 };
 
 export default PropertySidebar;
+
+
+const buildNormalUrl = (user) => {
+  const nameParts = user.name.trim().split(/\s+/);
+  const formattedName = nameParts.length > 1 ? nameParts.join('-') : user.name;
+  const url = `${formattedName}?id=${user?.id}`;
+  return url;
+};
+

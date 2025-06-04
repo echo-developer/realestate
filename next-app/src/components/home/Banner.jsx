@@ -315,10 +315,12 @@ const Banner = ({ translation }) => {
   };
 
   const handleTabChange = (tab) => {
-    // if (tab === "projects") {
-    //   router.push("/project-listing");
-    // } else {
     setSelectedTab(tab);
+    setSelectedPropertyType("1");
+    setSelectedPropertyFor("1");
+    setMaxBudget("");
+    setMinBudget("")
+    setSelectedLocality(null);
     // }
   };
   const buildSearchUrl = () => {
@@ -413,8 +415,10 @@ const Banner = ({ translation }) => {
       updatedFilters.max_price = maxBudget;
     }
 
+    
     const queryString = objectToQueryString(updatedFilters);
-    router.push(`/project-listing?${queryString}`)
+    const url = `/project-listing?${queryString}`;
+    window.location.href=url;
   }
 
 

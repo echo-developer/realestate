@@ -23,7 +23,7 @@ const Index = () => {
   const { callApi } = AuthUser();
   const router = useRouter();
   const { currency, formatPrice } = useAuth();
-  const { user_id } = router.query;
+  const { id: builder_id } = router.query;
   const [data, setData] = useState(null);
   const [list, setList] = useState([]);
   const translation = useTranslation();
@@ -63,7 +63,7 @@ const Index = () => {
     const fetchData = async () => {
       try {
         const res = await callApi({
-          api: `/user_details?uid=${user_id}`,
+          api: `/user_details?uid=${builder_id}`,
           method: "GET",
         });
 
@@ -76,10 +76,10 @@ const Index = () => {
     };
 
 
-    if (user_id) {
+    if (builder_id) {
       fetchData();
     }
-  }, [user_id]);
+  }, [builder_id]);
 
   const fetchPropertyList = async (page = 1, loadMore) => {
     if (!loadMore) {
@@ -87,7 +87,7 @@ const Index = () => {
     }
     try {
       const res = await callApi({
-        api: `/user_proprties?uid=${user_id}`,
+        api: `/user_proprties?uid=${builder_id}`,
         method: "GET",
         data: {
           current_page: page,
@@ -115,11 +115,11 @@ const Index = () => {
   useEffect(() => {
 
 
-    if (user_id) {
+    if (builder_id) {
       fetchPropertyList(1, false);
     }
 
-  }, [user_id, filters])
+  }, [builder_id, filters])
 
   useEffect(() => {
     const fetchPropertyTypeList = async () => {
