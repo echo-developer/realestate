@@ -380,11 +380,11 @@ const Index = () => {
                   />
                   <div className="rent-sale">
                     <Badge bg="warning" text="black" className="rounded-0 me-2">
-                      {data?.property_sale} {translation?.sale || "SALE"}
+                      {list?.[0]?.property_sale || 0} {translation?.sale || "SALE"}
                     </Badge>
 
                     <Badge bg="success" className="rounded-0 me-2">
-                      {data?.property_rent} {translation?.rent || "RENT"}
+                      {list?.[0]?.property_rent || 0} {translation?.rent || "RENT"}
                     </Badge>
                   </div>
                 </div>

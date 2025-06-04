@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
@@ -12,7 +12,10 @@ const EnquiryForm = ({ propertyId, handleClose, showPhoneNumber, displayPhoneNum
   const { callApi, isLogin } = AuthUser();
   const [loading, setLoading] = useState(false);
   const token = isLogin();
-  const [emailTimer, setEmailTimer] = useState(0);
+  const formRef = useRef();
+  const nameInputRef = useRef();
+  const emailInputRef = useRef();
+  const phoneInputRef = useRef();
 
   const validationSchema = Yup.object({
     name: Yup.string().required(translation?.name_is_required || "Name is required"),
@@ -23,23 +26,45 @@ const EnquiryForm = ({ propertyId, handleClose, showPhoneNumber, displayPhoneNum
       .matches(/^\d+$/, translation?.phone_number_must_be_digits_only || "Phone number must be digits only")
       .required(translation?.phone_number || "Phone number is required"),
     message: Yup.string().required(translation?.message_is_required || "Message is required"),
-    otp: Yup.string().when("otpSent", {
-      is: true,
-      then: Yup.string().required(translation?.otp_is_required || "OTP is required"),
-    }),
   });
 
+  // Handle auto-fill with mutation observer
   useEffect(() => {
-    let interval = null;
-    if (emailTimer > 0) {
-      interval = setInterval(() => {
-        setEmailTimer((prev) => prev - 1);
-      }, 1000);
-    } else if (interval) {
-      clearInterval(interval);
+    const checkAutoFill = () => {
+      if (nameInputRef.current?.value) {
+        nameInputRef.current.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+      if (emailInputRef.current?.value) {
+        emailInputRef.current.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+      if (phoneInputRef.current?.value) {
+        phoneInputRef.current.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    };
+
+    // Initial check after a small delay
+    const timer = setTimeout(checkAutoFill, 200);
+
+    // Setup mutation observer to detect changes
+    const observer = new MutationObserver(checkAutoFill);
+    if (formRef.current) {
+      observer.observe(formRef.current, {
+        attributes: true,
+        childList: true,
+        subtree: true,
+        characterData: true
+      });
     }
-    return () => clearInterval(interval);
-  }, [emailTimer]);
+
+    // Also check on window load
+    window.addEventListener('load', checkAutoFill);
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+      window.removeEventListener('load', checkAutoFill);
+    };
+  }, []);
 
   const submitFormData = async (values, resetForm) => {
     setLoading(true);
@@ -80,37 +105,30 @@ const EnquiryForm = ({ propertyId, handleClose, showPhoneNumber, displayPhoneNum
   return (
     <div>
       <Formik
-        initialValues={{ name: "", email: "", phone: "", message: "", otp: "" }}
+        initialValues={{ name: "", email: "", phone: "", message: "" }}
         validationSchema={validationSchema}
-        validateOnChange={false}
-        validateOnBlur={false}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           await submitFormData(values, resetForm);
           setSubmitting(false);
         }}
       >
-        {({ errors, touched, setFieldValue, setFieldTouched, validateField }) => (
-          <Form>
+        {({ errors, touched, handleChange, handleBlur, values }) => (
+          <Form ref={formRef}>
             {/* Name */}
             <FloatingLabel
               label={<>{translation?.name || "Name"} <span className="req">*</span></>}
               className="mb-3"
             >
-              <Field name="name">
-                {({ field }) => (
-                  <input
-                    type="text"
-                    {...field}
-                    className={`form-control ${errors.name && touched.name ? "is-invalid" : ""}`}
-                    placeholder=" "
-                    onChange={(e) => {
-                      setFieldValue("name", e.target.value);
-                      setFieldTouched("name", true, false);
-                      validateField("name");
-                    }}
-                  />
-                )}
-              </Field>
+              <Field 
+                name="name"
+                innerRef={nameInputRef}
+                type="text"
+                className={`form-control ${errors.name && touched.name ? "is-invalid" : ""}`}
+                placeholder=" "
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.name}
+              />
               <ErrorMessage name="name" component="div" className="error-message text-danger" />
             </FloatingLabel>
 
@@ -119,21 +137,16 @@ const EnquiryForm = ({ propertyId, handleClose, showPhoneNumber, displayPhoneNum
               label={<>{translation?.email || "Email"} <span className="req">*</span></>}
               className="mb-3"
             >
-              <Field name="email">
-                {({ field }) => (
-                  <input
-                    type="email"
-                    {...field}
-                    className={`form-control ${errors.email && touched.email ? "is-invalid" : ""}`}
-                    placeholder=" "
-                    onChange={(e) => {
-                      setFieldValue("email", e.target.value);
-                      setFieldTouched("email", true, false);
-                      validateField("email");
-                    }}
-                  />
-                )}
-              </Field>
+              <Field
+                name="email"
+                innerRef={emailInputRef}
+                type="email"
+                className={`form-control ${errors.email && touched.email ? "is-invalid" : ""}`}
+                placeholder=" "
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.email}
+              />
               <ErrorMessage name="email" component="div" className="error-message text-danger" />
             </FloatingLabel>
 
@@ -142,21 +155,16 @@ const EnquiryForm = ({ propertyId, handleClose, showPhoneNumber, displayPhoneNum
               label={<>{translation?.phone || "Phone"} <span className="req">*</span></>}
               className="mb-3"
             >
-              <Field name="phone">
-                {({ field }) => (
-                  <input
-                    type="text"
-                    {...field}
-                    className={`form-control ${errors.phone && touched.phone ? "is-invalid" : ""}`}
-                    placeholder=" "
-                    onChange={(e) => {
-                      setFieldValue("phone", e.target.value);
-                      setFieldTouched("phone", true, false);
-                      validateField("phone");
-                    }}
-                  />
-                )}
-              </Field>
+              <Field
+                name="phone"
+                innerRef={phoneInputRef}
+                type="text"
+                className={`form-control ${errors.phone && touched.phone ? "is-invalid" : ""}`}
+                placeholder=" "
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.phone}
+              />
               <ErrorMessage name="phone" component="div" className="error-message text-danger" />
             </FloatingLabel>
 
@@ -165,22 +173,17 @@ const EnquiryForm = ({ propertyId, handleClose, showPhoneNumber, displayPhoneNum
               label={<>{translation?.message || "Message"} <span className="req">*</span></>}
               className="mb-3"
             >
-              <Field name="message">
-                {({ field }) => (
-                  <textarea
-                    rows="3"
-                    {...field}
-                    className={`form-control ${errors.message && touched.message ? "is-invalid" : ""}`}
-                    placeholder=" "
-                    style={{ height: "100px" }}
-                    onChange={(e) => {
-                      setFieldValue("message", e.target.value);
-                      setFieldTouched("message", true, false);
-                      validateField("message");
-                    }}
-                  />
-                )}
-              </Field>
+              <Field
+                name="message"
+                as="textarea"
+                rows="3"
+                className={`form-control ${errors.message && touched.message ? "is-invalid" : ""}`}
+                placeholder=" "
+                style={{ height: "100px" }}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.message}
+              />
               <ErrorMessage name="message" component="div" className="error-message text-danger" />
             </FloatingLabel>
 
