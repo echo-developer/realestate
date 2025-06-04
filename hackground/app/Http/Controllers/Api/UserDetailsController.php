@@ -11,6 +11,7 @@ use App\Http\Resources\UserResource;
 
 class UserDetailsController extends Controller
 {
+    private $uid;
     public function details(Request $req)
     {
         $user = User::select('id', 'name', 'email', 'phone', 'image', 'user_type', 'whatsapp_no')->with('userAdditional:user_id,address')
@@ -44,6 +45,8 @@ class UserDetailsController extends Controller
     }
     public function userPropertyDetails(Request $req)
     {
+
+        $this->uid=$req->uid;
         $filters = [
             'post_for'      => $req->input('post_for'),
             'property_type' => $req->input('property_type'),
@@ -130,6 +133,8 @@ class UserDetailsController extends Controller
                 'bedrooms'        => optional($property->settings)->bedrooms,
                 'bathrooms'       => optional($property->settings)->bathrooms,
                 'area_in_sqft'    => optional($property->settings)->area_in_sqft,
+                'property_sale'    =>  UsersPropertyCount($this->uid)['forSell'],
+                'property_rent'    =>  UsersPropertyCount($this->uid)['forRent'],
                 'property_address' => optional($property->location)->property_address,
                 'possession_status' => get_name_by_id('property_status_names', 'status_id', $property->additional->possession_status, 'en'),
                 'property_price' => optional($property->settings)->expected_price,
