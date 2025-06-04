@@ -23,7 +23,7 @@ const Index = () => {
   const { callApi } = AuthUser();
   const router = useRouter();
   const { currency, formatPrice } = useAuth();
-  const { id:user_id } = router.query;
+  const { id: user_id } = router.query;
   const [data, setData] = useState(null);
   const [list, setList] = useState([]);
   const translation = useTranslation();
@@ -52,10 +52,7 @@ const Index = () => {
   const [property_loading, setPropertyLoading] = useState(true);
   const [pagination, setPagination] = useState(null);
   const [showEmail, setShowEmail] = useState(null);
-
-
-
-
+  const [selectedType, setSelectedType] = useState("");
 
 
 
@@ -211,15 +208,16 @@ const Index = () => {
   const propertyCounts = countProperties();
 
   const handleEmailPhoneClick = (type) => {
-    // setShowEnquiryModal(true);
+    setShowEnquiryModal(true);
+    setSelectedType(type);
     if (type == 'phone') {
       setShowPhone({
-        show: true,
+        show: false,
         value: data?.phone
       })
-    } else if(type == 'email') {
+    } else if (type == 'email') {
       setShowEmail({
-        show: true,
+        show: false,
         value: data?.email
       })
     }
@@ -318,7 +316,7 @@ const Index = () => {
         current_page: newPage
       }
     })
-    fetchPropertyList(agent_id, newPage, true);
+    fetchPropertyList(newPage, true);
   };
 
   const handleClick = (property_id) => {
@@ -326,13 +324,32 @@ const Index = () => {
     setShowContactModal(true);
   };
 
-    const handleWhatsappClick = (agent) => {
+  const handleWhatsappClick = (agent) => {
     const message = `Owner Name = ${agent.name} \nAgent Id = ${agent.id || agent.id}`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappURL = `https://wa.me/${agent.whatsapp_no || agent.phone}?text=${encodedMessage}`;
 
     window.open(whatsappURL, '_blank');
   };
+
+  const callEmailSuccessfunction = () => {
+    if(selectedType == 'phone') {
+      setShowPhone(prev => {
+        return {
+          ...prev,
+          show: true,
+        }
+      })
+
+    } else if(selectedType == 'email') {
+      setShowEmail(prev => {
+        return {
+          ...prev,
+          show: true
+        }
+      })
+    }
+  }
 
 
   return (
@@ -370,7 +387,7 @@ const Index = () => {
               <Col lg sm={9} xs={12}>
                 <Card.Body className='p-0'>
                   <div className='onCover'>
-                    
+
                   </div>
                   <div className='outCover'>
                     <Card.Title as='h4' className='mb-2 agent-name text-sm-start text-center'>
@@ -428,11 +445,11 @@ const Index = () => {
                             variant="outline-secondary"
                             className="btn-form-control bg-white border"
                           >
-                            {filters.post_for ? filters.post_for == 'sale' ? 'Buy' : 'Rent' : "Select"}
+                            {filters.post_for ? filters.post_for == 'sale' ? 'Sale' : 'Rent' : "Select"}
                           </Dropdown.Toggle>
                           <Dropdown.Menu>
                             <Dropdown.Item onClick={() => handleFilterChange("post_for", "")}>Select</Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleFilterChange("post_for", "sale")}>Buy</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleFilterChange("post_for", "sale")}>Sale</Dropdown.Item>
                             <Dropdown.Item onClick={() => handleFilterChange("post_for", "rent")}>Rent</Dropdown.Item>
                           </Dropdown.Menu>
                         </Dropdown>
@@ -620,7 +637,6 @@ const Index = () => {
                     list?.map((property, i) => {
                       return (
                         <div key={property.property_id} className="card card-ads">
-                          {console.log("property loop", property)}
                           <div className="row g-0">
                             <div className="col-lg-3 col-sm-3">
                               <CardImageSlider
@@ -708,12 +724,12 @@ const Index = () => {
                                     </h6>
                                     <p className="small text-muted">
                                       {data?.user_type === "A"
-                                      ? "Agent"
-                                      : data?.user_type === "B"
-                                      ? "Builder"
-                                      : data?.user_type === "O"
-                                      ? "Owner"
-                                      : ""}
+                                        ? "Agent"
+                                        : data?.user_type === "B"
+                                          ? "Builder"
+                                          : data?.user_type === "O"
+                                            ? "Owner"
+                                            : ""}
                                     </p>
                                   </div>
                                 </div>
@@ -776,6 +792,20 @@ const Index = () => {
           <EnquiryForm
             propertyId={propertyId}
             handleClose={handleContactClose}
+          />
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={showEnquiryModal} onHide={handleEnquiryClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>{translation?.contact_agent || "Contact Agent"}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <AgentEnquiryForm
+            agentId={user_id}
+            handleClose={handleEnquiryClose}
+            callSuccessfuntion={callEmailSuccessfunction}
           />
         </Modal.Body>
       </Modal>
