@@ -212,6 +212,8 @@ const Index = () => {
                 })
                 setList(newList)
 
+            } else {
+                handleOpenModal();
             }
         } catch (error) {
             console.error(error.message)
@@ -280,7 +282,7 @@ const Index = () => {
                             </div>
                         </>
                     )}
-                    {activeTab !== 'general' || activeTab !== 'site_visit' && list?.length > 0 && !loading && (
+                    {activeTab !== 'general' && activeTab !== 'site_visit' && list?.length > 0 && !loading && (
                         <div className="list-display mt-4">
                             {list.map((lead, i) => {
                                 return (
