@@ -22,7 +22,7 @@ const mapOptions = {
 
 
 
-export default function ProjectListingMapView({ loading, projectList }) {
+export default function ProjectListingMapView({ loading, projectList, handleContactClick, saveFavouriteProject }) {
   const translation = useTranslation();
   const [center, setCenter] = useState({
     lat: 0,
@@ -101,6 +101,7 @@ export default function ProjectListingMapView({ loading, projectList }) {
                     keyword={"gallery"}
                     showSq={true}
                     icons={false}
+                    addRemoveFav={() => saveFavouriteProject(project.id)}
                   />                                
                   <div className="card-body position-relative">
                     <h4>
@@ -148,7 +149,7 @@ export default function ProjectListingMapView({ loading, projectList }) {
                         <i className="icon-img-tower" title="Total Tower"></i>
                         <span>
                           {translation?.total_tower || "Total Tower"}:{" "}
-                          {project?.total_tower || "Not Available"}
+                          {project?.total_towers || "Not Available"}
                         </span>
                       </li>
 
@@ -156,7 +157,7 @@ export default function ProjectListingMapView({ loading, projectList }) {
                         <i className="icon-img-project" title="Total Unit"></i>
                         <span>
                           {translation?.total_unit || "Total Unit:"}{" "}
-                          {project?.total_unit || "Not Available"}
+                          {project?.total_units || "Not Available"}
                         </span>
                       </li>
                     </ul>
@@ -279,7 +280,7 @@ export default function ProjectListingMapView({ loading, projectList }) {
 
             </GoogleMap>
           </>) : (<>
-            <div>loading...</div>
+            <div></div>
           </>)}
         </div>
       </Col>

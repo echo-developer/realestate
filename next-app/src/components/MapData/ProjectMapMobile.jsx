@@ -22,7 +22,7 @@ const mapOptions = {
 
 
 
-export default function ProjectMobileMapView({ loading, projectList }) {
+export default function ProjectMobileMapView({ loading, projectList, handleContactClick }) {
     const translation = useTranslation();
     const [center, setCenter] = useState({
         lat: 0,

@@ -11,7 +11,9 @@ import { Helmet } from "react-helmet-async";
 import useTranslation from "@/hooks/useTranslation";
 import useIsMobile from "@/hooks/useIsMobile";
 import { AuthProvider, useAuth } from "@/context/AuthProvider";
+import { Modal } from "react-bootstrap"
 import useAdvertisement from "@/hooks/useAdvertisement";
+import { toast } from "react-toastify";
 import {
   Form,
   Row,
@@ -29,6 +31,7 @@ import ProjectMobileFilters from "@/components/addtional/ProjectMobileFilter";
 import ProjectListingMapView from "@/components/MapData/ProjectListingMapView";
 import Head from "next/head";
 import ProjectMobileMapView from "@/components/MapData/ProjectMapMobile";
+import ProjectEnquiryForm from "@/components/postproject/ProjectEnquiryForm";
 
 const Index = () => {
   const [showMapView, setShowMapView] = useState(false);
@@ -51,6 +54,9 @@ const Index = () => {
     "right",
     defaultCity?.city_id
   );
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [showLoginErrorModal, setShowLoginErrorModal] = useState(false);
+  const [projectId, setProjectId] = useState(null);
   const PostFor = searchParams.get("post_for");
   const projectType = searchParams.get("project_type");
   const projectFor = searchParams.get("project_for");
@@ -243,6 +249,61 @@ const Index = () => {
     FetchProjectListData(true, nextPage);
   };
 
+  const handleContactClick = (id) => {
+    setProjectId(id);
+    setShowContactModal(true);
+  }
+
+  const handleContactModalClose = () => {
+    setShowContactModal(false);
+    setProjectId(null);
+  };
+
+  const saveFavouriteProject = async (projectId) => {
+    if (!memberId) {
+      setShowLoginErrorModal(true);
+      return;
+    }
+
+    try {
+      const res = await callApi({
+        api: `/add_my_fav_project`,
+        method: "UPLOAD",
+        data: {
+          user_id: memberId,
+          project_id: projectId,
+        },
+      });
+
+      if (res?.status === 1) {
+        toast.success(res.message);
+        updateFavState(projectId);
+      } else {
+        toast.error(res?.message || "An error occurred. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Failed to save the project. Please try again.");
+    }
+  }
+
+  const updateFavState = (projectId) => {
+    const state = projectListData;
+    const newState = state?.map((item, i) => {
+      if (item?.id !== projectId) {
+        return item;
+      } else {
+        return {
+          ...item,
+          is_fav: !item?.is_fav,
+        };
+      }
+    });
+    setProjectListData(newState);
+  };
+
+  const handleLoginErrorClose = () => setShowLoginErrorModal(false);
+
+
   const metaTitle = `Find top residential projects in ${defaultCity?.name} including new launch, under construction, and ready-to-move properties. Compare amenities, prices, and locations to choose the best project for your needs.`
   const metaDescription = `Discover a wide range of projects in ${defaultCity?.name}, including newly launched, under-construction, and ready-to-move properties by top builders. Whether you're looking for 1, 2, 3, or 4 BHK flats, explore verified project listings with detailed information on floor plans, amenities, possession dates, and location insights. Compare prices, view real images, and make informed decisions when buying property in ${defaultCity?.name}`
 
@@ -278,7 +339,7 @@ const Index = () => {
               </div>
             </React.Fragment>
 
-            
+
           </>
         ) : (
           <div className="short-banner pt-4">
@@ -299,9 +360,9 @@ const Index = () => {
           <div className="container-fluid">
             <div className="row">
               <aside
-                   className={showMapView ? 'col-12' : 'col-lg-9'}
-                   >
-                    <div className="d-md-flex justify-content-between align-items-center mb-3">
+                className={showMapView ? 'col-12' : 'col-lg-9'}
+              >
+                <div className="d-md-flex justify-content-between align-items-center mb-3">
                   <h5 className="mb-3 mb-md-0">
                     {translation?.total || "Total"}{" "}
                     <span className="text-primary">{projectListData.length}</span>{" "}
@@ -309,30 +370,30 @@ const Index = () => {
                   </h5>
                   <div className="d-flex gap-2">
                     <div className="sort-by">
-                    <DropdownButton
-                      align="end"
-                      size='sm'
-                      title={selectedOption}
-                      id="dropdown-menu-align-end"
-                      onClick={() => setShowDrop(!showDrop)}
-                      aria-expanded={showDrop ? "true" : "false"}
-                    >
-                      {[
-                        "Recent",
-                        "Price - Low to High",
-                        "Price - High to Low",
-                        "Size - Low to High",
-                        "Size - High to Low",
-                      ].map((option) => (
-                        <Dropdown.Item
-                          eventKey="1"
-                          key={option}
-                          onClick={() => handleSortSelection(option)}
-                        >
-                          {option}
-                        </Dropdown.Item>
-                      ))}
-                    </DropdownButton>
+                      <DropdownButton
+                        align="end"
+                        size='sm'
+                        title={selectedOption}
+                        id="dropdown-menu-align-end"
+                        onClick={() => setShowDrop(!showDrop)}
+                        aria-expanded={showDrop ? "true" : "false"}
+                      >
+                        {[
+                          "Recent",
+                          "Price - Low to High",
+                          "Price - High to Low",
+                          "Size - Low to High",
+                          "Size - High to Low",
+                        ].map((option) => (
+                          <Dropdown.Item
+                            eventKey="1"
+                            key={option}
+                            onClick={() => handleSortSelection(option)}
+                          >
+                            {option}
+                          </Dropdown.Item>
+                        ))}
+                      </DropdownButton>
                     </div>
                     <Button
                       variant="outline-primary"
@@ -359,23 +420,23 @@ const Index = () => {
                         toggleDropdown={toggleDropdown}
                       />
                     )}
-                  </div>                  
+                  </div>
                 </div>
               </aside>
             </div>
-            
+
             {showMapView ? (<>
               <>
-               {isMobile ? (<>
-                <ProjectMobileMapView loading={loading} projectList={projectListData} />
-               </>) : (<>
-                <ProjectListingMapView loading={loading} projectList={projectListData} />
-               </>)}
+                {isMobile ? (<>
+                  <ProjectMobileMapView loading={loading} projectList={projectListData} handleContactClick={handleContactClick} saveFavouriteProject={saveFavouriteProject} />
+                </>) : (<>
+                  <ProjectListingMapView loading={loading} projectList={projectListData} handleContactClick={handleContactClick} saveFavouriteProject={saveFavouriteProject} />
+                </>)}
               </>
             </>) : (<>
               <div className="row main-row">
                 <aside className="col-xl-9 col-lg-9 col-12">
-                  
+
 
                   {loading ? (
                     <>
@@ -443,6 +504,57 @@ const Index = () => {
           </div>
         </section>
       </MainLayout>
+      <Modal show={showContactModal} onHide={handleContactModalClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            {translation?.contact_owner || "Contact Owner"}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ProjectEnquiryForm
+            projectId={projectId}
+            handleClose={handleContactModalClose}
+          />
+        </Modal.Body>
+      </Modal>
+
+      <Modal
+        show={showLoginErrorModal}
+        onHide={handleLoginErrorClose}
+        centered
+        size="lg"
+      >
+        <Modal.Header>
+          <button
+            className="btn btn-secondary"
+            onClick={handleLoginErrorClose}
+            style={{ position: "absolute", left: "15px" }}
+          >
+            {translation?.cancel || "Cancel"}
+          </button>
+          <Modal.Title className="mx-auto">
+            {" "}
+            {translation?.login_required || "Login Required"}{" "}
+          </Modal.Title>
+          <button
+            className="btn btn-danger"
+            onClick={() => {
+              handleLoginErrorClose();
+              Router.push("/login");
+            }}
+            style={{ position: "absolute", right: "15px" }}
+          >
+            {translation?.login || "Login"}
+          </button>
+        </Modal.Header>
+        <Modal.Body>
+          <p className="text-center">
+            {" "}
+            {translation?.please_log_in_to_perform_this_action ||
+              "Please log in to perform this action."}{" "}
+          </p>
+        </Modal.Body>
+      </Modal>
     </>
 
   );
