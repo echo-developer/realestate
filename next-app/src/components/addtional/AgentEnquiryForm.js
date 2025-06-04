@@ -50,7 +50,7 @@ const AgentEnquiryForm = ({ agentId, handleClose, callSuccessfuntion }) => {
       if (response && response.status === 1) {
         handleClose();
         resetForm();
-        toast.success(response.message || "Enquiry Sent Successfully");
+        toast.success("Enquiry sent successfully. You will be contacted soon.");
         callSuccessfuntion();
       }
     } catch (error) {

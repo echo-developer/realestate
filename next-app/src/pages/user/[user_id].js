@@ -333,7 +333,7 @@ const Index = () => {
   };
 
   const callEmailSuccessfunction = () => {
-    if(selectedType == 'phone') {
+    if (selectedType == 'phone') {
       setShowPhone(prev => {
         return {
           ...prev,
@@ -341,7 +341,7 @@ const Index = () => {
         }
       })
 
-    } else if(selectedType == 'email') {
+    } else if (selectedType == 'email') {
       setShowEmail(prev => {
         return {
           ...prev,
@@ -375,11 +375,11 @@ const Index = () => {
                   />
                   <div className="rent-sale">
                     <Badge bg="warning" text="black" className="rounded-0 me-2">
-                      {propertyCounts?.sale} {translation?.sale || "SALE"}
+                      {data?.property_sale} {translation?.sale || "SALE"}
                     </Badge>
 
                     <Badge bg="success" className="rounded-0 me-2">
-                      {propertyCounts?.rent} {translation?.rent || "RENT"}
+                      {data?.property_rent} {translation?.rent || "RENT"}
                     </Badge>
                   </div>
                 </div>
@@ -393,7 +393,12 @@ const Index = () => {
                     <Card.Title as='h4' className='mb-2 agent-name text-sm-start text-center'>
                       {data?.name || ""}
                     </Card.Title>
-                    <p class="text-muted"><GeoAlt color="#1365CF" size={18} /> {data?.address}</p>
+                    {data?.address && (
+                      <p className="text-muted">
+                        <GeoAlt color="#1365CF" size={18} /> {data.address}
+                      </p>
+                    )}
+
                     <Row className='align-items-end'>
                       <Col className='col-lg col-12'>
                         <div className="d-flex gap-2">

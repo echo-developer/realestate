@@ -37402,7 +37402,10 @@ fieldset .btn-delete {
     bottom: 0;
     width: 100%;
   }
-  .card-agent.card-agent-page .agent-name {
+  .card-agent.card-agent-page .onCover {
+    min-height: 64px;
+  }
+  .card-agent.card-agent-page .onCover .agent-name {
     color: #fff;
   }
   .footer-links h4 > a, .footer-links .h4 > a {
