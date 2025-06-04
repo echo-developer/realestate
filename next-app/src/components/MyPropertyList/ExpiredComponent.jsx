@@ -158,18 +158,18 @@ const ExpiredComponent = ({ propertiesData }) => {
                       <i className="bi bi-calendar4"></i>{" "}
                       {useDateFormat(property.created_at)}
                     </p>
-                    <div className="d-sm-flex">
+                    <div className="d-flex flex-wrap gap-2">
                       <a
                         onClick={() =>
                           handleShowBrochueModal(property?.property_id)
                         }
-                        className="btn btn-sm btn-success me-2"
+                        className="btn btn-sm btn-success"
                       >
                           {translation?.upload_brochure || "Upload Brochure"}
                       </a>
                       <a
                         onClick={() => handleShowModal(property?.property_id)}
-                        className="btn btn-sm btn-danger me-2"
+                        className="btn btn-sm btn-danger"
                       >
                          {translation?.add_amenity || "Add Amenity"}
                       </a>
@@ -177,13 +177,13 @@ const ExpiredComponent = ({ propertiesData }) => {
                         onClick={() =>
                           handleAdditionalproperty(property?.property_id)
                         }
-                        className="btn btn-sm btn-info me-2"
+                        className="btn btn-sm btn-info"
                       >
                        {translation?.add_new_field || "Add New Field"}
                       </a>
                       <Link
                         href={`/property-edit/${property?.property_id}`}
-                        className="btn btn-sm btn-outline-primary me-2 ms-auto"
+                        className="btn btn-sm btn-outline-primary ms-auto"
                       >
                         <i className="bi bi-pencil-square"></i>
                       </Link>
