@@ -285,30 +285,6 @@ const index = () => {
         <div className="container-fluid">
           <div className="row">
             <aside className="col-xl-9 col-12 mb-4 mb-xl-0">
-              {/* <div className="d-md-flex justify-content-between align-items-end mb-3">
-                <div className="mb-3 mb-md-0">
-                  <h1 className="h3">
-                    {propertyDetails?.property_name ||
-                      "property name not available"}{" "}
-                    {"in"} {propertyDetails?.address || "address not available"}
-                  </h1>
-                  <p>
-                    <Link href="">
-                      <i className="icon-feather-map-pin"></i>{" "}
-                      {propertyDetails?.address ||
-                        `${translation?.not_available || "Not available"}`}
-                    </Link>
-                  </p>
-                </div>
-                <div className="text-md-end" style={{ minWidth: "150px" }}>
-                  <p className="mb-0 text-muted">
-                    {translation?.launched_in || "Launched In"}
-                  </p>
-                  <h5 className="mb-0">
-                    {useDateFormat(propertyDetails?.created_at) || "Date "}
-                  </h5>
-                </div>
-              </div> */}
               <div className="d-md-flex justify-content-between align-items-end mb-3">
                 <div className="mb-3 mb-md-0">
                   <h1 className="h3">
@@ -322,10 +298,6 @@ const index = () => {
                       {propertyDetails?.address ||
                         `${translation?.not_available || "Not available"}`}
                     </a>{" "}
-                    {/* <span className="text-muted">
-                      {translation?.by_real_estate_limited ||
-                        "(By Real Estate Limited)"}
-                    </span> */}
                   </p>
                   <p className="text-muted mb-0">
                     {translation?.launched_in || "Launched On:"}{" "} {useDateFormat(propertyDetails?.created_at)}

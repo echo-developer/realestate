@@ -320,6 +320,9 @@ const Banner = ({ translation }) => {
     setSelectedPropertyFor("1");
     setMaxBudget("");
     setMinBudget("")
+    setSelectedBedrooms([])
+    setSelectedBathrooms([]);
+    setSelectedKitchens([])
     setSelectedLocality(null);
     // }
   };
