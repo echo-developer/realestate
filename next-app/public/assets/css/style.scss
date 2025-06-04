@@ -5777,9 +5777,12 @@ fieldset{
 	}
 	.card-agent{
 		&.card-agent-page{
-			.agent-name{
-				color: $white;
-			}
+			.onCover{
+				min-height: 64px;
+				.agent-name{
+					color: $white;
+				}
+			} 
 		}
 	}
 	.footer-links h4>a {

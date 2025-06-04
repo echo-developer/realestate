@@ -370,11 +370,13 @@ const Index = () => {
               <Col lg sm={9} xs={12}>
                 <Card.Body className='p-0'>
                   <div className='onCover'>
+                    
+                  </div>
+                  <div className='outCover'>
                     <Card.Title as='h4' className='mb-2 agent-name text-sm-start text-center'>
                       {data?.name || ""}
                     </Card.Title>
-                  </div>
-                  <div className='outCover'>
+                    <p class="text-muted"><GeoAlt color="#1365CF" size={18} /> {data?.address}</p>
                     <Row className='align-items-end'>
                       <Col className='col-lg col-12'>
                         <div className="d-flex gap-2">
