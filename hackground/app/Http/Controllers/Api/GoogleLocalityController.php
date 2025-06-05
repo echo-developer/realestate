@@ -32,11 +32,11 @@ class GoogleLocalityController extends Controller
             $data = DB::table('locality_names')
                 ->leftJoin('locality', 'locality_names.locality_id', '=', 'locality.locality_id')
                 ->select('locality_names.locality_id', 'locality_names.name')
-                ->where('lang', $lang)
+                ->where('locality_names.lang', $lang)
                 ->whereNotNull('locality.latitude')
                 ->whereNotNull('locality.longitude')
                 ->where('locality.city', $cityId)
-                ->where('name', 'LIKE', $keyword . '%')
+                ->where('locality_names.name', 'LIKE', $keyword . '%')
                 ->limit(11)
                 ->get()
                 ->toArray();
