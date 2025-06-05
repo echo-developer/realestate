@@ -1179,144 +1179,8 @@ class ApiModel extends Model
     }
 
 
-    public function searchProject($data, $user_id, $hasLatLang)
-    {
-        // log::info($data);
-        $query = PrefProject::where([
-            ['uid', '!=', $this->auth_user_id],
-            ['is_deleted', '!=', config('constants.STATUS_ACTIVE')],
-            ['status', '=', config('constants.STATUS_ACTIVE')],
-        ])
-            ->with([
-                'settings:id,project_id,project_budget,post_for,parking_availability,total_towers,total_area,occupied_area,total_units,project_furnish,project_type,project_facing,unit_type,area_in_sqft',
-                'additional:id,project_id,main_road_facing,project_amenity,possession_status,construct_year,possesion_month_possesion_year,currency,token_amount,expected_price,developer_details,developer_name,developer_experience',
-                'location:id,project_id,locality,city,address',
-                'location.locality:locality_id,latitude,longitude',
-                'gallery:id,project_id,image_type',
-                'gallery.images:gallary_id,filename,caption'
-            ]);
-
-        $filteredData = $query->cursor()->filter(function ($project) use ($data, $hasLatLang) {
-
-            $settings = $project->settings;
-            $location = $project->location;
-            $additional = $project->additional;
-            $locality = $location->locality;
-
-            if (!empty($data['city_id'])) {
-                $cityIds = array_map('intval', explode(',', $data['city_id']));
-                if (!$location || !in_array((int)$location->city, $cityIds)) {
-                    return false;
-                }
-            }
-
-            if ($hasLatLang == 1) {
-                if (
-                    !$locality ||
-                    empty($locality->latitude) ||
-                    empty($locality->longitude)
-                ) {
-                    return false;
-                }
-            }
-
-            if (!empty($data['locality'])) {
-                if (!$location || ($location->locality == $data['locality']) === false) {
-                    return false;
-                }
-            }
-
-            if (!empty($data['project_name'])) {
-                if (stripos($project->project_name, $data['project_name']) === false) {
-                    return false;
-                }
-            }
-
-            if (!empty($data['project_amenity'])) {
-                $selectedAmenities = array_map('intval', $data['project_amenity']);
-                $projectAmenities = $additional->project_amenity ? json_decode($additional->project_amenity, true) : [];
-                if (empty(array_intersect($selectedAmenities, $projectAmenities))) {
-                    return false;
-                }
-            }
-
-            if (!empty($data['project_furnish'])) {
-                $data['project_furnish'] = array_map('intval', $data['project_furnish']);
-                if (!$settings || !in_array($settings->project_furnish, $data['project_furnish'])) {
-                    return false;
-                }
-            }
-
-            if (!empty($data['parking_availability'])) {
-                if (!$settings || !in_array(strtolower($settings->parking_availability), $data['parking_availability'])) {
-                    return false;
-                }
-            }
-
-            if (!empty($data['project_facing'])) {
-                if (!$settings || !in_array(strtolower($settings->project_facing), $data['project_facing'])) {
-                    return false;
-                }
-            }
-
-            if (!empty($data['total_towers'])) {
-                $data['total_towers'] = array_map('intval', $data['total_towers']);
-                if (!$settings || !in_array($settings->total_towers, $data['total_towers'])) {
-                    return false;
-                }
-            }
-
-            if (!empty($data['project_type'])) {
-                if (!$settings || $settings->project_type != $data['project_type']) {
-                    return false;
-                }
-            }
-            if (!empty($data['project_for'])) {
-                if (!$settings || $settings->post_for != $data['project_for']) {
-                    return false;
-                }
-            }
-
-            if (!empty($data['possession_status'])) {
-                if (!$additional || $additional->possession_status != $data['possession_status']) {
-                    return false;
-                }
-            }
-
-            if (!empty($data['min_price']) || !empty($data['max_price'])) {
-                if (!$additional) {
-                    return false;
-                }
-                $expectedPrice = $additional->expected_price ?? 0;
-                $minBudget = $data['min_price'] ?? 0;
-                $maxBudget = $data['max_price'] ?? PHP_INT_MAX;
-
-                if ($expectedPrice < $minBudget || $expectedPrice > $maxBudget) {
-                    return false;
-                }
-            }
-
-            if (!empty($data['occupied_area[min]']) || !empty($data['occupied_area[max]'])) {
-                if (!$settings) {
-                    return false;
-                }
-                $occupiedArea = $settings->occupied_area ?? 0;
-                $minOccupied = $data['occupied_area[min]'] ?? 0;
-                $maxOccupied = $data['occupied_area[max]'] ?? PHP_INT_MAX;
-                if ($occupiedArea < $minOccupied || $occupiedArea > $maxOccupied) {
-                    return false;
-                }
-            }
-
-            return true;
-        });
-
-        return $filteredData;
-    }
-
     public function searchProject1($data, $user_id, $hasLatLang, $req)
     {
-
         $currentpage = (int) $req->input('currentpage', 2);
         $limit = (int) $req->input('limit', 10);
         $offset = ($currentpage - 1) * $limit;
@@ -1342,8 +1206,8 @@ class ApiModel extends Model
         // log_anything($query);return collect();
         // Now call get() and filter right after
         if (!empty($data['city_id'])) {
-            $cityIds = array_map('intval', explode(',', $data['city_id']));
-            $query->whereHas('location', fn($q) => $q->whereIn('city', $cityIds));
+            $cityId = (int) $data['city_id']; // cast to integer for safety
+            $query->whereHas('location', fn($q) => $q->where('city', $cityId));
         }
 
         if (!empty($data['locality'])) {

@@ -357,7 +357,7 @@ Route::get('/faq-lists', [FaqController::class, 'fetchFaqListsforAPI'])->name('f
 
 
 Route::get('/stored-localities', [GoogleLocalityController::class, 'fetchLocalityfromDatabase'])->name('get.localities.database');
-Route::get('/global-localities', [GoogleLocalityController::class, 'getGoogletLocalities'])->name('get.localities');
+Route::get('/global-localities', [GoogleLocalityController::class, 'getGoogletLocalities1'])->name('get.localities');
 Route::get('/yearly-price-trend', [GoogleLocalityController::class, 'getYearlyPriceTrend']);
 Route::get('/landmark-list', [GoogleLocalityController::class, 'landmark']);
 Route::post('/saveLocalityLatLong', [GoogleLocalityController::class, 'saveLocalityLatLong']);
@@ -368,11 +368,13 @@ Route::get('/sync-landmark', [CustomLandmarksAddController::class, 'insertLandma
 Route::get('user_details', [UserDetailsController::class, 'details']);
 Route::get('user_proprties', [UserDetailsController::class, 'userPropertyDetails']);
 Route::get('user_proprties', [UserDetailsController::class, 'userPropertyDetails']);
-Route::post('property-site-visit',[SiteVisitController::class, 'saveSiteVisit']);
-Route::post('property-video-upload',[PropertyController::class, 'uploadVideo']);
+Route::post('property-site-visit', [SiteVisitController::class, 'saveSiteVisit']);
+Route::post('property-video-upload', [PropertyController::class, 'uploadVideo']);
 Route::get('/auth/{provider}/callback', [AuthController::class, 'handleProviderCallback']);
 
 
 Route::controller(DummyController::class)->group(function () {
     Route::post('insertSlug', 'insertSlug');
+    Route::get('get-data-address', 'get_data_address');
+    Route::post('update_address', 'update_address');
 });

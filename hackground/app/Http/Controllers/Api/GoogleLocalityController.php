@@ -8,17 +8,20 @@ use App\Models\LocalityAreaPrice;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\LocalityModel;
+use App\Services\GoogleLocalityService;
 use Illuminate\Support\Facades\Http;
 use SebastianBergmann\CodeUnit\FunctionUnit;
 
 class GoogleLocalityController extends Controller
 {
     protected $localityModel;
+    protected $localityService;
 
 
-    public function __construct()
+    public function __construct(GoogleLocalityService $googleLocalityService)
     {
         $this->localityModel = new LocalityModel;
+        $this->localityService = $googleLocalityService;
     }
     public function fetchLocalityfromDatabase(Request $request)
     {
@@ -48,185 +51,55 @@ class GoogleLocalityController extends Controller
             throw $th;
         }
     }
-
-    public function getGoogletLocalities(Request $request)
+    public function getGoogletLocalities1(Request $request)
     {
         try {
-            // DB::beginTransaction();
-            // $cityName = $request->city_name;
+            $data = $this->localityService->fetchAndSaveLocalities($request);
 
-            $keyword = $request->keyWord;
-            $cityId = $request->city_id;
-            $cityLat = $request->city_latitude;
-            $cityLang = $request->city_longitude;
-            $radius = $request->input('radius', 50000);
-
-            $lang = $request->input('lang', 'en');
-            $apiKey = get_setting('google-api-key');
-
-            $countryCode = !empty($cityId) ? $this->get_country_code($cityId) : 'in';
-
-
-            if (empty($apiKey)) {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'API key not found',
-                    'data' =>  []
-                ]);
-            }
-
-            $autocompleteUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?" . http_build_query([
-                'input' => $keyword,
-                'types' => 'geocode',
-                'language' => $lang,
-                'key' => $apiKey,
-                'components' => "country:$countryCode",
-                'locationbias' => "circle:$radius@$cityLat,$cityLang"
-            ]);
-
-            $autoResponse = Http::get($autocompleteUrl)->json();
-
-
-            $filteredResults = collect($autoResponse['predictions'])->filter(function ($prediction) {
-                return collect($prediction['types'])->contains(function ($type) {
-                    return in_array($type, ['sublocality', 'sublocality_level_1', 'locality']);
-                });
-            })->map(function ($prediction) {
-                return [
-                    'name' => $prediction['structured_formatting']['main_text'],
-                    'place_id'   => $prediction['place_id'],
-                ];
-            })->values();
-
-
-
-            $savedData = $this->storeandReturnResult($filteredResults->toArray(), $lang, $cityId);
-            cURL_request('saveLocalityLatLong', $savedData);
-
-            $message = !empty($savedData) ? 'Locality Retrived' : 'No Locality Found';
-
-            // DB::commit();
             return response()->json([
-                'status' => 1,
-                'message' => $message,
-                'data' => !empty($savedData) ? $savedData : []
+                'status' => $data['status'],
+                'message' => $data['message'],
+                'data' => $data['data']
             ]);
         } catch (\Throwable $th) {
-            // DB::rollBack();
             throw $th;
         }
-    }
-
-    private function storeandReturnResult(array $data, $lang, $cityId)
-    {
-        $response = [];
-
-        foreach ($data as $locality) {
-            $slug = Str::slug($locality['name'], '_');
-
-            $existing = $this->checkIfLocalityExist($slug, $locality['place_id'], $cityId, $lang);
-
-            if (!$existing) {
-                $getId = DB::table('locality')->insertGetId([
-                    'city' => $cityId ?? get_setting('other-city-id'),
-                    'google_place_id' => $locality['place_id'],
-                    'locality_key' => $slug,
-                ]);
-
-                $langs = [
-                    'en' => $locality['name'],
-                    'ar' => null,
-                ];
-
-                foreach ($langs as $langCode => $langName) {
-                    DB::table('locality_names')->insert([
-                        'locality_id' => $getId,
-                        'lang' => $langCode,
-                        'name' => $langName,
-                    ]);
-                }
-
-                $response[] = [
-                    'locality_id' => $getId,
-                    'place_id' => $locality['place_id'],
-                    'name' => $locality['name'],
-                ];
-            }
-        }
-
-        return $response;
-    }
-
-    private function checkIfLocalityExist($slug, $place_id, $cityId, $lang)
-    {
-        return DB::table('locality')
-            ->join('locality_names', function ($join) use ($lang) {
-                $join->on('locality.locality_id', '=', 'locality_names.locality_id')
-                    ->where('locality_names.lang', '=', $lang);
-            })
-            ->where(function ($query) use ($place_id, $slug) {
-                if ($place_id) {
-                    $query->where('locality.google_place_id', '=', $place_id)
-                        ->orWhere(function ($q) use ($slug) {
-                            $q->whereNull('locality.google_place_id')
-                                ->where('locality.locality_key', '=', $slug);
-                        });
-                } else {
-                    $query->where('locality.locality_key', '=', $slug);
-                }
-            })
-            ->exists();
     }
 
     public function saveLocalityLatLong(Request $request)
     {
         try {
-            log_anything($request->all());
             $apiKey = get_setting('google-api-key');
             $cURLRequest = collect($request->input('data'));
 
             $cURLRequest->each(function ($item) use ($apiKey) {
                 $placeId = $item['place_id'] ?? null;
 
-                if (!$placeId) {
-                    return;
-                }
+                if (!empty($placeId)) {
 
-                $detailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?" . http_build_query([
-                    'place_id' => $placeId,
-                    'fields' => 'geometry',
-                    'key' => $apiKey
-                ]);
+                    $detailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?" . http_build_query([
+                        'place_id' => $placeId,
+                        'fields' => 'geometry',
+                        'key' => $apiKey
+                    ]);
 
-                $detailsResponse = Http::get($detailsUrl)->json();
-                log_anything($detailsResponse);
-                if (isset($detailsResponse['result']['geometry']['location'])) {
-                    DB::table('locality')
-                        ->where('google_place_id', $placeId)
-                        ->update([
-                            'latitude' => $detailsResponse['result']['geometry']['location']['lat'] ?? null,
-                            'longitude' => $detailsResponse['result']['geometry']['location']['lng'] ?? null,
-                        ]);
+                    $detailsResponse = Http::get($detailsUrl)->json();
+                    if (isset($detailsResponse['result']['geometry']['location'])) {
+                        DB::table('locality')
+                            ->where('google_place_id', $placeId)
+                            ->update([
+                                'latitude' => $detailsResponse['result']['geometry']['location']['lat'] ?? null,
+                                'longitude' => $detailsResponse['result']['geometry']['location']['lng'] ?? null,
+                            ]);
+                    }
                 }
             });
-            // DB::commit();
         } catch (\Throwable $th) {
-            // DB::rollBack();
             throw $th;
         }
     }
 
-    public function get_country_code($cityID)
-    {
-        return DB::table('city')
-            ->leftJoin('country', 'city.country', '=', 'country.id')
-            ->where('city.city_id', $cityID)
-            ->value('country.country_code');
-    }
-
-
-
-    /* ==================================================================================================================================*/
+    /* ===============================================================================================================*/
 
     public function getYearlyPriceTrend(Request $req)
     {
@@ -287,4 +160,6 @@ class GoogleLocalityController extends Controller
 
         return response()->json(['status' => 1, 'data' => $landmarks]);
     }
+
+    /* ===============================================================================================================*/
 }
