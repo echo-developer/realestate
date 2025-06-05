@@ -33,6 +33,8 @@ class GoogleLocalityController extends Controller
                 ->leftJoin('locality', 'locality_names.locality_id', '=', 'locality.locality_id')
                 ->select('locality_names.locality_id', 'locality_names.name')
                 ->where('lang', $lang)
+                ->whereNotNull('locality.latitude')
+                ->whereNotNull('locality.longitude')
                 ->where('locality.city', $cityId)
                 ->where('name', 'LIKE', $keyword . '%')
                 ->limit(11)
