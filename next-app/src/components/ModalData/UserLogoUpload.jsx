@@ -1,27 +1,33 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import AuthUser from "@/components/Authentication/AuthUser";
 import useTranslation from "@/hooks/useTranslation";
 import { toast } from "react-toastify";
+import ImageCropper from "./ProfileImageCropper";
 
 const UserLogoUpload = ({ show, setShow, uploadUserImage }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const { callApi, GetMemberId } = AuthUser();
   const memberId = GetMemberId();
+  const fileInputRef = useRef();
+  const [cropperModal, setCropperModal] = useState(false);
 
   const translation = useTranslation();
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setSelectedFile(file);
-    handleUpload(file);
+    // handleUpload(file);
+    if (file)
+      setSelectedFile(file);
+    setCropperModal(true);
   };
-  
+
 
 
   const handleUpload = async (file) => {
@@ -38,22 +44,45 @@ const UserLogoUpload = ({ show, setShow, uploadUserImage }) => {
         uploadUserImage(response?.data?.image_url);
         if (typeof window !== "undefined") {
           localStorage.setItem("user_logo", response?.data?.image_url);
+          setSelectedFile(null);
+          if (fileInputRef?.current) {
+            fileInputRef.current.value = "";
+          }
         }
         handleClose();
       } else {
         toast.error(response.message || "Upload failed");
+        setSelectedFile(null)
+        if (fileInputRef?.current) {
+          fileInputRef.current.value = "";
+        }
       }
     } catch (error) {
       console.error("Error during upload:", error);
+      setSelectedFile(null);
+      if (fileInputRef?.current) {
+        fileInputRef.current.value = "";
+      }
     }
   };
 
+  const handleCropDone = (file) => {
+    if (file) {
+      handleUpload(file);
+    }
+  }
+
   return (
     <div>
-      <Button variant="primary" onClick={handleShow}>
+      {/* <Button variant="primary" onClick={handleShow}>
         {translation?.upload_logo || "Upload Logo"}
-      </Button>
-
+      </Button> */}
+      {/* {cropperModal ?
+        (<>       */}
+      <ImageCropper file={selectedFile} show={cropperModal} onClose={() => setCropperModal(false)} onCropDone={handleCropDone} />
+      {/* </>)
+        :
+        (<> */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
@@ -69,6 +98,7 @@ const UserLogoUpload = ({ show, setShow, uploadUserImage }) => {
                 id="fileinput"
                 accept="image/*"
                 onChange={handleFileChange}
+                ref={fileInputRef}
               />
               <i class="bi bi-upload"></i>
               <p>
@@ -97,6 +127,8 @@ const UserLogoUpload = ({ show, setShow, uploadUserImage }) => {
                     </Button>
                 </Modal.Footer> */}
       </Modal>
+      {/* </>)} */}
+
     </div>
   );
 };

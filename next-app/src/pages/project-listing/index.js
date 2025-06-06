@@ -32,6 +32,7 @@ import ProjectListingMapView from "@/components/MapData/ProjectListingMapView";
 import Head from "next/head";
 import ProjectMobileMapView from "@/components/MapData/ProjectMapMobile";
 import ProjectEnquiryForm from "@/components/postproject/ProjectEnquiryForm";
+import NoResultFound from "@/components/listing_no_result/NoResultFound";
 
 const Index = () => {
   const [showMapView, setShowMapView] = useState(false);
@@ -303,6 +304,11 @@ const Index = () => {
 
   const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
+  const handleClearFilters = () => {
+    // router.push('/project-listing');
+    window.location.href='/project-listing';
+  }
+
 
   const metaTitle = `Find top residential projects in ${defaultCity?.name} including new launch, under construction, and ready-to-move properties. Compare amenities, prices, and locations to choose the best project for your needs.`
   const metaDescription = `Discover a wide range of projects in ${defaultCity?.name}, including newly launched, under-construction, and ready-to-move properties by top builders. Whether you're looking for 1, 2, 3, or 4 BHK flats, explore verified project listings with detailed information on floor plans, amenities, possession dates, and location insights. Compare prices, view real images, and make informed decisions when buying property in ${defaultCity?.name}`
@@ -369,7 +375,7 @@ const Index = () => {
                     {translation?.projects_found || "Projects Found"}
                   </h5>
                   <div className="d-flex gap-2">
-                    <div className="sort-by">
+                    {projectListData?.lenth > 0 && (<div className="sort-by">
                       <DropdownButton
                         align="end"
                         size='sm'
@@ -394,7 +400,7 @@ const Index = () => {
                           </Dropdown.Item>
                         ))}
                       </DropdownButton>
-                    </div>
+                    </div>) || null};
                     <Button
                       variant="outline-primary"
                       size='sm'
@@ -403,14 +409,14 @@ const Index = () => {
                     >
                       <i className="bi bi-list-ul me-1"></i> List View
                     </Button>
-                    <Button
+                    {projectListData?.length > 0 && (<Button
                       variant="outline-primary"
                       size='sm'
                       className={`${showMapView ? 'active' : ''}`}
                       onClick={() => setShowMapView(true)}
                     >
                       <i className="bi bi-map me-1"></i> Map View
-                    </Button>
+                    </Button>) || null}
                     {isMobile && (
                       <ProjectMobileFilters
                         showDrop={showDrop}
@@ -461,12 +467,7 @@ const Index = () => {
                       setProjectListData={setProjectListData}
                     />
                   ) : (
-                    <div style={noRecordsStyle}>
-                      <h2>
-                        {" "}
-                        {translation?.no_records_found || "No Records Found"}
-                      </h2>
-                    </div>
+                    <NoResultFound type="project" handleClearFilters={handleClearFilters} />
                   )}
                   {!loading && currentPages < totalPages && (
                     <button
@@ -540,7 +541,7 @@ const Index = () => {
             className="btn btn-danger"
             onClick={() => {
               handleLoginErrorClose();
-              Router.push("/login");
+              router.push("/login");
             }}
             style={{ position: "absolute", right: "15px" }}
           >

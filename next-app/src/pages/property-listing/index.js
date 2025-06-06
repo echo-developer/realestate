@@ -40,6 +40,7 @@ import PropertyMobileFilters from "@/components/addtional/PropertyMobileFilter";
 import useIsMobile from "@/hooks/useIsMobile";
 import Locality from "@/components/Locality/Locality";
 import Head from "next/head";
+import NoResultFound from "@/components/listing_no_result/NoResultFound";
 const ListingMapView = dynamic(() => import('../../components/MapData/ListingMapView'), {
   ssr: false, loading: () => <>
     <ShimmerContentBlock
@@ -997,6 +998,15 @@ const index = () => {
     }
   };
 
+  const handleClearFilters = () => {
+    // router.push("/property-listing")
+    // resetBudget();
+    // handlePropertyForReset();
+    // resetSelection();
+    window.location.href='/property-listing';
+
+  }
+
   let metaTitle = `Explore ${selectedPropertyType} Properties in ${defaultCity?.name} – New Launch, Under Construction & Ready to Move`;
   let metaDescription = `Explore ${totalPropertyCount}+ verified properties available for sale/rent in ${defaultCity?.name}, only on realestate.scriptlisting.com. Discover apartments with real photos, map views, and complete details to help you make the right choice`;
 
@@ -1327,7 +1337,7 @@ const index = () => {
                             </Dropdown>
                           </Col>
                         )}
-                        <Col lg                          
+                        <Col lg
                           data-id="parent"
                           // onClick={openBudgetDropDown}
                           onClick={() => toggleDropdown('budget')}
@@ -1424,7 +1434,7 @@ const index = () => {
                         <div className="d-grid columns-2">
                           <Button variant="primary" onClick={handleSearchClick}>
                             {translation?.search || "Search"}
-                          </Button>                        
+                          </Button>
                           <Button
                             variant="primary"
                             // onClick={() => setAdvanceFilter((prev) => !prev)}
@@ -1709,17 +1719,19 @@ const index = () => {
         <section className="section pb-0">
           <div className="container-fluid">
             <div className="row">
-                  <aside
-                   className={showMapView ? 'col-12' : 'col-lg-9'}
-                   >
-                    <div className="d-md-flex justify-content-between align-items-center mb-3">
-                      <h5 className="mb-3 mb-md-0">
-                        {translation?.total || "Total"}{" "}
-                        <span className="text-primary">{totalPropertyCount}</span>{" "}
-                        {translation?.properties_in || "Properties in"}{" "}
-                        {defaultCity?.name || "Kolkata"}
-                      </h5>
-                      <div className="d-flex gap-2">
+              <aside
+                className={showMapView ? 'col-12' : 'col-lg-9'}
+              >
+                <div className="d-md-flex justify-content-between align-items-center mb-3">
+                  <h5 className="mb-3 mb-md-0">
+                    {translation?.total || "Total"}{" "}
+                    <span className="text-primary">{totalPropertyCount}</span>{" "}
+                    {translation?.properties_in || "Properties in"}{" "}
+                    {defaultCity?.name || "Kolkata"}
+                  </h5>
+                  <div className="d-flex gap-2">
+                    {propertyList?.length > 0 && (
+                      <>
                         <div className="sort-by">
                           <DropdownButton
                             align="end"
@@ -1744,51 +1756,53 @@ const index = () => {
                                 {option}
                               </Dropdown.Item>
                             ))}
-                          </DropdownButton>                        
+                          </DropdownButton>
                         </div>
-                        <Button variant="outline-primary"
-                          className={`${!showMapView ? 'active' : ''}`}
-                          size='sm'
-                          onClick={() => setShowMapView(false)}
-                        >
-                          <ListUl color="#1365CF" size={16} className="me-1" /> List View
-                        </Button>
-                        <Button variant="outline-primary"
-                          className={`${showMapView ? 'active' : ''}`}
-                          size='sm'
-                          onClick={() => setShowMapView(true)}
-                        >
-                          <Map color="#1365CF" size={16} className="me-1" /> Map View
-                        </Button>
-                        {isMobile && (
-                        <PropertyMobileFilters
-                          showDrop={showDrop}
-                          setShowDrop={setShowDrop}
-                          selectedOption={selectedOption}
-                          handleSortSelection={handleSortSelection}
-                          propertyTypeList={propertyTypeList}
-                          subPropertyList={subPropertyList}
-                        />
-                        )}
-                      </div>
-                    </div>
-                  </aside>
+                      </>
+                    ) || null}
+                    <Button variant="outline-primary"
+                      className={`${!showMapView ? 'active' : ''}`}
+                      size='sm'
+                      onClick={() => setShowMapView(false)}
+                    >
+                      <ListUl color="#1365CF" size={16} className="me-1" /> List View
+                    </Button>
+                    {propertyList?.length > 0 && (<Button variant="outline-primary"
+                      className={`${showMapView ? 'active' : ''}`}
+                      size='sm'
+                      onClick={() => setShowMapView(true)}
+                    >
+                      <Map color="#1365CF" size={16} className="me-1" /> Map View
+                    </Button>) || null}
+                    {isMobile && (
+                      <PropertyMobileFilters
+                        showDrop={showDrop}
+                        setShowDrop={setShowDrop}
+                        selectedOption={selectedOption}
+                        handleSortSelection={handleSortSelection}
+                        propertyTypeList={propertyTypeList}
+                        subPropertyList={subPropertyList}
+                      />
+                    )}
+                  </div>
+                </div>
+              </aside>
             </div>
             {showMapView ? (
               <>
                 {isMobile ? (
                   <>
-                  <ListingMobileMapView propertyList={propertyList} loading={loading} />
+                    <ListingMobileMapView propertyList={propertyList} loading={loading} />
                   </>
                 ) : (<>
-                <ListingMapView propertyList={propertyList} loading={loading} />
+                  <ListingMapView propertyList={propertyList} loading={loading} />
                 </>)}
               </>
             ) : (
               <>
                 <div className="row main-row">
                   <aside className="col-lg-9 col-12">
-                  
+
                     <div className="list-display">
                       {/* Show shimmer when loading */}
                       {loading ? (
@@ -1810,20 +1824,7 @@ const index = () => {
                         </>
                       ) : !loading && propertyList?.length === 0 ? (
                         // Show No Result Found only when loading is false and no data is present
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            height: "50vh",
-                            textAlign: "center",
-                            fontSize: "28px",
-                            fontWeight: "bold",
-                            color: "#555",
-                          }}
-                        >
-                          <p>{translation?.no_result_found || "No result found"}</p>
-                        </div>
+                        <NoResultFound type="property" handleClearFilters={handleClearFilters} />
                       ) : (
                         // Render Property Cards
                         propertyList?.map((property, i) => (
