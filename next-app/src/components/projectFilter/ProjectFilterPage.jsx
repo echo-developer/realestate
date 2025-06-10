@@ -310,6 +310,8 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
     }
     if (locality) {
       updatedFilters.locality = locality;
+    } else {
+      delete updatedFilters.locality;
     }
 
     updatedFilters.min_price = minBudget ?? "";
@@ -322,7 +324,11 @@ const ProjectFilterPage = ({ setPerPage, toggleDropdown, handleClickOutside, dro
   };
 
   const onSelectLocality = (locality) => {
-    setLocality(locality)
+    if(locality?.locality_id) {
+      setLocality(locality)
+    } else {
+      setLocality(null);
+    }
   }
 
   const handleSelecteAdvanceFilter = (key) => {

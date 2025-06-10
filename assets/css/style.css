@@ -32656,6 +32656,10 @@ header {
   box-shadow: none;
 }
 
+.modal-open .header-sticky .navbar {
+  padding-inline-end: 15px;
+}
+
 ul#desk-nav > li > a.btn-post {
   color: #fff;
   background-color: #1365CF;
@@ -35901,10 +35905,13 @@ button.close {
 }
 
 .not-found {
-  color: #dc3545;
-  min-height: 150px;
+  color: #6c757d;
+  min-height: 200px;
+  display: flex;
   align-items: center;
-  flex-direction: inherit;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
 }
 
 .pricing-plan ul {

@@ -32,9 +32,12 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setDefaultCity(
-        JSON.parse(localStorage.getItem("city"))
+      const city = localStorage.getItem('city');
+      if(city) {
+        setDefaultCity(
+        JSON.parse(city)
       );
+      }
     }
   }, []);
 

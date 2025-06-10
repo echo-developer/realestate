@@ -359,6 +359,11 @@ header {
 	top: -100px !important;
 	box-shadow: none;
 }
+.modal-open{
+	.header-sticky .navbar{
+		padding-inline-end: 15px;
+	}
+}
 ul#desk-nav {
 	&>li {
 		&>a {
@@ -413,7 +418,7 @@ ul#desk-nav {
 	}
 }
 
-.setlang {
+.setlang{
 	a {
 		img {
 			border-radius: 50%;
@@ -4096,10 +4101,13 @@ button {
 }
 
 .not-found {
-	color: #dc3545;
-	min-height: 150px;
+	color: $secondary;
+	min-height: 200px;
+	display: flex;
 	align-items: center;
-	flex-direction: inherit;
+	justify-content: center;
+	flex-direction: column;
+	text-align: center;
 }
 
 .pricing-plan {

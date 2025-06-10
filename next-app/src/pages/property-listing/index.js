@@ -534,6 +534,8 @@ const index = () => {
 
     if (locality?.locality_id) {
       queryObject.locality = JSON.stringify(locality)
+    } else {
+      delete queryObject.locality;
     }
 
     // Directly add minBudget and maxBudget
@@ -945,7 +947,11 @@ const index = () => {
   };
 
   const onSelectLocality = (locality) => {
-    setLocality(locality)
+    if(locality?.locality_id) {
+      setLocality(locality)
+    } else {
+      setLocality(null);
+    }
   }
 
   const advanceFilters =

@@ -141,7 +141,7 @@ const Header = () => {
           }
         })
         setCityData(cityList);
-        handleDefaultCityChange(cityList?.[0])
+        handleDefaultCityChange(JSON.parse(localStorage?.getItem(city)) ||  cityList?.[0]);
         setGetAllCity(response.data);
       }
     } catch (error) { }
