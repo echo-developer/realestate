@@ -73,15 +73,15 @@
             <!-- Basic Search Row -->
             <div class="row gx-3">
                 <div class="col-lg col-12">
-                    <!-- <label for="prop_category_search" class="form-label">Project Name</label> -->                    
-                    <input type="text" class="form-control" id="prop_category_search" name="term" placeholder="Project Name" value="{{ request('term') }}">                                        
+                    <!-- <label for="prop_category_search" class="form-label">Project Name</label> -->
+                    <input type="text" class="form-control" id="prop_category_search" name="term" placeholder="Project Name" value="{{ request('term') }}">
                 </div>
                 <div class="col-lg-auto col-12">
                     <button type="submit" class="btn btn-primary btn-block">Search</button>
                 </div>
                 <div class="col-lg-auto col-12">
                     <button type="button" onclick="$('#advanceFilter').slideToggle();" class="btn btn-outline-primary">
-                    <i class="bi bi-funnel"></i> Advanced
+                        <i class="bi bi-funnel"></i> Advanced
                     </button>
                 </div>
             </div>
@@ -92,7 +92,7 @@
                         <!-- Project Type -->
                         <div class="col-xl-3 col-lg-4 col-sm-6">
                             <div class="form-floating mb-4">
-                                
+
                                 <select class="form-select" name="project_type">
                                     <option value="">Select</option>
                                     @foreach($project_type as $items)
@@ -105,10 +105,10 @@
                                 <label>Project Type</label>
                             </div>
                         </div>
-                        
+
                         <!-- Address -->
                         <div class="col-xl-3 col-lg-4 col-sm-6">
-                            <div class="form-floating mb-4">                            
+                            <div class="form-floating mb-4">
                                 <input type="text" value="{{ request('address') }}" class="form-control" name="address" placeholder="Enter Address">
                                 <label>Address</label>
                             </div>
@@ -116,7 +116,7 @@
 
                         <!-- Occupied Area -->
                         <div class="col-xl-3 col-lg-4 col-sm-6">
-                            <div class="form-floating mb-4">                            
+                            <div class="form-floating mb-4">
                                 <input type="number" value="{{ request('occupied_area') }}" class="form-control" name="occupied_area" placeholder="Occupied Area">
                                 <label>Occupied Area (sq.ft)</label>
                             </div>
@@ -124,7 +124,7 @@
 
                         <!-- Total Area -->
                         <div class="col-xl-3 col-lg-4 col-sm-6">
-                            <div class="form-floating mb-4">                            
+                            <div class="form-floating mb-4">
                                 <input type="number" value="{{ request('total_area') }}" class="form-control" name="total_area" placeholder="Total Area">
                                 <label>Total Area (sq.ft)</label>
                             </div>
@@ -132,7 +132,7 @@
 
                         <!-- Possession Status -->
                         <div class="col-xl-3 col-lg-4 col-sm-6">
-                            <div class="form-floating mb-4">                            
+                            <div class="form-floating mb-4">
                                 <select class="form-select" name="possession_status">
                                     <option value="">Select</option>
                                     @foreach ($projectStatus as $status)
@@ -149,7 +149,7 @@
 
                         <!-- Price -->
                         <div class="col-xl-3 col-lg-4 col-sm-6">
-                            <div class="form-floating mb-4">                                
+                            <div class="form-floating mb-4">
                                 <input type="number" value="{{ request('price') }}" class="form-control" name="price" placeholder="Enter Price">
                                 <label>Price</label>
                             </div>
@@ -178,105 +178,105 @@
     @endif
 
     <div class="row" id="main_table">
-                @if ($project->count() > 0)
-                @foreach ($project as $proj)
-                <article class="col-lg-4 col-sm-6">
-                    <div class="card card-ads">
-                        <div class="card-image">
-                            @php
-                                $defaultImage = asset(config('constants.NO_IMAGE_PROPERTY'));
-                                $imageToShow = $defaultImage;
-                                if ($proj->gallery->count() > 0) {
-                                $firstGallery = $proj->gallery->first();
-                                $firstImage = $firstGallery->images->first();
-                                if ($firstImage && isset($firstImage->filename)) {
-                                $relativePath =
-                                'user_upload/project_images/' . $firstImage->filename;
-                                $localPath = public_path($relativePath);
-                                if (file_exists($localPath)) {
-                                $imageToShow = asset($relativePath);
-                                }
-                                }
-                                }
-                            @endphp
-                            <img src="{{ $imageToShow }}" alt="Project Photo" class="card-img" height="250" width="300" />                            
-                        </div>
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <!-- Displaying Project Name (Assuming `name` exists) -->
-                                <h4><a href="{{ url('project/edit') }}/{{ $proj->id }}">{{ $proj->project_name }}</a></h4>
+        @if ($project->count() > 0)
+        @foreach ($project as $proj)
+        <article class="col-lg-4 col-sm-6">
+            <div class="card card-ads">
+                <div class="card-image">
+                    @php
+                    $defaultImage = asset(config('constants.NO_IMAGE_PROPERTY'));
+                    $imageToShow = $defaultImage;
+                    if ($proj->gallery->count() > 0) {
+                    $firstGallery = $proj->gallery->first();
+                    $firstImage = $firstGallery->images->first();
+                    if ($firstImage && isset($firstImage->filename)) {
+                    $relativePath =
+                    'user_upload/project_images/' . $firstImage->filename;
+                    $localPath = public_path($relativePath);
+                    if (file_exists($localPath)) {
+                    $imageToShow = asset($relativePath);
+                    }
+                    }
+                    }
+                    @endphp
+                    <img src="{{ $imageToShow }}" alt="Project Photo" class="card-img" height="250" width="300" />
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <!-- Displaying Project Name (Assuming `name` exists) -->
+                        <h4><a href="{{ url('project/edit') }}/{{ $proj->id }}">{{ $proj->project_name }}</a></h4>
 
-                                <span>                                
-                                    <a href="{{ url('/enquiry/project-leads/' . $proj->id) }}" title="View Leads"><i class="ri-eye-fill"></i></a>
-                                    {{ projectLeadsCount($proj->id) }}
-                                </span>
+                        <span>
+                            <a href="{{ url('/enquiry/project-leads/' . $proj->id) }}" title="View Leads"><i class="ri-eye-fill"></i></a>
+                            {{ projectLeadsCount($proj->id) }}
+                        </span>
+                    </div>
+
+                    <!-- Displaying Address -->
+                    <p class="mb-2"><i class="ri-map-pin-line"></i> {{ $proj->location->address }}</p>
+
+                    <!-- Displaying Post Date (Assuming `created_at` exists) -->
+                    <p class="mb-2"><i class="ri-calendar-line"></i> {{ $proj->created_at->format('d-M-Y') }}</p>
+
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <button class="btn btn-sm btn-outline-warning"
+                            onclick="addAmenity(`{{ $proj->id }}`)"><i class="bi bi-plus-lg"></i> Amenity</button>
+
+                        <button type="button" onclick="addProperty(`{{ $proj->id }}`)"
+                            class="btn btn-sm btn-outline-primary"><i class="bi bi-plus-lg"></i> Property</button>
+
+                        <button onclick="addFloorConfig(`{{ $proj->id }}`)"
+                            class="btn btn-sm btn-outline-success"><i class="bi bi-plus-lg"></i> Floor Data</button>
+                        <button class="btn btn-sm btn-outline-primary"
+                            onclick="AddCertificate(`{{ $proj->id }}`)"><i class="bi bi-plus-lg"></i> Certificate</button>
+                        <button class="btn btn-sm btn-outline-danger"
+                            onclick="openBrochureModal(`{{ $proj->id }}`)">
+                            <i class="bi bi-upload"></i> Brochure
+                        </button>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xxl">
+                            <div class="form-check-inline small">
+                                <input type="checkbox" class="form-check-input prop_feature_status" id="featured" data-prop-id="{{ $proj->id }}" {{ $proj->is_featured ? 'checked' : '' }}>
+                                <label class="form-check-label" for="featured">Featured</label>
                             </div>
-
-                            <!-- Displaying Address -->
-                            <p class="mb-2"><i class="ri-map-pin-line"></i> {{ $proj->location->address }}</p>
-
-                            <!-- Displaying Post Date (Assuming `created_at` exists) -->
-                            <p class="mb-2"><i class="ri-calendar-line"></i> {{ $proj->created_at->format('d-M-Y') }}</p>
-
-                            <div class="d-flex flex-wrap gap-2 mb-3">
-                                <button class="btn btn-sm btn-outline-warning"
-                                    onclick="addAmenity(`{{ $proj->id }}`)"><i class="bi bi-plus-lg"></i> Amenity</button>
-
-                                <button type="button" onclick="addProperty(`{{ $proj->id }}`)"
-                                    class="btn btn-sm btn-outline-primary"><i class="bi bi-plus-lg"></i> Property</button>
-
-                                <button onclick="addFloorConfig(`{{ $proj->id }}`)"
-                                    class="btn btn-sm btn-outline-success"><i class="bi bi-plus-lg"></i> Floor Data</button>
-                                <button class="btn btn-sm btn-outline-primary"
-                                    onclick="AddCertificate(`{{ $proj->id }}`)"><i class="bi bi-plus-lg"></i>  Certificate</button>
-                                <button class="btn btn-sm btn-outline-danger"
-                                    onclick="openBrochureModal(`{{ $proj->id }}`)">
-                                    <i class="bi bi-upload"></i> Brochure
-                                </button>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-xxl">
-                                    <div class="form-check-inline small">
-                                        <input type="checkbox" class="form-check-input prop_feature_status" id="featured" data-prop-id="{{ $proj->id }}" {{ $proj->is_featured ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="featured">Featured</label>                                            
-                                    </div>
-                                    <div class="form-check-inline small">
-                                        <input type="checkbox" class="form-check-input prop_top_status" id="top" data-prop-id="{{ $proj->id }}" {{ $proj->is_top ? 'checked' :'' }}>
-                                        <label class="form-check-label" for="top">Top</label>
-                                    </div>
-                                </div>
-                                <div class="col-xxl-auto">
-                                    <select name="prop_status" id="prop_status"
-                                        data-project-id="{{ $proj->id }}"
-                                        class="prop_status form-select form-select-sm">
-                                        @foreach ($statusMapping as $key => $value)
-                                        <option value="{{ $value }}"
-                                            {{ $proj->status == $key ? 'selected' : '' }}>
-                                            {{ strtoupper($value) }}
-                                        </option>
-                                        @endforeach
-                                        <option value="delete">DELETE</option>
-                                        <option value="edit_view">Edit And View</option>
-                                    </select>
-                                </div>
+                            <div class="form-check-inline small">
+                                <input type="checkbox" class="form-check-input prop_top_status" id="top" data-prop-id="{{ $proj->id }}" {{ $proj->is_top ? 'checked' :'' }}>
+                                <label class="form-check-label" for="top">Top</label>
                             </div>
                         </div>
+                        <div class="col-xxl-auto">
+                            <select name="prop_status" id="prop_status"
+                                data-project-id="{{ $proj->id }}"
+                                class="prop_status form-select form-select-sm">
+                                @foreach ($statusMapping as $key => $value)
+                                <option value="{{ $value }}"
+                                    {{ $proj->status == $key ? 'selected' : '' }}>
+                                    {{ strtoupper($value) }}
+                                </option>
+                                @endforeach
+                                <option value="delete">DELETE</option>
+                                <option value="edit_view">Edit And View</option>
+                            </select>
+                        </div>
                     </div>
-                </article>
-                @endforeach
-                @else
-                <article class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <i class="icon-feather-thumbs-down fa-md"></i> &nbsp; Sorry, No records ! 
-                        </div>                        
-                    </div>
-                </article>
-                @endif
+                </div>
             </div>
+        </article>
+        @endforeach
+        @else
+        <article class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <i class="icon-feather-thumbs-down fa-md"></i> &nbsp; Sorry, No records !
+                </div>
+            </div>
+        </article>
+        @endif
+    </div>
 
-            {!! $project->links('vendor.pagination.bootstrap-5') !!}
+    {!! $project->links('vendor.pagination.bootstrap-5') !!}
 </div>
 @endsection
 
@@ -294,18 +294,18 @@
                 <input type="hidden" name="project_id" id="project_id">
 
                 <div class="row">
-                @foreach ($projectAmenities as $projectAmenitie)
-                <article class="col-xxl-3 col-xl-4 col-sm-6">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="{{ $projectAmenitie->id }}">
-                    <label class="form-check-label d-flex align-items-center ms-2">
-                        <img alt="Parking" height="24" width="24" class="me-2"
-                            src="{{ asset('user_upload/amenity_image/' . $projectAmenitie->image) }}">
-                        {{ $projectAmenitie->name }}
-                    </label>
-                </div>
-                </article>
-                @endforeach                
+                    @foreach ($projectAmenities as $projectAmenitie)
+                    <article class="col-xxl-3 col-xl-4 col-sm-6">
+                        <div class="form-check">
+                            <input class="form-check-input amenity-checkbox" type="checkbox" value="{{ $projectAmenitie->id }}">
+                            <label class="form-check-label d-flex align-items-center ms-2">
+                                <img alt="Parking" height="24" width="24" class="me-2"
+                                    src="{{ asset('user_upload/amenity_image/' . $projectAmenitie->image) }}">
+                                {{ $projectAmenitie->name }}
+                            </label>
+                        </div>
+                    </article>
+                    @endforeach
                 </div>
             </div>
             <div class="modal-footer">
@@ -328,7 +328,7 @@
                 <!-- Tower Container (dynamic content) -->
                 <div id="tower-container-modal"></div>
             </div>
-            <div class="modal-footer">                
+            <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="propertySaveButton">Save</button>
             </div>
         </div>
@@ -371,12 +371,12 @@
                 <hr>
                 <h6 class="mb-3">Upload New Document</h6>
                 <form action="" id='saveCertificate'>
-                    <div class="form-floating mb-3">                        
+                    <div class="form-floating mb-3">
                         <input type="text" class="form-control" name="certificate_number"
                             placeholder="Enter Registration Number">
                         <label class="form-label">Registration Number</label>
                     </div>
-                    <div class="form-floating mb-3">                        
+                    <div class="form-floating mb-3">
                         <input type="text" class="form-control" name="certificate_name"
                             placeholder="Enter Document Name">
                         <label class="form-label">Document Name</label>
@@ -466,7 +466,7 @@
                         amenities.split(',').map(String);
                 }
 
-                $(".amenity-item .form-check-input").each(function() {
+                $(".amenity-checkbox").each(function() {
                     $(this).prop('checked', selectedAmenities.includes($(this).val()));
                 });
             },
@@ -486,12 +486,12 @@
         $('#amenityModal').modal('show');
     }
 
-    /**
-     * Save selected amenities for a project
-     */
+    // Click event for saving amenities
+    $("#saveAmenityBtn").click(saveAmenities);
+
     function saveAmenities() {
         let project_id = $('#project_id').val();
-        let checkedAmenities = $(".amenity-item .form-check-input:checked").map(function() {
+        let checkedAmenities = $(".amenity-checkbox:checked").map(function() {
             return $(this).val();
         }).get();
 
@@ -512,10 +512,6 @@
             }
         });
     }
-
-    // Click event for saving amenities
-    $("#saveAmenityBtn").click(saveAmenities);
-
     /**
      * Update the status of a property (Top, Feature, General)
      * @param {string} url
@@ -859,7 +855,7 @@
                     flat_no: floorElement.querySelector('input[name="flat_no"]').value,
                     bhk_configurations: []
                 };
-               
+
                 floorElement.querySelectorAll('.bhk-container > div').forEach((bhkElement) => {
                     const floorPlanInput = bhkElement.querySelector('.floor_plan_image_name');
                     const bhkData = {
@@ -886,7 +882,7 @@
     }
 
     document.getElementById('propertySaveButton').addEventListener('click', function() {
-        const project_id =  $('#propertySaveButton').val();
+        const project_id = $('#propertySaveButton').val();
         const towersData = collectData();
         $.ajax({
             url: "{{ route('save.towers') }}",
