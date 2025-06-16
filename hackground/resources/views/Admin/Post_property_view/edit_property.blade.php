@@ -254,8 +254,6 @@
                     $construction_year = $month_arr[1];
                     }
                     @endphp
-                    @endif
-
                     <li>
                         <b>Expected Possesion Month Year: </b>
                         <span> {{ date('M',strtotime($construction_month)).', '.date('Y',strtotime($construction_year)), }}</span>
