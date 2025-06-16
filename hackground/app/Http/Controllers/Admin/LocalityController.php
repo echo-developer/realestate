@@ -52,6 +52,34 @@ class LocalityController extends Controller
         return view('Admin.Location.locality', compact('city_data', 'data'));
     }
 
+    public function getLocalityByCity(Request $req)
+    {
+        $city_id = $req->input('city_id');
+        $lang = strtolower($req->input('lang', 'en'));
+
+        $locality_data = getTableData(
+            'locality',
+            ['locality.locality_id as id', 'locality_names.name'],
+            [
+                [
+                    'table' => 'locality_names',
+                    'base_field' => 'locality.locality_id',
+                    'foreign_field' => 'locality_names.locality_id',
+                ],
+            ],
+            [
+                'locality.city' => $city_id,
+                'lang' => $lang,
+                'locality.status' => config('constants.STATUS_ACTIVE'),
+            ]
+        );
+
+        return response()->json([
+            'status' => true,
+            'localities' => $locality_data,
+        ]);
+    }
+
     public function AddLocality(Request $req)
     {
         // return response()->json($req);
@@ -265,7 +293,7 @@ class LocalityController extends Controller
                 'distance_km' => $request->distance,
                 'status' => $request->status,
             ]);
-            set_flash_message('update');
+        set_flash_message('update');
         return response()->json(['message' => 'Landmark Updated']);
     }
 
@@ -280,7 +308,7 @@ class LocalityController extends Controller
             ->update([
                 'status' => config('constants.STATUS_DELETE'),
             ]);
-            set_flash_message('delete');
+        set_flash_message('delete');
         return response()->json(['message' => 'Deleted !']);
     }
 }

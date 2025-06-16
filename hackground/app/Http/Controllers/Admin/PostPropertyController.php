@@ -31,7 +31,7 @@ class PostPropertyController extends Controller
             //load CSS
             $cssFiles = File::files(public_path('assets/property_css'));
             $userData = User::where('id', $user_id)->first();
-            
+
             $cssPaths = [];
             foreach ($cssFiles as $file) {
                 $cssPaths[] = 'assets/property_css/' . $file->getFilename();
@@ -41,10 +41,10 @@ class PostPropertyController extends Controller
 
             //load Property type
             $propertyTypes = json_decode($homeontroller->getPropertyType($request)->getContent(), true)['data'] ?? [];
-            
+
             //load cities
             $cities = json_decode($homeontroller->city($request)->getContent(), true)['data'] ?? [];
-            
+
             $postController = new PostController();
 
             //load proepertyAmenities
@@ -57,7 +57,7 @@ class PostPropertyController extends Controller
             //load Property Status
             $propertyStatus = json_decode($postController->status($request)->getContent(), true)['data'] ?? [];
             // dd($propertyStatus);
-            
+
             return view('Admin.Post_property_view.post_property', compact('cssPaths', 'userData', 'propertyTypes', 'cities', 'proepertyAmenities', 'propertyFurnishes', 'propertyStatus'));
         } else {
             return redirect('member/memberUser');
@@ -155,35 +155,30 @@ class PostPropertyController extends Controller
         $propertyFurnishes = json_decode($postController->furnish($request)->getContent(), true)['data'] ?? [];
         $propertyStatus = json_decode($postController->status($request)->getContent(), true)['data'] ?? [];
         $title = '';
-        if($page == 'basic')
-        {
+        if ($page == 'basic') {
             $title = 'Edit Basic Details';
             $property_id = $srch['id'];
-			$form_action = url('property/save-edit-property/basic');
+            $form_action = url('property/save-edit-property/basic');
         }
-        if($page == 'location')
-        {
+        if ($page == 'location') {
             $title = 'Edit Location Details';
             $property_id = $srch['id'];
-			$form_action = url('property/save-edit-property/location');
+            $form_action = url('property/save-edit-property/location');
         }
-        if($page == 'features')
-        {
+        if ($page == 'features') {
             $title = 'Edit Property Features';
             $property_id = $srch['id'];
-			$form_action = url('property/save-edit-property/features');
+            $form_action = url('property/save-edit-property/features');
         }
-        if($page == 'additional')
-        {
+        if ($page == 'additional') {
             $title = 'Edit Additional Details';
             $property_id = $srch['id'];
-			$form_action = url('property/save-edit-property/additional');
+            $form_action = url('property/save-edit-property/additional');
         }
-        if($page == 'landmark')
-        {
+        if ($page == 'landmark') {
             $title = 'Edit Landmark Details';
             $property_id = $srch['id'];
-			$form_action = url('property/save-edit-property/landmark');
+            $form_action = url('property/save-edit-property/landmark');
         }
         $propertyData = PrefProperty::where('id',  $property_id)->with([
             'settings',
@@ -194,20 +189,20 @@ class PostPropertyController extends Controller
             'gallery',
             'gallery.images'
         ])->first();
-       
+
         return view('Admin.Post_property_view.ajax_page', compact(
-                                                            'page', 
-                                                            'title', 
-                                                            'form_action', 
-                                                            'ID', 
-                                                            'propertyData', 
-                                                            'propertyTypes', 
-                                                            'property_id',
-                                                            'cities',
-                                                            'proepertyAmenities',
-                                                            'propertyFurnishes',
-                                                            'propertyStatus'
-                                                        ));
+            'page',
+            'title',
+            'form_action',
+            'ID',
+            'propertyData',
+            'propertyTypes',
+            'property_id',
+            'cities',
+            'proepertyAmenities',
+            'propertyFurnishes',
+            'propertyStatus'
+        ));
     }
 
     public function saveProperty(Request $request)
@@ -339,7 +334,7 @@ class PostPropertyController extends Controller
 
             $type = $request->route('type');
             $prop_id = $request->property_id;
-            
+
             if ($type == 'basic') {
                 $request->validate([
                     'postFor' => 'required',
@@ -347,7 +342,7 @@ class PostPropertyController extends Controller
                     'property_for' => 'required',
                     'expected_price' => 'required',
                 ]);
-                
+
                 $settings_data = array(
                     'post_for' => $request->postFor,
                     'property_type' => $request->property_type,
@@ -363,7 +358,7 @@ class PostPropertyController extends Controller
 
                 PrefPropertySetting::where('pid', $prop_id)->update($settings_data);
                 PrefPropertyAdditional::where('pid', $prop_id)->update($additional_data);
-                
+
                 return json_encode(array(
                     'status' => 'OK',
                 ));
@@ -371,7 +366,7 @@ class PostPropertyController extends Controller
             if ($type == 'location') {
                 $request->validate([
                     'city' => 'required',
-                    'landmark' => 'required',
+                    'locality' => 'required',
                     'address' => 'required',
                     //'description' => 'required'
                 ]);
@@ -386,7 +381,7 @@ class PostPropertyController extends Controller
                     'super_area' => 'required',
                     'total_floors' => 'required',
                 ]);
-            
+
                 $settings_data = array(
                     'carpet_area' => $request->carpet_area,
                     'super_area' => $request->super_area,
@@ -440,7 +435,7 @@ class PostPropertyController extends Controller
                         ((!empty($request->construction_month) && !empty($request->construction_year)) ? '-' : '') .
                         ($request->construction_year ?? '')
                 );
-                
+
                 $additional_data = array(
                     'possession_status' => $request->possession_status,
                     'expected_possesion_month_year' => $expected_possesion_month_year,
@@ -465,8 +460,8 @@ class PostPropertyController extends Controller
                 if ($prop_id) {
                     $property = PrefProperty::findOrFail($prop_id);
                     $this->savePropertyLandmark($property->id, $request);
-                } 
-    
+                }
+
                 return response()->json([
                     'status' => 'OK',
                     'message' => 'Landmark successfully updated',
@@ -488,103 +483,88 @@ class PostPropertyController extends Controller
         $commercial = $request->commercial ? $request->commercial : array();
         $transportation = $request->transportation ? $request->transportation : array();
 
-        if($education)
-        {
-            foreach($education['name'] as $k=>$v)
-            {
-                if($v)
-                {
+        if ($education) {
+            foreach ($education['name'] as $k => $v) {
+                if ($v) {
                     $data[] = array(
-                        'property_id'=>$propertyId,
-                        'landmark_type'=> 'education',
-                        'landmark_type_count'=>$k+1,
-                        'landmark_details'=>json_encode(array(
-                            'name'=> $v,
-                            'distance'=> $education['distance'][$k]
+                        'property_id' => $propertyId,
+                        'landmark_type' => 'education',
+                        'landmark_type_count' => $k + 1,
+                        'landmark_details' => json_encode(array(
+                            'name' => $v,
+                            'distance' => $education['distance'][$k]
                         ))
                     );
                 }
             }
         }
 
-        if($healthcare)
-        {
-            foreach($healthcare['name'] as $k=>$v)
-            {
-                if($v)
-                {
+        if ($healthcare) {
+            foreach ($healthcare['name'] as $k => $v) {
+                if ($v) {
                     $data[] = array(
-                        'property_id'=>$propertyId,
-                        'landmark_type'=> 'healthcare',
-                        'landmark_type_count'=>$k+1,
-                        'landmark_details'=>json_encode(array(
-                            'name'=> $v,
-                            'distance'=> $healthcare['distance'][$k]
+                        'property_id' => $propertyId,
+                        'landmark_type' => 'healthcare',
+                        'landmark_type_count' => $k + 1,
+                        'landmark_details' => json_encode(array(
+                            'name' => $v,
+                            'distance' => $healthcare['distance'][$k]
                         ))
                     );
                 }
             }
         }
 
-        if($shopping)
-        {
-            foreach($shopping['name'] as $k=>$v)
-            {
-                if($v)
-                {
+        if ($shopping) {
+            foreach ($shopping['name'] as $k => $v) {
+                if ($v) {
                     $data[] = array(
-                        'property_id'=>$propertyId,
-                        'landmark_type'=> 'shopping_center',
-                        'landmark_type_count'=>$k+1,
-                        'landmark_details'=>json_encode(array(
-                            'name'=> $v,
-                            'distance'=> $shopping['distance'][$k]
+                        'property_id' => $propertyId,
+                        'landmark_type' => 'shopping_center',
+                        'landmark_type_count' => $k + 1,
+                        'landmark_details' => json_encode(array(
+                            'name' => $v,
+                            'distance' => $shopping['distance'][$k]
                         ))
                     );
                 }
             }
         }
 
-        if($commercial)
-        {
-            foreach($commercial['name'] as $k=>$v)
-            {
-                if($v)
-                {
+        if ($commercial) {
+            foreach ($commercial['name'] as $k => $v) {
+                if ($v) {
                     $data[] = array(
-                        'property_id'=>$propertyId,
-                        'landmark_type'=> 'commercial',
-                        'landmark_type_count'=>$k+1,
-                        'landmark_details'=>json_encode(array(
-                            'name'=> $v,
-                            'distance'=> $commercial['distance'][$k]
+                        'property_id' => $propertyId,
+                        'landmark_type' => 'commercial',
+                        'landmark_type_count' => $k + 1,
+                        'landmark_details' => json_encode(array(
+                            'name' => $v,
+                            'distance' => $commercial['distance'][$k]
                         ))
                     );
                 }
             }
         }
 
-        if($transportation)
-        {
-            foreach($transportation['name'] as $k=>$v)
-            {
-                if($v)
-                {
+        if ($transportation) {
+            foreach ($transportation['name'] as $k => $v) {
+                if ($v) {
                     $data[] = array(
-                        'property_id'=>$propertyId,
-                        'landmark_type'=> 'transpotation',
-                        'landmark_type_count'=>$k+1,
-                        'landmark_details'=>json_encode(array(
-                            'name'=> $v,
-                            'distance'=> $transportation['distance'][$k]
+                        'property_id' => $propertyId,
+                        'landmark_type' => 'transpotation',
+                        'landmark_type_count' => $k + 1,
+                        'landmark_details' => json_encode(array(
+                            'name' => $v,
+                            'distance' => $transportation['distance'][$k]
                         ))
                     );
                 }
             }
         }
-        
-        DB::table('property_landmarks as l')->where('l.property_id',$propertyId)->delete();
-        if($data) {
+
+        DB::table('property_landmarks as l')->where('l.property_id', $propertyId)->delete();
+        if ($data) {
             DB::table('property_landmarks')->insert($data);
         }
     }
@@ -593,14 +573,14 @@ class PostPropertyController extends Controller
     {
         $lang = $request->input('lang', 'en');
         $property_id = $request->route('propId');
-        $form_action = url('property/save-property-photos/'.$property_id);
+        $form_action = url('property/save-property-photos/' . $property_id);
         $postController = new PostController();
 
         $images = DB::table('property_gallary as g')
-                       ->leftJoin('property_gallary_images as i', 'g.id', '=', 'i.gallary_id')
-                       ->select('g.id','g.image_type','g.description','i.filename','i.caption')
-                       ->where('g.pid',$property_id)
-                       ->get();
+            ->leftJoin('property_gallary_images as i', 'g.id', '=', 'i.gallary_id')
+            ->select('g.id', 'g.image_type', 'g.description', 'i.filename', 'i.caption')
+            ->where('g.pid', $property_id)
+            ->get();
         return view('Admin.Post_property_view.edit_photos', compact('property_id', 'images', 'form_action'));
     }
 
@@ -609,7 +589,7 @@ class PostPropertyController extends Controller
         if ($request) {
             $property_id = $request->route('property_id');
             $this->savePropertyGalleries($property_id, $request);
-            
+
             return response()->json([
                 'status' => 'OK',
                 'message' => 'Gallery updated successfully'
@@ -752,7 +732,7 @@ class PostPropertyController extends Controller
         // Then create new ones
         $dimension_arr = array();
         $structure = array();
-        
+
         foreach (['bedroom', 'bathroom', 'balcony'] as $room_type) {
             if ($request->$room_type && $request->$room_type['width']) {
                 foreach ($request->$room_type['width'] as $k => $w) {
@@ -764,10 +744,9 @@ class PostPropertyController extends Controller
                     ));
                     $dimension_arr[] = $structure;
                 }
-                
             }
         }
-        
+
         if (!empty($dimension_arr)) {
             PrefPropertyDimension::insert($dimension_arr);
         }
@@ -777,24 +756,20 @@ class PostPropertyController extends Controller
     {
         $galleries = $request->image;
         $description = $request->image_desc;
-        
-        $prevGallary = DB::table('property_gallary as g')->select('g.*')->where('g.pid',$propertyId)->get();
-        
-        if($prevGallary)
-        {
+
+        $prevGallary = DB::table('property_gallary as g')->select('g.*')->where('g.pid', $propertyId)->get();
+
+        if ($prevGallary) {
             $gallary_id = [];
-            foreach($prevGallary as $k=>$g)
-            {
+            foreach ($prevGallary as $k => $g) {
                 $gallary_id[] = $g->id;
             }
-            if($gallary_id)
-            {
-                DB::table('property_gallary_images')->whereIn('gallary_id',$gallary_id)->delete();
-                DB::table('property_gallary')->where('pid',$propertyId)->delete();
+            if ($gallary_id) {
+                DB::table('property_gallary_images')->whereIn('gallary_id', $gallary_id)->delete();
+                DB::table('property_gallary')->where('pid', $propertyId)->delete();
             }
-            
         }
-        
+
         if ($description) {
             foreach ($description as $k => $d) {
                 $gallery = PrefPropertyGallery::create([

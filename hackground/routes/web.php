@@ -354,6 +354,7 @@ Route::middleware('admin_auth')->group(function () {
 
     Route::controller(LocalityController::class)->group(function () {
         Route::get('/locality/{lang?}', 'LocalityView')->name('locality.view');
+        Route::get('/get-locality/{city_id?}', 'getLocalityByCity')->name('locality.view');
         Route::post('/add/locality', 'AddLocality')->name('locality.add');
         Route::get('/locality/details/{id?}', 'LocalityDetails')->name('locality.details');
         Route::post('/edit/locality', 'EditLocality')->name('locality.edit');
