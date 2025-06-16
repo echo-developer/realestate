@@ -2,442 +2,428 @@
 
 @section('content')
 
-    <div class="body-page-loader d-none">
-        <div class="loader">
-            <div class="line-scale-pulse-out">
-                <div class="bg-warning"></div>
-                <div class="bg-warning"></div>
-                <div class="bg-warning"></div>
-                <div class="bg-warning"></div>
-                <div class="bg-warning"></div>
+<div class="body-page-loader d-none">
+    <div class="loader">
+        <div class="line-scale-pulse-out">
+            <div class="bg-warning"></div>
+            <div class="bg-warning"></div>
+            <div class="bg-warning"></div>
+            <div class="bg-warning"></div>
+            <div class="bg-warning"></div>
+        </div>
+    </div>
+</div>
+
+<div class="app-main__inner">
+
+    <div class="app-page-title" hidden>
+        <div class="page-title-wrapper">
+            <div class="page-title-heading">
+                <div class="page-title-icon">
+                    <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
+                </div>
+                <div>Property
+                    <div class="page-title-subheading">Property &gt; Property Amenity List</div>
+                </div>
+            </div>
+            <div class="page-title-actions">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
+                    <li class="breadcrumb-item active">Property Amenity List</li>
+                </ol>
             </div>
         </div>
     </div>
+    <div id="successMessageContainer"></div>
+    <style>
+        .advance-search-panel {
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+    </style>
+    @if (session('success_msg'))
+    <div class="alert alert-{{ session('message_type') }}">
+        {{ session('success_msg') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert">
 
-    <div class="app-main__inner">
+        </button>
+    </div>
+    @endif
 
-        <div class="app-page-title" hidden>
-            <div class="page-title-wrapper">
-                <div class="page-title-heading">
-                    <div class="page-title-icon">
-                        <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
+    <form action="{{ url('project/amenity') }}" method="get">
+        <section class="content-header mb-2">
+            <div class="row justify-content-end">
+                <div class="col-xl-4 col-lg-6">
+                    <div class="input-group">
+                        <input class="form-control" id="prop_amenity_search" placeholder="Search..." name="term"
+                            value="{{ request('term') }}" />
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div>Property
-                        <div class="page-title-subheading">Property &gt; Property Amenity List</div>
-                    </div>
-                </div>
-                <div class="page-title-actions">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
-                        <li class="breadcrumb-item active">Property Amenity List</li>
-                    </ol>
                 </div>
             </div>
+        </section>
+    </form>
+
+    <div class="main-card mb-3 card">
+        <div class="card-header d-flex">
+            <h4>Property Amenity List</h4>
+            <div class="btn-actions-pane-right">
+                <button type="button" class="btn btn-sm btn-primary" onclick="add_prop_amenity()">Add Property
+                    Amenity</button>
+            </div>
         </div>
-        <div id="successMessageContainer"></div>
-        <style>
-            .advance-search-panel {
-                background-color: #fff;
-                box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
-                padding: 1rem;
-                margin-top: 1rem;
-            }
-        </style>
-        @if (session('success_msg'))
-            <div class="alert alert-{{ session('message_type') }}">
-                {{ session('success_msg') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert">
+        <div class="card-body">
+            <div class="table-responsive" id="main_table">
+                <table class="mb-0 table ">
+                    <thead>
+                        <tr>
+                            <th style="width: 32px;">ID</th>
+                            <th style="min-width:120px;">Name</th>
+                            <th>Order</th>
+                            <th>Status</th>
+                            <th>Icon</th>
+                            <th style="min-width:60px;" class="text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="user">
+                        @forelse($data as $item)
+                        <tr>
+                            <td>{{ $item->id }}</td>
+                            <td>{{ $item->name }}</td>
+                            <td>{{ $item->order }}</td>
+                            <td>
+                                <input type="checkbox" class="amenity_prop_status d-none"
+                                    data-id="{{ $item->id }}" data-toggle="toggle" data-on="Active"
+                                    data-off="Inactive" data-onstyle="success" data-offstyle="danger"
+                                    data-size="mini" {{ $item->status ? 'checked' : '' }}>
+                            </td>
+                            <td>
+                                @php
+                                $imagePath = 'user_upload/amenity_image/' . $item->image;
+                                $fullImagePath = public_path($imagePath);
+                                $imageToShow =
+                                isset($item->image) && file_exists($fullImagePath)
+                                ? asset($imagePath)
+                                : asset(config('constants.NO_IMAGE'));
+                                @endphp
+                                <img src="{{ $imageToShow }}"
+                                    alt="N/A" class="img-fluid" height="36" width="36">
+                            </td>
+                            <td class="text-right">
+                                <a href="javascript:void(0)" onclick="Edit_prop_amenity('{{ $item->id }}')" class="me-2"><i class="bi bi-pencil-square text-success fa-md"></i></a>
+                                <a href="javascript:void(0)" onclick="Delete_prop_amenity('{{ $item->id }}')"><i class="bi bi-trash3-fill text-danger fa-md"></i></a>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6">Sorry, no records found!</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+
+                </table>
+            </div>
+            {!! $data->links('vendor.pagination.bootstrap-5') !!}
+        </div>
+    </div>
+</div>
+@endsection
+@section('modals')
+<div class="modal fade" id="prop_amenity" tabindex="-1" role="dialog"
+    aria-labelledby="prop_amenityaddEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="prop_amenityAddEditModalLabel"></h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
 
                 </button>
             </div>
-        @endif
+            <div class="modal-body">
 
-        <form action="{{ url('project/amenity') }}" method="get">
-            <section class="content-header mb-2">
-                <div class="row justify-content-end">
-                    <div class="col-xl-4 col-lg-6">
-                        <div class="input-group">
-                            <input class="form-control" id="prop_amenity_search" placeholder="Search..." name="term"
-                                value="{{ request('term') }}" />
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                            </div>
+                <form id="prop_amenityformData">
+                    <input type="hidden" class='d-none' id="prop_amenityimage" name="image">
+                    <input type="text" class='d-none' id="prop_amenityId" name="prop_amenityId">
+                    @php
+                    $langs = explode(',', admin_default_lang());
+                    @endphp
+                    @foreach ($langs as $lang)
+                    <div class="form-floating mb-4">
+
+                        <input type="text" class="form-control reset_field" id="name_{{ $lang }}"
+                            name="name[{{ $lang }}]" autocomplete="off" placeholder="">
+                        <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
+                        <div class="invalid-feedback" id="name_{{ $lang }}_error"></div>
+                    </div>
+                    @endforeach
+
+                    <div class="form-group">
+                        <!-- <label for="ufile">Image Icon</label> -->
+                        <div class="">
+                            <input type="file" name="Amenityfile" id="AmenityfileUpload" class="form-control">
                         </div>
                     </div>
-                </div>
-            </section>
-        </form>
+                    <div class="form-group mb-4">
+                        <img id="image_preview" src=" " style="display:none; width: 64px; height: 64px;" />
+                        <button type="button" id="delete_image_btn" style="display:none;"
+                            class="btn btn-danger btn-sm" title="Delete Image" onclick="deleteUploadedImage()"><i class="bi bi-trash3-fill"></i></button>
+                    </div>
 
-        <div class="main-card mb-3 card">
-            <div class="card-header d-flex">
-            <h4>Property Amenity List</h4>
-                <div class="btn-actions-pane-right">
-                    <button type="button" class="btn btn-sm btn-primary" onclick="add_prop_amenity()">Add Property
-                        Amenity</button>
-                </div>
+                    <div class="form-floating mb-4">
+                        <input type="text" class="form-control" id="order" name="order" placeholder="" required>
+                        <label for="Order">Order</label>
+                        <div class="invalid-feedback" id="Order_error"></div>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <label class="form-label d-block">Status</label>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" name="status" value=1 class="magic-radio" id="status_1" checked
+                                required>
+                            <label class="form-check-label" for="status_1">Active</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" name="status" value=0 class="magic-radio" id="status_2">
+                            <label class="form-check-label" for="status_2">Inactive</label>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="card-body">
-                <div class="table-responsive" id="main_table">
-                    <table class="mb-0 table ">
-                        <thead>
-                            <tr>
-                                <th style="width: 32px;">ID</th>
-                                <th style="min-width:120px;">Name</th>
-                                <th>Order</th>
-                                <th>Status</th>
-                                <th>Icon</th>
-                                <th style="min-width:60px;" class="text-right">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="user">
-                            @forelse($data as $item)
-                                <tr>
-                                    <td>{{ $item->id }}</td>
-                                    <td>{{ $item->name }}</td>
-                                    <td>{{ $item->order }}</td>
-                                    <td>
-                                        <input type="checkbox" class="amenity_prop_status d-none"
-                                            data-id="{{ $item->id }}" data-toggle="toggle" data-on="Active"
-                                            data-off="Inactive" data-onstyle="success" data-offstyle="danger"
-                                            data-size="mini" {{ $item->status ? 'checked' : '' }}>
-                                    </td>
-                                    <td>
-                                        @php
-                                            $imagePath = 'user_upload/amenity_image/' . $item->image;
-                                            $fullImagePath = public_path($imagePath);
-                                            $imageToShow =
-                                                isset($item->image) && file_exists($fullImagePath)
-                                                    ? asset($imagePath)
-                                                    : asset(config('constants.NO_IMAGE'));
-                                        @endphp
-                                        <img src="{{ $imageToShow }}"
-                                            alt="N/A" class="img-fluid" height="36" width="36">
-                                    </td>
-                                    <td class="text-right">
-                                        <a href="javascript:void(0)" onclick="Edit_prop_amenity('{{ $item->id }}')" class="me-2"><i class="bi bi-pencil-square text-success fa-md"></i></a>
-                                        <a href="javascript:void(0)" onclick="Delete_prop_amenity('{{ $item->id }}')"><i class="bi bi-trash3-fill text-danger fa-md"></i></a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6">Sorry, no records found!</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-
-                    </table>
-                </div>
-                {!! $data->links('vendor.pagination.bootstrap-5') !!}
+            <div class="modal-footer">
+                <button type="button" onclick="add_edit_prop_amenity()" id="prop_amenityButton"
+                    class="btn btn-primary">Save</button>
             </div>
         </div>
+
     </div>
-@endsection
-@section('modals')
-    <div class="modal fade" id="prop_amenity" tabindex="-1" role="dialog"
-        aria-labelledby="prop_amenityaddEditModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-
-                    <h5 class="modal-title" id="prop_amenityAddEditModalLabel"></h5>
-
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <form id="prop_amenityformData">
-                        <input type="hidden" class='d-none' id="prop_amenityimage" name="image">
-                        <input type="text" class='d-none' id="prop_amenityId" name="prop_amenityId">
-                        @php
-                            $langs = explode(',', admin_default_lang());
-                        @endphp
-                        @foreach ($langs as $lang)
-                            <div class="form-floating mb-4">
-
-                                <input type="text" class="form-control reset_field" id="name_{{ $lang }}"
-                                    name="name[{{ $lang }}]" autocomplete="off" placeholder="">
-                                    <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
-                                <div class="invalid-feedback" id="name_{{ $lang }}_error"></div>
-                            </div>
-                        @endforeach
-
-                        <div class="form-group">
-                            <!-- <label for="ufile">Image Icon</label> -->
-                            <div class="">
-                                <input type="file" name="Amenityfile" id="AmenityfileUpload" class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group mb-4">
-                            <img id="image_preview" src=" " style="display:none; width: 64px; height: 64px;" />
-                            <button type="button" id="delete_image_btn" style="display:none;"
-                                class="btn btn-danger btn-sm" title="Delete Image" onclick="deleteUploadedImage()"><i class="bi bi-trash3-fill"></i></button>
-                        </div>
-
-                        <div class="form-floating mb-4">
-                            <input type="text" class="form-control" id="order" name="order" placeholder="" required>
-                            <label for="Order">Order</label>
-                            <div class="invalid-feedback" id="Order_error"></div>
-                        </div>
-
-                        <div class="form-group mb-0">
-                            <label class="form-label d-block">Status</label>
-                            <div class="form-check form-check-inline">
-                                <input type="radio" class="form-check-input" name="status" value=1 class="magic-radio" id="status_1" checked
-                                    required>
-                                <label class="form-check-label" for="status_1">Active</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input type="radio" class="form-check-input" name="status" value=0 class="magic-radio" id="status_2">
-                                <label class="form-check-label" for="status_2">Inactive</label>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" onclick="add_edit_prop_amenity()" id="prop_amenityButton"
-                        class="btn btn-primary">Save</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
+</div>
 @endsection
 @push('custom-js')
-    <script>
-        function add_prop_amenity() {
-            $('.form-control').removeClass('is-invalid');
-            $('.invalid-feedback').empty();
-            prop_amenityAddEdit('Property Amenity Add', 'Add');
-        }
+<script>
+    function add_prop_amenity() {
+        $('.form-control').removeClass('is-invalid');
+        $('.invalid-feedback').empty();
+        prop_amenityAddEdit('Property Amenity Add', 'Add');
+    }
 
-        function Edit_prop_amenity(id) {
-            $('.form-control').removeClass('is-invalid');
-            $('.invalid-feedback').empty();
-            prop_amenityAddEdit('Property Amenity Edit', 'Update', id);
-        }
+    function Edit_prop_amenity(id) {
+        $('.form-control').removeClass('is-invalid');
+        $('.invalid-feedback').empty();
+        prop_amenityAddEdit('Property Amenity Edit', 'Update', id);
+    }
 
-        function prop_amenityAddEdit(title, buttonText, id = null) {
-            $('#prop_amenityAddEditModalLabel').text(title);
-            $('#prop_amenityButton').text(buttonText);
-            $('#prop_amenityformData')[0].reset();
-            $('#image_preview').attr('src', '').hide();
-            $('#delete_image_btn').hide();
-            if (id) {
-                $.get(`{{ url('/project/amenity-details') }}/${id}`, function(data) {
-                    $('#prop_amenityId').val(data[0].amenity_id);
-                    data.forEach(function(amenity) {
-                        $('#name_' + amenity.lang).val(amenity.name);
-                        if (amenity.lang === 'en') {
-                            var imageSrc = `{{ asset('user_upload/amenity_image') }}/${amenity.image}`;
-                            if (amenity.image) {
-                                $('#image_preview').attr('src', imageSrc).show();
-                                $('#delete_image_btn').show();
-                            }
-                            $('#prop_amenityimage').val(amenity.image);
-                            $('#order').val(amenity.order);
-                            $('input[name="status"][value="' + amenity.status + '"]').prop(
-                                'checked', true);
+    function prop_amenityAddEdit(title, buttonText, id = null) {
+        $('#prop_amenityAddEditModalLabel').text(title);
+        $('#prop_amenityButton').text(buttonText);
+        $('#prop_amenityformData')[0].reset();
+        $('#image_preview').attr('src', '').hide();
+        $('#delete_image_btn').hide();
+        if (id) {
+            $.get(`{{ url('/project/amenity-details') }}/${id}`, function(data) {
+                $('#prop_amenityId').val(data[0].amenity_id);
+                data.forEach(function(amenity) {
+                    $('#name_' + amenity.lang).val(amenity.name);
+                    if (amenity.lang === 'en') {
+                        var imageSrc = `{{ asset('user_upload/amenity_image') }}/${amenity.image}`;
+                        if (amenity.image) {
+                            $('#image_preview').attr('src', imageSrc).show();
+                            $('#delete_image_btn').show();
                         }
-                    });
+                        $('#prop_amenityimage').val(amenity.image);
+                        $('#order').val(amenity.order);
+                        $('input[name="status"][value="' + amenity.status + '"]').prop(
+                            'checked', true);
+                    }
                 });
-            }
-            $('#prop_amenity').modal('show');
+            });
         }
+        $('#prop_amenity').modal('show');
+    }
 
-        function add_edit_prop_amenity() {
-            var data = $("#prop_amenityformData").serializeArray();
+    function add_edit_prop_amenity() {
+        var data = $("#prop_amenityformData").serializeArray();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        var url = $('#prop_amenityId').val() ?
+            `{{ url('/project/edit-project-amenity') }}` :
+            `{{ url('/project/add-project-amenity') }}`;
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: data,
+            success: function(response) {
+                // localStorage.setItem('successMessage', response.message);
+                window.location.reload(true);
+                $('#prop_amenity').modal('hide');
+                $('#prop_amenityformData')[0].reset();
+            },
+            error: function(response) {
+                var errors = response.responseJSON.errors;
+
+                // Reset previous error messages and invalid class
+                $('.invalid-feedback').text('').hide();
+                $('.form-control').removeClass('is-invalid');
+
+                // Loop through errors and update the DOM
+                Object.entries(errors).forEach(([field, messages]) => {
+                    const fieldId = field.replace('.', '_'); // Convert 'name.en' to 'name_en'
+                    const inputSelector = `#${fieldId}`;
+                    const errorSelector = `#${fieldId}_error`;
+
+                    $(inputSelector).addClass('is-invalid');
+                    $(errorSelector).text(messages[0]).show();
+                });
+
+            }
+
+        });
+    }
+
+
+
+    $('.amenity_prop_status').change(function() {
+
+        toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
+
+        var id = $(this).data('id');
+        var status = this.checked ? 1 : 0;
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: 'POST',
+            url: `{{ url('project/amenity_status') }}`,
+            data: {
+                'status': status,
+                'id': id
+            },
+            success: function(data) {
+                // Handle success response if needed
+            },
+            error: function(msg) {
+                console.log(msg);
+                var errors = msg.responseJSON;
+            }
+        });
+    });
+
+    function Delete_prop_amenity(id) {
+        var result = confirm('Are you sure you want to delete this?');
+        if (result) {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
-            var url = $('#prop_amenityId').val() ?
-                `{{ url('/project/edit-project-amenity') }}` :
-                `{{ url('/project/add-project-amenity') }}`;
-
             $.ajax({
                 type: 'POST',
-                url: url,
-                data: data,
+                url: `{{ url('project/amenity-delete') }}`,
+                data: {
+                    'id': id
+                },
                 success: function(response) {
                     // localStorage.setItem('successMessage', response.message);
                     window.location.reload(true);
-                    $('#prop_amenity').modal('hide');
-                    $('#prop_amenityformData')[0].reset();
-                },
-                error: function(response) {
-                    var errors = response.responseJSON.errors;
-
-                    // Reset previous error messages and invalid class
-                    $('.invalid-feedback').text('').hide();
-                    $('.form-control').removeClass('is-invalid');
-
-                    // Loop through errors and update the DOM
-                    Object.entries(errors).forEach(([field, messages]) => {
-                        const fieldId = field.replace('.', '_'); // Convert 'name.en' to 'name_en'
-                        const inputSelector = `#${fieldId}`;
-                        const errorSelector = `#${fieldId}_error`;
-
-                        $(inputSelector).addClass('is-invalid');
-                        $(errorSelector).text(messages[0]).show();
-                    });
-
-                }
-
-            });
-        }
-
-
-
-        $('.amenity_prop_status').change(function() {
-
-            toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
-
-            var id = $(this).data('id');
-            var status = this.checked ? 1 : 0;
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: 'POST',
-                url: `{{ url('project/amenity_status') }}`,
-                data: {
-                    'status': status,
-                    'id': id
-                },
-                success: function(data) {
-                    // Handle success response if needed
                 },
                 error: function(msg) {
                     console.log(msg);
                     var errors = msg.responseJSON;
                 }
             });
-        });
+        }
+    }
 
-        function Delete_prop_amenity(id) {
-            var result = confirm('Are you sure you want to delete this?');
-            if (result) {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: 'POST',
-                    url: `{{ url('project/amenity-delete') }}`,
-                    data: {
-                        'id': id
-                    },
-                    success: function(response) {
-                        // localStorage.setItem('successMessage', response.message);
-                        window.location.reload(true);
-                    },
-                    error: function(msg) {
-                        console.log(msg);
-                        var errors = msg.responseJSON;
-                    }
-                });
+    $('#AmenityfileUpload').change(function(event) {
+        var fileInput = event.target;
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        formData.append('file', file);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
+        });
+        $.ajax({
+            url: `{{ url('/project/amenity-image') }}`,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $('#prop_amenityimage').val(response.fileName);
+                $('#image_preview').attr('src', response.filePath).show();
+                $('#delete_image_btn').show();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error uploading file:', error);
+            }
+        });
+    });
+
+    function deleteUploadedImage() {
+        var fileName = $('#prop_amenityimage').val();
+        if (!fileName) {
+            alert('No image to delete!');
+            return;
         }
 
-        $('#AmenityfileUpload').change(function(event) {
-            var fileInput = event.target;
-            var file = fileInput.files[0];
-            var fileLabel = document.querySelector('.custom-file-label');
-            fileLabel.textContent = file.name;
-
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                var imagePreview = document.getElementById('image_preview');
-                imagePreview.style.display = 'block';
-                imagePreview.src = e.target.result;
-            };
-
-            if (file) {
-                reader.readAsDataURL(file);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-
-            var formData = new FormData();
-            formData.append('file', file);
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: `{{ url('/project/amenity-image') }}`,
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    $('#prop_amenityimage').val(response.fileName);
-                    $('#image_preview').attr('src', response.filePath).show();
-                    $('#delete_image_btn').show();
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error uploading file:', error);
-                }
-            });
         });
 
-        function deleteUploadedImage() {
-            var fileName = $('#prop_amenityimage').val();
-            if (!fileName) {
-                alert('No image to delete!');
-                return;
+        $.ajax({
+            url: `{{ url('/project/delete-amenity-image') }}`,
+            type: 'POST',
+            data: {
+                file: fileName
+            },
+            success: function(response) {
+                console.log('File deleted successfully');
+                $('#image_preview').attr('src', '').hide();
+                $('#delete_image_btn').hide();
+                $('#prop_amenityimage').val('');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error deleting file:', error);
             }
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                url: `{{ url('/project/delete-amenity-image') }}`,
-                type: 'POST',
-                data: {
-                    file: fileName
-                },
-                success: function(response) {
-                    console.log('File deleted successfully');
-                    $('#image_preview').attr('src', '').hide();
-                    $('#delete_image_btn').hide();
-                    $('#prop_amenityimage').val('');
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error deleting file:', error);
-                }
-            });
-        }
-        $(document).ready(function() {
-            var table = $('.table').DataTable({
-                "paging": false,
-                "searching": false,
-                "info": false,
-                "ordering": true,
-                "order": [
-                    [0, 'desc']
-                ],
-                "columnDefs": [{
-                        "orderable": true,
-                        "targets": [0]
-                    },
-                    {
-                        "orderable": false,
-                        "targets": [2, 3, 4, 5]
-                    }
-                ]
-            });
         });
-    </script>
+    }
+    $(document).ready(function() {
+        var table = $('.table').DataTable({
+            "paging": false,
+            "searching": false,
+            "info": false,
+            "ordering": true,
+            "order": [
+                [0, 'desc']
+            ],
+            "columnDefs": [{
+                    "orderable": true,
+                    "targets": [0]
+                },
+                {
+                    "orderable": false,
+                    "targets": [2, 3, 4, 5]
+                }
+            ]
+        });
+    });
+</script>
 @endpush
