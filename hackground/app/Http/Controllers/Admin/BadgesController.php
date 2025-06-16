@@ -45,8 +45,7 @@ class BadgesController extends Controller
 
             $file = $request->file('file');
             $fileName = time() . '-' . $file->getClientOriginalName();
-            $destinationPath = public_path('user_upload/badges/');
-            $file->move($destinationPath, $fileName);
+            $file->move(public_path('user_upload/badges/'), $fileName);
             $fileUrl = asset('user_upload/badges/' . $fileName);
             return response()->json(['success' => true, 'fileName' => $fileName, 'fileUrl' => $fileUrl]);
         }
@@ -171,5 +170,4 @@ class BadgesController extends Controller
             'message' => 'Item deleted successfully.',
         ]);
     }
-   
 }
