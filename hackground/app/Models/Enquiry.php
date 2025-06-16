@@ -224,7 +224,12 @@ class Enquiry extends Model
     {
         $query = DB::table('buyer_property_enquery as e')
             ->select('e.*');
-
+        if (!empty($srch['enquery_date'])) {
+            $query->whereDate('e.created_at', date('Y-m-d', strtotime($srch['enquery_date'])));
+        }
+        if (!empty($srch['member_name'])) {
+            $query->where('e.name', 'LIKE', '%' . $srch['member_name'] . '%');
+        }
         return $query->orderByDesc('created_at')->paginate($paginate);
     }
 
