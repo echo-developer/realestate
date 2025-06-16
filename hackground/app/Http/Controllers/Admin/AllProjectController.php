@@ -110,6 +110,7 @@ class AllProjectController extends Controller
 
             $result[] = [
                 'tower_name' => $tower->tower_name,
+                'slug'       => $tower->slug,
                 'lift_no' => $tower->lift_no,
                 'stair_no' => $tower->stair_no,
                 'fire_safety' => $tower->fire_safety,
@@ -118,6 +119,7 @@ class AllProjectController extends Controller
                 'projectLocation' => $project_location
             ];
         }
+        // dd( $result);
         return response()->json(['towers_data' => $result, 'total_towers' => $total_tower]);
     }
     public function FeaturedStatus(Request $req)
