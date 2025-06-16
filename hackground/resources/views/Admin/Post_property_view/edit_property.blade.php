@@ -244,10 +244,18 @@
                     @endif
                     @if($propertyData->additional->possession_status == '2')
                     @php
-                    $month_arr = explode('-',$propertyData->additional->expected_possesion_month_year);
+                    $construction_month = '';
+                    $construction_year = '';
+                    $possession = $propertyData->additional->expected_possesion_month_year ?? '';
+                    $month_arr = explode('-', $possession);
+
+                    if (count($month_arr) === 2) {
                     $construction_month = $month_arr[0];
                     $construction_year = $month_arr[1];
+                    }
                     @endphp
+                    @endif
+
                     <li>
                         <b>Expected Possesion Month Year: </b>
                         <span> {{ date('M',strtotime($construction_month)).', '.date('Y',strtotime($construction_year)), }}</span>
