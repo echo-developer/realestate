@@ -116,10 +116,6 @@
                                                 {{ $item->status ? 'checked' : '' }}>
                                         </td>
                                         <td class="text-right">
-                                            <a title="Landmark List"
-                                                href="{{ route('locality.landmarks.page', ['locality_id' => $item->locality_id]) }}">
-                                                <i class="fa fa-list text-success fa-md"></i>
-                                            </a>
                                             <i class="fa fa-edit text-success fa-md "
                                                 onclick="Edit('{{ $item->locality_id }}')"></i>
                                             <i class="fa fa-trash text-danger fa-md"

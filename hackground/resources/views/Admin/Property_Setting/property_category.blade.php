@@ -357,20 +357,6 @@
     $('#CategoryfileUpload').change(function(event) {
         var fileInput = event.target;
         var file = fileInput.files[0];
-        var fileLabel = document.querySelector('.custom-file-label');
-        fileLabel.textContent = file.name;
-
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var imagePreview = document.getElementById('image_preview');
-            imagePreview.style.display = 'block';
-            imagePreview.src = e.target.result;
-        };
-
-        if (file) {
-            reader.readAsDataURL(file);
-        }
-
         var formData = new FormData();
         formData.append('file', file);
         $.ajaxSetup({

@@ -1,7 +1,4 @@
 <div class="modal-header">
-    @php
-        '<pre>' . print_r($enquiry) . '</pre>';
-    @endphp
     <h5 class="modal-title" id="viewLeadModal">Lead Details</h5>
 
     <button type="button" class="btn-close" data-bs-dismiss="modal">
