@@ -624,7 +624,7 @@
                     <label>Tower Name</label>
                 </div>
             </div>
-            <input class="form-control" name="slug" type="hidden" value="${slug}">
+            <input class="form-control" name="slug" type="hidden" value="${towerData.slug??slug}">
             <div class="col-lg-3 col-sm-6">
                 <div class="form-floating mb-3">
                     <input type="number" class="form-control" name="lift_no" placeholder="" value="${towerData.lift_no}">
@@ -834,52 +834,67 @@
 
 <script>
     function collectData() {
-
         const towers = [];
-
-
 
         document.querySelectorAll('.mb-4.border.p-3').forEach((towerElement) => {
             const towerData = {
-                tower_name: towerElement.querySelector('input[name="tower_name"]').value,
-                slug: towerElement.querySelector('input[name="slug"]').value,
-                lift_no: towerElement.querySelector('input[name="lift_no"]').value,
-                stair_no: towerElement.querySelector('input[name="stair_no"]').value,
-                fire_safety: towerElement.querySelector('input[name="fire_safety"]').value,
+                tower_name: towerElement.querySelector('input[name="tower_name"]')?.value || '',
+                slug: towerElement.querySelector('input[name="slug"]')?.value || '',
+                lift_no: towerElement.querySelector('input[name="lift_no"]')?.value || '',
+                stair_no: towerElement.querySelector('input[name="stair_no"]')?.value || '',
+                fire_safety: towerElement.querySelector('input[name="fire_safety"]')?.value || '',
                 floor_data: []
             };
 
             towerElement.querySelectorAll('.floor-container').forEach((floorElement) => {
+                const floorNoInput = floorElement.querySelector('input[name="floor_no"]');
+                const flatNoInput = floorElement.querySelector('input[name="flat_no"]');
+
+                // Skip if essential fields are missing (probably removed)
+                if (!floorNoInput || !flatNoInput) return;
+
                 const floorData = {
-                    floor_no: floorElement.querySelector('input[name="floor_no"]').value,
-                    flat_no: floorElement.querySelector('input[name="flat_no"]').value,
+                    floor_no: floorNoInput.value,
+                    flat_no: flatNoInput.value,
                     bhk_configurations: []
                 };
 
                 floorElement.querySelectorAll('.bhk-container > div').forEach((bhkElement) => {
+                    const bhkTypeSelect = bhkElement.querySelector('select');
+                    const numberInputs = bhkElement.querySelectorAll('input[type="number"]');
+                    const facingSelect = bhkElement.querySelectorAll('select')[1];
                     const floorPlanInput = bhkElement.querySelector('.floor_plan_image_name');
-                    const bhkData = {
-                        bhk_type: bhkElement.querySelector('select').value,
-                        carpet_area: bhkElement.querySelector('input[type="number"]').value,
-                        super_area: bhkElement.querySelectorAll('input[type="number"]')[1]
-                            .value,
-                        property_price: bhkElement.querySelectorAll('input[type="number"]')[
-                            2].value,
-                        property_facing: bhkElement.querySelectorAll('select')[1].value,
-                        floor_plan_image: floorPlanInput ? floorPlanInput.value : ''
 
+                    // Skip if BHK is missing required inputs
+                    if (!bhkTypeSelect || numberInputs.length < 3 || !facingSelect) return;
+
+                    const bhkData = {
+                        bhk_type: bhkTypeSelect.value,
+                        carpet_area: numberInputs[0].value,
+                        super_area: numberInputs[1].value,
+                        property_price: numberInputs[2].value,
+                        property_facing: facingSelect.value,
+                        floor_plan_image: floorPlanInput ? floorPlanInput.value : ''
                     };
+
                     floorData.bhk_configurations.push(bhkData);
                 });
 
-                towerData.floor_data.push(floorData);
+                // Push floor only if it has at least one BHK
+                if (floorData.bhk_configurations.length > 0) {
+                    towerData.floor_data.push(floorData);
+                }
             });
 
-            towers.push(towerData);
+            // Push tower only if it has at least one floor
+            if (towerData.floor_data.length > 0) {
+                towers.push(towerData);
+            }
         });
 
         return towers;
     }
+
 
     document.getElementById('propertySaveButton').addEventListener('click', function() {
         const project_id = $('#propertySaveButton').val();
