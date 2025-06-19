@@ -32,7 +32,7 @@ class AdminUserController extends Controller
                 // 'sub_category_typ' => 'required',
                 'username' => 'required|max:20',
                 'name' => 'required|max:20',
-                'email' => 'required|email',
+                'email' => 'required|email|unique:admin,email',
                 'password' => 'required',
                 'role' => 'required',
                 'status' => 'required',
