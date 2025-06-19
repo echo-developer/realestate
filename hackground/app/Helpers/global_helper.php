@@ -413,10 +413,10 @@ if (!function_exists('AllmenusForSideBar')) {
     {
         $role = Auth::guard('admin')->user()->role;
 
-        $allmenus = DB::table('menu_management as mmt')
-            ->leftJoin('permissions as pt', 'mmt.slug', '=', 'pt.menu_code');
+        $allmenus = DB::table('menu_management as mmt');
 
         if ($role != 1) {
+            $allmenus->leftJoin('permissions as pt', 'mmt.slug', '=', 'pt.menu_code');
             $allmenus->where('pt.role_id', '=', $role);
         }
 
