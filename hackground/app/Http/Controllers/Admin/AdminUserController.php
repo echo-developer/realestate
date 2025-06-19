@@ -18,7 +18,7 @@ class AdminUserController extends Controller
     public function Admin_User_Page()
     {
         $users = Admin::where('status', '!=', config('constants.STATUS_DELETE'))->get();
-        $roles = Admin_Role::where('status', '!=', config('constants.STATUS_DELETE'))->get();
+        $roles = Admin_Role::where('status', config('constants.STATUS_ACTIVE'))->get();
         return view('Admin.Users.index')->with(compact('users', 'roles'));
     }
 
