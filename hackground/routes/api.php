@@ -369,6 +369,7 @@ Route::get('user_details', [UserDetailsController::class, 'details']);
 Route::get('user_proprties', [UserDetailsController::class, 'userPropertyDetails']);
 Route::get('user_proprties', [UserDetailsController::class, 'userPropertyDetails']);
 Route::post('property-site-visit', [SiteVisitController::class, 'saveSiteVisit']);
+Route::post('get-site-visits', [SiteVisitController::class, 'getSiteVisitreq']);
 Route::post('property-video-upload', [PropertyController::class, 'uploadVideo']);
 Route::get('/auth/{provider}/callback', [AuthController::class, 'handleProviderCallback']);
 
