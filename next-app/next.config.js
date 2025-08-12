@@ -5,9 +5,9 @@ const nextConfig = {
   },
   generateBuildId: async () => 'my-build-id', // Optional, but helps cache-busting
   experimental: {
-    serverActions: false, // Optional, depending on whether you use them
+    serverActions: false,
   },
-  output: 'export', // Enables `next export` to static `out/` folder
+  output: 'export', // 👈 this enables static export to `out/` folder
 };
 
 module.exports = nextConfig;
