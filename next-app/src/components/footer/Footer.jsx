@@ -5,10 +5,12 @@ import useTranslation from '@/hooks/useTranslation';
 import MobileFooter from '../addtional/MobileFooter';
 import AuthUser from '../Authentication/AuthUser';
 import { useAuth } from '@/context/AuthProvider';
+import useIsMobile from '@/hooks/useIsMobile';
 
 const Footer = () => {
   const { callApi } = AuthUser();
   const { adminDetails } = useAuth();
+  const isMobile = useIsMobile();
   const [adminData, setAdminData] = useState({
     address: "",
     phone: "",
@@ -125,7 +127,9 @@ const Footer = () => {
   return (
 
     <>
-      <MobileFooter />
+      {isMobile && (
+        <MobileFooter />
+      )}
       <footer className='large-footer'>
         <div className="container">
           <div className="footer-top">

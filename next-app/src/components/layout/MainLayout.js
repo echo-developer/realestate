@@ -1,13 +1,18 @@
 "use client"
 import React, { useState, useEffect } from "react";
-import Header from "../header/Header";
-import Footer from "../footer/Footer";
+// import Header from "../header/Header";
+// import Footer from "../footer/Footer";
+import dynamic from "next/dynamic";
 import Loading from "../LoadingSpinner/Loading";
-import useTranslation from "@/hooks/useTranslation";
+import { usePathname } from "next/navigation";
+const Header = dynamic(() => import('../header/Header'), { ssr: false });
+const Footer = dynamic(() => import('../footer/Footer'), { ssr: false });
+import { useInView } from "react-intersection-observer";
 
 const MainLayout = ({ children }) => {
+  const pathname = usePathname();
   const [isLoaded, setIsLoaded] = useState(false);
-const translation = useTranslation();
+  const [footerRef, footerView] = useInView({ triggerOnce: true, threshold: 0.1})
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(true);
@@ -16,17 +21,21 @@ const translation = useTranslation();
     return () => clearTimeout(timer);
   }, []);
 
+  if(!isLoaded && pathname != '/') {
+    return <Loading />
+  }
   return (
     <React.Fragment>
-      {!isLoaded ? (
-        <Loading /> 
-      ) : (
+      
         <>
           <Header />
           {children}
-          <Footer />
+          <div ref={footerRef}>
+          {footerView && (
+            <Footer />
+          )}
+          </div>
         </>
-      )}
     </React.Fragment>
   );
 };
