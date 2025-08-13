@@ -8,7 +8,7 @@ import { useAuth } from '@/context/AuthProvider';
 import { useInView } from "react-intersection-observer";
 import dynamic from 'next/dynamic';
 import useTranslation from '@/hooks/useTranslation';
-import { ShimmerPostDetails } from "react-shimmer-effects";
+import { ShimmerText } from "react-shimmer-effects";
 
 const MainSlider = dynamic(() => import("../MainSlder/MainSlider"), { ssr: false });
 const FindPropertySection = dynamic(() => import("./FindPropertySection"), { ssr: false });
@@ -162,11 +162,14 @@ const HomeContent = () => {
     };
     const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
-    if (loading) {
-        return <ShimmerPostDetails card={false} cta variant="EDITOR" />;
-    }
     return (
         <>
+            {loading && (
+                <>
+                    <ShimmerText line={15} gap={15} />
+                    <ShimmerText line={15} gap={15} />
+                </>
+            )}
             <ToastContainer position="top-right" autoClose={5000} />
 
             <div ref={ref1}>
@@ -269,11 +272,7 @@ const HomeContent = () => {
                                 </a>
                             ))
                         ) : (
-                            <img
-                                alt="Advertisement"
-                                src="/assets/images/ads/ads-blank.jpg"
-                                className="img-fluid"
-                            />
+                            <></>
                         )}
                     </div>
 

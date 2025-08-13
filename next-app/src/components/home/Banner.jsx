@@ -2,12 +2,16 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import "./home.css";
-import BannerForm from "./BannerForm";
+import dynamic from "next/dynamic";
+// import BannerForm from "./BannerForm";
+import useTranslation from "@/hooks/useTranslation";
+const BannerForm = dynamic(() => import('./BannerForm'), { ssr: false })
 
 
-const Banner = ({ translation }) => {
+const Banner = () => {
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   const [dropdownState, setDropdownState] = useState({});
+  const translation = useTranslation();
 
   const handleClickOutside = (e) => {
     setDropdownState({});
@@ -29,15 +33,18 @@ const Banner = ({ translation }) => {
       // style={{ backgroundImage: "url('/assets/images/banner-1.webp')" }}
       >
         <Image
-          src="/assets/images/banner-1.webp" 
+          src="/assets/images/banner-1.webp"
           alt="Main banner"
           fill
-          priority
+          // priority
+          loading="lazy"
           sizes="100vw"
+          placeholder="blur"
+          blurDataURL="/assets/images/banner-1-blur.webp" // tiny low-res preview
           style={{
             objectFit: "cover",
             objectPosition: "bottom center",
-            zIndex: -1, // put behind content
+            zIndex: -1,
           }}
         />
         <div className="banner-layer">

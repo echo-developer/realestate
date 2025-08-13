@@ -55,23 +55,6 @@ const Header = () => {
   }, []);
 
 
-  // const FetchUserData = async (memberId) => {
-  //   let response;
-  //   try {
-  //     response = await callApi({
-  //       api: `/get_user_data`,
-  //       method: "GET",
-  //       data: {
-  //         member_id: memberId,
-  //       },
-  //     });
-  //     if (response && response.success === 1) {
-  //       setUserData(response.data);
-  //       setUserLogo(response?.data?.image);
-  //     }
-  //   } catch (error) { }
-  // };
-
   useEffect(() => {
     if (defaultCity) {
       setSelectedCity(defaultCity?.name);
@@ -141,7 +124,7 @@ const Header = () => {
           }
         })
         setCityData(cityList);
-        handleDefaultCityChange(JSON.parse(localStorage?.getItem(city)) ||  cityList?.[0]);
+        handleDefaultCityChange(JSON.parse(localStorage?.getItem(city)) || cityList?.[0]);
         setGetAllCity(response.data);
       }
     } catch (error) { }
@@ -161,12 +144,6 @@ const Header = () => {
     };
   }, []);
 
-  const handleClose = () => setMobileView(false);
-
-  const handleShow = (type) => {
-    setMobileView(true);
-    setMenu(type);
-  };
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -194,10 +171,12 @@ const Header = () => {
     }
   };
 
-  const handlePropertyCrmClick = (e) => {
-    if (e.currentTarget.getAttribute("data-id") === "property-crm") {
-      setOffCanvasPropertyCrm(!offCanvasPropertyCrm);
-    }
+
+  const customStyles = {
+    container: (provided) => ({
+      ...provided,
+      width: "175px", // Change to your desired width
+    }),
   };
 
   useEffect(() => {
@@ -205,21 +184,13 @@ const Header = () => {
     // desktopImage.src = "/assets/images/logo.png";
     // desktopImage.onload = () => setIsDesktopLogoLoaded(true);
     // desktopImage.onerror = () => setIsDesktopLogoLoaded(false);
-
-    const mobileImage = new Image();
-    mobileImage.src = "/assets/images/logo-mobile.png";
-    mobileImage.onload = () => setIsMobileLogoLoaded(true);
-    mobileImage.onerror = () => setIsMobileLogoLoaded(false);
-  }, []);
-
-
-
-  const customStyles = {
-  container: (provided) => ({
-    ...provided,
-    width: "175px", // Change to your desired width
-  }),
-};
+    if (isMobile) {
+      const mobileImage = new Image();
+      mobileImage.src = "/assets/images/logo-mobile.png";
+      mobileImage.onload = () => setIsMobileLogoLoaded(true);
+      mobileImage.onerror = () => setIsMobileLogoLoaded(false);
+    }
+  }, [isMobile]);
 
   return (
     <>
@@ -232,17 +203,6 @@ const Header = () => {
                 <div
                   className="d-none d-md-block"
                 >
-                  {/* {!isDesktopLogoLoaded && (
-                    <div className="shimmer-placeholder"></div>
-                  )} */}
-                  {/* {isDesktopLogoLoaded && (
-                    <img
-                      src="/assets/images/logo.png"
-                      alt="Logo"
-                      loading="lazy"
-                      style={{ opacity: isDesktopLogoLoaded ? 1 : 0, transition: 'opacity 0.3s ease-in-out' }}
-                    />
-                  )} */}
                   <NextImage
                     src="/assets/images/logo.png"
                     alt="Logo"
@@ -250,6 +210,7 @@ const Header = () => {
                     height={56}
                     priority
                   />
+
 
                 </div>
 
@@ -261,9 +222,16 @@ const Header = () => {
                     <div className="shimmer-placeholder"></div>
                   )}
                   {isMobileLogoLoaded && (
-                    <img
+                    // <img
+                    //   src="/assets/images/logo-mobile.png"
+                    //   alt="Logo"
+                    //   loading="lazy"
+                    // />
+                    <NextImage
                       src="/assets/images/logo-mobile.png"
                       alt="Logo"
+                      width={200} // adjust to match your actual logo width
+                      height={60}  // adjust to match your actual logo height
                       loading="lazy"
                     />
                   )}
@@ -297,25 +265,7 @@ const Header = () => {
 
 
               </Link>
-              {/* show={showLocationDrop} onToggle={handleShowLocationDropDown} */}
-              {/* <Dropdown className="ms-3 ms-xxl-4">
-                <Dropdown.Toggle variant="link" className="text-decoration-none" id="dropdown-basic">
-                  {selectedCity}
-                </Dropdown.Toggle>
-                <Dropdown.Menu className="city-drop">
-                  {cityData?.map((city) => (
-                    <Dropdown.Item
-                      key={city.city_id}
-                      onClick={() => {
-                        // setShowLocationDrop(false);
-                        handleDefaultCityChange(city);
-                      }}
-                    >
-                      {city.name}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown> */}
+
               <Select
                 value={defaultCity}
                 onChange={handleDefaultCityChange}
@@ -909,23 +859,7 @@ const Header = () => {
                   {translation ? (
                     validLogin ? (
                       <React.Fragment>
-                        {/* <li className="nav-item">
-                          <a className="nav-link dropdown-toggle" role="button">
-                            {translation.help}
-                          </a>
-                          <ul className="dropdown-single dropdown-nav">
-                            <li>
-                              <a href="/help-center">
-                                {translation.help_center}
-                              </a>
-                            </li>
-                            <li>
-                              <a href="/sales-enquiry">
-                                {translation.sales_enquiry}
-                              </a>
-                            </li>
-                          </ul>
-                        </li> */}
+
                         <li className="nav-item userInitial">
                           <Link
                             href={`/`}
@@ -935,9 +869,10 @@ const Header = () => {
                               {userData?.name ? (
                                 userData.name.charAt(0).toUpperCase()
                               ) : (
-                                <img
-                                  src={userData?.image || "/assets/images/user.jpg"} 
+                                <NextImage
+                                  src={userData?.image || "/assets/images/user.jpg"}
                                   alt="Default User"
+                                  width={30}
                                   height={30}
                                   loading="lazy"
                                 />
@@ -1030,31 +965,31 @@ const Header = () => {
                       {/* {translation?.post_property || "Post Property"}{" "} {Number(listingAllowed) > 0 && "for Free"} */}
                       {listingAllowed > 0 ? 'Post Property for Free' : 'Post Property'}
                       {Number(listingAllowed) && listingAllowed > 0 ? (
-                        <img
+                        <NextImage
                           src="/assets/images/icons/free-badge.png"
                           alt="Free Badge"
-                          height="28"
-                          width="28"
+                          width={28}
+                          height={28}
                           loading="lazy"
                         />
                       ) : ""}
                       {!listingAllowed && listingAllowed !== 0 ? (
                         (
-                        <img
-                          src="/assets/images/icons/free-badge.png"
-                          alt="Free Badge"
-                          height="28"
-                          width="28"
-                          loading="lazy"
-                        />
-                      )
+                          <NextImage
+                            src="/assets/images/icons/free-badge.png"
+                            alt="Free Badge"
+                            width={28}
+                            height={28}
+                            loading="lazy"
+                          />
+                        )
                       ) : ""}
                     </Link>
                   </li>
                   {/* language  */}
                   <li className="nav-item ms-xl-3 setlang">
                     <a className="nav-link dropdown-toggle" role="button">
-                      <img
+                      <NextImage
                         src={`/assets/images/flags/${currentLang === "ar"
                           ? "ae"
                           : currentLang === "de"
@@ -1062,8 +997,8 @@ const Header = () => {
                             : "gb"
                           }.svg`}
                         alt={currentLang.toUpperCase()}
-                        height="20"
-                        width="20"
+                        width={20}
+                        height={20}
                         loading="lazy"
                       />{" "}
                       {currentLang === "ar"
@@ -1075,11 +1010,11 @@ const Header = () => {
                     <ul className="dropdown-single dropdown-nav dropdown-menu-end" style={{ minWidth: 'auto' }}>
                       <li className={currentLang === "en" ? "active" : ""}>
                         <a role="button" onClick={() => changeLanguage("en")}>
-                          <img
+                          <NextImage
                             src="/assets/images/flags/gb.svg"
                             alt="English"
-                            height="16"
-                            width="16"
+                            width={16}
+                            height={16}
                             loading="lazy"
                           />{" "}
                           En
@@ -1087,11 +1022,11 @@ const Header = () => {
                       </li>
                       <li className={currentLang === "ar" ? "active" : ""}>
                         <a role="button" onClick={() => changeLanguage("ar")}>
-                          <img
+                          <NextImage
                             src="/assets/images/flags/ae.svg"
                             alt="Arabic"
-                            height="16"
-                            width="16"
+                            width={16}
+                            height={16}
                             loading="lazy"
                           />{" "}
                           Ar
@@ -1099,11 +1034,11 @@ const Header = () => {
                       </li>
                       <li className={currentLang === "de" ? "active" : ""}>
                         <a role="button" onClick={() => changeLanguage("de")}>
-                          <img
+                          <NextImage
                             src="/assets/images/flags/de.svg"
                             alt="German"
-                            height="16"
-                            width="16"
+                            width={16}
+                            height={16}
                             loading="lazy"
                           />{" "}
                           De

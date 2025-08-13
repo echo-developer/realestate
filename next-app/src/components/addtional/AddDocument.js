@@ -1,8 +1,10 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Form, FloatingLabel } from "react-bootstrap";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 import useTranslation from "@/hooks/useTranslation";
+import Image from "next/image";
 
 const DocumentUploadModal = ({ propId, show, onClose }) => {
   const { callApi } = AuthUser();
@@ -18,7 +20,7 @@ const DocumentUploadModal = ({ propId, show, onClose }) => {
     project_id: "",
   });
   const [loading, setLoading] = useState(false);
-const translation = useTranslation();
+  const translation = useTranslation();
   // Fetch Previous Documents
   const fetchDocuments = async () => {
     try {
@@ -30,7 +32,7 @@ const translation = useTranslation();
 
       if (response?.status === 1) {
         setDocuments(response.data);
-      } 
+      }
     } catch (error) {
       console.error("Error fetching documents:", error);
     }
@@ -65,7 +67,7 @@ const translation = useTranslation();
         setFileUrl(response.filename_url);
         setCurrentDoc((prev) => ({ ...prev, fileName: response.fileName }));
         toast.success(response.message || "File uploaded successfully.");
-      } 
+      }
     } catch (error) {
       console.error("Error during upload:", error);
     }
@@ -97,7 +99,7 @@ const translation = useTranslation();
         setNewDocuments((prev) => [...prev, newDocument]);
 
         resetForm();
-      } 
+      }
     } catch (error) {
       console.error("API Error:", error);
     } finally {
@@ -135,7 +137,7 @@ const translation = useTranslation();
               <li key={index} className="d-flex align-items-center mb-3">
                 <span className="me-3">
                   {doc?.certificate_name} ({translation?.reg_no || "Reg No"}
-                    {doc?.certificate_number}) -
+                  {doc?.certificate_number}) -
                 </span>
                 {doc?.filename_url?.endsWith(".pdf") ? (
                   <a
@@ -143,16 +145,16 @@ const translation = useTranslation();
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                   {translation?.view || "View"}
+                    {translation?.view || "View"}
 
                   </a>
                 ) : (
-                  <img
+                  <Image
                     src={doc?.filename_url}
-                    alt={doc?.certificate_name}
+                    alt={doc?.certificate_name || "certificate"}
+                    width={60}
+                    height={60}
                     style={{
-                      width: "60px",
-                      height: "60px",
                       objectFit: "cover",
                       borderRadius: "8px",
                     }}
@@ -168,18 +170,18 @@ const translation = useTranslation();
         {/* Form for New Upload */}
         <h5 className="mb-3">{translation?.upload_new_document || "Upload New Document"}</h5>
         <FloatingLabel
-          label={translation?.registration_number || "Registration Number"} 
+          label={translation?.registration_number || "Registration Number"}
           className="mb-3"
         >
           <Form.Control
-            type="text"            
+            type="text"
             value={currentDoc.certificate_number}
             onChange={(e) => handleChange("certificate_number", e.target.value)}
             placeholder={translation?.enter_registration_number || "Enter Registration Number"}
 
           />
         </FloatingLabel>
-        <FloatingLabel 
+        <FloatingLabel
           label={translation?.document_name || "Document Name"}
           className="mb-3"
         >
@@ -191,7 +193,7 @@ const translation = useTranslation();
 
           />
         </FloatingLabel>
-        <Form.Group 
+        <Form.Group
           className="upload-area mb-3"
         >
           <Form.Control
@@ -210,17 +212,29 @@ const translation = useTranslation();
               <strong>{translation?.uploaded_file || "Uploaded File:"}
               </strong>
               <a href={fileUrl} target="_blank" rel="noopener noreferrer">
-              {translation?.view_pdf || "View PDF"}
+                {translation?.view_pdf || "View PDF"}
 
               </a>
             </p>
           ) : (
             <div>
               <h5>{translation?.uploaded_image_preview || "Uploaded Image Preview:"}</h5>
-              <img
+              {/* <img
                 src={fileUrl}
                 alt="Uploaded Document"
                 style={{ maxWidth: "100%", maxHeight: "200px" }}
+              /> */}
+              <Image
+                src={fileUrl}
+                alt="Uploaded Document"
+                width={500} // approximate width, adjust as needed
+                height={200}
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "200px",
+                  height: "auto",
+                  width: "auto",
+                }}
               />
             </div>
           ))}
@@ -236,7 +250,7 @@ const translation = useTranslation();
                 <li key={index} className="d-flex align-items-center mb-3">
                   <span className="me-3">
                     {doc?.certificate_name} ({translation?.reg_no || "Reg No"}
-                      {doc?.certificate_number})
+                    {doc?.certificate_number})
                     -
                   </span>
                   {doc?.file_url?.endsWith(".pdf") ? (
@@ -273,7 +287,7 @@ const translation = useTranslation();
           disabled={loading}
         >
           {loading ? "Saving..." : `${translation?.save_document || "Save Document"}`
-        }
+          }
         </Button>
       </Modal.Footer>
     </Modal>
