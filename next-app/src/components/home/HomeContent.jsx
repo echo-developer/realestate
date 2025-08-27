@@ -8,9 +8,9 @@ import { useAuth } from '@/context/AuthProvider';
 import { useInView } from "react-intersection-observer";
 import dynamic from 'next/dynamic';
 import useTranslation from '@/hooks/useTranslation';
-import { ShimmerText } from "react-shimmer-effects";
+import MainSlider from '../MainSlder/MainSlider';
 
-const MainSlider = dynamic(() => import("../MainSlder/MainSlider"), { ssr: false });
+
 const FindPropertySection = dynamic(() => import("./FindPropertySection"), { ssr: false });
 const VerifiedAgent = dynamic(() => import("./VerifiedAgent"), { ssr: false });
 const PopularLocalities = dynamic(() => import("./PopularLocalities"), { ssr: false });
@@ -164,31 +164,22 @@ const HomeContent = () => {
 
     return (
         <>
-            {loading && (
-                <>
-                    <ShimmerText line={15} gap={15} />
-                    <ShimmerText line={15} gap={15} />
-                </>
-            )}
             <ToastContainer position="top-right" autoClose={5000} />
 
-            <div ref={ref1}>
-                {view1 && (
-                    <MainSlider
-                        data={propertyData?.featured_properties}
-                        title={translation?.discover_featured_listings || "Discover Our Featured Listings"}
-                        miniTitle={translation?.featured_homes || "Featured Homes"}
-                        subTitle={translation?.explore_featured_properties}
-                        logo="assets/images/icons/house-sm-1.png"
-                        type="normal"
-                        mainType="property"
-                        url="/property-details"
-                        listKey="featured_properties"
-                        addRemoveFav={addRemoveFav}
-                        translation={translation}
-                    />
-                )}
-            </div>
+            <MainSlider
+                data={propertyData?.featured_properties}
+                title={translation?.discover_featured_listings || "Discover Our Featured Listings"}
+                miniTitle={translation?.featured_homes || "Featured Homes"}
+                subTitle={translation?.explore_featured_properties || ""}
+                logo="assets/images/icons/house-sm-1.png"
+                type="normal"
+                mainType="property"
+                url="/property-details"
+                listKey="featured_properties"
+                addRemoveFav={addRemoveFav}
+                translation={translation}
+                loading={loading}
+            />
 
             <div ref={ref2}>
                 {view2 && (
@@ -244,6 +235,7 @@ const HomeContent = () => {
                         listKey="popular_properties"
                         addRemoveFav={addRemoveFav}
                         translation={translation}
+                        loading={loading}
                     />
                 )}
             </div>

@@ -1,11 +1,13 @@
 "use client";
 import React from 'react';
 import SideBar from '../sidebar/SideBar';
-import Header from '../header/Header';
-import MobileFooter from '../addtional/MobileFooter';
 import dynamic from 'next/dynamic';
+import useIsMobile from '@/hooks/useIsMobile';
+const Header = dynamic(() => import('../header/Header'), { ssr: false })
+const MobileFooter = dynamic(() => import('../addtional/MobileFooter'), {ssr: false})
 
 const DashboardLayout = ({ children }) => {
+  const isMobile = useIsMobile();
   return (
     <React.Fragment>
       <Header />
@@ -18,7 +20,7 @@ const DashboardLayout = ({ children }) => {
           </div>
         </div>
       </div>
-      <MobileFooter />
+      {isMobile && <MobileFooter />}
     </React.Fragment>
   );
 };

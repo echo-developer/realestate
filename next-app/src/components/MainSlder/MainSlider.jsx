@@ -9,8 +9,9 @@ import "./slick.css";
 import useDateFormat from '@/hooks/useDateFormat'
 import Image from 'next/image';
 import { useAuth } from '@/context/AuthProvider';
+import CardShimmer from '../shimmer/card/CardShimmer';
 
-const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemoveFav, mainType, listKey ,translation }) => {
+const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemoveFav, mainType, listKey, translation, loading }) => {
 
     const [isMobile, setIsMobile] = useState(false);
     const checkMobileView = () => {
@@ -28,41 +29,41 @@ const MainSlider = ({ data, title, miniTitle, subTitle, logo, type, url, addRemo
 
     return (
         <>
-            {data?.length > 0 && (
+            {/* {data?.length > 0 && ( */}
                 <section className="section pb-0">
                     <div className="container-fluid">
                         <div className="section-headline text-center">
                             <h5>
-                                <Image src={logo || "assets/images/icons/house-sm-1.png"} alt="Icon" height="20" width="20" loading="lazy"/> {miniTitle}
+                                <Image src={logo || "assets/images/icons/house-sm-1.png"} alt="Icon" height="20" width="20" loading="lazy" /> {miniTitle}
                             </h5>
-                            <h3>{title || `${translation?.not_available ||"Not available"}`}</h3>
-                            <p>{subTitle || `${translation?.not_available ||"Not available"}`}</p>
+                            <h3>{title || `${translation?.not_available || "Not available"}`}</h3>
+                            <p>{subTitle || `${translation?.not_available || "Not available"}`}</p>
                         </div>
                         {type === "card" && (
-                            <CardTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey}  translation={translation}/>
+                            <CardTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} translation={translation} />
                         )}
                         {type === "normal" && (
-                            <NormarTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} translation={translation} />
+                            <NormarTypeComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} translation={translation} loading={loading} />
                         )}
                         {type === "project card" && (
                             <ProjectCardComponent isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} translation={translation} />
                         )}
                         {type === "project galary" && (
-                            <NewProjectGalary isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} translation={translation}/>
+                            <NewProjectGalary isMobile={isMobile} data={data} url={url} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} translation={translation} />
                         )}
 
                     </div>
                 </section>
-            )}
+            {/* // )} */}
         </>
     )
-}     
+}
 
 export default MainSlider;
 
 
-const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveFav, mainType, listKey, translation }) => {
-    const [currentSlide, setCurrentSlide] = useState(0); 
+const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveFav, mainType, listKey, translation, loading }) => {
+    const [currentSlide, setCurrentSlide] = useState(0);
     const { currencyCode, formatPrice } = useAuth();
 
 
@@ -127,22 +128,11 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
         }
     };
 
+
     return (
         <div className="custom-carousel-container">
-            {/* {!isMobile && data?.length > 4 && (
-                <div className="carousel-controls">
-                    <button onClick={goToPrevSlide} className="prev-button">
-                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                    </button>
-                    <button onClick={goToNextSlide} className="next-button">
-                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                    </button>
-                </div>
-            )} */}
-
-
             <Slider ref={sliderRef} {...settings}>
-                {data?.length > 0 && data?.map((item, i) => {
+                {!loading && data?.length > 0 && data?.map((item, i) => {
                     const firstImage = item?.galleries?.[0]?.images?.[0]?.image_url || "/assets/images/uploads/d0d74748da69d1067d797427796723c5.jpg";
                     const id = mainType === "property" ? "property_id" : "project_id";
                     const price = formatPrice(item?.price);
@@ -201,6 +191,11 @@ const NormarTypeComponent = ({ isMobile, data, url, handleRouteClick, addRemoveF
                             </article>
                         </div>
                     );
+                })}
+                {loading && [...Array(4)]?.map((item, i) => {
+                    return (
+                        <CardShimmer key={i} />
+                    )
                 })}
             </Slider>
 
@@ -268,7 +263,7 @@ const CardTypeComponent = ({ isMobile, data, url, addRemoveFav, mainType, listKe
                         <CardImageSlider data={item} id={id} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} />
                         <div className="card-body">
                             <h4>
-                                <a href={`${url}/${item?.slug}`} target='_blank'>{item?.property_name ||`${translation?.not_available ||"Not available"}`}</a>
+                                <a href={`${url}/${item?.slug}`} target='_blank'>{item?.property_name || `${translation?.not_available || "Not available"}`}</a>
                             </h4>
                             <p className="mb-1">
                                 <i className="icon-feather-map-pin"></i> {item?.address}
@@ -348,13 +343,13 @@ const ProjectCardComponent = ({ isMobile, data, url, addRemoveFav, mainType, lis
                         <div className="card-body">
                             <h4>
                                 <a href={`${url}/${project?.slug}`} target="_blank" rel="noopener noreferrer">
-                                    {project?.project_name || `${translation?.not_available ||"Not available"}`}
+                                    {project?.project_name || `${translation?.not_available || "Not available"}`}
                                 </a>
                             </h4>
                             {project?.address && (
                                 <p className="mb-1">
-                                <i className="icon-feather-map-pin"></i> {project?.address}
-                            </p>
+                                    <i className="icon-feather-map-pin"></i> {project?.address}
+                                </p>
                             )}
                             <ul className="list-info mb-3">
                                 {project?.property_type_for && (
@@ -390,7 +385,7 @@ const ProjectCardComponent = ({ isMobile, data, url, addRemoveFav, mainType, lis
     );
 };
 
-const NewProjectGalary = ({ isMobile, data, url, addRemoveFav, mainType, listKey,translation }) => {
+const NewProjectGalary = ({ isMobile, data, url, addRemoveFav, mainType, listKey, translation }) => {
     const responsive = {
         desktop: { breakpoint: { max: 3000, min: 1024 }, items: 4, slidesToSlide: 1 },
         tablet: { breakpoint: { max: 1024, min: 768 }, items: 2, slidesToSlide: 1 },
@@ -418,12 +413,12 @@ const NewProjectGalary = ({ isMobile, data, url, addRemoveFav, mainType, listKey
                         <CardImageSlider data={item} keyword="gallery" id={id} addRemoveFav={addRemoveFav} mainType={mainType} listKey={listKey} translation={translation} />
                         <div className="card-body">
                             <h4>
-                                <a href={`${url}/${item?.slug}`} target="_blank">{item?.project_name || `${translation?.not_available ||"Not available"}`}</a>
+                                <a href={`${url}/${item?.slug}`} target="_blank">{item?.project_name || `${translation?.not_available || "Not available"}`}</a>
                             </h4>
                             {item?.address && (
                                 <p className="mb-1">
-                                <i className="icon-feather-map-pin"></i> {item?.address}
-                            </p>
+                                    <i className="icon-feather-map-pin"></i> {item?.address}
+                                </p>
                             )}
                             <ul className="list-info">
                                 {item?.property_type_for && (

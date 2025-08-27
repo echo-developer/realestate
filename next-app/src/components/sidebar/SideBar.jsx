@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import AuthUser from "../Authentication/AuthUser";
-import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import UserLogoUpload from "../ModalData/UserLogoUpload";
 import Link from "next/link";
@@ -9,7 +8,7 @@ import useTranslation from "@/hooks/useTranslation";
 import { useAuth } from "@/context/AuthProvider";
 
 const SideBar = () => {
-  const { callApi, GetMemberId, logout } = AuthUser();
+  const { GetMemberId, logout } = AuthUser();
   // const [userData, setUserData] = useState();
   const { userData, uploadUserImage } = useAuth();
 
@@ -22,10 +21,12 @@ const SideBar = () => {
   const dropdownRef = useRef(null);
   const translation = useTranslation();
 
-  const storedLogo = localStorage.getItem("user_logo");
-
+  
   useEffect(() => {
-    setUserLogo(storedLogo);
+    if(typeof window !== "undefined") {
+      const storedLogo = localStorage?.getItem("user_logo") || "";
+      setUserLogo(storedLogo);
+    }
   }, []);
 
   const toggleDropdown = (e) => {

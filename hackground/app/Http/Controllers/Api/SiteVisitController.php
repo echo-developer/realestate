@@ -9,6 +9,7 @@ use App\Models\SiteVisit;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SiteVisitController extends Controller
 {
@@ -72,9 +73,9 @@ class SiteVisitController extends Controller
 
     public function getSiteVisitreq(Request $request)
     {
-
-        $userId = $request->user_id ?? auth_user_id();
-
+        try {
+            $userId = $request->user_id ?? auth_user_id();
+        log::info($userId);
         $getVisitList  = LeadAssigned::select('assign_id', 'lead_type', 'enquery_id', 'lead_status', 'is_seen')
             ->with(['siteVisit'])
             ->where('user_id', $userId)
@@ -96,5 +97,9 @@ class SiteVisitController extends Controller
             'message' => 'Visit request retrived',
             'data' => $getVisitList,
         ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+        
     }
 }

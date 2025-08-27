@@ -70,7 +70,6 @@ const Index = () => {
                                         onSubmit={handleSubmit}
                                     >
                                         {({ isSubmitting }) => (
-                                            <Form className="authentication-form" autoComplete="off">
                                                 <div className="row">
                                                     <div className="col-md-12 col-12">
                                                         <FloatingLabel
@@ -80,7 +79,7 @@ const Index = () => {
                                                             <input
                                                                 type="email"
                                                                 className="form-control"
-                                                                value={userData.email}
+                                                                value={userData?.email}
                                                                 readOnly
                                                             />
                                                         </FloatingLabel>
@@ -128,7 +127,7 @@ const Index = () => {
                                                         <div className="d-grid">
                                                             {step === 'password' && (
                                                                 <Button type="submit" variant="primary" disabled={isSubmitting}>
-                                                                    Send OTP
+                                                                    {translation?.send_otp || "Send OTP"}
                                                                 </Button>
                                                             )}
 
@@ -138,7 +137,7 @@ const Index = () => {
                                                                         Go Back
                                                                     </Button>
                                                                     <Button type="submit" variant="primary" disabled={isSubmitting}>
-                                                                        Verify
+                                                                        {translation?.verify_otp || "Verify"}
                                                                     </Button>
                                                                 </div>
                                                             )}
@@ -146,7 +145,6 @@ const Index = () => {
 
                                                     </div>
                                                 </div>
-                                            </Form>
                                         )}
                                     </Formik>
                                 </Card.Body>

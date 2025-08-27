@@ -1,13 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    unoptimized: true, // Important for static export (disables Image Optimization)
+    unoptimized: true, 
   },
-  generateBuildId: async () => 'my-build-id', // Optional, but helps cache-busting
+  generateBuildId: async () => 'my-build-id', 
   experimental: {
     serverActions: false,
   },
-  output: 'export', // 👈 this enables static export to `out/` folder
+  output: 'export', 
+  modularizeImports: {
+    lodash: { transform: 'lodash/{{member}}' },
+    'react-bootstrap': { transform: 'react-bootstrap/{{member}}' },
+  }
 };
 
 module.exports = nextConfig;

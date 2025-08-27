@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import CRMEnquiry from "@/components/property-crm/CRMEnquiry";
 import AuthUser from "@/components/Authentication/AuthUser";
-import useDateFormat from "@/hooks/useDateFormat";
 import Link from "next/link";
-import Swal from "sweetalert2";
 import { toast } from "react-toastify";
-import { enquiryStatuses } from "@/components/post/PropertyData";
 import withAuth from "@/utils/withAuth";
-import { RiMapPinTimeLine } from "react-icons/ri";
 import useTranslation from "@/hooks/useTranslation";
 import CardImageSlider from "@/components/cardImageSlider/CardImageSlider";
-import { Modal, Button, Nav } from "react-bootstrap";
+import Image from "next/image";
+import { Modal, Nav } from "react-bootstrap";
 import ContactModal from "@/components/property-crm/ContactModal";
 
 
-
-const ITEMS_PER_PAGE = 10;
 
 const Index = () => {
     const { callApi, GetMemberId } = AuthUser();
@@ -135,7 +129,6 @@ const Index = () => {
 
     const handleModalOpen = (phone = "", email = "", assign_id, enquery_id, lead_type, blur) => {
         if (blur) {
-
             handleOpenModal();
         } else {
             setActiveModalData({
@@ -269,11 +262,11 @@ const Index = () => {
                         <>
                             <div className="card border-0 text-center mt-4">
                                 <div className="card-body">
-                                    <img
+                                    <Image
                                         src="/assets/images/icons/9939447.png"
                                         alt="Icon"
-                                        height={48}
                                         width={48}
+                                        height={48}
                                         className="mb-2"
                                         loading="lazy"
                                     />
@@ -470,7 +463,7 @@ const Index = () => {
                                             <div className="card-body">
                                                 <h5 className="card-title mb-1">
                                                     <Link href={`/property-details/${item?.site_visit?.property_details?.slug}`}>
-                                                    {item?.site_visit?.property_details?.name || "Property Name"}
+                                                        {item?.site_visit?.property_details?.name || "Property Name"}
                                                     </Link>
                                                 </h5>
 

@@ -5,7 +5,8 @@ import "./home.css";
 import dynamic from "next/dynamic";
 // import BannerForm from "./BannerForm";
 import useTranslation from "@/hooks/useTranslation";
-const BannerForm = dynamic(() => import('./BannerForm'), { ssr: false })
+// const BannerForm = dynamic(() => import('./BannerForm'), { ssr: false })
+import BannerForm from "./BannerForm";
 
 
 const Banner = () => {
@@ -36,11 +37,10 @@ const Banner = () => {
           src="/assets/images/banner-1.webp"
           alt="Main banner"
           fill
-          // priority
-          loading="lazy"
+          priority
           sizes="100vw"
-          placeholder="blur"
-          blurDataURL="/assets/images/banner-1-blur.webp" // tiny low-res preview
+          // placeholder="blur"
+          // blurDataURL="/assets/images/banner-1-blur.webp" 
           style={{
             objectFit: "cover",
             objectPosition: "bottom center",
