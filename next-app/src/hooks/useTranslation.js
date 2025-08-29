@@ -2,7 +2,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-const translationCache = {}; // Global cache to store fetched translations
+const translationCache = {}; // Memory cache
+const translationPromises = {}; // Ongoing fetch promises
 
 const useTranslation = () => {
   const { locale } = useRouter();
@@ -18,32 +19,49 @@ const useTranslation = () => {
 
   useEffect(() => {
     const loadTranslation = async () => {
+      // Return cached translations if available
       if (translationCache[currentLocale]) {
-        setTranslations(translationCache[currentLocale]); // Use cached translation
+        setTranslations(translationCache[currentLocale]);
         return;
       }
 
-      try {
-        const storedData = localStorage.getItem(`translations_${currentLocale}`);
-        if (storedData) {
-          const parsedData = JSON.parse(storedData);
-          setTranslations(parsedData);
-          translationCache[currentLocale] = parsedData; // Cache it
-          return;
-        }
-
-        const response = await fetch(`/locales/${currentLocale}.json`);
-        if (response.ok) {
-          const data = await response.json();
-          setTranslations(data);
-          translationCache[currentLocale] = data; // Cache the data
-          localStorage.setItem(`translations_${currentLocale}`, JSON.stringify(data));
-        } else {
-          console.error("Translation file not found for locale:", currentLocale);
-        }
-      } catch (error) {
-        console.error("Error loading translation:", error);
+      // Return sessionStorage if available
+      const storedData = sessionStorage.getItem(`translations_${currentLocale}`);
+      if (storedData) {
+        const parsedData = JSON.parse(storedData);
+        setTranslations(parsedData);
+        translationCache[currentLocale] = parsedData;
+        return;
       }
+
+      // If a fetch is already ongoing, wait for it
+      if (translationPromises[currentLocale]) {
+        const data = await translationPromises[currentLocale];
+        setTranslations(data);
+        return;
+      }
+
+      // Otherwise, start a new fetch
+      const fetchPromise = fetch(`/locales/${currentLocale}.json`)
+        .then((res) => {
+          if (!res.ok) throw new Error("Translation file not found");
+          return res.json();
+        })
+        .then((data) => {
+          translationCache[currentLocale] = data;
+          sessionStorage.setItem(`translations_${currentLocale}`, JSON.stringify(data));
+          return data;
+        })
+        .catch((err) => {
+          console.error("Error loading translation:", err);
+          return {};
+        });
+
+      translationPromises[currentLocale] = fetchPromise;
+      const data = await fetchPromise;
+      setTranslations(data);
+      // Clean up promise after fetch
+      delete translationPromises[currentLocale];
     };
 
     if (currentLocale) {

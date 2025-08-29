@@ -1,9 +1,6 @@
 "use client"
 import React, { useState, useEffect } from "react";
-// import Header from "../header/Header";
-// import Footer from "../footer/Footer";
 import dynamic from "next/dynamic";
-// import Loading from "../LoadingSpinner/Loading";
 import { usePathname } from "next/navigation";
 const Header = dynamic(() => import('../header/Header'), { ssr: false });
 const Footer = dynamic(() => import('../footer/Footer'), { ssr: false });

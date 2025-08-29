@@ -6,12 +6,9 @@ import Link from "next/link";
 import NextImage from "next/image";
 import "../../app/globals.css";
 import AuthUser from "../Authentication/AuthUser";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import { Collapse, Dropdown } from "react-bootstrap";
-import { toast } from "react-toastify";
+import { Dropdown } from "react-bootstrap";
 import { useRouter, usePathname } from "next/navigation";
 import useIsMobile from "@/hooks/useIsMobile";
-// import useTranslation from "@/hooks/useTranslation";
 
 import { useAuth } from "@/context/AuthProvider";
 import MobileMenu from "../addtional/Mmenu";
@@ -19,32 +16,26 @@ import Select from 'react-select';
 
 const Header = () => {
   const isMobile = useIsMobile();
-  const { callApi, isLogin, logout, GetMemberId } = AuthUser();
+  const { callApi, logout, GetMemberId } = AuthUser();
   const { defaultCity, handleDefaultCityChange, setGetAllCity, currency, userData, listingAllowed } = useAuth();
-  const [isDesktopLogoLoaded, setIsDesktopLogoLoaded] = useState(false);
   const [isMobileLogoLoaded, setIsMobileLogoLoaded] = useState(false);
-  const [showLocationDrop, setShowLocationDrop] = useState(false);
-  const [mobileView, setMobileView] = useState(false);
-  const [menu, setMenu] = useState(false);
-  const [isMobileView, setIsMobileView] = useState(false);
   const [cityData, setCityData] = useState([]);
   const [selectedCity, setSelectedCity] = useState("Kolkata");
-  const [cityId, setCityId] = useState(1);
   const pathname = usePathname();
   const isHomePage = pathname === "/";
   const [scrollState, setScrollState] = useState("header-sticky");
-  const [offCanvasPropertyCrm, setOffCanvasPropertyCrm] = useState(false);
   let lastScrollY = window.scrollY;
   const router = useRouter();
   const translation = useTranslation();
   const [validLogin, setValidLogin] = useState(false);
-  // const [userData, setUserData] = useState();
   const memberId = GetMemberId();
   const [currentLang, setCurrentLang] = useState("en");
 
   useEffect(() => {
-    const storedLang = localStorage.getItem("lang") || "en";
-    setCurrentLang(storedLang);
+    if(typeof window != 'undefined') {
+      const storedLang = localStorage.getItem("lang") || "en";
+      setCurrentLang(storedLang);
+    }
   }, []);
 
   useEffect(() => {
@@ -58,7 +49,6 @@ const Header = () => {
   useEffect(() => {
     if (defaultCity) {
       setSelectedCity(defaultCity?.name);
-      setCityId(defaultCity?.city_id);
     }
   }, [defaultCity]);
 
@@ -93,22 +83,6 @@ const Header = () => {
     FetchCityData();
   }, []);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const handleResize = () => {
-        if (window?.innerWidth < 1200) {
-          setIsMobileView(true);
-        } else {
-          setIsMobileView(false);
-        }
-      };
-
-      window?.addEventListener("resize", handleResize);
-      handleResize();
-      return () => window?.removeEventListener("resize", handleResize);
-    }
-  }, []);
-
   const FetchCityData = async () => {
     try {
       const response = await callApi({
@@ -130,19 +104,6 @@ const Header = () => {
     } catch (error) { }
   };
 
-  const handleShowLocationDropDown = () => {
-    setShowLocationDrop((prev) => !prev);
-  };
-
-  const handleRightClick = (e) => {
-    setShowLocationDrop(false);
-  };
-  useEffect(() => {
-    document.addEventListener("contextmenu", handleRightClick);
-    return () => {
-      document.removeEventListener("contextmenu", handleRightClick);
-    };
-  }, []);
 
 
   const handleLogout = (e) => {
@@ -180,10 +141,6 @@ const Header = () => {
   };
 
   useEffect(() => {
-    // const desktopImage = new Image();
-    // desktopImage.src = "/assets/images/logo.png";
-    // desktopImage.onload = () => setIsDesktopLogoLoaded(true);
-    // desktopImage.onerror = () => setIsDesktopLogoLoaded(false);
     if (isMobile) {
       const mobileImage = new Image();
       mobileImage.src = "/assets/images/logo-mobile.png";
@@ -191,6 +148,10 @@ const Header = () => {
       mobileImage.onerror = () => setIsMobileLogoLoaded(false);
     }
   }, [isMobile]);
+
+  if(isMobile === null) {
+    return null;
+  }
 
   return (
     <>

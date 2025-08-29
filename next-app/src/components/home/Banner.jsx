@@ -1,11 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import Image from "next/image";
 import "./home.css";
-import dynamic from "next/dynamic";
-// import BannerForm from "./BannerForm";
 import useTranslation from "@/hooks/useTranslation";
-// const BannerForm = dynamic(() => import('./BannerForm'), { ssr: false })
 import BannerForm from "./BannerForm";
 
 
@@ -62,7 +59,9 @@ const Banner = () => {
                         "Search A Home Which You’ll Love"}
                     </h1>
                   </div>
+                  <Suspense>
                   <BannerForm handleClickOutside={handleClickOutside} dropdownState={dropdownState} setDropdownState={setDropdownState} setIsOverlayVisible={setIsOverlayVisible} />
+                  </Suspense>
                 </div>
               </div>
             </div>

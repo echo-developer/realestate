@@ -14,9 +14,11 @@ export default function Home() {
     <>
       <div>
         <MainLayout>
-           <Banner />
+          <Banner /> 
           <QuickSection />
+         <Suspense fallback={<></>}>
          <HomeContent />
+         </Suspense>
         </MainLayout>
       </div>
     </>

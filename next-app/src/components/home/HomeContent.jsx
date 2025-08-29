@@ -182,7 +182,7 @@ const HomeContent = () => {
             />
 
             <div ref={ref2}>
-                {view2 && (
+                {view2 && propertyData?.top_properties && (
                     <MainSlider
                         data={propertyData?.top_properties}
                         title={translation?.top_property || "Top Property"}
@@ -200,7 +200,7 @@ const HomeContent = () => {
             </div>
 
             <div ref={ref3}>
-                {view3 && (
+                {view3 && propertyData?.recent_properties && (
                     <>
                         <MainSlider
                             data={propertyData?.recent_properties}
@@ -222,7 +222,7 @@ const HomeContent = () => {
             <div ref={ref4}>{view4 && <FindPropertySection translation={translation} />}</div>
 
             <div ref={ref5}>
-                {view5 && (
+                {view5 && propertyData?.popular_properties && (
                     <MainSlider
                         data={propertyData?.popular_properties}
                         title={translation?.popular_property}

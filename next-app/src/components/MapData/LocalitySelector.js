@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useLoadScript } from "@react-google-maps/api";

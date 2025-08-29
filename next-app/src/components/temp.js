@@ -1,10 +1,558 @@
-const MainSlider = dynamic(() => import("../MainSlder/MainSlider"), { ssr: false });
-const FindPropertySection = dynamic(() => import("./FindPropertySection"), { ssr: false });
-const VerifiedAgent = dynamic(() => import("./VerifiedAgent"), { ssr: false });
-const PopularLocalities = dynamic(() => import("./PopularLocalities"), { ssr: false });
-const ProperTimeLine = dynamic(() => import("./ProperTimeLine"), { ssr: false });
-const Testimonials = dynamic(() => import("./Testimonials"), { ssr: false });
-const AdviceSection = dynamic(() => import("./AdviceSection"), { ssr: false });
-const LoginErrorModal = dynamic(() => import("./LoginErrorModal"), { ssr: false });
-const TotolUserRecord = dynamic(() => import("./TotolUserRecord"), { ssr: false });
-const PostPropertyPath = dynamic(() => import("./PostPropertyPath"), { ssr: false });
+'use client';
+
+import { useEffect, useRef } from 'react';
+// Bring in the default mmenu styles
+import 'mmenu-js/dist/mmenu.css';
+
+/**
+ * Simple mmenu-js off‑canvas menu for Next.js (App Router friendly)
+ *
+ * Install deps:
+ *   npm i mmenu-js
+ *
+ * Usage:
+ *   import MMenu from '@/components/MMenu';
+ *   ...
+ *   <MMenu />
+ */
+export default function MMenu() {
+  const menuRef = useRef(null);
+  const apiRef = useRef(null);
+
+  useEffect(() => {
+    let cleanup;
+
+    (async () => {
+      // Dynamic import so it doesn't run during SSR
+      const Mmenu = (await import('mmenu-js')).default;
+
+      // Initialize mmenu on the <nav> element
+      const instance = new Mmenu(
+        menuRef.current,
+        {
+          theme: 'light',
+          navbar: { title: 'Menu' },
+          slidingSubmenus: true,
+        },
+        {
+          offCanvas: {
+            position: 'left',
+            // correct way for mmenu-js
+            pageSelector: '#__next',
+          },
+        }
+      );
+      
+
+      apiRef.current = instance.API;
+      cleanup = () => instance?.destroy();
+    })();
+
+    return () => {
+      if (cleanup) cleanup();
+    };
+  }, []);
+
+  return (
+    <div>
+      {/* Toggle button */}
+      <button
+        type="button"
+        aria-label="Open menu"
+        onClick={() => apiRef.current && apiRef.current.open()}
+        className="fixed top-4 left-4 z-[100] rounded-2xl border px-3 py-2 shadow bg-white/90 hover:bg-white"
+      >
+        <span style={{ fontSize: 20 }}>☰</span>
+      </button>
+
+      {/* The menu element mmenu will enhance */}
+      <nav ref={menuRef} id="mobile-menu">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li>
+            <span>Products</span>
+            <ul>
+              <li><a href="/products/a">Category A</a></li>
+              <li><a href="/products/b">Category B</a></li>
+              <li><a href="/products/c">Category C</a></li>
+            </ul>
+          </li>
+          <li>
+            <span>About</span>
+            <ul>
+              <li><a href="/about/company">Company</a></li>
+              <li><a href="/about/team">Team</a></li>
+            </ul>
+          </li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <style jsx global>{`
+        .mm-ocd--open ~ button[aria-label='Open menu'] { display: none; }
+      `}</style>
+    </div>
+  );
+}
+
+
+
+"use client";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import useIsMobile from "@/hooks/useIsMobile";
+import "mmenu-js/dist/mmenu.css";
+import AuthUser from "../Authentication/AuthUser";
+import { ImMenu } from "react-icons/im";
+import './mmenu.css'
+import { Cursor, Cart, ChatRightQuote, People, Speedometer, Tag, List, Key, ChatSquareText, House, Building, HouseHeart, BookmarkStar, Box, Mic, Flag, Lock, BoxArrowRight, BoxArrowLeft, Person } from 'react-bootstrap-icons';
+
+const MobileMenu = ({
+  translation,
+  handleLogout,
+  selectedCity,
+  currentLang,
+  changeLanguage,
+}) => {
+  const isMobile = useIsMobile();
+
+  const { GetMemberId } = AuthUser();
+
+  const memberId = GetMemberId();
+
+  useEffect(() => {
+    if (isMobile && typeof window !== "undefined") {
+      import("mmenu-js").then(({ default: Mmenu }) => {
+        const menu = new Mmenu("#menu", {
+          slidingSubmenus: true,
+          theme: "light",
+          extensions: ["position-right", "fx-menu-slide"],
+          navbars: [
+            {
+              content: ["prev", "title"],
+            },
+          ],
+        });
+
+        const api = menu.API;
+        document
+          .querySelector(".menu-trigger")
+          ?.addEventListener("click", () => api.open());
+          
+      });
+    }
+  }, [isMobile, memberId]);
+
+  const menuData = [
+    {
+      name: "Buy",
+      icon: <Cart color="currentColor" size={18} />,
+      options: [
+        {
+          name: "Popular Choices",
+          links: [
+            {
+              text: "Ready to Move",
+              url: "/property-listing?post_for=sell&property_type=1",
+             
+            },
+            {
+              text: "Owner Properties",
+              url: "/property-listing?post_for=sell&property_type=1",
+            },
+            {
+              text: "Budget Homes",
+              url: "/property-listing?sort_key=exp_price&sort_order=asc",
+            },
+            { text: "New Projects", url: "/project-listing" },
+          ],
+        },
+        {
+          name: "Property Types",
+          links: [
+            {
+              text: "Flat for ",
+              url: "/property-listing?property_type=1&property_for=1",
+            },
+            {
+              text: "Villa for ",
+              url: "/property-listing?property_type=1&property_for=2",
+            },
+            {
+              text: "Residential House ",
+              url: "/property-listing?property_type=1&property_for=6",
+            },
+            {
+              text: "Offices ",
+              url: "/property-listing?property_type=2&property_for=3",
+            },
+            {
+              text: "Commercial Office Space",
+              url: "/property-listing?post_for=sell&property_type=2&property_for=11",
+            },
+          ],
+        },
+        {
+          name: "Budget",
+          links: [
+            {
+              text: "Under AED 399.00",
+              url: '/property-listing?post_for=sell&property_type=1&searchData={"max_budget":399}',
+            },
+            {
+              text: "AED400.00 - AED699.00",
+              url: '/property-listing?post_for=sell&property_type=1&searchData={"min_budget":400,"max_budget":699}',
+            },
+            {
+              text: "AED700.00 - AED1199.00",
+              url: '/property-listing?post_for=sell&property_type=1&searchData={"min_budget":700,"max_budget":1199}',
+            },
+            {
+              text: "AED1200.00 - AED1599.00",
+              url: '/property-listing?post_for=sell&property_type=1&searchData={"min_budget":1200,"max_budget":1599}',
+            },
+            {
+              text: "Above AED1600.00",
+              url: '/property-listing?post_for=sell&property_type=1&searchData={"min_budget":1600}',
+            },
+          ],
+        },
+        {
+          name: "Explore",
+          links: [
+            { text: "Find an Agent", url: "/agent-list" },
+            { text: "Projects", url: "/project-listing" },
+            { text: "Property Valuation", url: "/property-valuation" },
+            { text: "Top Agents ", url: "/agent-list" },
+          ],
+        },
+      ],
+      
+    },
+    {
+      name: "Rent",
+      icon: <Key color="currentColor" size={18} />,
+      options: [
+        {
+          name: "Popular Choices",
+          links: [
+            {
+              text: "Owner Properties",
+              url: "/property-listing?post_for=rent",
+            },
+            {
+              text: "Furnished Properties",
+              url: "/property-listing?post_for=rent",
+            },
+            {
+              text: "Semi Furnished Properties",
+              url: "/property-listing?post_for=rent",
+            },
+            {
+              text: "Immediately Available",
+              url: "/property-listing?post_for=rent",
+            },
+          ],
+        },
+        {
+          name: "Property Types",
+          links: [
+            {
+              text: "Flat for rent",
+              url: "/property-listing?post_for=rent&property_type=1&property_for=1",
+            },
+            {
+              text: "Villa for rent ",
+              url: "/property-listing?post_for=rent&property_type=1&property_for=2",
+            },
+            {
+              text: "Residential House for rent ",
+              url: "/property-listing?post_for=rent&property_type=1&property_for=6",
+            },
+            {
+              text: "Offices for rent ",
+              url: "/property-listing?post_for=rent&property_type=2&property_for=3",
+            },
+            {
+              text: "Commercial Office Space for rent ",
+              url: "/property-listing?post_for=rent&property_type=2&property_for=11",
+            },
+          ],
+        },
+        {
+          name: "Budget",
+          links: [
+            {
+              text: "Under AED 399.00",
+              url: "/property-listing?post_for=rent",
+            },
+            {
+              text: "AED400.00 - AED699.00",
+              url: "/property-listing?post_for=rent",
+            },
+            {
+              text: "AED700.00 - AED1199.00",
+              url: "/property-listing?post_for=rent",
+            },
+            {
+              text: "AED1200.00 - AED1599.00",
+              url: "/property-listing?post_for=rent",
+            },
+            {
+              text: "Above AED1600.00",
+              url: "/property-listing?post_for=rent",
+            },
+          ],
+        },
+        {
+          name: "Explore",
+          links: [
+            { text: "Find an Agent", url: "/agent-list" },
+            { text: "Rent Agreement", url: "/rent-agreement" },
+          ],
+        },
+      ],
+    },
+    {
+      name: "Sell",
+      icon: <Tag color="currentColor" size={18} />,
+      options: [
+        {
+          name: "For Owner",
+          links: [
+            { text: "Post Property", url: "/postproperty" },
+            { text: "My Dashboard", url: "/dashboard" },
+            { text: "Sell / Rent Ad Packages", url: "/membership" },
+          ],
+        },
+        {
+          name: "For Agent & Builder",
+          links: [
+            { text: "My Dashboard", url: "/dashboard" },
+            { text: "Ad Packages", url: "/membership" },
+            { text: "Sales Enquiry", url: "/sales-enquiry" },
+          ],
+        },
+        {
+          name: "Selling Tools",
+          links: [
+            { text: "Property Valuation In", url: "/property-valuation" },
+            { text: "Find an Agent", url: "/agent-list" },
+          ],
+        },
+      ],
+    },
+    {
+      name: "Agent",
+      options: [
+        { text: "Find an Agent", url: "/find-agent" },
+        { text: "Become an Agent", url: "/become-agent" },
+      ],
+      icon: <People color="currentColor" size={18} />,
+      options: [{ text: "Find an Agent", url: "/agent-list" }],
+    },
+  ];
+
+  return (
+    <>
+      {isMobile && <button className="menu-trigger"><List color="currentColor" size={24} /></button>}
+
+      {isMobile && (
+        <nav id="menu" className="menuHidden">
+          <ul>
+          <li className="setlang">
+              <span>
+                <img
+                  src={`/assets/images/flags/${
+                    currentLang === "ar"
+                      ? "ae"
+                      : currentLang === "de"
+                      ? "de"
+                      : "gb"
+                  }.svg`}
+                  alt={currentLang?.toUpperCase()}
+                  height="20"
+                  width="20"
+                />
+                {currentLang === "ar"
+                  ? "Arabic"
+                  : currentLang === "de"
+                  ? "German"
+                  : "English"}
+              </span>
+              <ul>
+                <li className={currentLang === "en" ? "active" : ""}>
+                  <a role="button" onClick={() => changeLanguage("en")}>
+                    <img
+                      src="/assets/images/flags/gb.svg"
+                      alt="English"
+                      height="16"
+                      width="16"
+                    />{" "}
+                    English
+                  </a>
+                </li>
+                <li className={currentLang === "ar" ? "active" : ""}>
+                  <a role="button" onClick={() => changeLanguage("ar")}>
+                    <img
+                      src="/assets/images/flags/ae.svg"
+                      alt="Arabic"
+                      height="16"
+                      width="16"
+                    />{" "}
+                    Arabic
+                  </a>
+                </li>
+                <li className={currentLang === "de" ? "active" : ""}>
+                  <a role="button" onClick={() => changeLanguage("de")}>
+                    <img
+                      src="/assets/images/flags/de.svg"
+                      alt="German"
+                      height="16"
+                      width="16"
+                    />{" "}
+                    German
+                  </a>
+                </li>
+              </ul>
+            </li>
+            {menuData.map((item) => (
+              <li key={item.name}>
+                 <span>{item.icon} {item.name}</span>
+                <ul>
+                  {item.options?.map((option, index) => (
+                    <li key={index}>
+                      {option.name ? (
+                        <>
+                          <span>{option.name}</span>
+                          <ul>
+                            {option.links?.map((link, linkIndex) => (
+                              <li key={linkIndex}>
+                                <Link href={link.url}>{link.text} </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      ) : (
+                        <Link href={option.url}>{option.text}</Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+            {memberId ? (
+              <React.Fragment>
+                <li>
+                  <Link href="/dashboard" className="active">
+                    <Speedometer color="currentColor" size={18} />{" "}
+                    {translation?.dashboard || "Dashboard"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/my-profile">
+                    <Person color="currentColor" size={18} />{" "}
+                    {translation?.profile || "Profile"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/review-list">
+                    <ChatRightQuote color="currentColor" size={18} />{" "}
+                    {translation?.reviews || "Reviews"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/my-property-listing?post_for=sale">
+                    <House color="currentColor" size={18} />{" "}
+                    {translation?.my_properties || "My Properties"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/my-project">
+                    <Building color="currentColor" size={18} />{" "}
+                    {translation?.my_projects || "My Projects"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/my-favourite-list">
+                    <HouseHeart color="currentColor" size={18} />{" "}
+                    {translation?.my_property_favourites ||
+                      "My Property Favourites"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/my-project-favourite-list">
+                    <BookmarkStar color="currentColor" size={18} />{" "}
+                    {translation?.my_project_favourites ||
+                      "My Project Favourites"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/postproperty">
+                    <Cursor color="currentColor" size={18} />{" "}
+                    {translation?.post_property || "Post Property"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/property-crm">
+                    <i className="icon-line-awesome-arrow-right"></i>{" "}
+                    {translation?.leads || "Leads"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/membership">
+                    <Box color="currentColor" size={18} />{" "}
+                    {translation?.packages || "Packages"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/enquiry-list">
+                    <Mic color="currentColor" size={18} />{" "}
+                    {translation?.enquiries || "Enquiries"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/report">
+                    <Flag color="currentColor" size={18} />{" "}
+                    {translation?.user_report || "User Report"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/update-password">
+                    <Lock color="currentColor" size={18} />{" "}
+                    {translation?.change_password || "Change Password"}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/" onClick={handleLogout}>
+                    <BoxArrowRight color="currentColor" size={18} />{" "}
+                    {translation?.logout || "Logout"}
+                  </Link>
+                </li>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <li>
+                  <Link href="/login" className="active">
+                    <BoxArrowLeft color="currentColor" size={18} />{" "}
+                    <span>{translation?.login || "Login"}</span>
+                  </Link>
+                </li>
+
+                <li>
+                  <Link href="/register" className="active">
+                    <Person color="currentColor" size={18} />{" "}
+                    <span>{translation?.register || "Register"}</span>
+                  </Link>
+                </li>
+              </React.Fragment>
+            )}
+            
+          </ul>
+        </nav>
+      )}
+    </>
+  );
+};
+
+export default MobileMenu;
