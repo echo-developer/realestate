@@ -3,6 +3,7 @@ import React, { Suspense, useState } from "react";
 import Image from "next/image";
 import "./home.css";
 import useTranslation from "@/hooks/useTranslation";
+import useIsMobile from "@/hooks/useIsMobile";
 import BannerForm from "./BannerForm";
 
 
@@ -10,11 +11,16 @@ const Banner = () => {
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   const [dropdownState, setDropdownState] = useState({});
   const translation = useTranslation();
+  const isMobile = useIsMobile();
 
   const handleClickOutside = (e) => {
     setDropdownState({});
     setIsOverlayVisible(false);
   };
+
+  if (isMobile === null) {
+    return null;
+  }
 
   return (
     <React.Fragment>
@@ -28,22 +34,21 @@ const Banner = () => {
       <div className="clearfix"></div>
       <section
         className="banner"
-      // style={{ backgroundImage: "url('/assets/images/banner-1.webp')" }}
       >
-        <Image
-          src="/assets/images/banner-1.webp"
-          alt="Main banner"
-          fill
-          priority
-          sizes="100vw"
-          // placeholder="blur"
-          // blurDataURL="/assets/images/banner-1-blur.webp" 
-          style={{
-            objectFit: "cover",
-            objectPosition: "bottom center",
-            zIndex: -1,
-          }}
-        />
+        {!isMobile && (
+          <Image
+            src="/assets/images/banner-1.webp"
+            alt="Main banner"
+            fill
+            priority
+            sizes="100vw"
+            style={{
+              objectFit: "cover",
+              objectPosition: "bottom center",
+              zIndex: -1,
+            }}
+          />
+        )}
         <div className="banner-layer">
           <div
             className="transparent-header-spacer"
@@ -59,8 +64,8 @@ const Banner = () => {
                         "Search A Home Which You’ll Love"}
                     </h1>
                   </div>
-                  <Suspense>
-                  <BannerForm handleClickOutside={handleClickOutside} dropdownState={dropdownState} setDropdownState={setDropdownState} setIsOverlayVisible={setIsOverlayVisible} />
+                  <Suspense fallback={<></>}>
+                    <BannerForm handleClickOutside={handleClickOutside} dropdownState={dropdownState} setDropdownState={setDropdownState} setIsOverlayVisible={setIsOverlayVisible} />
                   </Suspense>
                 </div>
               </div>

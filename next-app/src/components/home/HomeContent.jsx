@@ -41,7 +41,7 @@ const HomeContent = () => {
     const memberId = GetMemberId();
 
     const { ref: ref1, inView: view1 } = useInView({ triggerOnce: true, threshold: 0.1 });
-    const { ref: ref2, inView: view2 } = useInView({ triggerOnce: true, threshold: 0.1 });
+    const { ref: ref2, inView: view2 } = useInView({ triggerOnce: true, threshold: 0 });
     const { ref: ref3, inView: view3 } = useInView({ triggerOnce: true, threshold: 0.1 });
     const { ref: ref4, inView: view4 } = useInView({ triggerOnce: true, threshold: 0.1 });
     const { ref: ref5, inView: view5 } = useInView({ triggerOnce: true, threshold: 0.1 });
@@ -161,6 +161,8 @@ const HomeContent = () => {
         }
     };
     const handleLoginErrorClose = () => setShowLoginErrorModal(false);
+
+    console.log("propertyData", propertyData);
 
     return (
         <>

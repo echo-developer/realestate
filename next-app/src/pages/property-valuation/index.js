@@ -5,10 +5,13 @@ import { CheckCircle, Check, ArrowRight } from "lucide-react"
 import Image from "next/image"
 import MainLayout from "@/components/layout/MainLayout"
 import useTranslation from "@/hooks/useTranslation"
+import PropertyValuationForm from "@/components/property/PropertyValuationForm"
 
 export default function PropertyValuation() {
   const [activeTab, setActiveTab] = useState("role")
   const translation = useTranslation();
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
   // Content mapping for the tabs
   const tabContent = {
     role: {
@@ -66,7 +69,7 @@ export default function PropertyValuation() {
               </p>
               <p className="text-muted mb-4">{translation?.valuation_range || 'Get ₹5 crore to ₹50 lakh for your property'}
               </p>
-              <Button variant="primary">
+              <Button variant="primary" onClick={() => setShow(true)}>
                 {translation?.request_valuation || 'Request Valuation'}
                 <ArrowRight className="ms-2" size={20} />
               </Button>
@@ -191,37 +194,7 @@ export default function PropertyValuation() {
                         </span>
                       </div>
                     </Col>
-                    <Col lg="auto" className="mb-3">
-                      <h6 className="text-muted mb-0">{translation?.starting_from || 'Starting from'}</h6>
-                      <h2 className="fw-bold mb-0">₹2399</h2>
-                      <span className="badge bg-success">20% OFF</span>
-                    </Col>
                   </Row>
-                  <Button variant="primary" className="w-100">
-                    {translation?.get_now || 'Get Now'}
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col lg={6}>
-              {/* Contact Form */}
-              <Card className="mb-3">
-                <Card.Body>
-                  <h3 className="mb-4">{translation?.free_advice || 'Get Free Advice on your Property Valuation requirement'}</h3>
-                  <Form>
-                    <FloatingLabel label={translation?.name || "Name"} className="mb-3">
-                      <Form.Control type="text" placeholder="" />
-                    </FloatingLabel>                    
-                    <FloatingLabel label={translation?.mobile || "Mobile"} className="mb-3">
-                      <Form.Control type="tel" placeholder="" />
-                    </FloatingLabel>
-                    <FloatingLabel label={translation?.email || "Email"} className="mb-4">
-                      <Form.Control type="email" placeholder="" />
-                    </FloatingLabel>
-                    <Button variant="primary" className="w-100">
-                      {translation?.free_valuation || 'Get FREE Valuation'}
-                    </Button>
-                  </Form>
                 </Card.Body>
               </Card>
             </Col>
@@ -351,7 +324,10 @@ export default function PropertyValuation() {
             </Col>
           </Row>
         </Container>
-      </section>      
+      </section>    
+      {show && (
+        <PropertyValuationForm translation={translation} show={show} onHide={handleClose} />
+      )}  
     </MainLayout>
   )
 }
