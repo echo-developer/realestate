@@ -311,7 +311,7 @@ const index = () => {
   }, []);
 
   useEffect(() => {
-    if (router?.isReady && defaultCity) {
+    if (router?.isReady) {
       const queryObject = getSearchParamsData();
       // SET THE STATES
       if (queryObject?.post_for) {

@@ -209,7 +209,7 @@ const Index = () => {
 
 
   useEffect(() => {
-    if (router?.isReady && defaultCity) {
+    if (router?.isReady) {
       FetchProjectListData();
     }
   }, [
