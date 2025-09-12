@@ -5,6 +5,7 @@ import useIsMobile from "@/hooks/useIsMobile";
 import "mmenu-js/dist/mmenu.css";
 import AuthUser from "../Authentication/AuthUser";
 import { ImMenu } from "react-icons/im";
+import Image from "next/image";
 // import './mmenu.css'
 import { Cursor, Cart, ChatRightQuote, People, Speedometer, Tag, List, Key, ChatSquareText, House, Building, HouseHeart, BookmarkStar, Box, Mic, Flag, Lock, BoxArrowRight, BoxArrowLeft, Person } from 'react-bootstrap-icons';
 
@@ -39,7 +40,7 @@ const MobileMenu = ({
         document
           .querySelector(".menu-trigger")
           ?.addEventListener("click", () => api.open());
-          
+
       });
     }
   }, [isMobile, memberId]);
@@ -55,7 +56,7 @@ const MobileMenu = ({
             {
               text: "Ready to Move",
               url: "/property-listing?post_for=sell&property_type=1",
-             
+
             },
             {
               text: "Owner Properties",
@@ -128,7 +129,7 @@ const MobileMenu = ({
           ],
         },
       ],
-      
+
     },
     {
       name: "Rent",
@@ -261,56 +262,60 @@ const MobileMenu = ({
       {isMobile && (
         <nav id="menu" className="menuHidden">
           <ul>
-          <li className="setlang">
+            <li className="setlang">
               <span>
-                <img
-                  src={`/assets/images/flags/${
-                    currentLang === "ar"
+                <Image
+                  src={`/assets/images/flags/${currentLang === "ar"
                       ? "ae"
                       : currentLang === "de"
-                      ? "de"
-                      : "gb"
-                  }.svg`}
-                  alt={currentLang?.toUpperCase()}
-                  height="20"
-                  width="20"
+                        ? "de"
+                        : "gb"
+                    }.svg`}
+                  alt={currentLang?.toUpperCase() || "EN"}
+                  width={20}
+                  height={20}
+                  loading="lazy"
                 />
                 {currentLang === "ar"
                   ? "Arabic"
                   : currentLang === "de"
-                  ? "German"
-                  : "English"}
+                    ? "German"
+                    : "English"}
               </span>
               <ul>
                 <li className={currentLang === "en" ? "active" : ""}>
                   <a role="button" onClick={() => changeLanguage("en")}>
-                    <img
+                    <Image
                       src="/assets/images/flags/gb.svg"
                       alt="English"
-                      height="16"
-                      width="16"
+                      width={16}
+                      height={16}
+                      loading="lazy"
                     />{" "}
                     English
                   </a>
                 </li>
                 <li className={currentLang === "ar" ? "active" : ""}>
                   <a role="button" onClick={() => changeLanguage("ar")}>
-                    <img
+                    <Image
                       src="/assets/images/flags/ae.svg"
                       alt="Arabic"
-                      height="16"
-                      width="16"
+                      width={16}
+                      height={16}
+                      loading="lazy"
                     />{" "}
                     Arabic
                   </a>
                 </li>
                 <li className={currentLang === "de" ? "active" : ""}>
                   <a role="button" onClick={() => changeLanguage("de")}>
-                    <img
+
+                    <Image
                       src="/assets/images/flags/de.svg"
-                      alt="German"
-                      height="16"
-                      width="16"
+                      alt="Arabic"
+                      width={16}
+                      height={16}
+                      loading="lazy"
                     />{" "}
                     German
                   </a>
@@ -319,7 +324,7 @@ const MobileMenu = ({
             </li>
             {menuData.map((item) => (
               <li key={item.name}>
-                 <span>{item.icon} {item.name}</span>
+                <span>{item.icon} {item.name}</span>
                 <ul>
                   {item.options?.map((option, index) => (
                     <li key={index}>
@@ -448,7 +453,7 @@ const MobileMenu = ({
                 </li>
               </React.Fragment>
             )}
-            
+
           </ul>
         </nav>
       )}

@@ -3,6 +3,7 @@ import { Doughnut, Bar, Line } from "react-chartjs-2";
 import moment from "moment";
 import useTranslation from "@/hooks/useTranslation";
 import { Row, Col } from "react-bootstrap";
+import Image from "next/image";
 
 import {
   Chart as ChartJS,
@@ -177,14 +178,14 @@ const ChartsRow = ({ dashboardList }) => {
                   <Doughnut data={doughnutData} options={doughnutOptions} />
                 ) : (
                   <>
-                    <img
-                      alt="Icon"
-                      height="48"
-                      width="48"
-                      className="mb-2"
-                      loading="lazy"
-                      src="/assets/images/icons/9939447.png"
-                    />
+                    <Image
+  src="/assets/images/icons/9939447.png"
+  alt="Icon"
+  width={48}
+  height={48}
+  className="mb-2"
+  loading="lazy"
+/>
                     <p className="text-muted">No Record Found</p>
                   </>
                 )}

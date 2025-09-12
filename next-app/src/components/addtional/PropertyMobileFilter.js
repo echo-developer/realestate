@@ -2,9 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, Plus, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { toast } from "react-toastify";
-import { FaFilter } from "react-icons/fa6";
 import { Funnel } from "react-bootstrap-icons";
+import Image from "next/image";
 import {
   Button,
   Offcanvas,
@@ -164,9 +163,9 @@ export function PropertyMobileFilters({
           });
           if (res && res?.status === 1) {
             setSelectedPropertyForList(res?.data || []);
-          } 
+          }
         } catch (error) {
-          
+
         }
       };
 
@@ -227,7 +226,7 @@ export function PropertyMobileFilters({
     if (budgetRange.max_budget) {
       queryParams.append("max_budget", budgetRange?.max_budget);
     }
-    if(localityData) {
+    if (localityData) {
       queryParams.append('locality', localityData);
     }
     queryParams.append("searchData", JSON.stringify(searchData));
@@ -272,11 +271,11 @@ export function PropertyMobileFilters({
 
   return (
     <>
-      
+
       {/* Filter Button */}
       <Button variant="outline-primary d-md-none" size="sm" onClick={() => setShow(true)}>
         <Funnel color="#1365CF" size={16} /> Filters
-      </Button>              
+      </Button>
 
       {/* Bootstrap Offcanvas */}
       <Offcanvas
@@ -362,8 +361,8 @@ export function PropertyMobileFilters({
                 />
                 <label
                   className={`btn btn-sm ${selectedPropertyTypes.includes(type.category_id)
-                      ? "btn-outline-light"
-                      : "btn-success"
+                    ? "btn-outline-light"
+                    : "btn-success"
                     }`}
                   // btn-outline-light
                   htmlFor={`property_${type.category_id}`}
@@ -389,8 +388,8 @@ export function PropertyMobileFilters({
                 />
                 <label
                   className={`btn btn-sm ${selectedPropertyFor.includes(type.sub_category_id)
-                      ? "btn-outline-light"
-                      : "btn-success"
+                    ? "btn-outline-light"
+                    : "btn-success"
                     }`}
                   htmlFor={`property_for_data_${type.sub_category_id}`}
                 >
@@ -533,15 +532,16 @@ export function PropertyMobileFilters({
                     className="btn btn-outline-light btn-sm flex-column"
                     htmlFor={`amenity_${amenity.amenity_id}`}
                   >
-                    <img
+
+                    <Image
                       src={amenity.image || "/placeholder.svg"}
                       alt={amenity.amenity_name}
+                      width={24}
+                      height={24}
+                      style={{ objectFit: "contain" }}
                       className="mb-1"
-                      style={{
-                        width: "24px",
-                        height: "24px",
-                        objectFit: "contain",
-                      }}
+                      loading="lazy"
+                      unoptimized
                     />
                     {amenity.amenity_name}
                   </label>

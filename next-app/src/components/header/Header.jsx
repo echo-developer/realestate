@@ -183,11 +183,7 @@ const Header = () => {
                     <div className="shimmer-placeholder"></div>
                   )}
                   {isMobileLogoLoaded && (
-                    // <img
-                    //   src="/assets/images/logo-mobile.png"
-                    //   alt="Logo"
-                    //   loading="lazy"
-                    // />
+
                     <NextImage
                       src="/assets/images/logo-mobile.png"
                       alt="Logo"

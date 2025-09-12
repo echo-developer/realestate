@@ -30,16 +30,16 @@ const LoginHeader = () => {
     setMobileView(false);
   };
   useEffect(() => {
-      // const desktopImage = new Image();
-      // desktopImage.src = "/assets/images/logo.png";
-      // desktopImage.onload = () => setIsDesktopLogoLoaded(true);
-      // desktopImage.onerror = () => setIsDesktopLogoLoaded(false);
-  
-      const mobileImage = new Image();
-      mobileImage.src = "/assets/images/logo-mobile.png";
-      mobileImage.onload = () => setIsMobileLogoLoaded(true);
-      mobileImage.onerror = () => setIsMobileLogoLoaded(false);
-    }, []);
+    // const desktopImage = new Image();
+    // desktopImage.src = "/assets/images/logo.png";
+    // desktopImage.onload = () => setIsDesktopLogoLoaded(true);
+    // desktopImage.onerror = () => setIsDesktopLogoLoaded(false);
+
+    const mobileImage = new Image();
+    mobileImage.src = "/assets/images/logo-mobile.png";
+    mobileImage.onload = () => setIsMobileLogoLoaded(true);
+    mobileImage.onerror = () => setIsMobileLogoLoaded(false);
+  }, []);
 
   return (
     <>
@@ -48,48 +48,41 @@ const LoginHeader = () => {
           <div className="container-fluid position-relative">
             <div className="d-flex align-items-center">
               <Link href="/" className="navbar-brand">
-                              {/* Desktop Logo with Shimmer */}
-                              <div
-                                className="d-none d-md-block"
-                              >
-                                {/* {!isDesktopLogoLoaded && (
-                                  <div className="shimmer-placeholder"></div>
-                                )} */}
-                                {/* {isDesktopLogoLoaded && (
-                                  <img
-                                    src="/assets/images/logo.png"
-                                    alt="Logo"
-                                    loading="lazy"
-                                    style={{ opacity: isDesktopLogoLoaded ? 1 : 0, transition: 'opacity 0.3s ease-in-out' }}
-                                  />
-                                )} */}
-                                <NextImage
-                                  src="/assets/images/logo.png"
-                                  alt="Logo"
-                                  width={151}
-                                  height={56}
-                                  priority
-                                />
-              
-                              </div>
-              
-                              {/* Mobile Logo with Shimmer */}
-                              <div
-                                className="d-md-none"
-                              >
-                                {!isMobileLogoLoaded && (
-                                  <div className="shimmer-placeholder"></div>
-                                )}
-                                {isMobileLogoLoaded && (
-                                  <img
-                                    src="/assets/images/logo-mobile.png"
-                                    alt="Logo"
-                                    loading="lazy"
-                                  />
-                                )}
-                              </div>
-              
-                              <style jsx>{`
+                {/* Desktop Logo with Shimmer */}
+                <div
+                  className="d-none d-md-block"
+                >
+                  <NextImage
+                    src="/assets/images/logo.png"
+                    alt="Logo"
+                    width={151}
+                    height={56}
+                    priority
+                  />
+
+                </div>
+
+                {/* Mobile Logo with Shimmer */}
+                <div
+                  className="d-md-none"
+                >
+                  {!isMobileLogoLoaded && (
+                    <div className="shimmer-placeholder"></div>
+                  )}
+                  {isMobileLogoLoaded && (
+                    <NextImage
+                      src="/assets/images/logo-mobile.png"
+                      alt="Logo"
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                      style={{ width: "auto", height: "auto", maxWidth: "100%", maxHeight: "100%" }}
+                      loading="lazy"
+                    />
+                  )}
+                </div>
+
+                <style jsx>{`
                                   .shimmer-placeholder {
                                     display: block;
                                     width: 100%;
@@ -114,9 +107,9 @@ const LoginHeader = () => {
                                     }
                                   }
                                 `}</style>
-              
-              
-                            </Link>
+
+
+              </Link>
             </div>
             <div className="d-none d-lg-flex">
               <div id="navigation">
@@ -131,65 +124,71 @@ const LoginHeader = () => {
                     >
                       <i className="icon-line-awesome-mouse-pointer"></i>{" "}
                       {translation?.post_property || "Post Property"}{" "}
-                      <img
+                      <NextImage
                         src="/assets/images/icons/free-badge.png"
                         alt="Free Badge"
-                        height="28"
-                        width="28"
+                        width={28}
+                        height={28}
+                        loading="lazy"
                       />
+
                     </Link>
                   </li>
                   {/* language  */}
                   <li className="nav-item ms-3 setlang">
                     <a className="nav-link dropdown-toggle" role="button">
-                      <img
-                        src={`/assets/images/flags/${
-                          currentLang === "ar"
-                            ? "ae"
-                            : currentLang === "de"
+                      <NextImage
+                        src={`/assets/images/flags/${currentLang === "ar"
+                          ? "ae"
+                          : currentLang === "de"
                             ? "de"
                             : "gb"
-                        }.svg`}
+                          }.svg`}
                         alt={currentLang.toUpperCase()}
-                        height="20"
-                        width="20"
+                        width={20}
+                        height={20}
+                        loading="lazy"
                       />{" "}
                       {currentLang === "ar"
                         ? "Arabic"
                         : currentLang === "de"
-                        ? "German"
-                        : "English"}
+                          ? "German"
+                          : "English"}
                     </a>
                     <ul className="dropdown-single dropdown-nav dropdown-menu-end">
                       <li className={currentLang === "en" ? "active" : ""}>
                         <a role="button" onClick={() => changeLanguage("en")}>
-                          <img
+
+                          <NextImage
                             src="/assets/images/flags/gb.svg"
                             alt="English"
-                            height="16"
-                            width="16"
+                            width={16}
+                            height={16}
+                            loading="lazy"
                           />{" "}
                           English
                         </a>
                       </li>
                       <li className={currentLang === "ar" ? "active" : ""}>
                         <a role="button" onClick={() => changeLanguage("ar")}>
-                          <img
+                          <NextImage
                             src="/assets/images/flags/ae.svg"
                             alt="Arabic"
-                            height="16"
-                            width="16"
+                            width={16}
+                            height={16}
+                            loading="lazy"
                           />{" "}
                           Arabic
                         </a>
                       </li>
                       <li className={currentLang === "de" ? "active" : ""}>
                         <a role="button" onClick={() => changeLanguage("de")}>
-                          <img
+                          <NextImage
                             src="/assets/images/flags/de.svg"
                             alt="German"
-                            height="16"
-                            width="16"
+                            width={16}
+                            height={16}
+                            loading="lazy"
                           />{" "}
                           German
                         </a>
@@ -200,14 +199,14 @@ const LoginHeader = () => {
               </div>
             </div>
 
-              <MobileMenu
-                translation={translation}
-                handleLogout={handleLogout}
-                selectedCity={selectedCity}
-                currentLang={currentLang}
-                changeLanguage={changeLanguage}
-              />
-            
+            <MobileMenu
+              translation={translation}
+              handleLogout={handleLogout}
+              selectedCity={selectedCity}
+              currentLang={currentLang}
+              changeLanguage={changeLanguage}
+            />
+
           </div>
         </nav>
       </header>

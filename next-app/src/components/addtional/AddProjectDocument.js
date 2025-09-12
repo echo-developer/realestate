@@ -3,6 +3,7 @@ import { Modal, Button, Form, FloatingLabel } from "react-bootstrap";
 import { toast } from "react-toastify";
 import AuthUser from "../Authentication/AuthUser";
 import useTranslation from "@/hooks/useTranslation";
+import Image from "next/image";
 
 const ProjectDocumentModal = ({ propId, show, onClose }) => {
   const { callApi } = AuthUser();
@@ -162,16 +163,18 @@ const ProjectDocumentModal = ({ propId, show, onClose }) => {
                     {translation?.view || "View"}
                   </a>
                 ) : (
-                  <img
-                    src={doc?.filename_url}
-                    alt={doc?.certificate_name}
-                    style={{
-                      width: "60px",
-                      height: "60px",
-                      objectFit: "cover",
-                      borderRadius: "8px",
-                    }}
-                  />
+                  <Image
+  src={doc?.filename_url}
+  alt={doc?.certificate_name || "Certificate"}
+  width={60}
+  height={60}
+  style={{
+    objectFit: "cover",
+    borderRadius: "8px",
+  }}
+  unoptimized
+  loading="lazy"
+/>
                 )}
               </li>
             ))}
@@ -243,11 +246,16 @@ const ProjectDocumentModal = ({ propId, show, onClose }) => {
           ) : (
             <div>
               <h5>{translation?.uploaded_image_preview || "Uploaded Image Preview:"}</h5>
-              <img
-                src={fileUrl}
-                alt="Uploaded Document"
-                style={{ maxWidth: "100%", maxHeight: "200px" }}
-              />
+              <Image
+  src={fileUrl}
+  alt="Uploaded Document"
+  width={0}
+  height={0}
+  sizes="100vw"
+  style={{ maxWidth: "100%", maxHeight: "200px", height: "auto", width: "auto" }}
+  unoptimized
+  loading="lazy"
+/>
             </div>
           ))}
 
@@ -272,16 +280,18 @@ const ProjectDocumentModal = ({ propId, show, onClose }) => {
                       {translation?.view_pdf || "View PDF"}
                     </a>
                   ) : (
-                    <img
-                      src={doc?.file_url}
-                      alt={doc?.certificate_name}
-                      style={{
-                        width: "60px",
-                        height: "60px",
-                        objectFit: "cover",
-                        borderRadius: "8px",
-                      }}
-                    />
+                    <Image
+  src={doc?.file_url}
+  alt={doc?.certificate_name || "Certificate"}
+  width={60}
+  height={60}
+  style={{
+    objectFit: "cover",
+    borderRadius: "8px",
+  }}
+  unoptimized
+  loading="lazy"
+/>
                   )}
                 </li>
               ))}

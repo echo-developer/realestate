@@ -1,5 +1,6 @@
 import React from 'react';
 import useTranslation from '@/hooks/useTranslation';
+import Image from 'next/image';
 
 const properties = [
   {
@@ -123,7 +124,13 @@ const FeatureProperty = () => {
       <div className="container-fluid">
         <div className="section-headline text-center">
           <h5>
-            <img src="/assets/images/icons/house-sm-1.png" alt="Icon" height="20" width="20" /> Featured Homes
+            <Image
+  src="/assets/images/icons/house-sm-1.png"
+  alt="Icon"
+  width={20}
+  height={20}
+  loading="lazy"
+/> Featured Homes
           </h5>
           <h3>Discover Our Featured Listings</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
@@ -136,7 +143,16 @@ const FeatureProperty = () => {
                   <article className="item">
                     <div className="card card-ads card-overlay" style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)' }}>
                       <div className="card-image">
-                        <img src={property.image} alt="" className="card-img" />
+                        <Image
+  src={property.image}
+  alt=""
+  className="card-img"
+  width={0}
+  height={0}
+  style={{ width: "100%", height: "auto" }}
+  unoptimized
+  loading="lazy"
+/>
                         <span className={`ads-type ${property.type}`}>{property.type === "rent" ? "for rent" : "for Sale"}</span>
                         <span className="ads-fav"><i className="icon-line-awesome-heart-o"></i></span>
                       </div>

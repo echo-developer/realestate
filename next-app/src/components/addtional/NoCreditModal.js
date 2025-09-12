@@ -3,6 +3,7 @@ import { Modal, Button } from "react-bootstrap";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import useTranslation from "@/hooks/useTranslation";
+import Image from "next/image";
 
 function NoCreditModal({ show, onHide }) {
   const router = useRouter();
@@ -20,7 +21,15 @@ function NoCreditModal({ show, onHide }) {
       </Modal.Header>
       <Modal.Body>
         <div className="text-center bg-danger-subtle p-3 rounded-2">
-          <img src='/assets/images/icons/3515278.png' alt="No Credit" height={64} width={64} className="mb-2" />         
+          
+          <Image
+  src="/assets/images/icons/3515278.png"
+  alt="No Credit"
+  width={64}
+  height={64}
+  className="mb-2"
+  loading="lazy"
+/>        
           <p className="mb-0">{translation?.not_enough_credits || "You don’t have enough credits to proceed."}</p>        
           <p className="fst-italic text-muted">{translation?.upgrade_membership_to_continue || "Please upgrade your membership to continue."}</p>
         </div>

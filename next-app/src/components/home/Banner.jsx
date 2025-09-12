@@ -18,9 +18,9 @@ const Banner = () => {
     setIsOverlayVisible(false);
   };
 
-  if (isMobile === null) {
-    return null;
-  }
+  // if (isMobile === null) {
+  //   return null;
+  // }
 
   return (
     <React.Fragment>

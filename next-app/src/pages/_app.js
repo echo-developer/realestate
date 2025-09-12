@@ -12,6 +12,7 @@ import { AuthProvider } from "@/context/AuthProvider";
 // import 'mmenu-js/dist/mmenu.css'; // Optional default styles
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter();
   const { locale, events } = useRouter();
   const [loading, setLoading] = useState(true);
 
@@ -30,6 +31,14 @@ function MyApp({ Component, pageProps }) {
       events.off("routeChangeError", handleComplete);
     };
   }, [events]);
+
+  useEffect(() => {
+  if (router.pathname === "/") {
+    document.body.removeAttribute("id"); 
+  } else {
+    document.body.setAttribute("id", "wrapper"); 
+  }
+}, [router.pathname]);
 
 
   return (

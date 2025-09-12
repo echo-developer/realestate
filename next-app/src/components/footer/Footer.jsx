@@ -3,12 +3,11 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import useTranslation from '@/hooks/useTranslation';
 import MobileFooter from '../addtional/MobileFooter';
-import AuthUser from '../Authentication/AuthUser';
 import { useAuth } from '@/context/AuthProvider';
 import useIsMobile from '@/hooks/useIsMobile';
+import Image from 'next/image';
 
 const Footer = () => {
-  const { callApi } = AuthUser();
   const { adminDetails } = useAuth();
   const isMobile = useIsMobile();
   const [adminData, setAdminData] = useState({
@@ -123,6 +122,10 @@ const Footer = () => {
   //   }
   // }
 
+  if(isMobile === null) {
+    return null;
+  }
+
 
   return (
 
@@ -198,8 +201,26 @@ const Footer = () => {
                   </h4>
                   <ul className="foot-nav" style={{ display: dropDowns?.contactUs ? "block" : "" }}>
                     <a className="d-inline-block mb-3" href="index.php">
-                      <img src="/assets/images/logo.png" alt="Logo" className="d-none d-md-block" loading="lazy" />
-                      <img src="/assets/images/logo-mobile.png" alt="Logo" className="d-md-none" loading="lazy" />
+                      <Image
+  src="/assets/images/logo.png"
+  alt="Logo"
+  className="d-none d-md-block"
+  width={0}
+  height={0}
+  style={{ width: "auto", height: "auto", maxWidth: "100%" }}
+  loading="lazy"
+/>
+
+{/* Mobile Logo */}
+<Image
+  src="/assets/images/logo-mobile.png"
+  alt="Logo"
+  className="d-md-none"
+  width={0}
+  height={0}
+  style={{ width: "auto", height: "auto", maxWidth: "100%" }}
+  loading="lazy"
+/>
                     </a>
                     <address>
                       <p><i className="icon-feather-map-pin"></i> {adminData?.address ? adminData.address : ""}</p>
@@ -219,11 +240,7 @@ const Footer = () => {
                   </ul>
                 </div>
 
-                {/* Download App Section */}
-                {/* <div className="download-app">
-                <a href="" className="ms-2"><img src="/assets/images/google-play.png" alt="Google Play" height="40" width="133" loading="lazy"/></a>
-                <a href="" className="ms-2"><img src="/assets/images/app-store.png" alt="App Store" height="40" width="133" loading="lazy"/></a>
-              </div> */}
+
               </div>
             </div>
           </div>

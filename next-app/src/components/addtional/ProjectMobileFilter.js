@@ -4,6 +4,7 @@ import { ChevronLeft, Plus, X } from "lucide-react";
 import AuthUser from "../Authentication/AuthUser";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Funnel } from "react-bootstrap-icons";
+import Image from "next/image";
 import {
   Button,
   Offcanvas,
@@ -493,16 +494,16 @@ export function ProjectMobileFilters({
                     className="btn btn-outline-light btn-sm flex-column"
                     htmlFor={`amenity_${amenity.amenity_id}`}
                   >
-                    <img
-                      src={amenity.image || "/placeholder.svg"}
-                      alt={amenity.amenity_name}
-                      className="mb-1"
-                      style={{
-                        width: "24px",
-                        height: "24px",
-                        objectFit: "contain",
-                      }}
-                    />
+                    <Image
+  src={amenity.image || "/placeholder.svg"}
+  alt={amenity.amenity_name}
+  width={24}
+  height={24}
+  style={{ objectFit: "contain" }}
+  className="mb-1"
+  loading="lazy"
+  unoptimized
+/>
                     {amenity.amenity_name}
                   </label>
                 </React.Fragment>

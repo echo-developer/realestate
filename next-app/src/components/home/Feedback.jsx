@@ -3,6 +3,7 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import AuthUser from '../Authentication/AuthUser';
 import useTranslation from '../../hooks/useTranslation'
+import Image from 'next/image';
 
 
 const Feedback = () => {
@@ -63,7 +64,13 @@ const Feedback = () => {
         </div>
         <div className="bg-box">
           <div className="quote">
-            <img src="/assets/images/icons/quote.png" alt="Quote" height="72" width="72" />
+            <Image
+  src="/assets/images/icons/quote.png"
+  alt="Quote"
+  width={72}
+  height={72}
+  loading="lazy"
+/>
           </div>
           <div className="row gx-lg-5 align-items-center justify-content-between">
             <aside className="col-12">
@@ -86,13 +93,16 @@ const Feedback = () => {
                   >                    
                     <div className="card-body">
                       <div className="card-image text-center mb-3">
-                        <img
-                          src={testimonial?.image || "/assets/images/user.jpg"}
-                          alt="Feedback"
-                          height="150"
-                          width="150"
-                          className="rounded-circle"
-                        />
+                        <Image
+  src={testimonial?.image || "/assets/images/user.jpg"}
+  alt="Feedback"
+  width={150}
+  height={150}
+  className="rounded-circle"
+  style={{ objectFit: "cover" }}
+  unoptimized
+  loading="lazy"
+/>
                       </div>
                       <p>{testimonial?.description}</p>
                       <h4>{testimonial?.name}</h4>

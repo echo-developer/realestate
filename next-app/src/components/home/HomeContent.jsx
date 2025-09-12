@@ -9,6 +9,7 @@ import { useInView } from "react-intersection-observer";
 import dynamic from 'next/dynamic';
 import useTranslation from '@/hooks/useTranslation';
 import MainSlider from '../MainSlder/MainSlider';
+import Image from 'next/image';
 
 
 const FindPropertySection = dynamic(() => import("./FindPropertySection"), { ssr: false });
@@ -162,8 +163,6 @@ const HomeContent = () => {
     };
     const handleLoginErrorClose = () => setShowLoginErrorModal(false);
 
-    console.log("propertyData", propertyData);
-
     return (
         <>
             <ToastContainer position="top-right" autoClose={5000} />
@@ -183,7 +182,7 @@ const HomeContent = () => {
                 loading={loading}
             />
 
-            <div ref={ref2}>
+            <div ref={ref2} style={{minHeight: "300px"}}>
                 {view2 && propertyData?.top_properties && (
                     <MainSlider
                         data={propertyData?.top_properties}
@@ -201,7 +200,7 @@ const HomeContent = () => {
                 )}
             </div>
 
-            <div ref={ref3}>
+            <div ref={ref3} style={{minHeight: "300px"}}>
                 {view3 && propertyData?.recent_properties && (
                     <>
                         <MainSlider
@@ -221,9 +220,9 @@ const HomeContent = () => {
                 )}
             </div>
 
-            <div ref={ref4}>{view4 && <FindPropertySection translation={translation} />}</div>
+            <div ref={ref4} style={{minHeight: "300px"}}>{view4 && <FindPropertySection translation={translation} />}</div>
 
-            <div ref={ref5}>
+            <div ref={ref5} style={{minHeight: "300px"}}>
                 {view5 && propertyData?.popular_properties && (
                     <MainSlider
                         data={propertyData?.popular_properties}
@@ -242,11 +241,11 @@ const HomeContent = () => {
                 )}
             </div>
 
-            <div ref={ref6}>{view6 && <VerifiedAgent translation={translation} verifiedAgentList={verifiedAgentList} />}</div>
-            <div ref={ref7}>{view7 && <PopularLocalities translation={translation} />}</div>
-            <div ref={ref8}>{view8 && <ProperTimeLine translation={translation} />}</div>
-            <div ref={ref9}>{view9 && <Testimonials testimonialData={testimonialList} translation={translation} />}</div>
-            <div ref={ref10}>{view10 && (
+            <div ref={ref6} style={{minHeight: "300px"}}>{view6 && <VerifiedAgent translation={translation} verifiedAgentList={verifiedAgentList} />}</div>
+            <div ref={ref7} style={{minHeight: "300px"}}>{view7 && <PopularLocalities translation={translation} />}</div>
+            <div ref={ref8} style={{minHeight: "300px"}}>{view8 && <ProperTimeLine translation={translation} />}</div>
+            <div ref={ref9} style={{minHeight: "300px"}}>{view9 && <Testimonials testimonialData={testimonialList} translation={translation} />}</div>
+            <div ref={ref10} style={{minHeight: "300px"}}>{view10 && (
                 <>
                     <AdviceSection translation={translation} />
                     <TotolUserRecord translation={translation} />
@@ -262,7 +261,16 @@ const HomeContent = () => {
                                         logAdClick(ad.advertisement_id, ad.ad_url);
                                     }}
                                 >
-                                    <img src={ad.ad_image} alt="Ad" />
+                                    <Image
+                                        src={ad.ad_image}
+                                        alt="Ad"
+                                        width={0}
+                                        height={0}
+                                        sizes="100vw"
+                                        style={{ width: "100%", height: "auto" }}
+                                        unoptimized
+                                        loading="lazy"
+                                    />
                                 </a>
                             ))
                         ) : (

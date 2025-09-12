@@ -4,9 +4,10 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import AuthUser from '../Authentication/AuthUser';
 import Link from 'next/link';
- 
+import Image from 'next/image';
 
-const PopularLocalities = ({translation}) => {
+
+const PopularLocalities = ({ translation }) => {
   const { callApi } = AuthUser();
   const [activeTab, setActiveTab] = useState('');
   const [projectListData, setProjectListData] = useState(null);
@@ -99,12 +100,14 @@ const PopularLocalities = ({translation}) => {
                         <div key={i} className="card card-city">
                           <div className="card-body">
                             <div className="d-flex align-items-center">
-                              <img
+                              <Image
                                 src={firstImage?.file}
                                 alt="Locality Name"
-                                height="64"
-                                width="64"
+                                width={64}
+                                height={64}
                                 className="rounded-circle"
+                                style={{ objectFit: "cover" }}
+                                unoptimized
                                 loading="lazy"
                               />
                               <div className="flex-grow-1 ps-3">
@@ -129,13 +132,13 @@ const PopularLocalities = ({translation}) => {
                       )
                     })}
                   </Carousel>
-                ):(                  
+                ) : (
                   <>
-                  <div className='text-center'>
-                  <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" loading="lazy"/>
-                  <p className='text-muted'>{translation?.no_record_founds || "No Record Founds"}</p>
-                  </div>
-                  </>                                    
+                    <div className='text-center'>
+                      <img src="/assets/images/icons/9939447.png" alt="Icon" height={48} width={48} className="mb-2" loading="lazy" />
+                      <p className='text-muted'>{translation?.no_record_founds || "No Record Founds"}</p>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
