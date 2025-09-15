@@ -17,7 +17,7 @@ const MobileMenu = ({
   changeLanguage,
 }) => {
   const isMobile = useIsMobile();
-
+  const [menuReady, setMenuReady] = useState(false);
   const { GetMemberId } = AuthUser();
 
   const memberId = GetMemberId();
@@ -37,6 +37,14 @@ const MobileMenu = ({
         });
 
         const api = menu.API;
+        api.bind("open:start", () => {
+          setMenuReady(true);
+        });
+
+        // Hide menu again when closed
+        api.bind("close:finish", () => {
+          setMenuReady(false);
+        });
         document
           .querySelector(".menu-trigger")
           ?.addEventListener("click", () => api.open());
@@ -255,210 +263,223 @@ const MobileMenu = ({
     },
   ];
 
+  console.log("menuReady", menuReady)
+
+  if(isMobile === null) {
+    return null;
+  }
+
   return (
     <>
-      {isMobile && <button className="menu-trigger"><List color="currentColor" size={24} /></button>}
+      {/* Trigger button */}
+      <a
+        href="#menu"
+        role="button"
+        className={`btn btn-outline-dark border-0 rounded-circle p-2 hamburger-btn ${!isMobile ? "d-none" : ""
+          }`}
+      >
+        <List size={20} />
+      </a>
 
-      {isMobile && (
-        <nav id="menu" className="menuHidden">
-          <ul>
-            <li className="setlang">
-              <span>
-                <Image
-                  src={`/assets/images/flags/${currentLang === "ar"
-                      ? "ae"
-                      : currentLang === "de"
-                        ? "de"
-                        : "gb"
-                    }.svg`}
-                  alt={currentLang?.toUpperCase() || "EN"}
-                  width={20}
-                  height={20}
-                  loading="lazy"
-                />
-                {currentLang === "ar"
-                  ? "Arabic"
+      {/* The menu itself */}
+      <nav id="menu" className={!isMobile ? "d-none" : ""}>
+        <ul>
+          <li className="setlang">
+            <span>
+              <Image
+                src={`/assets/images/flags/${currentLang === "ar"
+                  ? "ae"
                   : currentLang === "de"
-                    ? "German"
-                    : "English"}
-              </span>
-              <ul>
-                <li className={currentLang === "en" ? "active" : ""}>
-                  <a role="button" onClick={() => changeLanguage("en")}>
-                    <Image
-                      src="/assets/images/flags/gb.svg"
-                      alt="English"
-                      width={16}
-                      height={16}
-                      loading="lazy"
-                    />{" "}
-                    English
-                  </a>
-                </li>
-                <li className={currentLang === "ar" ? "active" : ""}>
-                  <a role="button" onClick={() => changeLanguage("ar")}>
-                    <Image
-                      src="/assets/images/flags/ae.svg"
-                      alt="Arabic"
-                      width={16}
-                      height={16}
-                      loading="lazy"
-                    />{" "}
-                    Arabic
-                  </a>
-                </li>
-                <li className={currentLang === "de" ? "active" : ""}>
-                  <a role="button" onClick={() => changeLanguage("de")}>
+                    ? "de"
+                    : "gb"
+                  }.svg`}
+                alt={currentLang?.toUpperCase() || "EN"}
+                width={20}
+                height={20}
+                loading="lazy"
+              />
+              {currentLang === "ar"
+                ? "Arabic"
+                : currentLang === "de"
+                  ? "German"
+                  : "English"}
+            </span>
+            <ul>
+              <li className={currentLang === "en" ? "active" : ""}>
+                <a role="button" onClick={() => changeLanguage("en")}>
+                  <Image
+                    src="/assets/images/flags/gb.svg"
+                    alt="English"
+                    width={16}
+                    height={16}
+                    loading="lazy"
+                  />{" "}
+                  English
+                </a>
+              </li>
+              <li className={currentLang === "ar" ? "active" : ""}>
+                <a role="button" onClick={() => changeLanguage("ar")}>
+                  <Image
+                    src="/assets/images/flags/ae.svg"
+                    alt="Arabic"
+                    width={16}
+                    height={16}
+                    loading="lazy"
+                  />{" "}
+                  Arabic
+                </a>
+              </li>
+              <li className={currentLang === "de" ? "active" : ""}>
+                <a role="button" onClick={() => changeLanguage("de")}>
 
-                    <Image
-                      src="/assets/images/flags/de.svg"
-                      alt="Arabic"
-                      width={16}
-                      height={16}
-                      loading="lazy"
-                    />{" "}
-                    German
-                  </a>
-                </li>
+                  <Image
+                    src="/assets/images/flags/de.svg"
+                    alt="Arabic"
+                    width={16}
+                    height={16}
+                    loading="lazy"
+                  />{" "}
+                  German
+                </a>
+              </li>
+            </ul>
+          </li>
+          {menuData?.length && menuData.map((item) => (
+            <li key={item.name}>
+              <span>{item.icon} {item.name}</span>
+              <ul>
+                {item.options?.map((option, index) => (
+                  <li key={index}>
+                    {option.name ? (
+                      <>
+                        <span>{option.name}</span>
+                        <ul>
+                          {option.links?.map((link, linkIndex) => (
+                            <li key={linkIndex}>
+                              <Link href={link.url}>{link.text}</Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    ) : (
+                      <Link href={option.url}>{option.text}</Link>
+                    )}
+                  </li>
+                ))}
               </ul>
             </li>
-            {menuData.map((item) => (
-              <li key={item.name}>
-                <span>{item.icon} {item.name}</span>
-                <ul>
-                  {item.options?.map((option, index) => (
-                    <li key={index}>
-                      {option.name ? (
-                        <>
-                          <span>{option.name}</span>
-                          <ul>
-                            {option.links?.map((link, linkIndex) => (
-                              <li key={linkIndex}>
-                                <Link href={link.url}>{link.text} </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </>
-                      ) : (
-                        <Link href={option.url}>{option.text}</Link>
-                      )}
-                    </li>
-                  ))}
-                </ul>
+          ))}
+
+          {memberId ? (
+            <React.Fragment>
+              <li>
+                <Link href="/dashboard" className="active">
+                  <Speedometer color="currentColor" size={18} />{" "}
+                  {translation?.dashboard || "Dashboard"}
+                </Link>
               </li>
-            ))}
-            {memberId ? (
-              <React.Fragment>
-                <li>
-                  <Link href="/dashboard" className="active">
-                    <Speedometer color="currentColor" size={18} />{" "}
-                    {translation?.dashboard || "Dashboard"}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/my-profile">
-                    <Person color="currentColor" size={18} />{" "}
-                    {translation?.profile || "Profile"}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/review-list">
-                    <ChatRightQuote color="currentColor" size={18} />{" "}
-                    {translation?.reviews || "Reviews"}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/my-property-listing?post_for=sale">
-                    <House color="currentColor" size={18} />{" "}
-                    {translation?.my_properties || "My Properties"}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/my-project">
-                    <Building color="currentColor" size={18} />{" "}
-                    {translation?.my_projects || "My Projects"}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/my-favourite-list">
-                    <HouseHeart color="currentColor" size={18} />{" "}
-                    {translation?.my_property_favourites ||
-                      "My Property Favourites"}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/my-project-favourite-list">
-                    <BookmarkStar color="currentColor" size={18} />{" "}
-                    {translation?.my_project_favourites ||
-                      "My Project Favourites"}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/postproperty">
-                    <Cursor color="currentColor" size={18} />{" "}
-                    {translation?.post_property || "Post Property"}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/property-crm">
-                    <i className="icon-line-awesome-arrow-right"></i>{" "}
-                    {translation?.leads || "Leads"}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/membership">
-                    <Box color="currentColor" size={18} />{" "}
-                    {translation?.packages || "Packages"}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/enquiry-list">
-                    <Mic color="currentColor" size={18} />{" "}
-                    {translation?.enquiries || "Enquiries"}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/report">
-                    <Flag color="currentColor" size={18} />{" "}
-                    {translation?.user_report || "User Report"}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/update-password">
-                    <Lock color="currentColor" size={18} />{" "}
-                    {translation?.change_password || "Change Password"}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/" onClick={handleLogout}>
-                    <BoxArrowRight color="currentColor" size={18} />{" "}
-                    {translation?.logout || "Logout"}
-                  </Link>
-                </li>
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
-                <li>
-                  <Link href="/login" className="active">
-                    <BoxArrowLeft color="currentColor" size={18} />{" "}
-                    <span>{translation?.login || "Login"}</span>
-                  </Link>
-                </li>
+              <li>
+                <Link href="/my-profile">
+                  <Person color="currentColor" size={18} />{" "}
+                  {translation?.profile || "Profile"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/review-list">
+                  <ChatRightQuote color="currentColor" size={18} />{" "}
+                  {translation?.reviews || "Reviews"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/my-property-listing?post_for=sale">
+                  <House color="currentColor" size={18} />{" "}
+                  {translation?.my_properties || "My Properties"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/my-project">
+                  <Building color="currentColor" size={18} />{" "}
+                  {translation?.my_projects || "My Projects"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/my-favourite-list">
+                  <HouseHeart color="currentColor" size={18} />{" "}
+                  {translation?.my_property_favourites ||
+                    "My Property Favourites"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/my-project-favourite-list">
+                  <BookmarkStar color="currentColor" size={18} />{" "}
+                  {translation?.my_project_favourites ||
+                    "My Project Favourites"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/postproperty">
+                  <Cursor color="currentColor" size={18} />{" "}
+                  {translation?.post_property || "Post Property"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/property-crm">
+                  <i className="icon-line-awesome-arrow-right"></i>{" "}
+                  {translation?.leads || "Leads"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/membership">
+                  <Box color="currentColor" size={18} />{" "}
+                  {translation?.packages || "Packages"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/enquiry-list">
+                  <Mic color="currentColor" size={18} />{" "}
+                  {translation?.enquiries || "Enquiries"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/report">
+                  <Flag color="currentColor" size={18} />{" "}
+                  {translation?.user_report || "User Report"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/update-password">
+                  <Lock color="currentColor" size={18} />{" "}
+                  {translation?.change_password || "Change Password"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/" onClick={handleLogout}>
+                  <BoxArrowRight color="currentColor" size={18} />{" "}
+                  {translation?.logout || "Logout"}
+                </Link>
+              </li>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <li>
+                <Link href="/login" className="active">
+                  <BoxArrowLeft color="currentColor" size={18} />{" "}
+                  <span>{translation?.login || "Login"}</span>
+                </Link>
+              </li>
 
-                <li>
-                  <Link href="/register" className="active">
-                    <Person color="currentColor" size={18} />{" "}
-                    <span>{translation?.register || "Register"}</span>
-                  </Link>
-                </li>
-              </React.Fragment>
-            )}
-
-          </ul>
-        </nav>
-      )}
+              <li>
+                <Link href="/register" className="active">
+                  <Person color="currentColor" size={18} />{" "}
+                  <span>{translation?.register || "Register"}</span>
+                </Link>
+              </li>
+            </React.Fragment>
+          )}
+        </ul>
+      </nav>
     </>
-  );
-};
+  )
+}
 
 export default MobileMenu;

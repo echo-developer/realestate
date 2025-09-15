@@ -1006,15 +1006,16 @@ const Header = () => {
                 </ul>
               </div>
             </div>
-            {isMobile && (
+            {/* {isMobile && ( */}
               <MobileMenu
                 handleLogout={handleLogout}
                 selectedCity={selectedCity}
                 currentLang={currentLang}
                 changeLanguage={changeLanguage}
                 translation={translation}
+                currency={currency}
               />
-            )}
+            {/* )} */}
           </div>
         </nav>
       </header>

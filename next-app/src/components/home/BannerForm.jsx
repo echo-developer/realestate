@@ -9,10 +9,12 @@ import useFetch from "@/hooks/useFetch";
 import useTranslation from "@/hooks/useTranslation";
 // import BannerFormRent from "./BannerFormRent";
 import BannerFormSell from "./BannerFormSell";
+import BannerFormRent from "./BannerFormRent";
+import BannerFormProject from "./BannerFormProject";
 // import BannerFormProject from "./BannerFormProject";
-const BannerFormRent = dynamic(() => import('./BannerFormRent'), { ssr: false });
+// const BannerFormRent = dynamic(() => import('./BannerFormRent'), { ssr: false });
 // const BannerFormSell = dynamic(() => import('./BannerFormSell'), { ssr: false });
-const BannerFormProject = dynamic(() => import('./BannerFormProject'), { ssr: false });
+// const BannerFormProject = dynamic(() => import('./BannerFormProject'), { ssr: false });
 
 const BannerForm = ({ handleClickOutside, dropdownState, setDropdownState, setIsOverlayVisible }) => {
     const router = useRouter();
