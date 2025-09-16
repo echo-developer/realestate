@@ -263,8 +263,6 @@ const MobileMenu = ({
     },
   ];
 
-  console.log("menuReady", menuReady)
-
   if(isMobile === null) {
     return null;
   }
