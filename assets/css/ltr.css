@@ -39,7 +39,12 @@ ul.list > li:before{
 .close_filter, .ads-fav {
 	right: 1rem;
 }
-
+.folded ul.user-nav > li > a > span{
+	left: 3rem;
+}
+.folded ul.user-nav > li:hover > a > span::before{
+    left: -6px;
+}
 .fun-facts .icon-circle{
 	left: -0.5rem;
 }
@@ -61,7 +66,7 @@ ul.list > li:before{
 .user-profile .avatar a.upload-file {
 	right: 0;
 }
-.togglez {
+#toggleZ {
 	left: 0;
 }
 .card-collapse .card-header p a.icon-line-awesome-angle-down{
@@ -109,6 +114,9 @@ ul#desk-nav > li > .dropdown-single.dropdown-menu-end{
 }
 ul#desk-nav li ul li ul{
 	left: 100%;
+}
+.folded ul.user-nav > li > a > span{
+	left: 5rem;
 }
 
 /* MMENU MOBILE */
