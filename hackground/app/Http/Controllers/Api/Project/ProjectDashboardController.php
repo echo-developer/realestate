@@ -35,35 +35,36 @@ class ProjectDashboardController extends Controller
     public function GetProject(Request $req)
     {
         $perPage = $req->input('limit', 10);
-        $type = $req->type;
-        $page = $req->page;
-
+        $type    = $req->type;
+        $page    = $req->page;
 
         $statusMapping = [
-            'pending' => 0,
+            'pending'   => 0,
             'published' => 1,
-            'draft' => 2,
-            'expired' => -1,
+            'draft'     => 2,
+            'expired'   => -1,
         ];
-
 
         if (!isset($statusMapping[$type])) {
             return response()->json([
-                'status' => 0,
+                'status'  => 0,
                 'message' => 'Invalid type provided',
             ], 400);
         }
 
+        // --- project counts
         $statusCounts = PrefProject::where('uid', $req->uid)
             ->where('is_deleted', false)
             ->get()
             ->groupBy('status')
-            ->map->count(); 
-        $publish_projects_count = $statusCounts[1] ?? 0;
-        $pending_projects_count = $statusCounts[0] ?? 0;
-        $draft_projects_count   = $statusCounts[2] ?? 0;
-        $expired_projects_count = $statusCounts[-1] ?? 0;
+            ->map->count();
 
+        $publishCount = $statusCounts[1] ?? 0;
+        $pendingCount = $statusCounts[0] ?? 0;
+        $draftCount   = $statusCounts[2] ?? 0;
+        $expiredCount = $statusCounts[-1] ?? 0;
+
+        // --- main project query
         $projects = PrefProject::where([
             ['uid', $req->uid],
             ['status', $statusMapping[$type]],
@@ -76,97 +77,97 @@ class ProjectDashboardController extends Controller
             'gallery.images:gallary_id,filename,caption'
         ])->paginate($perPage, ['*'], 'page', $page);
 
-
+        // --- formatting projects
         $formattedProjects = $projects->map(function ($project) {
+            // change uid to uname
             $project->uid = get_user_name($project->uid);
 
-            if (isset($project->additional->project_amenity) && $project->additional->project_amenity) {
-                // $projectAmenities = explode(',', $project->additional->project_amenity);
-                $project->additional->project_amenity = $this->apiModel->getPropertyAmnitybyID($this->sanitizeAmenityIds($project->additional->project_amenity));
+            // amenities mapping
+            if (!empty($project->additional->project_amenity)) {
+                $project->additional->project_amenity = $this->apiModel
+                    ->getPropertyAmnitybyID($this->sanitizeAmenityIds($project->additional->project_amenity));
             }
 
-            if (isset($project->location->city)) {
+            // transform values
+            if ($project->location?->city) {
                 $project->location->city = get_name_by_id('city_names', 'city_id', $project->location->city, 'en');
             }
-
-            if (isset($project->additional->main_road_facing)) {
+            if ($project->additional?->main_road_facing) {
                 $project->additional->main_road_facing = $project->additional->main_road_facing === 'Y' ? 'Yes' : 'No';
             }
-
-            if (isset($project->additional->possession_status)) {
+            if ($project->additional?->possession_status) {
                 $project->additional->possession_status = get_name_by_id('property_status_names', 'status_id', $project->additional->possession_status, 'en');
             }
-
-            if (isset($project->settings->project_type)) {
+            if ($project->settings?->project_type) {
                 $project->settings->project_type = get_name_by_id('property_category_names', 'category_id', $project->settings->project_type, 'en');
             }
 
-            $projectData = $project->toArray();
-            $flattenedData = array_merge(
-                $projectData,
-                $projectData['settings'] ?? [],
-                $projectData['additional'] ?? [],
-                $projectData['location'] ?? []
+            // flatten relations
+            $data = $project->toArray();
+            $flattened = array_merge(
+                $data,
+                $data['settings']   ?? [],
+                $data['additional'] ?? [],
+                $data['location']   ?? []
             );
+            unset($flattened['settings'], $flattened['additional'], $flattened['location']);
 
-            unset($flattenedData['settings'], $flattenedData['additional'], $flattenedData['location']);
-
-            if (isset($flattenedData['uid'])) {
-                $flattenedData['uname'] = $flattenedData['uid'];
-                unset($flattenedData['uid']);
+            // rename uid to uname
+            if (isset($flattened['uid'])) {
+                $flattened['uname'] = $flattened['uid'];
+                unset($flattened['uid']);
             }
 
-            $flattenedData['brochure_url'] = !empty($flattenedData['brochure_file'])
-                ? asset('user_upload/project_brochure/' . $flattenedData['brochure_file'])
+            // brochure url
+            $flattened['brochure_url'] = !empty($flattened['brochure_file'])
+                ? asset('user_upload/project_brochure/' . $flattened['brochure_file'])
                 : '';
 
+            // gallery handling (exterior preferred, fallback to any first image)
+            $flattened['image_count'] = getGalleriesCount($flattened['id'], 'project');
+            $flattened['gallery'] = [];
 
-            $flattenedData['image_count'] = getGalleriesCount($flattenedData['id'], 'project');
+            if (!empty($data['gallery'])) {
+                // try exterior first
+                $exteriorGallery = collect($data['gallery'])->firstWhere('image_type', 'exterior');
+                $chosenGallery   = $exteriorGallery ?? $data['gallery'][0] ?? null;
 
-            if (isset($flattenedData['gallery'])) {
-                $filteredGallery = [];
-
-                foreach ($flattenedData['gallery'] as $gallery) {
-                    if (isset($gallery['image_type']) && $gallery['image_type'] === 'exterior') {
-                        if (isset($gallery['images']) && count($gallery['images']) > 0) {
-                            $image = $gallery['images'][0];
-                            $image['file'] = asset('user_upload/project_images/' . $image['filename']);
-                            unset($image['filename']);
-                            $gallery['images'] = [$image];
-                        } else {
-                            $gallery['images'] = [];
-                        }
-
-                        $filteredGallery[] = $gallery;
-                        break;
-                    }
+                if ($chosenGallery && !empty($chosenGallery['images'])) {
+                    $image = $chosenGallery['images'][0];
+                    $flattened['gallery'][] = [
+                        'id'        => $chosenGallery['id'] ?? null,
+                        'image_type' => $chosenGallery['image_type'],
+                        'images'    => [[
+                            'file'    => asset('user_upload/project_images/' . $image['filename']),
+                            'caption' => $image['caption'] ?? '',
+                        ]]
+                    ];
                 }
-
-                $flattenedData['gallery'] = $filteredGallery;
             }
 
-
-            return $flattenedData;
+            return $flattened;
         });
 
+        // --- response
         return response()->json([
-            'status' => 1,
-            'message' => ucfirst($type) . ' projects successfully fetched',
-            'data' => $formattedProjects,
+            'status'   => 1,
+            'message'  => ucfirst($type) . ' projects successfully fetched',
+            'data'     => $formattedProjects,
             'projects_counts' => [
-                'publish' => $publish_projects_count,
-                'pending' =>  $pending_projects_count,
-                'draft' => $draft_projects_count,
-                'expired' =>  $expired_projects_count,
+                'publish' => $publishCount,
+                'pending' => $pendingCount,
+                'draft'   => $draftCount,
+                'expired' => $expiredCount,
             ],
             'pagination' => [
                 'current_page' => $projects->currentPage(),
-                'total_pages' => $projects->lastPage(),
-                'total' => $projects->total(),
-                'per_page' => $projects->perPage(),
+                'total_pages'  => $projects->lastPage(),
+                'total'        => $projects->total(),
+                'per_page'     => $projects->perPage(),
             ],
         ]);
     }
+
 
     public function uploaodPrjBrochure(Request $request)
     {
