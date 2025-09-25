@@ -104,13 +104,14 @@ class PostProjectController extends Controller
             'project_desc' => is_string($request->description) ? $request->description : null,
             'status' => config('constants.STATUS_INACTIVE'),
         ]);
-        $encodedId   = base64_encode($project->id);
+        $encodedId = base64_encode($project->id);
         $localityKey = get_field_by_model(\App\Models\LocalityModel::class, 'locality_id', $request->locality, 'locality_key') ?? 'unknown';
-        $cityName    = get_name_by_id('city_names', 'city_id', $request->city, 'en') ?? 'unknown';
+        $cityName = get_name_by_id('city_names', 'city_id', $request->city, 'en') ?? 'unknown';
         $slugPart = Str::slug($request->project_name . '-' . $localityKey . '-' . $cityName);
         $slugBase = $slugPart . '-prjDtId-' . $encodedId;
         $project->slug = $slugBase;
         $project->save();
+        return $project;
     }
 
 
