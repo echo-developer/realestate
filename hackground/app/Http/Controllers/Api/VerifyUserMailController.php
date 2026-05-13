@@ -23,7 +23,7 @@ class VerifyUserMailController extends Controller
             ];
 
             $validator = Validator::make($request->all(), [
-                'email' => 'required|unique:users,email',
+                'email' => 'required',
             ], $messages);
 
             if ($validator->fails()) {

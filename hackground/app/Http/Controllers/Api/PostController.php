@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\PrefPropertyDimension;
 use App\Models\PrefPropertyAdditional;
 use App\Models\PrefPropertyGalleryImage;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class PostController extends Controller
 {
@@ -64,14 +65,25 @@ class PostController extends Controller
 
     public function postProperty(Request $request)
     {
-        // log::info(json_encode($request->all(), JSON_PRETTY_PRINT));
         DB::beginTransaction();
 
         try {
-
-            if (empty($request->uid)) {
-                $userID = $this->CreateUserId($request);
-                $this->UserId = $userID;
+            $token = null;
+            $providedUid = $request->uid;
+            if (empty($providedUid) || $providedUid === 'null' || $providedUid === 'undefined') {
+                // Check if user already exists by email
+                $user = User::where('email', $request->user_email)->first();
+                if (!$user) {
+                    // New user detected - return status 2 to trigger OTP flow in frontend
+                    return response()->json([
+                        'status' => 2,
+                        'message' => 'New user. OTP verification required.'
+                    ]);
+                }
+                
+                // Existing user - prepare for auto-login and post
+                $this->UserId = $user->id;
+                $token = JWTAuth::fromUser($user);
             } else {
                 $this->UserId = $request->uid;
             }
@@ -86,20 +98,31 @@ class PostController extends Controller
             $this->savePropertyAdditional($property->id, $request);
             $this->savePropertyGalleries($property->id, $request);
             $this->savePropertyLandmarks($property->id, $request);
+            
             $can_post = get_remaining_values('remaining_listings_allowed', $this->UserId);
             if ($can_post != null) {
-
                 debit_membership_feature_value('listings_allowed', 'remaining_listings_allowed', $this->UserId);
             }
+            
             DB::commit();
-            return response()->json([
+
+            $responseData = [
                 'status' => 1,
                 'message' => 'Property successfully posted',
                 'data' => [
                     'user_id' => $this->UserId,
                     'property_id' => $property->id,
                 ]
-            ], 201);
+            ];
+
+            if ($token) {
+                $responseData['authorisation'] = [
+                    'token' => $token,
+                    'type' => 'bearer',
+                ];
+            }
+
+            return response()->json($responseData, 201);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
@@ -372,7 +395,7 @@ class PostController extends Controller
 
             foreach ($nearbyLandmarks as $landmark) {
                 DB::table('nearby_landmarks')->insert([
-                    'uid' => auth_user_id(),
+                    'uid' => $this->UserId,
                     'property_id' => $propertyId,
                     'loc_id' =>  $request->locality,
                     'landmark_type' => $landmarkType,

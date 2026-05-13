@@ -1,1 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[6391],{86391:(s,a,e)=>{"use strict";e.r(a),e.d(a,{default:()=>l});var i=e(95155);e(12115),e(79898);let l=()=>(0,i.jsx)("div",{className:"loading-container",children:(0,i.jsx)("img",{src:"/assets/images/loadingGif-unscreen.gif",alt:"Loading...",className:"loading-gif"})})},79898:()=>{}}]);

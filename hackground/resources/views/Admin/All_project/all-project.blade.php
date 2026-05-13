@@ -213,7 +213,7 @@
                     </div>
 
                     <!-- Displaying Address -->
-                    <p class="mb-2"><i class="ri-map-pin-line"></i> {{ $proj->location->address }}</p>
+                    <p class="mb-2"><i class="ri-map-pin-line"></i> {{ $proj->location?->address }}</p>
 
                     <!-- Displaying Post Date (Assuming `created_at` exists) -->
                     <p class="mb-2"><i class="ri-calendar-line"></i> {{ $proj->created_at->format('d-M-Y') }}</p>

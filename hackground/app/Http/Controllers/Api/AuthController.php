@@ -23,7 +23,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'sendPasswordResetLink', 'forgot-password', 'resetPassword', 'user', 'handleProviderCallback']]);
+        $this->middleware('auth:api', ['except' => ['login', 'checkEmail', 'register', 'sendPasswordResetLink', 'forgot-password', 'resetPassword', 'user', 'handleProviderCallback']]);
     }
 
     public function login(Request $request)
@@ -65,14 +65,44 @@ class AuthController extends Controller
         }
     }
 
+    public function checkEmail(Request $request)
+    {
+        try {
+            $request->validate([
+                'email' => 'required|email',
+            ]);
+
+            $exists = User::where('email', $request->email)->exists();
+            
+            return response()->json([
+                'status' => $exists ? 0 : 1,
+                'message' => $exists ? 'This email is already registered. Please login or use a different email.' : 'Email is available.',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error checking email: ' . $e->getMessage(),
+            ]);
+        }
+    }
+
     public function register(Request $request)
     {
+        if ($request->is_auto_register) {
+            $user = User::where('email', $request->email)->first();
+            if ($user) {
+                $token = JWTAuth::fromUser($user);
+                auth()->login($user);
+                return $this->respondWithToken($token);
+            }
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'user_type' => 'required|string',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
-            'phone' => 'required|string|max:15',
+            'phone' => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -87,8 +117,9 @@ class AuthController extends Controller
             'user_type' => $request->user_type,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'phone' => $request->phone,
-            'phone_code' => $request->phone_code
+            'phone' => $request->phone ? (string) $request->phone : null,
+            'whatsapp_no' => $request->phone ? (string) $request->phone : null,
+            'phone_code' => $request->phone_code ? (string) $request->phone_code : null
         ]);
 
         $token = JWTAuth::fromUser($user);
@@ -102,7 +133,7 @@ class AuthController extends Controller
 
         JWTAuth::setToken($token)->authenticate();
 
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($token, $request->password);
     }
 
     public function logout()
@@ -140,12 +171,21 @@ class AuthController extends Controller
         ]);
     }
 
-    protected function respondWithToken($token)
+    protected function respondWithToken($token, $password = null)
     {
         assign_free_plan(auth()->user()->id);
         notify_admins_with_template('new_user_registered', [
             'FULL_NAME' => auth()->user()->name,
         ]);
+
+        if (request()->is_auto_register && $password) {
+            $mail_unique_title = 'user-password';
+            dispatch(new \App\Jobs\SendEmailJob(auth()->user()->email, $mail_unique_title, [
+                'USERNAME' => auth()->user()->name,
+                'PASSWORD' => $password
+            ]));
+        }
+
         return response()->json([
             'status' => 1,
             'message' => 'Successfully registered',
