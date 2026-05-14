@@ -82,7 +82,7 @@
 
                         </div>
 
-                        <div class="text-center text-muted small mt-3">Copyright © OriginateSoft Pvt. Ltd. 2025</div>
+                        <div class="text-center text-muted small mt-3">Copyright © Realestate Pvt. Ltd. 2025</div>
                     </div>
                 </div>
             </div>
