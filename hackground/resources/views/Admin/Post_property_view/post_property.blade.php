@@ -976,7 +976,7 @@
         let imgWrapper = $('<div class="preview-item"></div>');
         imgWrapper.html(`
         <img src="${imageUrl}" alt="Uploaded Image">
-        <button class="remove-btn" data-type="${type}" data-filename="${filename}">X</button><input type="hidden" name="image[${type}][]" value="${filename}" />`);
+        <button class="btn remove-btn" data-type="${type}" data-filename="${filename}"><i class="bi bi-trash3-fill"></i></button><input type="hidden" name="image[${type}][]" value="${filename}" />`);
         imgWrapper.find('.remove-btn').click(function() {
             let fileType = $(this).data('type'); // Get the type
             removeImage(imgWrapper, filename, fileType);

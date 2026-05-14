@@ -939,6 +939,25 @@ ul.list-info li span {
     opacity: 1;
 }
 
+.preview-item {
+    position: relative;
+    
+}
+.preview-item .remove-btn {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background-color: #dc3545;
+    color: #fff;
+    border-radius: 50%;
+    padding: 5px;
+    cursor: pointer;
+    opacity: .85;
+}
+.preview-item .remove-btn:hover {
+    opacity: 1;
+}
+
 @media only screen and (min-width: 1200px) {
     ul.list-info li {
         flex: 0 0 50%;
