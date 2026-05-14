@@ -48,16 +48,15 @@
     </style>
 
     <form action="" method="get">
-        <section class="content-header mb-2">
-            <div class="row">
-                
-                <div class="col-md-3 col-sm-4">
+        <section class="content-header mb-3">
+            <div class="row g-3">                
+                <div class="col-lg-4 col-sm-6">
                     <label for="lead_type">Leads Date</label>
-                    <div class="form-group">
+                    <div class="form-group mb-0">
                         <input type="date" class="form-control" id="enquery_date" name="enquery_date" value="{{ request('enquery_date') }}" />
                     </div>
                 </div>
-                <div class="col-md-3 col-sm-4">
+                <div class="col-lg-4 col-sm-6">
                     <label for="lead_type">Member Name</label>
                     <div class="input-group">
                         <input class="form-control" id="member_name" placeholder="Search by member" name="member_name" value="{{ request('member_name') }}" />
@@ -73,25 +72,25 @@
     </form>
 
     <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> {{ $title }}
+        <div class="card-header">
+            <h4 class="mb-0">{{ $title }}</h4>
 
-                {{-- <div class="btn-actions-pane-right">
+            {{-- <div class="btn-actions-pane-right">
                     <button type="button" class="btn btn-sm btn-success" onclick="add()">Add Country</button>
                 </div> --}}
 
-            </div>
+        </div>
+        <div class="card-body">
 
             <div class="table-responsive" id="main_table">
                 <table id="myTable" class="mb-0 table">
                     <thead>
                         <tr>
-                            <th style="width:5%">ID</th>
-                            <th style="width:20%">Customer Name</th>
-                            <th style="width:45%">Message</th>
-                            <th style="width:20%">Date</th>
-                            {{-- <th style="width:20%">Status</th> --}}
+                            <th>ID</th>
+                            <th>Customer Name</th>
+                            <th>Message</th>
+                            <th>Date</th>
+                            {{-- <th>Status</th> --}}
                             <th class="text-right">Action</th>
                         </tr>
                     </thead>

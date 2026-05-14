@@ -44,9 +44,10 @@
         </style>
 
         <div class="main-card mb-3 card">
+            <div class="card-header">
+                <h4>Agent Lead Details</h4>
+            </div>
             <div class="card-body">
-                <div class="card-header p-0">
-                    <h4>Agent Lead Details</h4>
                     <div class="row mt-2" style="text-transform: none;">
                         <div class="col">
                             <ul>
@@ -91,9 +92,10 @@
         </ul>
 
         <div class="main-card mb-3 card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>Assign Leads</h4>
+            </div>
             <div class="card-body">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4>Assign Leads</h4>
                     <div class="btn-actions-pane-right">
                         <button type="button" class="btn btn-sm btn-success" onclick="assign()">Assign</button>
                     </div>
@@ -106,14 +108,14 @@
                             <thead>
                                 <tr>
                                     @if ($assigned == false)
-                                        <th style="width:5%">Check</th>
+                                        <th>Check</th>
                                     @endif
-                                    <th style="width:5%">User ID</th>
-                                    <th style="width:10%">Agent Name</th>
-                                    <th style="width:10%">Leads Used / Total Leads</th>
+                                    <th>User ID</th>
+                                    <th>Agent Name</th>
+                                    <th>Leads Used / Total Leads</th>
                                     @if ($assigned == true)
-                                        <th style="width:10%">Assigned Date</th>
-                                        <th style="width:10%">Action</th>
+                                        <th>Assigned Date</th>
+                                        <th>Action</th>
                                     @endif
                                 </tr>
                             </thead>

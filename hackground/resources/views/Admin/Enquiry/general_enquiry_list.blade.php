@@ -60,26 +60,26 @@
         </ul>
 
         <form action="" method="get">
-            <section class="content-header mb-2">
-                <div class="row">
-                    {{-- <div class="col-md-3 col-sm-4">
-                    <label for="lead_for">Type</label>
-                    <div class="form-group">
-                        <select class="form-select" name="lead_for" id="lead_for">
-                            <option value="" >All</option>
-                            <option value="property" {{ request('lead_for') == 'property' ? 'selected' : ''; }}>Property</option>
-                            <option value="project" {{ request('lead_for') == 'project' ? 'selected' : ''; }}>Project</option>
-                        </select>
-                    </div>
-                </div> --}}
-                    <div class="col-md-3 col-sm-4">
+            <section class="content-header mb-3">
+                <div class="row g-3">
+                    {{-- <div class="col-lg-4 col-sm-6">
+                        <label for="lead_for">Type</label>
+                        <div class="form-group mb-0">
+                            <select class="form-select" name="lead_for" id="lead_for">
+                                <option value="" >All</option>
+                                <option value="property" {{ request('lead_for') == 'property' ? 'selected' : ''; }}>Property</option>
+                                <option value="project" {{ request('lead_for') == 'project' ? 'selected' : ''; }}>Project</option>
+                            </select>
+                        </div>
+                    </div> --}}
+                    <div class="col-lg-4 col-sm-6">
                         <label for="lead_type">Leads Date</label>
-                        <div class="form-group">
+                        <div class="form-group mb-0">
                             <input type="date" class="form-control" id="enquery_date" name="enquery_date"
                                 value="{{ request('enquery_date') }}" />
                         </div>
                     </div>
-                    <div class="col-md-3 col-sm-4">
+                    <div class="col-lg-4 col-sm-6">
                         <label for="lead_type">Member Name</label>
                         <div class="input-group">
                             <input class="form-control" id="member_name" placeholder="Search by member" name="member_name"
@@ -96,33 +96,32 @@
         </form>
 
         <div class="main-card mb-3 card">
-            <div class="card-body">
-                <div class="card-header p-0">
-                    <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> {{ $title }}
+            <div class="card-header">
+                <h4 class="mb-0">{{ $title }}</h4>
 
-                    {{-- <div class="btn-actions-pane-right">
+                {{-- <div class="btn-actions-pane-right">
                     <button type="button" class="btn btn-sm btn-success" onclick="add()">Add Country</button>
                 </div> --}}
 
-                </div>
+            </div>
+            <div class="card-body">
 
                 <div class="table-responsive" id="main_table">
                     <table id="myTable" class="mb-0 table">
                         <thead>
                             <tr>
-                                <th style="width:5%">ID</th>
-                                <th style="width:15%">Buyer Name</th>
-                                <th style="width:15%">
+                                <th>ID</th>
+                                <th>Buyer Name</th>
+                                <th>
                                     Agent Name
                                     <small>
-                                        <span class="badge bg-warning text-dark">Only for agent leads</span>
+                                        <span class="badge bg-warning text-black">Only for agent leads</span>
                                     </small>
                                 </th>
-                                <th style="width:15%">Phone</th>
-                                <th style="width:15%">Email</th>
-                                <th style="width:15%">Enquiry For</th>
-                                <th style="width:15%">Budget</th>
-                                <th style="width:15%">Date</th>
+                                <th>Email / Phone</th>
+                                <th>Enquiry For</th>
+                                <th>Budget</th>
+                                <th>Date</th>
                                 <th class="text-right">Action</th>
                             </tr>
                         </thead>
@@ -134,7 +133,7 @@
                                     <td>
                                         @php $agentName = get_user_name($item?->agent_id); @endphp
                                         @if (!empty($agentName))
-                                            <span class="badge bg-primary text-white">
+                                            <span class="badge bg-primary-subtle text-primary">
                                                 {{ $agentName }}
                                             </span>
                                         @else
@@ -142,8 +141,9 @@
                                         @endif
                                     </td>
 
-                                    <td>{{ $item?->phone }}</td>
-                                    <td>{{ $item?->email }}</td>
+                                    <td>{{ $item?->email }}
+                                        <p class="text-muted mb-0">{{ $item?->phone }}</p>
+                                    </td>
                                     @php
                                         $sub = get_property_sub_category_name($item?->property_for);
                                         $cat = get_property_category_name($item?->property_type);
@@ -171,8 +171,8 @@
                                                     ? url('/enquiry/general-assign-list/' . $item?->id)
                                                     : url('/enquiry/general-agent-leads-assign-list/' . $item?->id);
                                         @endphp
-                                        <a href="{{ $url }}" title="Assign Lead"><i
-                                                class="fa fa-plus text-info fa-md"></i></a>
+                                        <a href="{{ $url }}" title="Assign Lead" class="text-info me-2"><i
+                                                class="fa fa-plus fa-md"></i></a>
                                         <i class="fa fa-eye text-success fa-md"
                                             onclick="viewLead('{{ $item->id }}','G')"></i>
                                         {{-- <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->id }}')"></i> --}}

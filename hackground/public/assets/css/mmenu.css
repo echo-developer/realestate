@@ -482,7 +482,7 @@ em.mm-counter+a.mm-fullsubopen+a, em.mm-counter+a.mm-fullsubopen+span {
 /* Hamburger Icon */
 .hamburger {
 	padding: 0;
-	top: 15px;
+	top: 5px;
 	position: relative;
 	display: inline-block;
 	cursor: pointer;

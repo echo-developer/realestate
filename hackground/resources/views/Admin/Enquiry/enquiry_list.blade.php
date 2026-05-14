@@ -60,11 +60,11 @@
     </ul>
 
     <form action="" method="get">
-        <section class="content-header mb-2">
-            <div class="row">
-                <div class="col-md-3 col-sm-4">
+        <section class="content-header mb-3">
+            <div class="row g-3">
+                <div class="col-lg-4 col-sm-6">
                     <label for="lead_for">Type</label>
-                    <div class="form-group">
+                    <div class="form-group mb-0">
                         <select class="form-select" name="lead_for" id="lead_for">
                             <option value="" >All</option>
                             <option value="property" {{ request('lead_for') == 'property' ? 'selected' : ''; }}>Property</option>
@@ -72,13 +72,13 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-3 col-sm-4">
+                <div class="col-lg-4 col-sm-6">
                     <label for="lead_type">Leads Date</label>
-                    <div class="form-group">
+                    <div class="form-group mb-0">
                         <input type="date" class="form-control" id="enquery_date" name="enquery_date" value="{{ request('enquery_date') }}" />
                     </div>
                 </div>
-                <div class="col-md-3 col-sm-4">
+                <div class="col-lg-4 col-sm-12">
                     <label for="lead_type">Member Name</label>
                     <div class="input-group">
                         <input class="form-control" id="member_name" placeholder="Search by member" name="member_name" value="{{ request('member_name') }}" />
@@ -94,27 +94,26 @@
     </form>
 
     <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header p-0">
-                <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i> {{ $title }}
+        <div class="card-header">
+            <h4 class="mb-0">{{ $title }}</h4>
 
-                {{-- <div class="btn-actions-pane-right">
+            {{-- <div class="btn-actions-pane-right">
                     <button type="button" class="btn btn-sm btn-success" onclick="add()">Add Country</button>
                 </div> --}}
 
-            </div>
+        </div>
+        <div class="card-body">
 
             <div class="table-responsive" id="main_table">
                 <table id="myTable" class="mb-0 table">
                     <thead>
                         <tr>
-                            <th style="width:5%">ID</th>
-                            <th style="width:35%">Property Name</th>
-                            <th style="width:15%">Customer Name</th>
-                            <th style="width:15%">Email</th>
-                            <th style="width:15%">Phone</th>
-                            <th style="width:15%">Date</th>
-                            <th style="width:15%" class="text-center">Lead Assigned</th>
+                            <th>ID</th>
+                            <th>Property Name</th>
+                            <th>Customer Name</th>
+                            <th>Email / Phone</th>
+                            <th>Date</th>
+                            <th class="text-center">Lead Assigned</th>
                             <th class="text-right">Action</th>
                         </tr>
                     </thead>
@@ -130,14 +129,15 @@
                                 @endif
                             </td>
                             <td>{{ $item->customer }}</td>
-                            <td>{{ $item->customer_email }}</td>
-                            <td>{{ $item->customer_phone }}</td>
+                            <td>{{ $item->customer_email }}
+                                <p class="text-muted mb-0">{{ $item->customer_phone }}</p>
+                            </td>
                             <td>{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
                             <td class="text-center">
                                 {{ $item->assigned_count }}
                             </td>
                             <td class="text-right">
-                                <a href="{{ url('/enquiry/assign-list/'.$item->enquery_id); }}" title="Assign Lead"><i class="fa fa-plus text-info fa-md"></i></a>
+                                <a href="{{ url('/enquiry/assign-list/'.$item->enquery_id); }}" title="Assign Lead" class="text-info me-2"><i class="fa fa-plus fa-md"></i></a>
                                 <i class="fa fa-eye text-success fa-md" onclick="viewLead('{{ $item->enquery_id }}', 'P')"></i>
                                 {{-- <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->enquery_id }}')"></i> --}}
                             </td>

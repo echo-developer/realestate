@@ -138,13 +138,11 @@ $userTypes = [
                     <thead>
                         <tr>
                             <th>User Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Created At</th>
+                            <th>Email &amp; Phone</th>
+                            <th style="min-width: 115px;">Created At</th>
                             <th>Leads</th>
-                            <th>Verify</th>
-                            <th>Status</th>
-                            <th style="text-align: right;">Action</th>
+                            <th style="min-width: 125px;">Verify &amp; Status</th>
+                            <th class="text-end" style="min-width: 150px;">Action</th>
                         </tr>
                         <thead>
                         <tbody id="allUserBody">
@@ -152,7 +150,7 @@ $userTypes = [
                             <tr>
 
                                 <td>
-                                    <a href="{{ route('memberUser.allDetails', $items->id) }}" target="_blank" class="d-flex">
+                                    <a href="{{ route('memberUser.allDetails', $items->id) }}" target="_blank" class="d-flex text-dark">
                                         @php
                                         $relativePath = 'user_upload/profile_image/' . $items->image;
                                         $localPath = public_path($relativePath);
@@ -164,7 +162,8 @@ $userTypes = [
                                         @else
                                         <span class="user-initial rounded-circle me-2" style="background-color: <?= getAvatarColor($items->name) ?>;"><?php echo strtoupper($items->name[0]);  ?></span>
                                         @endif
-                                        <div>{{ $items->name }}<br><span class="badge bg-info">{{ $userTypes[$items->user_type] ?? 'Unknown' }}</span>
+                                        <div>{{ $items->name }}<br>
+                                            <span class="badge badge bg-primary-subtle text-primary">{{ $userTypes[$items->user_type] ?? 'Unknown' }}</span>
 
                                             @if($items->userbadges && $items->userbadges->count())
                                             <div class="mt-1">
@@ -172,7 +171,7 @@ $userTypes = [
                                                 @php
                                                 $badgeName = $badge->names->firstWhere('lang', app()->getLocale())?->name;
                                                 @endphp
-                                                <span class="badge bg-secondary d-inline-flex align-items-center me-1" title="{{ $badgeName }}">
+                                                <span class="badge bg-secondary-subtle text-dark d-inline-flex align-items-center me-1" title="{{ $badgeName }}">
                                                     @if($badge->icon)
                                                     <img src="{{ asset('user_upload/badges/' . $badge->icon) }}" alt="Badge Icon" width="16" height="16" class="me-1">
                                                     @endif
@@ -181,16 +180,15 @@ $userTypes = [
                                                 @endforeach
                                             </div>
                                             @endif
-
-
                                         </div>
                                     </a>
 
                                 </td>
-                                <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width:150px;">
-                                    {{ $items->email }}
+                                <td>
+                                    <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width:200px;">
+                                        <i class="icon-feather-mail text-muted"></i> {{ $items->email }}</div>
+                                    <div><i class="icon-feather-phone text-muted"></i> {{ $items->phone }}</div>
                                 </td>
-                                <td>{{ $items->phone }}</td>
                                 <td>{{ date('d-M-Y', strtotime($items->created_at)) }}</td>
                                 <td>
                                     @php
@@ -202,22 +200,23 @@ $userTypes = [
                                         title="View Leads"><i class="fa fa-eye"></i></a>
                                     @endif
                                 </td>
-                                @if ($items->user_type == 'A')
-                                <td><input type="checkbox" class="agent_verify_status d-none"
-                                        data-id="{{ $items->id }}" data-toggle="toggle" data-on="Verified"
-                                        data-off="Verify" data-onstyle="success" data-offstyle="danger"
-                                        data-size="mini" {{ $items->is_verified_agent ? 'checked' : '' }}>
-                                </td>
-                                @else
-                                <td></td>
-                                @endif
                                 <td>
-                                    <input type="checkbox" class="category_prop_status d-none"
-                                        data-id="{{ $items->id }}" data-toggle="toggle" data-on="Active"
-                                        data-off="Inactive" data-onstyle="success" data-offstyle="danger"
-                                        data-size="mini" {{ $items->status ? 'checked' : '' }}>
+                                    @if ($items->user_type == 'A')
+                                    <div class="mb-1">
+                                        <input type="checkbox" class="agent_verify_status d-none"
+                                            data-id="{{ $items->id }}" data-toggle="toggle" data-on="Verified"
+                                            data-off="Verify" data-onstyle="success" data-offstyle="danger"
+                                            data-size="mini" {{ $items->is_verified_agent ? 'checked' : '' }}>
+                                    </div>
+                                    @endif
+                                    <div>
+                                        <input type="checkbox" class="category_prop_status d-none"
+                                            data-id="{{ $items->id }}" data-toggle="toggle" data-on="Active"
+                                            data-off="Inactive" data-onstyle="success" data-offstyle="danger"
+                                            data-size="mini" {{ $items->status ? 'checked' : '' }}>
+                                    </div>
                                 </td>
-                                <td class="text-right" style="padding-right:15px;">
+                                <td class="text-end">
                                     @if ($items->user_type == 'A')
                                     <a href="javascript:void(0)"
                                         data-bs-toggle="tooltip"

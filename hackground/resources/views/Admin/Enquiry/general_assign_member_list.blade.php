@@ -44,9 +44,9 @@
         </style>
 
         {{-- <form action="" method="get">
-        <section class="content-header mb-2">
-            <div class="row">
-                <div class="offset-sm-8 col-sm-4">
+        <section class="content-header mb-3">
+            <div class="row justify-content-end">
+                <div class="col-lg-4">
                     <div class="input-group">
                         <input class="form-control" id="prop_transaction_search" placeholder="Search..." name="term" value="{{ request('term') }}" />
                         <div class="input-group-append">
@@ -61,9 +61,10 @@
     </form> --}}
 
         <div class="main-card mb-3 card">
+            <div class="card-header">
+                <h4>Lead Details</h4>
+            </div>
             <div class="card-body">
-                <div class="card-header p-0">
-                    <h4>Lead Details</h4>
                     <ul>
                         <li>Name: {{ $enquiry->name }}</li>
                         <li>Phone: {{ $enquiry->phone }}</li>
@@ -118,10 +119,8 @@
         </ul>
 
         <div class="main-card mb-3 card">
-            <div class="card-body">
-                <div class="card-header">
-                    {{-- <i class="header-icon lnr-layers icon-gradient bg-plum-plate"> </i>  --}}
-                    {{ $title }}
+            <div class="card-header">
+                <h4 class="mb-0">{{ $title }}</h4>
                     @if ($assign_type == 'unassigned')
                         <div class="btn-actions-pane-right">
                             <button type="button" class="btn btn-sm btn-success" onclick="assign()">Assign</button>
@@ -137,14 +136,14 @@
                             <thead>
                                 <tr>
                                     @if ($assign_type == 'unassigned')
-                                        <th style="width:5%">Check</th>
+                                        <th>Check</th>
                                     @endif
-                                    <th style="width:5%">User ID</th>
-                                    <th style="width:10%">Member Name</th>
-                                    <th style="width:10%">Leads Used</th>
+                                    <th>User ID</th>
+                                    <th>Member Name</th>
+                                    <th>Leads Used</th>
                                     @if ($assign_type == 'assigned')
-                                        <th style="width:10%">Assigned Date</th>
-                                        <th style="width:10%">Action</th>
+                                        <th>Assigned Date</th>
+                                        <th>Action</th>
                                     @endif
                                 </tr>
                             </thead>

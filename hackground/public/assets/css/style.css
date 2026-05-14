@@ -1866,9 +1866,9 @@ progress {
   --re-table-bg-type: initial;
   --re-table-color-state: initial;
   --re-table-bg-state: initial;
-  --re-table-color: var(--re-emphasis-color);
+  --re-table-color: var(--re-dark);
   --re-table-bg: var(--re-body-bg);
-  --re-table-border-color: var(--re-border-color);
+  --re-table-border-color: var(--re-gray-200);
   --re-table-accent-bg: transparent;
   --re-table-striped-color: var(--re-emphasis-color);
   --re-table-striped-bg: rgba(var(--re-emphasis-color-rgb), 0.05);
