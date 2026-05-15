@@ -1422,7 +1422,6 @@ class ApiModel extends Model
 
     public function getScheduleMeetingList($user_id, $schedule_date)
     {
-        $schedule_date = Carbon::parse($schedule_date)->format('Y-m-d');
         $query = DB::table('crm_log as log')
             ->select('log.*', 'p_e.property_id', 'p_e.project_id', 'p.name as property_name', 'pj.project_name', 'c.Name as customer_name', 'c.Phone as customer_phone', 'c.Email as customer_email', 'g_e.name as g_customer_name', 'g_e.phone as g_customer_phone', 'g_e.email as g_customer_email')
             ->leftJoin('property_enquiry as p_e', 'log.enquiry_id', '=', 'p_e.enquery_id')
@@ -1430,14 +1429,15 @@ class ApiModel extends Model
             ->leftJoin('project as pj', 'pj.id', '=', 'p_e.project_id')
             ->leftJoin('customer as c', 'p_e.cid', '=', 'c.cid')
             ->leftJoin('buyer_property_enquery as g_e', 'log.enquiry_id', '=', 'g_e.id')
-            ->where([
-                'log.user_id' => $user_id,
-            ])
-            ->whereDate('log.schedule_date', $schedule_date)
-            ->orderBy('log.schedule_date', 'asc')
-            ->get();
+            ->where('log.user_id', $user_id);
 
-        return $query;
+        if ($schedule_date) {
+            $query->whereDate('log.schedule_date', Carbon::parse($schedule_date)->format('Y-m-d'));
+        } else {
+            $query->whereDate('log.schedule_date', '>=', Carbon::today()->format('Y-m-d'));
+        }
+
+        return $query->orderBy('log.schedule_date', 'asc')->get();
     }
 
     public function updateMeetingStatus($data = array())
