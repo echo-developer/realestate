@@ -106,7 +106,8 @@ class UserDetailsController extends Controller
             });
         }
 
-        $data = $query->paginate(10);
+        $currentPage = $req->input('current_page', 1);
+        $data = $query->paginate(10, ['*'], 'page', $currentPage);
 
         $properties = $data->getCollection()->map(function ($property) {
             $galleries = [];
