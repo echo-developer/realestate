@@ -158,7 +158,7 @@ class AgentDetailsController extends Controller
     public function ProeprtyInfo(Request $rq)
     {
         try {
-            $currentPage = $rq->input('currentPage', 1);
+            $currentPage = (int) $rq->input('currentPage', 1);
             $perPage = $rq->input('perPage', 10);
             $offSet = ($currentPage - 1) * $perPage;
             $filters = [
