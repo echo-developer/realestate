@@ -90,7 +90,7 @@ class UserDetailsController extends Controller
 
         if (!empty($filters['min_budget'])) {
             $query->whereHas('settings', function ($q) use ($filters) {
-                $q->where('expected_price', '<=', $filters['max_budget']);
+                $q->where('expected_price', '>=', $filters['min_budget']);
             });
         }
 
