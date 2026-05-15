@@ -44,11 +44,24 @@ class VerifyUserMailController extends Controller
                 'expires_at' => $expiresAt,
             ]);
 
-            $mail_unique_title = 'email-verification';
-            dispatch(new \App\Jobs\SendEmailJob( $request->email, $mail_unique_title,  ['VERIFICATION_CODE' => $otp,]));
+            // Email is skipped and OTP returned only when BOTH conditions are true:
+            // 1. RETURN_OTP=true in server .env
+            // 2. The request explicitly sends return_otp=1 (opt-in per caller)
+            // Other setups that don't send return_otp always receive email normally.
+            $returnOtp = env('RETURN_OTP', false) && filter_var($request->input('return_otp', false), FILTER_VALIDATE_BOOLEAN);
 
-          
-            return response()->json(['status' => 1, 'message' => 'OTP sent successfully.'], 200);
+            if (!$returnOtp) {
+                $mail_unique_title = 'email-verification';
+                dispatch(new \App\Jobs\SendEmailJob($request->email, $mail_unique_title, ['VERIFICATION_CODE' => $otp]));
+            }
+
+            $response = ['status' => 1, 'message' => 'OTP sent successfully.', 'email_sent' => !$returnOtp];
+
+            if ($returnOtp) {
+                $response['otp'] = $otp;
+            }
+
+            return response()->json($response, 200);
         }catch (\Throwable $e) {
             throw $e;
         }
