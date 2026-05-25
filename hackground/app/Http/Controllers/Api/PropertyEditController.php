@@ -69,7 +69,7 @@ class PropertyEditController extends Controller
     {
         $property_address = getTableData(
             'properties_location',
-            ['property_address', 'locality as property_locality'],
+            ['property_address', 'locality as property_locality', 'city'],
             [],
             ['pid' => $propertyID],
             null
@@ -81,6 +81,10 @@ class PropertyEditController extends Controller
                 'locality' => [
                     'locality_id' => $key->property_locality,
                     'locality_name' => !empty($key->property_locality) ? get_name_by_id('locality_names', 'locality_id', $key->property_locality, 'en') : null
+                ],
+                'city' => [
+                    'city_id' => $key->city,
+                    'name' => !empty($key->city) ? get_name_by_id('city_names', 'city_id', $key->city, 'en') : null
                 ],
             ];
         }

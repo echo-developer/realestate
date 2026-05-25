@@ -188,7 +188,7 @@ if (!function_exists('generatePropertyCardHTML')) {
                     <table width="100%" cellpadding="0" cellspacing="0" border="0">
                         <tr>
                             <td style="font-size:18px; font-weight:bold; color:#000;">
-                                ' . $Price . ' 
+                                ' . $Price . '
                                 <span style="font-weight:normal;font-size:16px;color:#606060;display:inline-block;padding-left:10px"> ' .  $property->additional->bhk_type  . ' Flat</span>
                             </td>
                         </tr>
@@ -1504,34 +1504,36 @@ if (!function_exists('debit_membership_feature_value')) {
 if (!function_exists('assign_free_plan')) {
     function assign_free_plan($user_id, $transactionId = null)
     {
-
         $planDetails = MembershipPlans::with('plan_features')->where('plan_type_id', 1)->first();
 
+        if (!$planDetails) {
+            \Illuminate\Support\Facades\Log::error('assign_free_plan: No Free plan found in pref_membership_plans for plan_type_id=1');
+            return false;
+        }
 
         $subscriptionDate = now();
         $expireDate = now()->addDays($planDetails->validity_days);
 
         DB::transaction(function () use ($user_id, $transactionId, $subscriptionDate, $expireDate, $planDetails) {
             $features = $planDetails->plan_features;
-            logger($features);
+
             DB::table('user_membership')->where('user_id', $user_id)->delete();
 
             DB::table('user_membership')->insert([
-                'user_id'               => $user_id,
-                'transaction_id'        => $transactionId ?? null,
-                'plan_id'               => 10,
-                'subcription_date'      => $subscriptionDate,
-                'expire_date'           => $expireDate,
-                'leads'                 => $features->leads ?? null,
-                'listings_allowed'      => $features->listings_allowed ?? null,
-                'relationship_manager'  => $features->relationship_manager ?? 'N',
-                'verified_badge'        => $features->verified_badge ?? 'N',
-                'listing_visibility'    => $features->listing_visibility ?? null,
-                'social_media_promotion' => $features->social_media_promotion ?? 'N',
-                'leads_used'             => 0,
-                'remaining_listings_allowed' => $features->listings_allowed,
-                'created_at'            => now(),
-                'updated_at'            => now(),
+                'user_id'                    => $user_id,
+                'transaction_id'             => $transactionId ?? null,
+                'plan_id'                    => $planDetails->id,
+                'subcription_date'           => $subscriptionDate,
+                'expire_date'                => $expireDate,
+                'listings_allowed'           => $features->listings_allowed ?? null,
+                'featured_listings_limit'    => $features->featured_listings ?? '0',
+                'featured_listings_used'     => 0,
+                'leads'                      => $features->leads ?? null,
+                'leads_used'                 => 0,
+                'verified_badge'             => $features->verified_badge ?? 'N',
+                'remaining_listings_allowed' => $features->listings_allowed ?? null,
+                'created_at'                 => now(),
+                'updated_at'                 => now(),
             ]);
         });
 

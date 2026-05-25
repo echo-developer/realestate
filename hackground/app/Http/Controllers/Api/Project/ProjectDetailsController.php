@@ -107,24 +107,14 @@ class ProjectDetailsController extends Controller
 
             $project->additional->project_amenity = $amenityArray;
 
-            // fetch landmarks data
-            $landmarks = $project->landmarks;
-            // log::info('sssss' . json_encode($landmarks, JSON_PRETTY_PRINT));
-            $formattedLandmarks = [];
-
-            foreach ($landmarks as $landmark) {
-
-                $type = preg_replace('/\d+$/', '', $landmark->landmark_type);;
-
-                $details = json_decode($landmark->landmark_details, true);
-
-                $item = [
-                    'key' => $landmark->landmark_type,
-                    'name' => $details['name'] . 'hello',
-                    'distance' => $details['distance'],
-                    "{$type}_count" => $landmark->landmark_type_count
-                ];
-                $formattedLandmarks[$type][] = $item;
+            // Fetch landmarks dynamically from Google Places API based on project coordinates
+            if (!empty($project->location->latitude) && !empty($project->location->longitude)) {
+                $formattedLandmarks = \App\Models\PrefProperty::nearby_landmarks_from_google(
+                    $project->location->latitude,
+                    $project->location->longitude
+                );
+            } else {
+                $formattedLandmarks = [];
             }
 
             //Fetching BHK types from all property of this project

@@ -68,6 +68,10 @@ class PropertyUpdateControler extends Controller
                 $datatoupdate['property_address'] = $req->address;
             }
 
+            if ($req->has('city')) {
+                $datatoupdate['city'] = $req->city;
+            }
+
             if ($req->has('locality')) {
                 $datatoupdate['locality'] = $req->locality;
             }

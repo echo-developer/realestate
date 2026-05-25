@@ -723,3 +723,23 @@ Route::prefix('reports')->name('reports.')->controller(ProjectReportController::
     Route::post('/status-project', 'changeStatus')->name('project.status');
     Route::post('/project-delete', 'deleteReport')->name('project.delete');
 });
+
+// Temporary route to assign the free plan to all users
+Route::get('/assign-all-free-plan', function () {
+    // Empty the user_membership table
+    \Illuminate\Support\Facades\DB::table('user_membership')->delete();
+    
+    // Assign free plan to all users
+    $users = \App\Models\User::all();
+    $count = 0;
+    foreach ($users as $user) {
+        if (assign_free_plan($user->id)) {
+            $count++;
+        }
+    }
+    
+    return response()->json([
+        'status' => true,
+        'message' => "Successfully emptied user_membership table and assigned the free plan to $count users."
+    ]);
+});

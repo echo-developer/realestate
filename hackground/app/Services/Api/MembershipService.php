@@ -23,6 +23,7 @@ class MembershipService
                         'relationship_manager',
                         'leads',
                         'listings_allowed',
+                        'featured_listings',
                         'verified_badge',
                         'listing_visibility',
                         'social_media_promotion'
@@ -43,5 +44,5 @@ class MembershipService
             });
     }
 
-    
+
 }

@@ -19,56 +19,68 @@ class GoogleLocalityService
     public function fetchAndSaveLocalities($request)
     {
         $apiKey = get_setting('google-api-key');
-        $countryCode = $this->get_country_code($request->city_id);
-        $radius = $request->input('radius', 50000);
-        $cityName = $request->city_name;
 
         if (!$apiKey) {
             return ['status' => 0, 'message' => 'API key not found', 'data' => []];
         }
 
-        $autocompleteUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?" . http_build_query([
+        $countryCode = $this->get_country_code($request->city_id);
+        $radius = $request->input('radius', 50000);
+        $cityName = $request->city_name;
+
+        if (!$countryCode) {
+            $countryCode = DB::table('country')->where('status', 1)->value('country_code');
+        }
+        if (!$countryCode) {
+            $countryCode = 'IN'; // fallback default
+        }
+
+        $queryParams = [
             'input' => $request->keyWord,
             'types' => 'geocode',
             'language' => $request->input('lang', 'en'),
             'key' => $apiKey,
-            'components' => "country:$countryCode",
-            'locationbias' => "circle:$radius@{$request->city_latitude},{$request->city_longitude}"
-        ]);
+        ];
+
+        if (!empty($countryCode)) {
+            $queryParams['components'] = "country:$countryCode";
+        }
+
+        if (!empty($request->city_latitude) && !empty($request->city_longitude)) {
+            $queryParams['locationrestriction'] = "circle:$radius@{$request->city_latitude},{$request->city_longitude}";
+        }
+
+        $autocompleteUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?" . http_build_query($queryParams);
+
+        \Illuminate\Support\Facades\Log::error("Google Autocomplete Request: " . $autocompleteUrl);
 
         $response = Http::get($autocompleteUrl)->json();
+
+        \Illuminate\Support\Facades\Log::error("Google Autocomplete Response: " . json_encode($response));
 
         $results = collect($response['predictions'] ?? [])->filter(function ($item) use ($cityName) {
             $hasCorrectType = collect($item['types'])->contains(
                 fn($type) =>
-                in_array($type, ['sublocality', 'sublocality_level_1', 'locality'])
+                in_array($type, [
+                    'sublocality', 'sublocality_level_1', 'sublocality_level_2', 
+                    'sublocality_level_3', 'sublocality_level_4', 'sublocality_level_5', 
+                    'locality', 'neighborhood', 'political', 'route', 'premise', 'geocode'
+                ])
             );
 
-            $matchesCity = isset($item['structured_formatting']['secondary_text']) &&
-                str_contains(strtolower($item['structured_formatting']['secondary_text']), strtolower($cityName));
-
-            return $hasCorrectType && $matchesCity;
+            return $hasCorrectType;
         })->map(function ($item) {
             return [
                 'name' => $item['structured_formatting']['main_text'],
                 'place_id' => $item['place_id'],
+                'is_google' => true,
             ];
         })->values()->toArray();
 
-        $asyncUrl = env('APP_URL') . '/api' . '/saveLocalityLatLong';
-
-        $saved = $this->localityRepo->storeNewLocalities($results, $request->input('lang', 'en'), $request->city_id);
-
-        Http::pool(fn($pool) => [
-            $pool->as('locality')->async()->post($asyncUrl, [
-                'data' => $saved
-            ])
-        ]);
-
         return [
             'status' => 1,
-            'message' => count($saved) ? 'Locality Retrieved' : 'No Locality Found',
-            'data' => $saved
+            'message' => count($results) ? 'Locality Retrieved' : 'No Locality Found',
+            'data' => $results
         ];
     }
 

@@ -163,5 +163,112 @@ class GoogleLocalityController extends Controller
         return response()->json(['status' => 1, 'data' => $landmarks]);
     }
 
+    public function saveGoogleLocality(Request $request)
+    {
+        try {
+            $placeId = $request->input('place_id');
+            $name = $request->input('name');
+            $cityId = $request->input('city_id');
+            $lang = $request->input('lang', 'en');
+
+            if (empty($placeId) || empty($name) || empty($cityId)) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'place_id, name, and city_id are required',
+                    'data' => null
+                ]);
+            }
+
+            $slug = Str::slug($name, '_');
+
+            // Check if locality already exists in database
+            $localityRecord = DB::table('locality')
+                ->join('locality_names', 'locality.locality_id', '=', 'locality_names.locality_id')
+                ->where('locality_names.lang', $lang)
+                ->where('locality.city', $cityId)
+                ->where(function ($query) use ($slug, $placeId) {
+                    $query->where('locality.google_place_id', $placeId)
+                        ->orWhere('locality.locality_key', $slug);
+                })
+                ->first();
+
+            if ($localityRecord) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Locality already exists',
+                    'data' => [
+                        'locality_id' => $localityRecord->locality_id,
+                        'name' => $localityRecord->name,
+                        'latitude' => $localityRecord->latitude,
+                        'longitude' => $localityRecord->longitude,
+                    ]
+                ]);
+            }
+
+            // Not existing, insert it
+            $getId = DB::table('locality')->insertGetId([
+                'city' => $cityId,
+                'google_place_id' => $placeId,
+                'locality_key' => $slug,
+            ]);
+
+            $langs = [
+                'en' => $name,
+                'ar' => $name,
+            ];
+
+            foreach ($langs as $langCode => $langName) {
+                DB::table('locality_names')->insert([
+                    'locality_id' => $getId,
+                    'lang' => $langCode,
+                    'name' => $langName,
+                ]);
+            }
+
+            // Fetch coordinates from Google Places API
+            $apiKey = get_setting('google-api-key');
+            $latitude = null;
+            $longitude = null;
+
+            if (!empty($apiKey)) {
+                $detailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?" . http_build_query([
+                    'place_id' => $placeId,
+                    'fields' => 'geometry',
+                    'key' => $apiKey
+                ]);
+
+                $detailsResponse = Http::get($detailsUrl)->json();
+                if (isset($detailsResponse['result']['geometry']['location'])) {
+                    $latitude = $detailsResponse['result']['geometry']['location']['lat'] ?? null;
+                    $longitude = $detailsResponse['result']['geometry']['location']['lng'] ?? null;
+
+                    DB::table('locality')
+                        ->where('locality_id', $getId)
+                        ->update([
+                            'latitude' => $latitude,
+                            'longitude' => $longitude,
+                        ]);
+                }
+            }
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Locality saved successfully',
+                'data' => [
+                    'locality_id' => $getId,
+                    'name' => $name,
+                    'latitude' => $latitude,
+                    'longitude' => $longitude,
+                ]
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 0,
+                'message' => $th->getMessage(),
+                'data' => null
+            ]);
+        }
+    }
+
     /* ===============================================================================================================*/
 }

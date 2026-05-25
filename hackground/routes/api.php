@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\Dummy\DummyController;
 use App\Http\Controllers\Api\Enquery_CRM_Controller;
 use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\FloorPlaningController;
+use App\Http\Controllers\Api\GoogleCityController;
 use App\Http\Controllers\Api\GoogleLocalityController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\OtpController;
@@ -362,6 +363,12 @@ Route::get('/global-localities', [GoogleLocalityController::class, 'getGoogletLo
 Route::get('/yearly-price-trend', [GoogleLocalityController::class, 'getYearlyPriceTrend']);
 Route::get('/landmark-list', [GoogleLocalityController::class, 'landmark']);
 Route::post('/saveLocalityLatLong', [GoogleLocalityController::class, 'saveLocalityLatLong']);
+Route::post('/save-google-locality', [GoogleLocalityController::class, 'saveGoogleLocality']);
+
+Route::get('/stored-cities', [GoogleCityController::class, 'fetchCityfromDatabase'])->name('get.cities.database');
+Route::get('/global-cities', [GoogleCityController::class, 'getGoogleCities'])->name('get.cities');
+Route::post('/saveCityLatLong', [GoogleCityController::class, 'saveCityLatLong']);
+Route::post('/save-google-city', [GoogleCityController::class, 'saveGoogleCity']);
 
 
 Route::get('/badge-list', [BadgesController::class, 'getBadges']);
