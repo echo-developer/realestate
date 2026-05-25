@@ -557,8 +557,8 @@ if (!function_exists('get_slug_name')) {
             $slug = sprintf(
                 "%s-BHK-%s-Sq-ft-FOR-%s-%s-in-%s&id=%s",
                 is_numeric($bedrooms_count) ? $bedrooms_count : "2",
-                is_numeric($carpet_area) && is_numeric($super_area)
-                    ? ($carpet_area * $super_area)
+                is_numeric($carpet_area)
+                    ? $carpet_area
                     : "NA",
                 ucfirst($post_for ?? "Sale"),
                 ucfirst(get_field_by_model(\App\Models\LocalityModel::class, 'locality_id', $locality, 'locality_key') ?? "Unknown"),
@@ -570,8 +570,8 @@ if (!function_exists('get_slug_name')) {
             $slug = sprintf(
                 "%s-%s-Sq-ft-FOR-%s-%s-in-%s&id=%s",
                 ucfirst(get_name_by_id('property_sub_category_names', 'sub_category_id', $property_type, 'en') ?? "Unknown"),
-                is_numeric($carpet_area) && is_numeric($super_area)
-                    ? ($carpet_area * $super_area)
+                is_numeric($carpet_area)
+                    ? $carpet_area
                     : "NA",
                 ucfirst($post_for ?? "Sale"),
                 ucfirst(get_field_by_model(\App\Models\LocalityModel::class, 'locality_id', $locality, 'locality_key') ?? "Unknown"),
@@ -599,8 +599,8 @@ if (!function_exists('get_property_name')) {
             $name = sprintf(
                 "%s BHK %s Sq-ft FOR %s",
                 is_numeric($bedrooms_count) ? $bedrooms_count : "Unknown",
-                is_numeric($carpet_area) && is_numeric($super_area)
-                    ? ($carpet_area * $super_area)
+                is_numeric($carpet_area)
+                    ? $carpet_area
                     : "NA",
                 ucfirst($post_for)
             );
