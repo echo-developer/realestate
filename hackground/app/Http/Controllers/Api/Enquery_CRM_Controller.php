@@ -789,6 +789,7 @@ class Enquery_CRM_Controller extends Controller
                     $customArray[] = [
                         'enquery_id' => $row->id,
                         'assign_id' => $row->assign_id,
+                        'lead_status' => $row->lead_status,
                         'name' => $row->is_seen ?  $row->name :  blur_text($row->name, 1),
                         'phone' => $row->is_seen ?  $row->phone :  blur_text($row->phone, 1),
                         'email' => $row->is_seen ?  $row->email : blur_text($row->email, 1),
