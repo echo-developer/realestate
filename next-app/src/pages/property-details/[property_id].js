@@ -253,7 +253,7 @@ const index = () => {
         ...prev,
         "property_reviews": {
           ...prev.property_reviews,
-          "total_reviews": prev.property_reviews?.total_reviews,
+          "total_reviews": (prev.property_reviews?.total_reviews || 0) + 1,
           "reviews": [
             ...prev.property_reviews?.reviews,
             ratingObj
@@ -843,13 +843,11 @@ const index = () => {
                 <AboutProject projectData={propertyDetails?.property_project} />
               )}
 
-              {propertyDetails?.property_reviews?.reviews?.length > 0 && (
-                <PropertyReviewDetails
-                  property_reviews={propertyDetails?.property_reviews}
-                  handleShowCanvas={handleShow}
-                  isMyProperty={propertyDetails?.is_my_property}
-                />
-              )}
+              <PropertyReviewDetails
+                property_reviews={propertyDetails?.property_reviews}
+                handleShowCanvas={handleShow}
+                isMyProperty={propertyDetails?.is_my_property}
+              />
               {propertyDetails?.landmarks && (
                 <PropertyLandmarkData
                   detailsData={propertyDetails}

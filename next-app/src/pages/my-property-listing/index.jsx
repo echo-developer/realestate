@@ -60,14 +60,9 @@ const TabComponent = () => {
 
     useEffect(() => {
         if (memberId && router.isReady) {
-            if (router?.query?.post_for) {
-                setPostFor(router.query.post_for)
-                FetchPropertyData(null, null, router.query.post_for);
-            } else {
-                FetchPropertyData(null, null);
-            }
+            FetchPropertyData(null, null);
         }
-    }, [memberId, router.query]);
+    }, [memberId, router.isReady]);
 
     const FetchPropertyData = async (loadMore, nextPage = 1, filter) => {
         if (!loadMore || filter) {
@@ -138,11 +133,9 @@ const TabComponent = () => {
         setPostFor("");
 
         const { pathname, query } = router;
+        router.push({ pathname, query }, undefined, { shallow: true });
 
-        router.push({
-            pathname,
-            query
-        }, undefined, { shallow: true });
+        FetchPropertyData(null, null);
     };
 
     const renderTabContent = () => {
@@ -205,14 +198,15 @@ const TabComponent = () => {
     }
 
     const handleFilterSelect = (queryVal) => {
-        if (queryVal) {
-            const { pathname, query } = router;
-            query.post_for = queryVal;
-
-            router.push({
-                pathname,
-                query
-            }, undefined, { shallow: true });
+        setLoading(true);
+        setPropertyData([]);
+        setTabCounts({ published_properties: 0, pending_properties: 0, expired_properties: 0, draft_properties: 0 });
+        if (queryVal && queryVal !== "all") {
+            setPostFor(queryVal);
+            FetchPropertyData(null, null, queryVal);
+        } else {
+            setPostFor("");
+            FetchPropertyData(null, null);
         }
     }
 
@@ -291,10 +285,13 @@ const TabComponent = () => {
                         <Col sm="auto">
                             <Dropdown className="mb-3 mb-sm-0">
                                 <Dropdown.Toggle variant="outline-primary" size="sm" id="dropdown-basic">
-                                    {postFor ? postFor.charAt(0).toUpperCase() + postFor.slice(1) : "Select Option"}
+                                    {postFor ? postFor.charAt(0).toUpperCase() + postFor.slice(1) : "All"}
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu className="dropdown-menu-end">
+                                    <Dropdown.Item onClick={() => handleFilterSelect('all')}>
+                                        All
+                                    </Dropdown.Item>
                                     <Dropdown.Item onClick={() => handleFilterSelect('rent')}>
                                         Rent
                                     </Dropdown.Item>

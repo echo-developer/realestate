@@ -336,6 +336,11 @@ class PropertyDetailsController extends Controller
                         ->sortByDesc('overall_rating')
                         ->values();
 
+                    $has_user_reviewed = !empty($user_id) ? DB::table('property_reviews')
+                        ->where('user_id', $user_id)
+                        ->where('property_id', $property->property_id)
+                        ->exists() : false;
+
                     // Transform data in one go
                     $property_review->transform(function ($item) {
                         $raterUserImage = User::select('image')->where('id', $item->user_id)->first();
@@ -514,6 +519,7 @@ class PropertyDetailsController extends Controller
                             'rating' => $average_rating_on_this_property ?? null,
                             'total_reviews' => $total_count ?? null,
                             'reviews' => $property_review ?? [],
+                            'has_user_reviewed' => $has_user_reviewed,
                         ]
                     ];
                 });
