@@ -883,7 +883,7 @@ class ApiModel extends Model
                 'leads_assigned.lead_type' => 'P',
                 'property_enquiry.is_deleted' => config('constants.STATUS_INACTIVE'),
             ])
-            //->where('property_enquiry.project_id','!=','')
+            ->whereNotNull('property_enquiry.project_id')
             ->select(
                 'leads_assigned.assign_id',
                 'leads_assigned.lead_status',
