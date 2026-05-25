@@ -12,6 +12,7 @@ class UserAdditional extends Model
         'user_id',
         'address',
         'city',
+        'locality',
         'website_url',
         'website_title',
         'description'

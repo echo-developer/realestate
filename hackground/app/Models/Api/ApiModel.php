@@ -929,6 +929,7 @@ class ApiModel extends Model
             ->select(
                 'address',
                 'city',
+                'locality',
                 'website_url',
                 'website_title',
                 'description',
@@ -940,7 +941,7 @@ class ApiModel extends Model
 
     public function UpdateMyProfileData($user_id, $data)
     {
-        // log_anything($data);
+        log::info('UpdateMyProfileData received: ' . json_encode($data, JSON_PRETTY_PRINT));
         DB::table('users')
             ->where('id', $user_id)
             ->update([
@@ -960,6 +961,7 @@ class ApiModel extends Model
                 [
                     'address' => $data['address'],
                     'city' => $data['city'],
+                    'locality' => $data['locality'] ?? null,
                     'website_title' => $data['website_title'],
                     'website_url' => $data['website_url'],
                     'description' => $data['description'],

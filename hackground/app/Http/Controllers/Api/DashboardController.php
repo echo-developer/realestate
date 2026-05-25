@@ -1017,7 +1017,7 @@ class DashboardController extends Controller
                     'message' => 'User not found.'
                 ]);
             }
-            // log::info('get_my_profile' . json_encode($get_user, JSON_PRETTY_PRINT));
+
             $agentAdditional = $get_user->agentAdditional ?? null;
             if ($agentAdditional) {
                 $agentAdditional->agent_docucment = !empty($agentAdditional->agent_doc)
@@ -1057,6 +1057,14 @@ class DashboardController extends Controller
                 ['service_area' => $user['service_area'] ?? []],
                 ['social' => $user['social'] ?? []]
             );
+            
+            // Add city_name and locality_name for frontend compatibility
+            if (!empty($mergedUser['city'])) {
+                $mergedUser['city_name'] = $mergedUser['city'];
+            }
+            if (!empty($mergedUser['locality'])) {
+                $mergedUser['locality_name'] = $mergedUser['locality'];
+            }
 
             $cities = $this->apiModel->getCity($lang);
 
@@ -1087,7 +1095,8 @@ class DashboardController extends Controller
                 'phone' => $req->phone,
                 'whatsapp_no' => $req->whatsapp,
                 'address' => $req->address,
-                'city' => $req->city_id,
+                'city' => $req->city,
+                'locality' => $req->locality,
                 'website_title' => $req->website_title,
                 'website_url' => $req->website_url,
                 'description' => $req->description,
@@ -1276,6 +1285,7 @@ class DashboardController extends Controller
     {
         try {
             $locations = json_decode($req->input('service_area'), true);
+            \Log::info('Service area received:', ['locations' => $locations]);
 
             $inputKeys = array_column($locations, 'key');
 
@@ -1283,6 +1293,7 @@ class DashboardController extends Controller
 
             // 1. Insert or Update Records
             foreach ($locations as $locationData) {
+                \Log::info('Processing location:', $locationData);
                 if (!empty($locationData['city']) && !empty($locationData['locality'])) {
                     AgentSecviceLocationModel::updateOrCreate(
                         [
@@ -1754,5 +1765,107 @@ class DashboardController extends Controller
             'total_count' => $totalCount
         ]);
         return $propList;
+    }
+
+    public function ToggleFeaturedProperty(Request $request)
+    {
+        try {
+            $user_id = auth_user_id();
+            if (!$user_id) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'No user found.',
+                ]);
+            }
+
+            $property_id = $request->id;
+            if (empty($property_id)) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Property ID is required.',
+                ]);
+            }
+
+            $property = DB::table('properties')
+                ->where('id', $property_id)
+                ->where('uid', $user_id)
+                ->where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
+                ->first();
+
+            if (!$property) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Property not found or unauthorized.',
+                ]);
+            }
+
+            $membership = DB::table('user_membership')
+                ->where('user_id', $user_id)
+                ->first();
+
+            if (!$membership) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'You do not have an active membership plan.',
+                ]);
+            }
+
+            $limit = (int)$membership->featured_listings_limit;
+            $used = (int)$membership->featured_listings_used;
+            $is_currently_featured = (int)$property->is_featured === 1;
+
+            if (!$is_currently_featured) {
+                if ($used >= $limit) {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => "You have reached your featured listing limit of {$limit}. Please unfeature another property first or upgrade your plan.",
+                    ]);
+                }
+
+                DB::transaction(function () use ($property_id, $user_id) {
+                    DB::table('properties')
+                        ->where('id', $property_id)
+                        ->update(['is_featured' => 1, 'updated_at' => now()]);
+
+                    DB::table('user_membership')
+                        ->where('user_id', $user_id)
+                        ->increment('featured_listings_used');
+                });
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Property successfully featured!',
+                    'is_featured' => true,
+                    'featured_listings_used' => $used + 1,
+                ]);
+            } else {
+                DB::transaction(function () use ($property_id, $user_id) {
+                    DB::table('properties')
+                        ->where('id', $property_id)
+                        ->update(['is_featured' => 0, 'updated_at' => now()]);
+
+                    DB::table('user_membership')
+                        ->where('user_id', $user_id)
+                        ->update([
+                            'featured_listings_used' => DB::raw("GREATEST(0, CAST(featured_listings_used AS SIGNED) - 1)"),
+                            'updated_at' => now()
+                        ]);
+                });
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Property successfully unfeatured!',
+                    'is_featured' => false,
+                    'featured_listings_used' => max(0, $used - 1),
+                ]);
+            }
+
+        } catch (\Throwable $e) {
+            Log::error('Error in ToggleFeaturedProperty: ' . $e->getMessage());
+            return response()->json([
+                'status' => 0,
+                'message' => 'An error occurred while updating featured status.',
+            ], 500);
+        }
     }
 }

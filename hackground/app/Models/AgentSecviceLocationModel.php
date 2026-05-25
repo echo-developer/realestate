@@ -26,13 +26,17 @@ class AgentSecviceLocationModel extends Model
         'id',
         'agent_id',
     ];
+    
+    protected $appends = ['city_name', 'locality_name'];
 
-    public function getLocalityAttribute($value)
+    public function getCityNameAttribute()
     {
-        return [
-            'locality_id' => $value,
-            'locality_name' => get_name_by_id('locality_names', 'locality_id', $value, 'en') ?? null
-        ];
+        return get_name_by_id('city_names', 'city_id', $this->attributes['city'] ?? null, 'en') ?? null;
+    }
+
+    public function getLocalityNameAttribute()
+    {
+        return get_name_by_id('locality_names', 'locality_id', $this->attributes['locality'] ?? null, 'en') ?? null;
     }
 
     public function agent()
