@@ -275,18 +275,26 @@ class Enquiry extends Model
             ->where('lead_type', 'G')
             ->pluck('user_id');
 
-
-        $agent = User::with('serviceArea')->find($agent_id);
         $cityIds = [];
         $localityIds = [];
 
-        foreach ($agent->serviceArea as $area) {
-            if (!empty($area->city)) {
-                $cityIds[] = $area->city;
-            }
+        if (!empty($agent_id)) {
+            $agent = User::with('serviceArea')->find($agent_id);
+            if ($agent && $agent->serviceArea) {
+                foreach ($agent->serviceArea as $area) {
+                    if (!empty($area->city)) {
+                        $cityIds[] = $area->city;
+                    }
 
-            if (!empty($area->locality['locality_id'])) {
-                $localityIds[] = $area->locality['locality_id'];
+                    $localityVal = $area->locality;
+                    if (!empty($localityVal)) {
+                        if (is_array($localityVal)) {
+                            $localityIds[] = $localityVal['locality_id'] ?? $localityVal;
+                        } else {
+                            $localityIds[] = $localityVal;
+                        }
+                    }
+                }
             }
         }
 
@@ -295,15 +303,23 @@ class Enquiry extends Model
 
         $agent_query = User::select('id', 'name', 'image')
             ->where('user_type', 'A');
+            
         if ($agents_already_assigned->isNotEmpty()) {
-
             $agent_query->whereNotIn('id', $agents_already_assigned);
         }
-        $agent_list = $agent_query->whereHas('serviceArea', function ($query) use ($cityIds, $localityIds) {
-            $query->whereIn('city', $cityIds)
-                ->whereIn(DB::raw('`locality`'), $localityIds);
-        })
-            ->with([
+
+        if (!empty($cityIds) || !empty($localityIds)) {
+            $agent_query->whereHas('serviceArea', function ($query) use ($cityIds, $localityIds) {
+                if (!empty($cityIds)) {
+                    $query->whereIn('city', $cityIds);
+                }
+                if (!empty($localityIds)) {
+                    $query->whereIn('locality', $localityIds);
+                }
+            });
+        }
+
+        $agent_list = $agent_query->with([
                 'serviceArea:agent_id,city,locality',
                 'membership:user_id,leads,leads_used'
             ])

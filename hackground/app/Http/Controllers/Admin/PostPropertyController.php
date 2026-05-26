@@ -239,12 +239,6 @@ class PostPropertyController extends Controller
                 ));
             }
             if ($step == '4') {
-                return json_encode(array(
-                    'status' => 'OK',
-                    'nextStep' => '5'
-                ));
-            }
-            if ($step == '5') {
                 $request->validate([
                     'carpet_area' => 'required',
                     'super_area' => 'required',
@@ -253,10 +247,10 @@ class PostPropertyController extends Controller
 
                 return json_encode(array(
                     'status' => 'OK',
-                    'nextStep' => '6'
+                    'nextStep' => '5'
                 ));
             }
-            if ($step == '6') {
+            if ($step == '5') {
                 $request->validate([
                     'possession_status' => 'required',
                     'expected_price' => 'required',
@@ -278,10 +272,10 @@ class PostPropertyController extends Controller
 
                 return json_encode(array(
                     'status' => 'OK',
-                    'nextStep' => '7'
+                    'nextStep' => '6'
                 ));
             }
-            if ($step == '7') {
+            if ($step == '6') {
                 try {
                     DB::beginTransaction();
                     log::info(json_encode($request->all()));
@@ -303,7 +297,6 @@ class PostPropertyController extends Controller
                     $this->savePropertyDimensions($property->id, $request);
                     $this->savePropertyAdditional($property->id, $request);
                     $this->savePropertyGalleries($property->id, $request);
-                    $this->savePropertyLandmark($property->id, $request);
 
                     DB::commit();
 
@@ -563,7 +556,7 @@ class PostPropertyController extends Controller
             }
         }
 
-        DB::table('property_landmarks as l')->where('l.property_id', $propertyId)->delete();
+        DB::table('property_landmarks')->where('property_id', $propertyId)->delete();
         if ($data) {
             DB::table('property_landmarks')->insert($data);
         }

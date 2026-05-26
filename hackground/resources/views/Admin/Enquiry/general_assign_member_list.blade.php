@@ -43,28 +43,10 @@
             }
         </style>
 
-        {{-- <form action="" method="get">
-        <section class="content-header mb-3">
-            <div class="row justify-content-end">
-                <div class="col-lg-4">
-                    <div class="input-group">
-                        <input class="form-control" id="prop_transaction_search" placeholder="Search..." name="term" value="{{ request('term') }}" />
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </form> --}}
-
         <div class="main-card mb-3 card">
-            <div class="card-header">
-                <h4>Lead Details</h4>
-            </div>
             <div class="card-body">
+                <div class="card-header p-0">
+                    <h4>Lead Details</h4>
                     <ul>
                         <li>Name: {{ $enquiry->name }}</li>
                         <li>Phone: {{ $enquiry->phone }}</li>
@@ -119,8 +101,9 @@
         </ul>
 
         <div class="main-card mb-3 card">
-            <div class="card-header">
-                <h4 class="mb-0">{{ $title }}</h4>
+            <div class="card-body">
+                <div class="card-header">
+                    {{ $title }}
                     @if ($assign_type == 'unassigned')
                         <div class="btn-actions-pane-right">
                             <button type="button" class="btn btn-sm btn-success" onclick="assign()">Assign</button>
@@ -136,14 +119,14 @@
                             <thead>
                                 <tr>
                                     @if ($assign_type == 'unassigned')
-                                        <th>Check</th>
+                                        <th style="width:5%">Check</th>
                                     @endif
-                                    <th>User ID</th>
-                                    <th>Member Name</th>
-                                    <th>Leads Used</th>
+                                    <th style="width:5%">User ID</th>
+                                    <th style="width:10%">Member Name</th>
+                                    <th style="width:10%">Leads (Used / Total)</th>
                                     @if ($assign_type == 'assigned')
-                                        <th>Assigned Date</th>
-                                        <th>Action</th>
+                                        <th style="width:10%">Assigned Date</th>
+                                        <th style="width:10%">Action</th>
                                     @endif
                                 </tr>
                             </thead>
@@ -166,10 +149,9 @@
                                         @endif
                                         <td>{{ $item->user_id }}</td>
                                         <td>{{ $item->member_name }}</td>
-                                        <td>{{ $item->leads ? $item->leads_used . '/' . $item->leads : '0/0' }}</td>
+                                        <td>{{ $item->leads ? $item->leads_used . '/' . ($item->leads == 'Unlimited' ? '∞' : $item->leads) : '0/0' }}</td>
                                         @if ($assign_type == 'assigned')
-                                            <td>{{ $item->created_at ? date('d-M-Y', strtotime($item->created_at)) : '' }}
-                                            </td>
+                                             <td class="text-nowrap">{{ $item->created_at ? date('d-M-Y', strtotime($item->created_at)) : '' }}</td>
                                             <td>
                                                 <a data-bs-toggle="tooltip" data-bs-placement="top"
                                                     data-bs-title="Remove from assigned list" class="allUsersDeleteButton"

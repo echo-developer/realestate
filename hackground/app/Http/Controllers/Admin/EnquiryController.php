@@ -243,10 +243,13 @@ class EnquiryController extends Controller
     {
         $assigned = false;
         $paginate = 10;
+        $main_title = 'Assign Leads';
+        $second_title = 'Assign Leads to Agent(s)';
+        $title = 'Agent List';
         $enquiry = $this->enquiry->general_enquiry_details($enquery_id);
         // dd($enquiry);
         $agent_list = $this->enquiry->get_agents_of_common_service_area($enquiry->agent_id, $enquery_id, $paginate);
-        return view('Admin.Enquiry.Agent Leads.agent-leads-assigned', compact('enquiry', 'assigned', 'agent_list'));
+        return view('Admin.Enquiry.Agent Leads.agent-leads-assigned', compact('enquiry', 'assigned', 'agent_list', 'main_title', 'second_title', 'title'));
     }
 
     public function general_agent_leads_assigned($enquery_id)
@@ -254,6 +257,9 @@ class EnquiryController extends Controller
         // dd($enquiry);
         $assigned = true;
         $paginate = 10;
+        $main_title = 'Assigned Leads';
+        $second_title = 'Assigned Leads to Agent(s)';
+        $title = 'Assigned Agent List';
         $enquiry = $this->enquiry->general_enquiry_details($enquery_id);
 
 
@@ -263,6 +269,6 @@ class EnquiryController extends Controller
         $agent_list = $this->enquiry->get_assigned_agent_list($srch, $paginate);
 
 
-        return view('Admin.Enquiry.Agent Leads.agent-leads-assigned', compact('enquiry', 'assigned', 'agent_list'));
+        return view('Admin.Enquiry.Agent Leads.agent-leads-assigned', compact('enquiry', 'assigned', 'agent_list', 'main_title', 'second_title', 'title'));
     }
 }

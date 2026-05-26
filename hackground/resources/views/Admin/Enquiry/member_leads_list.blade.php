@@ -35,40 +35,34 @@
         </div>
     </div>
     <div id="successMessageContainer"></div>
-    <style>
-        .advance-search-panel {
-            background-color: #fff;
-            box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
-            padding: 1rem;
-            margin-top: 1rem;
-        }
-    </style>
 
-    <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav ml-0">
-        <li class="nav-item">
-            <a class="nav-link ajax-link {{ Request::is('enquiry/member-leads') &&  request('lead_type') == 'P' ? 'active' : '' }}"
-                href="{{ url('enquiry/member-leads?user_id='.$user_id.'&lead_type=P') }}" >
-                <span>Project and Property Leads</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link ajax-link {{ Request::is('enquiry/member-leads') &&  request('lead_type') == 'G' ? 'active' : '' }}"
-                href="{{ url('/enquiry/member-leads?user_id='.$user_id.'&lead_type=G') }}" >
-                <span>General Leads</span>
-            </a>
-        </li>
-    </ul>
+    <div class="custom-tabs-container">
+        <ul class="custom-tabs">
+            <li>
+                <a class="custom-tab-link ajax-link {{ Request::is('enquiry/member-leads') &&  request('lead_type') == 'P' ? 'active' : '' }}"
+                    href="{{ url('enquiry/member-leads?user_id='.$user_id.'&lead_type=P') }}" >
+                    Project and Property Leads
+                </a>
+            </li>
+            <li>
+                <a class="custom-tab-link ajax-link {{ Request::is('enquiry/member-leads') &&  request('lead_type') == 'G' ? 'active' : '' }}"
+                    href="{{ url('/enquiry/member-leads?user_id='.$user_id.'&lead_type=G') }}" >
+                    General Leads
+                </a>
+            </li>
+        </ul>
+    </div>
 
     <form action="" method="get">
         <input type="hidden" value="{{ request('user_id') }}" name="user_id" />
         <input type="hidden" value="{{ request('lead_type') }}" name="lead_type" />
-        <section class="content-header mb-3">
-            <div class="row g-3">
+        <div class="custom-card p-4 mb-4">
+            <div class="row align-items-end">
                 @if($lead_type == 'P')
-                <div class="col-lg-4 col-sm-6">
-                    <label for="lead_for">Type</label>
-                    <div class="form-group">
-                        <select class="form-select" name="lead_for" id="lead_for">
+                <div class="col-md-3 col-sm-4">
+                    <label for="lead_for" class="form-label" style="font-weight: 500; color: #475569; font-size: 0.88rem;">Type</label>
+                    <div class="form-group mb-0">
+                        <select class="form-select custom-input" name="lead_for" id="lead_for">
                             <option value="" >All</option>
                             <option value="property" {{ request('lead_for') == 'property' ? 'selected' : ''; }}>Property</option>
                             <option value="project" {{ request('lead_for') == 'project' ? 'selected' : ''; }}>Project</option>
@@ -76,44 +70,39 @@
                     </div>
                 </div>
                 @endif
-                <div class="col-lg-4 col-sm-6">
-                    <label for="lead_type">Leads Date</label>
-                    <div class="input-group">
-                        <div class="input-group-append">
-                            <input type="date" class="form-control" id="enquery_date" name="enquery_date" value="{{ request('enquery_date') }}" />
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
+                <div class="col-md-3 col-sm-4">
+                    <label for="enquery_date" class="form-label" style="font-weight: 500; color: #475569; font-size: 0.88rem;">Leads Date</label>
+                    <div class="form-group mb-0">
+                        <input type="date" class="form-control custom-input" id="enquery_date" name="enquery_date" value="{{ request('enquery_date') }}" />
                     </div>
                 </div>
-                
+                <div class="col-md-3 col-sm-4">
+                    <div class="form-group mb-0">
+                        <button type="submit" class="btn btn-primary d-inline-flex align-items-center gap-2" style="background-color: #0d6efd; border: none; padding: 0.6rem 1.25rem; font-weight: 500; box-shadow: 0 4px 10px rgba(13, 110, 253, 0.15);">
+                            <i class="fa fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
             </div>
-        </section>
+        </div>
     </form>
 
-    <div class="main-card mb-3 card">
-        <div class="card-header">
-            <h4 class="mb-0">{{ $title }}</h4>
-
-            {{-- <div class="btn-actions-pane-right">
-                    <button type="button" class="btn btn-sm btn-success" onclick="add()">Add Country</button>
-                </div> --}}
-
+    <div class="custom-card">
+        <div class="custom-card-header">
+            <h4><i class="fa fa-list"></i> {{ $title }}</h4>
         </div>
-        <div class="card-body">
-
+        <div class="custom-card-body p-0">
             <div class="table-responsive" id="main_table">
                 @if($lead_type == 'P')
-                <table id="myTable" class="mb-0 table">
+                <table id="myTable" class="custom-table mb-0">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Property Name</th>
-                            <th>Member Name</th>
-                            <th>Customer Name</th>
-                            <th>Date</th>
-                            <th class="text-right">Action</th>
+                            <th style="width:5%">ID</th>
+                            <th style="width:35%">Property Name</th>
+                            <th style="width:15%">Member Name</th>
+                            <th style="width:15%">Customer Name</th>
+                            <th style="width:15%">Date</th>
+                            <th class="text-right" style="width:15%">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -123,18 +112,25 @@
                             <td>{{ $item->enquery_id }}</td>
                             <td>
                                 @if($item->property_id)
-                                 <b>Property:</b><br/>{{ $item->property_name }}
-                                 @elseif($item->project_id)
-                                 <b>Project:</b><br/>{{ $item->project_name }}
+                                    <span class="badge bg-primary text-white mb-1" style="font-size: 0.72rem; font-weight: 500; padding: 0.25rem 0.5rem; border-radius: 4px;">Property</span>
+                                    <div style="font-weight: 600; color: #1e293b; font-size: 0.92rem;">{{ $item->property_name }}</div>
+                                @elseif($item->project_id)
+                                    <span class="badge bg-success text-white mb-1" style="font-size: 0.72rem; font-weight: 500; padding: 0.25rem 0.5rem; border-radius: 4px;">Project</span>
+                                    <div style="font-weight: 600; color: #1e293b; font-size: 0.92rem;">{{ $item->project_name }}</div>
                                 @endif
                             </td>
                             <td>{{ $item->owner }}</td>
-                            <td>{{ $item->customer }}</td>
-                            <td>{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
+                            <td style="font-weight: 500; color: #334155;">{{ $item->customer }}</td>
+                            <td class="text-nowrap">{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
                             <td class="text-right">
-                                {{-- <a href="{{ url('/enquiry/assign-list/'.$item->enquery_id); }}" title="Assign Lead"><i class="fa fa-plus text-info fa-md"></i></a> --}}
-                                <i class="fa fa-eye text-success fa-md" onclick="viewLead('{{ $item->enquery_id }}','P')"></i>
-                                <i class="fa fa-trash text-danger fa-md" onclick="remove_assigned('{{ $item->assign_id }}')"></i>
+                                <div class="d-flex justify-content-end gap-2">
+                                    <button type="button" class="action-btn btn-view-lead" onclick="viewLead('{{ $item->enquery_id }}','P')" title="View Details">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="action-btn btn-delete-lead" onclick="remove_assigned('{{ $item->assign_id }}')" title="Remove assigned">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                         @endforeach
@@ -142,86 +138,65 @@
                     </tbody>
                 </table>
                 @elseif($lead_type == 'G')
-                <table id="myTable" class="mb-0 table">
+                <table id="myTable" class="custom-table mb-0">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Buyer Name</th>
-                            <th>Email &amp; Phone</th>
-                            <th>Enquiry For</th>
-                            <th>Budget</th>
-                            <th>Date</th>
-                            <th class="text-right">Action</th>
+                            <th style="width:5%">ID</th>
+                            <th style="width:15%">Buyer Name</th>
+                            <th style="width:15%">Phone</th>
+                            <th style="width:15%">Email</th>
+                            <th style="width:15%">Enquiry For</th>
+                            <th style="width:15%">Budget</th>
+                            <th style="width:15%">Date</th>
+                            <th class="text-right" style="width:15%">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($list as $item)
                         <tr>
                             <td>{{ $item->id }}</td>
-                            <td>{{ $item->name }}</td>
-                            <td>{{ $item->email }}<br/>{{ $item->phone }}</td>
-                            <td>
+                            <td style="font-weight: 500; color: #334155;">{{ $item->name }}</td>
+                            <td>{{ $item->phone }}</td>
+                            <td>{{ $item->email }}</td>
+                            <td style="font-size: 0.88rem; color: #475569;">
                                 {{ get_property_sub_category_name($item->property_for).', '.get_property_category_name($item->property_type) }}
                             </td>
-                            <td>{{ $item->min_budget.'-'.$item->max_budget }}</td>
-                            <td>{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
+                            <td style="font-weight: 600; color: #1e293b; font-size: 0.88rem;">{{ $item->min_budget.'-'.$item->max_budget }}</td>
+                            <td class="text-nowrap">{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
                             <td class="text-right">
-                                {{-- <a href="{{ url('/enquiry/general-assign-list/'.$item->id); }}" title="Assign Lead"><i class="fa fa-plus text-info fa-md"></i></a> --}}
-                                <i class="fa fa-eye text-success fa-md" onclick="viewLead('{{ $item->id }}','G')"></i>
-                                <i class="fa fa-trash text-danger fa-md" onclick="remove_assigned('{{ $item->assign_id }}')"></i>
+                                <div class="d-flex justify-content-end gap-2">
+                                    <button type="button" class="action-btn btn-view-lead" onclick="viewLead('{{ $item->id }}','G')" title="View Details">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="action-btn btn-delete-lead" onclick="remove_assigned('{{ $item->assign_id }}')" title="Remove assigned">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="text-center" >Sorry, no records found!</td>
+                            <td colspan="8" class="text-center py-4 text-muted">
+                                <i class="fa fa-info-circle me-1"></i> Sorry, no records found!
+                            </td>
                         </tr>
                         @endforelse
                     </tbody>
                 </table>
                 @endif
             </div>
-            {!! $list->links('vendor.pagination.bootstrap-5') !!}
-            <?php /* ?>
-            @if(isset($list))
-            <div class="card-footer pagination-rounded clearfix justify-content-center">
-                <ul class="pagination small mb-0">
-                    @if ($list->currentPage() == $list->lastPage() && $list->currentPage() != 1)
-                    <li class="page-item">
-                        <a href="{{ $list->appends(['term' => request('term')])->url(1) }}" class="page-link" rel="start">
-                            <i class="fa fa-chevron-left"></i> First
-                        </a>
-                    </li>
-                    @endif
-
-                    <li class="page-item {{ $list->currentPage() == 1 ? 'disabled' : '' }}">
-                        <a href="{{ $list->appends(['term' => request('term')])->previousPageUrl() }}" class="page-link" rel="prev">
-                            <i class="fa fa-chevron-left"></i>
-                        </a>
-                    </li>
-
-                    @for ($i = max($list->currentPage() - 1, 1); $i <= min($list->currentPage() + 1, $list->lastPage()); $i++)
-                        <li class="page-item {{ ($list->currentPage() == $i) ? 'active' : '' }}">
-                            <a href="{{ $list->appends(['term' => request('term')])->url($i) }}" class="page-link">{{ $i }}</a>
-                        </li>
-                        @endfor
-
-                        <li class="page-item {{ $list->currentPage() == $list->lastPage() ? 'disabled' : '' }}">
-                            <a href="{{ $list->appends(['term' => request('term')])->nextPageUrl() }}" class="page-link" rel="next">
-                                <i class="fa fa-chevron-right"></i>
-                            </a>
-                        </li>
-
-                        @if ($list->currentPage() != $list->lastPage())
-                        <li class="page-item">
-                            <a href="{{ $list->appends(['term' => request('term')])->url($list->lastPage()) }}" class="page-link" rel="end">
-                                Last <i class="fa fa-chevron-right"></i>
-                            </a>
-                        </li>
-                        @endif
-                </ul>
+            
+            <div class="custom-table-footer">
+                <div class="custom-table-info">
+                    Showing {{ $list->firstItem() ?? 0 }} to {{ $list->lastItem() ?? 0 }} of {{ $list->total() ?? 0 }} entries
+                </div>
+                <div>
+                    {!! $list->links('vendor.pagination.bootstrap-5') !!}
+                </div>
             </div>
-            @endif
-            <?php */ ?>
+        </div>
+    </div>
+</div>
 
         </div>
     </div>

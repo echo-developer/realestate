@@ -37,6 +37,47 @@
     background: #eff6ff;
     color: #2563eb;
 }
+.upload-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+    min-height: 10px;
+}
+.preview-item {
+    position: relative;
+    width: 150px;
+    height: 110px;
+    flex-shrink: 0;
+}
+.preview-item img {
+    width: 150px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    display: block;
+}
+.preview-item .remove-btn {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background-color: #dc3545;
+    color: #fff;
+    border-radius: 50%;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: .85;
+    z-index: 1;
+}
+.preview-item .remove-btn:hover {
+    opacity: 1;
+}
 </style>
 
 @endpush
@@ -73,16 +114,13 @@
                 <a class="nav-link tab-3" href="javascript:void(0)">Location Details</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link tab-4" href="javascript:void(0)">Landmark Details</a>
+                <a class="nav-link tab-4" href="javascript:void(0)">Property Features</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link tab-5" href="javascript:void(0)">Property Features</a>
+                <a class="nav-link tab-5" href="javascript:void(0)">Additional Details</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link tab-6" href="javascript:void(0)">Additional Details</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link tab-7" href="javascript:void(0)">Photos/Gallery</a>
+                <a class="nav-link tab-6" href="javascript:void(0)">Photos/Gallery</a>
             </li>
         </ul>
         <div class="card border-0 post-form">
@@ -222,7 +260,7 @@
                         </div>
 
                         <div class="form-floating mb-3">
-                            <textarea rows="3" class="form-control mb-2" name='address' placeholder="Enter Your Address" style="min-height: 75px;"></textarea>
+                            <textarea rows="3" class="form-control mb-2" id="property_address" name='address' placeholder="Enter Your Address" style="min-height: 75px;"></textarea>
                             <label class="form-label">Address</label>
                             <span class="error addressError text-danger"></span>
                             <p class="text-end text-help">Maximum 300 words are allowed</p>
@@ -243,80 +281,7 @@
                         </div>
                     </div>
 
-                    <div id="step-4" style="display:none">
-                        <div class="landmark-tab-content">
-                            <ul class="nav nav-underline nav-custom">
-                                <li class="nav-item"><a class="nav-link active" data-tab='education'
-                                        href="javascript:void(0)">Education</a>
-                                </li>
-                                <li class="nav-item"><a class="nav-link" data-tab='healthcare'
-                                        href="javascript:void(0)">Healthcare</a></li>
-                                <li class="nav-item"><a class="nav-link" data-tab='shopping'
-                                        href="javascript:void(0)">Shopping Center</a>
-                                </li>
-                                <li class="nav-item"><a class="nav-link" data-tab='commercial'
-                                        href="javascript:void(0)">Commercial Hub</a>
-                                </li>
-                                <li class="nav-item"><a class="nav-link" data-tab='transaportation'
-                                        href="javascript:void(0)">Transaportation Hub</a>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="landmark-content" id="tab-content-education">
-                            <div class="form-field" id="education-field">
-                                <button type="button" class="btn btn-primary" onclick="add_landmark('education')"><i class="fa fa-plus"></i> Add Education</button>
-                                <div class="education-con my-3">
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="landmark-content" id="tab-content-healthcare" style="display:none">
-                            <div class="form-field">
-                                <button type="button" class="btn btn-primary" onclick="add_landmark('healthcare')"><i class="fa fa-plus"></i> Add Healthcare</button>
-                                <div class="healthcare-con my-3">
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="landmark-content" id="tab-content-shopping" style="display:none">
-                            <div class="form-field">
-                                <button type="button" class="btn btn-primary" onclick="add_landmark('shopping')"><i class="fa fa-plus"></i> Add Shopping</button>
-                                <div class="shopping-con my-3">
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="landmark-content" id="tab-content-commercial" style="display:none">
-                            <div class="form-field">
-                                <button type="button" class="btn btn-primary" onclick="add_landmark('commercial')"><i class="fa fa-plus"></i> Add Commercial</button>
-                                <div class="commercial-con my-3">
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="landmark-content" id="tab-content-transaportation" style="display:none">
-                            <div class="form-field">
-                                <button type="button" class="btn btn-primary" onclick="add_landmark('transaportation')"><i class="fa fa-plus"></i> Add transaportation</button>
-                                <div class="transaportation-con my-3">
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="">
-                            <button type="button" class="btn btn-secondary btn-back-4 me-2"><i
-                                    class="bi bi-arrow-left"></i> Back</button>
-                            <button type="button" class="btn btn-primary btn-next" data-step="4">Next <i
-                                    class="bi bi-arrow-right"></i></button>
-                        </div>
-                    </div>
-
-                    <div id="step-5" style="display:none;">
+                    <div id="step-4" style="display:none;">
 
                         <div class="row gx-3">
                             <!-- Bedroom -->
@@ -554,12 +519,12 @@
                         
 
                         <div class="">
-                            <button type="button" class="btn btn-secondary btn-back-5 me-2"><i class="bi bi-arrow-left"></i> Back</button>
-                            <button type="button" class="btn btn-primary btn-next" data-step="5">Next <i class="bi bi-arrow-right"></i></button>
+                            <button type="button" class="btn btn-secondary btn-back-4 me-2"><i class="bi bi-arrow-left"></i> Back</button>
+                            <button type="button" class="btn btn-primary btn-next" data-step="4">Next <i class="bi bi-arrow-right"></i></button>
                         </div>
                     </div>
 
-                    <div id="step-6" style="display:none;">
+                    <div id="step-5" style="display:none;">
                         <div class="mb-3">
                             <label class="form-label d-block">Possession Status :</label>
                             @if (!empty($propertyStatus) && is_array($propertyStatus))
@@ -766,14 +731,14 @@
                         </div>
 
                         <div class="">
-                            <button type="button" class="btn btn-secondary btn-back-6 me-2"><i
+                            <button type="button" class="btn btn-secondary btn-back-5 me-2"><i
                                     class="bi bi-arrow-left"></i> Back</button>
-                            <button type="button" class="btn btn-primary btn-next" data-step="6">Next <i
+                            <button type="button" class="btn btn-primary btn-next" data-step="5">Next <i
                                     class="bi bi-arrow-right"></i></button>
                         </div>
                     </div>
 
-                    <div id="step-7" style="display:none;">
+                    <div id="step-6" style="display:none;">
                         <div class="form-field">
                             <div class="image-tab-content">
                                 <ul class="nav nav-underline nav-custom">
@@ -870,9 +835,9 @@
                         </div>
 
                         <div class="">
-                            <button type="button" class="btn btn-secondary btn-back-7 me-2"><i
+                            <button type="button" class="btn btn-secondary btn-back-6 me-2"><i
                                     class="bi bi-arrow-left"></i> Back</button>
-                            <button type="button" class="btn btn-primary btn-next" data-step="7" id="submit-btn">Post
+                            <button type="button" class="btn btn-primary btn-next" data-step="6" id="submit-btn">Post
                                 Property</button>
                         </div>
                     </div>
@@ -905,37 +870,113 @@
             return;
         }
         citySearchTimer = setTimeout(function() {
+            const container = $('#city-dropdown');
+            container.empty().show();
+            container.append('<div class="dropdown-item text-muted">Searching...</div>');
+
+            let storedDone = false, globalDone = false;
+            let storedResults = [], globalResults = [];
+
+            function renderCityResults() {
+                if (!storedDone || !globalDone) return;
+                container.empty();
+                const allNames = new Set();
+                storedResults.forEach(function(city) {
+                    const item = $('<div class="dropdown-item"></div>')
+                        .text(city.name)
+                        .data('id', city.city_id)
+                        .data('name', city.name)
+                        .on('click', function() {
+                            selectStoredCity(city.city_id, city.name, container);
+                        });
+                    container.append(item);
+                    allNames.add(city.name);
+                });
+                globalResults.forEach(function(gcity) {
+                    if (!allNames.has(gcity.name)) {
+                        const item = $('<div class="dropdown-item"></div>')
+                            .text(gcity.name)
+                            .data('name', gcity.name)
+                            .data('place_id', gcity.place_id)
+                            .on('click', function() {
+                                saveAndSelectGoogleCity(gcity.name, gcity.place_id, container);
+                            });
+                        container.append(item);
+                        allNames.add(gcity.name);
+                    }
+                });
+                if (container.children().length === 0) {
+                    container.append('<div class="dropdown-item text-muted">No cities found</div>');
+                }
+            }
+
+            // Search stored
             $.ajax({
                 url: "{{ url('/api/stored-cities') }}",
                 type: 'GET',
                 data: { keyWord: query },
                 dataType: 'json',
                 success: function(response) {
-                    const container = $('#city-dropdown');
-                    container.empty().show();
-                    if (response.status === 1 && response.data.length > 0) {
-                        $.each(response.data, function(i, city) {
-                            const item = $('<div class="dropdown-item"></div>')
-                                .text(city.name)
-                                .data('id', city.city_id)
-                                .data('name', city.name)
-                                .on('click', function() {
-                                    $('#city-search').val(city.name);
-                                    $('#city-id').val(city.city_id);
-                                    selectedCity = { city_id: city.city_id, name: city.name };
-                                    container.hide();
-                                    $('#locality-search').val('').focus();
-                                    $('#locality-id').val('');
-                                });
-                            container.append(item);
-                        });
-                    } else {
-                        container.append('<div class="dropdown-item text-muted">No cities found</div>');
-                    }
+                    storedResults = (response.status === 1 && response.data) ? response.data : [];
+                },
+                complete: function() {
+                    storedDone = true;
+                    renderCityResults();
+                }
+            });
+
+            // Search Google
+            $.ajax({
+                url: "{{ url('/api/global-cities') }}",
+                type: 'GET',
+                data: { keyWord: query },
+                dataType: 'json',
+                success: function(globalRes) {
+                    globalResults = (globalRes.status === 1 && globalRes.data) ? globalRes.data : [];
+                },
+                error: function() {
+                    globalResults = [];
+                },
+                complete: function() {
+                    globalDone = true;
+                    renderCityResults();
                 }
             });
         }, 400);
     });
+
+    function selectStoredCity(id, name, container) {
+        $('#city-search').val(name);
+        $('#city-id').val(id);
+        selectedCity = { city_id: id, name: name };
+        container.hide();
+        $('#locality-search').val('').focus();
+        $('#locality-id').val('');
+        $('#property_address').val('');
+    }
+
+    function saveAndSelectGoogleCity(name, placeId, container) {
+        $.ajax({
+            url: "{{ url('/api/save-google-city') }}",
+            type: 'POST',
+            data: {
+                place_id: placeId,
+                name: name,
+                _token: '{{ csrf_token() }}'
+            },
+            dataType: 'json',
+            success: function(resp) {
+                if (resp.status === 1 && resp.data) {
+                    selectStoredCity(resp.data.city_id, name, container);
+                } else {
+                    alert('Failed to save city. Please try again.');
+                }
+            },
+            error: function() {
+                alert('Failed to save city. Please try again.');
+            }
+        });
+    }
 
     // Locality autocomplete
     $('#locality-search').on('input', function() {
@@ -1023,10 +1064,22 @@
         }, 400);
     });
 
+    function getCityName() {
+        return $('#city-search').val() || '';
+    }
+
+    function updateAddress(localityName) {
+        const cityName = getCityName();
+        if (cityName && localityName) {
+            $('#property_address').val(localityName + ', ' + cityName);
+        }
+    }
+
     function selectLocality(id, name, container) {
         $('#locality-search').val(name);
         $('#locality-id').val(id);
         container.hide();
+        updateAddress(name);
     }
 
     function saveAndSelectGoogleLocality(name, placeId, cityId, container) {
@@ -1117,22 +1170,6 @@
         $('.select2').select2();
     }); */
 
-    function add_landmark(type) {
-        var html = '';
-        html += '<div class="card p-3 mb-3">';
-        html += '<div class="row">';
-        html += '<div class="col-md"><div class="form-group"><input type="text" class="form-control" name="' + type + '[name][]" placeholder="Name" /></div></div>';
-        html += '<div class="col-md-3"><div class="form-group"><input type="text" class="form-control" name="' + type + '[distance][]" placeholder="Distance" /></div></div>';
-        html += '<div class="col-md-auto"><a href="javascript:void(0)" class="btn btn-danger" onclick="remove_landmark(this)"><i class="bi bi-trash3-fill"></i></a></div>';
-        html += '</div></div>';
-
-        $('.' + type + '-con').append(html);
-    }
-
-    function remove_landmark(evt) {
-        $(evt).parent().parent().parent().remove();
-    }
-
     function previewImage(imageUrl, filename, type) {
         let gallery = $('#previewGallery');
         let imgWrapper = $('<div class="preview-item"></div>');
@@ -1147,15 +1184,6 @@
     }
 
     $(document).ready(function() {
-        $(".landmark-tab-content .nav-link").click(function(e) {
-            e.preventDefault();
-            $(".landmark-tab-content .nav-link").removeClass("active");
-            $(this).addClass("active");
-            var activeTab = $(this).attr("data-tab");
-            $(".landmark-content").hide();
-            $("#tab-content-" + activeTab).show();
-        });
-
         $(".image-tab-content .nav-link").click(function(e) {
             e.preventDefault();
             $(".image-tab-content .nav-link").removeClass("active");
@@ -1232,10 +1260,23 @@
             $('.btn-next-1').click(function() {
                 $('.spaceX').hide();
             });
-            $('.btn-back-2').click(function() {
-                $('.spaceX').show();
-            });
         }
+        $('[class*="btn-back-"]').click(function() {
+            var classes = $(this).attr('class').split(' ');
+            for (var i = 0; i < classes.length; i++) {
+                var match = classes[i].match(/btn-back-(\d+)/);
+                if (match) {
+                    var currentStep = parseInt(match[1]);
+                    var prevStep = currentStep - 1;
+                    $("#step-" + currentStep).hide();
+                    $("#step-" + prevStep).show();
+                    $("#step").val(prevStep);
+                    $(".tab-" + currentStep).removeClass('active');
+                    $(".tab-" + prevStep).addClass('active');
+                    break;
+                }
+            }
+        });
 
         // --------------------------------------------------------------------------------------------------------//
 

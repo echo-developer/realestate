@@ -38,88 +38,93 @@
         </div>
     </div>
     <div id="successMessageContainer"></div>
-    <style>
-        .advance-search-panel {
-            background-color: #fff;
-            box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
-            padding: 1rem;
-            margin-top: 1rem;
-        }
-    </style>
 
     <form action="" method="get">
-        <section class="content-header mb-3">
-            <div class="row g-3">                
-                <div class="col-lg-4 col-sm-6">
-                    <label for="lead_type">Leads Date</label>
+        <div class="custom-card p-4 mb-4">
+            <div class="row align-items-end">
+                <div class="col-md-3 col-sm-4">
+                    <label for="enquery_date" class="form-label" style="font-weight: 500; color: #475569; font-size: 0.88rem;">Leads Date</label>
                     <div class="form-group mb-0">
-                        <input type="date" class="form-control" id="enquery_date" name="enquery_date" value="{{ request('enquery_date') }}" />
+                        <input type="date" class="form-control custom-input" id="enquery_date" name="enquery_date" value="{{ request('enquery_date') }}" />
                     </div>
                 </div>
-                <div class="col-lg-4 col-sm-6">
-                    <label for="lead_type">Member Name</label>
-                    <div class="input-group">
-                        <input class="form-control" id="member_name" placeholder="Search by member" name="member_name" value="{{ request('member_name') }}" />
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
+                <div class="col-md-3 col-sm-4">
+                    <label for="member_name" class="form-label" style="font-weight: 500; color: #475569; font-size: 0.88rem;">Member Name</label>
+                    <div class="form-group mb-0">
+                        <input class="form-control custom-input" id="member_name" placeholder="Search by member" name="member_name" value="{{ request('member_name') }}" />
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-4">
+                    <div class="form-group mb-0 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary d-inline-flex align-items-center gap-2" style="background-color: #0d6efd; border: none; padding: 0.6rem 1.25rem; font-weight: 500; box-shadow: 0 4px 10px rgba(13, 110, 253, 0.15);">
+                            <i class="fa fa-search"></i> Search
+                        </button>
+                        <a href="{{ url()->current() }}" class="btn btn-secondary d-inline-flex align-items-center gap-2" style="background-color: #64748b; border: none; padding: 0.6rem 1.25rem; font-weight: 500;">
+                            <i class="fa fa-undo"></i> Reset
+                        </a>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </form>
 
-    <div class="main-card mb-3 card">
-        <div class="card-header">
-            <h4 class="mb-0">{{ $title }}</h4>
-
-            {{-- <div class="btn-actions-pane-right">
-                    <button type="button" class="btn btn-sm btn-success" onclick="add()">Add Country</button>
-                </div> --}}
-
+    <div class="custom-card">
+        <div class="custom-card-header">
+            <h4><i class="fa fa-list"></i> {{ $title }}</h4>
         </div>
-        <div class="card-body">
-
+        <div class="custom-card-body p-0">
             <div class="table-responsive" id="main_table">
-                <table id="myTable" class="mb-0 table">
+                <table id="myTable" class="custom-table mb-0">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Customer Name</th>
-                            <th>Message</th>
-                            <th>Date</th>
-                            {{-- <th>Status</th> --}}
-                            <th class="text-right">Action</th>
+                            <th style="width:5%">ID</th>
+                            <th style="width:20%">Customer Name</th>
+                            <th style="width:45%">Message</th>
+                            <th style="width:20%">Date</th>
+                            <th class="text-right" style="width:10%;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($list as $item)
                         <tr>
                             <td>{{ $item->enquery_id }}</td>
-                            <td>{{ $item->customer }}</td>
-                            <td>{{ $item->message }}</td>
-                            <td>{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
-                            {{-- <td>
-                                <input data-id="{{$item->enquery_id}}" class="status d-none" type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ !$item->status ? 'checked' : '' }} onchange="change_status()">
-                            </td> --}}
+                            <td style="font-weight: 500; color: #334155;">{{ $item->customer }}</td>
+                            <td style="color: #475569; font-size: 0.88rem;">{{ $item->message }}</td>
+                            <td class="text-nowrap">{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
                             <td class="text-right">
-                                <a href="{{ url('/enquiry/assign-list/'.$item->enquery_id); }}" title="Assign Lead"><i class="fa fa-plus text-info fa-md"></i></a>
-                                <i class="fa fa-eye text-success fa-md" onclick="viewLead('{{ $item->enquery_id }}', 'P')"></i>
-                                {{-- <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->enquery_id }}')"></i> --}}
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a href="{{ url('/enquiry/assign-list/'.$item->enquery_id); }}" class="action-btn btn-assign-lead" title="Assign Lead">
+                                        <i class="fa fa-plus"></i>
+                                    </a>
+                                    <button type="button" class="action-btn btn-view-lead" onclick="viewLead('{{ $item->enquery_id }}', 'P')" title="View Details">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="text-center" >Sorry, no records found!</td>
+                            <td colspan="5" class="text-center py-4 text-muted">
+                                <i class="fa fa-info-circle me-1"></i> Sorry, no records found!
+                            </td>
                         </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
 
-            {!! $list->links('vendor.pagination.bootstrap-5') !!}
+            <div class="custom-table-footer">
+                <div class="custom-table-info">
+                    Showing {{ $list->firstItem() ?? 0 }} to {{ $list->lastItem() ?? 0 }} of {{ $list->total() ?? 0 }} entries
+                </div>
+                <div>
+                    {!! $list->links('vendor.pagination.bootstrap-5') !!}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 
         </div>
     </div>

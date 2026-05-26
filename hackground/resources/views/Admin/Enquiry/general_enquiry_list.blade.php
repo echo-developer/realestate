@@ -16,225 +16,173 @@
 
     <div class="app-main__inner">
 
-        <div class="app-page-title">
-            <div class="page-title-wrapper">
-                <div class="page-title-heading">
-                    <div class="page-title-icon">
-                        <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
-                    </div>
-                    <div>{{ $main_title }}
-                        <div class="page-title-subheading">{{ $second_title }} &gt; {{ $title }}</div>
-                    </div>
+    <div class="app-page-title">
+        <div class="page-title-wrapper">
+            <div class="page-title-heading">
+                <div class="page-title-icon">
+                    <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
                 </div>
-                <div class="page-title-actions">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
-                        <li class="breadcrumb-item active">{{ $main_title }}</li>
-                    </ol>
+                <div>{{ $main_title }}
+                    <div class="page-title-subheading">{{ $second_title }} &gt; {{ $title }}</div>
                 </div>
             </div>
+            <div class="page-title-actions">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
+                    <li class="breadcrumb-item active">{{ $main_title }}</li>
+                </ol>
+            </div>
         </div>
-        <div id="successMessageContainer"></div>
-        <style>
-            .advance-search-panel {
-                background-color: #fff;
-                box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
-                padding: 1rem;
-                margin-top: 1rem;
-            }
-        </style>
+    </div>
+    <div id="successMessageContainer"></div>
 
-        <ul class="body-tabs body-tabs-layout tabs-animated body-tabs-animated nav ml-0">
-            <li class="nav-item">
-                <a class="nav-link ajax-link {{ Request::is('enquiry/list') ? 'active' : '' }}"
+    <div class="custom-tabs-container">
+        <ul class="custom-tabs">
+            <li>
+                <a class="custom-tab-link ajax-link {{ Request::is('enquiry/list') ? 'active' : '' }}"
                     href="{{ url('enquiry/list') }}" data-url="{{ url('enquiry/assign-list/') }}">
-                    <span>Project and Property Leads</span>
+                    Project and Property Leads
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link ajax-link {{ Request::is('enquiry/general-leads') ? 'active' : '' }}"
+            <li>
+                <a class="custom-tab-link ajax-link {{ Request::is('enquiry/general-leads') ? 'active' : '' }}"
                     href="{{ url('/enquiry/general-leads') }}" data-url="{{ url('/enquiry/general-leads') }}">
-                    <span>General Leads</span>
+                    General Leads
                 </a>
             </li>
         </ul>
+    </div>
 
-        <form action="" method="get">
-            <section class="content-header mb-3">
-                <div class="row g-3">
-                    {{-- <div class="col-lg-4 col-sm-6">
-                        <label for="lead_for">Type</label>
-                        <div class="form-group mb-0">
-                            <select class="form-select" name="lead_for" id="lead_for">
-                                <option value="" >All</option>
-                                <option value="property" {{ request('lead_for') == 'property' ? 'selected' : ''; }}>Property</option>
-                                <option value="project" {{ request('lead_for') == 'project' ? 'selected' : ''; }}>Project</option>
-                            </select>
-                        </div>
-                    </div> --}}
-                    <div class="col-lg-4 col-sm-6">
-                        <label for="lead_type">Leads Date</label>
-                        <div class="form-group mb-0">
-                            <input type="date" class="form-control" id="enquery_date" name="enquery_date"
-                                value="{{ request('enquery_date') }}" />
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6">
-                        <label for="lead_type">Member Name</label>
-                        <div class="input-group">
-                            <input class="form-control" id="member_name" placeholder="Search by member" name="member_name"
-                                value="{{ request('member_name') }}" />
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
+    <form action="" method="get">
+        <div class="custom-card p-4 mb-4">
+            <div class="row align-items-end">
+                <div class="col-md-3 col-sm-4">
+                    <label for="enquery_date" class="form-label" style="font-weight: 500; color: #475569; font-size: 0.88rem;">Leads Date</label>
+                    <div class="form-group mb-0">
+                        <input type="date" class="form-control custom-input" id="enquery_date" name="enquery_date" value="{{ request('enquery_date') }}" />
                     </div>
                 </div>
-            </section>
-        </form>
-
-        <div class="main-card mb-3 card">
-            <div class="card-header">
-                <h4 class="mb-0">{{ $title }}</h4>
-
-                {{-- <div class="btn-actions-pane-right">
-                    <button type="button" class="btn btn-sm btn-success" onclick="add()">Add Country</button>
-                </div> --}}
-
+                <div class="col-md-3 col-sm-4">
+                    <label for="member_name" class="form-label" style="font-weight: 500; color: #475569; font-size: 0.88rem;">Member Name</label>
+                    <div class="form-group mb-0">
+                        <input class="form-control custom-input" id="member_name" placeholder="Search by member" name="member_name" value="{{ request('member_name') }}" />
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-4">
+                    <div class="form-group mb-0 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary d-inline-flex align-items-center gap-2" style="background-color: #0d6efd; border: none; padding: 0.6rem 1.25rem; font-weight: 500; box-shadow: 0 4px 10px rgba(13, 110, 253, 0.15);">
+                            <i class="fa fa-search"></i> Search
+                        </button>
+                        <a href="{{ url()->current() }}" class="btn btn-secondary d-inline-flex align-items-center gap-2" style="background-color: #64748b; border: none; padding: 0.6rem 1.25rem; font-weight: 500;">
+                            <i class="fa fa-undo"></i> Reset
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
+        </div>
+    </form>
 
-                <div class="table-responsive" id="main_table">
-                    <table id="myTable" class="mb-0 table">
-                        <thead>
+    <div class="custom-card">
+        <div class="custom-card-header">
+            <h4><i class="fa fa-list"></i> {{ $title }}</h4>
+        </div>
+        <div class="custom-card-body p-0">
+            <div class="table-responsive" id="main_table">
+                <table id="myTable" class="custom-table mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width:5%">ID</th>
+                            <th style="width:15%">Buyer Name</th>
+                            <th style="width:15%">
+                                Agent Name
+                                <small class="d-block" style="font-weight: 400; font-size: 0.72rem; margin-top: 0.15rem;">
+                                    <span class="badge bg-warning text-dark px-2 py-1" style="border-radius: 4px;">Only for agent leads</span>
+                                </small>
+                            </th>
+                            <th style="width:15%">Phone</th>
+                            <th style="width:15%">Email</th>
+                            <th style="width:15%">Enquiry For</th>
+                            <th style="width:15%">Budget</th>
+                            <th style="width:15%">Date</th>
+                            <th class="text-right" style="width:10%;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($list as $item)
                             <tr>
-                                <th>ID</th>
-                                <th>Buyer Name</th>
-                                <th>
-                                    Agent Name
-                                    <small>
-                                        <span class="badge bg-warning text-black">Only for agent leads</span>
-                                    </small>
-                                </th>
-                                <th>Email / Phone</th>
-                                <th>Enquiry For</th>
-                                <th>Budget</th>
-                                <th>Date</th>
-                                <th class="text-right">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($list as $item)
-                                <tr>
-                                    <td>{{ $item?->id }}</td>
-                                    <td>{{ $item?->name }}</td>
-                                    <td>
-                                        @php $agentName = get_user_name($item?->agent_id); @endphp
-                                        @if (!empty($agentName))
-                                            <span class="badge bg-primary-subtle text-primary">
-                                                {{ $agentName }}
-                                            </span>
-                                        @else
-                                            N/A
-                                        @endif
-                                    </td>
+                                <td>{{ $item?->id }}</td>
+                                <td style="font-weight: 500; color: #334155;">{{ $item?->name }}</td>
+                                <td>
+                                    @php $agentName = !empty($item->agent_id) ? get_user_name($item->agent_id) : ''; @endphp
+                                    @if (!empty($agentName))
+                                        <span class="badge text-white px-2 py-1" style="font-size: 0.75rem; font-weight: 600; background-color: #0d6efd; border-radius: 4px;">
+                                            {{ $agentName }}
+                                        </span>
+                                    @else
+                                        <span class="text-muted" style="font-size: 0.85rem;">N/A</span>
+                                    @endif
+                                </td>
 
-                                    <td>{{ $item?->email }}
-                                        <p class="text-muted mb-0">{{ $item?->phone }}</p>
-                                    </td>
-                                    @php
-                                        $sub = get_property_sub_category_name($item?->property_for);
-                                        $cat = get_property_category_name($item?->property_type);
-                                    @endphp
+                                <td>{{ $item?->phone }}</td>
+                                <td>{{ $item?->email }}</td>
+                                @php
+                                    $sub = get_property_sub_category_name($item?->property_for);
+                                    $cat = get_property_category_name($item?->property_type);
+                                @endphp
 
-                                    <td>
-                                        {{ !empty($sub) || !empty($cat) ? trim($sub . (!empty($sub) && !empty($cat) ? ', ' : '') . $cat) : 'N/A' }}
-                                    </td>
+                                <td style="font-size: 0.88rem; color: #475569;">
+                                    {{ !empty($sub) || !empty($cat) ? trim($sub . (!empty($sub) && !empty($cat) ? ', ' : '') . $cat) : 'N/A' }}
+                                </td>
 
-                                    <td>
-                                        {{ !empty($item?->min_budget) && !empty($item?->max_budget)
-                                            ? $item?->min_budget . ' - ' . $item?->max_budget
-                                            : (!empty($item?->min_budget)
-                                                ? $item->min_budget
-                                                : (!empty($item?->max_budget)
-                                                    ? $item?->max_budget
-                                                    : 'N/A')) }}
-                                    </td>
+                                <td style="font-weight: 600; color: #1e293b; font-size: 0.88rem;">
+                                    {{ !empty($item?->min_budget) && !empty($item?->max_budget)
+                                        ? $item?->min_budget . ' - ' . $item?->max_budget
+                                        : (!empty($item?->min_budget)
+                                            ? $item->min_budget
+                                            : (!empty($item?->max_budget)
+                                                ? $item?->max_budget
+                                                : 'N/A')) }}
+                                </td>
 
-                                    <td>{{ date('d-M-Y', strtotime($item?->created_at)) }}</td>
-                                    <td class="text-right">
+                                <td class="text-nowrap">{{ date('d-M-Y', strtotime($item?->created_at)) }}</td>
+                                <td class="text-right">
+                                    <div class="d-flex justify-content-end gap-2">
                                         @php
-                                            $url =
-                                                $item->agent_id == null && $item->agent_id == ''
+                                            $url = empty($item->agent_id)
                                                     ? url('/enquiry/general-assign-list/' . $item?->id)
                                                     : url('/enquiry/general-agent-leads-assign-list/' . $item?->id);
                                         @endphp
-                                        <a href="{{ $url }}" title="Assign Lead" class="text-info me-2"><i
-                                                class="fa fa-plus fa-md"></i></a>
-                                        <i class="fa fa-eye text-success fa-md"
-                                            onclick="viewLead('{{ $item->id }}','G')"></i>
-                                        {{-- <i class="fa fa-trash text-danger fa-md" onclick="Delete('{{ $item->id }}')"></i> --}}
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="text-center">Sorry, no records found!</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                                        <a href="{{ $url }}" class="action-btn btn-assign-lead" title="Assign Lead">
+                                            <i class="fa fa-plus"></i>
+                                        </a>
+                                        <button type="button" class="action-btn btn-view-lead" onclick="viewLead('{{ $item->id }}','G')" title="View Details">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="9" class="text-center py-4 text-muted">
+                                    <i class="fa fa-info-circle me-1"></i> Sorry, no records found!
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="custom-table-footer">
+                <div class="custom-table-info">
+                    Showing {{ $list->firstItem() ?? 0 }} to {{ $list->lastItem() ?? 0 }} of {{ $list->total() ?? 0 }} entries
                 </div>
-
-                {!! $list->links('vendor.pagination.bootstrap-5') !!}
-
-                <?php /* ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
-                @if (isset($list))
-                    <div class="card-footer pagination-rounded clearfix justify-content-center">
-                        <ul class="pagination small mb-0">
-                            @if ($list->currentPage() == $list->lastPage() && $list->currentPage() != 1)
-                                <li class="page-item">
-                                    <a href="{{ $list->appends(['term' => request('term')])->url(1) }}" class="page-link"
-                                        rel="start">
-                                        <i class="fa fa-chevron-left"></i> First
-                                    </a>
-                                </li>
-                            @endif
-
-                            <li class="page-item {{ $list->currentPage() == 1 ? 'disabled' : '' }}">
-                                <a href="{{ $list->appends(['term' => request('term')])->previousPageUrl() }}"
-                                    class="page-link" rel="prev">
-                                    <i class="fa fa-chevron-left"></i>
-                                </a>
-                            </li>
-
-                            @for ($i = max($list->currentPage() - 1, 1); $i <= min($list->currentPage() + 1, $list->lastPage()); $i++)
-                                <li class="page-item {{ $list->currentPage() == $i ? 'active' : '' }}">
-                                    <a href="{{ $list->appends(['term' => request('term')])->url($i) }}"
-                                        class="page-link">{{ $i }}</a>
-                                </li>
-                            @endfor
-
-                            <li class="page-item {{ $list->currentPage() == $list->lastPage() ? 'disabled' : '' }}">
-                                <a href="{{ $list->appends(['term' => request('term')])->nextPageUrl() }}"
-                                    class="page-link" rel="next">
-                                    <i class="fa fa-chevron-right"></i>
-                                </a>
-                            </li>
-
-                            @if ($list->currentPage() != $list->lastPage())
-                                <li class="page-item">
-                                    <a href="{{ $list->appends(['term' => request('term')])->url($list->lastPage()) }}"
-                                        class="page-link" rel="end">
-                                        Last <i class="fa fa-chevron-right"></i>
-                                    </a>
-                                </li>
-                            @endif
-                        </ul>
-                    </div>
-                @endif
-                <?php */ ?>
+                <div>
+                    {!! $list->links('vendor.pagination.bootstrap-5') !!}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
             </div>
         </div>

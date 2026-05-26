@@ -282,6 +282,60 @@
             font-size: 0.85rem;
             color: #64748b;
         }
+        
+        .agent-name-cell { display: flex; align-items: center; gap: 10px; }
+        .agent-avatar {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: #0d6efd;
+            color: #fff; font-size: 13px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .agent-name-text { font-weight: 600; color: #1e293b; }
+        .agent-id-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            background: rgba(13, 110, 253, 0.09);
+            border-radius: 20px;
+            font-size: 12px; font-weight: 600; color: #0d6efd;
+        }
+        .leads-bar-wrap {
+            display: flex; align-items: center; gap: 10px;
+        }
+        .leads-bar-bg {
+            flex: 1; height: 6px; border-radius: 99px;
+            background: #e2e8f0; overflow: hidden;
+            min-width: 80px;
+        }
+        .leads-bar-fill {
+            height: 100%; border-radius: 99px;
+            background: linear-gradient(90deg, #0d6efd, #4799eb);
+        }
+        .leads-bar-text { font-size: 12px; font-weight: 600; color: #64748b; white-space: nowrap; }
+        .badge-date {
+            display: inline-block;
+            padding: 3px 10px;
+            background: #f1f5f9;
+            border-radius: 20px;
+            font-size: 12px; font-weight: 500; color: #64748b;
+        }
+        .btn-remove-assign {
+            display: inline-flex; align-items: center;
+            width: 30px; height: 30px;
+            border-radius: 8px;
+            background: rgba(239,68,68,.08);
+            color: #ef4444;
+            justify-content: center;
+            cursor: pointer; border: none;
+            transition: all .15s;
+        }
+        .btn-remove-assign:hover { background: rgba(239,68,68,.18); }
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center; color: #94a3b8;
+        }
+        .empty-state i { font-size: 36px; margin-bottom: 12px; display: block; }
+        .empty-state p { font-size: 14px; margin: 0; }
     </style>
 
     <div class="custom-card">
@@ -293,7 +347,7 @@
                 </div>
                 <div class="calendar-badge-text">
                     <span class="calendar-badge-label">Posted On</span>
-                    <span class="calendar-badge-value">{{ date('d-M-Y', strtotime($enquiry->created_at)) }}</span>
+                    <span class="calendar-badge-value">{{ $enquiry?->created_at ? date('d-M-Y', strtotime($enquiry?->created_at)) : 'N/A' }}</span>
                 </div>
             </div>
         </div>
@@ -303,42 +357,12 @@
                 <div class="d-flex flex-column gap-2">
                     <div class="info-item">
                         <div class="info-icon-container">
-                            <i class="fa fa-building"></i>
-                        </div>
-                        <div class="info-content">
-                            <span class="info-label">
-                                @if($enquiry->property_id)
-                                Property Name
-                                @elseif($enquiry->project_id)
-                                Project Name
-                                @else
-                                Property Name
-                                @endif
-                            </span>
-                            <span class="info-colon">:</span>
-                            <span class="info-value">{{ $enquiry->property_id ? $enquiry->property_name : ($enquiry->project_id ? $enquiry->project_name : '—') }}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="info-item">
-                        <div class="info-icon-container">
                             <i class="fa fa-user"></i>
                         </div>
                         <div class="info-content">
-                            <span class="info-label">Owner Name</span>
+                            <span class="info-label">Name</span>
                             <span class="info-colon">:</span>
-                            <span class="info-value">{{ $enquiry->owner ?? '—' }}</span>
-                        </div>
-                    </div>
-
-                    <div class="info-item">
-                        <div class="info-icon-container">
-                            <i class="fa fa-user"></i>
-                        </div>
-                        <div class="info-content">
-                            <span class="info-label">Customer Name</span>
-                            <span class="info-colon">:</span>
-                            <span class="info-value">{{ $enquiry->customer }}</span>
+                            <span class="info-value">{{ $enquiry?->name ?? 'N/A' }}</span>
                         </div>
                     </div>
 
@@ -347,9 +371,20 @@
                             <i class="fa fa-phone"></i>
                         </div>
                         <div class="info-content">
-                            <span class="info-label">Customer Phone</span>
+                            <span class="info-label">Phone</span>
                             <span class="info-colon">:</span>
-                            <span class="info-value">{{ $enquiry->customer_phone }}</span>
+                            <span class="info-value">{{ $enquiry?->phone ?? 'N/A' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon-container">
+                            <i class="fa fa-envelope"></i>
+                        </div>
+                        <div class="info-content">
+                            <span class="info-label">Email</span>
+                            <span class="info-colon">:</span>
+                            <span class="info-value">{{ $enquiry?->email ?? 'N/A' }}</span>
                         </div>
                     </div>
                 </div>
@@ -358,23 +393,12 @@
                 <div class="d-flex flex-column gap-2">
                     <div class="info-item">
                         <div class="info-icon-container">
-                            <i class="fa fa-envelope"></i>
-                        </div>
-                        <div class="info-content">
-                            <span class="info-label">Customer Email</span>
-                            <span class="info-colon">:</span>
-                            <span class="info-value">{{ $enquiry->customer_email }}</span>
-                        </div>
-                    </div>
-
-                    <div class="info-item">
-                        <div class="info-icon-container">
                             <i class="fa fa-calendar"></i>
                         </div>
                         <div class="info-content">
                             <span class="info-label">Posted On</span>
                             <span class="info-colon">:</span>
-                            <span class="info-value">{{ date('d-M-Y', strtotime($enquiry->created_at)) }}</span>
+                            <span class="info-value">{{ $enquiry?->created_at ? date('d-M-Y', strtotime($enquiry?->created_at)) : 'N/A' }}</span>
                         </div>
                     </div>
 
@@ -385,7 +409,7 @@
                         <div class="info-content">
                             <span class="info-label">Message</span>
                             <span class="info-colon">:</span>
-                            <span class="info-value">{{ $enquiry->message ?? '—' }}</span>
+                            <span class="info-value">{{ $enquiry?->messsage ?? 'N/A' }}</span>
                         </div>
                     </div>
                 </div>
@@ -396,25 +420,24 @@
     <div class="custom-tabs-container">
         <ul class="custom-tabs">
             <li>
-                <a class="custom-tab-link ajax-link {{ Request::is('enquiry/assign-list/'.$enquiry->enquery_id) ? 'active' : '' }}"
-                    href="{{ url('enquiry/assign-list/'.$enquiry->enquery_id) }}" data-url="{{ url('enquiry/assign-list/'.$enquiry->enquery_id) }}">
+                <a class="custom-tab-link ajax-link {{ Request::is('enquiry/general-agent-leads-assign-list/' . $enquiry?->id) ? 'active' : '' }}"
+                    href="{{ url('enquiry/general-agent-leads-assign-list/' . $enquiry?->id) }}" data-url="{{ url('enquiry/general-agent-leads-assign-list/' . $enquiry?->id) }}">
                     Unassigned
                 </a>
             </li>
             <li>
-                <a class="custom-tab-link ajax-link {{ Request::is('enquiry/assign-list/assigned/'.$enquiry->enquery_id) ? 'active' : '' }}"
-                    href="{{ url('enquiry/assign-list/assigned/'.$enquiry->enquery_id) }}" data-url="{{ url('enquiry/assign-list/assigned/'.$enquiry->enquery_id) }}">
+                <a class="custom-tab-link ajax-link {{ Request::is('enquiry/general-agent-leads-assign-list/assigned/' . $enquiry?->id) ? 'active' : '' }}"
+                    href="{{ url('enquiry/general-agent-leads-assign-list/assigned/' . $enquiry?->id) }}" data-url="{{ url('enquiry/general-agent-leads-assign-list/assigned/' . $enquiry?->id) }}">
                     Assigned
                 </a>
             </li>
         </ul>
     </div>
 
-
     <div class="custom-card">
         <div class="custom-card-header">
-            <h4><i class="pe-7s-users"></i> {{ $title }}</h4>
-            @if($assign_type == 'unassigned')
+            <h4><i class="pe-7s-users"></i> {{ $main_title }}</h4>
+            @if(!$assigned)
             <div>
                 <button type="button" class="btn-assign" onclick="assign()">
                     <i class="fa fa-user-plus"></i> Assign
@@ -425,53 +448,75 @@
         <div class="custom-card-body p-0">
             <div class="table-responsive" id="assign_table">
                 <form id="assign-form">
-                    <input type="hidden" name="enquery_id" value="{{ $enquiry->enquery_id }}" />
+                    <input type="hidden" name="enquery_id" value="{{ $enquiry->id }}" />
                     <table id="myTable" class="custom-table mb-0">
                         <thead>
                             <tr>
-                                @if($assign_type == 'unassigned')
+                                @if(!$assigned)
                                 <th style="width:10%; text-align: center;">Check</th>
                                 @endif
                                 <th style="width:15%">User ID</th>
-                                <th style="width:45%">Member Name</th>
+                                <th style="width:45%">Agent Name</th>
                                 <th style="width:30%">Leads (Used / Total)</th>
-                                @if($assign_type == 'assigned')
+                                @if($assigned)
                                 <th style="width:25%">Assigned Date</th>
                                 <th style="width:10%; text-align: center;">Action</th>
                                 @endif
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($list as $item)
+                            @forelse($agent_list as $item)
                             @php
-                            $is_clickable = 0;
+                                if (!$assigned) {
+                                    $leads = $item->membership->leads ?? 0;
+                                    $leads_used = $item->membership->leads_used ?? 0;
+                                } else {
+                                    $leads = $item->leads ?? 0;
+                                    $leads_used = $item->leads_used ?? 0;
+                                }
+                                $is_clickable = $leads > $leads_used ? 1 : 0;
+                                $initials = strtoupper(substr($item->name ?? 'A', 0, 1));
                             @endphp
-                            @if($item->leads > $item->leads_used)
-                            @php
-                            $is_clickable = 1;
-                            @endphp
-                            @endif
                             <tr>
-                                @if($assign_type == 'unassigned')
+                                @if(!$assigned)
                                 <td style="text-align: center;">
-                                    <input name="userid[]" value="{{ $item->user_id }}" type="checkbox" class="custom-checkbox-input user-selected" {{ !$is_clickable ? 'disabled' : '' }} />
+                                    <input name="userid[]" value="{{ $item->id }}" type="checkbox" class="custom-checkbox-input user-selected" {{ !$is_clickable ? 'disabled' : '' }} />
                                 </td>
                                 @endif
-                                <td>{{ $item->user_id }}</td>
-                                <td style="font-weight: 500;">{{ $item->member_name }}</td>
-                                <td>{{ $item->leads ? $item->leads_used . '/' . ($item->leads == 'Unlimited' ? '∞' : $item->leads) : '0/0' }}</td>
-                                @if($assign_type == 'assigned')
-                                <td class="text-nowrap">{{ $item->created_at ? date('d-M-Y', strtotime($item->created_at)) : '' }}</td>
+                                <td><span class="agent-id-badge">#{{ $item->id }}</span></td>
+                                <td>
+                                    <div class="agent-name-cell">
+                                        <div class="agent-avatar">{{ $initials }}</div>
+                                        <span class="agent-name-text">{{ $item->name }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="leads-bar-wrap">
+                                        <div class="leads-bar-bg">
+                                            <div class="leads-bar-fill" style="width:{{ $leads > 0 ? min(100, round(($leads_used / $leads) * 100)) : 0 }}%;"></div>
+                                        </div>
+                                        <span class="leads-bar-text">{{ $leads_used }}/{{ $leads }}</span>
+                                    </div>
+                                </td>
+                                @if($assigned)
+                                <td>
+                                    <span class="badge-date">
+                                        {{ $item->created_at ? date('d-M-Y', strtotime($item->created_at)) : '—' }}
+                                    </span>
+                                </td>
                                 <td style="text-align: center;">
-                                    <a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Remove from assigned list" class="allUsersDeleteButton" style="cursor: pointer;" user-id="{{ $item->user_id }}" onclick="remove_assigned('{{ $item->assign_id }}')">
-                                        <i class="fa fa-trash text-danger fa-lg"></i>
-                                    </a>
+                                    <button type="button" class="btn-remove-assign"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                        data-bs-title="Remove from assigned list"
+                                        onclick="remove_assigned('{{ $item->assign_id }}')">
+                                        <i class="fa fa-trash fa-sm"></i>
+                                    </button>
                                 </td>
                                 @endif
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="{{ $assign_type == 'unassigned' ? 4 : 5 }}" class="text-center py-4 text-muted">
+                                <td colspan="{{ !$assigned ? 4 : 6 }}" class="text-center py-4 text-muted">
                                     <i class="fa fa-info-circle me-1"></i> Sorry, no records found!
                                 </td>
                             </tr>
@@ -483,71 +528,18 @@
 
             <div class="custom-table-footer">
                 <div class="custom-table-info">
-                    Showing {{ $list->firstItem() ?? 0 }} to {{ $list->lastItem() ?? 0 }} of {{ $list->total() ?? 0 }} entries
+                    Showing {{ $agent_list->firstItem() ?? 0 }} to {{ $agent_list->lastItem() ?? 0 }} of {{ $agent_list->total() ?? 0 }} entries
                 </div>
                 <div>
-                    {!! $list->links('vendor.pagination.bootstrap-5') !!}
+                    {!! $agent_list->links('vendor.pagination.bootstrap-5') !!}
                 </div>
             </div>
 
-    </div>
-</div>
-</div>
-@endsection
-@section('modals')
-<div class="modal fade" id="modal_action" tabindex="-1" role="dialog" aria-labelledby="addEditModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-
-                <h5 class="modal-title" id="AddEditModalLabel"></h5>
-
-                <button type="button" class="btn-close" data-bs-dismiss="modal">
-
-                </button>
-            </div>
-            <div class="modal-body">
-
-                <form id="formData">
-                    <input type="text" class='d-none' id="countryId" name="countryId">
-                    @php
-                    $langs = explode(',', admin_default_lang());
-                    @endphp
-                    @foreach($langs as $lang)
-                    <div class="form-group">
-                        <label for="name">{{ __('Name') }} ({{ strtoupper($lang) }})</label>
-                        <input type="text" class="form-control reset_field" id="name_{{ $lang }}" name="name[{{ $lang }}]" autocomplete="off">
-                        <div class="invalid-feedback" id="name_{{ $lang }}_error"></div>
-                    </div>
-                    @endforeach
-
-                    <div class="form-group">
-                        <label for="Order">Order</label>
-                        <input type="Order" class="form-control" id="order" name="order" required>
-                        <div class="invalid-feedback" id="Order_error"></div>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label class="form-label">Status</label>
-                        <div class="radio-inline">
-                            <input type="radio" name="status" value=1 class="magic-radio" id="status_1" checked required>
-                            <label for="status_1">Active</label>
-                            <input type="radio" name="status" value=0 class="magic-radio" id="status_2">
-                            <label for="status_2">Inactive</label>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" onclick="add_edit()" id="button" class="btn btn-primary">Save</button>
-            </div>
         </div>
-
     </div>
 </div>
 @endsection
+
 @push('custom-js')
 <script>
     function assign() {
@@ -556,7 +548,7 @@
         if (ln > 0) {
             $.ajax({
                 type: 'POST',
-                url: '{{ url("/enquiry/save-assign-list") }}',
+                url: '{{ url("/enquiry/general-save-assign-list") }}',
                 data: $(formId).serialize(),
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -640,154 +632,21 @@
         }
     }
 
-    function Edit(id) {
-        $('.form-control').removeClass('is-invalid');
-        $('.invalid-feedback').empty();
-        AddEdit('Edit', 'Update', id);
-    }
-
-    function AddEdit(title, buttonText, id = null) {
-        $('#AddEditModalLabel').text(title);
-        $('#button').text(buttonText);
-        $('#formData')[0].reset();
-        if (id) {
-            $.get(`{{ url('/country/details') }}/${id}`, function(data) {
-                $('#countryId').val(data[0].country_id);
-                data.forEach(function(country) {
-                    $('#name_' + country.lang).val(country.name);
-                    if (country.lang === 'en') {
-                        $('#order').val(country.order);
-                        $('input[name="status"][value="' + country.status + '"]').prop(
-                            'checked', true);
-                    }
-                });
-            });
-        }
-        $('#modal_action').modal('show');
-    }
-
-    function add_edit() {
-        var data = $("#formData").serializeArray();
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        var url = $('#countryId').val() ?
-            `{{ url('/edit/country') }}` :
-            `{{ url('/add/country') }}`;
-
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: data,
-            success: function(response) {
-                localStorage.setItem('successMessage', response.message);
-                window.location.reload(true);
-                $('#modal_action').modal('hide');
-                $('#formData')[0].reset();
-            },
-            error: function(response) {
-                var errors = response.responseJSON.errors;
-
-                // Reset previous error messages and invalid class
-                $('.invalid-feedback').text('').hide();
-                $('.form-control').removeClass('is-invalid');
-
-                // Loop through errors and update the DOM
-                Object.entries(errors).forEach(([field, messages]) => {
-                    const fieldId = field.replace('.', '_'); // Convert 'name.en' to 'name_en'
-                    const inputSelector = `#${fieldId}`;
-                    const errorSelector = `#${fieldId}_error`;
-
-                    $(inputSelector).addClass('is-invalid');
-                    $(errorSelector).text(messages[0]).show();
-                });
-
-            }
-
-        });
-    }
-
-
-
-    $('.status').change(function() {
-
-        toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
-
-        var id = $(this).data('id');
-        var status = this.checked ? 1 : 0;
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            type: 'POST',
-            url: `{{ url('/country/status') }}`,
-            data: {
-                'status': status,
-                'id': id
-            },
-            success: function(data) {
-                // Handle success response if needed
-            },
-            error: function(msg) {
-                console.log(msg);
-                var errors = msg.responseJSON;
-            }
-        });
-    });
-
-    function Delete(id) {
-        var result = confirm('Are you sure you want to delete this?');
-        console.log(id);
-        if (result) {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: 'POST',
-                url: `{{ url('/country/delete') }}`,
-                data: {
-                    'id': id
-                },
-                success: function(response) {
-                    localStorage.setItem('successMessage', response.message);
-                    window.location.reload(true);
-                },
-                error: function(msg) {
-                    console.log(msg);
-                    var errors = msg.responseJSON;
-                }
-            });
-        }
-    }
-
     $(document).ready(function() {
+        var tooltipEls = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipEls.forEach(function(el) { new bootstrap.Tooltip(el); });
+
         var table = $('#myTable').DataTable({
-            "paging": false,
-            "searching": false,
-            "info": false,
-            "ordering": true,
-            "order": [
-                [0, 'desc']
-            ],
-            "columnDefs": [{
-                    "orderable": true,
-                    "targets": [0]
-                },
-                {
-                    "orderable": false,
-                    "targets": [2, 3, 4]
-                }
+            paging: false,
+            searching: false,
+            info: false,
+            ordering: true,
+            order: [[1, 'asc']],
+            columnDefs: [
+                { orderable: false, targets: [0] }
             ]
         });
     });
 </script>
-
 
 @endpush
