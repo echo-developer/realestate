@@ -8,6 +8,37 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/select2-bootstrap-5-theme.css')}}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/dist/css/style.css') }}">
 
+<style>
+.autocomplete-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    display: none;
+}
+.autocomplete-dropdown .dropdown-item {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #1e293b;
+    transition: background 0.15s;
+}
+.autocomplete-dropdown .dropdown-item:hover {
+    background: #f1f5f9;
+}
+.autocomplete-dropdown .dropdown-item.selected {
+    background: #eff6ff;
+    color: #2563eb;
+}
+</style>
+
 @endpush
 
 @section('content')
@@ -169,32 +200,22 @@
                     <div id="step-3" style="display:none;">
                         <div class="row gx-3">
                             <div class="col-lg-6 col-12">
-                                <div class="form-floating mb-3">
-                                    <select id="city" name="city" class="selectpicker" onchange="loadLocality($(this))">
-                                        <option value="">Select City</option>
-                                        @if (!empty($cities) && is_array($cities))
-                                        @foreach ($cities as $city)
-                                        <option value="{{ $city['city_id'] }}">{{ $city['name'] }}
-                                        </option>
-                                        @endforeach
-                                        @else
-                                        <option value="" disabled>No cities available</option>
-                                        <!-- Fallback option -->
-                                        @endif
-
-                                    </select>
-                                    <label class="form-label">City</label>
+                                <div class="form-floating mb-3 position-relative">
+                                    <input type="text" class="form-control" id="city-search" name="city_name" placeholder="Type to search city" autocomplete="off">
+                                    <input type="hidden" name="city" id="city-id">
+                                    <label class="form-label">City <span class="text-danger">*</span></label>
                                     <span class="error cityError text-danger"></span>
+                                    <div id="city-dropdown" class="autocomplete-dropdown"></div>
                                 </div>
                             </div>
 
                             <div class="col-lg-6 col-12">
-                                <div class="form-floating mb-3">
-                                    <select class="selectpicker" name="locality" id="locality">
-
-                                    </select>
-                                    <label class="form-label">Locality</label>
+                                <div class="form-floating mb-3 position-relative">
+                                    <input type="text" class="form-control" id="locality-search" name="locality_name" placeholder="Type to search locality" autocomplete="off">
+                                    <input type="hidden" name="locality" id="locality-id">
+                                    <label class="form-label">Locality <span class="text-danger">*</span></label>
                                     <span class="error localityError text-danger"></span>
+                                    <div id="locality-dropdown" class="autocomplete-dropdown"></div>
                                 </div>
                             </div>
 
@@ -871,32 +892,173 @@
     });
 </script>
 <script>
-    function loadLocality(evt) {
-        var city_id = $(evt).val();
-        var dropdown = $('#locality');
-        dropdown.empty();
-        $.ajax({
-            url: "{{ url('/api/get_locality') }}/" + city_id,
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                if (response.status === 1) {
-                    dropdown.append(
-                        '<option value="">Select Locality</option>');
+    let citySearchTimer, localitySearchTimer;
+    let selectedCity = null;
 
-                    $.each(response.data, function(index, item) {
-                        dropdown.append('<option value="' + item.locality_id +
-                            '">' + item.locality_name + '</option>');
-                    });
+    // City autocomplete
+    $('#city-search').on('input', function() {
+        clearTimeout(citySearchTimer);
+        const query = $(this).val();
+        if (query.length < 2) {
+            $('#city-dropdown').hide();
+            $('#city-id').val('');
+            return;
+        }
+        citySearchTimer = setTimeout(function() {
+            $.ajax({
+                url: "{{ url('/api/stored-cities') }}",
+                type: 'GET',
+                data: { keyWord: query },
+                dataType: 'json',
+                success: function(response) {
+                    const container = $('#city-dropdown');
+                    container.empty().show();
+                    if (response.status === 1 && response.data.length > 0) {
+                        $.each(response.data, function(i, city) {
+                            const item = $('<div class="dropdown-item"></div>')
+                                .text(city.name)
+                                .data('id', city.city_id)
+                                .data('name', city.name)
+                                .on('click', function() {
+                                    $('#city-search').val(city.name);
+                                    $('#city-id').val(city.city_id);
+                                    selectedCity = { city_id: city.city_id, name: city.name };
+                                    container.hide();
+                                    $('#locality-search').val('').focus();
+                                    $('#locality-id').val('');
+                                });
+                            container.append(item);
+                        });
+                    } else {
+                        container.append('<div class="dropdown-item text-muted">No cities found</div>');
+                    }
+                }
+            });
+        }, 400);
+    });
+
+    // Locality autocomplete
+    $('#locality-search').on('input', function() {
+        clearTimeout(localitySearchTimer);
+        const query = $(this).val();
+        const cityId = $('#city-id').val();
+        if (query.length < 2 || !cityId) {
+            $('#locality-dropdown').hide();
+            $('#locality-id').val('');
+            return;
+        }
+        localitySearchTimer = setTimeout(function() {
+            const container = $('#locality-dropdown');
+            container.empty().show();
+            container.append('<div class="dropdown-item text-muted">Searching...</div>');
+
+            let storedDone = false, globalDone = false;
+            let storedResults = [], globalResults = [];
+
+            function renderResults() {
+                if (!storedDone || !globalDone) return;
+                container.empty();
+                const allNames = new Set();
+                storedResults.forEach(function(loc) {
+                    const item = $('<div class="dropdown-item"></div>')
+                        .text(loc.name)
+                        .data('id', loc.locality_id)
+                        .data('name', loc.name)
+                        .on('click', function() {
+                            selectLocality(loc.locality_id, loc.name, container);
+                        });
+                    container.append(item);
+                    allNames.add(loc.name);
+                });
+                globalResults.forEach(function(gloc) {
+                    if (!allNames.has(gloc.name)) {
+                        const item = $('<div class="dropdown-item"></div>')
+                            .text(gloc.name)
+                            .data('name', gloc.name)
+                            .data('place_id', gloc.place_id)
+                            .on('click', function() {
+                                saveAndSelectGoogleLocality(gloc.name, gloc.place_id, cityId, container);
+                            });
+                        container.append(item);
+                        allNames.add(gloc.name);
+                    }
+                });
+                if (container.children().length === 0) {
+                    container.append('<div class="dropdown-item text-muted">No localities found</div>');
+                }
+            }
+
+            // Search stored
+            $.ajax({
+                url: "{{ url('/api/stored-localities') }}",
+                type: 'GET',
+                data: { keyWord: query, city_id: cityId },
+                dataType: 'json',
+                success: function(response) {
+                    storedResults = (response.status === 1 && response.data) ? response.data : [];
+                },
+                complete: function() {
+                    storedDone = true;
+                    renderResults();
+                }
+            });
+
+            // Search Google
+            $.ajax({
+                url: "{{ url('/api/global-localities') }}",
+                type: 'GET',
+                data: { keyWord: query, city_id: cityId },
+                dataType: 'json',
+                success: function(globalRes) {
+                    globalResults = (globalRes.status === 1 && globalRes.data) ? globalRes.data : [];
+                },
+                error: function() {
+                    globalResults = [];
+                },
+                complete: function() {
+                    globalDone = true;
+                    renderResults();
+                }
+            });
+        }, 400);
+    });
+
+    function selectLocality(id, name, container) {
+        $('#locality-search').val(name);
+        $('#locality-id').val(id);
+        container.hide();
+    }
+
+    function saveAndSelectGoogleLocality(name, placeId, cityId, container) {
+        $.ajax({
+            url: "{{ url('/api/save-google-locality') }}",
+            type: 'POST',
+            data: {
+                place_id: placeId,
+                name: name,
+                city_id: cityId,
+                _token: '{{ csrf_token() }}'
+            },
+            dataType: 'json',
+            success: function(resp) {
+                if (resp.status === 1 && resp.data) {
+                    selectLocality(resp.data.locality_id, name, container);
                 } else {
-                    console.error('Error: ' + response.message);
+                    alert('Failed to save locality. Please try again.');
                 }
             },
-            error: function(xhr, status, error) {
-                console.error('AJAX Error:', error);
+            error: function() {
+                alert('Failed to save locality. Please try again.');
             }
         });
     }
+
+    // Close dropdowns on outside click
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.form-floating').length) {
+            $('#city-dropdown, #locality-dropdown').hide();
+        }
+    });
 
     $('#fileinput').on('change', function() {
         var activeTab = $(".image-tab-content .nav-link.active").attr("data-tab");

@@ -33,6 +33,10 @@ class AllPropertyModel extends Model
                 DB::raw('MAX(pref_ps.expected_price) as expected_price'),
                 DB::raw('MAX(pref_ps.post_for) as post_for'),
                 DB::raw('MAX(pref_ps.price_currency) as price_currency'),
+                DB::raw('MAX(pref_ps.bedrooms) as bedrooms'),
+                DB::raw('MAX(pref_ps.bathrooms) as bathrooms'),
+                DB::raw('MAX(pref_ps.carpet_area) as carpet_area'),
+                DB::raw('MAX(pref_ps.super_area) as super_area'),
                 DB::raw('MAX(pref_ploc.property_address) as property_address')
             );
 
