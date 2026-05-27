@@ -226,13 +226,14 @@ class ProjectPropertyController extends Controller
                         $property = $propertyMapping->property;
                         if ($property) {
                             $bhkConfigurations[] = [
-                                'bhk_type' => $property->additional->bhk_type ?? null,
-                                'carpet_area' => $property->settings->carpet_area ?? null,
-                                'super_area' => $property->settings->super_area ?? null,
-                                'property_price' => $property->settings->expected_price ?? null,
+                                'property_id'     => $property->id,
+                                'bhk_type'        => $property->additional->bhk_type ?? null,
+                                'carpet_area'     => $property->settings->carpet_area ?? null,
+                                'super_area'      => $property->settings->super_area ?? null,
+                                'property_price'  => $property->settings->expected_price ?? null,
                                 'property_facing' => $property->additional->facing_direction ?? null,
-                                'floor_plan_image' => $property->additional->floor_plan_image ?? null,
-                                'image_url' => asset('user_upload/project_floor_plan/' . $property->additional->floor_plan_image)
+                                'floor_plan_image'=> $property->additional->floor_plan_image ?? null,
+                                'image_url'       => asset('user_upload/project_floor_plan/' . $property->additional->floor_plan_image)
                             ];
                         }
                     }
