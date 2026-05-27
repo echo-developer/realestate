@@ -1726,18 +1726,36 @@ class DashboardController extends Controller
             ->orderByDesc('total_views')
             ->limit(6)
             ->get();
+
         $mapLists = $propLists->map(function ($prt) {
+            // Fetch first available image (exterior preferred, otherwise first found)
+            $image_url = null;
+            $galleries  = GetProperties_GalleryImages($prt->id);
+
+            // Try exterior first
+            foreach ($galleries as $img) {
+                if ($img->image_type === 'exterior') {
+                    $image_url = asset('user_upload/property_images/' . $img->filename);
+                    break;
+                }
+            }
+            // Fall back to very first image if no exterior exists
+            if (!$image_url && $galleries->isNotEmpty()) {
+                $image_url = asset('user_upload/property_images/' . $galleries->first()->filename);
+            }
+
             return [
-                'id' => UniquePropertyCode($prt->id),
-                'total_views' => $prt->total_views ?? null,
-                'name' => $prt->name ?? null,
-                'slug' => $prt->slug ?? null,
-                'locality' => get_name_by_id('locality_names', 'locality_id', $prt->location->locality, 'en') ?? null,
-                'address' => $prt->location->property_address ?? null,
+                'id'            => UniquePropertyCode($prt->id),
+                'total_views'   => $prt->total_views ?? null,
+                'name'          => $prt->name ?? null,
+                'slug'          => $prt->slug ?? null,
+                'locality'      => get_name_by_id('locality_names', 'locality_id', $prt->location->locality, 'en') ?? null,
+                'address'       => $prt->location->property_address ?? null,
                 'property_type' => isset($prt->settings) ? get_name_by_id('property_category_names', 'category_id', $prt->settings->property_type, 'en') : null,
-                'post_for' => $prt->settings->post_for ?? null,
-                'property_for' => isset($prt->settings) ? get_name_by_id('property_sub_category_names', 'sub_category_id', $prt->settings->property_type_for, 'en') : null,
-                'created_at' => $prt->created_at ?? null,
+                'post_for'      => $prt->settings->post_for ?? null,
+                'property_for'  => isset($prt->settings) ? get_name_by_id('property_sub_category_names', 'sub_category_id', $prt->settings->property_type_for, 'en') : null,
+                'created_at'    => $prt->created_at ?? null,
+                'image_url'     => $image_url,   // ← added: first available property image
             ];
         });
 
