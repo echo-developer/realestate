@@ -249,6 +249,7 @@ class DashboardController extends Controller
                     $data[$value . '_properties'] = [
                         'current_page' => $currentpage,
                         'total_pages' => ceil($Properties->count() / $page),
+                        'total_count' => $Properties->count(),
                         'per_page' => $page,
                         'data' => $paginatedProperties->values(),
                     ];
