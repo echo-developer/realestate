@@ -59,6 +59,7 @@ use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserSearchActivityController;
+use App\Http\Controllers\Admin\FeaturedPackageController;
 use App\Http\Controllers\Api\FloorPlaningController;
 use App\Http\Controllers\Api\Project\ProjectImageUploade;
 use Illuminate\Support\Facades\Artisan;
@@ -545,6 +546,16 @@ Route::middleware('admin_auth')->group(function () {
     Route::prefix('transaction')->controller(TransactionController::class)->group(function () {
         Route::get('transaction_list', 'index')->name('transaction.index');
     });
+
+    Route::prefix('featured-packages')->name('featured-package.')->controller(FeaturedPackageController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('store', 'store')->name('store');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        Route::post('update', 'update')->name('update');
+        Route::delete('destroy', 'destroy')->name('destroy');
+        Route::post('status', 'status')->name('status');
+    });
+
     Route::post('upload/floor-plan', [ProjectImageUploade::class, 'uploadFloorPlan'])->name('upload.floor.plan');
     Route::post('delete/floor-plan-image', [ProjectImageUploade::class, 'destroyFloorPlanImage']);
 

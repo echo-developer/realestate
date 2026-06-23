@@ -1791,20 +1791,15 @@ class DashboardController extends Controller
         try {
             $user_id = auth_user_id();
             if (!$user_id) {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'No user found.',
-                ]);
+                return response()->json(['status' => 0, 'message' => 'No user found.']);
             }
 
             $property_id = $request->id;
             if (empty($property_id)) {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'Property ID is required.',
-                ]);
+                return response()->json(['status' => 0, 'message' => 'Property ID is required.']);
             }
 
+            // Verify property ownership
             $property = DB::table('properties')
                 ->where('id', $property_id)
                 ->where('uid', $user_id)
@@ -1812,79 +1807,378 @@ class DashboardController extends Controller
                 ->first();
 
             if (!$property) {
+                return response()->json(['status' => 0, 'message' => 'Property not found or unauthorized.']);
+            }
+
+            $is_currently_featured = (int)$property->is_featured === 1;
+
+            // If already featured → UNFEATURE
+            if ($is_currently_featured) {
+                $membership = DB::table('user_membership')->where('user_id', $user_id)->first();
+
+                // Only decrement membership counter if featured via membership (no expire date)
+                $featuredViaMembership = empty($property->featured_expire_date);
+
+                DB::transaction(function () use ($property_id, $user_id, $membership, $featuredViaMembership) {
+                    DB::table('properties')
+                        ->where('id', $property_id)
+                        ->update([
+                            'is_featured'         => 0,
+                            'featured_expire_date' => null, // clear expiry on unfeature
+                            'updated_at'          => now(),
+                        ]);
+
+                    // Only decrement if featured via membership quota (not paid package)
+                    if ($membership && $featuredViaMembership) {
+                        DB::table('user_membership')
+                            ->where('user_id', $user_id)
+                            ->update([
+                                'featured_listings_used' => DB::raw("GREATEST(0, CAST(featured_listings_used AS SIGNED) - 1)"),
+                                'updated_at' => now()
+                            ]);
+                    }
+                });
+
                 return response()->json([
-                    'status' => 0,
-                    'message' => 'Property not found or unauthorized.',
+                    'status'     => 1,
+                    'message'    => 'Property successfully unfeatured!',
+                    'is_featured' => false,
                 ]);
             }
 
+            // --- Trying to FEATURE ---
+            // Check active membership
             $membership = DB::table('user_membership')
                 ->where('user_id', $user_id)
+                ->where('expire_date', '>=', now())
                 ->first();
 
             if (!$membership) {
                 return response()->json([
-                    'status' => 0,
-                    'message' => 'You do not have an active membership plan.',
+                    'status'          => 0,
+                    'message'         => 'No active membership found.',
+                    'error_code'      => 'NO_MEMBERSHIP',
+                    'require_package' => true,
                 ]);
             }
 
             $limit = (int)$membership->featured_listings_limit;
-            $used = (int)$membership->featured_listings_used;
-            $is_currently_featured = (int)$property->is_featured === 1;
+            $used  = (int)$membership->featured_listings_used;
 
-            if (!$is_currently_featured) {
-                if ($used >= $limit) {
-                    return response()->json([
-                        'status' => 0,
-                        'message' => "You have reached your featured listing limit of {$limit}. Please unfeature another property first or upgrade your plan.",
-                    ]);
-                }
-
-                DB::transaction(function () use ($property_id, $user_id) {
-                    DB::table('properties')
-                        ->where('id', $property_id)
-                        ->update(['is_featured' => 1, 'updated_at' => now()]);
-
-                    DB::table('user_membership')
-                        ->where('user_id', $user_id)
-                        ->increment('featured_listings_used');
-                });
-
+            if ($used >= $limit) {
                 return response()->json([
-                    'status' => 1,
-                    'message' => 'Property successfully featured!',
-                    'is_featured' => true,
-                    'featured_listings_used' => $used + 1,
-                ]);
-            } else {
-                DB::transaction(function () use ($property_id, $user_id) {
-                    DB::table('properties')
-                        ->where('id', $property_id)
-                        ->update(['is_featured' => 0, 'updated_at' => now()]);
-
-                    DB::table('user_membership')
-                        ->where('user_id', $user_id)
-                        ->update([
-                            'featured_listings_used' => DB::raw("GREATEST(0, CAST(featured_listings_used AS SIGNED) - 1)"),
-                            'updated_at' => now()
-                        ]);
-                });
-
-                return response()->json([
-                    'status' => 1,
-                    'message' => 'Property successfully unfeatured!',
-                    'is_featured' => false,
-                    'featured_listings_used' => max(0, $used - 1),
+                    'status'          => 0,
+                    'message'         => "Featured limit reached ({$limit}). Buy a featured package to continue.",
+                    'error_code'      => 'LIMIT_REACHED',
+                    'require_package' => true,
                 ]);
             }
+
+            DB::transaction(function () use ($property_id, $user_id) {
+                DB::table('properties')
+                    ->where('id', $property_id)
+                    ->update(['is_featured' => 1, 'updated_at' => now()]);
+
+                DB::table('user_membership')
+                    ->where('user_id', $user_id)
+                    ->increment('featured_listings_used');
+            });
+
+            return response()->json([
+                'status'                 => 1,
+                'message'                => 'Property successfully featured!',
+                'is_featured'            => true,
+                'featured_listings_used' => $used + 1,
+            ]);
 
         } catch (\Throwable $e) {
             Log::error('Error in ToggleFeaturedProperty: ' . $e->getMessage());
             return response()->json([
-                'status' => 0,
+                'status'  => 0,
                 'message' => 'An error occurred while updating featured status.',
             ], 500);
         }
     }
-}
+
+    public function getFeaturedPackages(Request $request)
+    {
+        try {
+            $packages = \App\Models\FeaturedPackage::active()
+                ->orderBy('price')
+                ->get(['id', 'name', 'description', 'price', 'duration_days']);
+
+            return response()->json([
+                'status'  => 1,
+                'message' => 'Featured packages retrieved successfully.',
+                'data'    => $packages,
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('Error in getFeaturedPackages: ' . $e->getMessage());
+            return response()->json(['status' => 0, 'message' => 'Error fetching packages.'], 500);
+        }
+    }
+
+    public function buyFeaturedPackage(Request $request)
+    {
+        try {
+            $user_id     = auth_user_id();
+            $property_id = $request->property_id;
+            $package_id  = $request->package_id;
+            $token       = $request->token; // Stripe token
+
+            if (!$user_id) {
+                return response()->json(['status' => 0, 'message' => 'Unauthorized.']);
+            }
+
+            $property = DB::table('properties')
+                ->where('id', $property_id)
+                ->where('uid', $user_id)
+                ->first();
+
+            if (!$property) {
+                return response()->json(['status' => 0, 'message' => 'Property not found.']);
+            }
+
+            $package = \App\Models\FeaturedPackage::active()->find($package_id);
+            if (!$package) {
+                return response()->json(['status' => 0, 'message' => 'Package not found.']);
+            }
+
+            // Process Stripe payment
+            $stripe = new \Stripe\StripeClient(get_setting('stripe_secret'));
+            $charge = $stripe->charges->create([
+                'source'      => $token,
+                'amount'      => (int)($package->price * 100),
+                'currency'    => 'USD',
+                'description' => "Featured Package: {$package->name}",
+            ]);
+
+            if (!$charge->paid) {
+                return response()->json(['status' => 0, 'message' => 'Payment failed.']);
+            }
+
+            DB::transaction(function () use ($user_id, $property_id, $package, $charge) {
+                // Record transaction
+                DB::table('transactions')->insert([
+                    'platform_txn_id' => $charge->id,
+                    'paid_amount'     => $charge->amount / 100,
+                    'currency'        => $charge->currency,
+                    'user_id'         => $user_id,
+                    'plan_id'         => null,
+                    'payment_status'  => $charge->status,
+                    'created_at'      => now(),
+                    'updated_at'      => now(),
+                ]);
+
+                // Feature the property
+                DB::table('properties')
+                    ->where('id', $property_id)
+                    ->update([
+                        'is_featured'          => 1,
+                        'featured_expire_date'  => now()->addDays($package->duration_days),
+                        'updated_at'           => now(),
+                    ]);
+            });
+
+            return response()->json([
+                'status'      => 1,
+                'message'     => "Property featured successfully for {$package->duration_days} days!",
+                'is_featured' => true,
+            ]);
+
+        } catch (\Throwable $e) {
+            Log::error('Error in buyFeaturedPackage: ' . $e->getMessage());
+            return response()->json(['status' => 0, 'message' => 'Payment error: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function ToggleFeaturedProject(Request $request)
+    {
+        try {
+            $user_id = auth_user_id();
+            if (!$user_id) {
+                return response()->json(['status' => 0, 'message' => 'No user found.']);
+            }
+
+            $project_id = $request->id;
+            if (empty($project_id)) {
+                return response()->json(['status' => 0, 'message' => 'Project ID is required.']);
+            }
+
+            // Verify project ownership
+            $project = DB::table('project')
+                ->where('id', $project_id)
+                ->where('uid', $user_id)
+                ->where('is_deleted', '!=', config('constants.STATUS_ACTIVE'))
+                ->first();
+
+            if (!$project) {
+                return response()->json(['status' => 0, 'message' => 'Project not found or unauthorized.']);
+            }
+
+            $is_currently_featured = (int)$project->is_featured === 1;
+
+            // If already featured → UNFEATURE
+            if ($is_currently_featured) {
+                $membership = DB::table('user_membership')->where('user_id', $user_id)->first();
+
+                // Only decrement membership counter if featured via membership (no expire date)
+                $featuredViaMembership = empty($project->featured_expire_date);
+
+                DB::transaction(function () use ($project_id, $user_id, $membership, $featuredViaMembership) {
+                    DB::table('project')
+                        ->where('id', $project_id)
+                        ->update([
+                            'is_featured'         => 0,
+                            'featured_expire_date' => null, // clear expiry on unfeature
+                            'updated_at'          => now(),
+                        ]);
+
+                    // Only decrement if featured via membership quota (not paid package)
+                    if ($membership && $featuredViaMembership) {
+                        DB::table('user_membership')
+                            ->where('user_id', $user_id)
+                            ->update([
+                                'featured_listings_used' => DB::raw("GREATEST(0, CAST(featured_listings_used AS SIGNED) - 1)"),
+                                'updated_at' => now()
+                            ]);
+                    }
+                });
+
+                return response()->json([
+                    'status'     => 1,
+                    'message'    => 'Project successfully unfeatured!',
+                    'is_featured' => false,
+                ]);
+            }
+
+            // --- Trying to FEATURE ---
+            // Check active membership
+            $membership = DB::table('user_membership')
+                ->where('user_id', $user_id)
+                ->where('expire_date', '>=', now())
+                ->first();
+
+            if (!$membership) {
+                return response()->json([
+                    'status'          => 0,
+                    'message'         => 'No active membership found.',
+                    'error_code'      => 'NO_MEMBERSHIP',
+                    'require_package' => true,
+                ]);
+            }
+
+            $limit = (int)$membership->featured_listings_limit;
+            $used  = (int)$membership->featured_listings_used;
+
+            if ($used >= $limit) {
+                return response()->json([
+                    'status'          => 0,
+                    'message'         => "Featured limit reached ({$limit}). Buy a featured package to continue.",
+                    'error_code'      => 'LIMIT_REACHED',
+                    'require_package' => true,
+                ]);
+            }
+
+            DB::transaction(function () use ($project_id, $user_id) {
+                DB::table('project')
+                    ->where('id', $project_id)
+                    ->update(['is_featured' => 1, 'updated_at' => now()]);
+
+                DB::table('user_membership')
+                    ->where('user_id', $user_id)
+                    ->increment('featured_listings_used');
+            });
+
+            return response()->json([
+                'status'                 => 1,
+                'message'                => 'Project successfully featured!',
+                'is_featured'            => true,
+                'featured_listings_used' => $used + 1,
+            ]);
+
+        } catch (\Throwable $e) {
+            Log::error('Error in ToggleFeaturedProject: ' . $e->getMessage());
+            return response()->json([
+                'status'  => 0,
+                'message' => 'An error occurred while updating featured status.',
+            ], 500);
+        }
+    }
+
+    public function buyFeaturedProjectPackage(Request $request)
+    {
+        try {
+            $user_id    = auth_user_id();
+            $project_id = $request->project_id;
+            $package_id = $request->package_id;
+            $token      = $request->token; // Stripe token
+
+            if (!$user_id) {
+                return response()->json(['status' => 0, 'message' => 'Unauthorized.']);
+            }
+
+            $project = DB::table('project')
+                ->where('id', $project_id)
+                ->where('uid', $user_id)
+                ->first();
+
+            if (!$project) {
+                return response()->json(['status' => 0, 'message' => 'Project not found.']);
+            }
+
+            $package = \App\Models\FeaturedPackage::active()->find($package_id);
+            if (!$package) {
+                return response()->json(['status' => 0, 'message' => 'Package not found.']);
+            }
+
+            // Process Stripe payment
+            $stripe = new \Stripe\StripeClient(get_setting('stripe_secret'));
+            $charge = $stripe->charges->create([
+                'source'      => $token,
+                'amount'      => (int)($package->price * 100),
+                'currency'    => 'USD',
+                'description' => "Featured Package for Project: {$package->name}",
+            ]);
+
+            if (!$charge->paid) {
+                return response()->json(['status' => 0, 'message' => 'Payment failed.']);
+            }
+
+            DB::transaction(function () use ($user_id, $project_id, $package, $charge) {
+                // Record transaction
+                DB::table('transactions')->insert([
+                    'platform_txn_id' => $charge->id,
+                    'paid_amount'     => $charge->amount / 100,
+                    'currency'        => $charge->currency,
+                    'user_id'         => $user_id,
+                    'plan_id'         => null,
+                    'payment_status'  => $charge->status,
+                    'created_at'      => now(),
+                    'updated_at'      => now(),
+                ]);
+
+                // Feature the project
+                DB::table('project')
+                    ->where('id', $project_id)
+                    ->update([
+                        'is_featured'          => 1,
+                        'featured_expire_date'  => now()->addDays($package->duration_days),
+                        'updated_at'           => now(),
+                    ]);
+            });
+
+            return response()->json([
+                'status'      => 1,
+                'message'     => "Project featured successfully for {$package->duration_days} days!",
+                'is_featured' => true,
+            ]);
+
+        } catch (\Throwable $e) {
+            Log::error('Error in buyFeaturedProjectPackage: ' . $e->getMessage());
+            return response()->json(['status' => 0, 'message' => 'Payment error: ' . $e->getMessage()], 500);
+        }
+    }
+
+} 
+
