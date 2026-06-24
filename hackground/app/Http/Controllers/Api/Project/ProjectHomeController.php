@@ -22,6 +22,7 @@ class ProjectHomeController extends Controller
    }
    function GetProjects(Request $request)
    {
+      cleanup_expired_featured_properties();
       try {
          // Fetch different types of projects
          $user_id = $request->input('user_id');
@@ -138,6 +139,7 @@ class ProjectHomeController extends Controller
 
    function getProjectsData()
    {
+      cleanup_expired_featured_properties();
       try {
 
          $project = PrefProject::where('status', config('constants.STATUS_ACTIVE'))->get()->makeHidden(['project_desc', 'status', 'is_deleted', 'is_featured', 'views', 'is_popular', 'created_at', 'uid']);

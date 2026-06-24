@@ -176,6 +176,7 @@ class HomeController extends Controller
 
     public function get_properties(Request $request)
     {
+        cleanup_expired_featured_properties();
         $recentPage = 1;
         $featuredPage = 1;
         $popularPage = 1;

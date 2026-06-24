@@ -22,6 +22,7 @@ class SeachController extends Controller
 
     public function SearchResult(Request $request)
     {
+        cleanup_expired_featured_properties();
         log::info($request);
 
         $currentpage = $request->input('currentpage', 1);
@@ -131,6 +132,11 @@ class SeachController extends Controller
             $sortedProperties = collect($formattedProperties)->sortBy(function ($property) use ($sortKey) {
                 return $property[$sortKey] ?? null;
             }, SORT_REGULAR, $sortOrder === 'desc');
+
+            // Ensure featured properties always appear first securely
+            $featured = $sortedProperties->filter(fn($item) => !empty($item['is_featured']));
+            $normal = $sortedProperties->filter(fn($item) => empty($item['is_featured']));
+            $sortedProperties = $featured->merge($normal);
 
             // Pagination details
             $totalProperties = $sortedProperties->count(); // Total number of properties

@@ -1317,6 +1317,8 @@ class ApiModel extends Model
             );
         }
 
+        $query->orderBy('is_featured', 'desc');
+
         $projects = $query->paginate($limit, ['*'], 'currentpage', $currentpage);
         return $projects;
     }

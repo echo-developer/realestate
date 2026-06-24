@@ -306,6 +306,10 @@ class AdvanceSearchController extends Controller
                     : $sortedProperties->sortBy($sortKey);
             }
 
+            // Ensure featured properties always appear first securely
+            $featured = $sortedProperties->filter(fn($item) => !empty($item['is_featured']));
+            $normal = $sortedProperties->filter(fn($item) => empty($item['is_featured']));
+            $sortedProperties = $featured->merge($normal);
 
             // Pagination details
             $totalProperties = $sortedProperties->count();

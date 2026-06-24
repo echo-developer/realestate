@@ -1854,3 +1854,55 @@ if (!function_exists('cURL_request')) {
         }
     }
 }
+
+if (!function_exists('cleanup_expired_featured_properties')) {
+    function cleanup_expired_featured_properties()
+    {
+        try {
+            $now = now();
+
+            // 1. Clean up expired paid featured packages (non-null expiration date)
+            DB::table('properties')
+                ->where('is_featured', 1)
+                ->whereNotNull('featured_expire_date')
+                ->where('featured_expire_date', '<', $now)
+                ->update([
+                    'is_featured' => 0,
+                    'featured_expire_date' => null,
+                    'updated_at' => $now,
+                ]);
+
+            // 2. Clean up legacy membership-featured properties (null expiration date) 
+            DB::table('properties')
+                ->where('is_featured', 1)
+                ->whereNull('featured_expire_date')
+                ->update([
+                    'is_featured' => 0,
+                    'updated_at' => $now,
+                ]);
+
+            // 3. Clean up expired paid featured project packages (non-null expiration date)
+            DB::table('project')
+                ->where('is_featured', 1)
+                ->whereNotNull('featured_expire_date')
+                ->where('featured_expire_date', '<', $now)
+                ->update([
+                    'is_featured' => 0,
+                    'featured_expire_date' => null,
+                    'updated_at' => $now,
+                ]);
+
+            // 4. Clean up legacy membership-featured projects (null expiration date) 
+            DB::table('project')
+                ->where('is_featured', 1)
+                ->whereNull('featured_expire_date')
+                ->update([
+                    'is_featured' => 0,
+                    'updated_at' => $now,
+                ]);
+
+        } catch (\Throwable $e) {
+            Log::error('Error in cleanup_expired_featured_properties: ' . $e->getMessage());
+        }
+    }
+}

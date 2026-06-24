@@ -22,6 +22,7 @@ class ProjectListandSearchController extends Controller
 
     public function getSearchedProjects(Request $req)
     {
+        cleanup_expired_featured_properties();
         // log::info($req->all());
         $hasLatLang = $req->input('hasLatLng', 0);
 
@@ -138,6 +139,11 @@ class ProjectListandSearchController extends Controller
             if ($customArray->isNotEmpty() && array_key_exists($sortKey, $customArray->first())) {
                 $customArray = $sortOrder === 'desc' ? $customArray->sortByDesc($sortKey) : $customArray->sortBy($sortKey);
             }
+
+            // Ensure featured projects always appear first securely
+            $featured = $customArray->filter(fn($item) => !empty($item['is_featured']));
+            $normal = $customArray->filter(fn($item) => empty($item['is_featured']));
+            $customArray = $featured->merge($normal);
 
             return response()->json([
                 'status' => 1,
