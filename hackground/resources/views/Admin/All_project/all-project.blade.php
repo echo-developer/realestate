@@ -305,38 +305,239 @@
 @endsection
 
 @section('modals')
+<style>
+    /* 2026 Amenity Modal Design */
+    #amenityModal .modal-content {
+        border-radius: 16px;
+        border: none;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    #amenityModal .modal-header {
+        border-bottom: none;
+        padding: 1.5rem 1.5rem 1rem;
+        align-items: center;
+        background: #ffffff !important; /* Force white background to override default theme grey */
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+    }
+    #amenityModal .modal-title-box {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    #amenityModal .modal-title-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        color: #0f172a; /* Match the title color */
+    }
+    #amenityModal .modal-title {
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: #0f172a;
+    }
+    #amenityModal .info-alert {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: #334155;
+        font-size: 0.9rem;
+        margin: 0 1.5rem 1rem;
+    }
+    #amenityModal .info-alert i {
+        color: #2563eb;
+        font-size: 1.1rem;
+    }
+    #amenityModal .controls-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 1.5rem 1.5rem;
+        gap: 1rem;
+    }
+    #amenityModal .search-input {
+        flex-grow: 1;
+        max-width: 300px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 0.5rem 1rem 0.5rem 2.5rem;
+        font-size: 0.9rem;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2394a3b8" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 0.75rem center;
+        background-color: #fff;
+    }
+    #amenityModal .search-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+    #amenityModal .select-all-box {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        color: #475569;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+    #amenityModal .amenity-grid {
+        padding: 0 0.5rem;
+        margin-bottom: 1rem;
+    }
+    #amenityModal .amenity-item {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 0;
+        margin-bottom: 0.75rem;
+        border-bottom: 1px solid #f1f5f9;
+        cursor: pointer;
+        width: 100%;
+    }
+    #amenityModal .amenity-item:hover { background: #f8fafc; border-radius: 8px; border-bottom-color: transparent; }
+    #amenityModal .form-check-input {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-top: 0;
+        cursor: pointer;
+        border-color: #cbd5e1;
+    }
+    #amenityModal .form-check-input:checked {
+        background-color: #2563eb;
+        border-color: #2563eb;
+    }
+    #amenityModal .amenity-icon-box {
+        width: 36px;
+        height: 36px;
+        background: #eff6ff;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 0.75rem;
+    }
+    #amenityModal .amenity-icon-box img {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+    }
+    #amenityModal .amenity-label {
+        font-size: 0.95rem;
+        color: #334155;
+        font-weight: 500;
+        user-select: none;
+    }
+    #amenityModal .modal-footer {
+        border-top: none;
+        padding: 1rem 1.5rem 1.5rem;
+        justify-content: space-between;
+    }
+    #amenityModal .btn-cancel {
+        background: #fff;
+        border: 1px solid #cbd5e1;
+        color: #475569;
+        font-weight: 600;
+        padding: 0.6rem 1.5rem;
+        border-radius: 8px;
+    }
+    #amenityModal .btn-cancel:hover { background: #f1f5f9; }
+    #amenityModal .btn-save {
+        background: #2563eb;
+        color: #fff;
+        font-weight: 600;
+        padding: 0.6rem 2rem;
+        border-radius: 8px;
+        border: none;
+    }
+    #amenityModal .btn-save:hover { background: #1d4ed8; }
+</style>
+
     <div class="modal fade" id="amenityModal" tabindex="-1" aria-labelledby="amenityModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-fullscreen-lg-down" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="amenityModalLabel">Add Amenity Data</h5>
+                    <div class="modal-title-box">
+                        <div class="modal-title-icon">
+                            <i class="bi bi-buildings"></i>
+                        </div>
+                        <h5 class="modal-title" id="amenityModalLabel">Add Amenity Data</h5>
+                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body amenity-container">
+                
+                <div class="info-alert">
+                    <i class="bi bi-info-circle-fill"></i>
+                    <span>Select the amenities available in this property.</span>
+                </div>
+
+                <div class="controls-row">
+                    <input type="text" id="searchAmenity" class="search-input" placeholder="Search amenities...">
+                    <label class="select-all-box">
+                        <input type="checkbox" id="selectAllAmenities" class="form-check-input">
+                        Select All
+                    </label>
+                </div>
+
+                <div class="modal-body amenity-container" style="padding-top: 0;">
                     <input type="hidden" name="project_id" id="project_id">
 
-                    <div class="row">
+                    <div class="row amenity-grid" id="amenityGrid">
                         @foreach ($projectAmenities as $projectAmenitie)
-                            <article class="col-xxl-3 col-xl-4 col-sm-6">
-                                <div class="form-check">
+                            <article class="col-xxl-4 col-xl-4 col-md-6 col-12 amenity-card">
+                                <label class="amenity-item">
                                     <input class="form-check-input amenity-checkbox" type="checkbox"
                                         value="{{ $projectAmenitie->id }}">
-                                    <label class="form-check-label d-flex align-items-center ms-2">
-                                        <img alt="Parking" height="24" width="24" class="me-2"
+                                    <div class="amenity-icon-box">
+                                        <img alt="Amenity" 
                                             src="{{ asset('user_upload/amenity_image/' . $projectAmenitie->image) }}">
-                                        {{ $projectAmenitie->name }}
-                                    </label>
-                                </div>
+                                    </div>
+                                    <span class="amenity-label amenity-name">{{ $projectAmenitie->name }}</span>
+                                </label>
                             </article>
                         @endforeach
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="saveAmenityBtn">Save</button>
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-save" id="saveAmenityBtn">Save</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- JS for Amenity Search and Select All -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchAmenity');
+            const selectAllCheck = document.getElementById('selectAllAmenities');
+            
+            if(searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const term = e.target.value.toLowerCase();
+                    const cards = document.querySelectorAll('.amenity-card');
+                    cards.forEach(card => {
+                        const name = card.querySelector('.amenity-name').textContent.toLowerCase();
+                        if(name.includes(term)) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            }
+            
+            if(selectAllCheck) {
+                selectAllCheck.addEventListener('change', function(e) {
+                    const isChecked = e.target.checked;
+                    // Only select checkboxes that are currently visible (matching search)
+                    const visibleCards = document.querySelectorAll('.amenity-card[style*="display: block"], .amenity-card:not([style*="display: none"])');
+                    visibleCards.forEach(card => {
+                        const cb = card.querySelector('.amenity-checkbox');
+                        if(cb) cb.checked = isChecked;
+                    });
+                });
+            }
+        });
+    </script>
 
     <div class="modal fade" id="propertyModal" tabindex="-1" aria-labelledby="propertyModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-fullscreen-lg-down" role="document">
@@ -355,19 +556,67 @@
         </div>
     </div>
 
-    <div class="modal fade" id="floorModal" tabindex="-1" aria-labelledby="propertyModalLabel" aria-hidden="true">
+    <style>
+    /* Floor Data Modal */
+    #floorModal .modal-content { border-radius: 16px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.12); }
+    #floorModal .modal-header { border-bottom: 1px solid #f1f5f9; padding: 1.25rem 1.5rem; background: #fff; border-top-left-radius: 16px; border-top-right-radius: 16px; }
+    #floorModal .modal-title { font-weight: 700; font-size: 1.2rem; color: #0f172a; }
+    #floorModal .modal-body { padding: 1.5rem; background: #fff; }
+    #floorModal .modal-footer { border-top: 1px solid #f1f5f9; padding: 1rem 1.5rem; background: #fff; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; justify-content: flex-end; }
+    #floorModal .modal-footer .btn-save-all { background: #2563eb; color: #fff; font-weight: 600; padding: 0.55rem 1.8rem; border-radius: 8px; border: none; font-size: 0.95rem; }
+    #floorModal .modal-footer .btn-save-all:hover { background: #1d4ed8; }
+
+    /* Tab Nav with scroll arrows */
+    .floor-tabs-wrapper { display: flex; align-items: center; gap: 0; border-bottom: 2px solid #e2e8f0; margin-bottom: 1.5rem; }
+    .floor-tab-scroll-btn { background: none; border: none; color: #64748b; padding: 0.4rem 0.5rem; cursor: pointer; flex-shrink: 0; font-size: 1rem; line-height: 1; display: flex; align-items: center; }
+    .floor-tab-scroll-btn:hover { color: #2563eb; }
+    .floor-tabs-scroll { overflow: hidden; flex: 1; }
+    #propertyTabs { display: flex; flex-wrap: nowrap; gap: 0; list-style: none; padding: 0; margin: 0; }
+    #propertyTabs .nav-item { flex-shrink: 0; }
+    #propertyTabs .nav-link {
+        background: none; border: none; border-bottom: 3px solid transparent;
+        padding: 0.65rem 1.1rem; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.04em;
+        color: #94a3b8; cursor: pointer; white-space: nowrap; text-transform: uppercase;
+        transition: color 0.2s, border-color 0.2s;
+    }
+    #propertyTabs .nav-link:hover { color: #2563eb; }
+    #propertyTabs .nav-link.active { color: #2563eb; border-bottom-color: #2563eb; }
+
+    /* Floor form fields */
+    .floor-field-group { margin-bottom: 1.1rem; }
+    .floor-field-label { font-size: 0.88rem; font-weight: 600; color: #334155; margin-bottom: 0.35rem; display: block; }
+    .floor-field-input {
+        width: 100%; border: 1px solid #e2e8f0; border-radius: 8px;
+        padding: 0.7rem 1rem; font-size: 0.95rem; color: #0f172a;
+        transition: border-color 0.2s, box-shadow 0.2s; background: #fff; resize: none;
+    }
+    .floor-field-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+    .floor-field-input::placeholder { color: #94a3b8; }
+    </style>
+
+    <div class="modal fade" id="floorModal" tabindex="-1" aria-labelledby="floorModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Floor Data</h5>
+                    <h5 class="modal-title" id="floorModalLabel">Floor Data</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <ul class="nav nav-tabs" id="propertyTabs" role="tablist"></ul>
-                    <div class="tab-content mt-3" id="propertyTabsContent"></div>
+                    <div class="floor-tabs-wrapper">
+                        <button class="floor-tab-scroll-btn" id="floorTabPrev" onclick="scrollFloorTabs(-1)">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <div class="floor-tabs-scroll">
+                            <ul class="nav" id="propertyTabs" role="tablist"></ul>
+                        </div>
+                        <button class="floor-tab-scroll-btn" id="floorTabNext" onclick="scrollFloorTabs(1)">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="tab-content" id="propertyTabsContent"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="saveAllButton" class="btn btn-primary">Save All</button>
+                    <button type="button" id="saveAllButton" class="btn-save-all">Save All</button>
                 </div>
             </div>
         </div>
@@ -609,6 +858,65 @@
         });
     </script>
 
+    <style>
+    /* 2026 Property Config Design */
+    #propertyModal .modal-content { border-radius: 16px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+    #propertyModal .modal-header { border-bottom: 1px solid #f1f5f9; padding: 1.5rem; background: #fff !important; border-top-left-radius: 16px; border-top-right-radius: 16px; }
+    #propertyModal .modal-title { font-weight: 700; font-size: 1.25rem; color: #0f172a; }
+    #propertyModal .modal-body { padding: 1.5rem; background: #f8fafc; }
+    #propertyModal .modal-footer { border-top: 1px solid #f1f5f9; padding: 1rem 1.5rem; background: #fff; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; justify-content: flex-end; gap: 1rem; }
+    #propertyModal .modal-footer .btn-secondary { background: #fff; border: 1px solid #cbd5e1; color: #475569; font-weight: 600; padding: 0.6rem 1.5rem; border-radius: 8px; }
+    #propertyModal .modal-footer .btn-primary { background: #2563eb; color: #fff; font-weight: 600; padding: 0.6rem 2rem; border-radius: 8px; border: none; }
+
+    /* Tower Card */
+    .prop-tower-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 1.5rem; overflow: hidden; }
+    .prop-tower-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.5rem; border-bottom: 1px solid #f1f5f9; cursor: pointer; user-select: none; }
+    .prop-tower-header-left { display: flex; align-items: center; gap: 0.75rem; font-weight: 600; color: #0f172a; font-size: 1.05rem; }
+    .prop-tower-header-left i { color: #475569; font-size: 1.2rem; }
+    .prop-tower-body { padding: 1.5rem; }
+
+    /* Floor Card */
+    .prop-floor-card { border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 1.5rem; }
+    .prop-floor-header { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.25rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0; border-top-left-radius: 12px; border-top-right-radius: 12px; cursor: pointer; user-select: none; }
+    .prop-floor-header-left { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #334155; }
+    .prop-floor-header-left i { color: #64748b; font-size: 1.1rem; }
+    .prop-floor-body { padding: 1.25rem; background: #fff; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
+    .btn-delete-floor { color: #ef4444; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; gap: 0.3rem; padding: 0; }
+    .btn-delete-floor:hover { color: #dc2626; }
+
+    /* Form Elements */
+    .prop-form-group { margin-bottom: 1rem; }
+    .prop-form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 0.4rem; }
+    .prop-form-control { width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.6rem 0.8rem; font-size: 0.95rem; color: #334155; transition: border-color 0.2s; }
+    .prop-form-control:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+    .prop-form-select { width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; padding: 0.6rem 0.8rem; font-size: 0.95rem; color: #334155; appearance: none; background: #fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="%2364748b" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>') no-repeat right 0.8rem center; }
+
+    /* File Upload */
+    .prop-file-upload { border: 1px dashed #cbd5e1; border-radius: 8px; display: flex; align-items: center; padding: 0.4rem 0.5rem; gap: 0.5rem; background: #f8fafc; }
+    .prop-file-btn { background: #eff6ff; color: #2563eb; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.4rem; cursor: pointer; }
+    .prop-file-text { font-size: 0.85rem; color: #64748b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* Buttons */
+    .btn-add-bhk { border: 1px solid #3b82f6; color: #3b82f6; background: #fff; padding: 0.4rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; }
+    .btn-add-bhk:hover { background: #eff6ff; }
+    .btn-add-floor { background: #2563eb; color: #fff; border: none; padding: 0.4rem 1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; }
+    .btn-add-floor:hover { background: #1d4ed8; }
+
+    /* BHK Card */
+    .bhk-card { border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 0.75rem; overflow: hidden; }
+    .bhk-card-header { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
+    .bhk-card-title { font-size: 0.9rem; font-weight: 600; color: #334155; display: flex; align-items: center; gap: 0.4rem; }
+    .bhk-card-title i { color: #2563eb; }
+    .bhk-card-body { padding: 1rem; background: #fff; }
+    .btn-remove-bhk { background: none; border: none; color: #ef4444; font-size: 0.82rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.5rem; border-radius: 5px; }
+    .btn-remove-bhk:hover { background: #fef2f2; }
+
+    /* Prefix Input (₹) */
+    .prop-input-prefix { position: relative; display: flex; align-items: center; }
+    .prop-input-prefix .prefix-icon { position: absolute; left: 10px; color: #64748b; font-size: 0.95rem; pointer-events: none; z-index: 1; }
+    .prop-input-prefix .prop-form-control { padding-left: 1.8rem; }
+    </style>
+
     <script>
         document.getElementById('addPropertyBtn')?.addEventListener('click', addProperty);
 
@@ -624,8 +932,6 @@
                     _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {
-                    console.log(response);
-
                     let towersData = response.towers_data || [];
                     const totalTowers = response.total_towers || towersData.length;
                     const modalContainer = document.getElementById("tower-container-modal");
@@ -646,41 +952,40 @@
 
         function createTower(towerData, towerIndex, container, project_id) {
             const tower = document.createElement("div");
-            tower.classList.add("mb-4", "border", "p-3");
+            tower.classList.add("prop-tower-card", "tower-item");
             $('#propertySaveButton').val(project_id);
             let slug = 'tower' + towerIndex;
             tower.innerHTML = `
-        <input class="form-control" name="project_id" type="hidden" value="${project_id}">
-        <h5>${'tower'+towerIndex}</h5>
-        <div class="row gx-3">
-            <div class="col-lg-3 col-sm-6">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="tower_name" placeholder="" value="${towerData.tower_name??''}">
-                    <label>Tower Name</label>
-                </div>
+        <div class="prop-tower-header" onclick="const b = this.nextElementSibling; b.style.display = b.style.display === 'none' ? 'block' : 'none'; const i = this.querySelector('.bi-chevron-down, .bi-chevron-up'); if(i) { i.classList.toggle('bi-chevron-down'); i.classList.toggle('bi-chevron-up'); }">
+            <div class="prop-tower-header-left">
+                <i class="bi bi-building"></i> Tower ${towerIndex}
             </div>
-            <input class="form-control" name="slug" type="hidden" value="${towerData.slug??slug}">
-            <div class="col-lg-3 col-sm-6">
-                <div class="form-floating mb-3">
-                    <input type="number" class="form-control" name="lift_no" placeholder="" value="${towerData.lift_no ?? ''}">
-                    <label>Lift Number</label>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="form-floating mb-3">
-                    <input type="number" class="form-control" name="stair_no" placeholder="" value="${towerData.stair_no ?? ''}">
-                    <label>Stair Number</label>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="form-floating mb-3">
-                    <input type="number" class="form-control" name="fire_safety" placeholder="" value="${towerData.fire_safety ?? ''}">
-                    <label>Fire Safety</label>
-                </div>
-            </div>
+            <i class="bi bi-chevron-up text-secondary"></i>
         </div>
-        <div class="floor-container"></div>
-        <button type="button" class="btn btn-primary btn-sm add-floor">Add Floor</button>`;
+        <div class="prop-tower-body">
+            <input class="form-control" name="project_id" type="hidden" value="${project_id}">
+            <input class="form-control" name="slug" type="hidden" value="${towerData.slug??slug}">
+            <div class="row gx-3 mb-3">
+                <div class="col-lg-3 col-sm-6 prop-form-group">
+                    <label>Tower Name</label>
+                    <input type="text" class="prop-form-control" name="tower_name" placeholder="Enter tower name" value="${towerData.tower_name??''}">
+                </div>
+                <div class="col-lg-3 col-sm-6 prop-form-group">
+                    <label>Lift Number</label>
+                    <input type="number" class="prop-form-control" name="lift_no" placeholder="Enter lift number" value="${towerData.lift_no ?? ''}">
+                </div>
+                <div class="col-lg-3 col-sm-6 prop-form-group">
+                    <label>Stair Number</label>
+                    <input type="number" class="prop-form-control" name="stair_no" placeholder="Enter stair number" value="${towerData.stair_no ?? ''}">
+                </div>
+                <div class="col-lg-3 col-sm-6 prop-form-group">
+                    <label>Fire Safety</label>
+                    <input type="text" class="prop-form-control" name="fire_safety" placeholder="Enter fire safety" value="${towerData.fire_safety ?? ''}">
+                </div>
+            </div>
+            <div class="floor-container"></div>
+            <button type="button" class="btn-add-floor add-floor"><i class="bi bi-plus"></i> Add Floor</button>
+        </div>`;
 
             container.appendChild(tower);
 
@@ -698,33 +1003,38 @@
         }
 
         function createFloor(floorContainer, floorIndex, floorData = null) {
-            const floor = document.createElement("fieldset");
-            floor.classList.add("border", "p-3", "mb-3", "position-relative", "floor-fieldset");
+            const floor = document.createElement("div");
+            floor.classList.add("prop-floor-card", "floor-fieldset");
 
-            floor.innerHTML =
-                `<legend class="float-none w-auto px-2 small fw-bold floor-legend">
-                    Floor ${floorIndex}
-                    <button type="button" class="btn btn-link text-danger remove-floor p-0 ms-3 text-decoration-none small" style="font-size: 11px; vertical-align: baseline;">
-                        <i class="bi bi-trash3 me-1"></i>Remove
-                    </button>
-                </legend>
-        <div class="row gx-3">
-            <input type="hidden" class="floor_id" value="${floorData ? floorData.floor_id : ''}">
-            <div class="col-sm-6">
-                <div class="form-floating mb-3">
-                    <input class="form-control" name="floor_no" type="number" placeholder="" value="${floorData ? floorData.floor_no : ''}">
-                    <label>Floor Number</label>
-                </div>
+            floor.innerHTML = `
+        <div class="prop-floor-header" onclick="if(event.target.closest('.remove-floor')) return; const b = this.nextElementSibling; b.style.display = b.style.display === 'none' ? 'block' : 'none'; const i = this.querySelector('.bi-chevron-down, .bi-chevron-up'); if(i) { i.classList.toggle('bi-chevron-down'); i.classList.toggle('bi-chevron-up'); }">
+            <div class="prop-floor-header-left">
+                <i class="bi bi-layers"></i> <span class="floor-legend">Floor ${floorIndex}</span>
+                <button type="button" class="btn btn-link btn-delete-floor remove-floor ms-3 text-decoration-none" title="Delete Floor">
+                    <i class="bi bi-trash3"></i> Delete
+                </button>
             </div>
-            <div class="col-sm-6">
-                <div class="form-floating mb-3">
-                    <input class="form-control" name="flat_no" type="number" placeholder="" value="${floorData ? floorData.flat_no : ''}">
-                    <label>Flat Number</label>
-                </div>
-            </div>
+            <i class="bi bi-chevron-up text-secondary"></i>
         </div>
-        <div class="bhk-container"></div>
-        <button type="button" class="btn btn-primary btn-sm add-bhk">Add BHK</button>`;
+        <div class="prop-floor-body">
+            <div class="row gx-3 mb-3">
+                <input type="hidden" class="floor_id" value="${floorData ? floorData.floor_id : ''}">
+                <div class="col-sm-6 prop-form-group">
+                    <label>Floor Number</label>
+                    <input class="prop-form-control" name="floor_no" type="number" placeholder="Enter floor number" value="${floorData ? floorData.floor_no : ''}">
+                </div>
+                <div class="col-sm-6 prop-form-group">
+                    <label>Flat Number</label>
+                    <input class="prop-form-control" name="flat_no" type="number" placeholder="Enter flat number" value="${floorData ? floorData.flat_no : ''}">
+                </div>
+            </div>
+            
+            <div class="mb-2">
+                <label class="d-block font-weight-bold mb-2" style="font-size: 0.95rem; font-weight: 600; color: #0f172a;">Flats</label>
+                <div class="bhk-container"></div>
+                <button type="button" class="btn-add-bhk add-bhk"><i class="bi bi-plus"></i> Add BHK</button>
+            </div>
+        </div>`;
 
             floorContainer.appendChild(floor);
 
@@ -735,7 +1045,8 @@
                     createBHK(bhkContainer, bhkIndex + 1, bhk);
                 });
             }
-            floor.querySelector(".remove-floor").addEventListener("click", function() {
+            floor.querySelector(".remove-floor").addEventListener("click", function(e) {
+                e.stopPropagation();
                 if (confirm("Are you sure you want to remove this floor and all its flat configurations?")) {
                     floor.remove();
                     reindexLabels(floorContainer, '.floor-fieldset', '.floor-legend', 'Floor');
@@ -748,86 +1059,86 @@
         }
 
         function createBHK(bhkContainer, bhkIndex, bhkData = null) {
-            console.log(bhkData);
             const bhk = document.createElement("div");
-            bhk.classList.add("mb-3", "position-relative", "bhk-item");
-            bhk.innerHTML =
-                `<fieldset class="position-relative border p-3">
-                <legend class="float-none w-auto px-2 small bhk-legend">
-                    Flats ${bhkIndex}
-                    <button type="button" class="btn btn-link text-danger remove-bhk p-0 ms-3 text-decoration-none small" style="font-size: 11px; vertical-align: baseline;">
-                        <i class="bi bi-trash3 me-1"></i>Remove
+            bhk.classList.add("mb-2", "bhk-item");
+            bhk.innerHTML = `
+            <div class="bhk-card">
+                <div class="bhk-card-header">
+                    <span class="bhk-card-title"><i class="bi bi-house-door"></i> Flat ${bhkIndex}</span>
+                    <button type="button" class="btn-remove-bhk remove-bhk">
+                        <i class="bi bi-trash3"></i> Remove
                     </button>
-                </legend>
-            <div class="row gx-3">
-                <div class="col-lg-4 col-sm-6">
-                    <div class="form-floating mb-3">
-                        <select class="form-select">
-                            <option value="1BHK" ${bhkData && bhkData.bhk_type === '1BHK' ? 'selected' : ''}>1BHK</option>
-                            <option value="2BHK" ${bhkData && bhkData.bhk_type === '2BHK' ? 'selected' : ''}>2BHK</option>
-                            <option value="3BHK" ${bhkData && bhkData.bhk_type === '3BHK' ? 'selected' : ''}>3BHK</option>
-                            <option value="4BHK" ${bhkData && bhkData.bhk_type === '4BHK' ? 'selected' : ''}>4BHK</option>
-                            <option value="5BHK" ${bhkData && bhkData.bhk_type === '5BHK' ? 'selected' : ''}>5BHK</option>
-                        </select>
-                        <label>BHK Type</label>
+                </div>
+                <div class="bhk-card-body">
+                    <input class="form-control floor_plan_image_name" type="hidden" value="${bhkData ? bhkData.floor_plan_image : ''}" name="floor_plan_image_name">
+                    <input type="hidden" class="property_id" value="${bhkData ? bhkData.property_id : ''}">
+                    <div class="row gx-3">
+                        <div class="col-lg-2 col-sm-4 prop-form-group">
+                            <label>BHK Type</label>
+                            <select class="prop-form-select">
+                                <option value="1BHK" ${bhkData && bhkData.bhk_type === '1BHK' ? 'selected' : ''}>1BHK</option>
+                                <option value="2BHK" ${bhkData && bhkData.bhk_type === '2BHK' ? 'selected' : ''}>2BHK</option>
+                                <option value="3BHK" ${bhkData && bhkData.bhk_type === '3BHK' ? 'selected' : ''}>3BHK</option>
+                                <option value="4BHK" ${bhkData && bhkData.bhk_type === '4BHK' ? 'selected' : ''}>4BHK</option>
+                                <option value="5BHK" ${bhkData && bhkData.bhk_type === '5BHK' ? 'selected' : ''}>5BHK</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-sm-4 prop-form-group">
+                            <label>Carpet Area <small class="text-muted">(sq.ft)</small></label>
+                            <input class="prop-form-control" type="number" placeholder="e.g. 800" value="${bhkData ? bhkData.carpet_area : ''}">
+                        </div>
+                        <div class="col-lg-2 col-sm-4 prop-form-group">
+                            <label>Super Area <small class="text-muted">(sq.ft)</small></label>
+                            <input class="prop-form-control" type="number" placeholder="e.g. 1250" value="${bhkData ? bhkData.super_area : ''}">
+                        </div>
+                        <div class="col-lg-2 col-sm-4 prop-form-group">
+                            <label>Price</label>
+                            <div class="prop-input-prefix">
+                                <span class="prefix-icon">₹</span>
+                                <input class="prop-form-control" type="number" placeholder="Amount" value="${bhkData ? bhkData.property_price : ''}">
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-4 prop-form-group">
+                            <label>Facing</label>
+                            <select class="prop-form-select">
+                                <option value="east" ${bhkData && bhkData.property_facing === 'east' ? 'selected' : ''}>East</option>
+                                <option value="north" ${bhkData && bhkData.property_facing === 'north' ? 'selected' : ''}>North</option>
+                                <option value="north_east" ${bhkData && bhkData.property_facing === 'north_east' ? 'selected' : ''}>North - East</option>
+                                <option value="north_west" ${bhkData && bhkData.property_facing === 'north_west' ? 'selected' : ''}>North - West</option>
+                                <option value="south" ${bhkData && bhkData.property_facing === 'south' ? 'selected' : ''}>South</option>
+                                <option value="south_east" ${bhkData && bhkData.property_facing === 'south_east' ? 'selected' : ''}>South - East</option>
+                                <option value="south_west" ${bhkData && bhkData.property_facing === 'south_west' ? 'selected' : ''}>South - West</option>
+                                <option value="west" ${bhkData && bhkData.property_facing === 'west' ? 'selected' : ''}>West</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-sm-4 prop-form-group">
+                            <label>Floor Image</label>
+                            <div class="prop-file-upload position-relative">
+                                <input class="floor-plan-input" type="file" accept="image/*" style="opacity:0;position:absolute;width:100%;height:100%;cursor:pointer;z-index:2;">
+                                <div class="prop-file-btn"><i class="bi bi-cloud-arrow-up"></i></div>
+                                <div class="prop-file-text preview-filename">${bhkData && bhkData.image_url ? 'Uploaded' : 'Choose file'}</div>
+                            </div>
+                            <img class="preview-image mt-1" src="${bhkData && bhkData.image_url ? bhkData.image_url : ''}"
+                                style="max-width:80px;border-radius:6px;display:${bhkData && bhkData.image_url ? 'block' : 'none'};">
+                            <button type="button" class="btn btn-link text-danger p-0 delete-floor-plan"
+                                style="font-size:0.8rem;display:${bhkData && bhkData.image_url ? 'block' : 'none'};text-decoration:none;">
+                                <i class="bi bi-x-circle"></i> Remove
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="form-floating mb-3">
-                        <input class="form-control" type="number" placeholder="" value="${bhkData ? bhkData.carpet_area : ''}">
-                        <label>Carpet Area</label>
-                    </div>
-                </div>
-                 <input class="form-control floor_plan_image_name" type="hidden" value="${bhkData ? bhkData.floor_plan_image : ''}" name="floor_plan_image_name">
-                <div class="col-lg-4 col-sm-6">
-                    <div class="form-floating mb-3">
-                        <input class="form-control" type="number" placeholder="" value="${bhkData ? bhkData.super_area : ''}">
-                        <label>Super Area</label>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="form-floating mb-3">
-                        <input class="form-control" type="number" placeholder="" value="${bhkData ? bhkData.property_price : ''}">
-                        <label>Price</label>
-                    </div>
-                </div>
-                <input type="hidden" class="property_id" value="${bhkData ? bhkData.property_id : ''}">
-                <div class="col-lg-4 col-sm-6">
-                    <div class="form-floating mb-3">
-                        <select class="form-select">
-                            <option value="east" ${bhkData && bhkData.property_facing === 'east' ? 'selected' : ''}>East</option>
-                            <option value="north" ${bhkData && bhkData.property_facing === 'north' ? 'selected' : ''}>North</option>
-                            <option value="north_east" ${bhkData && bhkData.property_facing === 'north_east' ? 'selected' : ''}>North - East</option>
-                            <option value="north_west" ${bhkData && bhkData.property_facing === 'north_west' ? 'selected' : ''}>North - West</option>
-                            <option value="south" ${bhkData && bhkData.property_facing === 'south' ? 'selected' : ''}>South</option>
-                            <option value="south_east" ${bhkData && bhkData.property_facing === 'south_east' ? 'selected' : ''}>South - East</option>
-                            <option value="south_west" ${bhkData && bhkData.property_facing === 'south_west' ? 'selected' : ''}>South - West</option>
-                            <option value="west" ${bhkData && bhkData.property_facing === 'west' ? 'selected' : ''}>West</option>
-                        </select>
-                        <label>Facing</label>
-                    </div>
-                </div>
-            <div class="col-lg-4 col-sm-6">
-                <div class="form-floating mb-3">
-                    <input class="form-control floor-plan-input" type="file" accept="image/*">
-                    <label>Upload Floor Image</label>
-                </div>
-                <img class="preview-image" src="${bhkData && bhkData.image_url ? bhkData.image_url : ''}" 
-                    style="max-width: 100px; display: ${bhkData && bhkData.image_url ? 'block' : 'none'}; margin-top: 5px;">
-                <button type="button" class="btn btn-danger btn-sm delete-floor-plan" 
-                        style="display: ${bhkData && bhkData.image_url ? 'block' : 'none'}; margin-top: 5px;">
-                    Delete
-                </button>
-            </div></div></fieldset>`;
+            </div>`;
 
             bhkContainer.appendChild(bhk);
             const fileInput = bhk.querySelector(".floor-plan-input");
             const previewImg = bhk.querySelector(".preview-image");
             const deleteImg = bhk.querySelector(".delete-floor-plan");
+            const previewFilename = bhk.querySelector(".preview-filename");
 
             fileInput.addEventListener("change", function(event) {
                 const file = event.target.files[0];
                 if (file) {
+                    previewFilename.textContent = file.name;
                     const objectURL = URL.createObjectURL(file);
                     previewImg.src = objectURL;
                     previewImg.style.display = "block";
@@ -846,7 +1157,7 @@
                     contentType: false,
                     success: function(response) {
                         if (response.status) {
-                            fileInput.closest('.bhk-container > div').querySelector(
+                            fileInput.closest('.bhk-item').querySelector(
                                 '.floor_plan_image_name').value = response.files;
                         } else {
                             alert("File upload failed");
@@ -863,6 +1174,7 @@
                 previewImg.style.display = "none";
                 fileInput.value = "";
                 deleteImg.style.display = "none";
+                previewFilename.textContent = "No file chosen";
 
                 const hiddenInput = bhk.querySelector('input[name="floor_plan_image_name"]');
                 if (hiddenInput) {
@@ -880,7 +1192,7 @@
         function collectData() {
             const towers = [];
 
-            document.querySelectorAll('.mb-4.border.p-3').forEach((towerElement) => {
+            document.querySelectorAll('.tower-item').forEach((towerElement) => {
                 const towerData = {
                     tower_name: towerElement.querySelector('input[name="tower_name"]')?.value || '',
                     slug: towerElement.querySelector('input[name="slug"]')?.value || '',
@@ -890,7 +1202,8 @@
                     floor_data: []
                 };
 
-                towerElement.querySelectorAll('.floor-container').forEach((floorElement) => {
+                // FIX: Look specifically for '.floor-fieldset' which are the individual floors
+                towerElement.querySelectorAll('.floor-fieldset').forEach((floorElement) => {
                     const floorNoInput = floorElement.querySelector('input[name="floor_no"]');
                     const flatNoInput = floorElement.querySelector('input[name="flat_no"]');
 
@@ -902,7 +1215,7 @@
                         bhk_configurations: []
                     };
 
-                    floorElement.querySelectorAll('.bhk-container > div').forEach((bhkElement) => {
+                    floorElement.querySelectorAll('.bhk-item').forEach((bhkElement) => {
                         const bhkTypeSelect = bhkElement.querySelector('select');
                         const numberInputs = bhkElement.querySelectorAll('input[type="number"]');
                         const facingSelect = bhkElement.querySelectorAll('select')[1];
@@ -995,21 +1308,18 @@
 
                         let items = response.data.floor_plans.filter(item => item.type_id === type.id);
                         let itemsHtml = items.map(item => `
-                                                        <li>
-                                                            <div class="form-floating mb-3">                                                        
-                                                               <input type="text" class="form-control item-input" 
-                                                                    placeholder="Enter description for ${item.item}" 
-                                                                    value="${item.description ? item.description : ''}" 
-                                                                    data-item-id="${item.item_id}" 
-                                                                    data-type-id="${type.id}">
-                                                                <label>${item.item}:</label>
-                                                            </div>
-                                                        </li>
-                                                    `).join("");
+                            <div class="floor-field-group">
+                                <label class="floor-field-label">${item.item}:</label>
+                                <textarea class="floor-field-input item-input" rows="2"
+                                    placeholder="Enter ${item.item.toLowerCase()} details"
+                                    data-item-id="${item.item_id}"
+                                    data-type-id="${type.id}">${item.description ? item.description : ''}</textarea>
+                            </div>
+                        `).join("");
 
                         let tabContent = `
                             <div class="tab-pane fade ${isActive ? "show active" : ""}" id="${type.slug}" role="tabpanel">
-                                <ul class="list-unstyled">${itemsHtml}</ul>
+                                ${itemsHtml}
                             </div>
                         `;
                         contentContainer.innerHTML += tabContent;
@@ -1024,6 +1334,11 @@
             });
         }
 
+        function scrollFloorTabs(direction) {
+            const scrollEl = document.querySelector('.floor-tabs-scroll');
+            if (scrollEl) scrollEl.scrollLeft += direction * 150;
+        }
+
         function saveAllFloorPlans(project_id) {
             let floorData = [];
 
@@ -1031,8 +1346,9 @@
                 tab.querySelectorAll(".item-input").forEach(input => {
                     let item_id = input.getAttribute("data-item-id");
                     let type_id = input.getAttribute("data-type-id");
-                    let label = input.closest(".form-floating")?.querySelector("label");
-                    let item_name = label ? label.innerText.replace(":", "").trim() : "Unknown";
+                    let item_name = input.closest(".floor-field-group")?.querySelector(".floor-field-label")?.innerText?.replace(":", "").trim() 
+                                    || input.closest(".form-floating")?.querySelector("label")?.innerText?.replace(":", "").trim() 
+                                    || "Unknown";
                     let description = input.value.trim();
 
                     if (item_id && type_id) {
