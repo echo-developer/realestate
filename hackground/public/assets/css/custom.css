@@ -290,16 +290,16 @@ form {
 /* Premium Redesigned Property & Project Cards */
 .custom-prop-card {
     background: #ffffff;
-    border: 1px solid #f1f5f9;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    border: 1px solid #e8edf2;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
     overflow: hidden;
-    margin-bottom: 1.75rem;
+    margin-bottom: 1.25rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
-    flex: 1 0 auto; /* Allow card to grow to parent height */
-    height: calc(100% - 1.75rem);
+    flex: 1 0 auto;
+    height: calc(100% - 1.25rem);
 }
 
 /* Ensure grid column articles behave as flex containers so cards stretch to equal height */
@@ -316,7 +316,7 @@ form {
 
 .prop-card-img-wrapper {
     position: relative;
-    height: 220px;
+    height: 185px;
     overflow: visible !important;
     background-color: #f8fafc;
 }
@@ -357,11 +357,11 @@ form {
 }
 
 .prop-card-body {
-    padding: 1.25rem 1.5rem;
+    padding: 0.85rem 1rem;
     display: flex;
     flex-direction: column;
     flex: 1;
-    gap: 0.75rem;
+    gap: 0.5rem;
 }
 
 .prop-price-row {
@@ -409,16 +409,16 @@ form {
 }
 
 .prop-title {
-    font-size: 1.05rem;
-    font-weight: 600;
-    line-height: 1.4;
+    font-size: 0.97rem;
+    font-weight: 700;
+    line-height: 1.35;
     margin: 0;
     color: #1e293b;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    height: 2.8em;
+    height: auto;
 }
 
 .prop-title a {
@@ -434,38 +434,44 @@ form {
 .prop-info-list {
     display: flex;
     flex-direction: column;
-    gap: 0.45rem;
-    margin-bottom: 0.25rem;
+    gap: 0.2rem;
+    margin-bottom: 0.1rem;
 }
 
 .prop-info-item {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.82rem;
+    gap: 0.4rem;
+    font-size: 0.78rem;
     color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .prop-info-item i {
     color: #94a3b8;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
+    flex-shrink: 0;
 }
 
 .project-amenity-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.35rem;
+    gap: 0.25rem;
+    margin-top: 0.1rem;
 }
 
 .btn-action-pill {
-    padding: 0.25rem 0.6rem !important;
-    font-size: 0.72rem !important;
+    padding: 0.18rem 0.5rem !important;
+    font-size: 0.68rem !important;
     font-weight: 600 !important;
     border-radius: 20px !important;
     display: inline-flex !important;
     align-items: center !important;
     transition: all 0.2s ease !important;
     border: 1px solid transparent !important;
+    line-height: 1.4 !important;
 }
 
 .btn-outline-warning-pill {
@@ -509,8 +515,8 @@ form {
     justify-content: flex-end;
     align-items: center;
     border-top: 1px solid #f1f5f9;
-    margin-top: auto !important; /* Always push footer to bottom of flex card body */
-    padding-top: 1rem;
+    margin-top: auto !important;
+    padding-top: 0.65rem;
     background-color: transparent;
 }
 
@@ -566,9 +572,9 @@ form {
     background-color: #ffffff !important;
     color: #1e293b !important;
     border: 1px solid #d1d5db !important;
-    font-size: 0.85rem !important;
+    font-size: 0.8rem !important;
     font-weight: 600 !important;
-    padding: 0.65rem 1rem !important;
+    padding: 0.45rem 0.9rem !important;
     border-radius: 8px !important; /* Rounded corners */
     transition: all 0.2s ease !important;
     display: inline-flex !important;
@@ -576,6 +582,7 @@ form {
     justify-content: center !important;
     gap: 0.35rem !important;
     width: 100% !important;
+    white-space: nowrap !important;
 }
 
 .custom-dropdown .btn-actions:hover {
@@ -588,29 +595,39 @@ form {
     display: none !important; /* Hide bootstrap arrow */
 }
 
+/* ── Actions Dropdown ── */
 .custom-dropdown .dropdown-menu {
     border: 1px solid #e2e8f0 !important;
-    border-radius: 8px !important;
-    padding: 0.4rem 0 !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
-    min-width: 140px !important;
+    border-radius: 10px !important;
+    padding: 0.35rem 0 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+    min-width: 150px !important;
+    max-width: 200px !important;
+    width: auto !important;
+    overflow: hidden !important;
+    animation: dropdownFadeIn 0.15s ease !important;
+}
+
+@keyframes dropdownFadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .custom-dropdown .dropdown-item {
-    font-size: 0.8rem !important;
+    font-size: 0.82rem !important;
     font-weight: 600 !important;
     color: #475569 !important;
-    padding: 0.45rem 1rem !important;
+    padding: 0.5rem 1rem !important;
     display: flex !important;
     align-items: center !important;
-    gap: 0.35rem !important;
-    transition: all 0.2s ease !important;
+    gap: 0.4rem !important;
+    transition: background 0.15s ease, color 0.15s ease !important;
     cursor: pointer !important;
-    text-transform: none !important; /* Keep case better case, not uppercase */
+    white-space: nowrap !important;
 }
 
 .custom-dropdown .dropdown-item:hover {
-    background-color: #f8fafc !important;
+    background-color: #f1f5f9 !important;
     color: #0f172a !important;
 }
 
@@ -619,18 +636,59 @@ form {
     color: #2563eb !important;
 }
 
+.custom-dropdown .dropdown-item.text-danger {
+    color: #ef4444 !important;
+}
 .custom-dropdown .dropdown-item.text-danger:hover {
     background-color: #fef2f2 !important;
-    color: #ef4444 !important;
+    color: #dc2626 !important;
+}
+
+/* ── 3-Dot (Featured/Top) Dropdown — global ── */
+.pos-three-dots .dropdown-menu {
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    padding: 0.35rem 0 !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1) !important;
+    min-width: 130px !important;
+    max-width: 180px !important;
+    width: auto !important;
+    overflow: hidden !important;
+    right: 0 !important;
+    left: auto !important;
+    animation: dropdownFadeIn 0.15s ease !important;
+}
+
+.pos-three-dots .dropdown-item {
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    color: #475569 !important;
+    padding: 0.5rem 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.4rem !important;
+    white-space: nowrap !important;
+    transition: background 0.15s ease !important;
+}
+
+.pos-three-dots .dropdown-item:hover {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+}
+
+.pos-three-dots .dropdown-item.active,
+.pos-three-dots .dropdown-item:has(.bi-check2) {
+    background-color: #eff6ff !important;
+    color: #2563eb !important;
 }
 
 .btn-edit-view {
     background-color: #3b82f6 !important;
     border: 1px solid #3b82f6 !important;
     color: #ffffff !important;
-    font-size: 0.85rem !important;
+    font-size: 0.8rem !important;
     font-weight: 600 !important;
-    padding: 0.65rem 1rem !important;
+    padding: 0.45rem 0.9rem !important;
     border-radius: 8px !important; /* Rounded corners */
     transition: all 0.2s ease !important;
     text-decoration: none !important;
@@ -796,4 +854,343 @@ form {
     color: #3b82f6 !important;
     font-size: 0.95rem !important;
 }
+
+/* ═══════════════════════════════════════════════
+   REAL ESTATE ADMIN — MOBILE RESPONSIVE SYSTEM
+   Breakpoints: xs<576 | sm576 | md768 | lg992
+   ═══════════════════════════════════════════════ */
+
+/* ─── GLOBAL TOUCH IMPROVEMENTS ─── */
+@media (max-width: 991.98px) {
+    .app-main__inner { padding: 1rem !important; }
+    .app-page-title {
+        padding: 0 0 1rem 0 !important;
+        margin: 0 0 1rem 0 !important;
+    }
+    /* Fix page title — left-aligned, no centering */
+    .page-title-wrapper {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.4rem !important;
+    }
+    .page-title-heading {
+        font-size: 1.05rem !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+    }
+    .page-title-icon {
+        width: 36px !important;
+        height: 36px !important;
+        border-radius: 10px !important;
+    }
+    .page-title-icon i { font-size: 1.1rem !important; }
+    .page-title-subheading { font-size: 0.75rem !important; margin-top: 0.1rem !important; }
+    /* Hide the duplicated breadcrumb on mobile — subheading already shows the path */
+    .page-title-actions { display: none !important; }
+}
+
+/* ─── DROPDOWN MENUS — compact, never full-width ─── */
+@media (max-width: 991.98px) {
+    /* Actions dropdown & 3-dot dropdown */
+    .custom-dropdown .dropdown-menu,
+    .pos-three-dots .dropdown-menu {
+        min-width: 160px !important;
+        max-width: 220px !important;
+        width: auto !important;
+        /* Prevent stretching to card/screen width */
+        left: auto !important;
+        right: 0 !important;
+        transform: none !important;
+    }
+    /* Keep the dropdown within the card by limiting its containing block */
+    .prop-actions { position: relative !important; }
+    .prop-card-body { position: relative !important; }
+
+    /* 3-dot dropdown: attach to the button, not the card */
+    .pos-three-dots { position: absolute !important; }
+    .pos-three-dots .dropdown-menu {
+        right: 0 !important;
+        left: auto !important;
+    }
+    /* Actions button dropdown */
+    .prop-actions .custom-dropdown { position: relative !important; flex: 1 !important; }
+    .prop-actions .custom-dropdown .dropdown-menu {
+        left: 0 !important;
+        right: auto !important;
+        min-width: 140px !important;
+    }
+}
+
+
+/* ─── PAGINATION — modern rounded square, all screens ─── */
+nav[aria-label] ul.pagination,
+.pagination {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.3rem !important;
+    justify-content: center !important;
+    padding: 0.75rem 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+}
+.pagination .page-item .page-link {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    padding: 0 !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #475569 !important;
+    background: #fff !important;
+    text-decoration: none !important;
+    line-height: 1 !important;
+    transition: all 0.15s ease !important;
+}
+.pagination .page-item .page-link:hover {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #1e293b !important;
+}
+.pagination .page-item.active .page-link {
+    background: #2563eb !important;
+    border-color: #2563eb !important;
+    color: #fff !important;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.25) !important;
+}
+.pagination .page-item.disabled .page-link {
+    opacity: 0.4 !important;
+    pointer-events: none !important;
+    background: #f8fafc !important;
+}
+/* xs screens: hide middle page numbers */
+@media (max-width: 575.98px) {
+    .pagination .page-link { width: 34px !important; height: 34px !important; font-size: 0.78rem !important; }
+    .pagination .page-item:not(.active):not(:first-child):not(:last-child):not(:nth-child(2)):not(:nth-last-child(2)) {
+        display: none !important;
+    }
+}
+
+/* ─── BOTTOM-SHEET MODALS (slide up from bottom) ─── */
+@media (max-width: 767.98px) {
+    /* Set modal wrapper to handle height properly and hide wrapper scrollbar */
+    .modal { padding: 0 !important; overflow: hidden !important; }
+    
+    /* Make dialog a flex container that pushes content to bottom */
+    .modal.fade .modal-dialog {
+        display: flex !important;
+        align-items: flex-end !important;
+        min-height: 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        transform: translateY(100%) !important;
+        transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1) !important;
+    }
+    .modal.show .modal-dialog {
+        transform: translateY(0) !important;
+    }
+    
+    /* Content wrapper takes shape */
+    .modal-content {
+        width: 100% !important;
+        border-radius: 20px 20px 0 0 !important;
+        max-height: 90vh !important;
+        border: none !important;
+        margin-top: auto !important; /* Force to bottom of flex container */
+        overflow: hidden !important; /* Clip corners */
+    }
+    .modal-body {
+        overflow-y: auto !important;
+    }
+    /* Drag handle visual indicator */
+    .modal-header::before {
+        content: '' !important;
+        display: block !important;
+        width: 40px !important;
+        height: 4px !important;
+        background: #cbd5e1 !important;
+        border-radius: 2px !important;
+        margin: 0 auto 0.75rem !important;
+    }
+    .modal-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        padding-top: 0.5rem !important;
+    }
+    .modal-header .btn-close {
+        position: absolute !important;
+        top: 1rem !important;
+        right: 1rem !important;
+    }
+    .modal-body { overflow-y: auto !important; }
+
+    /* Modals with xl/lg class — keep full width on mobile */
+    .modal-dialog.modal-xl,
+    .modal-dialog.modal-lg,
+    .modal-dialog.modal-fullscreen-lg-down {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+}
+
+/* ─── FILTER / SEARCH CARD ─── */
+@media (max-width: 767.98px) {
+    .card.mb-4.shadow-sm .card-body { padding: 1rem !important; }
+    .card.mb-4.shadow-sm .d-flex.align-items-center.justify-content-between {
+        flex-wrap: wrap !important;
+        height: auto !important;
+        padding: 0.4rem 0.6rem !important;
+        gap: 0.3rem !important;
+    }
+    .card.mb-4.shadow-sm .d-flex.align-items-center input[type="date"] {
+        height: 36px !important;
+        font-size: 0.82rem !important;
+        flex: 1 !important;
+        min-width: 100px;
+    }
+    .card.mb-4.shadow-sm .col-lg-3.d-flex {
+        flex-direction: row !important;
+        width: 100% !important;
+        gap: 0.5rem !important;
+        padding-top: 0 !important;
+    }
+    .card.mb-4.shadow-sm .col-lg-3 .btn { flex: 1 !important; height: 42px !important; }
+    .card.mb-4.shadow-sm .form-control,
+    .card.mb-4.shadow-sm .form-select { height: 42px !important; font-size: 0.85rem !important; }
+}
+
+/* ─── PROJECT GRID: lg 992-1199 = 3 cols ─── */
+@media (max-width: 1199.98px) and (min-width: 992px) {
+    #main_table .col-lg-3 { flex: 0 0 33.333% !important; max-width: 33.333% !important; }
+}
+
+/* ─── PROJECT GRID: md 576-991 = 2 cols ─── */
+@media (max-width: 991.98px) and (min-width: 576px) {
+    #main_table .col-lg-3 { flex: 0 0 50% !important; max-width: 50% !important; }
+    .prop-card-img-wrapper { height: 165px !important; }
+}
+
+/* ─── PROJECT GRID: xs <576 = 1 col, horizontal card ─── */
+@media (max-width: 575.98px) {
+    #main_table .col-lg-3 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+
+    /* Horizontal card layout */
+    .custom-prop-card {
+        flex-direction: row !important;
+        border-radius: 10px !important;
+        height: auto !important;
+        margin-bottom: 0 !important;
+        min-height: 130px;
+    }
+    .prop-card-img-wrapper {
+        width: 115px !important;
+        min-width: 115px !important;
+        height: auto !important;
+        min-height: 130px !important;
+        flex-shrink: 0 !important;
+        border-radius: 10px 0 0 10px !important;
+    }
+    .prop-card-img {
+        border-radius: 10px 0 0 10px !important;
+        height: 100% !important;
+        min-height: 130px !important;
+        object-fit: cover !important;
+    }
+
+    /* Badges */
+    .prop-badges-left { top: 6px !important; left: 6px !important; gap: 3px !important; }
+    .prop-badge-type, .prop-badge-featured, .prop-badge-top {
+        font-size: 0.6rem !important;
+        padding: 0.12rem 0.4rem !important;
+    }
+    .pos-three-dots { top: 6px !important; right: 6px !important; }
+    .btn-three-dots { width: 26px !important; height: 26px !important; font-size: 0.75rem !important; }
+
+    /* Card body */
+    .prop-card-body {
+        flex: 1 !important;
+        padding: 0.55rem 0.7rem !important;
+        gap: 0.2rem !important;
+        min-width: 0 !important;
+        overflow: hidden;
+    }
+    .prop-price-row { margin-bottom: 0.1rem !important; }
+    .prop-title {
+        font-size: 0.85rem !important;
+        -webkit-line-clamp: 1 !important;
+        height: auto !important;
+        margin-bottom: 0 !important;
+    }
+    .prop-info-list { gap: 0.1rem !important; margin-bottom: 0 !important; }
+    .prop-info-item { font-size: 0.7rem !important; }
+    .prop-leads-badge-new { font-size: 0.75rem !important; }
+    .prop-leads-badge-new i { font-size: 0.9rem !important; }
+
+    /* Action pills compact */
+    .project-amenity-buttons { gap: 0.15rem !important; flex-wrap: wrap !important; }
+    .btn-action-pill { padding: 0.1rem 0.38rem !important; font-size: 0.6rem !important; }
+    .btn-action-pill .bi-plus-lg { display: none !important; }
+    .btn-action-pill .bi-upload { display: none !important; }
+
+    /* Footer buttons */
+    .prop-card-footer { padding-top: 0.35rem !important; }
+    .prop-actions { gap: 0.25rem !important; }
+    .custom-dropdown .btn-actions {
+        font-size: 0.68rem !important;
+        padding: 0.28rem 0.45rem !important;
+    }
+    .btn-edit-view {
+        font-size: 0.68rem !important;
+        padding: 0.28rem 0.5rem !important;
+        white-space: nowrap !important;
+    }
+}
+
+/* ─── MODALS: md and below ─── */
+@media (max-width: 767.98px) {
+    .modal-dialog.modal-xl,
+    .modal-dialog.modal-lg { max-width: 96vw !important; margin: 0.75rem auto !important; }
+
+    /* Amenity modal */
+    #amenityModal .controls-row {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        margin: 0 0.75rem 0.75rem !important;
+    }
+    #amenityModal .search-input { max-width: 100% !important; }
+    #amenityModal .amenity-grid .col-xxl-4 { flex: 0 0 50% !important; max-width: 50% !important; }
+
+    /* Property Config modal */
+    .prop-tower-body { padding: 0.9rem !important; }
+    .prop-floor-body { padding: 0.75rem !important; }
+    .bhk-card-body { padding: 0.75rem !important; }
+    .bhk-card-body .col-lg-2 { flex: 0 0 50% !important; max-width: 50% !important; }
+
+    /* Floor Data modal */
+    #floorModal .modal-body { padding: 1rem !important; }
+}
+
+@media (max-width: 575.98px) {
+    #amenityModal .amenity-grid .col-xxl-4 { flex: 0 0 50% !important; max-width: 50% !important; }
+    .bhk-card-body .col-lg-2 { flex: 0 0 100% !important; max-width: 100% !important; }
+    .prop-tower-header-left { font-size: 0.88rem !important; }
+
+    /* filter fields full width on xs */
+    .card.mb-4.shadow-sm .col-lg-3,
+    .card.mb-4.shadow-sm .col-md-4,
+    .card.mb-4.shadow-sm .col-sm-6 { flex: 0 0 100% !important; max-width: 100% !important; }
+    .card.mb-4.shadow-sm .form-label { font-size: 0.78rem !important; }
+}
+
 /*# sourceMappingURL=custom.css.map */

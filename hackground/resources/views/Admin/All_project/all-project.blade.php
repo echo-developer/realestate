@@ -35,8 +35,9 @@
         </div>
         <div id="successMessageContainer"></div>
 
-        <form action="{{ url('allproject/all-project-view') }}" method="get">
-            <div class="card mb-4 shadow-sm border-0" style="border-radius: 12px; background-color: #fff;">
+        {{-- ═══ DESKTOP FILTER CARD (hidden on mobile) ═══ --}}
+        <form action="{{ url('allproject/all-project-view') }}" method="get" id="desktopFilterForm">
+            <div class="card mb-4 shadow-sm border-0 d-none d-md-block" style="border-radius: 12px; background-color: #fff;">
                 <div class="card-body p-4">
                     <div class="row g-3 align-items-end mb-3">
                         <div class="col-lg-7 col-md-12">
@@ -54,19 +55,18 @@
                             <div class="form-group mb-0">
                                 <label class="form-label mb-1 fw-semibold" style="font-size: 0.85rem; color: #475569;">Filter by Date Range</label>
                                 <div class="d-flex align-items-center justify-content-between p-1 bg-white border" style="height: 50px; border-radius: 10px; border: 1px solid #e2e8f0 !important;">
-                                    <input type="date" class="form-control border-0 shadow-none bg-transparent" name="start_date" placeholder="Start Date" value="{{ request('start_date') }}" style="height: 100%; font-size: 0.9rem; color: #1e293b;">
+                                    <input type="date" class="form-control border-0 shadow-none bg-transparent" name="start_date" value="{{ request('start_date') }}" style="height: 100%; font-size: 0.9rem; color: #1e293b;">
                                     <span class="mx-2 text-muted fw-medium" style="font-size: 1.1rem;">→</span>
-                                    <input type="date" class="form-control border-0 shadow-none bg-transparent" name="end_date" placeholder="End Date" value="{{ request('end_date') }}" style="height: 100%; font-size: 0.9rem; color: #1e293b;">
+                                    <input type="date" class="form-control border-0 shadow-none bg-transparent" name="end_date" value="{{ request('end_date') }}" style="height: 100%; font-size: 0.9rem; color: #1e293b;">
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="row g-3 align-items-end">
-                        <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="col-lg-3 col-md-4">
                             <div class="form-group mb-0">
                                 <label class="form-label mb-1 fw-semibold" style="font-size: 0.85rem; color: #475569;">Project Type</label>
-                                <select class="form-select" name="project_type" style="height: 48px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.9rem; color: #1e293b;">
+                                <select class="form-select" name="project_type" style="height: 48px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.9rem;">
                                     <option value="">Select</option>
                                     @foreach ($project_type as $items)
                                         <option value="{{ $items->id }}" {{ request('project_type') == $items->id ? 'selected' : '' }}>{{ $items->name }}</option>
@@ -74,10 +74,10 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="col-lg-3 col-md-4">
                             <div class="form-group mb-0">
                                 <label class="form-label mb-1 fw-semibold" style="font-size: 0.85rem; color: #475569;">Possession Status</label>
-                                <select class="form-select" name="possession_status" style="height: 48px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.9rem; color: #1e293b;">
+                                <select class="form-select" name="possession_status" style="height: 48px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.9rem;">
                                     <option value="">Select</option>
                                     @foreach ($projectStatus as $status)
                                         <option value="{{ $status['status_id'] }}" {{ request('possession_status') == $status['status_id'] ? 'selected' : '' }}>{{ $status['status_name'] }}</option>
@@ -85,24 +85,154 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="col-lg-3 col-md-4">
                             <div class="form-group mb-0">
                                 <label class="form-label mb-1 fw-semibold" style="font-size: 0.85rem; color: #475569;">Address</label>
-                                <input type="text" class="form-control" name="address" placeholder="Enter Address" value="{{ request('address') }}" style="height: 48px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.9rem; color: #1e293b;">
+                                <input type="text" class="form-control" name="address" placeholder="Enter Address" value="{{ request('address') }}" style="height: 48px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.9rem;">
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-12 col-sm-6 d-flex align-items-center justify-content-end gap-3 pt-2">
-                            <a href="{{ url('allproject/all-project-view') }}" class="btn btn-outline-primary fw-medium px-4 d-flex align-items-center justify-content-center gap-2" style="height: 48px; border-radius: 8px; font-size: 0.9rem; border: 1px solid #3b82f6; color: #3b82f6; transition: all 0.2s; background: transparent;">
-                                <i class="bi bi-arrow-counterclockwise" style="font-size: 1.1rem;"></i> Reset
+                        <div class="col-lg-3 col-md-12 d-flex align-items-center justify-content-end gap-3 pt-2">
+                            <a href="{{ url('allproject/all-project-view') }}" class="btn btn-outline-primary fw-medium px-4 d-flex align-items-center gap-2" style="height: 48px; border-radius: 8px; font-size: 0.9rem; border: 1px solid #3b82f6; color: #3b82f6;">
+                                <i class="bi bi-arrow-counterclockwise"></i> Reset
                             </a>
-                            <button type="submit" class="btn btn-primary fw-medium px-4 d-flex align-items-center justify-content-center gap-2" style="height: 48px; border-radius: 8px; font-size: 0.9rem; background-color: #3b82f6; border-color: #3b82f6; transition: all 0.2s; flex-grow: 1;">
-                                <i class="bi bi-search" style="font-size: 1rem;"></i> Search
+                            <button type="submit" class="btn btn-primary fw-medium px-4 d-flex align-items-center gap-2" style="height: 48px; border-radius: 8px; font-size: 0.9rem; background-color: #3b82f6; border-color: #3b82f6; flex-grow: 1;">
+                                <i class="bi bi-search"></i> Search
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
+
+        {{-- ═══ MOBILE: Search bar + Filter icon ═══ --}}
+        <form action="{{ url('allproject/all-project-view') }}" method="get" id="mobileSearchForm" class="d-flex d-md-none align-items-center gap-2 mb-3">
+            <div class="position-relative flex-grow-1">
+                <span class="position-absolute top-50 start-0 translate-middle-y ps-3" style="pointer-events:none;z-index:5;">
+                    <i class="bi bi-search" style="color:#94a3b8;font-size:1rem;"></i>
+                </span>
+                <input type="text" class="form-control" name="term"
+                       placeholder="Search projects…"
+                       value="{{ request('term') }}"
+                       style="padding-left:2.5rem;height:44px;border-radius:10px;border:1px solid #e2e8f0;font-size:0.9rem;">
+            </div>
+            <button type="button" id="mobileFilterToggle"
+                    style="width:44px;height:44px;border-radius:10px;border:1px solid #e2e8f0;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;">
+                <i class="bi bi-sliders2" style="font-size:1.1rem;color:#2563eb;"></i>
+                @if(request('start_date') || request('end_date') || request('project_type') || request('possession_status') || request('address'))
+                    <span style="position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:#ef4444;border:2px solid #fff;"></span>
+                @endif
+            </button>
+        </form>
+
+        {{-- ═══ MOBILE FILTER DRAWER (slides from right) ═══ --}}
+        <div id="mobileFilterOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1050;backdrop-filter:blur(2px);"></div>
+
+        <form action="{{ url('allproject/all-project-view') }}" method="get" id="mobileFilterDrawer"
+              style="position:fixed;top:0;right:0;height:100%;width:min(320px,88vw);background:#fff;z-index:1055;
+                     transform:translateX(calc(100% + 50px));transition:transform 0.32s cubic-bezier(0.32,0.72,0,1);
+                     display:flex;flex-direction:column;box-shadow:-8px 0 32px rgba(0,0,0,0.12);overflow:hidden;">
+
+            {{-- Drawer Header --}}
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.25rem;border-bottom:1px solid #f1f5f9;">
+                <div style="display:flex;align-items:center;gap:0.6rem;">
+                    <div style="width:32px;height:32px;background:#eff6ff;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                        <i class="bi bi-funnel-fill" style="color:#2563eb;font-size:0.9rem;"></i>
+                    </div>
+                    <span style="font-weight:700;font-size:1rem;color:#0f172a;">Filters</span>
+                </div>
+                <button type="button" id="mobileFilterClose"
+                        style="width:32px;height:32px;border-radius:8px;border:none;background:#f1f5f9;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                    <i class="bi bi-x-lg" style="font-size:0.9rem;color:#64748b;"></i>
+                </button>
+            </div>
+
+            {{-- Drawer Body --}}
+            <div style="flex:1;overflow-y:auto;padding:1.25rem;">
+
+                <div class="mb-4">
+                    <label style="font-size:0.82rem;font-weight:700;color:#334155;margin-bottom:0.5rem;display:block;text-transform:uppercase;letter-spacing:0.04em;">Date Range</label>
+                    <div style="border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;">
+                        <input type="date" class="form-control border-0 shadow-none" name="start_date"
+                               value="{{ request('start_date') }}"
+                               style="height:44px;font-size:0.88rem;border-bottom:1px solid #f1f5f9 !important;border-radius:0;">
+                        <input type="date" class="form-control border-0 shadow-none" name="end_date"
+                               value="{{ request('end_date') }}"
+                               style="height:44px;font-size:0.88rem;border-radius:0;">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label style="font-size:0.82rem;font-weight:700;color:#334155;margin-bottom:0.5rem;display:block;text-transform:uppercase;letter-spacing:0.04em;">Project Type</label>
+                    <select class="form-select" name="project_type" style="height:44px;border-radius:10px;border:1px solid #e2e8f0;font-size:0.9rem;">
+                        <option value="">All Types</option>
+                        @foreach ($project_type as $items)
+                            <option value="{{ $items->id }}" {{ request('project_type') == $items->id ? 'selected' : '' }}>{{ $items->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label style="font-size:0.82rem;font-weight:700;color:#334155;margin-bottom:0.5rem;display:block;text-transform:uppercase;letter-spacing:0.04em;">Possession Status</label>
+                    <select class="form-select" name="possession_status" style="height:44px;border-radius:10px;border:1px solid #e2e8f0;font-size:0.9rem;">
+                        <option value="">All Status</option>
+                        @foreach ($projectStatus as $status)
+                            <option value="{{ $status['status_id'] }}" {{ request('possession_status') == $status['status_id'] ? 'selected' : '' }}>{{ $status['status_name'] }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label style="font-size:0.82rem;font-weight:700;color:#334155;margin-bottom:0.5rem;display:block;text-transform:uppercase;letter-spacing:0.04em;">Address</label>
+                    <input type="text" class="form-control" name="address" placeholder="Enter address"
+                           value="{{ request('address') }}"
+                           style="height:44px;border-radius:10px;border:1px solid #e2e8f0;font-size:0.9rem;">
+                </div>
+            </div>
+
+            {{-- Drawer Footer --}}
+            <div style="padding:1rem 1.25rem;border-top:1px solid #f1f5f9;display:flex;gap:0.6rem;">
+                <a href="{{ url('allproject/all-project-view') }}"
+                   style="flex:1;height:44px;border-radius:10px;border:1px solid #e2e8f0;background:#f8fafc;color:#475569;font-weight:600;font-size:0.88rem;display:flex;align-items:center;justify-content:center;text-decoration:none;gap:0.4rem;">
+                    <i class="bi bi-arrow-counterclockwise"></i> Reset
+                </a>
+                <button type="submit"
+                        style="flex:2;height:44px;border-radius:10px;border:none;background:#2563eb;color:#fff;font-weight:700;font-size:0.9rem;display:flex;align-items:center;justify-content:center;gap:0.4rem;">
+                    <i class="bi bi-search"></i> Apply Filters
+                </button>
+            </div>
+        </form>
+
+        <script>
+        (function(){
+            const toggle   = document.getElementById('mobileFilterToggle');
+            const drawer   = document.getElementById('mobileFilterDrawer');
+            const overlay  = document.getElementById('mobileFilterOverlay');
+            const closeBtn = document.getElementById('mobileFilterClose');
+
+            function openDrawer() {
+                overlay.style.display = 'block';
+                setTimeout(() => drawer.style.transform = 'translateX(0)', 10);
+                document.body.style.overflow = 'hidden';
+            }
+            const closeDrawer = () => {
+                drawer.style.transform = 'translateX(calc(100% + 90px))';
+                overlay.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+
+            toggle?.addEventListener('click', openDrawer);
+            closeBtn?.addEventListener('click', closeDrawer);
+            overlay?.addEventListener('click', closeDrawer);
+
+            // Swipe left to close
+            let startX = 0;
+            drawer?.addEventListener('touchstart', e => startX = e.touches[0].clientX, { passive: true });
+            drawer?.addEventListener('touchend', e => {
+                if (e.changedTouches[0].clientX - startX > 60) closeDrawer();
+            }, { passive: true });
+        })();
+        </script>
+
 
         @if (!empty($user_id))
             <div class="text-end mb-3">
@@ -115,7 +245,7 @@
         <div class="row" id="main_table">
             @if ($project->count() > 0)
                 @foreach ($project as $proj)
-                    <article class="col-lg-4 col-sm-6 mb-4">
+                    <article class="col-lg-3 col-sm-6 mb-3">
                         <div class="custom-prop-card">
                             <div class="prop-card-img-wrapper">
                                 @php
@@ -154,9 +284,6 @@
                                 </a>
 
                                 <div class="prop-badges-left">
-                                    <span class="prop-badge-type sale">
-                                        PROJECT
-                                    </span>
                                     @if($proj->is_featured)
                                     <span class="prop-badge-featured">
                                         <i class="bi bi-star-fill me-1 text-white"></i> Featured
@@ -452,7 +579,7 @@
 </style>
 
     <div class="modal fade" id="amenityModal" tabindex="-1" aria-labelledby="amenityModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-fullscreen-lg-down" role="document">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-title-box">
@@ -463,7 +590,7 @@
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                
+
                 <div class="info-alert">
                     <i class="bi bi-info-circle-fill"></i>
                     <span>Select the amenities available in this property.</span>
@@ -487,7 +614,7 @@
                                     <input class="form-check-input amenity-checkbox" type="checkbox"
                                         value="{{ $projectAmenitie->id }}">
                                     <div class="amenity-icon-box">
-                                        <img alt="Amenity" 
+                                        <img alt="Amenity"
                                             src="{{ asset('user_upload/amenity_image/' . $projectAmenitie->image) }}">
                                     </div>
                                     <span class="amenity-label amenity-name">{{ $projectAmenitie->name }}</span>
@@ -509,7 +636,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchAmenity');
             const selectAllCheck = document.getElementById('selectAllAmenities');
-            
+
             if(searchInput) {
                 searchInput.addEventListener('input', function(e) {
                     const term = e.target.value.toLowerCase();
@@ -524,7 +651,7 @@
                     });
                 });
             }
-            
+
             if(selectAllCheck) {
                 selectAllCheck.addEventListener('change', function(e) {
                     const isChecked = e.target.checked;
@@ -540,13 +667,13 @@
     </script>
 
     <div class="modal fade" id="propertyModal" tabindex="-1" aria-labelledby="propertyModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-fullscreen-lg-down" role="document">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Property Configuration</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <div class="modal-body">
                     <div id="tower-container-modal"></div>
                 </div>
                 <div class="modal-footer">
@@ -558,11 +685,11 @@
 
     <style>
     /* Floor Data Modal */
-    #floorModal .modal-content { border-radius: 16px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.12); }
-    #floorModal .modal-header { border-bottom: 1px solid #f1f5f9; padding: 1.25rem 1.5rem; background: #fff; border-top-left-radius: 16px; border-top-right-radius: 16px; }
+    #floorModal .modal-content { border-radius: 16px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.12); overflow: hidden; }
+    #floorModal .modal-header { border-bottom: 1px solid #f1f5f9; padding: 1.25rem 1.5rem; background: #fff; }
     #floorModal .modal-title { font-weight: 700; font-size: 1.2rem; color: #0f172a; }
     #floorModal .modal-body { padding: 1.5rem; background: #fff; }
-    #floorModal .modal-footer { border-top: 1px solid #f1f5f9; padding: 1rem 1.5rem; background: #fff; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; justify-content: flex-end; }
+    #floorModal .modal-footer { border-top: 1px solid #f1f5f9; padding: 1rem 1.5rem; background: #fff; justify-content: flex-end; }
     #floorModal .modal-footer .btn-save-all { background: #2563eb; color: #fff; font-weight: 600; padding: 0.55rem 1.8rem; border-radius: 8px; border: none; font-size: 0.95rem; }
     #floorModal .modal-footer .btn-save-all:hover { background: #1d4ed8; }
 
@@ -595,7 +722,7 @@
     </style>
 
     <div class="modal fade" id="floorModal" tabindex="-1" aria-labelledby="floorModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="floorModalLabel">Floor Data</h5>
@@ -695,8 +822,69 @@
 @endsection
 @push('custom-js')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
+        const isMobile = () => window.innerWidth <= 767;
+
+        /* ── Bottom-sheet modal: swipe-to-close ── */
+        document.querySelectorAll('.modal').forEach(function (modalEl) {
+            let startY = 0, isDragging = false;
+
+            modalEl.addEventListener('touchstart', function (e) {
+                if (!isMobile()) return;
+                // Only allow drag from modal-header (the drag handle area)
+                if (!e.target.closest('.modal-header')) return;
+                startY = e.touches[0].clientY;
+                isDragging = true;
+            }, { passive: true });
+
+            modalEl.addEventListener('touchmove', function (e) {
+                if (!isMobile() || !isDragging) return;
+                const deltaY = e.touches[0].clientY - startY;
+                if (deltaY > 0) {
+                    modalEl.querySelector('.modal-dialog').style.transform = `translateY(${deltaY}px)`;
+                }
+            }, { passive: true });
+
+            modalEl.addEventListener('touchend', function (e) {
+                if (!isMobile() || !isDragging) return;
+                isDragging = false;
+                const dialog = modalEl.querySelector('.modal-dialog');
+                const deltaY = e.changedTouches[0].clientY - startY;
+                dialog.style.transform = '';
+                if (deltaY > 100) {
+                    bootstrap.Modal.getInstance(modalEl)?.hide();
+                }
+            });
         });
+
+        /* ── Dropdown: prevent full-width stretch on mobile ── */
+        if (isMobile()) {
+            document.querySelectorAll('.dropdown-menu').forEach(function (menu) {
+                menu.style.maxWidth = '220px';
+                menu.style.width = 'auto';
+                menu.style.minWidth = '150px';
+            });
+
+            // Re-apply after each dropdown show
+            document.addEventListener('shown.bs.dropdown', function (e) {
+                const menu = e.target.nextElementSibling || e.target.querySelector('.dropdown-menu');
+                if (menu) {
+                    menu.style.maxWidth = '220px';
+                    menu.style.width = 'auto';
+                    menu.style.minWidth = '150px';
+                }
+            });
+        }
+
+        /* ── Tap outside modal body to close on mobile ── */
+        document.querySelectorAll('.modal').forEach(function (modalEl) {
+            modalEl.addEventListener('click', function (e) {
+                if (isMobile() && e.target === modalEl) {
+                    bootstrap.Modal.getInstance(modalEl)?.hide();
+                }
+            });
+        });
+    });
     </script>
     <script>
         $.ajaxSetup({
@@ -860,11 +1048,11 @@
 
     <style>
     /* 2026 Property Config Design */
-    #propertyModal .modal-content { border-radius: 16px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
-    #propertyModal .modal-header { border-bottom: 1px solid #f1f5f9; padding: 1.5rem; background: #fff !important; border-top-left-radius: 16px; border-top-right-radius: 16px; }
+    #propertyModal .modal-content { border-radius: 16px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; }
+    #propertyModal .modal-header { border-bottom: 1px solid #f1f5f9; padding: 1.5rem; background: #fff !important; }
     #propertyModal .modal-title { font-weight: 700; font-size: 1.25rem; color: #0f172a; }
     #propertyModal .modal-body { padding: 1.5rem; background: #f8fafc; }
-    #propertyModal .modal-footer { border-top: 1px solid #f1f5f9; padding: 1rem 1.5rem; background: #fff; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; justify-content: flex-end; gap: 1rem; }
+    #propertyModal .modal-footer { border-top: 1px solid #f1f5f9; padding: 1rem 1.5rem; background: #fff; justify-content: flex-end; gap: 1rem; }
     #propertyModal .modal-footer .btn-secondary { background: #fff; border: 1px solid #cbd5e1; color: #475569; font-weight: 600; padding: 0.6rem 1.5rem; border-radius: 8px; }
     #propertyModal .modal-footer .btn-primary { background: #2563eb; color: #fff; font-weight: 600; padding: 0.6rem 2rem; border-radius: 8px; border: none; }
 
@@ -1028,7 +1216,7 @@
                     <input class="prop-form-control" name="flat_no" type="number" placeholder="Enter flat number" value="${floorData ? floorData.flat_no : ''}">
                 </div>
             </div>
-            
+
             <div class="mb-2">
                 <label class="d-block font-weight-bold mb-2" style="font-size: 0.95rem; font-weight: 600; color: #0f172a;">Flats</label>
                 <div class="bhk-container"></div>
@@ -1298,7 +1486,7 @@
 
                         let tabButton = `
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link ${isActive}" id="${type.slug}-tab" 
+                                <button class="nav-link ${isActive}" id="${type.slug}-tab"
                                     data-bs-toggle="tab" data-bs-target="#${type.slug}" type="button" role="tab">
                                     ${type.name}
                                 </button>
@@ -1346,8 +1534,8 @@
                 tab.querySelectorAll(".item-input").forEach(input => {
                     let item_id = input.getAttribute("data-item-id");
                     let type_id = input.getAttribute("data-type-id");
-                    let item_name = input.closest(".floor-field-group")?.querySelector(".floor-field-label")?.innerText?.replace(":", "").trim() 
-                                    || input.closest(".form-floating")?.querySelector("label")?.innerText?.replace(":", "").trim() 
+                    let item_name = input.closest(".floor-field-group")?.querySelector(".floor-field-label")?.innerText?.replace(":", "").trim()
+                                    || input.closest(".form-floating")?.querySelector("label")?.innerText?.replace(":", "").trim()
                                     || "Unknown";
                     let description = input.value.trim();
 

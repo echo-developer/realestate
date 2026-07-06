@@ -16,22 +16,19 @@
 
 <div class="app-main__inner mb-3">
 
-    <div class="app-page-title">
-        <div class="page-title-wrapper">
-            <div class="page-title-heading">
-                <div class="page-title-icon">
-                    <i class="bi bi-houses"></i>
-                </div>
-                <div>Property
-                    <div class="page-title-subheading">Property Setting <i class="bi bi-chevron-right"></i> Property List</div>
-                </div>
+    <!-- Header Title -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <div class="bg-primary bg-opacity-10 p-3 rounded-3 text-primary">
+                <i class="bi bi-gear fs-4"></i>
             </div>
-            <div class="page-title-actions">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
-                    <li class="breadcrumb-item active">Property List</li>
-                </ol>
+            <div>
+                <h4 class="mb-1 fw-bold">Property Listing</h4>
+                <p class="text-muted mb-0">Manage all properties listed on your platform.</p>
             </div>
+        </div>
+        <div class="text-muted small fw-medium">
+            <a href="{{ url('/') }}" class="text-decoration-none text-primary">Home</a> &gt; Properties
         </div>
     </div>
     <div id="successMessageContainer"></div>
@@ -42,262 +39,238 @@
         $cities = get_all_city();
     @endphp
 
-    <form action="{{ url('allproperties/all-property-view') }}" method="get" class="form-horizontal">
-        <div class="card mb-4 shadow-sm border-0" style="border-radius: 12px; background-color: #fff;">
-            <div class="card-body p-4">
-                <!-- Row 1: Search Term & Date Range -->
-                <div class="row g-3 align-items-end mb-3">
-                    <div class="col-lg-7 col-md-12">
-                        <div class="form-group mb-0 position-relative">
-                            <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted" style="pointer-events: none; z-index: 5;">
-                                <i class="bi bi-search" style="font-size: 1.1rem; color: #94a3b8;"></i>
-                            </span>
-                            <input type="text" class="form-control" name="term"
-                                   placeholder="Search by Property Name, User Name, City, etc."
-                                   value="{{ request('term') }}"
-                                   style="padding-left: 2.75rem; height: 50px; border-radius: 10px; border: 1px solid #e2e8f0; font-size: 0.95rem; color: #1e293b;">
-                        </div>
+    <!-- Summary Cards -->
+    <div class="row mb-4 g-3">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-3 h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="bg-primary bg-opacity-10 rounded-3 text-primary me-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
+                        <i class="bi bi-house fs-4"></i>
                     </div>
-                    <div class="col-lg-5 col-md-12">
-                        <div class="form-group mb-0">
-                            <label class="form-label mb-1 fw-semibold" style="font-size: 0.85rem; color: #475569;">Filter by Date Range</label>
-                            <div class="d-flex align-items-center justify-content-between p-1 bg-white border" style="height: 50px; border-radius: 10px; border: 1px solid #e2e8f0 !important;">
-                                <input type="date" class="form-control border-0 shadow-none bg-transparent" name="start_date" placeholder="Start Date" value="{{ request('start_date') }}" style="height: 100%; font-size: 0.9rem; color: #1e293b;">
-                                <span class="mx-2 text-muted fw-medium" style="font-size: 1.1rem;">→</span>
-                                <input type="date" class="form-control border-0 shadow-none bg-transparent" name="end_date" placeholder="End Date" value="{{ request('end_date') }}" style="height: 100%; font-size: 0.9rem; color: #1e293b;">
-                            </div>
-                        </div>
+                    <div>
+                        <p class="text-muted mb-1 fs-6">Total Properties</p>
+                        <h4 class="fw-bold mb-1">{{ $data->total() ?? '1,256' }}</h4>
+                        <span class="text-success small fw-semibold"><i class="bi bi-arrow-up"></i> 12.5%</span>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-3 h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="bg-success bg-opacity-10 rounded-3 text-success me-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
+                        <i class="bi bi-check-circle fs-4"></i>
+                    </div>
+                    <div>
+                        <p class="text-muted mb-1 fs-6">Active Properties</p>
+                        <h4 class="fw-bold mb-1">982</h4>
+                        <span class="text-success small fw-semibold"><i class="bi bi-arrow-up"></i> 18.4%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-3 h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="bg-warning bg-opacity-10 rounded-3 text-warning me-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
+                        <i class="bi bi-clock fs-4"></i>
+                    </div>
+                    <div>
+                        <p class="text-muted mb-1 fs-6">Pending Properties</p>
+                        <h4 class="fw-bold mb-1">156</h4>
+                        <span class="text-success small fw-semibold"><i class="bi bi-arrow-up"></i> 8.6%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-3 h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="bg-danger bg-opacity-10 rounded-3 text-danger me-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
+                        <i class="bi bi-x-circle fs-4"></i>
+                    </div>
+                    <div>
+                        <p class="text-muted mb-1 fs-6">Inactive Properties</p>
+                        <h4 class="fw-bold mb-1">118</h4>
+                        <span class="text-danger small fw-semibold"><i class="bi bi-arrow-up"></i> 6.3%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                <!-- Row 2: Dropdowns & Action Buttons -->
-                <div class="row g-3 align-items-end">
-                    <div class="col-lg-3 col-md-4 col-sm-6">
-                        <div class="form-group mb-0">
-                            <label class="form-label mb-1 fw-semibold" style="font-size: 0.85rem; color: #475569;">Property For</label>
-                            <select class="form-select" name="post_for" style="height: 48px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.9rem; color: #1e293b;">
-                                <option value="">Select</option>
-                                @foreach ($post_for as $k => $t)
-                                    <option value="{{ $k }}" {{ request('post_for') == $k ? 'selected' : '' }}>{{ $t }}</option>
-                                @endforeach
-                            </select>
+    <!-- Table Container -->
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4">
+            <!-- Filter Actions -->
+            <form action="{{ url('allproperties/all-property-view') }}" method="get">
+                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                    <div class="d-flex gap-2 flex-grow-1 flex-wrap">
+                        <div class="position-relative" style="min-width: 250px;">
+                            <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                            <input type="text" class="form-control ps-5 bg-light border-0 shadow-none" name="term" placeholder="Search properties..." value="{{ request('term') }}" style="border-radius: 8px; height: 42px;">
                         </div>
+                        <select class="form-select bg-light border-0 shadow-none text-muted" name="post_for" style="width: 130px; border-radius: 8px; height: 42px;">
+                            <option value="">All Status</option>
+                            @foreach ($post_for as $k => $t)
+                                <option value="{{ $k }}" {{ request('post_for') == $k ? 'selected' : '' }}>{{ $t }}</option>
+                            @endforeach
+                        </select>
+                        <select class="form-select bg-light border-0 shadow-none text-muted" name="property_type" style="width: 130px; border-radius: 8px; height: 42px;">
+                            <option value="">All Type</option>
+                            @foreach ($property_types as $k => $t)
+                                <option value="{{ $t->id }}" {{ request('property_type') == $t->id ? 'selected' : '' }}>{{ $t->name }}</option>
+                            @endforeach
+                        </select>
+                        <select class="form-select bg-light border-0 shadow-none text-muted" name="city" style="width: 130px; border-radius: 8px; height: 42px;">
+                            <option value="">All Location</option>
+                            @foreach ($cities as $k => $c)
+                                <option value="{{ $c->city_id }}" {{ request('city') == $c->city_id ? 'selected' : '' }}>{{ $c->name }}</option>
+                            @endforeach
+                        </select>
+                        <button type="submit" class="btn btn-outline-secondary d-flex align-items-center gap-2 border-1" style="border-radius: 8px; height: 42px;">
+                            <i class="bi bi-funnel"></i> Filter
+                        </button>
                     </div>
-                    <div class="col-lg-3 col-md-4 col-sm-6">
-                        <div class="form-group mb-0">
-                            <label class="form-label mb-1 fw-semibold" style="font-size: 0.85rem; color: #475569;">City</label>
-                            <select class="form-select" name="city" style="height: 48px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.9rem; color: #1e293b;">
-                                <option value="">Select</option>
-                                @foreach ($cities as $k => $c)
-                                    <option value="{{ $c->city_id }}" {{ request('city') == $c->city_id ? 'selected' : '' }}>{{ $c->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-4 col-sm-6">
-                        <div class="form-group mb-0">
-                            <label class="form-label mb-1 fw-semibold" style="font-size: 0.85rem; color: #475569;">Property Type</label>
-                            <select class="form-select" name="property_type" style="height: 48px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.9rem; color: #1e293b;">
-                                <option value="">Select</option>
-                                @foreach ($property_types as $k => $t)
-                                    <option value="{{ $t->id }}" {{ request('property_type') == $t->id ? 'selected' : '' }}>{{ $t->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-12 col-sm-6 d-flex align-items-center justify-content-end gap-3 pt-2">
-                        <a href="{{ url('allproperties/all-property-view') }}" class="btn btn-outline-primary fw-medium px-4 d-flex align-items-center justify-content-center gap-2" style="height: 48px; border-radius: 8px; font-size: 0.9rem; border: 1px solid #3b82f6; color: #3b82f6; transition: all 0.2s; background: transparent;">
-                            <i class="bi bi-arrow-counterclockwise" style="font-size: 1.1rem;"></i> Reset
+                    <div class="d-flex gap-2">
+                        @if (!empty($srch['user_id']))
+                        <a href="{{ url('post-property?uid=' . $srch['user_id']) }}" class="btn btn-primary d-flex align-items-center gap-2" style="border-radius: 8px; height: 42px;">
+                            <i class="bi bi-plus fs-5"></i> Add New Property
                         </a>
-                        <button type="submit" class="btn btn-primary fw-medium px-4 d-flex align-items-center justify-content-center gap-2" style="height: 48px; border-radius: 8px; font-size: 0.9rem; background-color: #3b82f6; border-color: #3b82f6; transition: all 0.2s; flex-grow: 1;">
-                            <i class="bi bi-search" style="font-size: 1rem;"></i> Search
+                        @else
+                        <a href="{{ url('post-property') }}" class="btn btn-primary d-flex align-items-center gap-2" style="border-radius: 8px; height: 42px;">
+                            <i class="bi bi-plus fs-5"></i> Add New Property
+                        </a>
+                        @endif
+                        <button type="button" class="btn btn-outline-secondary d-flex align-items-center gap-2 border-1" style="border-radius: 8px; height: 42px;">
+                            <i class="bi bi-download"></i> Export
                         </button>
                     </div>
                 </div>
+            </form>
+
+            <!-- Table -->
+            <div class="table-responsive">
+                <table class="table table-borderless align-middle mb-0" style="min-width: 1000px;">
+                    <thead>
+                        <tr class="text-muted" style="border-bottom: 2px solid #f1f5f9;">
+                            <th class="fw-semibold pb-3 fs-6">Property</th>
+                            <th class="fw-semibold pb-3 fs-6">Location</th>
+                            <th class="fw-semibold pb-3 fs-6">Type</th>
+                            <th class="fw-semibold pb-3 fs-6">Price</th>
+                            <th class="fw-semibold pb-3 fs-6">Status</th>
+                            <th class="fw-semibold pb-3 fs-6">Added On</th>
+                            <th class="fw-semibold pb-3 fs-6 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($data as $property)
+                        <tr style="border-bottom: 1px solid #f8fafc;">
+                            <td class="py-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    @php
+                                    $relativePath = 'user_upload/property_images/' . $property->filename;
+                                    $localPath = public_path($relativePath);
+                                    $imageToShow = isset($property->filename) && file_exists($localPath)
+                                        ? asset($relativePath)
+                                        : asset(config('constants.NO_IMAGE_PROPERTY'));
+                                    @endphp
+                                    <img src="{{ $imageToShow }}" alt="Property" class="rounded-3 object-fit-cover shadow-sm" width="70" height="50">
+                                    <div>
+                                        <h6 class="mb-1 fw-bold text-dark fs-6">{{ $property->name }}</h6>
+                                        <p class="text-muted mb-0 small fw-medium">ID: RE-{{ str_pad($property->id, 6, '0', STR_PAD_LEFT) }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="bg-light p-2 rounded-circle text-muted d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                        <i class="bi bi-geo-alt"></i>
+                                    </div>
+                                    <div>
+                                        <span class="d-block text-dark fw-bold fs-6 text-truncate" style="max-width: 200px;">{{ $property->property_address ?? 'N/A' }}</span>
+                                        <span class="text-muted small fw-medium">
+                                            @php
+                                            $cityName = '';
+                                            $propCity = $property->city ?? ($property->city_id ?? null);
+                                            if ($propCity) {
+                                                foreach($cities as $c) {
+                                                    if($c->city_id == $propCity) {
+                                                        $cityName = $c->name;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            echo $cityName ? $cityName : 'Unknown';
+                                            @endphp
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3 text-muted fw-medium">
+                                @php
+                                $typeName = 'Apartment';
+                                $propType = $property->property_type ?? ($property->type_id ?? null);
+                                if ($propType) {
+                                    foreach($property_types as $t) {
+                                        if($t->id == $propType) {
+                                            $typeName = $t->name;
+                                            break;
+                                        }
+                                    }
+                                }
+                                echo $typeName;
+                                @endphp
+                            </td>
+                            <td class="py-3 fw-bold text-dark fs-6">
+                                {{ get_setting('site-currency') . formatPrice($property->expected_price, get_setting('site-currency-code')) }}
+                            </td>
+                            <td class="py-3">
+                                @if($property->status == 'active' || $property->status == 1 || $property->status == '1')
+                                    <span class="badge text-success fw-bold" style="background-color: #dcfce7; padding: 0.5rem 1rem; border-radius: 6px;">Active</span>
+                                @elseif($property->status == 'pending' || $property->status == 2)
+                                    <span class="badge text-warning fw-bold" style="background-color: #fef3c7; padding: 0.5rem 1rem; border-radius: 6px;">Pending</span>
+                                @elseif($property->status == 'sold' || $property->status == 3 || $property->status == '0')
+                                    <span class="badge text-danger fw-bold" style="background-color: #fee2e2; padding: 0.5rem 1rem; border-radius: 6px;">Sold</span>
+                                @else
+                                    <span class="badge text-secondary fw-bold" style="background-color: #f1f5f9; padding: 0.5rem 1rem; border-radius: 6px;">{{ ucfirst($property->status) }}</span>
+                                @endif
+                            </td>
+                            <td class="py-3 text-muted fw-medium">
+                                {{ date('M d, Y', strtotime($property->created_at)) }}
+                            </td>
+                            <td class="py-3 text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a href="{{ url('/enquiry/property-leads/' . $property->id) }}" class="btn btn-sm btn-light rounded-circle text-secondary border shadow-sm" style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ url('property/edit/' . $property->id) }}" class="btn btn-sm btn-light rounded-circle text-primary border shadow-sm" style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button class="btn btn-sm btn-light rounded-circle text-danger border shadow-sm change-status-btn" data-property-id="{{ $property->id }}" data-status="delete" style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <i class="bi bi-house text-muted" style="font-size: 3rem;"></i>
+                                <h5 class="mt-3 text-muted">No Properties Found</h5>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="mt-4 pt-3 border-top">
+                {{ $data->links('vendor.pagination.bootstrap-5') }}
             </div>
         </div>
-    </form>
-
-    <div class="d-flex">
-        <p></p>
-        @if (!empty($srch['user_id']))
-        <div class="btn-actions-pane-right">
-            <a href="{{ url('post-property?uid=' . $srch['user_id']) }}" class="btn btn-sm btn-success mb-2">Add
-                Property</a>
-        </div>
-        @endif
     </div>
-
-    <div class="row" id="main_table">
-        @forelse ($data as $key => $property)
-        <article class="col-lg-4 col-sm-6 mb-4">
-            <div class="custom-prop-card">
-                <!-- Card Image Wrapper -->
-                <div class="prop-card-img-wrapper">
-                    @php
-                    $relativePath = 'user_upload/property_images/' . $property->filename;
-                    $localPath = public_path($relativePath);
-
-                    $imageToShow = isset($property->filename) && file_exists($localPath)
-                        ? asset($relativePath)
-                        : asset(config('constants.NO_IMAGE_PROPERTY'));
-                    @endphp
-                    <a href="#">
-                        <img src="{{ $imageToShow }}" alt="Property Image" class="prop-card-img">
-                    </a>
-
-                    <!-- Left Overlay Badges -->
-                    <div class="prop-badges-left">
-                        <span class="prop-badge-type {{ $property->post_for === 'rent' ? 'rent' : 'sale' }}">
-                            {{ strtoupper($property->post_for) }}
-                        </span>
-                        @if($property->is_featured)
-                        <span class="prop-badge-featured">
-                            <i class="bi bi-star-fill me-1 text-white"></i> Featured
-                        </span>
-                        @endif
-                        @if($property->is_top)
-                        <span class="prop-badge-top">
-                            <i class="bi bi-fire me-1 text-white"></i> Top Pick
-                        </span>
-                        @endif
-                    </div>
-
-                    <!-- Right Absolute 3-Dot Actions -->
-                    <div class="dropdown custom-dropdown pos-three-dots">
-                        <button class="btn btn-three-dots" type="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
-                            <i class="bi bi-three-dots-vertical"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                            <li>
-                                <a class="dropdown-item toggle-featured-btn"
-                                   href="#"
-                                   data-property-id="{{ $property->id }}"
-                                   data-status="{{ $property->is_featured ? 0 : 1 }}">
-                                   @if($property->is_featured)
-                                   <i class="bi bi-check2 me-1 text-primary"></i>
-                                   @endif
-                                   Featured
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item toggle-top-btn"
-                                   href="#"
-                                   data-property-id="{{ $property->id }}"
-                                   data-status="{{ $property->is_top ? 0 : 1 }}">
-                                   @if($property->is_top)
-                                   <i class="bi bi-check2 me-1 text-primary"></i>
-                                   @endif
-                                   Top
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Card Content Body -->
-                <div class="prop-card-body">
-                    <!-- Price and Leads Counter -->
-                    <div class="prop-price-row">
-                        <span class="prop-price">
-                            {{ get_setting('site-currency') . formatPrice($property->expected_price, get_setting('site-currency-code')) }}
-                        </span>
-                        <a href="{{ url('/enquiry/property-leads/' . $property->id) }}" class="prop-leads-badge-new" title="View Leads">
-                            <i class="bi bi-eye text-primary me-1 fs-5"></i>
-                            <span class="prop-leads-count-new">{{ propertyLeadsCount($property->id) }}</span>
-                        </a>
-                    </div>
-
-                    <!-- Title -->
-                    <h4 class="prop-title">
-                        <a href="{{ url('property/edit/' . $property->id) }}" title="{{ $property->name }}">{{ $property->name }}</a>
-                    </h4>
-
-                    <!-- Specs Row -->
-                    <div class="prop-specs-row">
-                        @if(!empty($property->bedrooms))
-                        <span class="prop-spec-item" title="Bedrooms">
-                            <i class="bi bi-door-closed"></i> {{ $property->bedrooms }} Bed{{ $property->bedrooms > 1 ? 's' : '' }}
-                        </span>
-                        @endif
-                        @if(!empty($property->bathrooms))
-                        <span class="prop-spec-item" title="Bathrooms">
-                            <i class="bi bi-droplet"></i> {{ $property->bathrooms }} Bath{{ $property->bathrooms > 1 ? 's' : '' }}
-                        </span>
-                        @endif
-                        @if(!empty($property->super_area) || !empty($property->carpet_area))
-                        <span class="prop-spec-item" title="Area">
-                            <i class="bi bi-arrows-angle-expand"></i> {{ $property->super_area ?: $property->carpet_area }} Sq-ft
-                        </span>
-                        @endif
-                    </div>
-
-                    <!-- Location and Date info -->
-                    <div class="prop-info-list">
-                        <div class="prop-info-item" title="{{ $property->property_address }}">
-                            <i class="ri-map-pin-line"></i>
-                            <span class="text-truncate" style="max-width: 100%;">{{ $property->property_address }}</span>
-                        </div>
-                        <div class="prop-info-item">
-                            <i class="ri-calendar-line"></i>
-                            <span>{{ date('Y-m-d', strtotime($property->created_at)) }}</span>
-                        </div>
-                    </div>
-
-                    <!-- Footer controls -->
-                    <div class="prop-card-footer">
-                        <div class="prop-actions">
-                            <!-- Actions Dropdown -->
-                            <div class="dropdown custom-dropdown">
-                                <button class="btn btn-actions dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-sliders2 me-1"></i> Actions <i class="bi bi-chevron-down ms-1"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                                    @foreach ($statusMapping as $k => $val)
-                                    <li>
-                                        <a class="dropdown-item change-status-btn {{ $property->status == $k ? 'active' : '' }}"
-                                           href="#"
-                                           data-property-id="{{ $property->id }}"
-                                           data-status="{{ $val }}">
-                                           @if($property->status == $k)
-                                           <i class="bi bi-check2 me-1 text-primary"></i>
-                                           @endif
-                                           {{ ucfirst(strtolower($val)) }}
-                                        </a>
-                                    </li>
-                                    @endforeach
-                                    <li>
-                                        <a class="dropdown-item change-status-btn text-danger"
-                                           href="#"
-                                           data-property-id="{{ $property->id }}"
-                                           data-status="delete">
-                                           Delete
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <!-- Edit and View Button -->
-                            <a href="{{ url('property/edit/' . $property->id) }}" class="btn btn-edit-view">
-                                <i class="bi bi-pencil-square me-1"></i> Edit and View
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </article>
-        @empty
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body text-center py-5">
-                    <i class="ri-home-line" style="font-size: 48px; color: #ccc;"></i>
-                    <h5 class="mt-3 text-muted">No Properties Found</h5>
-                </div>
-            </div>
-        </div>
-        @endforelse
-    </div>
-    {{ $data->links('vendor.pagination.bootstrap-5') }}
 </div>
 @endsection
 
