@@ -20,7 +20,7 @@
 </head>
 
 <body>
-    <div class="app-container app-theme-white bg-light bg-animation body-tabs-shadow">
+    <div class="app-container app-theme-white bg-light bg-animation body-tabs-shadow" style="background-image: url('{{ asset('assets/images/admin-login-bg.png') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
         <div class="container">
             <div class="vh-100">
                 <div class="row vh-100 justify-content-center align-items-center">

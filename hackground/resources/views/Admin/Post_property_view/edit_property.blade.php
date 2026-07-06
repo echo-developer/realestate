@@ -9,319 +9,379 @@
 @endpush
 @section('content')
 
-<div class="app-main__inner">
-    <div class="app-page-title">
-        <div class="page-title-wrapper">
-            <div class="page-title-heading">
-                <div class="page-title-icon">
-                    <i class="bi bi-house-gear"></i>
+<div class="app-main__inner mb-3">
+
+    <!-- Header Title -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <div class="bg-primary bg-opacity-10 p-3 rounded-3 text-primary">
+                <i class="bi bi-house-gear fs-4"></i>
+            </div>
+            <div>
+                <h4 class="mb-1 fw-bold">Property Edit</h4>
+                <div class="text-muted small fw-medium">
+                    Property &gt; Property Edit
                 </div>
-                <div>Property Edit <div class="page-title-subheading">Property <i class="bi bi-chevron-right"></i> Property Edit
+            </div>
+        </div>
+        <div class="text-muted small fw-medium">
+            <a href="{{ url('/') }}" class="text-decoration-none text-primary">Home</a> &gt; Property Edit
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8 col-xl-9">
+            <!-- Tabs & Back Button -->
+            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+                <ul class="nav nav-underline border-0" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active fw-bold text-primary" href="{{ url('property/edit/'.$property_id) }}">Property Details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-muted fw-medium" href="{{ url('property/edit-photos/'.$property_id) }}">Property Photos</a>
+                    </li>
+                </ul>
+                <a href="{{ url('allproperties/all-property-view') }}" class="btn btn-light border shadow-sm btn-sm fw-medium rounded-3 px-3 py-2 d-flex align-items-center gap-2">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+
+            <!-- Basic Details Card -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0 d-flex align-items-center gap-2">
+                        <div class="bg-primary bg-opacity-10 text-primary p-2 rounded-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                            <i class="bi bi-building"></i>
+                        </div>
+                        Basic Details
+                    </h5>
+                    <button class="btn btn-outline-secondary btn-sm rounded-3 d-flex align-items-center gap-2" onclick="edit('basic')">
+                        <i class="bi bi-pencil"></i> Edit <i class="bi bi-chevron-down ms-2"></i>
+                    </button>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-medium mb-1">Name</label>
+                            <div class="p-2 border rounded-3 bg-light text-dark fw-medium text-truncate" style="height: 42px; line-height: 24px;">
+                                {{ ucfirst($propertyData->name ?? 'N/A') }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small fw-medium mb-1">Post For</label>
+                            <div class="p-2 border rounded-3 bg-light text-dark fw-medium d-flex justify-content-between align-items-center" style="height: 42px;">
+                                <span>{{ ucfirst(optional($propertyData->settings)->post_for ?? 'N/A') }}</span>
+                                <i class="bi bi-chevron-down text-muted small"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small fw-medium mb-1">Property Type</label>
+                            <div class="p-2 border rounded-3 bg-light text-dark fw-medium d-flex justify-content-between align-items-center text-truncate" style="height: 42px;">
+                                <span class="text-truncate">{{ get_name_by_id('property_category_names','category_id',optional($propertyData->settings)->property_type,'en') ?? 'N/A' }}</span>
+                                <i class="bi bi-chevron-down text-muted small"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-medium mb-1">Price</label>
+                            <div class="d-flex gap-2">
+                                <div class="p-2 border rounded-3 bg-light text-dark fw-medium d-flex justify-content-between align-items-center" style="height: 42px; width: 100px;">
+                                    <span>{{ optional($propertyData->settings)->price_currency ?? 'USD' }}</span>
+                                    <i class="bi bi-chevron-down text-muted small"></i>
+                                </div>
+                                <div class="p-2 border rounded-3 bg-light text-dark fw-medium flex-grow-1" style="height: 42px; line-height: 24px;">
+                                    {{ optional($propertyData->settings)->expected_price ?? 'N/A' }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small fw-medium mb-1">Project / Society Name</label>
+                            <div class="p-2 border rounded-3 bg-light text-dark fw-medium text-truncate" style="height: 42px; line-height: 24px;">
+                                {{ optional($propertyData->settings)->project_name ?? 'N/A' }}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small fw-medium mb-1">Property For</label>
+                            <div class="p-2 border rounded-3 bg-light text-dark fw-medium d-flex justify-content-between align-items-center text-truncate" style="height: 42px;">
+                                <span class="text-truncate">{{ get_name_by_id('property_sub_category_names','sub_category_id',optional($propertyData->settings)->property_type_for,'en') ?? 'N/A' }}</span>
+                                <i class="bi bi-chevron-down text-muted small"></i>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-3">
+                            <label class="form-label text-muted small fw-medium mb-1">Message to Buyer (Optional)</label>
+                            <div class="p-3 border rounded-3 bg-light text-dark position-relative" style="min-height: 100px;">
+                                {{ optional($propertyData->additional)->buyer_message ?? 'Write a message to buyer...' }}
+                                <div class="position-absolute bottom-0 end-0 p-2 text-muted small">0 / 500</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="page-title-actions">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
-                    <li class="breadcrumb-item active">Property Edit</li>
-                </ol>
+            <!-- Location Card -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0 d-flex align-items-center gap-2">
+                        <div class="bg-primary bg-opacity-10 text-primary p-2 rounded-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+                        Location
+                    </h5>
+                    <button class="btn btn-outline-secondary btn-sm rounded-3 d-flex align-items-center gap-2" onclick="edit('location')">
+                        <i class="bi bi-pencil"></i> Edit <i class="bi bi-chevron-down ms-2"></i>
+                    </button>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small fw-medium mb-1">City</label>
+                            <div class="p-2 border rounded-3 bg-light text-dark fw-medium d-flex justify-content-between align-items-center text-truncate" style="height: 42px;">
+                                <span class="text-truncate">{{ get_name_by_id('city_names', 'city_id', optional($propertyData->location)->city, 'en') }}</span>
+                                <i class="bi bi-chevron-down text-muted small"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-muted small fw-medium mb-1">Locality</label>
+                            <div class="p-2 border rounded-3 bg-light text-dark fw-medium d-flex justify-content-between align-items-center text-truncate" style="height: 42px;">
+                                <span class="text-truncate">{{ optional($propertyData->location)->locality ? get_name_by_id('locality_names', 'locality_id', $propertyData->location->locality, 'en') : 'N/A' }}</span>
+                                <i class="bi bi-chevron-down text-muted small"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-medium mb-1">Address</label>
+                            <div class="p-2 border rounded-3 bg-light text-dark fw-medium text-truncate" style="height: 42px; line-height: 24px;">
+                                {{ optional($propertyData->location)->property_address ?? 'N/A' }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Property Features Card -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0 d-flex align-items-center gap-2">
+                        <div class="bg-primary bg-opacity-10 text-primary p-2 rounded-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                            <i class="bi bi-grid-3x3-gap"></i>
+                        </div>
+                        Property Features
+                    </h5>
+                    <button class="btn btn-outline-secondary btn-sm rounded-3 d-flex align-items-center gap-2" onclick="edit('features')">
+                        <i class="bi bi-pencil"></i> Edit <i class="bi bi-chevron-down ms-2"></i>
+                    </button>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <h6 class="fw-bold mb-3 fs-6">Configuration</h6>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted small fw-medium">Bedrooms</span>
+                                <span class="fw-bold text-dark">{{ optional($propertyData->settings)->bedrooms ?? 'N/A' }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted small fw-medium">Bathrooms</span>
+                                <span class="fw-bold text-dark">{{ optional($propertyData->settings)->bathrooms ?? 'N/A' }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted small fw-medium">Balcony</span>
+                                <span class="fw-bold text-dark">{{ optional($propertyData->additional)->balcony ?? 'N/A' }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 class="fw-bold mb-3 fs-6">Floor Details</h6>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted small fw-medium">Flooring Types</span>
+                                <span class="fw-bold text-dark text-end">
+                                    @php
+                                    $style_arr = json_decode(optional($propertyData->additional)->flooring_style);
+                                    if(is_array($style_arr) && count($style_arr) > 0) {
+                                        echo 'Multiple Types';
+                                    } else {
+                                        echo 'N/A';
+                                    }
+                                    @endphp
+                                </span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted small fw-medium">Floor No.</span>
+                                <span class="fw-bold text-dark">{{ optional($propertyData->additional)->floor ?? 'N/A' }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted small fw-medium">Total Floors</span>
+                                <span class="fw-bold text-dark">{{ optional($propertyData->additional)->total_floor ? get_total_floors($propertyData->additional->total_floor) : 'N/A' }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted small fw-medium">Flats on the Floor</span>
+                                <span class="fw-bold text-dark">{{ optional($propertyData->additional)->flat_each_floor ?? 'N/A' }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 class="fw-bold mb-3 fs-6">More Details</h6>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted small fw-medium">Lifts in the Tower</span>
+                                <span class="fw-bold text-dark">{{ optional($propertyData->additional)->lifts_in_tower ?? 'N/A' }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted small fw-medium">Carpet Area (sq.ft)</span>
+                                <span class="fw-bold text-dark">{{ optional($propertyData->settings)->carpet_area ?? 'N/A' }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted small fw-medium">Super Area (sq.ft)</span>
+                                <span class="fw-bold text-dark">{{ optional($propertyData->settings)->super_area ?? 'N/A' }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted small fw-medium">Furnished</span>
+                                <span class="fw-bold text-dark text-end">{{ get_name_by_id('property_furnish_names','furnish_id',optional($propertyData->additional)->property_furnish,'en') ?? 'N/A' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Information Card -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0 d-flex align-items-center gap-2">
+                        <div class="bg-primary bg-opacity-10 text-primary p-2 rounded-3 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                            <i class="bi bi-info-circle"></i>
+                        </div>
+                        Additional Information
+                    </h5>
+                    <button class="btn btn-outline-secondary btn-sm rounded-3 d-flex align-items-center gap-2" onclick="edit('additional')">
+                        <i class="bi bi-pencil"></i> Edit <i class="bi bi-chevron-down ms-2"></i>
+                    </button>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="d-flex justify-content-between mb-3 pb-2 border-bottom">
+                                <span class="text-muted small fw-medium">Water Availability</span>
+                                <span class="fw-bold text-dark">{{ optional($propertyData->additional)->water_available ? get_water_availability($propertyData->additional->water_available) : 'N/A' }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3 pb-2 border-bottom">
+                                <span class="text-muted small fw-medium">Type of Ownership</span>
+                                <span class="fw-bold text-dark">{{ optional($propertyData->additional)->ownership_type ? get_ownership_types($propertyData->additional->ownership_type) : 'N/A' }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3 pb-2 border-bottom">
+                                <span class="text-muted small fw-medium">Parking</span>
+                                <span class="fw-bold text-dark">
+                                    @php
+                                    $parkingStatus = ['av' => 'Available', 'na' => 'Not Available', 'uc' => 'Under Construction'];
+                                    @endphp
+                                    {{ $parkingStatus[optional($propertyData->settings)->parking_ability] ?? 'N/A' }}
+                                </span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3 pb-2 border-bottom border-light">
+                                <span class="text-muted small fw-medium">Overlooking</span>
+                                <span class="fw-bold text-dark">
+                                    @php
+                                    $overlooking = optional($propertyData->additional)->overlooking ?? '';
+                                    $overlookingArray = !empty($overlooking) ? json_decode($overlooking, true) : null;
+                                    echo $overlookingArray ? implode(', ', $overlookingArray) : 'N/A';
+                                    @endphp
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex justify-content-between mb-3 pb-2 border-bottom">
+                                <span class="text-muted small fw-medium">Status of Electricity</span>
+                                <span class="fw-bold text-dark">{{ optional($propertyData->additional)->electric_available ? electricity_status($propertyData->additional->electric_available) : 'N/A' }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3 pb-2 border-bottom">
+                                <span class="text-muted small fw-medium">Possession Status</span>
+                                <span class="fw-bold text-dark">{{ get_name_by_id('property_status_names','status_id',optional($propertyData->additional)->possession_status,'en') ?? 'N/A' }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3 pb-2 border-bottom">
+                                <span class="text-muted small fw-medium">Facing</span>
+                                <span class="fw-bold text-dark">{{ optional($propertyData->additional)->facing_direction ?? 'N/A' }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3 pb-2 border-bottom border-light">
+                                <span class="text-muted small fw-medium">Age of Property</span>
+                                <span class="fw-bold text-dark">{{ optional($propertyData->additional)->construct_year ?? 'N/A' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Actions -->
+            <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
+                <a href="{{ url('allproperties/all-property-view') }}" class="btn btn-outline-secondary rounded-3 px-4 py-2 fw-medium border shadow-sm">Cancel</a>
+                <div class="d-flex gap-3">
+                    <button class="btn btn-light text-primary bg-primary bg-opacity-10 rounded-3 px-4 py-2 fw-bold border-0"><i class="bi bi-eye"></i> Preview</button>
+                    <button class="btn btn-primary rounded-3 px-4 py-2 fw-bold shadow-sm"><i class="bi bi-save"></i> Update Property</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="col-lg-4 col-xl-3">
+            <!-- Property Summary Card -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-2">
+                    <h6 class="fw-bold mb-0 text-dark">Property Summary</h6>
+                </div>
+                <div class="card-body p-4 pt-2">
+                    <div class="position-relative mb-4">
+                        @php
+                        $imageToShow = asset('assets/images/property_placeholder.png');
+                        if (isset($groupedImages['exterior'][0])) {
+                            $imageToShow = asset('user_upload/property_images/'.$groupedImages['exterior'][0]->filename);
+                        }
+                        @endphp
+                        <img src="{{ $imageToShow }}" alt="Property" class="img-fluid rounded-4 shadow-sm w-100 object-fit-cover" style="height: 140px;">
+                    </div>
+                    
+                    <ul class="list-unstyled mb-0">
+                        <li class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-muted small fw-medium d-flex align-items-center gap-2"><i class="bi bi-info-circle fs-6"></i> Property ID</span>
+                            <span class="fw-bold text-dark fs-6">RE-{{ str_pad($property_id, 6, '0', STR_PAD_LEFT) }}</span>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-muted small fw-medium d-flex align-items-center gap-2"><i class="bi bi-circle fs-6"></i> Status</span>
+                            <span class="badge bg-success bg-opacity-10 text-success rounded-3 px-3 py-1 fw-bold">Active</span>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-muted small fw-medium d-flex align-items-center gap-2"><i class="bi bi-calendar fs-6"></i> Added On</span>
+                            <span class="fw-bold text-dark fs-6">{{ $propertyData->created_at ? date('M d, Y', strtotime($propertyData->created_at)) : 'N/A' }}</span>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-muted small fw-medium d-flex align-items-center gap-2"><i class="bi bi-clock-history fs-6"></i> Last Updated</span>
+                            <span class="fw-bold text-dark fs-6">{{ $propertyData->updated_at ? date('M d, Y', strtotime($propertyData->updated_at)) : 'N/A' }}</span>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-muted small fw-medium d-flex align-items-center gap-2"><i class="bi bi-eye fs-6"></i> Views</span>
+                            <span class="fw-bold text-dark fs-6">120</span>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted small fw-medium d-flex align-items-center gap-2"><i class="bi bi-chat-square-text fs-6"></i> Inquiries</span>
+                            <span class="fw-bold text-dark fs-6">8</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Actions Card -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-2">
+                    <h6 class="fw-bold mb-0 text-dark">Actions</h6>
+                </div>
+                <div class="card-body p-4 pt-2">
+                    <button class="btn btn-light bg-white border shadow-sm w-100 mb-3 rounded-3 text-dark fw-bold d-flex align-items-center justify-content-center gap-2 py-2">
+                        <i class="bi bi-eye"></i> Preview Property
+                    </button>
+                    <button class="btn btn-primary shadow-sm w-100 mb-3 rounded-3 fw-bold d-flex align-items-center justify-content-center gap-2 py-2">
+                        <i class="bi bi-save"></i> Update Property
+                    </button>
+                    <button class="btn btn-outline-danger w-100 rounded-3 fw-bold d-flex align-items-center justify-content-center gap-2 py-2 bg-danger bg-opacity-10 border-danger">
+                        <i class="bi bi-trash"></i> Delete Property
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- <select class="form-select" multiple>   
-  <option value="1">One</option>
-  <option value="2">Two</option>
-  <option value="3">Three</option>
-</select> -->
-
-    {{-- {{ $propertyData->settings }} --}}
-    <section class="content">
-        <ul id="myTab" class="nav nav-underline mb-3" role="tablist">
-            <li class="nav-item"><a class="nav-link active" href="{{ url('property/edit/'.$property_id) }}" aria-expanded="false">Property Details</a> </li>
-
-            <li class="nav-item"><a class="nav-link" href="{{ url('property/edit-photos/'.$property_id) }}" aria-expanded="true">Property Photos</a> </li>
-        </ul>
-
-        <div class="card mb-3">
-            <div class="card-header d-flex">
-                <h4 class="card-title">Basic Details </h4>
-                <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('basic')"><i class="bi bi-pencil-square"></i></a>
-            </div>
-            <div class="card-body">
-                <ul class="list-info mb-3">
-                    <li>
-                        <b>Name:</b>
-                        <span>{{ ucfirst($propertyData->name ?? 'N/A') }}</span>
-                    </li>
-                    <li>
-                        <b>Post For:</b>
-                        <span>{{ ucfirst(optional($propertyData->settings)->post_for ?? 'N/A') }}</span>
-                    </li>
-                    <li>
-                        <b>Property Type:</b>
-                        <span>{{get_name_by_id('property_category_names','category_id',$propertyData->settings->property_type,'en') ?? 'N/A'}}</span>
-                    </li>
-                    <li>
-                        <b>Property For:</b>
-                        <span>{{get_name_by_id('property_sub_category_names','sub_category_id',$propertyData->settings->property_type_for,'en') ?? 'N/A'}}</span>
-                    </li>
-
-                    <li>
-                        <b>Price:</b>
-                        <span>{{ $propertyData->settings->price_currency ?? 'N/A'}}{{ $propertyData->settings->expected_price ?? 'N/A'}}</span>
-                    </li>
-
-
-                    <li>
-                        <b>Project/Society Name:</b>
-                        <span>{{$propertyData->settings->project_name ?? 'N/A'}}</span>
-                    </li>
-                </ul>
-
-                <h5>Message to Buyer:</h5>
-                <p>{{ $propertyData->additional->buyer_message ?? 'N/A'}}</p>
-
-            </div>
-        </div>
-
-        <div class="card mb-3">
-            <div class="card-header d-flex">
-                <h4 class="card-title">Location </h4>
-                <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('location')"><i class="bi bi-pencil-square"></i></a>
-            </div>
-            <div class="card-body">
-                <ul class="list-info">
-                    <li>
-                        <b>City:</b>
-                        {{ get_name_by_id('city_names', 'city_id', $propertyData->location->city, 'en') }}
-                        {{-- <span>{{ $propertyData->location->city ? get_name_by_id('city_names', 'name', $propertyData->location->city, 'en') : '' }}</span> --}}
-                    </li>
-                    <li>
-                        <b>Locality:</b>
-                        <span>{{ $propertyData->location->locality ? get_name_by_id('locality_names', 'locality_id', $propertyData->location->locality, 'en') : '' }}</span>
-                    </li>
-                    <li>
-                        <b>Address:</b>
-                        <span>{{$propertyData->location->property_address??'N/A'}}</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="card mb-3">
-            <div class="card-header d-flex">
-                <h4 class="card-title">Property Features </h4>
-                <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('features')"><i class="bi bi-pencil-square"></i></a>
-            </div>
-            <div class="card-body">
-                <h4>Configuration:</h4>
-                <ul class="list-info">
-                    <li>
-                        <b>Bedrooms:</b>
-                        <span>{{$propertyData->settings->bedrooms ?? 'N/A'}}
-                            @if($propertyData->dimensions)
-                            @foreach($propertyData->dimensions as $k=>$d)
-                            @if($d->room_type == 'bedroom')
-                            @php
-                            $size = json_decode($d->size);
-                            @endphp
-                            <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
-                            @endif
-                            @endforeach
-                            @endif
-                        </span>
-                    </li>
-                    <li>
-                        <b>Bathrooms:</b>
-                        <span>{{$propertyData->settings->bathrooms ?? 'N/A'}}
-                            @if($propertyData->dimensions)
-                            @foreach($propertyData->dimensions as $k=>$d)
-                            @if($d->room_type == 'bathroom')
-                            @php
-                            $size = json_decode($d->size);
-                            @endphp
-                            <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
-                            @endif
-                            @endforeach
-                            @endif
-                        </span>
-                    </li>
-                    <li>
-                        <b>Balcony:</b>
-                        <span>{{$propertyData->additional->balcony ?? 'N/A'}}
-                            @if($propertyData->dimensions)
-                            @foreach($propertyData->dimensions as $k=>$d)
-                            @if($d->room_type == 'balcony')
-                            @php
-                            $size = json_decode($d->size);
-                            @endphp
-                            <small>({{ $size->width ?? '?' }} x {{ $size->height ?? '?' }})</small>
-                            @endif
-                            @endforeach
-                            @endif
-                        </span>
-                    </li>
-                </ul>
-
-                <h4>Floor Details:</h4>
-                <ul class="list-info">
-                    <li>
-                        <b>Flooring Types:</b>
-                        <span>
-                            <?php
-                            $types = get_floor_types();
-                            $style_arr = json_decode($propertyData->additional->flooring_style);
-                            print_r($propertyData->additional->flooring_style);
-                            ?>
-                        </span>
-                    </li>
-                    <li>
-                        <b>Floor No:</b>
-                        <span>{{$propertyData->additional->floor ?? 'N/A'}}</span>
-                    </li>
-                    <li>
-                        <b>Total Floors:</b>
-                        <span>{{$propertyData->additional->total_floor ? get_total_floors($propertyData->additional->total_floor) : 'N/A'}}</span>
-                    </li>
-                    <li>
-                        <b>Flats on the Floor:</b>
-                        <span>{{$propertyData->additional->flat_each_floor ?? 'N/A'}}</span>
-                    </li>
-                    <li>
-                        <b>Lifts in the Tower:</b>
-                        <span>{{$propertyData->additional->lifts_in_tower ?? 'N/A'}}</span>
-                    </li>
-
-                    <li>
-                        <b>Carpet Area:</b>
-                        <span>{{$propertyData->settings->carpet_area??'N/A'}}</span>
-                    </li>
-                    <li>
-                        <b>Super Area:</b>
-                        <span>{{$propertyData->settings->super_area??'N/A'}}</span>
-                    </li>
-
-                    <li>
-                        <b>Furnished:</b>
-                        <span>{{get_name_by_id('property_furnish_names','furnish_id',$propertyData->additional->property_furnish,'en')??'N/A'}}</span>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-
-        <div class="card mb-3">
-            <div class="card-header d-flex">
-                <h4 class="card-title">Additional Information </h4>
-                <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('additional')"><i class="bi bi-pencil-square"></i></a>
-            </div>
-            <div class="card-body">
-                <ul class="list-info">
-                    <li>
-                        <b>Water Availability:</b>
-                        <span>{{ $propertyData->additional->water_available ? get_water_availability($propertyData->additional->water_available) : '' }}</span>
-                    </li>
-                    <li>
-                        <b>Status of Electricity:</b>
-                        <span>{{ $propertyData->additional->electric_available ? electricity_status($propertyData->additional->electric_available) : '' }}</span>
-                    </li>
-                    <li>
-                        <b>Type of Ownership:</b>
-                        <span>{{ $propertyData->additional->ownership_type ? get_ownership_types($propertyData->additional->ownership_type) : '' }}</span>
-                    </li>
-                    <li>
-                        <b>Possession Status:</b>
-                        <span> {{get_name_by_id('property_status_names','status_id',$propertyData->additional->possession_status,'en') ?? 'N/A'}}</span>
-                    </li>
-
-                    @if($propertyData->additional->possession_status == '1')
-                    <li>
-                        <b>Age Of Constraction:</b>
-                        <span> {{$propertyData->additional->construct_year ?? 'N/A'}}</span>
-                    </li>
-                    @endif
-                    @if($propertyData->additional->possession_status == '2')
-                    @php
-                    $construction_month = '';
-                    $construction_year = '';
-                    $possession = $propertyData->additional->expected_possesion_month_year ?? '';
-                    $month_arr = explode('-', $possession);
-
-                    if (count($month_arr) === 2) {
-                    $construction_month = $month_arr[0];
-                    $construction_year = $month_arr[1];
-                    }
-                    @endphp
-                    <li>
-                        <b>Expected Possesion Month Year: </b>
-                        <span> {{ date('M',strtotime($construction_month)).', '.date('Y',strtotime($construction_year)), }}</span>
-                    </li>
-                    @endif
-
-                    <li>
-                        <b>Parking:</b>
-                        <span>
-                            @php
-                            $parkingStatus = [
-                            'av' => 'Available',
-                            'na' => 'Not Available',
-                            'uc' => 'Under Construction'
-                            ];
-                            @endphp
-                            {{ $parkingStatus[$propertyData->settings->parking_ability] ?? 'N/A' }}
-                        </span>
-                    </li>
-                    <li>
-                        <b>Facing:</b>
-                        <span>{{$propertyData->additional->facing_direction??'N/A'}}</span>
-                    </li>
-                    <li>
-                        <b>OverLooking:</b>
-                        <span>
-                            @php
-                            $overlooking = $propertyData->additional->overlooking ?? '';
-                            $overlookingArray = !empty($overlooking) ? json_decode($overlooking, true) : '';
-
-                            // echo $overlookingArray ? implode(', ', $overlookingArray) : 'N/A';
-                            // if($overlookingArray)
-                            // {
-
-                            // }
-                            @endphp
-                        </span>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-        {{--
-        <div class="card mb-3">
-            <div class="card-header d-flex">
-                <h4 class="card-title">Property Landmark </h4>
-                <a href="javascript:void(0)" class="editInfo ml-auto ml-auto" data-id="1" onclick="edit('landmark')"><i class="bi bi-pencil-square"></i></a>
-            </div>
-            <div class="card-body">
-
-                <div class="list-container row">
-                    @foreach ($landmark_categories as $category => $items)
-                    @if (!empty($items))
-                    <div class="list-category col-lg-6">
-                        <b>{{ ucfirst($category) }}:</b>
-        <ul>
-            @foreach ($items as $item)
-            <li>{{ $item['name'] }} - {{ $item['distance'] }} meters</li>
-            @endforeach
-        </ul>
-</div>
-@endif
-@endforeach
-</div>
-</div>
-</div>
---}}
-</section>
 </div>
 
 @endsection
