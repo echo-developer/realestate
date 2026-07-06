@@ -40,6 +40,16 @@
             </div>
         </div>
 
+        <div class="app-header__mobile-menu">
+            <div>
+                <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
+            </div>
+        </div>
+
         <div class="app-header__content">
             <div class="app-header-left">
                 <div class="search-wrapper">
@@ -112,8 +122,151 @@
     <!--Header END-->
 
     <style>
-        /* ══ MOBILE TOPBAR COMPLETE REDESIGN ══ */
+        /* ══ 2026 DROPDOWN & AVATAR MODERNIZATION (Global) ══ */
+        .header-user-info { display: none !important; } /* Clean up header by hiding raw text */
+        
+        .header-btn-lg .btn-group > a.profile-avatar-btn {
+            padding: 2px !important;
+            border-radius: 50% !important;
+            border: 2px solid #e2e8f0 !important;
+            transition: all 0.3s ease;
+            display: flex !important;
+            align-items: center !important;
+        }
+        .header-btn-lg .btn-group > a.profile-avatar-btn:hover {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2) !important;
+        }
+        
+        .modern-profile-dropdown {
+            border-radius: 16px !important;
+            border: none !important;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12) !important;
+            padding: 0 !important;
+            min-width: 260px !important;
+            overflow: hidden !important;
+            margin-top: 10px !important;
+        }
+        
+        .profile-dropdown-header {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%) !important;
+            padding: 20px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 15px !important;
+            color: white !important;
+        }
+        
+        .profile-dropdown-avatar {
+            width: 50px !important;
+            height: 50px !important;
+            border-radius: 50% !important;
+            border: 3px solid rgba(255,255,255,0.2) !important;
+            object-fit: cover !important;
+        }
+        
+        .profile-dropdown-name {
+            font-weight: 700 !important;
+            font-size: 1.1rem !important;
+            margin-bottom: 2px !important;
+            color: #ffffff !important;
+            line-height: 1.2 !important;
+        }
+        
+        .profile-dropdown-email {
+            font-size: 0.8rem !important;
+            color: rgba(255,255,255,0.8) !important;
+        }
+        
+        .profile-dropdown-item {
+            padding: 12px 20px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            color: #475569 !important;
+            font-weight: 500 !important;
+            transition: all 0.2s ease !important;
+            text-decoration: none !important;
+            background: transparent !important;
+        }
+        .profile-dropdown-item:hover {
+            background: #f8fafc !important;
+            color: #2563eb !important;
+            padding-left: 24px !important;
+        }
+        .profile-dropdown-item i {
+            font-size: 1.1rem !important;
+            color: #94a3b8 !important;
+            transition: all 0.2s ease !important;
+        }
+        .profile-dropdown-item:hover i { color: #2563eb !important; }
+        
+        .profile-dropdown-item.logout { color: #ef4444 !important; }
+        .profile-dropdown-item.logout i { color: #f87171 !important; }
+        .profile-dropdown-item.logout:hover {
+            background: #fef2f2 !important;
+            color: #dc2626 !important;
+        }
+        .profile-dropdown-item.logout:hover i { color: #dc2626 !important; }
+        
+        .profile-dropdown-divider {
+            height: 1px !important;
+            background: #f1f5f9 !important;
+            margin: 4px 0 !important;
+            border: none !important;
+        }
+
+        /* ══ DESKTOP TOPBAR MODERNIZATION (2026 Trend) ══ */
+        @media (min-width: 992px) {
+            .app-header {
+                box-shadow: 0 4px 24px rgba(0,0,0,0.04) !important;
+                background: #ffffff !important;
+                border-bottom: 1px solid #f1f5f9 !important;
+                height: 64px !important;
+            }
+            .app-header__logo {
+                background: #ffffff !important;
+                border-right: 1px solid #f1f5f9 !important;
+                width: 280px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                padding: 0 1.5rem !important;
+                transition: width 0.3s ease !important;
+            }
+            .app-header__logo .logo-src {
+                width: 130px !important;
+                height: 38px !important;
+                background-position: left center !important;
+                transition: opacity 0.3s ease;
+            }
+            .app-header__logo .header__pane { margin: 0 !important; }
+            .header-btn-lg { border-left: none !important; padding-left: 0 !important; }
+            .header-btn-lg .btn-group > a.profile-avatar-btn { margin-right: 1rem !important; }
+            
+            /* Closed Sidebar Fixes */
+            .closed-sidebar .app-header__logo {
+                width: 80px !important;
+                padding: 0 !important;
+                justify-content: center !important;
+            }
+            .closed-sidebar .app-header__logo .logo-src {
+                display: none !important;
+            }
+            .closed-sidebar .app-header__logo .header__pane {
+                margin: 0 auto !important;
+            }
+        }
+
+        /* ══ MOBILE TOPBAR COMPLETE REDESIGN (2026 Trend) ══ */
         @media (max-width: 991px) {
+            
+            /* Hide ArchitectUI redundant mobile headers */
+            .app-sidebar .app-header__logo,
+            .app-sidebar .app-header__mobile-menu,
+            .app-sidebar .app-header__menu {
+                display: none !important;
+            }
 
             /* ─ Full reset of the header ─ */
             .app-header {
@@ -121,11 +274,13 @@
                 display: flex !important;
                 flex-direction: row !important;
                 align-items: center !important;
+                justify-content: space-between !important;
                 width: 100% !important;
-                height: 58px !important;
+                height: 64px !important;
                 padding: 0 1rem !important;
-                background: #ffffff !important;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.10) !important;
+                background: rgba(255, 255, 255, 0.95) !important;
+                backdrop-filter: blur(10px) !important;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.05) !important;
                 position: fixed !important;
                 top: 0 !important;
                 left: 0 !important;
@@ -134,91 +289,105 @@
                 box-sizing: border-box !important;
             }
 
-            /* ─ Logo block ─ */
+            /* ─ Logo ─ */
             .app-header__logo {
                 display: flex !important;
-                align-items: center !important;
-                flex-shrink: 0 !important;
+                order: 2 !important;
+                position: absolute !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                border: none !important;
+                background: transparent !important;
                 width: auto !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                border: none !important;
-                background: none !important;
-                order: 1 !important;
             }
             .app-header__logo .logo-src {
                 display: block !important;
-                width: 100px !important;
-                height: 38px !important;
+                width: 120px !important;
+                height: 34px !important;
                 background-size: contain !important;
                 background-repeat: no-repeat !important;
-                background-position: left center !important;
+                background-position: center !important;
             }
-            /* Hide the hamburger inside logo pane */
-            .app-header__logo .header__pane {
-                display: none !important;
+            .app-header__logo .header__pane { display: none !important; } /* Hide desktop hamburger on mobile */
+            
+            /* ─ Hamburger Menu (Left) ─ */
+            .app-header__mobile-menu {
+                order: 1 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                margin: 0 !important;
+                z-index: 10 !important;
+            }
+            .app-header__mobile-menu .hamburger {
+                padding: 0.5rem !important;
+                margin: 0 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                background: transparent !important;
+                border-radius: 8px !important;
+            }
+            .app-header__mobile-menu .hamburger:active { background: rgba(0,0,0,0.05) !important; }
+            .app-header__mobile-menu .hamburger-box { width: 26px !important; }
+            .app-header__mobile-menu .hamburger-inner, 
+            .app-header__mobile-menu .hamburger-inner::before, 
+            .app-header__mobile-menu .hamburger-inner::after {
+                width: 26px !important;
+                height: 3px !important;
+                border-radius: 4px !important;
+                background-color: #1e293b !important;
             }
 
-            /* ─ Content area (right side: profile) ─ */
+            /* ─ Content area (Right side: profile) ─ */
             .app-header__content {
                 all: unset !important;
                 display: flex !important;
-                flex: 1 !important;
                 align-items: center !important;
                 justify-content: flex-end !important;
                 order: 3 !important;
-                gap: 0.75rem;
+                z-index: 10 !important;
             }
             .app-header-left  { display: none !important; }
             .app-header-right {
                 display: flex !important;
                 align-items: center !important;
-                gap: 0.5rem;
+                margin: 0 !important;
             }
             .header-btn-lg {
                 display: flex !important;
                 align-items: center !important;
                 padding: 0 !important;
+                border-left: none !important; /* Remove grey border */
             }
             .header-btn-lg > div,
             .header-btn-lg .widget-content,
-            .header-btn-lg .widget-content-wrapper,
-            .header-btn-lg .widget-content-left {
+            .header-btn-lg .widget-content-wrapper {
                 display: flex !important;
                 align-items: center !important;
                 padding: 0 !important;
                 margin: 0 !important;
             }
+            .header-btn-lg .widget-content-left:first-child {
+                border: none !important;
+                padding: 0 !important;
+            }
+            
+            /* The superadmin text block - KILL IT */
+            .widget-content-left.ml-3.header-user-info {
+                display: none !important;
+            }
+            
             .header-btn-lg .btn-group {
                 display: flex !important;
                 align-items: center !important;
             }
-            .header-btn-lg .btn-group > a {
-                display: flex !important;
-                align-items: center !important;
-                padding: 2px !important;
-                border-radius: 50% !important;
-                border: 2px solid #e0e6ef !important;
-            }
-            .header-btn-lg .btn-group > a img {
-                width: 34px !important;
-                height: 34px !important;
-                border-radius: 50% !important;
-                display: block !important;
-                object-fit: cover !important;
-            }
-            .header-btn-lg .fa-angle-down,
-            .header-user-info { display: none !important; }
-
-            /* ─ Inject hamburger between logo and profile ─ */
-            .app-header__logo::after {
-                display: none !important;
-            }
-
-            /* ─ Push content below fixed header ─ */
-            .app-main {
-                padding-top: 58px !important;
-            }
+            
+            .header-btn-lg .fa-angle-down { display: none !important; }
+            .app-header__logo::after { display: none !important; }
+            .app-main { padding-top: 64px !important; }
         }
 
         /* ══ PAGE TITLE MOBILE FIX ══ */

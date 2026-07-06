@@ -107,6 +107,7 @@ Route::middleware('admin_auth')->group(function () {
     // Dashboard routes
     Route::controller(DashboardController::class)->group(function () {
         Route::get('dashboard', 'index')->name('admin.dashboard');
+        Route::get('dashboard/chart-data', 'chartData')->name('admin.dashboard.chartData');
         Route::post('admin/update-details', 'adminDetailsUpdate')->name('admin.update.Details');
     });
 

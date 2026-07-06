@@ -28,9 +28,15 @@ class DashboardController extends Controller
 
     public function index()
     {
-
         $data = $this->dashboardService->getDashboardData();
         return view('Admin.dashboard', compact('data'));
+    }
+
+    public function chartData(Request $request)
+    {
+        $range = $request->input('range', '30'); // default 30 days
+        $data = $this->dashboardService->getChartDataByRange($range);
+        return response()->json($data);
     }
 
     public function adminDetailsUpdate(Request $r)
