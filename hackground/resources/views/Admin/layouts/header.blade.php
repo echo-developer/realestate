@@ -1,3 +1,23 @@
+    
+    <style id="profile-mobile-fix">
+        @media (max-width: 991px) {
+            .header-user-info, .fa-angle-down { display: none !important; }
+            /* Ensure btn-group doesn't clip the fixed dropdown */
+            .header-btn-lg .btn-group { position: static !important; overflow: visible !important; }
+            /* Override any Popper inline style */
+            .modern-profile-dropdown, .modern-profile-dropdown[style] {
+                top: 62px !important;
+                left: 10px !important;
+                right: 10px !important;
+                bottom: auto !important;
+                margin: 0 !important;
+                transform: none !important;
+                position: fixed !important;
+                width: auto !important;
+            }
+        }
+    </style>
+
     <!--Header START-->
     @php
         $admin = Auth::guard('admin')->user();
@@ -37,64 +57,46 @@
                             <div class="widget-content-left">
                                 <div class="btn-group">
                                     <a data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                        class="p-0 btn">
+                                        class="p-0 btn profile-avatar-btn">
                                         <img src="{{ asset(config('constants.ADMIN_PHOTO')) }}" alt="User"
-                                            width="40" height="40" class="rounded-circle object-fit-cover" />
-                                        <i class="fa fa-angle-down ml-2 opacity-8"></i>
+                                            width="38" height="38" class="rounded-circle object-fit-cover profile-avatar-img" />
                                     </a>
 
-                                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                                        <div class="dropdown-menu-header">
-                                            <div class="dropdown-menu-header-inner bg-info">
-                                                <div class="menu-header-image opacity-2"></div>
-                                                <div class="menu-header-content text-left">
-                                                    <div class="widget-content p-0">
-                                                        <div class="widget-content-wrapper">
-                                                            <div class="widget-content-left mr-3">
-                                                                <img src="{{ asset(config('constants.ADMIN_PHOTO')) }}"
-                                                                    alt="User" width="60" height="60"
-                                                                    class="rounded-circle object-fit-cover" />
-                                                            </div>
-                                                            <div class="widget-content-left">
-                                                                <div class="widget-heading">
-                                                                    {{ $admin?->full_name ?? 'N/A' }}
-                                                                </div>
-                                                                <div class="widget-subheading opacity-8">
-                                                                    {{ $admin?->email ?? 'N/A' }}
-                                                                </div>
-                                                            </div>
-                                                            <div class="widget-content-right mr-2">
-                                                                <a href="{{ url('logout') }}">
-                                                                    <button
-                                                                        class="btn-pill btn-shadow btn-shine btn btn-focus">Logout</button>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                    <div class="dropdown-menu modern-profile-dropdown dropdown-menu-end">
+                                        {{-- Top user card --}}
+                                        <div class="profile-dropdown-header">
+                                            <img src="{{ asset(config('constants.ADMIN_PHOTO')) }}"
+                                                alt="User" class="profile-dropdown-avatar" />
+                                            <div class="profile-dropdown-info">
+                                                <div class="profile-dropdown-name">{{ $admin?->full_name ?? 'Admin' }}</div>
+                                                <div class="profile-dropdown-email">{{ $admin?->email ?? '' }}</div>
                                             </div>
                                         </div>
-                                        <div class="p-3">
-                                            <div class="mb-2">
-                                                <strong class="text-muted small">MY ACCOUNT</strong>
-                                            </div>
-                                            <a href="#" class="d-block text-primary mb-3 open-profile-modal"
-                                                data-bs-toggle="modal" data-bs-target="#editProfileModal"
-                                                onclick="moveFocusAndCloseDropdown()">
-                                                Edit Profile
-                                            </a>
-                                            <div class="text-center">
-                                                <a href="{{ config('app.frontend_url') }}"
-                                                    class="btn btn-sm btn-primary">View Site</a>
-                                            </div>
-                                        </div>
+
+                                        <div class="profile-dropdown-divider"></div>
+
+                                        {{-- Menu items --}}
+                                        <a href="#" class="profile-dropdown-item open-profile-modal"
+                                            data-bs-toggle="modal" data-bs-target="#editProfileModal"
+                                            onclick="moveFocusAndCloseDropdown()">
+                                            <i class="bi bi-person-circle"></i>
+                                            <span>Edit Profile</span>
+                                        </a>
+                                        <a href="{{ config('app.frontend_url') }}" class="profile-dropdown-item" target="_blank">
+                                            <i class="bi bi-globe"></i>
+                                            <span>View Site</span>
+                                        </a>
+
+                                        <div class="profile-dropdown-divider"></div>
+
+                                        <a href="{{ url('logout') }}" class="profile-dropdown-item logout">
+                                            <i class="bi bi-box-arrow-right"></i>
+                                            <span>Logout</span>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="widget-content-left  ml-3 header-user-info">
-                                <div class="widget-heading">
-
-                                </div>
+                            <div class="widget-content-left ml-3 header-user-info">
                                 <div class="widget-subheading">
                                     @if (Auth::guard('admin')->user()->username)
                                         {{ Auth::guard('admin')->user()->username }}
@@ -108,6 +110,175 @@
         </div>
     </div>
     <!--Header END-->
+
+    <style>
+        /* ══ MOBILE TOPBAR COMPLETE REDESIGN ══ */
+        @media (max-width: 991px) {
+
+            /* ─ Full reset of the header ─ */
+            .app-header {
+                all: unset !important;
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                width: 100% !important;
+                height: 58px !important;
+                padding: 0 1rem !important;
+                background: #ffffff !important;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.10) !important;
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                z-index: 1050 !important;
+                box-sizing: border-box !important;
+            }
+
+            /* ─ Logo block ─ */
+            .app-header__logo {
+                display: flex !important;
+                align-items: center !important;
+                flex-shrink: 0 !important;
+                width: auto !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                border: none !important;
+                background: none !important;
+                order: 1 !important;
+            }
+            .app-header__logo .logo-src {
+                display: block !important;
+                width: 100px !important;
+                height: 38px !important;
+                background-size: contain !important;
+                background-repeat: no-repeat !important;
+                background-position: left center !important;
+            }
+            /* Hide the hamburger inside logo pane */
+            .app-header__logo .header__pane {
+                display: none !important;
+            }
+
+            /* ─ Content area (right side: profile) ─ */
+            .app-header__content {
+                all: unset !important;
+                display: flex !important;
+                flex: 1 !important;
+                align-items: center !important;
+                justify-content: flex-end !important;
+                order: 3 !important;
+                gap: 0.75rem;
+            }
+            .app-header-left  { display: none !important; }
+            .app-header-right {
+                display: flex !important;
+                align-items: center !important;
+                gap: 0.5rem;
+            }
+            .header-btn-lg {
+                display: flex !important;
+                align-items: center !important;
+                padding: 0 !important;
+            }
+            .header-btn-lg > div,
+            .header-btn-lg .widget-content,
+            .header-btn-lg .widget-content-wrapper,
+            .header-btn-lg .widget-content-left {
+                display: flex !important;
+                align-items: center !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .header-btn-lg .btn-group {
+                display: flex !important;
+                align-items: center !important;
+            }
+            .header-btn-lg .btn-group > a {
+                display: flex !important;
+                align-items: center !important;
+                padding: 2px !important;
+                border-radius: 50% !important;
+                border: 2px solid #e0e6ef !important;
+            }
+            .header-btn-lg .btn-group > a img {
+                width: 34px !important;
+                height: 34px !important;
+                border-radius: 50% !important;
+                display: block !important;
+                object-fit: cover !important;
+            }
+            .header-btn-lg .fa-angle-down,
+            .header-user-info { display: none !important; }
+
+            /* ─ Inject hamburger between logo and profile ─ */
+            .app-header__logo::after {
+                display: none !important;
+            }
+
+            /* ─ Push content below fixed header ─ */
+            .app-main {
+                padding-top: 58px !important;
+            }
+        }
+
+        /* ══ PAGE TITLE MOBILE FIX ══ */
+        @media (max-width: 767px) {
+            .app-page-title {
+                padding: 1rem !important;
+                margin-bottom: 0.5rem !important;
+                background: #f8f9fc;
+            }
+            .page-title-wrapper {
+                display: flex !important;
+                align-items: flex-start !important;
+                justify-content: space-between !important;
+                gap: 0.5rem !important;
+            }
+            .page-title-heading {
+                display: flex !important;
+                align-items: center !important;
+                gap: 0.6rem !important;
+                flex: 1 !important;
+                min-width: 0 !important;
+            }
+            .page-title-icon {
+                width: 42px !important;
+                height: 42px !important;
+                min-width: 42px !important;
+                font-size: 1.25rem !important;
+                margin: 0 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                flex-shrink: 0 !important;
+                border-radius: 10px !important;
+            }
+            .page-title-heading > div {
+                font-size: 1.05rem !important;
+                font-weight: 700 !important;
+                line-height: 1.3 !important;
+            }
+            .page-title-subheading {
+                font-size: 0.73rem !important;
+                margin-top: 2px !important;
+                opacity: 0.7;
+            }
+            .page-title-actions {
+                flex-shrink: 0 !important;
+                align-self: center !important;
+            }
+            .page-title-actions .breadcrumb {
+                margin: 0 !important;
+                padding: 0 !important;
+                background: none !important;
+                font-size: 0.72rem !important;
+                white-space: nowrap;
+            }
+            .breadcrumb-item + .breadcrumb-item::before {
+                padding: 0 3px;
+            }
+        }
+    </style>
 
     <!-- Edit Profile Modal -->
     <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel"
@@ -230,3 +401,5 @@
 
         })
     </script>
+
+

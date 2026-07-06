@@ -35,6 +35,323 @@
                 padding: 1rem;
                 margin-top: 1rem;
             }
+            /* Settings tab bar with inline search */
+            .settings-tab-bar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+                padding: 0.5rem 1rem;
+                min-height: 80px;
+                margin-bottom: 1.25rem;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            .settings-tab-bar .nav {
+                border-bottom: none;
+                flex-wrap: nowrap;
+                gap: 0;
+            }
+            .settings-tab-bar .nav-link {
+                color: #495057;
+                font-size: 0.88rem;
+                font-weight: 500;
+                padding: 0.6rem 1rem;
+                border-bottom: 2px solid transparent;
+                border-radius: 0;
+                white-space: nowrap;
+                transition: color .15s, border-color .15s;
+            }
+            .settings-tab-bar .nav-link:hover {
+                color: #1a73e8;
+            }
+            .settings-tab-bar .nav-link.active {
+                color: #1a73e8;
+                border-bottom-color: #1a73e8;
+                font-weight: 600;
+            }
+            .settings-search-wrap {
+                display: flex;
+                align-items: center;
+                flex-shrink: 0;
+            }
+            .settings-search-input-wrap {
+                position: relative;
+                display: flex;
+                align-items: center;
+            }
+            .settings-search-input-wrap .search-icon {
+                position: absolute;
+                left: 10px;
+                color: #6c757d;
+                font-size: 0.9rem;
+                pointer-events: none;
+            }
+            .settings-search-wrap .form-control {
+                width: 220px;
+                border-radius: 20px 0 0 20px;
+                font-size: 0.85rem;
+                height: 38px;
+                padding-left: 34px;
+                border: 1.5px solid #dee2e6;
+                border-right: none;
+                background: #f8f9fc;
+                transition: border-color .2s, box-shadow .2s;
+            }
+            .settings-search-wrap .form-control:focus {
+                border-color: #1a73e8;
+                box-shadow: none;
+                background: #fff;
+                outline: none;
+            }
+            .settings-search-wrap .btn {
+                height: 38px;
+                border-radius: 0 20px 20px 0;
+                padding: 0 1rem;
+                font-size: 0.85rem;
+                border: none;
+            }
+            /* Card header overrides */
+            .settings-card-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0.85rem 1.25rem;
+                background: #fff;
+                border-bottom: 1px solid #e0e6ef;
+            }
+            .settings-card-header h4 {
+                font-size: 0.82rem;
+                font-weight: 700;
+                letter-spacing: 0.07em;
+                text-transform: uppercase;
+                color: #343a40;
+                margin: 0;
+            }
+            .btn-add-setting {
+                background-color: #1a73e8;
+                color: #fff;
+                border: none;
+                border-radius: 6px;
+                font-size: 0.85rem;
+                font-weight: 500;
+                padding: 0.45rem 1rem;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.3rem;
+                transition: background .15s;
+            }
+            .btn-add-setting:hover {
+                background-color: #1558c0;
+                color: #fff;
+            }
+            /* Table overrides */
+            .settings-table thead th {
+                background-color: #f0f4fb;
+                color: #495057;
+                font-size: 0.82rem;
+                font-weight: 700;
+                border-top: none;
+                border-bottom: 1px solid #dee2e6;
+                padding: 0.75rem 1rem;
+            }
+            .settings-table tbody td {
+                font-size: 0.875rem;
+                color: #343a40;
+                padding: 0.75rem 1rem;
+                vertical-align: middle;
+                border-color: #f0f0f0;
+            }
+            .settings-table tbody tr:hover {
+                background-color: #f8f9ff;
+            }
+            /* Action icon buttons */
+            .action-icon-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 34px;
+                height: 34px;
+                border-radius: 6px;
+                border: none;
+                cursor: pointer;
+                font-size: 1rem;
+                transition: opacity .15s, transform .15s;
+                text-decoration: none;
+            }
+            .action-icon-btn:hover {
+                opacity: 0.85;
+                transform: scale(1.08);
+            }
+            .action-icon-btn.edit {
+                background-color: #fff;
+                color: #2e7d32;
+                border: 1.5px solid #c3c7c3;
+            }
+            .action-icon-btn.delete {
+                background-color: #fff;
+                color: #c62828;
+                border: 1.5px solid #c3c7c3;
+            }
+            .actions-cell {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                gap: 6px;
+            }
+
+            /* ── Mobile Responsive ── */
+            @media (max-width: 767px) {
+                /* Tab bar: scrollable row */
+                .settings-tab-bar {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    min-height: auto;
+                    padding: 0.5rem 0.75rem;
+                    gap: 0.5rem;
+                }
+                .settings-tab-bar .nav {
+                    width: 100%;
+                    overflow-x: auto;
+                    flex-wrap: nowrap;
+                    -webkit-overflow-scrolling: touch;
+                    scrollbar-width: none;
+                }
+                .settings-tab-bar .nav::-webkit-scrollbar { display: none; }
+                .settings-tab-bar .nav-link {
+                    padding: 0.5rem 0.75rem;
+                    font-size: 0.82rem;
+                }
+                /* Search full width on mobile */
+                .settings-search-wrap {
+                    width: 100%;
+                }
+                .settings-search-input-wrap {
+                    flex: 1;
+                }
+                .settings-search-wrap .form-control {
+                    width: 100%;
+                }
+                /* Card header stack */
+                .settings-card-header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 0.6rem;
+                    padding: 0.75rem 1rem;
+                }
+                .btn-add-setting {
+                    width: 100%;
+                    justify-content: center;
+                }
+                /* Table: card-style rows */
+                .settings-table thead { display: none; }
+                .settings-table tbody tr {
+                    display: block;
+                    border: 1px solid #e0e6ef;
+                    border-radius: 8px;
+                    margin-bottom: 0.75rem;
+                    padding: 0.5rem 0.75rem;
+                    background: #fff;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+                }
+                .settings-table tbody td {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 0.4rem 0;
+                    border: none;
+                    border-bottom: 1px solid #f3f3f3;
+                    font-size: 0.82rem;
+                }
+                .settings-table tbody td:last-child { border-bottom: none; }
+                .settings-table tbody td::before {
+                    content: attr(data-label);
+                    font-weight: 600;
+                    color: #6c757d;
+                    font-size: 0.75rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.04em;
+                    flex-shrink: 0;
+                    margin-right: 0.5rem;
+                }
+                .actions-cell { justify-content: flex-end; }
+            }
+
+            @media (max-width: 480px) {
+                .settings-tab-bar .nav-link { padding: 0.4rem 0.6rem; font-size: 0.78rem; }
+                .action-icon-btn { width: 30px; height: 30px; font-size: 0.9rem; }
+            }
+
+            /* ── Mobile Bottom Sheet Modal ── */
+            @media (max-width: 767px) {
+                #SettingsModal .modal-dialog {
+                    position: fixed;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    margin: 0;
+                    width: 100%;
+                    max-width: 100%;
+                    transform: translateY(100%);
+                    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+                }
+                #SettingsModal.show .modal-dialog {
+                    transform: translateY(0);
+                }
+                #SettingsModal .modal-content {
+                    border-radius: 20px 20px 0 0;
+                    border: none;
+                    max-height: 90vh;
+                    display: flex;
+                    flex-direction: column;
+                    box-shadow: 0 -4px 24px rgba(0,0,0,0.15);
+                }
+                #SettingsModal .modal-content::before {
+                    content: '';
+                    display: block;
+                    width: 40px;
+                    height: 4px;
+                    background: #dee2e6;
+                    border-radius: 2px;
+                    margin: 10px auto 0;
+                    flex-shrink: 0;
+                }
+                #SettingsModal .modal-header {
+                    border-bottom: 1px solid #f0f0f0;
+                    padding: 0.85rem 1.25rem 0.75rem;
+                    flex-shrink: 0;
+                }
+                #SettingsModal .modal-title {
+                    font-size: 1rem;
+                    font-weight: 600;
+                }
+                #SettingsModal .modal-body {
+                    overflow-y: auto;
+                    -webkit-overflow-scrolling: touch;
+                    padding: 1rem 1.25rem;
+                    flex: 1;
+                }
+                #SettingsModal .modal-footer {
+                    border-top: 1px solid #f0f0f0;
+                    padding: 0.75rem 1.25rem;
+                    flex-shrink: 0;
+                    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+                }
+                #SettingsModal .modal-footer .btn {
+                    width: 100%;
+                    height: 46px;
+                    border-radius: 12px;
+                    font-size: 1rem;
+                    font-weight: 600;
+                }
+                #SettingsModal .form-floating .form-control,
+                #SettingsModal .form-floating .form-select {
+                    height: 52px;
+                    font-size: 0.95rem;
+                }
+            }
         </style>
         @if (session('success_msg'))
             <div class="alert alert-{{ session('message_type') }}">
@@ -44,70 +361,53 @@
                 </button>
             </div>
         @endif
-        <form action="{{ url('Settings/' . $group_key) }}" method="get">
-            <section class="content-header mb-2">
-                <div class="row justify-content-end">
-                    <div class="col-xl-4 col-lg-6">
-                        <div class="input-group">
-                            <input class="form-control" id="prop_category_search" placeholder="Search..." name="term"
-                                value="{{ request('term') }}" />
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+        <div class="settings-tab-bar">
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('Settings/default') || Request::is('Settings') ? 'active' : '' }}"
+                        href="{{ url('Settings/default') }}">Default</a>
+                </li>
+                @foreach ($Settings as $setting)
+                    @if ($setting->status != config('constants.STATUS_DELETE'))
+                        <li class="nav-item">
+                            <a class="nav-link {{ Request::is('Settings/' . $setting->group_key) ? 'active' : '' }}"
+                                href="{{ url('/Settings/' . $setting->group_key) }}">
+                                {{ $setting->group_name }}
+                            </a>
+                        </li>
+                    @endif
+                @endforeach
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('set.payment.method') }}">Payment Method</a>
+                </li>
+            </ul>
+            <form action="{{ url('Settings/' . $group_key) }}" method="get" class="settings-search-wrap">
+                <div class="settings-search-input-wrap">
+                    <i class="bi bi-search search-icon"></i>
+                    <input class="form-control" id="prop_category_search" placeholder="Search settings..."
+                        name="term" value="{{ request('term') }}" />
                 </div>
-            </section>
-        </form>
-
-        <ul class="nav nav-underline mb-3 gap-4">
-            <li class="nav-item">
-                <a class="nav-link ajax-link {{ Request::is('Settings/default') || Request::is('Settings') ? 'active' : '' }}"
-                    href="{{ url('Settings/default') }}" data-url="{{ url('/Settings/default') }}">
-                    <span>Default</span>
-                </a>
-            </li>
-            @foreach ($Settings as $setting)
-                @if ($setting->status != config('constants.STATUS_DELETE'))
-                    <li class="nav-item">
-                        <a class="nav-link ajax-link {{ Request::is('Settings/' . $setting->group_key) ? 'active' : '' }}"
-                            href="{{ url('/Settings/' . $setting->group_key) }}"
-                            data-url="{{ url('/Settings/' . $setting->group_key) }}">
-                            <span>{{ $setting->group_name }}</span>
-                        </a>
-                    </li>
-                @endif
-            @endforeach
-            <li class="nav-item">
-                <a class="nav-link ajax-link" href="{{ route('set.payment.method') }}">
-                    <span>Payment Method</span>
-                </a>
-            </li>
-        </ul>
+                <button type="submit" class="btn btn-primary">
+                    Search
+                </button>
+            </form>
+        </div>
 
         <div class="main-card mb-3 card">
 
-            <div class="card-header d-flex">
-
+            <div class="settings-card-header">
                 @if (isset($group_key))
-                    <h4>{{ $group_key }} Setting</h4>
+                    <h4>{{ strtoupper($group_key) }} Settings</h4>
                 @else
-                    <h4>Default Setting</h4>
+                    <h4>Default Settings</h4>
                 @endif
-                <div class="btn-actions-pane-right">
-                    &nbsp;
-                    <button type="button" class="btn btn-site btn-sm btn-primary" id="allSettingsaddButton">
-                        <i class="fa fa-plus"></i>
-                        Add new Setting
-                    </button>
-
-                </div>
+                <button type="button" class="btn-add-setting" id="allSettingsaddButton">
+                    <i class="fa fa-plus"></i> Add New Setting
+                </button>
             </div>
             <div class="card-body">
                 <div class="table-responsive" id="main_table">
-                    <table class="mb-0 table">
+                    <table class="mb-0 table settings-table">
                         <thead>
                             <tr>
                                 <th>Setting Name</th>
@@ -119,30 +419,28 @@
                             <tbody id="allSettingBody">
                                 @forelse ($all_settings as $items)
                                     <tr>
-                                        <td>{{ $items->title }}</td>
-                                        <td>{{ $items->setting_key }}</td>
-                                        <td style="width:40%;word-break: break-all;">{{ $items->setting_value }}
-                                        </td>
-                                        <td class="text-right">
-
-                                            {{-- @if (in_array('MEN0051_LIST_Edit', $rolePermissions)) --}}
-                                            @if ($items->editable != 0)
-                                                <a href="javascript:void(0)" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" data-bs-title="Edit"
-                                                    class="allSettingsEditButton" setting-id="{{ $items->id }}"><i
-                                                        class="bi bi-pencil-square text-success fa-md"></i></a>
-                                                &nbsp;
-                                            @endif
-                                            {{-- @endif --}}
-                                            {{-- @if (in_array('MEN0051_LIST_Edit', $rolePermissions)) --}}
-                                            @if ($items->deletable != 0)
-                                                <a href="javascript:void(0)" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" data-bs-title="Delete"
-                                                    class="allSettingsDeleteButton" setting-id="{{ $items->id }}"><i
-                                                        class="bi bi-trash3-fill text-danger fa-md"></i></a>
-                                                &nbsp;
-                                            @endif
-                                            {{-- @endif --}}
+                                        <td data-label="Setting Name">{{ $items->title }}</td>
+                                        <td data-label="Key">{{ $items->setting_key }}</td>
+                                        <td data-label="Value" style="width:40%;word-break: break-all;">{{ $items->setting_value }}</td>
+                                        <td>
+                                            <div class="actions-cell">
+                                                {{-- Edit --}}
+                                                @if ($items->editable != 0)
+                                                    <a href="javascript:void(0)" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" data-bs-title="Edit"
+                                                        class="action-icon-btn edit allSettingsEditButton" setting-id="{{ $items->id }}">
+                                                        <i class="bi bi-pencil-square"></i>
+                                                    </a>
+                                                @endif
+                                                {{-- Delete --}}
+                                                @if ($items->deletable != 0)
+                                                    <a href="javascript:void(0)" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" data-bs-title="Delete"
+                                                        class="action-icon-btn delete allSettingsDeleteButton" setting-id="{{ $items->id }}">
+                                                        <i class="bi bi-trash3-fill"></i>
+                                                    </a>
+                                                @endif
+                                            </div>
                                         </td>
                                     @empty
                                     <tr>

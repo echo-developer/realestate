@@ -24,6 +24,7 @@
     <link href="{{ asset('assets/css/custom.css') }}" type="text/css" rel="stylesheet">
     <link href="{{ asset('assets/css/responsive.css') }}" type="text/css" rel="stylesheet">
     <link href="{{ asset('assets/css/ltr.css') }}" type="text/css" rel="stylesheet">
+    <link href="{{ asset('assets/css/profile-dropdown.css') }}" type="text/css" rel="stylesheet">
     
     <!-- <link rel="stylesheet" href="{{ asset('assets/js/scripts-init/select2/dist/css/select2.min.css') }}"> -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"

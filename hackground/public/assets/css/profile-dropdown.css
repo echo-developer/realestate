@@ -1,0 +1,146 @@
+/* ══════════════════════════════════════
+   MODERN PROFILE DROPDOWN
+   ══════════════════════════════════════ */
+
+/* ── Hide "superadmin" text on mobile only ── */
+@media (max-width: 991px) {
+    .header-user-info { display: none !important; }
+    .fa-angle-down    { display: none !important; }
+}
+
+/* ── Avatar trigger ── */
+.profile-avatar-btn {
+    padding: 0 !important;
+    border-radius: 50% !important;
+    border: none !important;
+    background: none !important;
+    display: flex !important;
+    align-items: center !important;
+    box-shadow: none !important;
+}
+.profile-avatar-img {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    border: 2.5px solid #1a73e8 !important;
+    box-shadow: 0 0 0 3px rgba(26,115,232,0.18) !important;
+    display: block !important;
+    transition: box-shadow .2s !important;
+}
+.profile-avatar-btn:hover .profile-avatar-img {
+    box-shadow: 0 0 0 5px rgba(26,115,232,0.28) !important;
+}
+
+/* ── Dropdown card (desktop) ── */
+.modern-profile-dropdown {
+    min-width: 260px !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 16px !important;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.18) !important;
+    overflow: hidden !important;
+    margin-top: 8px !important;
+    z-index: 9999 !important;
+}
+
+/* Blue gradient header */
+.profile-dropdown-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.8rem !important;
+    padding: 1.1rem 1.2rem !important;
+    background: linear-gradient(135deg, #1565c0 0%, #1a73e8 100%) !important;
+}
+.profile-dropdown-avatar {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    border: 2.5px solid rgba(255,255,255,0.6) !important;
+    flex-shrink: 0 !important;
+}
+.profile-dropdown-info { min-width: 0; flex: 1; }
+.profile-dropdown-name {
+    font-size: 0.92rem !important;
+    font-weight: 700 !important;
+    color: #fff !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.3 !important;
+}
+.profile-dropdown-email {
+    font-size: 0.72rem !important;
+    color: rgba(255,255,255,0.8) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    margin-top: 2px !important;
+}
+
+.profile-dropdown-divider {
+    height: 1px !important;
+    background: #f0f2f5 !important;
+    margin: 0 !important;
+}
+
+/* Menu items */
+.profile-dropdown-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.7rem !important;
+    padding: 0.78rem 1.2rem !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    color: #212529 !important;
+    text-decoration: none !important;
+    transition: background .12s, color .12s !important;
+    background: #fff !important;
+    border: none !important;
+    width: 100% !important;
+    cursor: pointer !important;
+}
+.profile-dropdown-item i {
+    font-size: 1.05rem !important;
+    color: #6c757d !important;
+    width: 20px !important;
+    text-align: center !important;
+    flex-shrink: 0 !important;
+}
+.profile-dropdown-item:hover { background: #f0f5ff !important; color: #1a73e8 !important; }
+.profile-dropdown-item:hover i { color: #1a73e8 !important; }
+.profile-dropdown-item.logout { color: #d32f2f !important; }
+.profile-dropdown-item.logout i { color: #d32f2f !important; }
+.profile-dropdown-item.logout:hover { background: #fff5f5 !important; }
+
+/* ══ MOBILE: use a full-width panel below the fixed header ══ */
+@media (max-width: 991px) {
+    /* The btn-group containing the dropdown becomes the anchor */
+    .header-btn-lg .btn-group {
+        position: static !important;
+    }
+
+    /* The dropdown-menu itself: fixed below the 58px header */
+    .modern-profile-dropdown {
+        position: fixed !important;
+        top: 62px !important;
+        left: 10px !important;
+        right: 10px !important;
+        width: auto !important;
+        min-width: unset !important;
+        max-width: none !important;
+        border-radius: 16px !important;
+        z-index: 99999 !important;
+        /* Kill any Popper transforms */
+        transform: none !important;
+        inset: unset !important;
+        margin: 0 !important;
+        animation: dropFadeIn 0.2s ease;
+    }
+}
+
+@keyframes dropFadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
