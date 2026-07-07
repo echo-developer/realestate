@@ -426,8 +426,8 @@
 
 </div>
 
-<div class="tab-pane fade{{ request('tab') == 'project-photos' || !request('tab') ? 'show active' : '' }} "
-  id="project-photos" role="tabpanel" style="{{ request('tab') == '' ? 'display: none;' : 'display: block;' }}">
+<div class="tab-pane fade {{ request('tab') == 'project-photos' ? 'show active' : '' }}"
+  id="project-photos" role="tabpanel">
   <div class="card border-0 shadow-sm rounded-4 mb-4">
     <div class="card-header bg-white border-bottom-0 pt-4 pb-2 d-flex justify-content-between align-items-center">
       <h5 class="fw-bold mb-0">
@@ -465,8 +465,8 @@
                                 $typeFilenames[$t][] = $fn;
                                 $typeImages[$t] .= '
                                 <div class="col-md-3 col-sm-4 col-6 mb-3">
-                                    <div class="gallery-item h-100 position-relative">
-                                        <img src="'.$url.'" alt="Photo" class="img-fluid w-100 h-100 object-fit-cover rounded-3">
+                                    <div class="gallery-item position-relative">
+                                        <img src="'.$url.'" alt="Photo">
                                         <div class="gallery-overlay">
                                             <button type="button" class="btn-delete ms-auto" data-type="'.$t.'" data-filename="'.$fn.'" onclick="removeImage($(this))" title="Delete"><i class="bi bi-trash3-fill"></i></button>
                                         </div>
@@ -681,12 +681,20 @@
           }
       });
   }
-
-<script>
 let uploadedFilesByTab = {};
 @foreach(['interior','exterior','location','other'] as $tab)
     uploadedFilesByTab['{{$tab}}'] = JSON.parse($("#uploadedFiles-{{$tab}}").val() || '[]');
 @endforeach
+
+// Handle photo tab switching
+$(".photo-tabs-wrapper .photo-tab-pill").click(function(e) {
+    e.preventDefault();
+    $(".photo-tabs-wrapper .photo-tab-pill").removeClass("active");
+    $(this).addClass("active");
+    var activeTab = $(this).attr("data-tab");
+    $(".img-content").hide();
+    $("#tab-content-" + activeTab).show();
+});
 
 $(document).on('change', '.photo-file-input', function() {
     var activeTab = $(this).attr('data-tab');
@@ -722,8 +730,8 @@ $(document).on('change', '.photo-file-input', function() {
 function previewImage(imageUrl, filename, type) {
     let html = `
         <div class="col-md-3 col-sm-4 col-6 mb-3">
-            <div class="gallery-item h-100 position-relative">
-                <img src="${imageUrl}" alt="Photo" class="img-fluid w-100 h-100 object-fit-cover rounded-3">
+            <div class="gallery-item position-relative">
+                <img src="${imageUrl}" alt="Photo">
                 <div class="gallery-overlay">
                     <button type="button" class="btn-delete ms-auto" data-type="${type}" data-filename="${filename}" onclick="removeImage($(this))" title="Delete"><i class="bi bi-trash3-fill"></i></button>
                 </div>

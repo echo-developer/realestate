@@ -5,7 +5,7 @@
     /* ══ DASHBOARD MODERN REDESIGN ══ */
     .app-main__inner {
         background: #f8f9fa;
-        padding-top: 1.5rem;
+        padding: 1.5rem 1rem !important;
     }
     .dashboard-title-wrap {
         margin-bottom: 1.5rem;
@@ -69,6 +69,7 @@
         font-weight: 500;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        white-space: nowrap;
     }
     .kpi-value {
         font-size: 1.5rem;
@@ -90,30 +91,32 @@
     }
     .dashboard-card {
         background: #fff;
-        border-radius: 16px;
-        border: none;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        border-radius: 12px;
+        border: 1px solid #f1f5f9;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.02);
         display: flex;
         flex-direction: column;
+        overflow: hidden;
     }
     .h-100-card {
         height: 100%;
     }
     .dashboard-card-header {
-        padding: 1.25rem 1.5rem;
+        padding: 1rem 1.25rem;
         border-bottom: 1px solid #f1f5f9;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 1rem;
     }
     .dashboard-card-title {
-        font-size: 1.1rem;
+        font-size: 1rem;
         font-weight: 700;
         color: #1e293b;
         margin: 0;
     }
     .dashboard-card-body {
-        padding: 1.5rem;
+        padding: 1.25rem;
         flex: 1;
     }
 
@@ -172,45 +175,73 @@
     .badge-soft-success {
         background: #dcfce7;
         color: #166534;
-        padding: 0.25rem 0.6rem;
-        border-radius: 6px;
-        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.7rem;
         font-weight: 600;
     }
     .badge-soft-purple {
         background: #f3e8ff;
         color: #6b21a8;
-        padding: 0.25rem 0.6rem;
-        border-radius: 6px;
-        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.7rem;
         font-weight: 600;
     }
     .badge-soft-blue {
         background: #e0f2fe;
         color: #0369a1;
-        padding: 0.25rem 0.6rem;
-        border-radius: 6px;
-        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+    .badge-soft-warning {
+        background: #fef3c7;
+        color: #d97706;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+    .badge-soft-danger {
+        background: #fee2e2;
+        color: #dc2626;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.7rem;
         font-weight: 600;
     }
 
     /* ── Table ── */
+    .modern-table {
+        margin-bottom: 0;
+        table-layout: fixed;
+        width: 100%;
+    }
     .modern-table th {
-        background: #f8fafc;
-        color: #475569;
-        font-size: 0.8rem;
+        background: #fff;
+        color: #64748b;
+        font-size: 0.75rem;
         font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        padding: 1rem 1.5rem;
+        padding: 0.6rem 0.75rem;
         border-bottom: 1px solid #e2e8f0;
+        border-top: none;
     }
     .modern-table td {
-        padding: 1rem 1.5rem;
+        padding: 0.6rem 0.75rem;
         vertical-align: middle;
-        font-size: 0.9rem;
+        font-size: 0.75rem;
         color: #334155;
         border-bottom: 1px solid #f1f5f9;
+    }
+    .modern-table th:first-child,
+    .modern-table td:first-child {
+        padding-left: 1.25rem;
+    }
+    .modern-table th:last-child,
+    .modern-table td:last-child {
+        padding-right: 1.25rem;
     }
     .modern-table tr:last-child td { border-bottom: none; }
 
@@ -357,7 +388,7 @@
                 </div>
                 <div class="kpi-details">
                     <div class="kpi-title">Total Projects</div>
-                    <div class="kpi-value">{{ $data["properties_for_sale"] ?? 0 }}</div>
+                    <div class="kpi-value">{{ $data["total_projects"] ?? 0 }}</div>
                     @if(isset($data['project_trend']))
                         @if($data['project_trend'] > 0)
                             <div class="kpi-trend trend-up"><i class="bi bi-arrow-up-right"></i> {{ $data['project_trend'] }}%</div>
@@ -419,7 +450,7 @@
                 </div>
                 <div class="kpi-details">
                     <div class="kpi-title">Total Revenue</div>
-                    <div class="kpi-value">$ {{ $data["total_revenue"] ?? "248,250" }}</div>
+                    <div class="kpi-value">${{ number_format($data["total_revenue"] ?? 0) }}</div>
                     @if(isset($data['revenue_trend']))
                         @if($data['revenue_trend'] > 0)
                             <div class="kpi-trend trend-up"><i class="bi bi-arrow-up-right"></i> {{ $data['revenue_trend'] }}%</div>
@@ -533,216 +564,531 @@
         </div>
     </div>
 
-    <!-- ── BOTTOM 3 COLUMNS ── -->
+    <style>
+    /* Middle Metrics Row Styles */
+    .metric-title { font-size: 0.8rem; font-weight: 600; color: #1e293b; margin-bottom: 0.5rem; white-space: nowrap; }
+    .metric-title-dark { font-size: 0.8rem; font-weight: 600; color: #1e293b; margin-bottom: 0.5rem; white-space: nowrap; }
+    .metric-number { font-size: 1.6rem; font-weight: 700; color: #1e293b; line-height: 1.2; }
+    .metric-icon-wrap { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+    .icon-outline-blue { background: transparent; border: 1.5px solid #3b82f6; color: #3b82f6; }
+    .icon-solid-yellow { background: #fefce8; color: #eab308; }
+    .metric-prog-bg { height: 6px; border-radius: 4px; background-color: #e2e8f0; }
+    .metric-prog-bar { background-color: #3b82f6; border-radius: 4px; }
+    .metric-subtext { font-size: 0.75rem; color: #64748b; font-weight: 500; margin-bottom: 2px; }
+    .metric-trend { font-size: 0.8rem; font-weight: 600; }
+    .rev-month-label { font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 0.25rem; }
+    .rev-num-lg { font-size: 1.8rem; font-weight: 700; color: #1e293b; line-height: 1.2; }
+    .rev-trend { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .rev-num-sm { font-size: 1.2rem; font-weight: 700; color: #1e293b; line-height: 1.2; }
+    .rev-chart-wrap { position: absolute; bottom: 0; right: 0; left: 0; height: 100px; }
+    .feat-card-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 1rem; }
+    .feat-chart-wrap { position: relative; height: 160px; width: 160px; margin: 0 auto; display: flex; justify-content: center; align-items: center; }
+    .feat-chart-star { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #fffbeb; color: #f59e0b; font-size: 1.2rem; }
+    .feat-lbl-blue { font-size: 0.85rem; font-weight: 600; color: #3b82f6; margin-bottom: 0.25rem; }
+    .feat-num-blue { font-size: 1.4rem; font-weight: 700; color: #3b82f6; line-height: 1.2; }
+    .feat-lbl-dark { font-size: 0.85rem; font-weight: 600; color: #1e293b; margin-bottom: 0.25rem; }
+    .feat-num-green { font-size: 1.4rem; font-weight: 700; color: #10b981; line-height: 1.2; }
+    .feat-subtext { font-size: 0.75rem; color: #64748b; margin-top: 2px; }
+</style>
+
+    <!-- ── MIDDLE METRICS ROW ── -->
     <div class="row dashboard-section">
-        <!-- Top Locations -->
+        <!-- Membership Overview -->
         <div class="col-lg-4 mb-4">
             <div class="dashboard-card h-100-card">
                 <div class="dashboard-card-header">
-                    <h3 class="dashboard-card-title">Top Locations</h3>
+                    <h3 class="dashboard-card-title">Membership Overview</h3>
+                    <a href="{{ url('member/memberUser') }}" style="font-size: 0.85rem; font-weight: 600; text-decoration: none; white-space: nowrap;">View All</a>
+                </div>
+                <div class="dashboard-card-body pt-4 px-3 pb-3">
+                    <div class="row w-100 m-0">
+                        <!-- Free Members Column -->
+                        <div class="col-6 position-relative p-0 pe-2" style="border-right: 1px solid #f1f5f9;">
+                            <div class="metric-title">Free Members</div>
+                            <div class="d-flex justify-content-between align-items-center mb-2 pe-3">
+                                <div class="metric-number">{{ number_format($data['free_members'] ?? 0) }}</div>
+                                <div class="metric-icon-wrap icon-outline-blue">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="progress mb-3 metric-prog-bg me-3">
+                                @php $freePct = (($data['free_members'] ?? 0) + ($data['premium_members'] ?? 0)) > 0 ? (($data['free_members'] ?? 0) / (($data['free_members'] ?? 0) + ($data['premium_members'] ?? 0))) * 100 : 0; @endphp
+                                <div class="progress-bar metric-prog-bar" role="progressbar" style="width: {{ $freePct }}%;" aria-valuenow="{{ $freePct }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            
+                            <div class="metric-subtext">This Month</div>
+                            <div class="trend-up metric-trend"><i class="bi bi-arrow-up-right"></i> {{ number_format($data['free_members_this_month'] ?? 0) }}</div>
+                        </div>
+                        
+                        <!-- Premium Members Column -->
+                        <div class="col-6 p-0 ps-3">
+                            <div class="metric-title-dark">Premium Members</div>
+                            <div class="d-flex justify-content-between align-items-center mb-2 pe-1">
+                                <div class="metric-number">{{ number_format($data['premium_members'] ?? 0) }}</div>
+                                <div class="metric-icon-wrap icon-solid-yellow">
+                                    <i class="bi bi-star-fill"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="progress mb-3 metric-prog-bg pe-1">
+                                @php $premiumPct = (($data['free_members'] ?? 0) + ($data['premium_members'] ?? 0)) > 0 ? (($data['premium_members'] ?? 0) / (($data['free_members'] ?? 0) + ($data['premium_members'] ?? 0))) * 100 : 0; @endphp
+                                <div class="progress-bar metric-prog-bar" role="progressbar" style="width: {{ $premiumPct }}%;" aria-valuenow="{{ $premiumPct }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            
+                            <div class="metric-subtext">This Month</div>
+                            <div class="trend-up metric-trend"><i class="bi bi-arrow-up-right"></i> {{ number_format($data['premium_members_this_month'] ?? 0) }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Revenue Overview -->
+        <div class="col-lg-4 mb-4">
+            <div class="dashboard-card h-100-card" style="overflow: hidden;">
+                <div class="dashboard-card-header">
+                    <h3 class="dashboard-card-title">Revenue Overview</h3>
+                    <a href="{{ url('transaction/transaction_list') }}" style="font-size: 0.85rem; font-weight: 600; text-decoration: none; white-space: nowrap;">View All</a>
+                </div>
+                <div class="dashboard-card-body position-relative pb-0 d-flex flex-column">
+                    <div class="mb-4">
+                        <div class="rev-month-label">This Month ({{ date('M') }})</div>
+                        <div class="d-flex align-items-end gap-3">
+                            <div class="rev-num-lg">${{ number_format($data['this_month_revenue'] ?? 0) }}</div>
+                            <div class="{{ ($data['revenue_trend'] ?? 0) >= 0 ? 'trend-up' : 'trend-down' }} rev-trend">
+                                <i class="bi bi-arrow-{{ ($data['revenue_trend'] ?? 0) >= 0 ? 'up' : 'down' }}-right"></i> {{ abs($data['revenue_trend'] ?? 0) }}%
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="rev-month-label">Last Month</div>
+                        <div class="rev-num-sm">${{ number_format($data['last_month_revenue'] ?? 0) }}</div>
+                    </div>
+                    <!-- Mini Chart Canvas -->
+                    <div class="flex-grow-1 rev-chart-wrap">
+                        <canvas id="revenueMiniChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured vs Regular Properties -->
+        <div class="col-lg-4 mb-4">
+            <div class="dashboard-card h-100-card">
+                <div class="dashboard-card-header">
+                    <h3 class="dashboard-card-title feat-card-title">Featured vs Regular Properties</h3>
+                    <a href="{{ url('allproperties/all-property-view') }}" style="font-size: 0.85rem; font-weight: 600; text-decoration: none; white-space: nowrap;">View All</a>
+                </div>
+                <div class="dashboard-card-body d-flex flex-row align-items-center justify-content-between">
+                    @php
+                        $featured = $data['featured_properties'] ?? 0;
+                        $regular = $data['regular_properties'] ?? 0;
+                        $totalProp = max(1, $featured + $regular);
+                        $featPct = round(($featured / $totalProp) * 100, 1);
+                        $regPct = round(($regular / $totalProp) * 100, 1);
+                    @endphp
+                    <div class="text-left" style="flex: 1;">
+                        <div class="feat-lbl-blue">Featured</div>
+                        <div class="feat-num-blue">{{ number_format($featured) }}</div>
+                        <div class="feat-subtext">({{ $featPct }}%)</div>
+                    </div>
+                    <div class="feat-chart-wrap" style="flex: 0 0 160px;">
+                        <canvas id="featuredRegularChart"></canvas>
+                        <div class="feat-chart-star">
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                    </div>
+                    <div class="text-right" style="flex: 1; text-align: right;">
+                        <div class="feat-lbl-dark">Regular</div>
+                        <div class="feat-num-green">{{ number_format($regular) }}</div>
+                        <div class="feat-subtext">({{ $regPct }}%)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── LOCATIONS & PROPERTY TYPES ROW ── -->
+    <div class="row dashboard-section">
+        <!-- Top Cities -->
+        <div class="col-lg-4 mb-4">
+            <div class="dashboard-card h-100-card">
+                <div class="dashboard-card-header">
+                    <h3 class="dashboard-card-title">Top Cities</h3>
                     <a href="{{ url('allproperties/all-property-view') }}" style="font-size: 0.85rem; font-weight: 600; text-decoration: none;">View All</a>
                 </div>
                 <div class="dashboard-card-body p-0">
                     <div class="list-group list-group-flush px-3 py-2">
-                        @if(isset($data["top_locations"]) && count($data["top_locations"]) > 0)
-                            @foreach ($data["top_locations"] as $location)
+                        @if(isset($data['top_cities']) && count($data['top_cities']) > 0)
+                            @foreach($data['top_cities'] as $city)
                             <div class="list-item">
-                                <div class="list-icon"><i class="bi bi-geo-alt"></i></div>
+                                <div class="list-icon icon-sky bg-opacity-50"><i class="bi bi-geo-alt"></i></div>
                                 <div class="list-info">
-                                    <div class="list-title">{{ get_name_by_id("locality_names", "locality_id", $location->locality, "en") ?? "N/A" }}</div>
-                                    <div class="list-subtitle">{{ $location->total }} Properties</div>
+                                    <div class="list-title">{{ $city->city_name ?: 'Unknown City' }}</div>
+                                    <div class="list-subtitle">{{ number_format($city->total) }} Properties</div>
                                 </div>
-                                <div class="list-action {{ $location->trend >= 0 ? 'trend-up' : 'trend-down' }}">
-                                    <i class="bi {{ $location->trend >= 0 ? 'bi-arrow-up-right' : 'bi-arrow-down-right' }}"></i> 
-                                    {{ abs($location->trend) }}%
-                                </div>
+                                @if(isset($city->trend))
+                                    <div class="{{ $city->trend >= 0 ? 'trend-up' : 'trend-down' }} list-action">
+                                        <i class="bi bi-arrow-{{ $city->trend >= 0 ? 'up' : 'down' }}-right"></i> {{ abs($city->trend) }}%
+                                    </div>
+                                @endif
                             </div>
                             @endforeach
                         @else
-                            <div class="p-3 text-center text-muted">No locations found.</div>
+                            <div class="p-3 text-center text-muted">No city data available</div>
                         @endif
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Recent Properties -->
+        <!-- Top Areas -->
         <div class="col-lg-4 mb-4">
             <div class="dashboard-card h-100-card">
+                <div class="dashboard-card-header">
+                    <h3 class="dashboard-card-title">Top Areas</h3>
+                    <a href="{{ url('allproperties/all-property-view') }}" style="font-size: 0.85rem; font-weight: 600; text-decoration: none;">View All</a>
+                </div>
+                <div class="dashboard-card-body p-0">
+                    <div class="list-group list-group-flush px-3 py-2">
+                        @if(isset($data['top_locations']) && count($data['top_locations']) > 0)
+                            @foreach($data['top_locations'] as $location)
+                            <div class="list-item">
+                                <div class="list-icon icon-indigo bg-opacity-50"><i class="bi bi-geo"></i></div>
+                                <div class="list-info">
+                                    <div class="list-title">{{ $location->locality_name ?: 'Unknown Area' }}</div>
+                                    <div class="list-subtitle">{{ number_format($location->total) }} Properties</div>
+                                </div>
+                                @if(isset($location->trend))
+                                    <div class="{{ $location->trend >= 0 ? 'trend-up' : 'trend-down' }} list-action">
+                                        <i class="bi bi-arrow-{{ $location->trend >= 0 ? 'up' : 'down' }}-right"></i> {{ abs($location->trend) }}%
+                                    </div>
+                                @endif
+                            </div>
+                            @endforeach
+                        @else
+                            <div class="p-3 text-center text-muted">No area data available</div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popular Property Types -->
+        <div class="col-lg-4 mb-4">
+            <div class="dashboard-card h-100-card">
+                <div class="dashboard-card-header">
+                    <h3 class="dashboard-card-title">Popular Property Types</h3>
+                    <a href="{{ url('allproperties/all-property-view') }}" style="font-size: 0.85rem; font-weight: 600; text-decoration: none;">View All</a>
+                </div>
+                <div class="dashboard-card-body p-0">
+                    <div class="list-group list-group-flush px-3 py-2">
+                        @forelse($data['popular_property_types'] ?? [] as $ptype)
+                        <div class="list-item">
+                            <div class="list-icon icon-blue bg-opacity-50"><i class="bi {{ $ptype->icon }}"></i></div>
+                            <div class="list-info">
+                                <div class="list-title">{{ $ptype->title }}</div>
+                            </div>
+                            <div class="list-action d-flex align-items-center gap-2">
+                                <span style="font-size: 0.85rem; font-weight: 700;">{{ $ptype->count }}</span> <span style="font-size: 0.75rem; color: #64748b; font-weight: 500;">({{ $ptype->percentage }}%)</span>
+                            </div>
+                        </div>
+                        @empty
+                        <div class="text-center p-3 text-muted" style="font-size: 0.85rem;">No property types found</div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── RECENT TABLES ROW ── -->
+    <div class="row dashboard-section">
+        <!-- Recent Properties Table -->
+        <div class="col-lg-6 mb-4 d-flex">
+            <div class="dashboard-card w-100 flex-grow-1">
                 <div class="dashboard-card-header">
                     <h3 class="dashboard-card-title">Recent Properties</h3>
-                    <a href="{{ url('allproperties/all-property-view') }}" style="font-size: 0.85rem; font-weight: 600; text-decoration: none;">View All</a>
+                    <a href="{{ url('allproperties/all-property-view') }}" style="font-size: 0.85rem; font-weight: 600; text-decoration: none; white-space: nowrap;">View All</a>
                 </div>
-                <div class="dashboard-card-body p-0">
-                    <div class="list-group list-group-flush px-3 py-2">
-                        @if(isset($data["properties_lists"]) && count($data["properties_lists"]) > 0)
-                            @foreach ($data["properties_lists"]->take(4) as $property)
-                            @php
-                                $filename = null;
-                                if ($property->gallery->isNotEmpty() && $property->gallery->first()->images->isNotEmpty()) {
-                                    $filename = $property->gallery->first()->images->first()->filename;
-                                }
-                                $relativePath = 'user_upload/property_images/' . $filename;
-                                $localPath = public_path($relativePath);
-                                $imageToShow = $filename && file_exists($localPath)
-                                    ? asset($relativePath)
-                                    : asset(config('constants.NO_IMAGE_PROPERTY', 'https://via.placeholder.com/100x100.png?text=No+Img'));
-                            @endphp
-                            <div class="list-item">
-                                <img src="{{ $imageToShow }}" class="list-img" alt="{{ $property->name }}">
-                                <div class="list-info">
-                                    <div class="list-title">{{ $property->name }}</div>
-                                    <div class="list-subtitle">{{ get_name_by_id("locality_names", "locality_id", optional($property->location)->locality, "en") ?? "N/A" }}</div>
+                <div class="table-responsive flex-grow-1 w-100 border-0 m-0" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                    <table class="table modern-table mb-0 h-100 text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>Property</th>
+                                <th>Type</th>
+                                <th>Location</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(isset($data["properties_lists"]) && count($data["properties_lists"]) > 0)
+                                @foreach ($data["properties_lists"]->take(5) as $property)
+                                @php
+                                    $filename = null;
+                                    if ($property->gallery->isNotEmpty() && $property->gallery->first()->images->isNotEmpty()) {
+                                        $filename = $property->gallery->first()->images->first()->filename;
+                                    }
+                                    $relativePath = 'user_upload/property_images/' . $filename;
+                                    $localPath = public_path($relativePath);
+                                    $imageToShow = $filename && file_exists($localPath)
+                                        ? asset($relativePath)
+                                        : asset(config('constants.NO_IMAGE_PROPERTY', 'https://via.placeholder.com/100x100.png?text=No+Img'));
+                                @endphp
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <img src="{{ $imageToShow }}" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex-shrink: 0;">
+                                            <div style="min-width: 0; flex-grow: 1;">
+                                                <div class="fw-bold text-dark text-truncate" style="font-size: 0.75rem;">{{ $property->name }}</div>
+                                                <div class="text-muted text-truncate" style="font-size: 0.7rem;">{{ get_name_by_id("locality_names", "locality_id", optional($property->location)->locality, "en") ?? "N/A" }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><span style="font-size: 0.75rem; color: #475569;">For {{ ucfirst($property->settings->post_for ?? "Sale") }}</span></td>
+                                    <td><span style="font-size: 0.75rem; color: #475569;">{{ get_name_by_id("city_names", "city_id", optional($property->location)->city, "en") ?? "N/A" }}</span></td>
+                                    <td><span class="fw-bold text-dark" style="font-size: 0.75rem;">${{ number_format($property->settings->expected_price ?? 0) }}</span></td>
+                                    <td>
+                                        @if($property->status == 1)
+                                            <span class="badge-soft-success">Active</span>
+                                        @elseif($property->status == 2)
+                                            <span class="badge-soft-warning">Pending</span>
+                                        @else
+                                            <span class="badge-soft-danger">Sold</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @endforeach
+                            @else
+                                <tr><td colspan="5" class="text-center text-muted py-4">No records found.</td></tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Enquiries Table -->
+        <div class="col-lg-6 mb-4 d-flex">
+            <div class="dashboard-card w-100 flex-grow-1">
+                <div class="dashboard-card-header">
+                    <h3 class="dashboard-card-title">Recent Enquiries</h3>
+                    <a href="{{ url('enquiry/list') }}" style="font-size: 0.85rem; font-weight: 600; text-decoration: none; white-space: nowrap;">View All</a>
+                </div>
+                <div class="table-responsive flex-grow-1 w-100 border-0 m-0" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                    <table class="table modern-table mb-0 h-100 text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Property</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(isset($data["recent_enquiries"]) && count($data["recent_enquiries"]) > 0)
+                                @foreach ($data["recent_enquiries"]->take(5) as $enquiry)
+                                <tr>
+                                    <td style="min-width: 0;">
+                                        <div class="fw-bold text-dark text-truncate" style="font-size: 0.75rem;">{{ $enquiry->customer ?? 'Guest' }}</div>
+                                        <div class="text-muted text-truncate" style="font-size: 0.7rem;">{{ strtolower(str_replace(' ', '', $enquiry->customer ?? 'guest')) }}@example.com</div>
+                                    </td>
+                                    <td style="min-width: 0;">
+                                        <div class="text-truncate" style="font-size: 0.75rem; color: #475569;">{{ $enquiry->property_name ?? 'General Inquiry' }}</div>
+                                    </td>
+                                    <td><span style="font-size: 0.75rem; color: #475569;">Sale</span></td>
+                                    <td><span style="font-size: 0.75rem; color: #475569; white-space: nowrap;">{{ date("M d, Y", strtotime($enquiry->created_at)) }}</span></td>
+                                    <td>
+                                        @if($enquiry->status == 1)
+                                            <span class="badge-soft-blue">New</span>
+                                        @elseif($enquiry->status == 2)
+                                            <span class="badge-soft-warning">Contacted</span>
+                                        @elseif($enquiry->status == 0)
+                                            <span class="badge-soft-success">Closed</span>
+                                        @else
+                                            <span class="badge-soft-purple">Pending</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @endforeach
+                            @else
+                                <tr><td colspan="5" class="text-center text-muted py-4">No records found.</td></tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── MEMBERSHIPS & AGENTS ROW ── -->
+    <div class="row dashboard-section">
+        <!-- Membership Plans -->
+        <div class="col-xl-7 mb-4">
+            <div class="dashboard-card h-100-card">
+                <div class="dashboard-card-header">
+                    <h3 class="dashboard-card-title">Membership Plans</h3>
+                    <a href="{{ url('membership/plan') }}" style="font-size: 0.85rem; font-weight: 600; text-decoration: none;">View All Plans</a>
+                </div>
+                <div class="dashboard-card-body p-4">
+                    <div class="row g-4">
+                        @if(isset($data['membership_plans']) && count($data['membership_plans']) > 0)
+                            @foreach($data['membership_plans'] as $index => $plan)
+                                @php
+                                    $isPopular = $index == 1; // Highlight the 2nd one
+                                @endphp
+                                <div class="col-md-4">
+                                    <div class="text-center p-4 rounded-4 {{ $isPopular ? 'position-relative' : '' }}" style="border: {{ $isPopular ? '2px solid #3b82f6' : '1px solid #e2e8f0' }}; background: #fff; height: 100%;">
+                                        @if($isPopular)
+                                            <div class="position-absolute" style="top: -12px; left: 50%; transform: translateX(-50%); background: #3b82f6; color: #fff; padding: 2px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">Popular</div>
+                                        @endif
+                                        <div class="fw-bold text-dark mb-2" style="font-size: 1.1rem;">{{ $plan->name ?: 'Plan' }}</div>
+                                        <div class="mb-3">
+                                            <span style="font-size: 2rem; font-weight: 800; color: #1e293b;">${{ number_format($plan->price) }}</span>
+                                            <span class="text-muted" style="font-size: 0.85rem;">/month</span>
+                                        </div>
+                                        <div class="text-muted mb-4" style="font-size: 0.85rem;">For members</div>
+                                        <a href="{{ url('membership/plan') }}" class="btn {{ $isPopular ? 'btn-primary' : 'btn-outline-secondary' }} w-100 rounded-pill" style="font-size: 0.85rem; font-weight: 600;">View Details</a>
+                                    </div>
                                 </div>
-                                <div>
-                                    <span class="badge-soft-success">For {{ $property->settings->post_for ?? "Sale" }}</span>
-                                </div>
-                            </div>
                             @endforeach
                         @else
-                            <div class="p-3 text-center text-muted">No properties found.</div>
+                            <div class="col-12 text-center text-muted py-4">No plans available.</div>
                         @endif
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Users by Role -->
-        <div class="col-lg-4 mb-4">
+        <!-- Top Performing Agents -->
+        <div class="col-xl-5 mb-4">
             <div class="dashboard-card h-100-card">
                 <div class="dashboard-card-header">
-                    <h3 class="dashboard-card-title">Users by Role</h3>
+                    <h3 class="dashboard-card-title">Top Performing Agents</h3>
+                    <a href="{{ url('member/memberUser/Agent') }}" style="font-size: 0.85rem; font-weight: 600; text-decoration: none;">View All</a>
                 </div>
-                <div class="dashboard-card-body d-flex align-items-center donut-chart-container">
-                    @php
-                        $agents = $data['total_agents'] ?? 0;
-                        $builders = $data['total_builder'] ?? 0;
-                        $owners = $data['total_owner'] ?? 0;
-                        $totalUsers = $agents + $builders + $owners;
-                        $divUsers = $totalUsers > 0 ? $totalUsers : 1;
-                        $pAgents = round(($agents / $divUsers) * 100, 1);
-                        $pBuilders = round(($builders / $divUsers) * 100, 1);
-                        $pOwners = round(($owners / $divUsers) * 100, 1);
-                    @endphp
-                    <div class="donut-chart-canvas-wrap" style="position: relative; height: 220px; width: 55%;">
-                        <canvas id="usersRoleChart"></canvas>
-                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-                            <h4 style="margin:0; font-weight: 700; font-size: 1.5rem; color: #1e293b;">{{ number_format($totalUsers) }}</h4>
-                            <span style="color: #64748b; font-size: 0.8rem; font-weight: 500;">Total</span>
-                        </div>
-                    </div>
-                    <div class="donut-chart-legend" style="width: 45%; padding-left: 1rem;">
-                        <div class="mb-3">
-                            <div class="d-flex align-items-center mb-1">
-                                <span style="width: 8px; height: 8px; border-radius: 50%; background-color: #10b981; display: inline-block; margin-right: 8px;"></span>
-                                <span style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Agents</span>
-                            </div>
-                            <div style="padding-left: 16px; font-size: 0.85rem; color: #64748b;">
-                                {{ $agents }} ({{ $pAgents }}%)
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="d-flex align-items-center mb-1">
-                                <span style="width: 8px; height: 8px; border-radius: 50%; background-color: #3b82f6; display: inline-block; margin-right: 8px;"></span>
-                                <span style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Builders</span>
-                            </div>
-                            <div style="padding-left: 16px; font-size: 0.85rem; color: #64748b;">
-                                {{ $builders }} ({{ $pBuilders }}%)
-                            </div>
-                        </div>
-                        <div>
-                            <div class="d-flex align-items-center mb-1">
-                                <span style="width: 8px; height: 8px; border-radius: 50%; background-color: #f59e0b; display: inline-block; margin-right: 8px;"></span>
-                                <span style="font-size: 0.85rem; font-weight: 600; color: #1e293b;">Owners</span>
-                            </div>
-                            <div style="padding-left: 16px; font-size: 0.85rem; color: #64748b;">
-                                {{ $owners }} ({{ $pOwners }}%)
-                            </div>
-                        </div>
+                <div class="dashboard-card-body p-0">
+                    <div class="list-group list-group-flush px-3 py-2">
+                        @if(isset($data['top_agents']) && count($data['top_agents']) > 0)
+                            @foreach($data['top_agents'] as $agent)
+                                @php
+                                    $bgColors = ['eff6ff', 'f5f3ff', 'fff7ed'];
+                                    $textColors = ['3b82f6', '8b5cf6', 'f97316'];
+                                    $colorIndex = $loop->index % 3;
+                                    $bg = $bgColors[$colorIndex];
+                                    $color = $textColors[$colorIndex];
+                                    
+                                    $relativePath = 'user_upload/profile_image/' . $agent->image;
+                                    $localPath = public_path($relativePath);
+                                    $imageToShow = ($agent->image && file_exists($localPath)) 
+                                        ? asset($relativePath) 
+                                        : "https://ui-avatars.com/api/?name=" . urlencode($agent->name) . "&background={$bg}&color={$color}";
+                                @endphp
+                                <div class="list-item d-flex align-items-center justify-content-between border-0 border-bottom py-3">
+                                    <div class="d-flex align-items-center" style="width: 45%;">
+                                        <img src="{{ $imageToShow }}" class="rounded-circle me-3" style="width: 45px; height: 45px; object-fit: cover;">
+                                        <div class="list-title mb-0" style="font-weight: 600; font-size: 0.9rem; color: #1e293b;">{{ $agent->name }}</div>
+                                    </div>
+                                    <div class="list-subtitle mb-0 text-start" style="width: 30%; color: #64748b; font-size: 0.85rem;">
+                                        {{ $agent->properties_count }} Properties
+                                    </div>
+                                    <div class="text-end" style="width: 25%;">
+                                        <div class="fw-bold text-dark" style="font-size: 0.9rem;">${{ number_format($agent->properties_count * 1250) }}</div>
+                                        <div class="text-muted fw-semibold" style="font-size: 0.85rem;">Total Sales</div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="text-center text-muted py-4">No agents found.</div>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ── RECENT ENQUIRIES TABLE ── -->
-    <div class="dashboard-card mb-4">
-        <div class="dashboard-card-header">
-            <h3 class="dashboard-card-title">Recent Enquiries</h3>
-            <a href="{{ url('enquiry/list') }}" style="font-size: 0.85rem; font-weight: 600; text-decoration: none;">View All</a>
+    <!-- ── FOOTER QUICK LINKS ── -->
+    <div class="row g-3 mb-4 mt-2">
+        <div class="col-xl col-lg-4 col-md-6">
+            <a href="{{ url('post-property') }}" class="d-flex align-items-center gap-3 text-decoration-none bg-white p-3 rounded-4 shadow-sm h-100" style="color: inherit; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.05)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
+                <div class="icon-blue" style="width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                    <i class="bi bi-house-add"></i>
+                </div>
+                <div>
+                    <div class="fw-bold text-dark" style="font-size: 0.9rem;">Add New Property</div>
+                    <div class="text-muted" style="font-size: 0.75rem;">Create a new listing</div>
+                </div>
+            </a>
         </div>
-        <div class="table-responsive">
-            <table class="table modern-table mb-0">
-                <thead>
-                    <tr>
-                        <th>Enquiry ID</th>
-                        <th>Customer</th>
-                        <th>Property</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if(isset($data["recent_enquiries"]) && count($data["recent_enquiries"]) > 0)
-                        @foreach ($data["recent_enquiries"] as $enquiry)
-                        <tr>
-                            <td class="text-muted fw-bold">#{{ $enquiry->enquery_id }}</td>
-                            <td class="fw-bold text-dark">{{ $enquiry->customer ?? 'Guest' }}</td>
-                            <td>{{ $enquiry->property_name ?? 'General Inquiry' }}</td>
-                            <td>{{ date("M d, Y", strtotime($enquiry->created_at)) }}</td>
-                            <td>
-                                @if($enquiry->status == 1)
-                                    <span class="badge-soft-success">Active</span>
-                                @elseif($enquiry->status == 0)
-                                    <span class="badge-soft-blue">Closed</span>
-                                @else
-                                    <span class="badge-soft-warning">Pending</span>
-                                @endif
-                            </td>
-                        </tr>
-                        @endforeach
-                    @else
-                        <tr>
-                            <td colspan="5" class="text-center text-muted py-4">No records found.</td>
-                        </tr>
-                    @endif
-                </tbody>
-            </table>
+        <div class="col-xl col-lg-4 col-md-6">
+            <a href="{{ url('member/memberUser/Agent') }}" class="d-flex align-items-center gap-3 text-decoration-none bg-white p-3 rounded-4 shadow-sm h-100" style="color: inherit; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.05)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
+                <div class="icon-indigo" style="width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                    <i class="bi bi-person-plus"></i>
+                </div>
+                <div>
+                    <div class="fw-bold text-dark" style="font-size: 0.9rem;">Add New Agent</div>
+                    <div class="text-muted" style="font-size: 0.75rem;">Register a new agent</div>
+                </div>
+            </a>
         </div>
-    </div>
-
-    <!-- ── FOOTER FEATURES ── -->
-    <div class="features-row d-none d-lg-flex">
-        <div class="feature-item">
-            <i class="bi bi-shield-check feature-icon"></i>
-            <div>
-                <div class="feature-title">100% Secure</div>
-                <div class="feature-desc">Your data is safe with us</div>
-            </div>
+        <div class="col-xl col-lg-4 col-md-6">
+            <a href="{{ url('member/memberUser') }}" class="d-flex align-items-center gap-3 text-decoration-none bg-white p-3 rounded-4 shadow-sm h-100" style="color: inherit; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.05)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
+                <div class="icon-purple" style="width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                    <i class="bi bi-people"></i>
+                </div>
+                <div>
+                    <div class="fw-bold text-dark" style="font-size: 0.9rem;">Manage Users</div>
+                    <div class="text-muted" style="font-size: 0.75rem;">View all users</div>
+                </div>
+            </a>
         </div>
-        <div class="feature-item">
-            <i class="bi bi-headset feature-icon"></i>
-            <div>
-                <div class="feature-title">24/7 Support</div>
-                <div class="feature-desc">We're here to help</div>
-            </div>
-        </div>
-        <div class="feature-item">
-            <i class="bi bi-graph-up-arrow feature-icon"></i>
-            <div>
-                <div class="feature-title">Real-time Analytics</div>
-                <div class="feature-desc">Make data-driven decisions</div>
-            </div>
-        </div>
-        <div class="feature-item">
-            <i class="bi bi-file-earmark-text feature-icon"></i>
-            <div>
-                <div class="feature-title">Automated Reports</div>
-                <div class="feature-desc">Get insights on the go</div>
-            </div>
+        <div class="col-xl col-lg-4 col-md-6">
+            <a href="{{ url('Settings') }}" class="d-flex align-items-center gap-3 text-decoration-none bg-white p-3 rounded-4 shadow-sm h-100" style="color: inherit; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.05)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
+                <div class="icon-sky" style="width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                    <i class="bi bi-gear"></i>
+                </div>
+                <div>
+                    <div class="fw-bold text-dark" style="font-size: 0.9rem;">System Settings</div>
+                    <div class="text-muted" style="font-size: 0.75rem;">Configure system</div>
+                </div>
+            </a>
         </div>
     </div>
-
+    
+    <!-- ── FEATURES ── -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between rounded-4 rounded-xl-pill px-4 py-3 mb-4 shadow-sm gap-3" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+        <div class="d-flex align-items-center gap-3">
+            <div class="icon-blue" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;"><i class="bi bi-activity"></i></div>
+            <div>
+                <div class="fw-bold text-dark" style="font-size: 0.85rem;">99.9% Uptime</div>
+                <div class="text-muted" style="font-size: 0.75rem;">Your platform is running smoothly</div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <div class="icon-indigo" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;"><i class="bi bi-headset"></i></div>
+            <div>
+                <div class="fw-bold text-dark" style="font-size: 0.85rem;">24/7 Support</div>
+                <div class="text-muted" style="font-size: 0.75rem;">We're here to help you anytime</div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <div class="icon-sky" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;"><i class="bi bi-shield-check"></i></div>
+            <div>
+                <div class="fw-bold text-dark" style="font-size: 0.85rem;">Secure Platform</div>
+                <div class="text-muted" style="font-size: 0.75rem;">Your data is safe with us</div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <div class="icon-purple" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;"><i class="bi bi-cloud-arrow-up"></i></div>
+            <div>
+                <div class="fw-bold text-dark" style="font-size: 0.85rem;">Regular Backups</div>
+                <div class="text-muted" style="font-size: 0.75rem;">Daily automated backups</div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 
@@ -898,6 +1244,72 @@
                         legend: { display: false } // Custom HTML legend is used
                     },
                     cutout: '70%'
+                }
+            });
+        }
+
+        // Revenue Mini Chart
+        const revCtx = document.getElementById('revenueMiniChart');
+        if (revCtx) {
+            let revGradient = revCtx.getContext('2d').createLinearGradient(0, 0, 0, 110);
+            revGradient.addColorStop(0, 'rgba(16, 185, 129, 0.25)'); // green with opacity
+            revGradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+
+            new Chart(revCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: @json($data['chart_labels'] ?? []),
+                    datasets: [{
+                        data: @json($data['chart_revenue'] ?? []),
+                        borderColor: '#10b981',
+                        backgroundColor: revGradient,
+                        borderWidth: 2,
+                        tension: 0, // straight lines
+                        fill: true,
+                        pointBackgroundColor: '#10b981',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: { enabled: true } },
+                    scales: { 
+                        x: { display: false }, 
+                        y: { display: false } 
+                    },
+                    layout: { padding: { left: 0, right: 0, bottom: -10, top: 10 } }
+                }
+            });
+        }
+
+        // Featured vs Regular Donut
+        const featCtx = document.getElementById('featuredRegularChart');
+        if (featCtx) {
+            new Chart(featCtx.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Featured', 'Regular'],
+                    datasets: [{
+                        data: [
+                            {{ $data['featured_properties'] ?? 0 }}, 
+                            {{ $data['regular_properties'] ?? 0 }}
+                        ],
+                        backgroundColor: ['#e2e8f0', '#10b981'], // light gray and green
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%', // reverted to slightly thicker to match design
+                    plugins: {
+                        legend: { display: false }
+                    }
                 }
             });
         }

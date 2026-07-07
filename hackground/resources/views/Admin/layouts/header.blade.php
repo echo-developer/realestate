@@ -64,7 +64,8 @@
                 <div class="header-btn-lg pr-0">
                     <div class="widget-content p-0">
                         <div class="widget-content-wrapper">
-                            <div class="widget-content-left">
+                            <div class="widget-content-left d-flex align-items-center">
+                                <div class="d-none d-lg-block" style="border-left: 1px solid #e5e7eb; height: 35px; margin-right: 15px;"></div>
                                 <div class="btn-group">
                                     <a data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                         class="p-0 btn profile-avatar-btn">
@@ -106,12 +107,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="widget-content-left ml-3 header-user-info">
-                                <div class="widget-subheading">
-                                    @if (Auth::guard('admin')->user()->username)
-                                        {{ Auth::guard('admin')->user()->username }}
-                                    @endif
+                            <div class="widget-content-left ml-3 header-user-info d-none d-lg-block" style="cursor: pointer;" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="widget-heading fw-bolder" style="color: #4b5563; font-size: 1rem; line-height: 1.2;">
+                                    {{ Auth::guard('admin')->user()->full_name ?? (Auth::guard('admin')->user()->username ?? 'Super Admin') }}
                                 </div>
+                                <div class="widget-subheading" style="color: #9ca3af; font-size: 0.85rem; margin-top: 2px;">
+                                    Administrator
+                                </div>
+                            </div>
+                            <div class="widget-content-left ml-2 header-user-info d-none d-lg-block" style="cursor: pointer;" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bi bi-chevron-down" style="color: #6b7280; font-size: 0.8rem; font-weight: bold;"></i>
                             </div>
                         </div>
                     </div>
@@ -123,19 +128,22 @@
 
     <style>
         /* ══ 2026 DROPDOWN & AVATAR MODERNIZATION (Global) ══ */
-        .header-user-info { display: none !important; } /* Clean up header by hiding raw text */
+        /* ══ 2026 DROPDOWN & AVATAR MODERNIZATION (Global) ══ */
         
         .header-btn-lg .btn-group > a.profile-avatar-btn {
-            padding: 2px !important;
+            padding: 3px !important;
             border-radius: 50% !important;
-            border: 2px solid #e2e8f0 !important;
+            border: 1px solid #bfdbfe !important;
+            background-color: #fff !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
             transition: all 0.3s ease;
             display: flex !important;
             align-items: center !important;
+            margin-left: 4px;
         }
         .header-btn-lg .btn-group > a.profile-avatar-btn:hover {
-            border-color: #3b82f6 !important;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2) !important;
+            border-color: #93c5fd !important;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15) !important;
         }
         
         .modern-profile-dropdown {

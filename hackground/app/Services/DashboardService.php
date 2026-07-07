@@ -22,10 +22,11 @@ class DashboardService
         $monthlyData = collect(CarbonPeriod::create($startDate, '1 month', $endDate))
             ->mapWithKeys(fn($date) => [
                 $date->format('Y-m') => [
-                    'month' => $date->format('F Y'),
+                    'month' => $date->format('M'), // Use short month for labels
                     'total_sale' => 0,
                     'total_rent' => 0,
                     'total_enquiry' => 0,
+                    'total_revenue' => 0,
                 ],
             ]);
 
@@ -51,12 +52,20 @@ class DashboardService
             ->get()
             ->keyBy('y_m');
 
-        $finalData = $monthlyData->map(function ($default, $key) use ($salesData, $enquiryData) {
+        $revenueData = UserTransaction::where('payment_status', 'succeeded')
+            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as y_m, SUM(paid_amount) as total_revenue")
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->groupBy(DB::raw("DATE_FORMAT(created_at, '%Y-%m')"))
+            ->get()
+            ->keyBy('y_m');
+
+        $finalData = $monthlyData->map(function ($default, $key) use ($salesData, $enquiryData, $revenueData) {
             return [
                 'month' => $default['month'],
                 'total_sale' => $salesData->has($key) ? $salesData[$key]->total_sale : 0,
                 'total_rent' => $salesData->has($key) ? $salesData[$key]->total_rent : 0,
                 'total_enquiry' => $enquiryData->has($key) ? $enquiryData[$key]->total_enquiry : 0,
+                'total_revenue' => $revenueData->has($key) ? $revenueData[$key]->total_revenue : 0,
             ];
         });
 
@@ -102,10 +111,36 @@ class DashboardService
         $revenueTrend = $calcTrend($currRev, $prevRev);
 
         $topLocations = DB::table('properties_location')
-            ->select('locality', DB::raw('count(pid) as total'))
-            ->groupBy('locality')
+            ->join('locality_names', 'properties_location.locality', '=', 'locality_names.locality_id')
+            ->where('locality_names.lang', 'en')
+            ->select('locality_names.name as locality_name', 'properties_location.locality', DB::raw('count(pid) as total'))
+            ->groupBy('properties_location.locality', 'locality_names.name')
             ->orderByDesc('total')
             ->limit(5)
+            ->get();
+
+        $topCities = DB::table('properties_location')
+            ->join('city_names', 'properties_location.city', '=', 'city_names.city_id')
+            ->where('city_names.lang', 'en')
+            ->select('city_names.name as city_name', 'properties_location.city', DB::raw('count(pid) as total'))
+            ->groupBy('properties_location.city', 'city_names.name')
+            ->orderByDesc('total')
+            ->limit(5)
+            ->get();
+
+        $membershipPlans = DB::table('membership_plans as mp')
+            ->join('membership_plan_names as mpn', 'mp.id', '=', 'mpn.plan_id')
+            ->where('mpn.lang', 'en')
+            ->where('mp.status', config('constants.STATUS_ACTIVE') ?? 1)
+            ->select('mp.id', 'mp.price', 'mp.discounted_price', 'mpn.about_plan as name')
+            ->take(3)
+            ->get();
+
+        $topAgents = User::where('user_type', 'A')
+            ->where('status', config('constants.STATUS_ACTIVE') ?? 1)
+            ->withCount('properties')
+            ->orderByDesc('properties_count')
+            ->take(3)
             ->get();
 
         foreach ($topLocations as $location) {
@@ -122,6 +157,47 @@ class DashboardService
             $location->trend = $calcTrend($currCount, $prevCount);
         }
 
+        foreach ($topCities as $c) {
+            $currCount = PrefProperty::where('status', '!=', $deleteStatus)
+                ->whereHas('location', fn($q) => $q->where('city', $c->city))
+                ->where('created_at', '>=', $currStart)
+                ->count();
+            $prevCount = PrefProperty::where('status', '!=', $deleteStatus)
+                ->whereHas('location', fn($q) => $q->where('city', $c->city))
+                ->whereBetween('created_at', [$prevStart, $currStart])
+                ->count();
+            $c->trend = $calcTrend($currCount, $prevCount);
+        }
+
+        $popularPropertyTypes = DB::table('properties_settings as ps')
+            ->join('properties as p', 'ps.pid', '=', 'p.id')
+            ->join('property_sub_category_names as scn', 'ps.property_type', '=', 'scn.sub_category_id')
+            ->where('scn.lang', 'en')
+            ->where('p.status', '!=', $deleteStatus)
+            ->select('scn.name as title', DB::raw('count(*) as count'))
+            ->groupBy('ps.property_type', 'scn.name')
+            ->orderByDesc('count')
+            ->take(5)
+            ->get();
+
+        $totalPropertiesForPercentage = DB::table('properties_settings as ps')
+            ->join('properties as p', 'ps.pid', '=', 'p.id')
+            ->where('p.status', '!=', $deleteStatus)
+            ->count();
+
+        foreach ($popularPropertyTypes as $type) {
+            $type->percentage = $totalPropertiesForPercentage > 0 ? round(($type->count / $totalPropertiesForPercentage) * 100, 1) : 0;
+            
+            $titleLower = strtolower($type->title);
+            $icon = 'bi-building';
+            if (strpos($titleLower, 'house') !== false) $icon = 'bi-house';
+            if (strpos($titleLower, 'villa') !== false) $icon = 'bi-house-door';
+            if (strpos($titleLower, 'office') !== false) $icon = 'bi-shop';
+            if (strpos($titleLower, 'land') !== false || strpos($titleLower, 'plot') !== false) $icon = 'bi-tree';
+            
+            $type->icon = $icon;
+        }
+
         return [
             'total_properties' => PrefProperty::where('status', '!=', $deleteStatus)->count(),
             'total_projects' => PrefProject::where('status', '!=', $deleteStatus)->count(),
@@ -131,8 +207,22 @@ class DashboardService
             'total_agents' => User::where([['user_type', 'A'], ['status', '!=', $deleteStatus]])->count(),
             'total_builder' => User::where([['user_type', 'B'], ['status', '!=', $deleteStatus]])->count(),
             'total_owner' => User::where([['user_type', 'O'], ['status', '!=', $deleteStatus]])->count(),
+            
+            'free_members' => User::where('is_verified_agent', 0)->where('status', '!=', $deleteStatus)->count(),
+            'free_members_this_month' => User::where('is_verified_agent', 0)->where('status', '!=', $deleteStatus)->where('created_at', '>=', now()->startOfMonth())->count(),
+            'premium_members' => User::where('is_verified_agent', 1)->where('status', '!=', $deleteStatus)->count(),
+            'premium_members_this_month' => User::where('is_verified_agent', 1)->where('status', '!=', $deleteStatus)->where('created_at', '>=', now()->startOfMonth())->count(),
+            
+            'featured_properties' => PrefProperty::where('is_featured', 1)->where('status', '!=', $deleteStatus)->count(),
+            'regular_properties' => PrefProperty::where('is_featured', 0)->where('status', '!=', $deleteStatus)->count(),
+
+            'popular_property_types' => $popularPropertyTypes,
+
             'top_locations' => $topLocations,
+            'top_cities' => $topCities,
             'total_revenue' => UserTransaction::where('payment_status', 'succeeded')->sum('paid_amount'),
+            'last_month_revenue' => UserTransaction::where('payment_status', 'succeeded')->whereBetween('created_at', [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()])->sum('paid_amount'),
+            'this_month_revenue' => UserTransaction::where('payment_status', 'succeeded')->where('created_at', '>=', now()->startOfMonth())->sum('paid_amount'),
             'properties_lists' => PrefProperty::select('id', 'name', 'created_at')
                 ->with(['settings:pid,post_for,property_type', 'location:pid,locality', 'gallery.images'])
                 ->latest()->take(5)->get(),
@@ -149,12 +239,17 @@ class DashboardService
             'chart_sale' => $finalData->pluck('total_sale')->toArray(),
             'chart_rent' => $finalData->pluck('total_rent')->toArray(),
             'chart_enquiry' => $finalData->pluck('total_enquiry')->toArray(),
+            'chart_revenue' => $finalData->pluck('total_revenue')->toArray(),
             'prop_trend' => $propTrend,
             'agent_trend' => $agentTrend,
             'builder_trend' => $builderTrend,
             'project_trend' => $projectTrend,
             'enquiry_trend' => $enquiryTrend,
             'owner_trend' => $ownerTrend,
+            'top_locations' => $topLocations,
+            'top_cities' => $topCities,
+            'membership_plans' => $membershipPlans,
+            'top_agents' => $topAgents,
             'revenue_trend' => $revenueTrend,
         ];
     }
