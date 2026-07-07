@@ -78,14 +78,28 @@ $allmenus = AllmenusForSideBar();
     .vertical-nav-menu ul {
         margin: 0.25rem 0 0.25rem 2.2rem !important;
         padding-left: 0 !important;
-        border-left: 2px solid #e2e8f0 !important;
+        border-left: 1px solid #e2e8f0 !important;
         transition: all 0.3s ease !important;
     }
     .vertical-nav-menu ul:before { display: none !important; }
     
+    .vertical-nav-menu ul li {
+        position: relative !important;
+    }
+    
+    .vertical-nav-menu ul li:before {
+        content: "" !important;
+        position: absolute !important;
+        left: -1px !important;
+        top: 50% !important;
+        width: 12px !important;
+        height: 1px !important;
+        background-color: #e2e8f0 !important;
+    }
+    
     .vertical-nav-menu ul li a {
-        padding-left: 1.2rem !important;
-        margin-left: -2px !important;
+        padding-left: 1.5rem !important;
+        margin-left: 0 !important;
         font-size: 0.85rem !important;
         color: #64748b !important;
         height: 2.25rem !important;
@@ -99,7 +113,7 @@ $allmenus = AllmenusForSideBar();
         color: #2563eb !important;
         font-weight: 600 !important;
         background: #eff6ff !important;
-        border-left: 2px solid #2563eb !important;
+        border-left: none !important;
     }
     .vertical-nav-menu ul li a:hover {
         color: #0f172a !important;
