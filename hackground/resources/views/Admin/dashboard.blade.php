@@ -812,45 +812,42 @@
                     <h3 class="dashboard-card-title">Recent Properties</h3>
                     <a href="{{ url('allproperties/all-property-view') }}" style="font-size: 0.85rem; font-weight: 600; text-decoration: none; white-space: nowrap;">View All</a>
                 </div>
-                <div class="table-responsive flex-grow-1 w-100 border-0 m-0" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
-                    <table class="table modern-table mb-0 h-100 text-nowrap">
-                        <thead>
-                            <tr>
-                                <th>Property</th>
-                                <th>Type</th>
-                                <th>Location</th>
-                                <th>Price</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if(isset($data["properties_lists"]) && count($data["properties_lists"]) > 0)
-                                @foreach ($data["properties_lists"]->take(5) as $property)
-                                @php
-                                    $filename = null;
-                                    if ($property->gallery->isNotEmpty() && $property->gallery->first()->images->isNotEmpty()) {
-                                        $filename = $property->gallery->first()->images->first()->filename;
-                                    }
-                                    $relativePath = 'user_upload/property_images/' . $filename;
-                                    $localPath = public_path($relativePath);
-                                    $imageToShow = $filename && file_exists($localPath)
-                                        ? asset($relativePath)
-                                        : asset(config('constants.NO_IMAGE_PROPERTY', 'https://via.placeholder.com/100x100.png?text=No+Img'));
-                                @endphp
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <img src="{{ $imageToShow }}" style="width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex-shrink: 0;">
-                                            <div style="min-width: 0; flex-grow: 1;">
-                                                <div class="fw-bold text-dark text-truncate" style="font-size: 0.75rem;">{{ $property->name }}</div>
-                                                <div class="text-muted text-truncate" style="font-size: 0.7rem;">{{ get_name_by_id("locality_names", "locality_id", optional($property->location)->locality, "en") ?? "N/A" }}</div>
-                                            </div>
+                <div class="modern-list-wrapper">
+                    <style>
+                        .modern-list-item { transition: background-color 0.2s ease; border-bottom: 1px solid #f1f5f9; }
+                        .modern-list-item:hover { background-color: #f8fafc; }
+                        .modern-list-item:last-child { border-bottom: none !important; }
+                        .avatar-circle { font-size: 1.1rem; color: #3b82f6; background-color: #eff6ff; }
+                    </style>
+                    <div class="d-flex flex-column h-100">
+                        @if(isset($data["properties_lists"]) && count($data["properties_lists"]) > 0)
+                            @foreach ($data["properties_lists"]->take(5) as $property)
+                            @php
+                                $filename = null;
+                                if ($property->gallery->isNotEmpty() && $property->gallery->first()->images->isNotEmpty()) {
+                                    $filename = $property->gallery->first()->images->first()->filename;
+                                }
+                                $relativePath = 'user_upload/property_images/' . $filename;
+                                $localPath = public_path($relativePath);
+                                $imageToShow = $filename && file_exists($localPath)
+                                    ? asset($relativePath)
+                                    : asset(config('constants.NO_IMAGE_PROPERTY', 'https://via.placeholder.com/100x100.png?text=No+Img'));
+                            @endphp
+                            <div class="modern-list-item p-3 d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-3" style="min-width: 0;">
+                                    <img src="{{ $imageToShow }}" style="width: 48px; height: 48px; border-radius: 10px; object-fit: cover; flex-shrink: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                    <div style="min-width: 0;">
+                                        <div class="fw-bold text-dark text-truncate mb-1" style="font-size: 0.9rem;">{{ $property->name }}</div>
+                                        <div class="text-muted d-flex align-items-center gap-2 text-truncate" style="font-size: 0.75rem;">
+                                            <span><i class="bi bi-geo-alt-fill text-secondary"></i> {{ get_name_by_id("locality_names", "locality_id", optional($property->location)->locality, "en") ?? "N/A" }}</span>
+                                            <span style="color: #cbd5e1;">&bull;</span>
+                                            <span>For {{ ucfirst($property->settings->post_for ?? "Sale") }}</span>
                                         </div>
-                                    </td>
-                                    <td><span style="font-size: 0.75rem; color: #475569;">For {{ ucfirst($property->settings->post_for ?? "Sale") }}</span></td>
-                                    <td><span style="font-size: 0.75rem; color: #475569;">{{ get_name_by_id("city_names", "city_id", optional($property->location)->city, "en") ?? "N/A" }}</span></td>
-                                    <td><span class="fw-bold text-dark" style="font-size: 0.75rem;">${{ number_format($property->settings->expected_price ?? 0) }}</span></td>
-                                    <td>
+                                    </div>
+                                </div>
+                                <div class="text-end ms-3 flex-shrink-0">
+                                    <div class="fw-bold text-dark mb-1" style="font-size: 0.9rem;">${{ number_format($property->settings->expected_price ?? 0) }}</div>
+                                    <div>
                                         @if($property->status == 1)
                                             <span class="badge-soft-success">Active</span>
                                         @elseif($property->status == 2)
@@ -858,14 +855,14 @@
                                         @else
                                             <span class="badge-soft-danger">Sold</span>
                                         @endif
-                                    </td>
-                                </tr>
-                                @endforeach
-                            @else
-                                <tr><td colspan="5" class="text-center text-muted py-4">No records found.</td></tr>
-                            @endif
-                        </tbody>
-                    </table>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        @else
+                            <div class="p-4 text-center text-muted">No records found.</div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
@@ -877,31 +874,28 @@
                     <h3 class="dashboard-card-title">Recent Enquiries</h3>
                     <a href="{{ url('enquiry/list') }}" style="font-size: 0.85rem; font-weight: 600; text-decoration: none; white-space: nowrap;">View All</a>
                 </div>
-                <div class="table-responsive flex-grow-1 w-100 border-0 m-0" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
-                    <table class="table modern-table mb-0 h-100 text-nowrap">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Property</th>
-                                <th>Type</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if(isset($data["recent_enquiries"]) && count($data["recent_enquiries"]) > 0)
-                                @foreach ($data["recent_enquiries"]->take(5) as $enquiry)
-                                <tr>
-                                    <td style="min-width: 0;">
-                                        <div class="fw-bold text-dark text-truncate" style="font-size: 0.75rem;">{{ $enquiry->customer ?? 'Guest' }}</div>
-                                        <div class="text-muted text-truncate" style="font-size: 0.7rem;">{{ strtolower(str_replace(' ', '', $enquiry->customer ?? 'guest')) }}@example.com</div>
-                                    </td>
-                                    <td style="min-width: 0;">
-                                        <div class="text-truncate" style="font-size: 0.75rem; color: #475569;">{{ $enquiry->property_name ?? 'General Inquiry' }}</div>
-                                    </td>
-                                    <td><span style="font-size: 0.75rem; color: #475569;">Sale</span></td>
-                                    <td><span style="font-size: 0.75rem; color: #475569; white-space: nowrap;">{{ date("M d, Y", strtotime($enquiry->created_at)) }}</span></td>
-                                    <td>
+                <div class="modern-list-wrapper">
+                    <div class="d-flex flex-column h-100">
+                        @if(isset($data["recent_enquiries"]) && count($data["recent_enquiries"]) > 0)
+                            @foreach ($data["recent_enquiries"]->take(5) as $enquiry)
+                            <div class="modern-list-item p-3 d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-3" style="min-width: 0;">
+                                    <div class="avatar-circle rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 42px; height: 42px;">
+                                        {{ strtoupper(substr($enquiry->customer ?? 'G', 0, 1)) }}
+                                    </div>
+                                    <div style="min-width: 0;">
+                                        <div class="fw-bold text-dark text-truncate mb-1" style="font-size: 0.9rem;">{{ $enquiry->customer ?? 'Guest' }}</div>
+                                        <div class="text-muted text-truncate" style="font-size: 0.75rem;">
+                                            <i class="bi bi-envelope-fill text-secondary"></i> {{ strtolower(str_replace(' ', '', $enquiry->customer ?? 'guest')) }}@example.com
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-end ms-3 flex-shrink-0 d-flex flex-column align-items-end">
+                                    <div class="text-dark fw-semibold text-truncate mb-1" style="font-size: 0.8rem; max-width: 140px;" title="{{ $enquiry->property_name ?? 'General Inquiry' }}">
+                                        {{ $enquiry->property_name ?? 'General Inquiry' }}
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="text-muted" style="font-size: 0.7rem;"><i class="bi bi-calendar3"></i> {{ date("M d", strtotime($enquiry->created_at)) }}</span>
                                         @if($enquiry->status == 1)
                                             <span class="badge-soft-blue">New</span>
                                         @elseif($enquiry->status == 2)
@@ -911,14 +905,14 @@
                                         @else
                                             <span class="badge-soft-purple">Pending</span>
                                         @endif
-                                    </td>
-                                </tr>
-                                @endforeach
-                            @else
-                                <tr><td colspan="5" class="text-center text-muted py-4">No records found.</td></tr>
-                            @endif
-                        </tbody>
-                    </table>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        @else
+                            <div class="p-4 text-center text-muted">No records found.</div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
