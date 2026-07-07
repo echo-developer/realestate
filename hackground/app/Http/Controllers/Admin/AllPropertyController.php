@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AllPropertyModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class AllPropertyController extends Controller
@@ -32,7 +33,38 @@ class AllPropertyController extends Controller
         $statusMapping = config('property_status.status');
         //$srch['term'] = $request->input('term');
         $data = $this->allpropertymodel->getallProperties($srch, $paginate);
-        return view('Admin.All_Property.all-properties', compact('data', 'statusMapping', 'srch', 'user_id'));
+
+        $base = DB::table('properties')->where('is_deleted', '!=', config('constants.STATUS_ACTIVE'));
+
+        $counts = (clone $base)->selectRaw("
+            COUNT(*) as total,
+            SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) as active,
+            SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) as pending,
+            SUM(CASE WHEN status = 0 THEN 1 ELSE 0 END) as inactive
+        ")->first();
+
+        $lastMonth = (clone $base)->whereMonth('created_at', now()->subMonth()->month)
+            ->whereYear('created_at', now()->subMonth()->year)
+            ->selectRaw("
+                COUNT(*) as total,
+                SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) as active,
+                SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) as pending,
+                SUM(CASE WHEN status = 0 THEN 1 ELSE 0 END) as inactive
+            ")->first();
+
+        $calcChange = function($current, $previous) {
+            if ($previous == 0) return $current > 0 ? 100 : 0;
+            return round((($current - $previous) / $previous) * 100, 1);
+        };
+
+        $changes = [
+            'total'    => $calcChange($counts->total,   $lastMonth->total),
+            'active'   => $calcChange($counts->active,  $lastMonth->active),
+            'pending'  => $calcChange($counts->pending, $lastMonth->pending),
+            'inactive' => $calcChange($counts->inactive,$lastMonth->inactive),
+        ];
+
+        return view('Admin.All_Property.all-properties', compact('data', 'statusMapping', 'srch', 'user_id', 'counts', 'changes'));
     }
 
     public function FeaturedStatus(Request $req)

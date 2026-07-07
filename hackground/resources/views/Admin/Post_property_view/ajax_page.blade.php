@@ -200,8 +200,7 @@
     function loadPropertyFor(propertyId) {
         var dropdown = $('#property_for');
         dropdown.empty();
-        var property_for = '{{ $propertyData['
-        settings ']->property_type_for }}';
+        var property_for = '{{ optional($propertyData['settings'])->property_type_for }}';
         //alert(property_for);
         $.ajax({
             url: "{{ url('/api/get_property_for') }}/" + propertyId,

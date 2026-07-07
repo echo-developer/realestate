@@ -1085,76 +1085,86 @@ nav[aria-label] ul.pagination,
         margin-bottom: 0.75rem !important;
     }
 
-    /* Horizontal card layout */
+    /* Horizontal card layout (List View) */
     .custom-prop-card {
         flex-direction: row !important;
         border-radius: 10px !important;
         height: auto !important;
         margin-bottom: 0 !important;
-        min-height: 130px;
+        min-height: 125px;
     }
     .prop-card-img-wrapper {
-        width: 115px !important;
-        min-width: 115px !important;
+        width: 110px !important;
+        min-width: 110px !important;
         height: auto !important;
-        min-height: 130px !important;
+        min-height: 125px !important;
         flex-shrink: 0 !important;
         border-radius: 10px 0 0 10px !important;
     }
     .prop-card-img {
         border-radius: 10px 0 0 10px !important;
         height: 100% !important;
-        min-height: 130px !important;
+        min-height: 125px !important;
         object-fit: cover !important;
     }
 
     /* Badges */
     .prop-badges-left { top: 6px !important; left: 6px !important; gap: 3px !important; }
     .prop-badge-type, .prop-badge-featured, .prop-badge-top {
-        font-size: 0.6rem !important;
-        padding: 0.12rem 0.4rem !important;
+        font-size: 0.55rem !important;
+        padding: 0.12rem 0.35rem !important;
     }
-    .pos-three-dots { top: 6px !important; right: 6px !important; }
-    .btn-three-dots { width: 26px !important; height: 26px !important; font-size: 0.75rem !important; }
+    .badge.bg-primary.position-absolute {
+        top: 6px !important !important; left: 6px !important !important; 
+        font-size: 0.55rem !important; padding: 2px 5px !important; border-radius: 3px !important;
+    }
+    .prop-leads-badge-new { font-size: 0.75rem !important; }
+    .prop-leads-badge-new i { font-size: 0.85rem !important; margin-right: 0.1rem !important; }
 
     /* Card body */
     .prop-card-body {
         flex: 1 !important;
-        padding: 0.55rem 0.7rem !important;
-        gap: 0.2rem !important;
+        padding: 0.5rem 0.55rem !important;
+        gap: 0.15rem !important;
         min-width: 0 !important;
         overflow: hidden;
     }
-    .prop-price-row { margin-bottom: 0.1rem !important; }
     .prop-title {
-        font-size: 0.85rem !important;
+        font-size: 0.8rem !important;
         -webkit-line-clamp: 1 !important;
         height: auto !important;
         margin-bottom: 0 !important;
     }
-    .prop-info-list { gap: 0.1rem !important; margin-bottom: 0 !important; }
-    .prop-info-item { font-size: 0.7rem !important; }
-    .prop-leads-badge-new { font-size: 0.75rem !important; }
-    .prop-leads-badge-new i { font-size: 0.9rem !important; }
+    .prop-info-list { gap: 0.1rem !important; margin-bottom: 0.4rem !important; }
+    .prop-info-item { font-size: 0.65rem !important; }
+    .prop-info-item i { font-size: 0.75rem !important; }
 
-    /* Action pills compact */
-    .project-amenity-buttons { gap: 0.15rem !important; flex-wrap: wrap !important; }
-    .btn-action-pill { padding: 0.1rem 0.38rem !important; font-size: 0.6rem !important; }
-    .btn-action-pill .bi-plus-lg { display: none !important; }
-    .btn-action-pill .bi-upload { display: none !important; }
+    /* Action pills horizontally scrollable */
+    .project-amenity-buttons {
+        gap: 0.25rem !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        margin-bottom: 0.5rem !important;
+        -webkit-overflow-scrolling: touch;
+    }
+    .btn-action-pill { padding: 0.15rem 0.35rem !important; font-size: 0.6rem !important; }
+    .btn-action-pill i { font-size: 0.65rem !important; }
 
     /* Footer buttons */
-    .prop-card-footer { padding-top: 0.35rem !important; }
-    .prop-actions { gap: 0.25rem !important; }
-    .custom-dropdown .btn-actions {
-        font-size: 0.68rem !important;
-        padding: 0.28rem 0.45rem !important;
+    .prop-card-footer { padding-top: 0 !important; border-top: none !important; margin-top: auto !important; }
+    .prop-card-footer .d-flex { gap: 0.35rem !important; }
+    
+    .prop-card-footer .dropdown { flex: 0 0 auto !important; width: 34px !important; }
+    .prop-card-footer .dropdown .btn {
+        padding: 0 !important; width: 34px !important; height: 28px !important; justify-content: center !important; font-size: 0 !important;
     }
-    .btn-edit-view {
-        font-size: 0.68rem !important;
-        padding: 0.28rem 0.5rem !important;
-        white-space: nowrap !important;
+    .prop-card-footer .dropdown .btn span { font-size: 0 !important; }
+    .prop-card-footer .dropdown .btn span i { font-size: 0.9rem !important; margin: 0 !important; }
+    
+    .prop-card-footer > .d-flex > .btn-primary {
+        font-size: 0.7rem !important; padding: 0 !important; height: 28px !important; flex: 1 !important; justify-content: center !important; align-items: center !important;
     }
+    .prop-card-footer > .d-flex > .btn-primary i { display: none !important; }
 }
 
 /* ─── MODALS: md and below ─── */

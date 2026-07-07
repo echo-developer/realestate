@@ -124,21 +124,18 @@
             </button>
         </form>
 
-        {{-- ═══ MOBILE FILTER DRAWER (slides from right) ═══ --}}
+        {{-- ═══ MOBILE FILTER BOTTOM SHEET ═══ --}}
         <div id="mobileFilterOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1050;backdrop-filter:blur(2px);"></div>
 
         <form action="{{ url('allproject/all-project-view') }}" method="get" id="mobileFilterDrawer"
-              style="position:fixed;top:0;right:0;height:100%;width:min(320px,88vw);background:#fff;z-index:1055;
-                     transform:translateX(calc(100% + 50px));transition:transform 0.32s cubic-bezier(0.32,0.72,0,1);
-                     display:flex;flex-direction:column;box-shadow:-8px 0 32px rgba(0,0,0,0.12);overflow:hidden;">
+              style="position:fixed;bottom:0;left:0;width:100%;max-height:85vh;background:#fff;z-index:1055;
+                     transform:translateY(110%);transition:transform 0.32s cubic-bezier(0.32,0.72,0,1);
+                     display:flex;flex-direction:column;box-shadow:0 -8px 32px rgba(0,0,0,0.12);overflow:hidden;border-radius:24px 24px 0 0;">
 
             {{-- Drawer Header --}}
             <div style="display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.25rem;border-bottom:1px solid #f1f5f9;">
                 <div style="display:flex;align-items:center;gap:0.6rem;">
-                    <div style="width:32px;height:32px;background:#eff6ff;border-radius:8px;display:flex;align-items:center;justify-content:center;">
-                        <i class="bi bi-funnel-fill" style="color:#2563eb;font-size:0.9rem;"></i>
-                    </div>
-                    <span style="font-weight:700;font-size:1rem;color:#0f172a;">Filters</span>
+                    <span style="font-weight:700;font-size:1.25rem;color:#0f172a;">Filters</span>
                 </div>
                 <button type="button" id="mobileFilterClose"
                         style="width:32px;height:32px;border-radius:8px;border:none;background:#f1f5f9;display:flex;align-items:center;justify-content:center;cursor:pointer;">
@@ -211,11 +208,11 @@
 
             function openDrawer() {
                 overlay.style.display = 'block';
-                setTimeout(() => drawer.style.transform = 'translateX(0)', 10);
+                setTimeout(() => drawer.style.transform = 'translateY(0)', 10);
                 document.body.style.overflow = 'hidden';
             }
             const closeDrawer = () => {
-                drawer.style.transform = 'translateX(calc(100% + 90px))';
+                drawer.style.transform = 'translateY(110%)';
                 overlay.style.display = 'none';
                 document.body.style.overflow = '';
             }
@@ -245,7 +242,7 @@
         <div class="row" id="main_table">
             @if ($project->count() > 0)
                 @foreach ($project as $proj)
-                    <article class="col-lg-3 col-sm-6 mb-3">
+                    <article class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-4">
                         <div class="custom-prop-card">
                             <div class="prop-card-img-wrapper">
                                 @php
@@ -338,78 +335,84 @@
                                     </a>
                                 </div>
 
-                                <div class="prop-info-list">
-                                    <div class="prop-info-item" title="{{ $proj->location?->address }}">
-                                        <i class="ri-map-pin-line"></i>
+                                <div class="prop-info-list" style="margin-bottom: 0.75rem;">
+                                    <div class="prop-info-item mb-1" title="{{ $proj->location?->address }}" style="font-size: 0.8rem; color: #64748b;">
+                                        <i class="bi bi-geo-alt" style="color: #94a3b8; font-size: 0.9rem;"></i>
                                         <span class="text-truncate" style="max-width: 100%;">{{ $proj->location?->address }}</span>
                                     </div>
-                                    <div class="prop-info-item">
-                                        <i class="ri-calendar-line"></i>
+                                    <div class="prop-info-item" style="font-size: 0.8rem; color: #64748b;">
+                                        <i class="bi bi-calendar3" style="color: #94a3b8; font-size: 0.85rem;"></i>
                                         <span>{{ $proj->created_at->format('Y-m-d') }}</span>
                                     </div>
                                 </div>
 
-                                <div class="project-amenity-buttons">
+                                <div class="project-amenity-buttons" style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem;">
                                     <button class="btn btn-action-pill btn-outline-warning-pill"
                                         onclick="addAmenity(`{{ $proj->id }}`)">
-                                        <i class="bi bi-plus-lg me-1"></i> Amenity
+                                        <i class="bi bi-plus" style="font-size: 1rem; margin-right: 1px;"></i> Amenity
                                     </button>
 
                                     <button type="button" onclick="addProperty(`{{ $proj->id }}`)"
                                         class="btn btn-action-pill btn-outline-primary-pill">
-                                        <i class="bi bi-plus-lg me-1"></i> Property
+                                        <i class="bi bi-plus" style="font-size: 1rem; margin-right: 1px;"></i> Property
                                     </button>
 
                                     <button onclick="addFloorConfig(`{{ $proj->id }}`)"
                                         class="btn btn-action-pill btn-outline-success-pill">
-                                        <i class="bi bi-plus-lg me-1"></i> Floor Data
+                                        <i class="bi bi-plus" style="font-size: 1rem; margin-right: 1px;"></i> Floor Data
                                     </button>
 
                                     <button class="btn btn-action-pill btn-outline-primary-pill"
                                         onclick="AddCertificate(`{{ $proj->id }}`)">
-                                        <i class="bi bi-plus-lg me-1"></i> Certificate
+                                        <i class="bi bi-plus" style="font-size: 1rem; margin-right: 1px;"></i> Certificate
                                     </button>
 
                                     <button class="btn btn-action-pill btn-outline-danger-pill"
                                         onclick="openBrochureModal(`{{ $proj->id }}`)">
-                                        <i class="bi bi-upload me-1"></i> Brochure
+                                        <i class="bi bi-upload" style="font-size: 0.8rem; margin-right: 3px;"></i> Brochure
                                     </button>
                                 </div>
 
-                                <div class="prop-card-footer">
-                                    <div class="prop-actions">
-                                        <div class="dropdown custom-dropdown">
-                                            <button class="btn btn-actions dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bi bi-sliders2 me-1"></i> Actions <i class="bi bi-chevron-down ms-1 fs-7"></i>
+                                <div class="prop-card-footer mt-auto pt-3 border-top">
+                                    <div class="d-flex gap-2 w-100 justify-content-between">
+
+                                        <div class="dropdown" style="flex: 1;">
+                                            <button class="btn bg-white border dropdown-toggle d-flex align-items-center justify-content-between w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 6px; font-size: 0.85rem; font-weight: 600; color: #475569; border-color: #cbd5e1 !important; padding: 0.45rem 0.75rem; white-space: nowrap;">
+                                                <span class="d-flex align-items-center"><i class="bi bi-sliders2 me-2" style="color: #64748b;"></i> Actions</span>
                                             </button>
-                                            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                            <ul class="dropdown-menu shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0; min-width: 100%;">
+                                                <li><h6 class="dropdown-header text-uppercase" style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px;">Update Status</h6></li>
                                                 @foreach ($statusMapping as $k => $val)
                                                 <li>
-                                                    <a class="dropdown-item change-status-btn {{ $proj->status == $k ? 'active' : '' }}"
+                                                    <a class="dropdown-item change-status-btn {{ $proj->status == $k ? 'active bg-primary bg-opacity-10 text-primary fw-semibold' : '' }}"
                                                        href="#"
                                                        data-project-id="{{ $proj->id }}"
-                                                       data-status="{{ $val }}">
+                                                       data-status="{{ $val }}" style="padding: 0.4rem 1rem; font-size: 0.85rem;">
                                                        @if($proj->status == $k)
-                                                       <i class="bi bi-check2 me-1 text-primary"></i>
+                                                       <i class="bi bi-check2 me-2 text-primary"></i>
+                                                       @else
+                                                       <i class="bi bi-circle me-2 text-muted" style="font-size: 0.5rem;"></i>
                                                        @endif
                                                        {{ ucfirst(strtolower($val)) }}
                                                     </a>
                                                 </li>
                                                 @endforeach
+                                                <li><hr class="dropdown-divider"></li>
                                                 <li>
                                                     <a class="dropdown-item change-status-btn text-danger"
                                                        href="#"
                                                        data-project-id="{{ $proj->id }}"
-                                                       data-status="delete">
-                                                       Delete
+                                                       data-status="delete" style="padding: 0.4rem 1rem; font-size: 0.85rem; font-weight: 500;">
+                                                       <i class="bi bi-trash me-2"></i> Delete
                                                     </a>
                                                 </li>
                                             </ul>
                                         </div>
 
-                                        <a href="{{ url('project/edit/' . $proj->id) }}" class="btn btn-edit-view">
-                                            <i class="bi bi-pencil-square me-1"></i> Edit and View
+                                        <a href="{{ url('project/edit/' . $proj->id) }}" class="btn btn-primary d-flex align-items-center justify-content-center" style="border-radius: 6px; font-size: 0.85rem; font-weight: 600; padding: 0.45rem 0.75rem; flex: 1; white-space: nowrap;">
+                                            <i class="bi bi-pencil-square me-2"></i> Edit & View
                                         </a>
+
                                     </div>
                                 </div>
                             </div>

@@ -55,8 +55,8 @@
                         </div>
                         Basic Details
                     </h5>
-                    <button class="btn btn-outline-secondary btn-sm rounded-3 d-flex align-items-center gap-2" onclick="edit('basic')">
-                        <i class="bi bi-pencil"></i> Edit <i class="bi bi-chevron-down ms-2"></i>
+                    <button class="btn btn-sm d-flex align-items-center gap-2 fw-semibold" onclick="edit('basic')" style="border: 1.5px solid #e2e8f0; border-radius: 8px; color: #475569; background: #fff; padding: 0.35rem 0.85rem; transition: all .15s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">
+                        <i class="bi bi-pencil" style="font-size:.85rem;"></i> Edit
                     </button>
                 </div>
                 <div class="card-body p-4">
@@ -81,7 +81,7 @@
                                 <i class="bi bi-chevron-down text-muted small"></i>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <label class="form-label text-muted small fw-medium mb-1">Price</label>
                             <div class="d-flex gap-2">
@@ -128,8 +128,8 @@
                         </div>
                         Location
                     </h5>
-                    <button class="btn btn-outline-secondary btn-sm rounded-3 d-flex align-items-center gap-2" onclick="edit('location')">
-                        <i class="bi bi-pencil"></i> Edit <i class="bi bi-chevron-down ms-2"></i>
+                    <button class="btn btn-sm d-flex align-items-center gap-2 fw-semibold" onclick="edit('location')" style="border: 1.5px solid #e2e8f0; border-radius: 8px; color: #475569; background: #fff; padding: 0.35rem 0.85rem; transition: all .15s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">
+                        <i class="bi bi-pencil" style="font-size:.85rem;"></i> Edit
                     </button>
                 </div>
                 <div class="card-body p-4">
@@ -167,8 +167,8 @@
                         </div>
                         Property Features
                     </h5>
-                    <button class="btn btn-outline-secondary btn-sm rounded-3 d-flex align-items-center gap-2" onclick="edit('features')">
-                        <i class="bi bi-pencil"></i> Edit <i class="bi bi-chevron-down ms-2"></i>
+                    <button class="btn btn-sm d-flex align-items-center gap-2 fw-semibold" onclick="edit('features')" style="border: 1.5px solid #e2e8f0; border-radius: 8px; color: #475569; background: #fff; padding: 0.35rem 0.85rem; transition: all .15s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">
+                        <i class="bi bi-pencil" style="font-size:.85rem;"></i> Edit
                     </button>
                 </div>
                 <div class="card-body p-4">
@@ -248,8 +248,8 @@
                         </div>
                         Additional Information
                     </h5>
-                    <button class="btn btn-outline-secondary btn-sm rounded-3 d-flex align-items-center gap-2" onclick="edit('additional')">
-                        <i class="bi bi-pencil"></i> Edit <i class="bi bi-chevron-down ms-2"></i>
+                    <button class="btn btn-sm d-flex align-items-center gap-2 fw-semibold" onclick="edit('additional')" style="border: 1.5px solid #e2e8f0; border-radius: 8px; color: #475569; background: #fff; padding: 0.35rem 0.85rem; transition: all .15s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">
+                        <i class="bi bi-pencil" style="font-size:.85rem;"></i> Edit
                     </button>
                 </div>
                 <div class="card-body p-4">
@@ -308,10 +308,7 @@
             <!-- Bottom Actions -->
             <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
                 <a href="{{ url('allproperties/all-property-view') }}" class="btn btn-outline-secondary rounded-3 px-4 py-2 fw-medium border shadow-sm">Cancel</a>
-                <div class="d-flex gap-3">
-                    <button class="btn btn-light text-primary bg-primary bg-opacity-10 rounded-3 px-4 py-2 fw-bold border-0"><i class="bi bi-eye"></i> Preview</button>
-                    <button class="btn btn-primary rounded-3 px-4 py-2 fw-bold shadow-sm"><i class="bi bi-save"></i> Update Property</button>
-                </div>
+
             </div>
 
         </div>
@@ -326,14 +323,32 @@
                 <div class="card-body p-4 pt-2">
                     <div class="position-relative mb-4">
                         @php
-                        $imageToShow = asset('assets/images/property_placeholder.png');
-                        if (isset($groupedImages['exterior'][0])) {
-                            $imageToShow = asset('user_upload/property_images/'.$groupedImages['exterior'][0]->filename);
+                        $imageToShow = asset('assets/images/no-image.jpg');
+                        
+                        // Check if we have a valid exterior image first
+                        if (isset($groupedImages['exterior']) && count($groupedImages['exterior']) > 0) {
+                            $filename = $groupedImages['exterior'][0]->filename;
+                            if ($filename && file_exists(public_path('user_upload/property_images/'.$filename))) {
+                                $imageToShow = asset('user_upload/property_images/'.$filename);
+                            }
+                        }
+                        
+                        // If still showing no-image, check all other categories for any valid image
+                        if (basename($imageToShow) === 'no-image.jpg' && !empty($groupedImages)) {
+                            foreach ($groupedImages as $type => $images) {
+                                if (count($images) > 0) {
+                                    $filename = $images[0]->filename;
+                                    if ($filename && file_exists(public_path('user_upload/property_images/'.$filename))) {
+                                        $imageToShow = asset('user_upload/property_images/'.$filename);
+                                        break;
+                                    }
+                                }
+                            }
                         }
                         @endphp
                         <img src="{{ $imageToShow }}" alt="Property" class="img-fluid rounded-4 shadow-sm w-100 object-fit-cover" style="height: 140px;">
                     </div>
-                    
+
                     <ul class="list-unstyled mb-0">
                         <li class="d-flex justify-content-between align-items-center mb-3">
                             <span class="text-muted small fw-medium d-flex align-items-center gap-2"><i class="bi bi-info-circle fs-6"></i> Property ID</span>
@@ -369,13 +384,14 @@
                     <h6 class="fw-bold mb-0 text-dark">Actions</h6>
                 </div>
                 <div class="card-body p-4 pt-2">
-                    <button class="btn btn-light bg-white border shadow-sm w-100 mb-3 rounded-3 text-dark fw-bold d-flex align-items-center justify-content-center gap-2 py-2">
+                    <a href="{{ url('property/view/' . $property_id) }}" target="_blank"
+                        class="btn btn-light bg-white border shadow-sm w-100 mb-3 rounded-3 text-dark fw-bold d-flex align-items-center justify-content-center gap-2 py-2">
                         <i class="bi bi-eye"></i> Preview Property
-                    </button>
-                    <button class="btn btn-primary shadow-sm w-100 mb-3 rounded-3 fw-bold d-flex align-items-center justify-content-center gap-2 py-2">
+                    </a>
+                    <button onclick="updateProperty()" class="btn btn-primary shadow-sm w-100 mb-3 rounded-3 fw-bold d-flex align-items-center justify-content-center gap-2 py-2">
                         <i class="bi bi-save"></i> Update Property
                     </button>
-                    <button class="btn btn-outline-danger w-100 rounded-3 fw-bold d-flex align-items-center justify-content-center gap-2 py-2 bg-danger bg-opacity-10 border-danger">
+                    <button onclick="deleteProperty()" class="btn btn-outline-danger w-100 rounded-3 fw-bold d-flex align-items-center justify-content-center gap-2 py-2 bg-danger bg-opacity-10 border-danger">
                         <i class="bi bi-trash"></i> Delete Property
                     </button>
                 </div>
@@ -718,16 +734,16 @@
         let widthValue = dimension ? JSON.parse(dimension.size).width : '';
         let heightValue = dimension ? JSON.parse(dimension.size).height : '';
         let roomTypeLabel = dimension ? `for ${dimension.room_type}` : '';
-        let formHtml = `<div class="size-form mt-3 p-3 border rounded bg-light">  
-                            <label class="fw-bold">Height & Width</label>  
-                            <div class="row">  
-                                <div class="col-6">  
-                                    <input type="text" class="form-control mb-2" name="${amenity}[width][${value ?? dimension.pid}]" placeholder="Enter Width" value="${widthValue}" autocomplete="off">  
-                                </div>  
-                                <div class="col-6">  
-                                    <input type="text" class="form-control" name="${amenity}[height][${value ?? dimension.pid}]" placeholder="Enter Height" value="${heightValue}" autocomplete="off">  
-                                </div>  
-                            </div>  
+        let formHtml = `<div class="size-form mt-3 p-3 border rounded bg-light">
+                            <label class="fw-bold">Height & Width</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="text" class="form-control mb-2" name="${amenity}[width][${value ?? dimension.pid}]" placeholder="Enter Width" value="${widthValue}" autocomplete="off">
+                                </div>
+                                <div class="col-6">
+                                    <input type="text" class="form-control" name="${amenity}[height][${value ?? dimension.pid}]" placeholder="Enter Height" value="${heightValue}" autocomplete="off">
+                                </div>
+                            </div>
                         </div>`;
         formContainer.append(formHtml);
     }
@@ -735,13 +751,51 @@
     function removeForm(formContainer) {
         formContainer.find('.size-form').last().remove();
     }
+
+    function updateProperty() {
+        // Since property is saved section by section in modals, just show a success toast and redirect
+        toastr.success("Property changes are already saved!");
+        setTimeout(() => {
+            window.location.href = "{{ url('allproperties/all-property-view') }}";
+        }, 1500);
+    }
+
+    function deleteProperty() {
+        Swal.fire({
+            title: 'Delete Property?',
+            text: 'Are you sure you want to delete this property?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `{{ url('allproperties/delete') }}`,
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        status: 'delete',
+                        propertyId: '{{ $property_id }}'
+                    },
+                    success: function(response) {
+                        window.location.href = "{{ url('allproperties/all-property-view') }}";
+                    },
+                    error: function(xhr, status, error) {
+                        toastr.error("Failed to delete property.");
+                        console.log(error);
+                    }
+                });
+            }
+        });
+    }
 </script>
 @endpush
 
-<div class="modal fade" id="ajaxModal">
-    <div class="modal-dialog modal-dialog-scrollable">
+<div class="modal fade" id="ajaxModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content">
-
         </div>
     </div>
 </div>
