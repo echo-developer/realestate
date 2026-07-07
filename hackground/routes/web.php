@@ -492,6 +492,7 @@ Route::middleware('admin_auth')->group(function () {
         Route::post('/enquiry/save-assign-list', 'save_assign_list')->name('enquiry.saveassign');
         Route::post('/enquiry/remove-assign-list', 'remove_assign_list')->name('enquiry.removeassign');
         Route::get('/enquiry/details/{id}/{type}', 'enquery_details')->name('enquiry.enquerydetails');
+        Route::post('/enquiry/update-enquiry', 'update_enquiry')->name('enquiry.updateenquiry');
         Route::get('/enquiry/property-leads/{property_id}', 'property_leads')->name('enquiry.propertyLeads');
         Route::get('/enquiry/project-leads/{project_id}', 'project_leads');
         Route::get('/enquiry/member-leads', 'member_leads');

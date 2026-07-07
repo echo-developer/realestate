@@ -96,9 +96,9 @@
                                     <a href="{{ url('/enquiry/assign-list/'.$item->enquery_id); }}" class="action-btn btn-assign-lead" title="Assign Lead">
                                         <i class="fa fa-plus"></i>
                                     </a>
-                                    <button type="button" class="action-btn btn-view-lead" onclick="viewLead('{{ $item->enquery_id }}', 'P')" title="View Details">
+                                    <a href="{{ url('/enquiry/details/'.$item->enquery_id.'/P') }}" class="action-btn btn-view-lead" title="View Details">
                                         <i class="fa fa-eye"></i>
-                                    </button>
+                                    </a>
                                 </div>
                             </td>
                         </tr>

@@ -124,9 +124,9 @@
                             <td class="text-nowrap">{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
                             <td class="text-right">
                                 <div class="d-flex justify-content-end gap-2">
-                                    <button type="button" class="action-btn btn-view-lead" onclick="viewLead('{{ $item->enquery_id }}','P')" title="View Details">
+                                    <a href="{{ url('/enquiry/details/'.$item->enquery_id.'/P') }}" class="action-btn btn-view-lead" title="View Details">
                                         <i class="fa fa-eye"></i>
-                                    </button>
+                                    </a>
                                     <button type="button" class="action-btn btn-delete-lead" onclick="remove_assigned('{{ $item->assign_id }}')" title="Remove assigned">
                                         <i class="fa fa-trash"></i>
                                     </button>
@@ -165,9 +165,9 @@
                             <td class="text-nowrap">{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
                             <td class="text-right">
                                 <div class="d-flex justify-content-end gap-2">
-                                    <button type="button" class="action-btn btn-view-lead" onclick="viewLead('{{ $item->id }}','G')" title="View Details">
+                                    <a href="{{ url('/enquiry/details/'.$item->id.'/G') }}" class="action-btn btn-view-lead" title="View Details">
                                         <i class="fa fa-eye"></i>
-                                    </button>
+                                    </a>
                                     <button type="button" class="action-btn btn-delete-lead" onclick="remove_assigned('{{ $item->assign_id }}')" title="Remove assigned">
                                         <i class="fa fa-trash"></i>
                                     </button>

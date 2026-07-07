@@ -14,163 +14,259 @@
     </div>
 </div>
 
-<div class="app-main__inner">
+<div class="app-main__inner" style="min-width: 0; max-width: 100%; overflow-x: hidden;">
+    <!-- Layout fixes for responsive horizontal scrolling -->
+    <style>
+        .app-main__inner { width: 100%; padding-bottom: 2rem; }
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .btn-pill-group { display: inline-flex; flex-wrap: wrap; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; width: 100%; max-width: max-content; }
+        .btn-pill-group .btn { border: none; border-radius: 0; font-weight: 600; padding: 0.5rem 0.75rem; font-size: 0.8rem; box-shadow: none !important; flex: 1 1 auto; white-space: nowrap; text-align: center; }
+        .btn-pill-group .btn.active { background-color: #2563eb; color: #ffffff; }
+        .btn-pill-group .btn.inactive { background-color: #ffffff; color: #64748b; }
+        .btn-pill-group .btn.inactive:hover { background-color: #f8fafc; color: #0f172a; }
+        @media (min-width: 768px) {
+            .btn-pill-group .btn { font-size: 0.85rem; padding: 0.5rem 1rem; }
+            .btn-pill-group { width: auto; }
+        }
+        .btn-add-lead { background-color: #2563eb; color: #ffffff; font-weight: 600; font-size: 0.85rem; padding: 0.5rem 1rem; border-radius: 6px; border: none; }
+        .btn-add-lead:hover { background-color: #1d4ed8; color: #ffffff; }
+    </style>
 
-    <div class="app-page-title">
-        <div class="page-title-wrapper">
-            <div class="page-title-heading">
-                <div class="page-title-icon">
-                    <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
-                </div>
-                <div>{{ $main_title }}
-                    <div class="page-title-subheading">{{ $second_title }} &gt; {{ $title }}</div>
-                </div>
+    <!-- New Modern Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div style="min-width: 0;">
+            <h2 class="fw-bold text-dark mb-1" style="font-size: 1.5rem; letter-spacing: -0.5px;">Leads</h2>
+            <div class="text-muted text-truncate" style="font-size: 0.8rem; font-weight: 500;">
+                Dashboard <span class="mx-1">&gt;</span> Leads Management <span class="mx-1">&gt;</span> {{ $title }}
             </div>
-            <div class="page-title-actions">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
-                    <li class="breadcrumb-item active">{{ $main_title }}</li>
-                </ol>
+        </div>
+        <div class="d-flex flex-wrap align-items-center gap-3">
+            <div class="btn-pill-group">
+                <a href="{{ url('enquiry/list') }}" class="btn {{ Request::is('enquiry/list') ? 'active' : 'inactive' }}">Project & Property Leads</a>
+                <a href="{{ url('/enquiry/general-leads') }}" class="btn {{ Request::is('enquiry/general-leads') ? 'active' : 'inactive' }}">General Leads</a>
             </div>
+            <button class="btn-add-lead d-flex align-items-center gap-2 text-nowrap" onclick="add()">
+                <i class="fa fa-plus"></i> Add Lead
+            </button>
         </div>
     </div>
     <div id="successMessageContainer"></div>
 
-    <div class="custom-tabs-container">
-        <ul class="custom-tabs">
-            <li>
-                <a class="custom-tab-link ajax-link {{ Request::is('enquiry/list') ? 'active' : '' }}"
-                    href="{{ url('enquiry/list') }}" data-url="{{ url('enquiry/assign-list/') }}">
-                    Project and Property Leads
-                </a>
-            </li>
-            <li>
-                <a class="custom-tab-link ajax-link {{ Request::is('enquiry/general-leads') ? 'active' : '' }}"
-                    href="{{ url('/enquiry/general-leads') }}" data-url="{{ url('/enquiry/general-leads') }}">
-                    General Leads
-                </a>
-            </li>
-        </ul>
-    </div>
+    <!-- Premium Filter Bar -->
+    <form action="" method="get" class="mb-4">
+        <!-- Main Search Pill -->
+        <div class="d-flex bg-white rounded-pill p-1 shadow-sm align-items-center mb-3" style="border: 1px solid #e2e8f0;">
+            <div class="d-flex align-items-center px-2 px-md-3 flex-grow-1" style="min-width: 0;">
+                <i class="fa fa-search text-muted me-2 opacity-50"></i>
+                <input type="text" class="form-control border-0 shadow-none p-0 bg-transparent text-dark-main text-truncate" placeholder="Search leads..." name="member_name" value="{{ request('member_name') }}" style="font-size: 0.85rem; font-weight: 500; min-width: 0;">
+            </div>
+            
+            <div class="d-none d-md-block bg-light" style="width: 1px; height: 28px;"></div>
+            
+            <!-- Actions -->
+            <div class="d-flex align-items-center gap-1 pe-1 flex-shrink-0">
+                <button type="button" class="btn btn-light rounded-pill text-muted px-3 d-flex align-items-center justify-content-center" data-bs-toggle="collapse" data-bs-target="#advancedFilters" style="font-size: 0.8rem; font-weight: 600; height: 34px;" title="Advanced Filters">
+                    <i class="fa fa-filter"></i> <span class="d-none d-md-inline ms-2">Filters</span>
+                </button>
+                <button type="submit" class="btn btn-primary rounded-pill px-3 px-md-4 d-flex align-items-center justify-content-center" style="font-size: 0.8rem; font-weight: 600; height: 34px; letter-spacing: 0.5px;">
+                    <span class="d-none d-md-inline">Search</span><i class="fa fa-search d-inline d-md-none"></i>
+                </button>
+            </div>
+        </div>
 
-    <form action="" method="get">
-        <div class="custom-card p-4 mb-4">
-            <div class="row align-items-end">
-                <div class="col-md-3 col-sm-4">
-                    <label for="lead_for" class="form-label" style="font-weight: 500; color: #475569; font-size: 0.88rem;">Type</label>
-                    <div class="form-group mb-0">
-                        <select class="form-select custom-input" name="lead_for" id="lead_for">
-                            <option value="" >All</option>
-                            <option value="property" {{ request('lead_for') == 'property' ? 'selected' : ''; }}>Property</option>
-                            <option value="project" {{ request('lead_for') == 'project' ? 'selected' : ''; }}>Project</option>
+        <!-- Collapsible Advanced Filters -->
+        <div class="collapse" id="advancedFilters">
+            <div class="bg-white rounded-4 p-3 shadow-sm" style="border: 1px solid #e2e8f0;">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-4 col-12 mb-2 mb-md-0">
+                        <label class="form-label text-muted mb-1 px-1" style="font-size: 0.75rem; font-weight: 600;">Type</label>
+                        <select class="form-select shadow-none bg-light border-0 rounded-3 px-3" name="lead_for" id="lead_for" style="font-weight: 500; font-size: 0.85rem; height: 42px;">
+                            <option value="">All</option>
+                            <option value="property" {{ request('lead_for') == 'property' ? 'selected' : '' }}>Property</option>
+                            <option value="project" {{ request('lead_for') == 'project' ? 'selected' : '' }}>Project</option>
                         </select>
                     </div>
-                </div>
-                <div class="col-md-3 col-sm-4">
-                    <label for="enquery_date" class="form-label" style="font-weight: 500; color: #475569; font-size: 0.88rem;">Leads Date</label>
-                    <div class="form-group mb-0">
-                        <input type="date" class="form-control custom-input" id="enquery_date" name="enquery_date" value="{{ request('enquery_date') }}" />
+                    <div class="col-md-4 col-12 mb-2 mb-md-0">
+                        <label class="form-label text-muted mb-1 px-1" style="font-size: 0.75rem; font-weight: 600;">Date Range</label>
+                        <div class="d-flex align-items-center bg-light rounded-3 px-3" style="height: 42px;">
+                            <i class="fa fa-calendar text-muted opacity-50 me-2"></i>
+                            <input type="text" class="form-control shadow-none bg-transparent border-0 p-0 w-100" placeholder="01/05/2025 - 31/05/2026" name="enquery_date" value="{{ request('enquery_date') }}" style="font-weight: 500; font-size: 0.85rem;">
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3 col-sm-4">
-                    <label for="member_name" class="form-label" style="font-weight: 500; color: #475569; font-size: 0.88rem;">Member Name</label>
-                    <div class="form-group mb-0">
-                        <input class="form-control custom-input" id="member_name" placeholder="Search by member" name="member_name" value="{{ request('member_name') }}" />
+                    <div class="col-md-4 col-12 mb-2 mb-md-0">
+                        <label class="form-label text-muted mb-1 px-1" style="font-size: 0.75rem; font-weight: 600;">Location</label>
+                        <select class="form-select shadow-none bg-light border-0 rounded-3 px-3" name="location" style="font-weight: 500; font-size: 0.85rem; height: 42px;">
+                            <option value="">All Location</option>
+                        </select>
                     </div>
-                </div>
-                <div class="col-md-3 col-sm-12 mt-3 mt-md-0">
-                    <div class="form-group mb-0 d-flex gap-2">
-                        <button type="submit" class="btn btn-primary d-inline-flex align-items-center gap-2" style="background-color: #0d6efd; border: none; padding: 0.6rem 1.25rem; font-weight: 500; box-shadow: 0 4px 10px rgba(13, 110, 253, 0.15);">
-                            <i class="fa fa-search"></i> Search
-                        </button>
-                        <a href="{{ url()->current() }}" class="btn btn-secondary d-inline-flex align-items-center gap-2" style="background-color: #64748b; border: none; padding: 0.6rem 1.25rem; font-weight: 500;">
-                            <i class="fa fa-undo"></i> Reset
-                        </a>
+                    <div class="col-12 d-flex gap-2 justify-content-end mt-3 border-top pt-3" style="border-color: #f1f5f9 !important;">
+                        <a href="{{ url()->current() }}" class="btn btn-sm btn-light text-muted px-4 rounded-pill" style="font-weight: 600; font-size: 0.8rem;">Reset</a>
+                        <button type="submit" class="btn btn-sm btn-dark px-4 rounded-pill" style="font-weight: 600; font-size: 0.8rem;">Apply Filters</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
 
-    <div class="custom-card">
-        <div class="custom-card-header">
-            <h4><i class="fa fa-list"></i> {{ $title }}</h4>
+    <!-- Modern Card List Layout -->
+    <div class="bg-white rounded shadow-sm border border-light w-100">
+        <div class="p-3 border-bottom border-light">
+            <h5 class="mb-0 fw-bold text-dark fs-6">{{ $title }}</h5>
         </div>
-        <div class="custom-card-body p-0">
-            <div class="table-responsive" id="main_table">
-                <table id="myTable" class="custom-table mb-0">
-                    <thead>
-                        <tr>
-                            <th style="width:5%">ID</th>
-                            <th style="width:35%">Property Name</th>
-                            <th style="width:15%">Customer Name</th>
-                            <th style="width:15%">Email</th>
-                            <th style="width:15%">Phone</th>
-                            <th style="width:15%">Date</th>
-                            <th style="width:15%" class="text-center">Lead Assigned</th>
-                            <th class="text-right" style="width:10%;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($list as $item)
-                        <tr>
-                            <td>{{ $item->enquery_id }}</td>
-                            <td>
-                                @if($item->property_id)
-                                    <span class="badge bg-primary text-white mb-1" style="font-size: 0.72rem; font-weight: 500; padding: 0.25rem 0.5rem; border-radius: 4px;">Property</span>
-                                    <div style="font-weight: 600; color: #1e293b; font-size: 0.92rem;">{{ $item->property_name }}</div>
-                                @elseif($item->project_id)
-                                    <span class="badge bg-success text-white mb-1" style="font-size: 0.72rem; font-weight: 500; padding: 0.25rem 0.5rem; border-radius: 4px;">Project</span>
-                                    <div style="font-weight: 600; color: #1e293b; font-size: 0.92rem;">{{ $item->project_name }}</div>
-                                @endif
-                            </td>
-                            <td style="font-weight: 500; color: #334155;">{{ $item->customer }}</td>
-                            <td>{{ $item->customer_email }}</td>
-                            <td>{{ $item->customer_phone }}</td>
-                            <td class="text-nowrap">{{ date('d-M-Y', strtotime($item->created_at)) }}</td>
-                            <td class="text-center">
-                                @if($item->assigned_count > 0)
-                                    <span class="badge rounded-pill px-3 py-2" style="font-size: 0.85rem; font-weight: 600; background-color: #d1fae5; color: #065f46;">
-                                        {{ $item->assigned_count }}
-                                    </span>
-                                @else
-                                    <span class="badge rounded-pill px-3 py-2" style="font-size: 0.85rem; font-weight: 600; background-color: #f1f5f9; color: #475569;">
-                                        0
-                                    </span>
-                                @endif
-                            </td>
-                            <td class="text-right">
-                                <div class="d-flex justify-content-end gap-2">
-                                    <a href="{{ url('/enquiry/assign-list/'.$item->enquery_id); }}" class="action-btn btn-assign-lead" title="Assign Lead">
-                                        <i class="fa fa-plus"></i>
-                                    </a>
-                                    <button type="button" class="action-btn btn-view-lead" onclick="viewLead('{{ $item->enquery_id }}', 'P')" title="View Details">
-                                        <i class="fa fa-eye"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="8" class="text-center py-4 text-muted">
-                                <i class="fa fa-info-circle me-1"></i> Sorry, no records found!
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+        
+        <style>
+            .hover-bg-light { transition: background-color 0.2s ease; }
+            .hover-bg-light:hover { background-color: #f8fafc; }
+            .badge-soft-primary { background-color: #eff6ff; color: #2563eb; padding: 0.35rem 0.65rem; border-radius: 4px; font-weight: 600; font-size: 0.7rem; letter-spacing: 0.3px; }
+            .badge-soft-success { background-color: #f0fdf4; color: #16a34a; padding: 0.35rem 0.65rem; border-radius: 4px; font-weight: 600; font-size: 0.7rem; letter-spacing: 0.3px; }
+            .badge-circle { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; font-weight: 600; font-size: 0.7rem; }
+            .badge-circle-active { background-color: #e0e7ff; color: #4f46e5; }
+            .badge-circle-inactive { background-color: #f1f5f9; color: #94a3b8; }
+            .text-dark-main { color: #1e293b; }
+            .text-sub { color: #64748b; }
+            .btn-icon-subtle { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; color: #64748b; background: transparent; border: 1px solid transparent; transition: all 0.2s; }
+            .btn-icon-subtle:hover { background-color: #f1f5f9; color: #0f172a; }
+            .btn-icon-primary { color: #2563eb; }
+            .btn-icon-primary:hover { background-color: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+        </style>
+
+        <!-- Desktop Header Row -->
+        <div class="d-none d-lg-block p-3 border-bottom" style="background-color: #f8fafc; border-color: #e2e8f0 !important;">
+            <div class="row align-items-center text-uppercase text-sub" style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px;">
+                <div class="col-lg-1">ID</div>
+                <div class="col-lg-4">Requirement</div>
+                <div class="col-lg-3">Customer</div>
+                <div class="col-lg-2">Date</div>
+                <div class="col-lg-1 text-center">Shared</div>
+                <div class="col-lg-1 text-end pe-4">Actions</div>
             </div>
-            
-            <div class="custom-table-footer">
-                <div class="custom-table-info">
-                    Showing {{ $list->firstItem() ?? 0 }} to {{ $list->lastItem() ?? 0 }} of {{ $list->total() ?? 0 }} entries
+        </div>
+
+        <!-- List Items -->
+        <div>
+            @forelse($list as $item)
+            <div class="p-0 border-bottom hover-bg-light position-relative" style="border-color: #f1f5f9 !important;">
+                
+                <!-- DESKTOP VIEW -->
+                <div class="d-none d-lg-block p-3">
+                    <div class="row align-items-center">
+                        <!-- ID -->
+                        <div class="col-lg-1 text-sub fw-medium" style="font-size: 0.85rem;">#{{ $item->enquery_id }}</div>
+                        
+                        <!-- Property / Requirement -->
+                        <div class="col-lg-4">
+                            <div class="fw-bold text-dark-main text-truncate mb-1" style="font-size: 0.95rem;" title="{{ $item->property_name ?? $item->project_name ?? 'General Requirement' }}">
+                                {{ $item->property_name ?? $item->project_name ?? 'General Requirement' }}
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                @if($item->property_id) <span class="badge-soft-primary">Property</span>
+                                @elseif($item->project_id) <span class="badge-soft-primary">Project</span>
+                                @else <span class="badge-soft-success">General</span> @endif
+                                <span class="text-sub" style="font-size: 0.8rem;">&bull; {{ $item->property_id ? 'Residential Apartment' : ($item->project_id ? 'Project Property' : 'General Requirement') }}</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Customer Details -->
+                        <div class="col-lg-3">
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <div class="fw-semibold text-dark-main" style="font-size: 0.85rem;">{{ $item->customer }}</div>
+                            </div>
+                            <div class="d-flex flex-wrap align-items-center gap-3 text-sub" style="font-size: 0.8rem;">
+                                <span><i class="fa fa-envelope-o me-1"></i>{{ $item->customer_email ?? 'N/A' }}</span>
+                                <span><i class="fa fa-phone me-1"></i>{{ $item->customer_phone ?? 'N/A' }}</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Enquiry Date -->
+                        <div class="col-lg-2 text-sub" style="font-size: 0.85rem;">
+                            {{ date('d M, Y', strtotime($item->created_at)) }}
+                        </div>
+                        
+                        <!-- Shared With -->
+                        <div class="col-lg-1 d-flex justify-content-center">
+                            @if($item->assigned_count > 0)
+                                <span class="badge-circle badge-circle-active">{{ $item->assigned_count }}</span>
+                            @else
+                                <span class="badge-circle badge-circle-inactive">0</span>
+                            @endif
+                        </div>
+                        
+                        <!-- Action -->
+                        <div class="col-lg-1 d-flex justify-content-end gap-1 pe-2">
+                            <a href="{{ url('/enquiry/details/'.$item->enquery_id.'/P') }}" class="btn-icon-subtle btn-icon-primary" title="View Details"><i class="fa fa-eye"></i></a>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    {!! $list->links('vendor.pagination.bootstrap-5') !!}
+
+                <!-- MOBILE VIEW (Premium Card) -->
+                <div class="d-block d-lg-none">
+                    <div class="p-3">
+                        <!-- Title & Badges Row -->
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div class="fw-bold text-dark-main fs-6 lh-sm pe-3">{{ $item->property_name ?? $item->project_name ?? 'General Requirement' }}</div>
+                                <span class="badge bg-light text-sub border px-2 py-1" style="font-size: 0.7rem;">#{{ $item->enquery_id }}</span>
+                            </div>
+                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                @if($item->property_id) <span class="badge-soft-primary">Property</span>
+                                @elseif($item->project_id) <span class="badge-soft-primary">Project</span>
+                                @else <span class="badge-soft-success">General</span> @endif
+                                <span class="text-sub" style="font-size: 0.75rem;">{{ $item->property_id ? 'Residential Apartment' : ($item->project_id ? 'Project Property' : 'General Requirement') }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Customer Info Box (Subtle Well) -->
+                        <div class="rounded p-2 mb-3" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
+                            <div class="fw-semibold text-dark-main mb-1" style="font-size: 0.85rem;">
+                                <i class="fa fa-user-circle-o text-primary me-2 opacity-75"></i>{{ $item->customer }}
+                            </div>
+                            <div class="d-flex flex-column gap-1 text-sub" style="font-size: 0.8rem; padding-left: 1.5rem;">
+                                <div><i class="fa fa-envelope-o me-2 opacity-50"></i>{{ $item->customer_email ?? 'N/A' }}</div>
+                                <div><i class="fa fa-phone me-2 opacity-50"></i>{{ $item->customer_phone ?? 'N/A' }}</div>
+                            </div>
+                        </div>
+
+                        <!-- Footer Row -->
+                        <div class="d-flex justify-content-between align-items-center pt-1">
+                            <div class="d-flex align-items-center gap-3 text-sub" style="font-size: 0.8rem;">
+                                <span class="d-flex align-items-center gap-1"><i class="fa fa-calendar-o opacity-50"></i> {{ date('d M, Y', strtotime($item->created_at)) }}</span>
+                                <span class="d-flex align-items-center gap-1">
+                                    <i class="fa fa-share-alt opacity-50"></i>
+                                    @if($item->assigned_count > 0)
+                                        <span class="badge-circle badge-circle-active" style="width:18px; height:18px; font-size:0.65rem;">{{ $item->assigned_count }}</span>
+                                    @else
+                                        <span>0</span>
+                                    @endif
+                                </span>
+                            </div>
+                            <div>
+                                <a href="{{ url('/enquiry/details/'.$item->enquery_id.'/P') }}" class="btn-icon-subtle btn-icon-primary" style="background-color: #eff6ff;" title="View Details">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Thick mobile separator -->
+                    <div class="w-100" style="height: 14px; background-color: #f1f5f9; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;"></div>
                 </div>
+
             </div>
+            @empty
+            <div class="text-center py-5 text-muted">
+                <i class="fa fa-folder-open-o fs-1 mb-3 text-light"></i>
+                <h5 class="fw-bold text-dark">No Leads Found</h5>
+                <p class="mb-0 text-sub">We couldn't find any leads matching your criteria.</p>
+            </div>
+            @endforelse
         </div>
     </div>
+
+    <!-- Pagination -->
+    <div class="mt-4 w-100">
+        {!! $list->links('vendor.pagination.bootstrap-5') !!}
+    </div>
+
+</div>
 </div>
             <?php /* ?>
             @if($list->isNotEmpty())
@@ -222,7 +318,7 @@
 <div class="modal fade" id="modal_action" tabindex="-1" role="dialog" aria-labelledby="viewLeadModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            
+
         </div>
     </div>
 </div>
@@ -248,7 +344,7 @@
                 $('#modal_action .modal-content').html(data);
             });
         }
-        
+
     }
 
     function add_edit() {
@@ -354,17 +450,17 @@
 
     $(document).ready(function() {
     var table = $('#myTable').DataTable({
-        "paging": false, 
-        "searching": false, 
-        "info": false, 
-        "ordering": true, 
+        "paging": false,
+        "searching": false,
+        "info": false,
+        "ordering": true,
         "order": [
-            [0, 'desc'] 
-        ], 
+            [0, 'desc']
+        ],
         "columnDefs": [
-            { 
-                "orderable": true, 
-                "targets": [0]     
+            {
+                "orderable": true,
+                "targets": [0]
             },
             {
                 "orderable": false,

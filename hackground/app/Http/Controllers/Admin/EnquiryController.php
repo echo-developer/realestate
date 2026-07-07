@@ -79,13 +79,76 @@ class EnquiryController extends Controller
 
     public function enquery_details($enquiry_id, $type)
     {
+        $srch = ['enquery_id' => $enquiry_id];
+        
         if ($type == 'P') {
             $enquiry = $this->enquiry->enquiry_details($enquiry_id);
+            if ($enquiry->property_id) {
+                $property_id = $enquiry->property_id;
+                $propertyTable = PrefProperty::where('id', $property_id)->with(['settings', 'location'])->first();
+                $srch['city'] = $propertyTable['location']->city ?? null;
+                $srch['property_type_for'] = $propertyTable['settings']->property_type_for ?? null;
+                $srch['property_type'] = $propertyTable['settings']->property_type ?? null;
+                $srch['post_for'] = $propertyTable['settings']->post_for ?? null;
+                $srch['enquiry_type'] = 'property';
+            } elseif ($enquiry->project_id) {
+                $project_id = $enquiry->project_id;
+                $projectTable = PrefProject::where('id', $project_id)->with(['settings', 'location'])->first();
+                $srch['city'] = $projectTable['location']->city ?? null;
+                $srch['post_for'] = $projectTable['settings']->post_for ?? null;
+                $srch['project_type'] = $projectTable['settings']->project_type ?? null;
+                $srch['enquiry_type'] = 'project';
+            }
+            $unassigned_members = $this->enquiry->get_unassign_member_list($srch, 100);
         } elseif ($type == 'G') {
             $enquiry = $this->enquiry->general_enquiry_details($enquiry_id);
+            $srch['id'] = $enquiry->id;
+            $srch['property_type'] = $enquiry->property_type;
+            $srch['property_type_for'] = $enquiry->property_for;
+            $srch['min_budget'] = $enquiry->min_budget;
+            $srch['max_budget'] = $enquiry->max_budget;
+            $unassigned_members = $this->enquiry->general_unassign_member_list($srch, 100);
         }
 
-        return view('Admin.Enquiry.ajax-enquiry-details', compact('type', 'enquiry'));
+        // Fetch Assigned Members
+        $assigned_members = $this->enquiry->get_assigned_agent_list(['enquery_id' => $enquiry_id, 'lead_type' => $type], 100);
+
+        $main_title = 'Lead Details';
+        $second_title = 'Leads Management';
+        $title = 'Lead Details';
+
+        return view('Admin.Enquiry.enquiry_details_full', compact('main_title', 'second_title', 'title', 'type', 'enquiry', 'assigned_members', 'unassigned_members'));
+    }
+
+    public function update_enquiry(Request $request)
+    {
+        $enquery_id = $request->enquery_id;
+        $type = $request->type;
+
+        if ($type == 'P') {
+            $enquiry = DB::table('enquery')->where('enquery_id', $enquery_id)->first();
+            if ($enquiry) {
+                // Update customer table
+                DB::table('customers')->where('id', $enquiry->cid)->update([
+                    'customer' => $request->customer_name,
+                    'customer_email' => $request->email,
+                    'customer_phone' => $request->phone
+                ]);
+                // Update enquery table
+                DB::table('enquery')->where('enquery_id', $enquery_id)->update([
+                    'message' => $request->message
+                ]);
+            }
+        } elseif ($type == 'G') {
+            DB::table('buyer_property_enquery')->where('id', $enquery_id)->update([
+                'name' => $request->customer_name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'messsage' => $request->message
+            ]);
+        }
+
+        return response()->json(['status' => 'OK', 'msg' => 'Lead updated successfully']);
     }
 
     public function unassign_list($enquiry_id)
