@@ -6,8 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Language" content="en">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
-    <title>New Admin | Admin</title>
+    <link rel="icon" href="{{ asset('../../assets/images/favicon.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ asset('../../favicon.ico') }}" type="image/x-icon">
+    <title>Admin Control | RealEstate Marketplace</title>
     <meta name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
     <meta name="csrf-token" content="{{ csrf_token() }}">

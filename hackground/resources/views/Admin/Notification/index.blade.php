@@ -35,6 +35,44 @@
     </div>
     <div id="#successMessageContainer"></div>
     <style>
+        .app-main__inner { padding-bottom: 2rem; background-color: #f8fafc; overflow-x: hidden; }
+        .card-modern { border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); background-color: #ffffff; width: 100%; max-width: 100%; }
+        .settings-card-header { padding: 0.85rem 1.25rem; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; background: #fff; border-radius: 12px 12px 0 0; }
+        .settings-card-header h4 { font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #1e293b; margin: 0; display: flex; align-items: center; gap: 0.5rem; }
+        .btn-add-setting { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; font-weight: 600; padding: 0.4rem 0.85rem; border-radius: 8px; font-size: 0.85rem; transition: all 0.2s; }
+        .btn-add-setting:hover { background: #2563eb; color: #fff; }
+        
+        .settings-table { width: 100%; margin: 0; color: #334155; }
+        .settings-table th { font-size: 0.8rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; padding: 1rem 1.25rem; border-bottom: 1px solid #e2e8f0; background: #f8fafc; }
+        .settings-table td { padding: 1rem 1.25rem; vertical-align: middle; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; font-weight: 500; }
+        .settings-table tr:last-child td { border-bottom: none; }
+        
+        .actions-cell { display: flex; gap: 0.5rem; justify-content: flex-end; }
+        .action-icon-btn { width: 34px; height: 34px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; border: 1.5px solid transparent; transition: all 0.2s; font-size: 1rem; color: #64748b; background: transparent; cursor: pointer; text-decoration: none; }
+        .action-icon-btn.edit { border-color: #bbf7d0; color: #16a34a; background: #f0fdf4; }
+        .action-icon-btn.edit:hover { background: #16a34a; color: #fff; transform: scale(1.05); }
+        .action-icon-btn.delete { border-color: #fecaca; color: #dc2626; background: #fef2f2; }
+        .action-icon-btn.delete:hover { background: #dc2626; color: #fff; transform: scale(1.05); }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 767px) {
+            .settings-card-header { flex-wrap: wrap; gap: 0.75rem; }
+            .table-responsive { overflow: visible !important; }
+            
+            /* Override DataTables wrappers */
+            .dataTables_wrapper .row { margin-left: 0 !important; margin-right: 0 !important; }
+            .dataTables_wrapper .col-sm-12 { padding-left: 0 !important; padding-right: 0 !important; overflow-x: visible !important; }
+            
+            .settings-table thead { display: none !important; }
+            .settings-table, .settings-table tbody, .settings-table tr, .settings-table td { display: block !important; width: 100% !important; box-sizing: border-box !important; }
+            .settings-table tr { margin-bottom: 0.75rem !important; border: 1px solid #e2e8f0 !important; border-radius: 8px !important; padding: 0 !important; overflow: hidden !important; box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important; background: #fff !important; }
+            .settings-table td { display: flex !important; justify-content: space-between !important; align-items: center !important; border-bottom: 1px solid #f1f5f9 !important; padding: 0.75rem 1rem !important; text-align: right !important; }
+            .settings-table td > span, .settings-table td > div { flex: 1 !important; min-width: 0 !important; word-break: break-word !important; overflow-wrap: break-word !important; text-align: right !important; justify-content: flex-end !important; display: flex !important; align-items: center !important; gap: 0.5rem !important; }
+            .settings-table td:last-child { border-bottom: none !important; background: #f8fafc !important; }
+            .settings-table td::before { content: attr(data-label) !important; font-weight: 600 !important; color: #64748b !important; font-size: 0.75rem !important; text-transform: uppercase !important; text-align: left !important; padding-right: 1rem !important; flex-shrink: 0 !important; }
+            .actions-cell { justify-content: flex-end !important; width: auto !important; }
+        }
+
         .advance-search-panel {
             background-color: #fff;
             box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
@@ -42,29 +80,28 @@
             margin-top: 1rem;
         }
     </style>
-    <div class="main-card mb-3 card">
-        <div class="card-body">
-            <div class="card-header p-0">
-                <h4>Notification</h4> 
-                <div class="btn-actions-pane-right">
-
-                    <div class="btn-group" id="global_action_btn" style="display:none">
-                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
-                            onclick="deleteSelected()" data-original-title="Delete selected"><i
-                                class="fa fa-trash"></i></button>
-                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
-                            onclick="changeStatusAll(1)" data-original-title="Mark as read"><i
-                                class="fa fa-thumbs-up"></i></button>
-                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
-                            onclick="changeStatusAll(0)" data-original-title="Mark as unread"><i
-                                class="fa  fa-thumbs-down"></i></button>
-                    </div>
-                    &nbsp;
+    <div class="main-card mb-3 card card-modern">
+        <div class="settings-card-header">
+            <h4><i class="bi bi-bell text-primary me-2"></i> Notification</h4>
+            <div class="btn-actions-pane-right">
+                <div class="btn-group" id="global_action_btn" style="display:none">
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
+                        onclick="deleteSelected()" data-original-title="Delete selected"><i
+                            class="fa fa-trash"></i></button>
+                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
+                        onclick="changeStatusAll(1)" data-original-title="Mark as read"><i
+                            class="fa fa-thumbs-up"></i></button>
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
+                        onclick="changeStatusAll(0)" data-original-title="Mark as unread"><i
+                            class="fa  fa-thumbs-down"></i></button>
                 </div>
+                &nbsp;
             </div>
+        </div>
 
+        <div class="card-body">
             <div class="table-responsive" id="main_table">
-                <table class="mb-0 table">
+                <table class="settings-table">
                     <thead>
                         <tr>
                             <th style="width:20px">
@@ -84,31 +121,37 @@
                         @foreach ($notifications as $notification)
                         <tr>
 
-                            <td>
-                                <div class="custom-checkbox custom-control">
-                                    <input type="checkbox" id="item_229" class="custom-control-input check_all"
-                                        name="ID[]" value="229">
-                                    <label class="custom-control-label" for="item_229"></label>
+                            <td data-label="Select">
+                                <div>
+                                    <div class="custom-checkbox custom-control">
+                                        <input type="checkbox" id="item_{{ $notification->id }}" class="custom-control-input check_all"
+                                            name="ID[]" value="{{ $notification->id }}">
+                                        <label class="custom-control-label" for="item_{{ $notification->id }}"></label>
+                                    </div>
                                 </div>
                             </td>
-                            <td>{{ $notification->id }}</td>
-                            <td>   {!! $notification->message !!}
-                                <div><small class="text-muted"> <i class="fa fa-clock"></i>
-                                        {{ $notification->created_date }}</small></div>
+                            <td data-label="ID"><span>#{{ $notification->id }}</span></td>
+                            <td data-label="Notification">
+                                <div>
+                                    {!! $notification->message !!}
+                                    <div class="mt-1"><small class="text-muted"> <i class="fa fa-clock"></i>
+                                            {{ $notification->created_date }}</small></div>
+                                </div>
                             </td>
-                            <td>
-                                <input data-id="{{ $notification->id }}" class="toggle-class-noti d-none sts_chnage"
-                                    type="checkbox" data-toggle="toggle" data-on="Read" data-off="Unread"
-                                    data-onstyle="success" data-offstyle="danger" data-size="mini"
-                                    {{ $notification->read_status ? 'checked' : '' }}>
-
+                            <td data-label="Status">
+                                <div>
+                                    <input data-id="{{ $notification->id }}" class="toggle-class-noti d-none sts_chnage"
+                                        type="checkbox" data-toggle="toggle" data-on="Read" data-off="Unread"
+                                        data-onstyle="success" data-offstyle="danger" data-size="mini"
+                                        {{ $notification->read_status ? 'checked' : '' }}>
+                                </div>
                             </td>
-                            <td class="text-right">
-                                <a noti_id="{{ $notification->id }}" class="delete-notification" title=""
-                                    data-original-title="Delete Permanently"><i
-                                        class="bi bi-trash3-fill text-danger fa-md"></i>
-                                </a>
-
+                            <td data-label="Action" class="text-right">
+                                <div class="actions-cell">
+                                    <a href="javascript:void(0)" noti_id="{{ $notification->id }}" class="action-icon-btn delete delete-notification cursor-pointer" title="Delete Permanently">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                         @endforeach

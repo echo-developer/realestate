@@ -9,259 +9,266 @@ $userTypes = [
 @endphp
 
 @section('content')
-<div class="app-main__inner">
-    <div class="app-page-title">
-        <div class="page-title-wrapper">
-            <div class="page-title-heading">
-                <div class="page-title-icon">
-                    <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
-                </div>
-                @if (isset($typeName))
-                <div>{{ ucwords(strtolower($typeName)) }}
-                    <div class="page-title-subheading">Users &gt; {{ ucwords(strtolower($typeName)) }}
-                    </div>
-                </div>
-                @else
-                <div> All User
-                    <div class="page-title-subheading">Users &gt; All User</div>
-                </div>
-                @endif
-            </div>
-            <div class="page-title-actions">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
-                    <li class="breadcrumb-item active">Users</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-    <div id="successMessageContainer"></div>
-    <style>
-        .advance-search-panel {
-            background-color: #fff;
-            box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
-            padding: 1rem;
-            margin-top: 1rem;
-        }
-    </style>
-    @if (session('success_msg'))
-    <div class="alert alert-{{ session('message_type') }}">
-        {{ session('success_msg') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert">
+<style>
+/* Page & Container */
+.app-main__inner { 
+    background-color: #f8fafc; 
+    padding: 1.5rem 2rem !important; 
+    font-family: 'Inter', sans-serif; 
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+}
+.page-title-wrapper { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+.page-title-heading { display: flex; align-items: center; gap: 1rem; }
+.page-title-icon { width: 48px; height: 48px; background: #eff6ff; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #2563eb; font-size: 1.5rem; }
+.page-title-heading h1 { font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 0; }
+.page-title-heading .breadcrumb { font-size: 0.85rem; color: #64748b; margin: 0; padding: 0; display: flex; gap: 0.5rem; align-items: center; }
+.page-title-heading .breadcrumb a { color: #2563eb; text-decoration: none; font-weight: 500; }
 
-        </button>
+/* Tabs & Search Row */
+.tabs-search-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+.custom-tabs-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); display: inline-flex; padding: 0 0.5rem; border: 1px solid #f1f5f9; }
+.custom-tabs { display: flex; gap: 0.5rem; list-style: none; margin: 0; padding: 0; }
+.custom-tabs .nav-item { display: flex; }
+.custom-tabs .nav-item .nav-link { color: #64748b; font-weight: 700; font-size: 0.95rem; padding: 0.85rem 1.25rem; border-bottom: 2px solid transparent; transition: all 0.2s; text-decoration: none; display: flex; align-items: center; }
+.custom-tabs .nav-item .nav-link:hover { color: #0f172a; }
+.custom-tabs .nav-item .nav-link.active { color: #2563eb; border-bottom-color: #2563eb; }
+.search-bar-wrapper { position: relative; width: 320px; margin-bottom: 0.6rem; }
+.search-bar-wrapper input { width: 100%; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.55rem 1rem; padding-right: 3rem; font-size: 0.85rem; color: #334155; outline: none; }
+.search-bar-wrapper input:focus { border-color: #93c5fd; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+.search-bar-wrapper button { position: absolute; right: 0; top: 0; height: 100%; background: #2563eb; color: #fff; border: none; border-radius: 0 6px 6px 0; padding: 0 1.25rem; cursor: pointer; transition: background 0.2s; }
+.search-bar-wrapper button:hover { background: #1d4ed8; }
+
+/* Main Card */
+.modern-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); margin-bottom: 1.5rem; min-width: 0; max-width: 100%; }
+.modern-card-header { padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f8fafc; }
+.modern-card-header h4 { font-size: 1.1rem; font-weight: 700; color: #0f172a; margin: 0; }
+.btn-primary-custom { background: #2563eb; color: #fff; border: none; padding: 0.55rem 1.25rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: background 0.2s; }
+.btn-primary-custom:hover { background: #1d4ed8; }
+
+/* Table */
+.table-responsive { display: block; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.table-borderless { width: 100%; border-collapse: collapse; margin-bottom: 0; min-width: 800px; }
+.table-borderless th { font-size: 0.8rem; font-weight: 700; color: #1e293b; padding: 1.25rem 1.5rem !important; text-align: left !important; border-bottom: 1px solid #e2e8f0; text-transform: capitalize; white-space: nowrap; }
+.table-borderless td { padding: 1.25rem 1.5rem !important; vertical-align: top; border-bottom: 1px solid #f8fafc; color: #334155; font-size: 0.85rem; text-align: left !important; }
+.table-borderless tr:last-child td { border-bottom: none; }
+.table-borderless tr:hover td { background-color: #f8fafc; }
+
+/* User Column */
+.user-info { display: flex; align-items: flex-start; gap: 1rem; }
+.user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 600; font-size: 1.1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.user-details { display: flex; flex-direction: column; gap: 0.25rem; }
+.user-name { font-weight: 700; color: #0f172a; font-size: 0.95rem; white-space: nowrap; }
+.user-role-badge { background: #eff6ff; color: #2563eb; font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 4px; display: inline-block; width: fit-content; text-transform: capitalize; }
+.user-additional-badge { background: #f1f5f9; color: #475569; font-size: 0.65rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 4px; display: inline-flex; align-items: center; gap: 0.25rem; margin-top: 0.25rem; border: 1px solid #e2e8f0; }
+
+/* Contact Column */
+.contact-info { display: flex; flex-direction: column; gap: 0.4rem; color: #64748b; font-size: 0.8rem; }
+.contact-info div { display: flex; align-items: center; gap: 0.5rem; }
+.contact-info i { color: #94a3b8; font-size: 0.9rem; }
+
+/* Badges */
+.status-badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer; border: 1px solid transparent; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.status-badge:hover { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+.status-badge.verified, .status-badge.active { background: #f0fdf4; color: #16a34a; border-color: #bbf7d0; }
+.status-badge.not-verified, .status-badge.inactive { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+.status-badge i { font-size: 0.8rem; }
+
+/* Actions */
+.action-icons { display: flex; align-items: center; gap: 0.85rem; margin-top: 0.25rem; }
+.action-icon { color: #64748b; cursor: pointer; transition: color 0.2s; font-size: 1.05rem; display: flex; align-items: center; justify-content: center; }
+.action-icon:hover { color: #2563eb; }
+.action-icon.edit { color: #3b82f6; }
+.action-icon.delete { color: #ef4444; }
+.action-icon.chat { color: #3b82f6; }
+
+@media (max-width: 767px) {
+    .tabs-search-row { flex-direction: column; align-items: flex-start; }
+    .search-bar-wrapper { width: 100%; margin-bottom: 0; }
+    .custom-tabs { overflow-x: auto; width: 100%; padding-bottom: 0.5rem; }
+    .modern-card-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+}
+</style>
+
+<div class="app-main__inner">
+    @if (session('success_msg'))
+    <div class="alert alert-{{ session('message_type') }} alert-dismissible shadow-sm">
+        {{ session('success_msg') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     @endif
 
+    <div class="page-title-wrapper">
+        <div class="page-title-heading">
+            <div class="page-title-icon">
+                <i class="bi bi-people"></i>
+            </div>
+            <div>
+                <h1>{{ isset($typeName) ? ucwords(strtolower($typeName)) : 'All User' }}</h1>
+                <div class="breadcrumb">
+                    <a href="{{ url('/') }}">Home</a> &gt; <a href="{{ url('member/memberUser') }}">Users</a> &gt; <span>{{ isset($typeName) ? ucwords(strtolower($typeName)) : 'Agent' }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @php
-    //setting dynamic search url , czz $typeName is not present for All User case
     if (isset($typeName)) {
-    $search_url = url('member/memberUser/' . $typeName);
+        $search_url = url('member/memberUser/' . $typeName);
     } else {
-    $search_url = url('member/memberUser');
+        $search_url = url('member/memberUser');
     }
     @endphp
 
-    <form action="{{ $search_url }}" method="get">
-        <section class="content-header mb-2">
-            <div class="row justify-content-end">
-                <div class="col-xl-4 col-lg-6">
-                    <div class="input-group">
-                        <input class="form-control" id="prop_category_search" placeholder="Search..." name="term"
-                            value="{{ request('term') }}" />
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+    <div class="tabs-search-row">
+        <div class="custom-tabs-card">
+            <ul class="custom-tabs">
+                <li class="nav-item">
+                    <a class="nav-link ajax-link {{ Request::is('member/memberUser') ? 'active' : '' }}" href="{{ url('member/memberUser') }}">All User</a>
+                </li>
+                @foreach ($userTypes as $userType => $userTypeName)
+                <li class="nav-item">
+                    <a class="nav-link ajax-link {{ Request::is('member/memberUser/' . $userTypeName) ? 'active' : '' }}" href="{{ url('member/memberUser/' . $userTypeName) }}">{{ $userTypeName }}</a>
+                </li>
+                @endforeach
+            </ul>
+        </div>
+        
+        <form action="{{ $search_url }}" method="get" class="m-0">
+            <div class="search-bar-wrapper">
+                <input type="text" placeholder="Search by name, email or phone..." name="term" value="{{ request('term') }}">
+                <button type="submit"><i class="bi bi-search"></i></button>
             </div>
-        </section>
-    </form>
+        </form>
+    </div>
 
-    {{-- Dynamic Nav Item --}}
-    <ul class="nav nav-underline mb-3 gap-4">
-        <li class="nav-item">
-            <a class="nav-link ajax-link {{ Request::is('member/memberUser') ? 'active' : '' }}"
-                href="{{ url('member/memberUser') }}" data-url="{{ url('member/memberUser') }}">
-                <span>All User</span>
-            </a>
-        </li>
-        @foreach ($userTypes as $userType => $userTypeName)
-        <li class="nav-item">
-            <a class="nav-link ajax-link {{ Request::is('member/memberUser/' . $userTypeName) ? 'active' : '' }}"
-                href="{{ url('member/memberUser/' . $userTypeName) }}"
-                data-url="{{ url('member/memberUser/' . $userTypeName) }}">
-                <span>{{ $userTypeName }}</span>
-            </a>
-        </li>
-        @endforeach
-    </ul>
-
-
-    <div class="main-card mb-3 card">
-        <div class="card-header d-flex">
-            <h4>
-                @if (isset($group_key))
-                {{ $group_key }} User
-                @else
-                User
-                @endif
-            </h4>
-            <div class="btn-actions-pane-right">
-
+    <div class="modern-card">
+        <div class="modern-card-header">
+            <h4>{{ isset($group_key) ? $group_key . ' User' : (isset($typeName) ? $typeName . ' List' : 'Agent List') }}</h4>
+            <div class="d-flex gap-2 align-items-center">
                 <div class="btn-group" id="global_action_btn" style="display:none">
-                    <button type="button" class="btn btn-default btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
-                        onclick="deleteSelected()" data-original-title="Delete selected"><i
-                            class="fa fa-trash"></i></button>
-                    <button type="button" class="btn btn-default btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
-                        onclick="changeStatusAll(1)" data-original-title="Make active"><i
-                            class="fa fa-thumbs-up"></i></button>
-                    <button type="button" class="btn btn-default btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
-                        onclick="changeStatusAll(0)" data-original-title="Make inactive"><i
-                            class="fa  fa-thumbs-o-down"></i></button>
+                    <button type="button" class="btn btn-default btn-sm" onclick="deleteSelected()"><i class="fa fa-trash"></i></button>
+                    <button type="button" class="btn btn-default btn-sm" onclick="changeStatusAll(1)"><i class="fa fa-thumbs-up"></i></button>
+                    <button type="button" class="btn btn-default btn-sm" onclick="changeStatusAll(0)"><i class="fa fa-thumbs-o-down"></i></button>
                 </div>
-                &nbsp;
-                {{-- @if (in_array('MEN0051_LIST_Add', $rolePermissions)) --}}
-                <button type="button" class="btn btn-site btn-sm btn-primary" id="allUsersaddButton">
-                    <i class="fa fa-plus"></i>
-                    Add new User
+                <button type="button" class="btn-primary-custom" id="allUsersaddButton">
+                    <i class="fa fa-plus"></i> Add New {{ isset($typeName) ? $typeName : 'Agent' }}
                 </button>
-                {{-- @endif --}}
-
             </div>
         </div>
-        <div class="card-body">
-            <div class="table-responsive" id="main_table">
-                <table class="mb-0 table">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table-borderless">
                     <thead>
                         <tr>
-                            <th>User Name</th>
-                            <th>Email &amp; Phone</th>
-                            <th style="min-width: 115px;">Created At</th>
+                            <th>Agent</th>
+                            <th>Details</th>
                             <th>Leads</th>
-                            <th style="min-width: 125px;">Verify &amp; Status</th>
-                            <th class="text-end" style="min-width: 150px;">Action</th>
+                            <th>Verify</th>
+                            <th>Status</th>
+                            <th class="text-center">Action</th>
                         </tr>
-                        <thead>
-                        <tbody id="allUserBody">
-                            @forelse ($data as $items)
-                            <tr>
-
-                                <td>
-                                    <a href="{{ route('memberUser.allDetails', $items->id) }}" target="_blank" class="d-flex text-dark">
-                                        @php
-                                        $relativePath = 'user_upload/profile_image/' . $items->image;
-                                        $localPath = public_path($relativePath);
-
-                                        $imageToShow =isset($items->image) && file_exists($localPath)? true: false;
-                                        @endphp
-                                        @if($imageToShow)
-                                        <img src="{{ asset('user_upload/profile_image/' . $items->image) }}" alt="User" height="40" width="40" class="rounded-circle me-2" />
-                                        @else
-                                        <span class="user-initial rounded-circle me-2" style="background-color: <?= getAvatarColor($items->name) ?>;"><?php echo strtoupper($items->name[0]);  ?></span>
-                                        @endif
-                                        <div>{{ $items->name }}<br>
-                                            <span class="badge badge bg-primary-subtle text-primary">{{ $userTypes[$items->user_type] ?? 'Unknown' }}</span>
-
-                                            @if($items->userbadges && $items->userbadges->count())
+                    </thead>
+                    <tbody>
+                        @forelse ($data as $items)
+                        <tr>
+                            <td>
+                                <div class="user-info">
+                                    @php
+                                    $localPath = public_path('user_upload/profile_image/' . $items->image);
+                                    $imageToShow = isset($items->image) && file_exists($localPath);
+                                    @endphp
+                                    @if($imageToShow)
+                                        <img src="{{ asset('user_upload/profile_image/' . $items->image) }}" alt="User" class="user-avatar" />
+                                    @else
+                                        <div class="user-avatar" style="background-color: <?= getAvatarColor($items->name) ?>;">{{ strtoupper($items->name[0]) }}</div>
+                                    @endif
+                                    <div class="user-details">
+                                        <a href="{{ route('memberUser.allDetails', $items->id) }}" target="_blank" class="user-name text-decoration-none">{{ $items->name }}</a>
+                                        <span class="user-role-badge">{{ $userTypes[$items->user_type] ?? 'Unknown' }}</span>
+                                        @if($items->userbadges && $items->userbadges->count())
                                             <div class="mt-1">
                                                 @foreach($items->userbadges as $badge)
-                                                @php
-                                                $badgeName = $badge->names->firstWhere('lang', app()->getLocale())?->name;
-                                                @endphp
-                                                <span class="badge bg-secondary-subtle text-dark d-inline-flex align-items-center me-1" title="{{ $badgeName }}">
-                                                    @if($badge->icon)
-                                                    <img src="{{ asset('user_upload/badges/' . $badge->icon) }}" alt="Badge Icon" width="16" height="16" class="me-1">
-                                                    @endif
+                                                @php $badgeName = $badge->names->firstWhere('lang', app()->getLocale())?->name; @endphp
+                                                <span class="user-additional-badge" title="{{ $badgeName }}">
+                                                    @if($badge->icon) <img src="{{ asset('user_upload/badges/' . $badge->icon) }}" alt="icon" width="14" height="14"> @endif
                                                     {{ $badgeName }}
                                                 </span>
                                                 @endforeach
                                             </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="contact-info">
+                                    <div><i class="bi bi-envelope"></i> {{ $items->email }}</div>
+                                    <div><i class="bi bi-calendar3"></i> {{ date('d-M-Y', strtotime($items->created_at)) }}</div>
+                                    <div><i class="bi bi-telephone"></i> {{ $items->phone }}</div>
+                                </div>
+                            </td>
+                            <td>
+                                <span style="font-weight: 500; color: #334155;">{{ memberLeadsCount($items->id) }}</span>
+                            </td>
+                            <td>
+                                @if ($items->user_type == 'A')
+                                    <span class="status-badge {{ $items->is_verified_agent ? 'verified' : 'not-verified' }} agent_verify_toggle_btn" data-id="{{ $items->id }}" data-status="{{ $items->is_verified_agent ? 1 : 0 }}">
+                                        <i class="bi {{ $items->is_verified_agent ? 'bi-check-circle-fill' : 'bi-x-circle-fill' }}"></i> 
+                                        <span>{{ $items->is_verified_agent ? 'Verified' : 'Not Verified' }}</span>
+                                    </span>
+                                @else
+                                    <span class="text-muted"><small>N/A</small></span>
+                                @endif
+                            </td>
+                            <td>
+                                <span class="status-badge {{ $items->status ? 'active' : 'inactive' }} user_status_toggle_btn" data-id="{{ $items->id }}" data-status="{{ $items->status ? 1 : 0 }}">
+                                    <i class="bi {{ $items->status ? 'bi-check-circle-fill' : 'bi-x-circle-fill' }}"></i> 
+                                    <span>{{ $items->status ? 'Active' : 'Inactive' }}</span>
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-icons justify-content-center">
+                                    <a href="javascript:void(0)" class="action-icon chat" title="Message"><i class="bi bi-chat-text"></i></a>
+                                    <a href="javascript:void(0)" class="action-icon edit allUsersEditButton" user-id="{{ $items->id }}" title="Edit"><i class="bi bi-pencil"></i></a>
+                                    <a href="javascript:void(0)" class="action-icon delete allUsersDeleteButton" user-id="{{ $items->id }}" title="Delete"><i class="bi bi-trash3"></i></a>
+                                    
+                                    <div class="dropdown">
+                                        <a href="#" class="action-icon" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></a>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="border-radius: 8px;">
+                                            @if ($items->user_type == 'A')
+                                            <li><a class="dropdown-item assignBadgeButton" href="javascript:void(0)" data-user-id="{{ $items->id }}"><i class="bi bi-award me-2 text-primary"></i> Assign Badge</a></li>
                                             @endif
-                                        </div>
-                                    </a>
-
-                                </td>
-                                <td>
-                                    <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width:200px;">
-                                        <i class="icon-feather-mail text-muted"></i> {{ $items->email }}</div>
-                                    <div><i class="icon-feather-phone text-muted"></i> {{ $items->phone }}</div>
-                                </td>
-                                <td>{{ date('d-M-Y', strtotime($items->created_at)) }}</td>
-                                <td>
-                                    @php
-                                    $leads_count = memberLeadsCount($items->id);
-                                    @endphp
-                                    {{ memberLeadsCount($items->id) }}
-                                    @if ($leads_count > 0)
-                                    <a href="{{ url('/enquiry/member-leads?user_id=' . $items->id . '&lead_type=P') }}"
-                                        title="View Leads"><i class="fa fa-eye"></i></a>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($items->user_type == 'A')
-                                    <div class="mb-1">
-                                        <input type="checkbox" class="agent_verify_status d-none"
-                                            data-id="{{ $items->id }}" data-toggle="toggle" data-on="Verified"
-                                            data-off="Verify" data-onstyle="success" data-offstyle="danger"
-                                            data-size="mini" {{ $items->is_verified_agent ? 'checked' : '' }}>
+                                            <li><a class="dropdown-item" href="{{ url('allproperties/all-property-view/' . $items->id) }}"><i class="bi bi-building me-2 text-success"></i> Properties</a></li>
+                                            <li><a class="dropdown-item" href="{{ url('allproject/all-project-view/' . $items->id) }}"><i class="bi bi-pie-chart me-2 text-success"></i> Projects</a></li>
+                                        </ul>
                                     </div>
-                                    @endif
-                                    <div>
-                                        <input type="checkbox" class="category_prop_status d-none"
-                                            data-id="{{ $items->id }}" data-toggle="toggle" data-on="Active"
-                                            data-off="Inactive" data-onstyle="success" data-offstyle="danger"
-                                            data-size="mini" {{ $items->status ? 'checked' : '' }}>
-                                    </div>
-                                </td>
-                                <td class="text-end">
-                                    @if ($items->user_type == 'A')
-                                    <a href="javascript:void(0)"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
-                                        data-bs-title="Assign Badge"
-                                        class="assignBadgeButton"
-                                        data-user-id="{{ $items->id }}">
-                                        <i class="bi bi-award-fill text-primary fa-md"></i>
-                                    </a>
-                                    &nbsp;
-                                    @endif
-
-
-                                    {{-- @if (in_array('MEN0051_LIST_Edit', $rolePermissions)) --}}
-                                    <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" class="allUsersEditButton"
-                                        user-id="{{ $items->id }}"><i
-                                            class="bi bi-pencil-fill text-success fa-md"></i></a>
-                                    &nbsp;
-                                    {{-- @endif --}}
-                                    {{-- @if (in_array('MEN0051_LIST_Edit', $rolePermissions)) --}}
-                                    <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete" class="allUsersDeleteButton"
-                                        user-id="{{ $items->id }}"><i
-                                            class="bi bi-trash3-fill text-danger fa-md"></i></a>
-                                    &nbsp;
-                                    <a href="{{ url('allproperties/all-property-view/' . $items->id) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Properties"
-                                        user-id="{{ $items->id }}"><i
-                                            class="bi bi-building-fill text-success fa-md"></i></a>
-                                    &nbsp;
-                                    <a href="{{ url('allproject/all-project-view/' . $items->id) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Projects"
-                                        user-id="{{ $items->id }}"><i
-                                            class="bi bi-pie-chart-fill text-success fa-md"></i></a>
-                                    {{-- @endif --}}
-                                </td>
-                                @empty
-                            <tr>
-                                <td colspan="6">Sorry, no records found!</td>
-                            </tr>
-                            @endforelse
-
-                        </tbody>
-
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">Sorry, no records found!</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
                 </table>
             </div>
-            {!! $data->links('vendor.pagination.bootstrap-5') !!}
+            
+            <div class="d-flex justify-content-between align-items-center p-3 border-top border-light">
+                <div class="text-muted small">
+                    Showing {{ $data->firstItem() ?? 0 }} to {{ $data->lastItem() ?? 0 }} of {{ $data->total() ?? 0 }} entries
+                </div>
+                <div>
+                    {!! $data->links('vendor.pagination.bootstrap-5') !!}
+                </div>
+            </div>
         </div>
+    </div>
+    
+    <div class="text-center text-muted small mt-4 mb-3" style="color: #94a3b8 !important;">
+        Copyright © New Admin 2025
     </div>
 </div>
 @endsection
@@ -656,12 +663,14 @@ $userTypes = [
             });
         });
 
-        $('.category_prop_status').change(function() {
+        $('.user_status_toggle_btn').click(function() {
+            var $btn = $(this);
+            var id = $btn.data('id');
+            var currentStatus = $btn.data('status');
+            var newStatus = currentStatus ? 0 : 1;
 
             toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
 
-            var id = $(this).data('id');
-            var status = this.checked ? 1 : 0;
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -671,25 +680,33 @@ $userTypes = [
                 type: 'POST',
                 url: `{{ url('member/memberUser-status') }}`,
                 data: {
-                    'status': status,
+                    'status': newStatus,
                     'id': id
                 },
                 success: function(data) {
-                    // Handle success response if needed
+                    $btn.data('status', newStatus);
+                    if(newStatus) {
+                        $btn.removeClass('inactive not-verified').addClass('active verified').find('span').text('Active');
+                        $btn.find('i').removeClass('bi-x-circle-fill').addClass('bi-check-circle-fill');
+                    } else {
+                        $btn.removeClass('active verified').addClass('inactive not-verified').find('span').text('Inactive');
+                        $btn.find('i').removeClass('bi-check-circle-fill').addClass('bi-x-circle-fill');
+                    }
                 },
                 error: function(msg) {
                     console.log(msg);
-                    var errors = msg.responseJSON;
                 }
             });
         });
 
-        $('.agent_verify_status').change(function() {
+        $('.agent_verify_toggle_btn').click(function() {
+            var $btn = $(this);
+            var id = $btn.data('id');
+            var currentStatus = $btn.data('status');
+            var newStatus = currentStatus ? 0 : 1;
 
             toastr.success('Verified', 'Request Status', toastrOptions);
 
-            var id = $(this).data('id');
-            var status = this.checked ? 1 : 0;
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -699,15 +716,21 @@ $userTypes = [
                 type: 'POST',
                 url: `{{ url('member/memberUser/agent-status') }}`,
                 data: {
-                    'status': status,
+                    'status': newStatus,
                     'id': id
                 },
                 success: function(data) {
-                    // Handle success response if needed
+                    $btn.data('status', newStatus);
+                    if(newStatus) {
+                        $btn.removeClass('inactive not-verified').addClass('active verified').find('span').text('Verified');
+                        $btn.find('i').removeClass('bi-x-circle-fill').addClass('bi-check-circle-fill');
+                    } else {
+                        $btn.removeClass('active verified').addClass('inactive not-verified').find('span').text('Not Verified');
+                        $btn.find('i').removeClass('bi-check-circle-fill').addClass('bi-x-circle-fill');
+                    }
                 },
                 error: function(msg) {
                     console.log(msg);
-                    var errors = msg.responseJSON;
                 }
             });
         });
