@@ -12,8 +12,8 @@ $userTypes = [
 <style>
 /* Page & Container */
 .app-main__inner { 
-    background-color: #f8fafc; 
-    padding: 1.5rem 2rem !important; 
+    background-color: #fcfcfc; 
+    padding: 1.5rem !important; 
     font-family: 'Inter', sans-serif; 
     box-sizing: border-box !important;
     min-width: 0 !important;
@@ -50,45 +50,148 @@ $userTypes = [
 
 /* Table */
 .table-responsive { display: block; width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.table-borderless { width: 100%; border-collapse: collapse; margin-bottom: 0; min-width: 800px; }
-.table-borderless th { font-size: 0.8rem; font-weight: 700; color: #1e293b; padding: 1.25rem 1.5rem !important; text-align: left !important; border-bottom: 1px solid #e2e8f0; text-transform: capitalize; white-space: nowrap; }
-.table-borderless td { padding: 1.25rem 1.5rem !important; vertical-align: top; border-bottom: 1px solid #f8fafc; color: #334155; font-size: 0.85rem; text-align: left !important; }
-.table-borderless tr:last-child td { border-bottom: none; }
-.table-borderless tr:hover td { background-color: #f8fafc; }
+.table-borderless { width: 100%; border-collapse: separate; border-spacing: 0; margin-bottom: 0; }
+.table-borderless thead th { 
+    background-color: #f8fafc; color: #475569; font-size: 0.75rem; font-weight: 600; 
+    text-transform: uppercase; letter-spacing: 0.05em; padding: 0.85rem 1rem !important; 
+    border-bottom: 1px solid #e2e8f0; border-top: 1px solid #f1f5f9; text-align: left !important; white-space: nowrap; 
+}
+.table-borderless tbody td { 
+    padding: 0.85rem 1rem !important; vertical-align: middle; border-bottom: 1px solid #f1f5f9; 
+    color: #334155; font-size: 0.85rem; text-align: left !important; transition: background-color 0.2s ease; 
+}
+.table-borderless tbody tr:hover td { background-color: #fcfcfc; }
+.table-borderless tbody tr:last-child td { border-bottom: none; }
 
 /* User Column */
-.user-info { display: flex; align-items: flex-start; gap: 1rem; }
-.user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 600; font-size: 1.1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-.user-details { display: flex; flex-direction: column; gap: 0.25rem; }
-.user-name { font-weight: 700; color: #0f172a; font-size: 0.95rem; white-space: nowrap; }
-.user-role-badge { background: #eff6ff; color: #2563eb; font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 4px; display: inline-block; width: fit-content; text-transform: capitalize; }
-.user-additional-badge { background: #f1f5f9; color: #475569; font-size: 0.65rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 4px; display: inline-flex; align-items: center; gap: 0.25rem; margin-top: 0.25rem; border: 1px solid #e2e8f0; }
+.user-info { display: flex; align-items: center; gap: 0.85rem; }
+.user-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 600; font-size: 1rem; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.user-details { display: flex; flex-direction: column; gap: 0.15rem; text-align: left; }
+.user-name { font-weight: 600; color: #0f172a; font-size: 0.9rem; white-space: nowrap; text-decoration: none; transition: color 0.2s; text-align: left; }
+.user-name:hover { color: #2563eb; }
+.user-role-badge { background: #e0e7ff; color: #4338ca; font-size: 0.65rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 4px; display: inline-block; width: fit-content; text-transform: uppercase; letter-spacing: 0.02em; }
+.user-additional-badge { background: #f1f5f9; color: #475569; font-size: 0.65rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 4px; display: inline-flex; align-items: center; gap: 0.25rem; margin-top: 0.2rem; border: 1px solid #e2e8f0; }
 
 /* Contact Column */
-.contact-info { display: flex; flex-direction: column; gap: 0.4rem; color: #64748b; font-size: 0.8rem; }
-.contact-info div { display: flex; align-items: center; gap: 0.5rem; }
-.contact-info i { color: #94a3b8; font-size: 0.9rem; }
+.contact-info { display: flex; flex-direction: column; gap: 0.3rem; color: #64748b; font-size: 0.8rem; text-align: left !important; align-items: flex-start !important; margin: 0 !important; padding: 0 !important; width: 100% !important; }
+.contact-info div { display: flex; align-items: center; justify-content: flex-start !important; gap: 0; text-align: left !important; margin: 0 !important; padding: 0 !important; }
+.contact-info i { color: #94a3b8; width: 16px; text-align: left; margin: 0 !important; margin-right: 0.25rem !important; padding: 0 !important; font-size: 0.85rem; }
 
 /* Badges */
-.status-badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer; border: 1px solid transparent; transition: all 0.2s; user-select: none; white-space: nowrap; }
-.status-badge:hover { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-.status-badge.verified, .status-badge.active { background: #f0fdf4; color: #16a34a; border-color: #bbf7d0; }
+.status-badge { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600; cursor: pointer; border: 1px solid transparent; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.status-badge:hover { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+.status-badge.verified, .status-badge.active { background: #ecfdf5; color: #059669; border-color: #a7f3d0; }
 .status-badge.not-verified, .status-badge.inactive { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
-.status-badge i { font-size: 0.8rem; }
+.status-badge i { font-size: 0.75rem; }
 
 /* Actions */
-.action-icons { display: flex; align-items: center; gap: 0.85rem; margin-top: 0.25rem; }
-.action-icon { color: #64748b; cursor: pointer; transition: color 0.2s; font-size: 1.05rem; display: flex; align-items: center; justify-content: center; }
-.action-icon:hover { color: #2563eb; }
-.action-icon.edit { color: #3b82f6; }
-.action-icon.delete { color: #ef4444; }
-.action-icon.chat { color: #3b82f6; }
+.action-icons { display: flex; align-items: center; gap: 0.4rem; }
+.action-icon { width: 32px; height: 32px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 1.05rem; text-decoration: none; }
+.action-icon.edit { color: #059669; background: #ecfdf5; }
+.action-icon.edit:hover { background: #d1fae5; color: #047857; }
+.action-icon.delete { color: #dc2626; background: #fef2f2; }
+.action-icon.delete:hover { background: #fee2e2; color: #b91c1c; }
+.action-icon.chat { color: #2563eb; background: #eff6ff; }
+.action-icon.chat:hover { background: #dbeafe; color: #1d4ed8; }
 
 @media (max-width: 767px) {
-    .tabs-search-row { flex-direction: column; align-items: flex-start; }
+    /* 1. Global Reset & Spacing */
+    .app-main__inner { padding: 0.75rem !important; background-color: #f8fafc; }
+    .page-title-heading h1 { font-size: 1.25rem; }
+    
+    /* 2. Tabs & Search */
+    .tabs-search-row { flex-direction: column; align-items: stretch; gap: 1rem; }
     .search-bar-wrapper { width: 100%; margin-bottom: 0; }
-    .custom-tabs { overflow-x: auto; width: 100%; padding-bottom: 0.5rem; }
-    .modern-card-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .custom-tabs { overflow-x: auto; width: 100%; padding-bottom: 0.5rem; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; border-bottom: none; gap: 0.5rem; }
+    .custom-tabs .nav-item .nav-link { white-space: nowrap; padding: 0.6rem 1.25rem; border: 1px solid #e2e8f0; border-radius: 20px; background: #fff; color: #64748b; font-size: 0.85rem; }
+    .custom-tabs .nav-item .nav-link.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+    
+    /* 3. Card Header */
+    .modern-card { background: transparent; border: none; box-shadow: none; margin-bottom: 0; }
+    .modern-card-header { flex-direction: column; align-items: stretch; gap: 1rem; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+    .modern-card-header > div { width: 100%; }
+    .btn-primary-custom { width: 100%; justify-content: center; padding: 0.65rem; }
+    
+    /* 4. Table to FLEX Card Transformation (Bulletproof for Mobile) */
+    .table-responsive { display: block; width: 100%; overflow: visible; }
+    .table-borderless { display: block; width: 100%; }
+    .table-borderless thead { display: none; }
+    .table-borderless tbody { display: block; width: 100%; }
+    
+    /* The Card Container */
+    .table-borderless tr {
+        display: flex; 
+        flex-wrap: wrap;
+        align-items: flex-start;
+        background: #fff; 
+        border: 1px solid #e2e8f0; 
+        border-radius: 16px; 
+        margin-bottom: 1.25rem; 
+        padding: 1.25rem; 
+        position: relative; 
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        z-index: 1;
+        transition: z-index 0s;
+    }
+    .table-borderless tr:hover,
+    .table-borderless tr:focus-within {
+        z-index: 50 !important;
+    }
+    .table-borderless tr:hover td { background-color: transparent !important; }
+    
+    /* Reset all td defaults - CRITICAL display: block */
+    .table-borderless td { 
+        display: block !important; 
+        border: none !important; 
+        padding: 0 !important; 
+        text-align: left !important; 
+    }
+    
+    /* Empty State */
+    .table-borderless td[colspan="6"] { width: 100% !important; text-align: center !important; padding: 2rem !important; }
+    
+    /* Cell 1: User Info */
+    .table-borderless td:nth-child(1) { width: 100% !important; order: 1; padding-right: 80px !important; margin-bottom: 1rem; }
+    
+    /* Cell 2: Contact Info */
+    /* Avatar is 36px + gap 0.85rem (13.6px) = ~50px perfect visual alignment */
+    .table-borderless td:nth-child(2) { width: 100% !important; order: 2; padding-left: 50px !important; margin-bottom: 1rem; }
+    .contact-info { background: #f8fafc; padding: 0.85rem !important; border-radius: 8px; border: 1px solid #f1f5f9; gap: 0.5rem; width: 100% !important; }
+    .contact-info i { margin: 0 !important; margin-right: 0.5rem !important; width: 16px; text-align: center; }
+    .contact-info .text-truncate { white-space: normal !important; overflow: visible !important; max-width: 100% !important; word-break: break-all; }
+    
+    /* Cell 3: Badges (Verify & Status) */
+    .table-borderless td:nth-child(4) { width: auto !important; order: 3; padding-left: 50px !important; margin-right: 0.5rem; margin-bottom: 0.5rem; display: flex; align-items: center; }
+    .table-borderless td:nth-child(5) { width: auto !important; order: 4; margin-bottom: 0.5rem; display: flex; align-items: center; }
+    
+    /* Cell 4: Leads Footer */
+    .table-borderless td:nth-child(3) {
+        width: 100% !important;
+        order: 5;
+        margin-top: 0.5rem;
+        padding-top: 1rem !important;
+        border-top: 1px dashed #e2e8f0 !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .table-borderless td:nth-child(3)::before { content: "Total Leads"; font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+    
+    /* Cell 6: Action Icons (Absolute Top Right) */
+    .table-borderless td:nth-child(6) { position: absolute; top: 1.25rem; right: 1.25rem; width: auto !important; order: 0; }
+    .action-icons { gap: 0.5rem; }
+    
+    /* Fix Bootstrap Popper.js bug for dropdowns in absolute containers */
+    .table-borderless td:nth-child(6) .dropdown-menu {
+        transform: none !important;
+        top: 100% !important;
+        right: 0 !important;
+        left: auto !important;
+        margin-top: 0.5rem !important;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important;
+        border: 1px solid #e2e8f0 !important;
+        z-index: 1050 !important;
+    }
 }
 </style>
 
@@ -146,7 +249,7 @@ $userTypes = [
 
     <div class="modern-card">
         <div class="modern-card-header">
-            <h4>{{ isset($group_key) ? $group_key . ' User' : (isset($typeName) ? $typeName . ' List' : 'Agent List') }}</h4>
+            <h4>{{ isset($group_key) ? $group_key . ' User' : (isset($typeName) ? $typeName . ' List' : 'User List') }}</h4>
             <div class="d-flex gap-2 align-items-center">
                 <div class="btn-group" id="global_action_btn" style="display:none">
                     <button type="button" class="btn btn-default btn-sm" onclick="deleteSelected()"><i class="fa fa-trash"></i></button>
@@ -154,7 +257,7 @@ $userTypes = [
                     <button type="button" class="btn btn-default btn-sm" onclick="changeStatusAll(0)"><i class="fa fa-thumbs-o-down"></i></button>
                 </div>
                 <button type="button" class="btn-primary-custom" id="allUsersaddButton">
-                    <i class="fa fa-plus"></i> Add New {{ isset($typeName) ? $typeName : 'Agent' }}
+                    <i class="fa fa-plus"></i> Add New {{ isset($typeName) ? $typeName : 'User' }}
                 </button>
             </div>
         </div>
@@ -163,12 +266,12 @@ $userTypes = [
                 <table class="table-borderless">
                     <thead>
                         <tr>
-                            <th>Agent</th>
-                            <th>Details</th>
-                            <th>Leads</th>
-                            <th>Verify</th>
-                            <th>Status</th>
-                            <th class="text-center">Action</th>
+                            <th width="25%"><div style="display: flex; justify-content: flex-start; text-align: left; width: 100%;">User</div></th>
+                            <th width="25%"><div style="display: flex; justify-content: flex-start; text-align: left; width: 100%;">Details</div></th>
+                            <th width="10%"><div style="display: flex; justify-content: flex-start; text-align: left; width: 100%;">Leads</div></th>
+                            <th width="15%"><div style="display: flex; justify-content: flex-start; text-align: left; width: 100%;">Verify</div></th>
+                            <th width="15%"><div style="display: flex; justify-content: flex-start; text-align: left; width: 100%;">Status</div></th>
+                            <th width="10%"><div style="display: flex; justify-content: center; text-align: center; width: 100%;">Action</div></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -204,13 +307,13 @@ $userTypes = [
                             </td>
                             <td>
                                 <div class="contact-info">
-                                    <div><i class="bi bi-envelope"></i> {{ $items->email }}</div>
+                                    <div class="text-truncate" style="max-width: 180px;" title="{{ $items->email }}"><i class="bi bi-envelope"></i> {{ $items->email }}</div>
                                     <div><i class="bi bi-calendar3"></i> {{ date('d-M-Y', strtotime($items->created_at)) }}</div>
                                     <div><i class="bi bi-telephone"></i> {{ $items->phone }}</div>
                                 </div>
                             </td>
                             <td>
-                                <span style="font-weight: 500; color: #334155;">{{ memberLeadsCount($items->id) }}</span>
+                                <span style="font-weight: 600; color: #334155;">{{ memberLeadsCount($items->id) }}</span>
                             </td>
                             <td>
                                 @if ($items->user_type == 'A')
@@ -219,7 +322,10 @@ $userTypes = [
                                         <span>{{ $items->is_verified_agent ? 'Verified' : 'Not Verified' }}</span>
                                     </span>
                                 @else
-                                    <span class="text-muted"><small>N/A</small></span>
+                                    <span class="status-badge not-verified">
+                                        <i class="bi bi-x-circle-fill"></i> 
+                                        <span>Not Verified</span>
+                                    </span>
                                 @endif
                             </td>
                             <td>
@@ -230,12 +336,11 @@ $userTypes = [
                             </td>
                             <td>
                                 <div class="action-icons justify-content-center">
-                                    <a href="javascript:void(0)" class="action-icon chat" title="Message"><i class="bi bi-chat-text"></i></a>
                                     <a href="javascript:void(0)" class="action-icon edit allUsersEditButton" user-id="{{ $items->id }}" title="Edit"><i class="bi bi-pencil"></i></a>
                                     <a href="javascript:void(0)" class="action-icon delete allUsersDeleteButton" user-id="{{ $items->id }}" title="Delete"><i class="bi bi-trash3"></i></a>
                                     
                                     <div class="dropdown">
-                                        <a href="#" class="action-icon" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></a>
+                                        <a href="#" class="action-icon" data-bs-toggle="dropdown" data-bs-display="static"><i class="bi bi-three-dots-vertical"></i></a>
                                         <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="border-radius: 8px;">
                                             @if ($items->user_type == 'A')
                                             <li><a class="dropdown-item assignBadgeButton" href="javascript:void(0)" data-user-id="{{ $items->id }}"><i class="bi bi-award me-2 text-primary"></i> Assign Badge</a></li>

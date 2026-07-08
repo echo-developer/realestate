@@ -18,101 +18,219 @@
         <div class="page-title-wrapper">
             <div class="page-title-heading">
                 <div class="page-title-icon">
-                    <i class="bi bi-award"></i>
+                    <i class="bi bi-award icon-gradient bg-mixed-hopes"></i>
                 </div>
-                <div>Membership Plan Type <div class="page-title-subheading">Membership Plan Type <i class="bi bi-chevron-right"></i> All Membership Plan Types</div>
+                <div>
+                    <h1>Membership Plan Type</h1>
+                    <div class="breadcrumb">
+                        <a href="{{ url('/') }}">Home</a> &gt; <span>All Membership Plan Types</span>
+                    </div>
                 </div>
-            </div>
-            <div class="page-title-actions">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-                    <li class="breadcrumb-item active">Membership Plan Type</li>
-                </ol>
             </div>
         </div>
     </div>
     <div id="successMessageContainer"></div>
 
     <style>
-        .advance-search-panel {
-            background-color: #fff;
-            box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
-            padding: 1rem;
-            margin-top: 1rem;
-        }
+/* Page & Container */
+.app-main__inner { background-color: #fcfcfc; padding: 1.5rem !important; font-family: 'Inter', sans-serif; box-sizing: border-box !important; }
+.page-title-wrapper { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+.page-title-heading { display: flex; align-items: center; gap: 1rem; }
+.page-title-icon { width: 48px; height: 48px; background: #eff6ff; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #2563eb; font-size: 1.5rem; }
+.page-title-heading h1 { font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 0; }
+.page-title-heading .breadcrumb { font-size: 0.85rem; color: #64748b; margin: 0; padding: 0; display: flex; gap: 0.5rem; align-items: center; }
+.page-title-heading .breadcrumb a { color: #2563eb; text-decoration: none; font-weight: 500; }
+
+/* Main Card */
+.modern-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); margin-bottom: 1.5rem; }
+.modern-card-header { padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f8fafc; }
+.modern-card-header h4 { font-size: 1.1rem; font-weight: 700; color: #0f172a; margin: 0; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Table */
+.table-borderless { width: 100%; border-collapse: separate; border-spacing: 0; margin-bottom: 0; }
+.table-borderless thead th { background-color: #fcfcfc; color: #1e293b; font-size: 0.85rem; font-weight: 700; border-bottom: 1px solid #e2e8f0 !important; border-top: none; }
+.table-borderless tbody td { vertical-align: middle; border-bottom: 1px solid #e2e8f0 !important; transition: background-color 0.2s ease; border-top: none; }
+.table-borderless tbody tr:hover td { background-color: #fcfcfc; }
+.table-borderless tbody tr:last-child td { border-bottom: none !important; }
+
+/* Plan Icon Wrapper */
+.plan-icon-wrapper { width: 72px; height: 72px; margin: 0 auto; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+.plan-icon-wrapper.free-plan { background-color: #eff6ff; color: #3b82f6; }
+.plan-icon-wrapper.gold-plan { background-color: #fefce8; color: #eab308; }
+.plan-icon-wrapper.platinum-plan { background-color: #faf5ff; color: #a855f7; }
+
+/* Feature Items */
+.feature-item { font-size: 0.85rem; padding: 0.6rem 0; border-bottom: 1px dashed #e2e8f0; }
+.feature-item:last-child { border-bottom: none; }
+.feature-label i { width: 20px; text-align: center; color: #94a3b8; font-size: 1rem; }
+.feature-label { font-weight: 500; color: #475569; }
+
+/* Vertical Dividers */
+.v-divider { position: relative; }
+.v-divider::after { content: ''; position: absolute; right: 0; top: 20%; bottom: 20%; width: 1px; background-color: #f1f5f9; }
+
+/* Status Pill Toggle */
+.status-pill-toggle { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; border-radius: 50px; font-weight: 600; font-size: 0.8rem; cursor: pointer; user-select: none; transition: all 0.2s; border: 1px solid transparent; margin: 0; }
+.status-pill-toggle.active { background: #ecfdf5; color: #059669; border-color: #a7f3d0; }
+.status-pill-toggle.active .dot { background: #059669; }
+.status-pill-toggle.inactive { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+.status-pill-toggle.inactive .dot { background: #dc2626; }
+.status-pill-toggle .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; transition: all 0.2s; }
+
+/* Outline Action Icons */
+.action-icons { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+.action-icon { width: 36px; height: 36px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 1.1rem; text-decoration: none; }
+.action-icon.outline.edit { color: #3b82f6; background: #fff; border: 1px solid #bfdbfe; }
+.action-icon.outline.edit:hover { background: #eff6ff; }
+.action-icon.outline.delete { color: #ef4444; background: #fff; border: 1px solid #fecaca; }
+.action-icon.outline.delete:hover { background: #fef2f2; }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .table-borderless thead { display: none; }
+    .table-borderless tbody tr { display: flex; flex-direction: column; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); overflow: hidden; }
+    .table-borderless tbody td { border: none !important; padding: 1.25rem !important; display: block; width: 100% !important; text-align: left !important; }
+    .v-divider::after { display: none !important; }
+    
+    /* Plan Title Block */
+    .table-borderless tbody td:first-child { background-color: #f8fafc; border-bottom: 1px solid #e2e8f0 !important; text-align: center !important; }
+    .plan-icon-wrapper { margin: 0 auto; }
+    
+    /* Features Block */
+    .row.gx-0.gy-2 { display: flex; flex-direction: column; }
+    .row.gx-0.gy-2 .col-6 { width: 100% !important; padding: 0 !important; }
+    /* Fix missing dashed divider when columns stack */
+    .row.gx-0.gy-2 .col-6:first-child .feature-item:last-child { border-bottom: 1px dashed #e2e8f0; }
+    
+    /* Status & Action Blocks */
+    .table-borderless tbody td:nth-last-child(2),
+    .table-borderless tbody td:last-child {
+        display: flex; justify-content: space-between; align-items: center;
+        border-top: 1px dashed #e2e8f0 !important; padding: 1rem 1.25rem !important;
+    }
+    .table-borderless tbody td:nth-last-child(2)::before { content: "Status"; font-weight: 600; color: #475569; }
+    .table-borderless tbody td:last-child::before { content: "Action"; font-weight: 600; color: #475569; }
+    
+    /* Align action icons correctly on mobile */
+    .action-icons { justify-content: flex-end; }
+}
     </style>
     @if (session('success_msg'))
     <div class="alert alert-{{ session('message_type') }}">
         {{ session('success_msg') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert">
-            
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     @endif
-    <div class="main-card mb-3 card">
-    <div class="card-header d-flex">
-                <h4>Membership Plan Type </h4>
-                <div class="btn-actions-pane-right">
-                    <div class="btn-group" id="global_action_btn" style="display:none">
-                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
-                            onclick="deleteSelected()" data-original-title="Delete selected"><i
-                                class="fa fa-trash"></i></button>
-                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
-                            onclick="changeStatusAll(1)" data-original-title="Make active"><i
-                                class="fa fa-thumbs-up"></i></button>
-                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
-                            onclick="changeStatusAll(0)" data-original-title="Make inactive"><i
-                                class="fa fa-thumbs-down"></i></button>
-                    </div>
+    <div class="modern-card">
+        <div class="modern-card-header">
+            <h4>MEMBERSHIP PLAN TYPE</h4>
+            <div class="btn-actions-pane-right">
+                <div class="btn-group" id="global_action_btn" style="display:none">
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
+                        onclick="deleteSelected()" data-original-title="Delete selected"><i class="fa fa-trash"></i></button>
+                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
+                        onclick="changeStatusAll(1)" data-original-title="Make active"><i class="fa fa-thumbs-up"></i></button>
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title=""
+                        onclick="changeStatusAll(0)" data-original-title="Make inactive"><i class="fa fa-thumbs-down"></i></button>
                 </div>
             </div>
-        <div class="card-body">
-            
-
+        </div>
+        <div class="card-body p-0">
             <div class="table-responsive" id="main_table">
-                <table id="myTable1" class="table table-bordered1">
+                <table id="myTable1" class="table-borderless w-100">
                     <thead>
                         <tr>
-                            <th>Plan Type Name</th>
-                            <th>Access</th>
-                            <th>Status</th>
-                            <th class="text-right">Action</th>
+                            <th width="25%" class="px-4 py-3">Plan Type Name</th>
+                            <th width="45%" class="px-4 py-3">Access & Limits</th>
+                            <th width="15%" class="px-4 py-3 text-center">Status</th>
+                            <th width="15%" class="px-4 py-3 text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody id="membershipPlanType">
                         @foreach ($MembershipPlanTypes as $planType)
+                        @php
+                            $planName = strtolower($planType->english_name);
+                            $iconClass = 'bi-send';
+                            $colorClass = 'free-plan';
+                            
+                            if(str_contains($planName, 'gold')) {
+                                $iconClass = 'bi-award';
+                                $colorClass = 'gold-plan';
+                            } elseif(str_contains($planName, 'platinum') || str_contains($planName, 'diamond')) {
+                                $iconClass = 'bi-gem';
+                                $colorClass = 'platinum-plan';
+                            }
+                        @endphp
                         <tr>
-                            <td>{{$planType->english_name}}</td>
-                            <td>
-                                <p class="mb-1"><span style="display:inline-block; min-width: 200px;">Listings Allowed:</span> <b>{{$planType->listings_allowed ?? 'Unlimited'}}</b></p>
-                                
-                                <p class="mb-1"><span style="display:inline-block; min-width: 200px;">Leads:</span> <b>{{$planType->leads ?? 'Unlimited'}}</b></p>
-                                
-                                <p class="mb-1"><span style="display:inline-block; min-width: 200px;">Listing Visibility:</span> <b class="{{ $planType->listing_visibility == 'Y' ? 'text-success' : 'text-danger' }}">{{ $planType->listing_visibility == 'Y' ? 'Yes' : 'No' }}</b></p>
-
-                                <p class="mb-1"><span style="display:inline-block; min-width: 200px;">Social Media Promotion:</span> <b class="{{$planType->social_media_promotion == 'Y' ? 'text-success' : 'text-danger' }}">{{$planType->social_media_promotion == 'Y' ? 'Yes' : 'No' }}</b></p>
-                                
-                                <p class="mb-1"><span style="display:inline-block; min-width: 200px;">Verified Badge:</span> <b class="{{$planType->verified_badge == 'Y' ? 'text-success' : 'text-danger' }}">{{$planType->verified_badge == 'Y' ? 'Yes' : 'No' }}</b></p>
-                                
-                                <p class="mb-1"><span style="display:inline-block; min-width: 200px;">Relationship Manager:</span> <b class="{{$planType->relationship_manager == 'Y' ? 'text-success' : 'text-danger' }}">{{$planType->relationship_manager == 'Y' ? 'Yes' : 'No' }}</b></p>
-
+                            <td class="px-4 py-4 v-divider">
+                                <div class="plan-type-card text-center">
+                                    <div class="plan-icon-wrapper {{ $colorClass }}">
+                                        <i class="bi {{ $iconClass }}"></i>
+                                    </div>
+                                    <h5 class="fw-bold mt-3 mb-1 text-dark">{{$planType->english_name}}</h5>
+                                    @if(str_contains($planName, 'free'))
+                                        <span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-1 mt-1">Default Plan</span>
+                                    @endif
+                                </div>
                             </td>
-                            <td>
-                                <input data-planTypeId="{{ $planType->id }}" id="status" class="status d-none" type="checkbox"
-                                    data-toggle="toggle" data-on="Active" data-off="Inactive"
-                                    data-onstyle="success" data-offstyle="danger" data-size="mini"
-                                    {{ $planType->status ? 'checked' : '' }}>
+                            <td class="px-4 py-4 v-divider">
+                                <div class="row gx-0 gy-2">
+                                    <div class="col-6 v-divider pe-4">
+                                        <div class="feature-item d-flex justify-content-between align-items-center">
+                                            <span class="feature-label"><i class="bi bi-list-task me-2"></i> Listings Allowed</span>
+                                            <span class="feature-value fw-bold text-dark">{{$planType->listings_allowed ?? 'Unlimited'}}</span>
+                                        </div>
+                                        <div class="feature-item d-flex justify-content-between align-items-center">
+                                            <span class="feature-label"><i class="bi bi-person me-2"></i> Leads</span>
+                                            <span class="feature-value fw-bold text-dark">{{$planType->leads ?? 'Unlimited'}}</span>
+                                        </div>
+                                        <div class="feature-item d-flex justify-content-between align-items-center">
+                                            <span class="feature-label"><i class="bi bi-eye me-2"></i> Listing Visibility</span>
+                                            <span class="feature-value fw-bold {{ $planType->listing_visibility == 'Y' ? 'text-success' : 'text-danger' }}">{{ $planType->listing_visibility == 'Y' ? 'Yes' : 'No' }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 ps-4">
+                                        <div class="feature-item d-flex justify-content-between align-items-center">
+                                            <span class="feature-label"><i class="bi bi-share me-2"></i> Social Media Promotion</span>
+                                            <span class="feature-value fw-bold {{$planType->social_media_promotion == 'Y' ? 'text-success' : 'text-danger' }}">{{$planType->social_media_promotion == 'Y' ? 'Yes' : 'No' }}</span>
+                                        </div>
+                                        <div class="feature-item d-flex justify-content-between align-items-center">
+                                            <span class="feature-label"><i class="bi bi-patch-check me-2"></i> Verified Badge</span>
+                                            <span class="feature-value fw-bold {{$planType->verified_badge == 'Y' ? 'text-success' : 'text-danger' }}">{{$planType->verified_badge == 'Y' ? 'Yes' : 'No' }}</span>
+                                        </div>
+                                        <div class="feature-item d-flex justify-content-between align-items-center">
+                                            <span class="feature-label"><i class="bi bi-shield-check me-2"></i> Relationship Manager</span>
+                                            <span class="feature-value fw-bold {{$planType->relationship_manager == 'Y' ? 'text-success' : 'text-danger' }}">{{$planType->relationship_manager == 'Y' ? 'Yes' : 'No' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
-                            <td class="text-right">
-                                <a href="javascript:void(0)" class="me-2"><i class="bi bi-pencil-fill text-success fa-md editButton" data-planTypeId="{{ $planType->id }}"></i></a>
-                                <a href="javascript:void(0)"><i class="bi bi-trash3-fill text-danger fa-md deleteButton" data-planTypeId="{{ $planType->id }}"></i></a>
+                            <td class="px-4 py-4 text-center">
+                                <label class="status-pill-toggle {{ $planType->status ? 'active' : 'inactive' }}">
+                                    <input data-planTypeId="{{ $planType->id }}" class="status-checkbox d-none" type="checkbox" {{ $planType->status ? 'checked' : '' }}>
+                                    <span class="dot"></span> <span class="status-text">{{ $planType->status ? 'Active' : 'Inactive' }}</span>
+                                </label>
+                            </td>
+                            <td class="px-4 py-4 text-center">
+                                <div class="action-icons">
+                                    <a href="javascript:void(0)" class="action-icon outline edit editButton" data-planTypeId="{{ $planType->id }}">
+                                        <i class="bi bi-pencil" data-planTypeId="{{ $planType->id }}"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" class="action-icon outline delete deleteButton" data-planTypeId="{{ $planType->id }}">
+                                        <i class="bi bi-trash3" data-planTypeId="{{ $planType->id }}"></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-            {{ $MembershipPlanTypes->links('vendor.pagination.bootstrap-5') }}
+            @if($MembershipPlanTypes->hasPages())
+            <div class="p-3 border-top">
+                {{ $MembershipPlanTypes->links('vendor.pagination.bootstrap-5') }}
+            </div>
+            @endif
         </div>
     </div>
 </div>
@@ -302,16 +420,30 @@
             }
         });
 
-        status.on('change', function() {
+        const statusCheckbox = $('.status-checkbox');
+        statusCheckbox.on('change', function() {
+            
+            // Visual Pill update
+            let label = $(this).closest('.status-pill-toggle');
+            let text = label.find('.status-text');
+            if(this.checked) {
+                label.removeClass('inactive').addClass('active');
+                text.text('Active');
+            } else {
+                label.removeClass('active').addClass('inactive');
+                text.text('Inactive');
+            }
+            
+            // Ajax update
             toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
-            const id = $(this).data('plantypeid');
-            const status = this.checked ? 1 : 0;
+            const id = $(this).attr('data-plantypeid');
+            const statusVal = this.checked ? 1 : 0;
             $.ajax({
                 url: `{{ route('plan_type.status') }}`,
                 type: 'POST',
                 data: {
                     id: id,
-                    status: status
+                    status: statusVal
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -320,7 +452,7 @@
 
                 },
                 error: function(xhr) {
-                    console.error('Error deleting plan:', xhr.responseText);
+                    console.error('Error modifying status:', xhr.responseText);
                 }
             });
 
