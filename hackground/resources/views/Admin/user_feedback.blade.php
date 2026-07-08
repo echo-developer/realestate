@@ -41,6 +41,22 @@
             padding: 1rem;
             margin-top: 1rem;
         }
+        /* Modern Table & Mobile Card Design */
+        .table-borderless { border-collapse: separate; border-spacing: 0; width: 100%; margin-bottom: 0; }
+        .table-borderless thead th { background-color: #f8fafc; color: #1e293b; font-size: 0.85rem; font-weight: 700; border-bottom: 1px solid #e2e8f0; border-top: none; padding: 1rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .table-borderless tbody td { vertical-align: middle; border-bottom: 1px solid #e2e8f0 !important; border-top: none; padding: 1.25rem 1rem; color: #475569; }
+        .table-borderless tbody tr:hover { background-color: #f8fafc; }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .table-borderless thead { display: none; }
+            .table-borderless tbody tr { display: flex; flex-direction: column; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); overflow: hidden; padding: 0; }
+            .table-borderless tbody td { border: none !important; padding: 1rem 1.25rem !important; display: block; width: 100% !important; border-bottom: 1px dashed #e2e8f0 !important; }
+            .table-borderless tbody td:last-child { border-bottom: none !important; }
+            
+            /* Mobile Labels */
+            .table-borderless tbody td::before { content: attr(data-label); display: block; font-weight: 700; color: #64748b; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.5rem; letter-spacing: 0.5px; }
+        }
     </style>
     @if (session('success_msg'))
     <div class="alert alert-{{ session('message_type') }}">
@@ -57,25 +73,27 @@
             </div>
 
             <div class="table-responsive" id="main_table">
-                <table id="myTable" class="mb-0 table">
+                <table id="myTable" class="mb-0 table table-borderless">
                     <thead>
                         <tr>
                             <th style="width:5%">ID</th>
-                            <th style="width:15%">User Name</th>
-                            <th style="width:20%">Email </th>
-                            <th style="width:15%">Phone</th>
-                            <th style="min-width:110px; width:20%">Feedback</th>
+                            <th style="width:25%">User</th>
+                            <th style="width:70%">Feedback</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         @foreach($data as $item)
                         <tr>
-                            <td>{{$item->id}}</td>
-                            <td>{{$item->name}}</td>
-                            <td>{{$item->email}}</td>
-                            <td>{{$item->phone}}</td>
-                            <td>{{$item->feedback}}</td>
+                            <td data-label="ID" class="fw-medium text-muted">#{{$item->id}}</td>
+                            <td data-label="User">
+                                <div class="fw-bold text-dark">{{$item->name}}</div>
+                                <div class="text-muted small mt-1"><i class="bi bi-envelope me-1"></i>{{$item->email}}</div>
+                                <div class="text-muted small"><i class="bi bi-telephone me-1"></i>{{$item->phone}}</div>
+                            </td>
+                            <td data-label="Feedback">
+                                <p class="mb-0 text-muted" style="line-height: 1.5;">{{$item->feedback}}</p>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

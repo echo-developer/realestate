@@ -29,6 +29,31 @@
             padding: 1rem;
             margin-top: 1rem;
         }
+        /* Modern Table & Mobile Card Design */
+        .table-borderless { border-collapse: separate; border-spacing: 0; width: 100%; margin-bottom: 0; }
+        .table-borderless thead th { background-color: #f8fafc; color: #1e293b; font-size: 0.85rem; font-weight: 700; border-bottom: 1px solid #e2e8f0; border-top: none; padding: 1rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .table-borderless tbody td { vertical-align: middle; border-bottom: 1px solid #e2e8f0 !important; border-top: none; padding: 1.25rem 1rem; color: #475569; }
+        .table-borderless tbody tr:hover { background-color: #f8fafc; }
+        
+        /* Modern Soft Badges */
+        .badge-soft { padding: 0.35em 0.8em; border-radius: 50px; font-weight: 600; font-size: 0.75rem; letter-spacing: 0.3px; display: inline-block; margin-bottom: 0; }
+        .badge-soft-success { background-color: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+        .badge-soft-danger { background-color: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .table-borderless thead { display: none; }
+            .table-borderless tbody tr { display: flex; flex-direction: column; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); overflow: hidden; padding: 0; }
+            .table-borderless tbody td { border: none !important; padding: 1rem 1.25rem !important; display: block; width: 100% !important; border-bottom: 1px dashed #e2e8f0 !important; }
+            .table-borderless tbody td:last-child { border-bottom: none !important; }
+            
+            /* Mobile Labels */
+            .table-borderless tbody td::before { content: attr(data-label); display: block; font-weight: 700; color: #64748b; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.5rem; letter-spacing: 0.5px; }
+            
+            /* Status alignment on mobile */
+            .table-borderless tbody td[data-label="Status"] { display: flex; justify-content: space-between; align-items: center; }
+            .table-borderless tbody td[data-label="Status"]::before { margin-bottom: 0; }
+        }
     </style>
 
     <form action="{{ route('transaction.index') }}" class="form-horizontal" novalidate="">
@@ -112,7 +137,7 @@
 
             <div class="table-responsive" id="main_table">
                 @if ($transactions->count() > 0)
-                <table id="myTable" class="table">
+                <table id="myTable" class="table table-borderless">
                     <thead>
                         <tr>
                             <th style="width:10%">Transaction ID</th>
@@ -128,18 +153,18 @@
                     <tbody id="transaction">
                         @foreach($transactions as $value)
                         <tr>
-                            <td>{{ $value->platform_txn_id }}</td>
-                            <td>{{ $value->user_id }}</td>
-                            <td>{{ $value->plan_id }}</td>
-                            <td>{{ $value->paid_amount }}</td>
-                            <td>{{ date('d F Y', strtotime($value->created_at)) }}</td>
-                            <td>{{ $value->paid_by }}</td>
-                            <td>{{ strtoupper($value->currency) }}</td>
-                            <td>
+                            <td data-label="Transaction ID" class="fw-medium text-muted">#{{ $value->platform_txn_id }}</td>
+                            <td data-label="User Id" class="fw-bold text-dark">{{ $value->user_id }}</td>
+                            <td data-label="Plan Id">{{ $value->plan_id }}</td>
+                            <td data-label="Amount" class="fw-bold text-success">{{ $value->paid_amount }}</td>
+                            <td data-label="Payment Date" class="text-muted"><i class="bi bi-calendar3 me-1"></i>{{ date('d F Y', strtotime($value->created_at)) }}</td>
+                            <td data-label="Paid By">{{ $value->paid_by }}</td>
+                            <td data-label="Currency" class="fw-medium">{{ strtoupper($value->currency) }}</td>
+                            <td data-label="Status">
                                 @if($value->payment_status === 'succeeded')
-                                <button type="button" class="btn btn-sm btn-success disabled">Accepted</button>
+                                <span class="badge-soft badge-soft-success">Accepted</span>
                                 @else
-                                <button type="button" class="btn btn-sm btn-danger disabled">Rejected</button>
+                                <span class="badge-soft badge-soft-danger">Rejected</span>
                                 @endif
                             </td>
                         </tr>

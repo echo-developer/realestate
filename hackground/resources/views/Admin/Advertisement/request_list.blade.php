@@ -45,6 +45,48 @@
             padding: 1rem;
             margin-top: 1rem;
         }
+        /* Modern Table & Mobile Card Design */
+        .table-borderless { border-collapse: separate; border-spacing: 0; width: 100%; margin-bottom: 0; }
+        .table-borderless thead th { background-color: #f8fafc; color: #1e293b; font-size: 0.85rem; font-weight: 700; border-bottom: 1px solid #e2e8f0; border-top: none; padding: 1rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .table-borderless tbody td { vertical-align: middle; border-bottom: 1px solid #e2e8f0 !important; border-top: none; padding: 1.25rem 1rem; color: #475569; }
+        .table-borderless tbody tr:hover { background-color: #f8fafc; }
+        
+        /* Status Pill Toggle */
+        .status-pill-toggle { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; border-radius: 50px; font-weight: 600; font-size: 0.8rem; cursor: pointer; user-select: none; transition: all 0.2s; border: 1px solid transparent; margin: 0; }
+        .status-pill-toggle.active { background: #ecfdf5; color: #059669; border-color: #a7f3d0; }
+        .status-pill-toggle.active .dot { background: #059669; }
+        .status-pill-toggle.inactive { background: #fffbeb; color: #d97706; border-color: #fde68a; }
+        .status-pill-toggle.inactive .dot { background: #d97706; }
+        .status-pill-toggle .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; transition: all 0.2s; }
+        
+        /* Outline Action Icons */
+        .action-icons { display: flex; align-items: center; gap: 0.5rem; justify-content: flex-end; }
+        .action-icon { width: 36px; height: 36px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 1.1rem; text-decoration: none; cursor: pointer; }
+        .action-icon.outline.edit { color: #3b82f6; background: #fff; border: 1px solid #bfdbfe; }
+        .action-icon.outline.edit:hover { background: #eff6ff; }
+        .action-icon.outline.delete { color: #ef4444; background: #fff; border: 1px solid #fecaca; }
+        .action-icon.outline.delete:hover { background: #fef2f2; }
+        .action-icon.outline.view { color: #10b981; background: #fff; border: 1px solid #a7f3d0; }
+        .action-icon.outline.view:hover { background: #ecfdf5; }
+        .action-icon.outline.approve { color: #8b5cf6; background: #fff; border: 1px solid #c4b5fd; }
+        .action-icon.outline.approve:hover { background: #f5f3ff; }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .table-borderless thead { display: none; }
+            .table-borderless tbody tr { display: flex; flex-direction: column; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.02); overflow: hidden; padding: 0; }
+            .table-borderless tbody td { border: none !important; padding: 1rem 1.25rem !important; display: block; width: 100% !important; border-bottom: 1px dashed #e2e8f0 !important; }
+            .table-borderless tbody td:last-child { border-bottom: none !important; }
+            
+            /* Mobile Labels */
+            .table-borderless tbody td::before { content: attr(data-label); display: block; font-weight: 700; color: #64748b; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.5rem; letter-spacing: 0.5px; }
+            
+            /* Status & Action layout for mobile */
+            .table-borderless tbody td[data-label="Status"],
+            .table-borderless tbody td[data-label="Action"] { display: flex; justify-content: space-between; align-items: center; }
+            .table-borderless tbody td[data-label="Status"]::before,
+            .table-borderless tbody td[data-label="Action"]::before { margin-bottom: 0; }
+        }
     </style>
 
     <form action="" method="get">
@@ -92,17 +134,14 @@
             </div>
 
             <div class="table-responsive" id="main_table">
-                <table id="myTable" class="mb-0 table">
+                <table id="myTable" class="mb-0 table table-borderless">
                     <thead>
                         <tr>
                             <th style="width:5%">ID</th>
-                            <th>Advertiser Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Page</th>
-                            <th>Position</th>
-                            <th>Duration(in weeks)</th>
-                            <th>location</th>
+                            <th>Advertiser</th>
+                            <th>Ad Placement</th>
+                            <th>Duration</th>
+                            <th>Location</th>
                             <th>Status</th>
                             <th class="text-right">Action</th>
                         </tr>
@@ -110,27 +149,48 @@
                     <tbody>
                         @forelse($list as $item)
                         <tr>
-                            <td>{{ $item->request_id }}</td>
-                            <td>{{ $item->name }}</td>
-                            <td>{{ $item->email }}</td>
-                            <td>{{ $item->phone_code.''.$item->phone }}</td>
-                            <td>{{ $item->page }}</td>
-                            <td>{{ $item->position }}</td>
-                            <td>{{ $item->duration }}</td>
-                            <td>
-                                {{ get_name_by_id('locality_names','locality_id',$item->locality_id,'en').', '.get_name_by_id('city_names','city_id',$item->city_id,'en') }}
+                            <td data-label="ID" class="fw-medium text-muted">#{{ $item->request_id }}</td>
+                            <td data-label="Advertiser">
+                                <div class="fw-bold text-dark">{{ $item->name }}</div>
+                                <div class="text-muted small"><i class="bi bi-envelope me-1"></i>{{ $item->email }}</div>
+                                <div class="text-muted small"><i class="bi bi-telephone me-1"></i>{{ $item->phone_code.''.$item->phone }}</div>
                             </td>
-                            <td> 
-                                <input type="checkbox" class="ad_status d-none" data-id="{{ $item->request_id }}" data-toggle="toggle" data-on="Completed" data-off="Pending" data-onstyle="success" data-offstyle="danger" data-size="mini" {{ $item->status ? 'checked' : '' }}>
+                            <td data-label="Ad Placement">
+                                <div class="fw-medium text-dark">{{ $item->page ? $item->page : 'N/A' }}</div>
+                                <div class="text-muted small mt-1">Pos: {!! $item->position ? '<span class="badge-soft badge-soft-info" style="font-size:0.65rem; padding:0.2em 0.6em;">'.$item->position.'</span>' : '<span class="text-muted">N/A</span>' !!}</div>
                             </td>
-                            <td class="text-right">
-                                {{-- <i class="fa fa-edit text-primary fa-md" onclick="edit('{{ $item->request_id }}')"></i> --}}
-                                @if($item->status == '0')
-                                    <i class="fa fa-plus text-primary fa-md" onclick="approve('{{ $item->request_id }}')"></i>
+                            <td data-label="Duration">
+                                @if($item->duration > 0)
+                                    <span class="fw-medium">{{ $item->duration }} {{ $item->duration == 1 ? 'week' : 'weeks' }}</span>
+                                @else
+                                    <span class="text-muted">N/A</span>
                                 @endif
-                                
-                                <i class="fa fa-eye text-success fa-md" onclick="view('{{ $item->request_id }}')"></i>
-                                {{-- <i class="fa fa-trash text-danger fa-md" onclick="reject('{{ $item->request_id }}')"></i> --}}
+                            </td>
+                            <td data-label="Location">
+                                @php
+                                    $locName = get_name_by_id('locality_names','locality_id',$item->locality_id,'en');
+                                    $cityName = get_name_by_id('city_names','city_id',$item->city_id,'en');
+                                    $fullLocation = implode(', ', array_filter([$locName, $cityName]));
+                                @endphp
+                                {{ $fullLocation ?: '-' }}
+                            </td>
+                            <td data-label="Status"> 
+                                <label class="status-pill-toggle {{ $item->status ? 'active' : 'inactive' }}">
+                                    <input type="checkbox" class="ad_status_checkbox d-none" data-id="{{ $item->request_id }}" {{ $item->status ? 'checked' : '' }}>
+                                    <span class="dot"></span> <span class="status-text">{{ $item->status ? 'Completed' : 'Pending' }}</span>
+                                </label>
+                            </td>
+                            <td data-label="Action" class="text-right">
+                                <div class="action-icons">
+                                    @if($item->status == '0')
+                                        <a onclick="approve('{{ $item->request_id }}')" class="action-icon outline approve" title="Approve">
+                                            <i class="bi bi-check-lg"></i>
+                                        </a>
+                                    @endif
+                                    <a onclick="view('{{ $item->request_id }}')" class="action-icon outline view" title="View">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                         @empty
@@ -259,10 +319,23 @@
 
 
 
-    $('.ad_status').change(function() {
-        toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
-        var id = $(this).data('id');
+    $('.ad_status_checkbox').on('change', function() {
+        var id = $(this).attr('data-id');
         var status = this.checked ? 1 : 0;
+        
+        // Visual Pill update
+        let label = $(this).closest('.status-pill-toggle');
+        let text = label.find('.status-text');
+        if(this.checked) {
+            label.removeClass('inactive').addClass('active');
+            text.text('Completed');
+        } else {
+            label.removeClass('active').addClass('inactive');
+            text.text('Pending');
+        }
+        
+        toastr.success('Request processed successfully.', 'Request Status', toastrOptions);
+        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

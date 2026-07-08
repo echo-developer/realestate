@@ -17,7 +17,8 @@
 <div class="app-main__inner" style="min-width: 0; max-width: 100%; overflow-x: hidden;">
     <!-- Layout fixes for responsive horizontal scrolling -->
     <style>
-        .app-main__inner { width: 100%; padding-bottom: 2rem; }
+    <style>
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
         .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
         .btn-pill-group { display: inline-flex; flex-wrap: wrap; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; width: 100%; max-width: max-content; }
         .btn-pill-group .btn { border: none; border-radius: 0; font-weight: 600; padding: 0.5rem 0.75rem; font-size: 0.8rem; box-shadow: none !important; flex: 1 1 auto; white-space: nowrap; text-align: center; }
@@ -28,10 +29,9 @@
             .btn-pill-group .btn { font-size: 0.85rem; padding: 0.5rem 1rem; }
             .btn-pill-group { width: auto; }
         }
-        .btn-add-lead { background-color: #2563eb; color: #ffffff; font-weight: 600; font-size: 0.85rem; padding: 0.5rem 1rem; border-radius: 6px; border: none; }
-        .btn-add-lead:hover { background-color: #1d4ed8; color: #ffffff; }
     </style>
 
+    <div class="px-4 py-4 px-md-5">
     <!-- New Modern Header -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div style="min-width: 0;">
@@ -45,9 +45,7 @@
                 <a href="{{ url('enquiry/list') }}" class="btn {{ Request::is('enquiry/list') ? 'active' : 'inactive' }}">Project & Property Leads</a>
                 <a href="{{ url('/enquiry/general-leads') }}" class="btn {{ Request::is('enquiry/general-leads') ? 'active' : 'inactive' }}">General Leads</a>
             </div>
-            <button class="btn-add-lead d-flex align-items-center gap-2 text-nowrap" onclick="add()">
-                <i class="fa fa-plus"></i> Add Lead
-            </button>
+        </div>
         </div>
     </div>
     <div id="successMessageContainer"></div>
@@ -311,6 +309,7 @@
             <?php */ ?>
 
         </div>
+    </div>
     </div>
 </div>
 @endsection
