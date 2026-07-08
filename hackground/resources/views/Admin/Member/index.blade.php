@@ -361,20 +361,12 @@ $userTypes = [
                 </table>
             </div>
             
-            <div class="d-flex justify-content-between align-items-center p-3 border-top border-light">
-                <div class="text-muted small">
-                    Showing {{ $data->firstItem() ?? 0 }} to {{ $data->lastItem() ?? 0 }} of {{ $data->total() ?? 0 }} entries
-                </div>
-                <div>
-                    {!! $data->links('vendor.pagination.bootstrap-5') !!}
-                </div>
+            <div class="p-3 border-top border-light">
+                {!! $data->links('vendor.pagination.bootstrap-5') !!}
             </div>
         </div>
     </div>
     
-    <div class="text-center text-muted small mt-4 mb-3" style="color: #94a3b8 !important;">
-        Copyright © New Admin 2025
-    </div>
 </div>
 @endsection
 

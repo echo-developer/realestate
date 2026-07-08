@@ -31,6 +31,67 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Global Premium Alert Styling */
+        .app-main__inner > .alert, .alert {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            animation: slideInDown 0.3s ease-out forwards;
+        }
+        @keyframes slideInDown {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .alert-success {
+            background: linear-gradient(to right, #dcfce7, #f0fdf4);
+            color: #166534;
+            border-left: 5px solid #22c55e;
+        }
+        .alert-danger {
+            background: linear-gradient(to right, #fee2e2, #fef2f2);
+            color: #991b1b;
+            border-left: 5px solid #ef4444;
+        }
+        .alert-warning {
+            background: linear-gradient(to right, #fef9c3, #fefce8);
+            color: #854d0e;
+            border-left: 5px solid #eab308;
+        }
+        .alert .btn-close {
+            background: transparent !important;
+            border: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: currentColor;
+            opacity: 0.5;
+            cursor: pointer;
+            padding: 0 0.5rem;
+            margin: 0;
+            line-height: 1;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .alert .btn-close:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        /* Fallback if Bootstrap's SVG is broken */
+        .alert .btn-close::after {
+            content: "\00d7";
+            display: block;
+        }
+    </style>
     @stack('custom-css')
 </head>
 
