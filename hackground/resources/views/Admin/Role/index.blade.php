@@ -132,7 +132,7 @@
                                     <td data-label="ID"><span>#{{ $items->id }}</span></td>
                                     <td data-label="Name" class="fw-bold"><span>{{ $items->name }}</span></td>
                                     <td data-label="Status">
-                                        <div class="d-flex justify-content-end">
+                                        <div>
                                             <input data-id="{{ $items->id }}" class="Rolestatus d-none" type="checkbox"
                                                 data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success"
                                                 data-offstyle="danger" data-size="mini" {{ $items->status ? 'checked' : '' }}>

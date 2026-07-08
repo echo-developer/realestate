@@ -1,32 +1,36 @@
 @foreach ($notifications as $notification)
 <tr>
-
-    <td>
-        <div class="custom-checkbox custom-control">
-            <input type="checkbox" id="item_229" class="custom-control-input check_all"
-                name="ID[]" value="229">
-            <label class="custom-control-label" for="item_229"></label>
+    <td data-label="Select">
+        <div>
+            <div class="custom-checkbox custom-control">
+                <input type="checkbox" id="item_{{ $notification->id }}" class="custom-control-input check_all"
+                    name="ID[]" value="{{ $notification->id }}">
+                <label class="custom-control-label" for="item_{{ $notification->id }}"></label>
+            </div>
         </div>
     </td>
-    <td>{{ $notification->id }}</td>
-    <td> {!! $notification->message !!}
-        <div><small class="text-muted"> <i class="fa fa-clock"></i>
-                {{ $notification->created_date }}</small></div>
+    <td data-label="ID"><span>#{{ $notification->id }}</span></td>
+    <td data-label="Notification">
+        <div>
+            {!! $notification->message !!}
+            <div class="mt-1"><small class="text-muted"> <i class="fa fa-clock"></i>
+                    {{ $notification->created_date }}</small></div>
+        </div>
     </td>
-    <td>
-        <input data-id="{{ $notification->id }}" class="toggle-class-noti d-none sts_chnage"
-            type="checkbox" data-toggle="toggle" data-on="Read" data-off="Unread"
-            data-onstyle="success" data-offstyle="danger" data-size="mini"
-            {{ $notification->read_status ? 'checked' : '' }}>
-
+    <td data-label="Status">
+        <div>
+            <input data-id="{{ $notification->id }}" class="toggle-class-noti d-none sts_chnage"
+                type="checkbox" data-toggle="toggle" data-on="Read" data-off="Unread"
+                data-onstyle="success" data-offstyle="danger" data-size="mini"
+                {{ $notification->read_status ? 'checked' : '' }}>
+        </div>
     </td>
-    <td class="text-right">
-        <a noti_id="{{ $notification->id }}" class="delete-notification" title=""
-            data-original-title="Delete Permanently"><i
-                class="fa fa-trash text-danger fa-md"></i>
-        </a>
-
-
+    <td data-label="Action" class="text-right">
+        <div class="actions-cell">
+            <a href="javascript:void(0)" noti_id="{{ $notification->id }}" class="action-icon-btn delete delete-notification cursor-pointer" title="Delete Permanently">
+                <i class="bi bi-trash3-fill"></i>
+            </a>
+        </div>
     </td>
 </tr>
 @endforeach
