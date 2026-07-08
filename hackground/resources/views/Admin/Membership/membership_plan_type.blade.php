@@ -34,7 +34,7 @@
     <style>
 /* Page & Container */
 .app-main__inner { background-color: #fcfcfc; padding: 1.5rem !important; font-family: 'Inter', sans-serif; box-sizing: border-box !important; }
-.page-title-wrapper { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+.page-title-wrapper { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
 .page-title-heading { display: flex; align-items: center; gap: 1rem; }
 .page-title-icon { width: 48px; height: 48px; background: #eff6ff; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #2563eb; font-size: 1.5rem; }
 .page-title-heading h1 { font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 0; }
@@ -60,10 +60,11 @@
 .plan-icon-wrapper.platinum-plan { background-color: #faf5ff; color: #a855f7; }
 
 /* Feature Items */
-.feature-item { font-size: 0.85rem; padding: 0.6rem 0; border-bottom: 1px dashed #e2e8f0; }
+.feature-item { font-size: 0.85rem; padding: 0.6rem 0; border-bottom: 1px dashed #e2e8f0; display: flex !important; justify-content: flex-start !important; align-items: center; gap: 0; }
 .feature-item:last-child { border-bottom: none; }
 .feature-label i { width: 20px; text-align: center; color: #94a3b8; font-size: 1rem; }
-.feature-label { font-weight: 500; color: #475569; }
+.feature-label { font-weight: 500; color: #475569; white-space: nowrap; width: 180px; flex-shrink: 0; margin: 0; }
+.feature-value { text-align: left !important; white-space: nowrap; font-weight: 700; flex: 1; }
 
 /* Vertical Dividers */
 .v-divider { position: relative; }
@@ -140,10 +141,10 @@
                 <table id="myTable1" class="table-borderless w-100">
                     <thead>
                         <tr>
-                            <th width="25%" class="px-4 py-3">Plan Type Name</th>
-                            <th width="45%" class="px-4 py-3">Access & Limits</th>
-                            <th width="15%" class="px-4 py-3 text-center">Status</th>
-                            <th width="15%" class="px-4 py-3 text-center">Action</th>
+                            <th width="20%" class="px-4 py-3">Plan Type Name</th>
+                            <th width="56%" class="px-4 py-3">Access & Limits</th>
+                            <th width="12%" class="px-4 py-3 text-center">Status</th>
+                            <th width="12%" class="px-4 py-3 text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody id="membershipPlanType">
