@@ -130,14 +130,14 @@
             <!-- Filter Bar -->
             <form action="{{ url('allproperties/all-property-view') }}" method="get">
                 <div class="d-flex flex-column flex-md-row align-items-md-center gap-3 mb-4 filter-bar">
-                    
+
                     <!-- Search & Filter Toggle -->
                     <div class="d-flex flex-grow-1 gap-2 w-100 w-md-auto">
                         <div class="position-relative search-box flex-grow-1" style="max-width:100%; @media(min-width:768px){max-width:280px;}">
                             <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" style="font-size:0.9rem;"></i>
                             <input type="text" class="form-control ps-5 border-0 bg-light w-100 shadow-sm" name="term" placeholder="Search properties..." value="{{ request('term') }}" style="border-radius:12px; height:46px; font-size:0.9rem;">
                         </div>
-                        
+
                         <button type="button" class="btn bg-light border-0 d-md-none text-dark toggle-filter-btn flex-shrink-0 shadow-sm" style="border-radius:12px; height:46px; width:46px; display:inline-flex; align-items:center; justify-content:center;">
                             <i class="bi bi-sliders text-primary fs-5"></i>
                         </button>
@@ -228,21 +228,31 @@
                                 {{ get_setting('site-currency') . formatPrice($property->expected_price, get_setting('site-currency-code')) }}
                             </td>
                             <td class="py-3">
-                                @if($property->status == 1 || $property->status == '1')
-                                    <span class="badge fw-semibold text-success" style="background:#dcfce7; padding:6px 12px; border-radius:6px;">Active</span>
-                                @elseif($property->status == 2)
-                                    <span class="badge fw-semibold text-warning" style="background:#fef3c7; padding:6px 12px; border-radius:6px;">Pending</span>
-                                @elseif($property->status == 0 || $property->status == '0' || $property->status == 3)
-                                    <span class="badge fw-semibold text-danger" style="background:#fee2e2; padding:6px 12px; border-radius:6px;">Sold</span>
-                                @else
-                                    <span class="badge fw-semibold text-secondary" style="background:#f1f5f9; padding:6px 12px; border-radius:6px;">{{ ucfirst($property->status) }}</span>
-                                @endif
+                                <div class="dropdown">
+                                    <button class="btn btn-sm dropdown-toggle fw-semibold border-0 py-1 px-3 d-inline-flex align-items-center gap-1 shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background: {{ $property->status == 1 ? '#dcfce7' : '#fef3c7' }}; color: {{ $property->status == 1 ? '#15803d' : '#b45309' }}; border-radius: 6px; font-size: 0.85rem;">
+                                        <span class="rounded-circle d-inline-block me-1" style="width: 6px; height: 6px; background-color: {{ $property->status == 1 ? '#15803d' : '#b45309' }};"></span>
+                                        {{ $property->status == 1 ? 'Active' : 'Pending' }}
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="border-radius: 12px; min-width: 120px; font-size: 0.9rem;">
+                                        <li>
+                                            <button class="dropdown-item d-flex align-items-center gap-2 py-2 change-status-btn" data-property-id="{{ $property->id }}" data-status="published">
+                                                <span class="rounded-circle d-inline-block" style="width: 8px; height: 8px; background-color: #15803d;"></span> Active
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button class="dropdown-item d-flex align-items-center gap-2 py-2 change-status-btn" data-property-id="{{ $property->id }}" data-status="pending">
+                                                <span class="rounded-circle d-inline-block" style="width: 8px; height: 8px; background-color: #b45309;"></span> Pending
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
                             </td>
                             <td class="py-3 text-center">
                                 <div class="d-flex justify-content-center gap-2">
-                                    <a href="{{ url('/enquiry/property-leads/'.$property->id) }}" class="action-btn text-secondary"><i class="bi bi-eye"></i></a>
-                                    <a href="{{ url('property/edit/'.$property->id) }}" class="action-btn text-primary"><i class="bi bi-pencil"></i></a>
-                                    <button class="action-btn text-danger change-status-btn" data-property-id="{{ $property->id }}" data-status="delete"><i class="bi bi-trash"></i></button>
+                                    {{-- <a href="{{ str_replace('/hackground', '', url('/')) . '/property-details/' . $property->slug }}" target="_blank" class="action-btn text-info" title="View on Frontend"><i class="bi bi-eye"></i></a> --}}
+                                    <a href="{{ url('/enquiry/property-leads/'.$property->id) }}" class="action-btn text-secondary" title="View Leads"><i class="bi bi-person-lines-fill"></i></a>
+                                    <a href="{{ url('property/edit/'.$property->id) }}" class="action-btn text-primary" title="Edit Property"><i class="bi bi-pencil"></i></a>
+                                    <button class="action-btn text-danger change-status-btn" data-property-id="{{ $property->id }}" data-status="delete" title="Delete Property"><i class="bi bi-trash"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -280,19 +290,29 @@
                     </div>
                     <div class="prop-meta">
                         <span class="fw-bold text-dark" style="font-size:0.9rem;">{{ get_setting('site-currency') . formatPrice($property->expected_price, get_setting('site-currency-code')) }}</span>
-                        @if($property->status == 1 || $property->status == '1')
-                            <span class="badge fw-semibold text-success" style="background:#dcfce7; padding:5px 10px; border-radius:6px; font-size:0.75rem;">Active</span>
-                        @elseif($property->status == 2)
-                            <span class="badge fw-semibold text-warning" style="background:#fef3c7; padding:5px 10px; border-radius:6px; font-size:0.75rem;">Pending</span>
-                        @elseif($property->status == 0 || $property->status == '0' || $property->status == 3)
-                            <span class="badge fw-semibold text-danger" style="background:#fee2e2; padding:5px 10px; border-radius:6px; font-size:0.75rem;">Sold</span>
-                        @else
-                            <span class="badge fw-semibold text-secondary" style="background:#f1f5f9; padding:5px 10px; border-radius:6px; font-size:0.75rem;">{{ ucfirst($property->status) }}</span>
-                        @endif
+                        <div class="dropdown">
+                            <button class="btn btn-sm dropdown-toggle fw-semibold border-0 py-1 px-3 d-inline-flex align-items-center gap-1 shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background: {{ $property->status == 1 ? '#dcfce7' : '#fef3c7' }}; color: {{ $property->status == 1 ? '#15803d' : '#b45309' }}; border-radius: 6px; font-size: 0.75rem;">
+                                <span class="rounded-circle d-inline-block me-1" style="width: 5px; height: 5px; background-color: {{ $property->status == 1 ? '#15803d' : '#b45309' }};"></span>
+                                {{ $property->status == 1 ? 'Active' : 'Pending' }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="border-radius: 12px; min-width: 120px; font-size: 0.85rem;">
+                                <li>
+                                    <button class="dropdown-item d-flex align-items-center gap-2 py-2 change-status-btn" data-property-id="{{ $property->id }}" data-status="published">
+                                        <span class="rounded-circle d-inline-block" style="width: 8px; height: 8px; background-color: #15803d;"></span> Active
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="dropdown-item d-flex align-items-center gap-2 py-2 change-status-btn" data-property-id="{{ $property->id }}" data-status="pending">
+                                        <span class="rounded-circle d-inline-block" style="width: 8px; height: 8px; background-color: #b45309;"></span> Pending
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
                         <div class="d-flex gap-2 ms-auto">
-                            <a href="{{ url('/enquiry/property-leads/'.$property->id) }}" class="action-btn text-secondary"><i class="bi bi-eye"></i></a>
-                            <a href="{{ url('property/edit/'.$property->id) }}" class="action-btn text-primary"><i class="bi bi-pencil"></i></a>
-                            <button class="action-btn text-danger change-status-btn" data-property-id="{{ $property->id }}" data-status="delete"><i class="bi bi-trash"></i></button>
+                            <a href="{{ str_replace('/hackground', '', url('/')) . '/property-details/' . $property->slug }}" target="_blank" class="action-btn text-info" title="View on Frontend"><i class="bi bi-eye"></i></a>
+                            <a href="{{ url('/enquiry/property-leads/'.$property->id) }}" class="action-btn text-secondary" title="View Leads"><i class="bi bi-person-lines-fill"></i></a>
+                            <a href="{{ url('property/edit/'.$property->id) }}" class="action-btn text-primary" title="Edit Property"><i class="bi bi-pencil"></i></a>
+                            <button class="action-btn text-danger change-status-btn" data-property-id="{{ $property->id }}" data-status="delete" title="Delete Property"><i class="bi bi-trash"></i></button>
                         </div>
                     </div>
                 </div>

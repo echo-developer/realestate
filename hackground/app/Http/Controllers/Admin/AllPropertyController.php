@@ -39,8 +39,8 @@ class AllPropertyController extends Controller
         $counts = (clone $base)->selectRaw("
             COUNT(*) as total,
             SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) as active,
-            SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) as pending,
-            SUM(CASE WHEN status = 0 THEN 1 ELSE 0 END) as inactive
+            SUM(CASE WHEN status = 0 THEN 1 ELSE 0 END) as pending,
+            SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) as inactive
         ")->first();
 
         $lastMonth = (clone $base)->whereMonth('created_at', now()->subMonth()->month)
@@ -48,8 +48,8 @@ class AllPropertyController extends Controller
             ->selectRaw("
                 COUNT(*) as total,
                 SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) as active,
-                SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) as pending,
-                SUM(CASE WHEN status = 0 THEN 1 ELSE 0 END) as inactive
+                SUM(CASE WHEN status = 0 THEN 1 ELSE 0 END) as pending,
+                SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) as inactive
             ")->first();
 
         $calcChange = function($current, $previous) {
