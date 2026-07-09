@@ -20,12 +20,7 @@ $userTypes = [
     max-width: 100% !important;
     overflow-x: hidden !important;
 }
-.page-title-wrapper { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
-.page-title-heading { display: flex; align-items: center; gap: 1rem; }
-.page-title-icon { width: 48px; height: 48px; background: #eff6ff; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #2563eb; font-size: 1.5rem; }
-.page-title-heading h1 { font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 0; }
-.page-title-heading .breadcrumb { font-size: 0.85rem; color: #64748b; margin: 0; padding: 0; display: flex; gap: 0.5rem; align-items: center; }
-.page-title-heading .breadcrumb a { color: #2563eb; text-decoration: none; font-weight: 500; }
+
 
 /* Tabs & Search Row */
 .tabs-search-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
@@ -203,16 +198,22 @@ $userTypes = [
     </div>
     @endif
 
-    <div class="page-title-wrapper">
-        <div class="page-title-heading">
-            <div class="page-title-icon">
-                <i class="bi bi-people"></i>
-            </div>
-            <div>
-                <h1>{{ isset($typeName) ? ucwords(strtolower($typeName)) : 'All User' }}</h1>
-                <div class="breadcrumb">
-                    <a href="{{ url('/') }}">Home</a> &gt; <a href="{{ url('member/memberUser') }}">Users</a> &gt; <span>{{ isset($typeName) ? ucwords(strtolower($typeName)) : 'Agent' }}</span>
+    <div class="app-page-title">
+        <div class="page-title-wrapper">
+            <div class="page-title-heading">
+                <div class="page-title-icon">
+                    <i class="pe-7s-users icon-gradient bg-mixed-hopes"></i>
                 </div>
+                <div>{{ isset($typeName) ? ucwords(strtolower($typeName)) : 'All User' }}
+                    <div class="page-title-subheading">Users &gt; {{ isset($typeName) ? ucwords(strtolower($typeName)) : 'Agent' }}</div>
+                </div>
+            </div>
+            <div class="page-title-actions">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('member/memberUser') }}">Users</a></li>
+                    <li class="breadcrumb-item active">{{ isset($typeName) ? ucwords(strtolower($typeName)) : 'Agent' }}</li>
+                </ol>
             </div>
         </div>
     </div>

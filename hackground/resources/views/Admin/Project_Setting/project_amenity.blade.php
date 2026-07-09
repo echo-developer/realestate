@@ -16,20 +16,20 @@
 
 <div class="app-main__inner">
 
-    <div class="app-page-title" hidden>
+    <div class="app-page-title">
         <div class="page-title-wrapper">
             <div class="page-title-heading">
                 <div class="page-title-icon">
-                    <i class="pe-7s-notebook icon-gradient bg-mixed-hopes"></i>
+                    <i class="pe-7s-star icon-gradient bg-mixed-hopes"></i>
                 </div>
-                <div>Property
-                    <div class="page-title-subheading">Property &gt; Property Amenity List</div>
+                <div>Project Amenity
+                    <div class="page-title-subheading">Project &gt; Project Amenity List</div>
                 </div>
             </div>
             <div class="page-title-actions">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ url('/') }}"> Home</a></li>
-                    <li class="breadcrumb-item active">Property Amenity List</li>
+                    <li class="breadcrumb-item active">Project Amenity List</li>
                 </ol>
             </div>
         </div>
