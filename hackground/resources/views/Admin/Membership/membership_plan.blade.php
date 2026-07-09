@@ -34,7 +34,7 @@
     <style>
 /* Page & Container */
 .app-main__inner { background-color: #fcfcfc; padding: 1.5rem !important; font-family: 'Inter', sans-serif; box-sizing: border-box !important; }
-.page-title-wrapper { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+.page-title-wrapper { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
 .page-title-heading { display: flex; align-items: center; gap: 1rem; }
 .page-title-icon { width: 48px; height: 48px; background: #eff6ff; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #2563eb; font-size: 1.5rem; }
 .page-title-heading h1 { font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 0; }
