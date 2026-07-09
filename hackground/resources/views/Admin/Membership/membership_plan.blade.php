@@ -18,14 +18,17 @@
         <div class="page-title-wrapper">
             <div class="page-title-heading">
                 <div class="page-title-icon">
-                    <i class="bi bi-award icon-gradient bg-mixed-hopes"></i>
+                    <i class="pe-7s-medal icon-gradient bg-mixed-hopes"></i>
                 </div>
-                <div>
-                    <h1>Membership Plan</h1>
-                    <div class="breadcrumb">
-                        <a href="{{ url('/') }}">Home</a> &gt; <span>All Membership Plan List</span>
-                    </div>
+                <div>Membership Plan <div class="page-title-subheading">Membership Plan &gt; All Membership Plan List</div>
                 </div>
+            </div>
+            <div class="page-title-actions">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ url('/') }}">
+                            Home</a></li>
+                    <li class="breadcrumb-item active">Membership Plan</li>
+                </ol>
             </div>
         </div>
     </div>
@@ -34,12 +37,6 @@
     <style>
 /* Page & Container */
 .app-main__inner { background-color: #fcfcfc; padding: 1.5rem !important; font-family: 'Inter', sans-serif; box-sizing: border-box !important; }
-.page-title-wrapper { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-.page-title-heading { display: flex; align-items: center; gap: 1rem; }
-.page-title-icon { width: 48px; height: 48px; background: #eff6ff; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #2563eb; font-size: 1.5rem; }
-.page-title-heading h1 { font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 0; }
-.page-title-heading .breadcrumb { font-size: 0.85rem; color: #64748b; margin: 0; padding: 0; display: flex; gap: 0.5rem; align-items: center; }
-.page-title-heading .breadcrumb a { color: #2563eb; text-decoration: none; font-weight: 500; }
 
 /* Main Card */
 .modern-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); margin-bottom: 1.5rem; }
