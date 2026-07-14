@@ -221,6 +221,7 @@ class DashboardController extends Controller
                         'parking_ability' => $property->parking_ability,
                         'property_type' => get_name_by_id('property_category_names', 'category_id', $property->property_type, 'en'),
                         'property_type_for' => get_name_by_id('property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
+                        'property_for' => $property->post_for,
                         'bedrooms' => $property->bedrooms,
                         'bathroom' => $property->bathrooms,
                         'currency' => $property->price_currency,
@@ -747,6 +748,7 @@ class DashboardController extends Controller
                     'is_populer' => $property->is_populer,
                     'parking_ability' => $property->parking_ability,
                     'property_type_for' => get_name_by_id('property_sub_category_names', 'sub_category_id', $property->property_type_for, 'en'),
+                    'property_for' => $property->post_for,
                     'bedrooms' => $property->bedrooms,
                     'bathroom' => $property->bathrooms,
                     'currency' => $property->price_currency ?? null,
@@ -1058,7 +1060,7 @@ class DashboardController extends Controller
                 ['service_area' => $user['service_area'] ?? []],
                 ['social' => $user['social'] ?? []]
             );
-            
+
             // Add city_name and locality_name for frontend compatibility
             if (!empty($mergedUser['city'])) {
                 $mergedUser['city_name'] = $mergedUser['city'];
@@ -1607,7 +1609,7 @@ class DashboardController extends Controller
     /*
 
             -------------------------------- DASHBOARD STATICTICS ------------------------------
-    
+
 
      */
 
@@ -2180,5 +2182,5 @@ class DashboardController extends Controller
         }
     }
 
-} 
+}
 
