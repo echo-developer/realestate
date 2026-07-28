@@ -138,12 +138,15 @@ class LocalityModel extends Model
             }, array_keys($data['name']), $data['name']);
 
             foreach ($localityNames as $localityName) {
-                DB::table($this->localityNamesTable)
-                    ->where('locality_id', $localityName['locality_id'])
-                    ->where('lang', $localityName['lang'])
-                    ->update([
-                        'name' => $localityName['name']
-                    ]);
+                DB::table($this->localityNamesTable)->updateOrInsert(
+                    [
+                        'locality_id' => $localityName['locality_id'],
+                        'lang' => $localityName['lang'],
+                    ],
+                    [
+                        'name' => $localityName['name'],
+                    ]
+                );
             }
 
             DB::commit();

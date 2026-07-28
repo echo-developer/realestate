@@ -107,13 +107,16 @@ class PropertyTransactionModel extends Model
 
             // Update the category names table (same as createCategory)
             foreach ($TransactionNames as $TransactionName) {
-                DB::table('property_transaction_names')
-                    ->where('transaction_id', $TransactionName['transaction_id'])
-                    ->where('lang', $TransactionName['lang'])
-                    ->update([
+                DB::table('property_transaction_names')->updateOrInsert(
+                    [
+                        'transaction_id' => $TransactionName['transaction_id'],
+                        'lang' => $TransactionName['lang'],
+                    ],
+                    [
                         'name' => $TransactionName['name'],
                         'updated_at' => $TransactionName['updated_at'],
-                    ]);
+                    ]
+                );
             }
 
             // Commit the transaction

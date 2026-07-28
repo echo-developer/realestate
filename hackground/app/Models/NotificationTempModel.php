@@ -112,12 +112,15 @@ class NotificationTempModel extends Model
             }, array_keys($data['content']), $data['content']);
 
             foreach ($notification_templatesNames as $notification_templatesName) {
-                DB::table('notification_templates_names')
-                    ->where('notification_template_id', $notification_templatesName['notification_template_id'])
-                    ->where('lang', $notification_templatesName['lang'])
-                    ->update([
+                DB::table('notification_templates_names')->updateOrInsert(
+                    [
+                        'notification_template_id' => $notification_templatesName['notification_template_id'],
+                        'lang' => $notification_templatesName['lang'],
+                    ],
+                    [
                         'content' => $notification_templatesName['content'],
-                    ]);
+                    ]
+                );
             }
 
             // Commit the transaction

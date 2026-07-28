@@ -107,13 +107,16 @@ class PropertyRecommendModel extends Model
 
             // Update the category names table (same as createCategory)
             foreach ($RecommendedNames as $RecommendedName) {
-                DB::table('property_recommended_names')
-                    ->where('recommended_id', $RecommendedName['recommended_id'])
-                    ->where('lang', $RecommendedName['lang'])
-                    ->update([
+                DB::table('property_recommended_names')->updateOrInsert(
+                    [
+                        'recommended_id' => $RecommendedName['recommended_id'],
+                        'lang' => $RecommendedName['lang'],
+                    ],
+                    [
                         'name' => $RecommendedName['name'],
                         'updated_at' => $RecommendedName['updated_at'],
-                    ]);
+                    ]
+                );
             }
 
             // Commit the recommended

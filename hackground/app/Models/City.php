@@ -123,12 +123,15 @@ class City extends Model
             }, array_keys($data['name']), $data['name']);
 
             foreach ($cityNames as $cityName) {
-                DB::table($this->cityNamesTable)
-                    ->where('city_id', $cityName['city_id'])
-                    ->where('lang', $cityName['lang'])
-                    ->update([
+                DB::table($this->cityNamesTable)->updateOrInsert(
+                    [
+                        'city_id' => $cityName['city_id'],
+                        'lang' => $cityName['lang'],
+                    ],
+                    [
                         'name' => $cityName['name']
-                    ]);
+                    ]
+                );
             }
 
             DB::commit();

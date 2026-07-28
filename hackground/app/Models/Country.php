@@ -108,13 +108,16 @@ class Country extends Model
 
            
             foreach ($countryNames as $countryName) {
-                DB::table('country_names')
-                    ->where('country_id', $countryName['country_id'])
-                    ->where('lang', $countryName['lang'])
-                    ->update([
+                DB::table('country_names')->updateOrInsert(
+                    [
+                        'country_id' => $countryName['country_id'],
+                        'lang' => $countryName['lang'],
+                    ],
+                    [
                         'name' => $countryName['name'],
                         'updated_at' => $countryName['updated_at'],
-                    ]);
+                    ]
+                );
             }
 
             DB::commit();

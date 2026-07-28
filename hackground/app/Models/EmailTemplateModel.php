@@ -99,13 +99,16 @@ class EmailTemplateModel extends Model
             }, array_keys($data['subject']), $data['subject'], $data['content']);
 
             foreach ($email_templatesNames as $email_templatesName) {
-                DB::table('email_templates_names')
-                    ->where('email_template_id', $email_templatesName['email_template_id'])
-                    ->where('lang', $email_templatesName['lang'])
-                    ->update([
+                DB::table('email_templates_names')->updateOrInsert(
+                    [
+                        'email_template_id' => $email_templatesName['email_template_id'],
+                        'lang' => $email_templatesName['lang'],
+                    ],
+                    [
                         'content' => $email_templatesName['content'],
                         'subject' => $email_templatesName['subject'],
-                    ]);
+                    ]
+                );
             }
 
             // Commit the transaction

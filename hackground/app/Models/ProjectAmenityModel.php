@@ -134,13 +134,16 @@ class ProjectAmenityModel extends Model
             }, array_keys($data['name']), $data['name']);
 
             foreach ($amenityNames as $amenityName) {
-                DB::table('project_amenity_names')
-                    ->where('amenity_id', $amenityName['amenity_id'])
-                    ->where('lang', $amenityName['lang'])
-                    ->update([
+                DB::table('project_amenity_names')->updateOrInsert(
+                    [
+                        'amenity_id' => $amenityName['amenity_id'],
+                        'lang' => $amenityName['lang'],
+                    ],
+                    [
                         'name' => $amenityName['name'],
                         'updated_at' => $amenityName['updated_at'],
-                    ]);
+                    ]
+                );
             }
 
             // Commit the transaction

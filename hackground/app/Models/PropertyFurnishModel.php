@@ -109,13 +109,16 @@ class PropertyFurnishModel extends Model
 
             // Update the category names table (same as createCategory)
             foreach ($FurnishNames as $FurnishName) {
-                DB::table('property_furnish_names')
-                    ->where('furnish_id', $FurnishName['furnish_id'])
-                    ->where('lang', $FurnishName['lang'])
-                    ->update([
+                DB::table('property_furnish_names')->updateOrInsert(
+                    [
+                        'furnish_id' => $FurnishName['furnish_id'],
+                        'lang' => $FurnishName['lang'],
+                    ],
+                    [
                         'name' => $FurnishName['name'],
                         'updated_at' => $FurnishName['updated_at'],
-                    ]);
+                    ]
+                );
             }
 
             // Commit the transaction

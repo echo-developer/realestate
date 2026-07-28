@@ -140,16 +140,19 @@ class CmsModel extends Model
             }, $langKeys);
 
             foreach ($cmsNames as $cmsName) {
-                DB::table($this->cmsNamesTable)
-                    ->where('cms_id', $cmsName['cms_id'])
-                    ->where('lang', $cmsName['lang'])
-                    ->update([
+                DB::table($this->cmsNamesTable)->updateOrInsert(
+                    [
+                        'cms_id' => $cmsName['cms_id'],
+                        'lang' => $cmsName['lang'],
+                    ],
+                    [
                         'title' => $cmsName['title'],
                         'content' => $cmsName['content'],
                         'meta_title' => $cmsName['meta_title'],
                         'meta_keys' => $cmsName['meta_keys'],
                         'meta_desc' => $cmsName['meta_desc']
-                    ]);
+                    ]
+                );
             }
 
             DB::commit();

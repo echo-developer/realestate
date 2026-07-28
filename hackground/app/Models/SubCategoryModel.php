@@ -124,13 +124,16 @@ class SubCategoryModel extends Model
                 ->update($subcategoryData);
 
             foreach ($data['name'] as $lang => $name) {
-                DB::table($this->subCategoryNamesTable)
-                    ->where('sub_category_id', $data['subcategory_id'])
-                    ->where('lang', $lang)
-                    ->update([
+                DB::table($this->subCategoryNamesTable)->updateOrInsert(
+                    [
+                        'sub_category_id' => $data['subcategory_id'],
+                        'lang' => $lang,
+                    ],
+                    [
                         'name' => $name,
                         'updated_at' => now(),
-                    ]);
+                    ]
+                );
             }
 
             DB::commit();

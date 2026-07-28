@@ -114,15 +114,18 @@ class TestimonialModel extends Model
             }, array_keys($data['name']), $data['name'], $data['subname'], $data['description']);
 
             foreach ($testimonialNames as $testimonialName) {
-                DB::table('testimonial_names')
-                    ->where('testimonial_id', $testimonialName['testimonial_id'])
-                    ->where('lang', $testimonialName['lang'])
-                    ->update([
+                DB::table('testimonial_names')->updateOrInsert(
+                    [
+                        'testimonial_id' => $testimonialName['testimonial_id'],
+                        'lang' => $testimonialName['lang'],
+                    ],
+                    [
                         'name' => $testimonialName['name'],
                         'subname' => $testimonialName['subname'],
                         'description' => $testimonialName['description'],
                         'updated_at' => $testimonialName['updated_at'],
-                    ]);
+                    ]
+                );
             }
 
             // Commit the transaction

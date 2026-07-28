@@ -108,13 +108,16 @@ class ProprertyStatusModel extends Model
 
             // Update the category names table (same as createCategory)
             foreach ($StatusNames as $StatusName) {
-                DB::table('property_status_names')
-                    ->where('status_id', $StatusName['status_id'])
-                    ->where('lang', $StatusName['lang'])
-                    ->update([
+                DB::table('property_status_names')->updateOrInsert(
+                    [
+                        'status_id' => $StatusName['status_id'],
+                        'lang' => $StatusName['lang'],
+                    ],
+                    [
                         'name' => $StatusName['name'],
                         'updated_at' => $StatusName['updated_at'],
-                    ]);
+                    ]
+                );
             }
 
             // Commit the status

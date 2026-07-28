@@ -122,13 +122,16 @@ class CategoryModel extends Model
 
             // Update the category names table (same as createCategory)
             foreach ($categoryNames as $categoryName) {
-                DB::table('property_category_names')
-                    ->where('category_id', $categoryName['category_id'])
-                    ->where('lang', $categoryName['lang'])
-                    ->update([
+                DB::table('property_category_names')->updateOrInsert(
+                    [
+                        'category_id' => $categoryName['category_id'],
+                        'lang' => $categoryName['lang'],
+                    ],
+                    [
                         'name' => $categoryName['name'],
                         'updated_at' => $categoryName['updated_at'],
-                    ]);
+                    ]
+                );
             }
 
             // Commit the transaction

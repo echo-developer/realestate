@@ -125,13 +125,16 @@ class State extends Model
 
            
             foreach ($stateNames as $stateName) {
-                DB::table('state_names')
-                    ->where('state_id', $stateName['state_id'])
-                    ->where('lang', $stateName['lang'])
-                    ->update([
+                DB::table('state_names')->updateOrInsert(
+                    [
+                        'state_id' => $stateName['state_id'],
+                        'lang' => $stateName['lang'],
+                    ],
+                    [
                         'name' => $stateName['name'],
                         'updated_at' => $stateName['updated_at'],
-                    ]);
+                    ]
+                );
             }
 
             DB::commit();
