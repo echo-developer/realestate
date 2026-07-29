@@ -384,7 +384,12 @@
                     <h6 class="fw-bold mb-0 text-dark">Actions</h6>
                 </div>
                 <div class="card-body p-4 pt-2">
-                    <a href="{{ url('property/view/' . $property_id) }}" target="_blank"
+                    @php
+                        $frontendUrl = config('app.frontend_url', env('FRONTEND_URL', 'https://demo-realestate.scriptlisting.com'));
+                        $slug = $propertyData->slug ?? '';
+                        $previewUrl = $frontendUrl . '/property-details/' . $slug . '?id=' . $property_id;
+                    @endphp
+                    <a href="{{ $previewUrl }}" target="_blank"
                         class="btn btn-light bg-white border shadow-sm w-100 mb-3 rounded-3 text-dark fw-bold d-flex align-items-center justify-content-center gap-2 py-2">
                         <i class="bi bi-eye"></i> Preview Property
                     </a>
