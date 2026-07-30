@@ -360,14 +360,18 @@
                         </div>
                         <span class="error bedroom_countError text-danger"></span>
                         <div class="size-forms">
-                            @if($propertyData->dimensions)
-                            @foreach($propertyData->dimensions as $k=>$d)
-                            @if($d->room_type == 'bedroom')
                             @php
-                            $size = json_decode($d->size);
+                            $bedroomCount = intval($propertyData->settings->bedrooms ?? 0);
+                            $bedroomDims = $propertyData->dimensions ? $propertyData->dimensions->where('room_type', 'bedroom')->values() : collect();
+                            $bedroomFormsCount = max($bedroomCount, count($bedroomDims));
+                            @endphp
+                            @for($i = 0; $i < $bedroomFormsCount; $i++)
+                            @php
+                            $d = $bedroomDims[$i] ?? null;
+                            $size = $d ? json_decode($d->size) : null;
                             @endphp
                             <div class="size-form mt-2 p-3 border rounded-3 bg-white shadow-2xs">
-                                <label class="form-label fw-semibold small text-muted mb-2">Height & Width</label>
+                                <label class="form-label fw-semibold small text-muted mb-2">Bedroom {{ $i + 1 }} Dimensions</label>
                                 <div class="row gx-2">
                                     <div class="col-6">
                                         <div class="form-floating">
@@ -383,9 +387,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @endif
-                            @endforeach
-                            @endif
+                            @endfor
                         </div>
                     </div>
                 </div>
@@ -405,14 +407,18 @@
                         </div>
                         <span class="error balcony_countError text-danger"></span>
                         <div class="size-forms">
-                            @if($propertyData->dimensions)
-                            @foreach($propertyData->dimensions as $k=>$d)
-                            @if($d->room_type == 'balcony')
                             @php
-                            $size = json_decode($d->size);
+                            $balconyCount = intval($propertyData->additional->balcony ?? 0);
+                            $balconyDims = $propertyData->dimensions ? $propertyData->dimensions->where('room_type', 'balcony')->values() : collect();
+                            $balconyFormsCount = max($balconyCount, count($balconyDims));
+                            @endphp
+                            @for($i = 0; $i < $balconyFormsCount; $i++)
+                            @php
+                            $d = $balconyDims[$i] ?? null;
+                            $size = $d ? json_decode($d->size) : null;
                             @endphp
                             <div class="size-form mt-2 p-3 border rounded-3 bg-white shadow-2xs">
-                                <label class="form-label fw-semibold small text-muted mb-2">Height & Width</label>
+                                <label class="form-label fw-semibold small text-muted mb-2">Balcony {{ $i + 1 }} Dimensions</label>
                                 <div class="row gx-2">
                                     <div class="col-6">
                                         <div class="form-floating">
@@ -428,9 +434,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @endif
-                            @endforeach
-                            @endif
+                            @endfor
                         </div>
                     </div>
                 </div>
@@ -450,14 +454,18 @@
                         </div>
                         <span class="error bathroom_countError text-danger"></span>
                         <div class="size-forms">
-                            @if($propertyData->dimensions)
-                            @foreach($propertyData->dimensions as $k=>$d)
-                            @if($d->room_type == 'bathroom')
                             @php
-                            $size = json_decode($d->size);
+                            $bathroomCount = intval($propertyData->settings->bathrooms ?? 0);
+                            $bathroomDims = $propertyData->dimensions ? $propertyData->dimensions->where('room_type', 'bathroom')->values() : collect();
+                            $bathroomFormsCount = max($bathroomCount, count($bathroomDims));
+                            @endphp
+                            @for($i = 0; $i < $bathroomFormsCount; $i++)
+                            @php
+                            $d = $bathroomDims[$i] ?? null;
+                            $size = $d ? json_decode($d->size) : null;
                             @endphp
                             <div class="size-form mt-2 p-3 border rounded-3 bg-white shadow-2xs">
-                                <label class="form-label fw-semibold small text-muted mb-2">Height & Width</label>
+                                <label class="form-label fw-semibold small text-muted mb-2">Bathroom {{ $i + 1 }} Dimensions</label>
                                 <div class="row gx-2">
                                     <div class="col-6">
                                         <div class="form-floating">
@@ -473,9 +481,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @endif
-                            @endforeach
-                            @endif
+                            @endfor
                         </div>
                     </div>
                 </div>
@@ -741,18 +747,20 @@
     });
 
     function addForm(formContainer, amenity, value) {
-        let formHtml = `<div class="size-form mt-3 p-3 border rounded bg-light">  
-                <div class="row gx-3">
+        let labelName = amenity.charAt(0).toUpperCase() + amenity.slice(1);
+        let formHtml = `<div class="size-form mt-2 p-3 border rounded-3 bg-white shadow-2xs">  
+                <label class="form-label fw-semibold small text-muted mb-2">${labelName} ${value} Dimensions</label>
+                <div class="row gx-2">
                     <div class="col-6">
                         <div class="form-floating">
-                            <input type="text" class="form-control" name="` + amenity + `[width][]" placeholder="Enter Height" value="" autocomplete="off"> 
-                            <label>Height</label>
+                            <input type="text" class="form-control" name="${amenity}[width][]" placeholder="Enter Width" value="" autocomplete="off"> 
+                            <label>Width</label>
                         </div>
                     </div>  
                     <div class="col-6">  
                         <div class="form-floating">
-                            <input type="text" class="form-control" name="` + amenity + `[height][]" placeholder="Enter Width" value="" autocomplete="off"> 
-                            <label>Width</label> 
+                            <input type="text" class="form-control" name="${amenity}[height][]" placeholder="Enter Height" value="" autocomplete="off"> 
+                            <label>Height</label> 
                         </div>
                     </div>  
                 </div>  
