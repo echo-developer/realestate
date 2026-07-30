@@ -385,7 +385,7 @@
                 </div>
                 <div class="card-body p-4 pt-2">
                     @php
-                        $frontendUrl = 'https://demo-realestate.scriptlisting.com';
+                        $frontendUrl = config('app.frontend_url', env('FRONTEND_URL', 'https://demo-realestate.scriptlisting.com'));
                         $slug = $propertyData->slug ?? '';
                         $previewUrl = $frontendUrl . '/property-details/' . $slug . '?id=' . $property_id;
                     @endphp

@@ -261,19 +261,15 @@
         });
 
 
-        $('.delete-notification').click(function() {
-            if (!confirm('Are you sure you want to delete this Role?')) {
+        $(document).on('click', '.delete-notification', function() {
+            if (!confirm('Are you sure you want to delete this notification?')) {
                 return;
             }
 
             var id = $(this).attr('noti_id');
-            alert(id);
-            // deleteRole('Edit Role', 'Update', id);
-
 
             $.ajax({
-
-                url: '/deleteNotification/' + id,
+                url: "{{ url('/deleteNotification') }}/" + id,
                 type: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',
@@ -281,23 +277,93 @@
                 },
                 dataType: 'json',
                 success: function(response) {
-                    // console.log('Success:', response);\
-                    window.location.reload(true);
-
-
+                    window.location.reload();
                 },
                 error: function(xhr, status, error) {
-                    console.error('Error:', xhr.responseText);
+                    console.error('Error deleting notification:', xhr.responseText);
                 }
-
             });
-
         });
 
+        $(document).on('change', '.check_all_main', function() {
+            $('.check_all').prop('checked', $(this).prop('checked'));
+            toggleGlobalActions();
+        });
 
-
-
+        $(document).on('change', '.check_all', function() {
+            toggleGlobalActions();
+        });
     });
+
+    function toggleGlobalActions() {
+        if ($('.check_all:checked').length > 0) {
+            $('#global_action_btn').show();
+        } else {
+            $('#global_action_btn').hide();
+        }
+    }
+
+    function deleteSelected() {
+        var ids = [];
+        $('.check_all:checked').each(function() {
+            ids.push($(this).val());
+        });
+
+        if (ids.length === 0) {
+            alert('Please select at least one notification to delete.');
+            return;
+        }
+
+        if (!confirm('Are you sure you want to delete the selected notification(s)?')) {
+            return;
+        }
+
+        $.ajax({
+            url: "{{ url('/deleteNotification') }}",
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                ids: ids,
+                status: "{{ config('constants.STATUS_DELETE') }}",
+            },
+            dataType: 'json',
+            success: function(response) {
+                window.location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error deleting selected notifications:', xhr.responseText);
+            }
+        });
+    }
+
+    function changeStatusAll(status) {
+        var ids = [];
+        $('.check_all:checked').each(function() {
+            ids.push($(this).val());
+        });
+
+        if (ids.length === 0) {
+            alert('Please select at least one notification.');
+            return;
+        }
+
+        let requests = ids.map(function(id) {
+            return $.ajax({
+                url: "{{ url('/noti_stausUp') }}",
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    notification_Id: id,
+                    status: status
+                },
+                dataType: 'json'
+            });
+        });
+
+        $.when.apply($, requests).then(function() {
+            window.location.reload();
+        });
+    }
     $(document).ready(function() {
         var table = $('.table').DataTable({
             "paging": false,

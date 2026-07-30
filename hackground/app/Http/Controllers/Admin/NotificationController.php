@@ -31,10 +31,16 @@ class NotificationController extends Controller
         return response()->json($status_chng);
     }
 
-    public function deleteNotification(Request $req, $id)
+    public function deleteNotification(Request $req, $id = null)
     {
+        $status = $req->input('status', config('constants.STATUS_DELETE'));
+        $ids = $id ? [$id] : $req->input('ids', []);
 
-        $noti_delete = Notification::where('id', $id)->update(['read_status' => $req->status]);
-        return response()->json($noti_delete);
+        if (!empty($ids)) {
+            $noti_delete = Notification::whereIn('id', (array)$ids)->update(['read_status' => $status]);
+            return response()->json($noti_delete);
+        }
+
+        return response()->json(false);
     }
 }

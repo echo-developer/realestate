@@ -22,4 +22,11 @@ class UserSearchActivityController extends Controller
         $data = $this->searchActivityModel->getActivityList($paginate);
         return view("Admin.Activity.userSearchActivity", compact('data'));
     }
+
+    public function deleteActivity(Request $request)
+    {
+        $id = $request->id;
+        UserSearchActivity::where('id', $id)->delete();
+        return response()->json(['success' => true, 'message' => 'Activity record deleted successfully.']);
+    }
 }

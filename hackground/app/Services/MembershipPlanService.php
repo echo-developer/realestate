@@ -29,14 +29,16 @@ class MembershipPlanService
     public function saveMembershipPlans($data)
     {
         return DB::transaction(function () use ($data) {
-            $englishName = $data['plan_name']['en'] ?? 'default-slug';
-            $slug = Str::slug($englishName);
+            $price = floatval($data['price']);
+            $discountedPrice = isset($data['discounted_price']) && $data['discounted_price'] !== '' ? floatval($data['discounted_price']) : null;
+            $discount = ($price > 0 && $discountedPrice !== null) ? (($price - $discountedPrice) / $price) * 100 : 0;
+
             $membershipPlan = MembershipPlans::create([
-                'price' => $data['price'],
+                'price' => $price,
                 'plan_type_id' => $data['plan_type'],
-                'discounted_price' => $data['discounted_price'],
+                'discounted_price' => $discountedPrice,
                 'validity_days' => $data['validity_days'],
-                'discount' => (($data['price'] - $data['discounted_price']) / $data['price']) * 100,
+                'discount' => $discount,
                 'status' => $data['status'],
             ]);
 
@@ -66,17 +68,21 @@ class MembershipPlanService
         return DB::transaction(function () use ($data, $id) {
             $plan = MembershipPlans::findOrFail($id);
 
+            $price = floatval($data['price']);
+            $discountedPrice = isset($data['discounted_price']) && $data['discounted_price'] !== '' ? floatval($data['discounted_price']) : null;
+            $discount = ($price > 0 && $discountedPrice !== null) ? (($price - $discountedPrice) / $price) * 100 : 0;
+
             $plan->update([
-                'price' => $data['price'],
+                'price' => $price,
                 'plan_type_id' => $data['plan_type'],
                 'validity_days' => $data['validity_days'],
-                'discounted_price' => $data['discounted_price'],
-                'discount' => $data['price'] > 0 ?  (($data['price'] - $data['discounted_price']) / $data['price']) * 100 : 0,
+                'discounted_price' => $discountedPrice,
+                'discount' => $discount,
                 'status' => $data['status'],
             ]);
 
             foreach ($data['about_plan'] as $lang => $about_plan) {
-                $plan->names()->updateOrCreate(
+                MembershipPlansNames::updateOrCreate(
                     ['plan_id' => $id, 'lang' => $lang],
                     ['about_plan' => $about_plan]
                 );

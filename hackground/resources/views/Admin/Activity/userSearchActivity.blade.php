@@ -81,6 +81,7 @@
                                 <th>Budget</th>
                                 <th>Filters</th>
                                 <th>Date</th>
+                                <th class="text-end">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -146,6 +147,11 @@
                                             <span class="text-muted fw-medium"><i class="bi bi-calendar3 me-1"></i>{{ date('M d, Y', strtotime($act->created_at)) }}</span>
                                             <br><small class="text-muted"><i class="bi bi-clock me-1"></i>{{ date('h:i A', strtotime($act->created_at)) }}</small>
                                         </td>
+                                        <td data-label="Action" class="text-end">
+                                            <a href="javascript:void(0)" class="action-icon delete deleteActivityBtn" data-id="{{ $act->id }}" title="Delete">
+                                                <i class="bi bi-trash3 text-danger fs-6"></i>
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endif
@@ -176,9 +182,32 @@
                     },
                     {
                         "orderable": false,
-                        "targets": [1, 2, 3, 4]
+                        "targets": [1, 2, 3, 4, 6]
                     }
                 ]
+            });
+
+            $(document).on('click', '.deleteActivityBtn', function() {
+                const id = $(this).data('id');
+                if (!confirm('Are you sure you want to delete this activity record?')) {
+                    return;
+                }
+                $.ajax({
+                    url: "{{ route('activity.delete') }}",
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(res) {
+                        if (res.success) {
+                            location.reload();
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('Error deleting activity:', xhr.responseText);
+                    }
+                });
             });
         });
     </script>

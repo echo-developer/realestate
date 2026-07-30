@@ -98,10 +98,12 @@ class EmailTempController extends Controller
         // Get the languages from the input data
         $langs = array_keys($req->input('subject', []));
 
+        $id = $req->input('prop_emailTemplateId');
+
         // Validation rules (same as add emailTemplate)
         $rules = [
             'name' => 'required|max:255',
-            'template_key' => 'required|max:255|unique:email_templates,key',
+            'template_key' => 'required|max:255|unique:email_templates,key,' . $id,
 
             'status' => 'required|boolean',
         ];

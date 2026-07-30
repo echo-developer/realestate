@@ -403,23 +403,24 @@
             var status = $(this).data('status');
 
             if (status === 'delete') {
-                common_delete_confirm(function() {
-                    $.ajax({
-                        url: `{{ url('allproperties/delete') }}`,
-                        method: 'POST',
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            status: status,
-                            propertyId: propertyId
-                        },
-                        success: function(response) {
-                            window.location.reload(true);
-                        },
-                        error: function(xhr, status, error) {
-                            console.log(error);
-                        }
-                    });
-                }, 'Delete Property?', 'Are you sure you want to delete this property?');
+                if (!confirm('Are you sure you want to delete this property?')) {
+                    return;
+                }
+                $.ajax({
+                    url: `{{ url('allproperties/delete') }}`,
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        status: status,
+                        propertyId: propertyId
+                    },
+                    success: function(response) {
+                        window.location.reload(true);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                });
             } else {
                 $.ajax({
                     url: `{{ url('allproperties/statusupdate') }}`,

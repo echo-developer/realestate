@@ -24,12 +24,11 @@ class FeaturedPackageController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name'             => 'required|string|max:100',
-            'description'      => 'nullable|string|max:500',
-            'price'            => 'required|numeric|min:0',
-            'duration_days'    => 'required|integer|min:1',
-            'properties_count' => 'required|integer|min:1',
-            'status'           => 'required|in:0,1',
+            'name'          => 'required|string|max:100',
+            'description'   => 'nullable|string|max:500',
+            'price'         => 'required|numeric|min:0',
+            'duration_days' => 'required|integer|min:1',
+            'status'        => 'required|in:0,1',
         ]);
 
         $this->service->create($data);

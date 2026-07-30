@@ -43,17 +43,17 @@ class MembershipPlanTypeService
             $plan = MembershipPlanType::findOrFail($id);
 
             $plan->update([
-                'relationship_manager' => $data['relationship_manager'],
-                'leads' => $data['leads']??null,
-                'listings_allowed' => $data['listings_allowed']?? null,
-                'verified_badge' => $data['verified_badge'],
-                'listing_visibility' => $data['listing_visibility'],
-                'social_media_promotion' => $data['social_media_promotion'],
+                'relationship_manager' => $data['relationship_manager'] ?? 'N',
+                'leads' => $data['leads'] ?? null,
+                'listings_allowed' => $data['listings_allowed'] ?? null,
+                'verified_badge' => $data['verified_badge'] ?? 'N',
+                'listing_visibility' => $data['listing_visibility'] ?? 'N',
+                'social_media_promotion' => $data['social_media_promotion'] ?? 'N',
                 'status' => $data['status'],
             ]);
 
             foreach ($data['type_name'] as $lang => $type_name) {
-                $plan->names()->updateOrCreate(
+                DB::table('membership_plan_type_names')->updateOrInsert(
                     ['id' => $id, 'lang' => $lang],
                     ['plan_name' => $type_name]
                 );

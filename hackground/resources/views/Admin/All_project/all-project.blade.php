@@ -1012,23 +1012,24 @@
             let status = $(this).data('status');
 
             if (status === 'delete') {
-                common_delete_confirm(function() {
-                    $.ajax({
-                        type: 'POST',
-                        url: `{{ url('allproject/delete') }}`,
-                        data: {
-                            id: projectId,
-                            status: status,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(data) {
-                            location.reload();
-                        },
-                        error: function(xhr) {
-                            console.error("Error updating status:", xhr.responseText);
-                        }
-                    });
-                }, 'Delete Project?', 'Are you sure you want to delete this project?');
+                if (!confirm('Are you sure you want to delete this project?')) {
+                    return;
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: `{{ url('allproject/delete') }}`,
+                    data: {
+                        id: projectId,
+                        status: status,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(data) {
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        console.error("Error updating status:", xhr.responseText);
+                    }
+                });
             } else {
                 $.ajax({
                     type: 'POST',

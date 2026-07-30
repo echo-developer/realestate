@@ -200,7 +200,6 @@ $(document).ready(function () {
                     $('#pkg_description').val(d.description);
                     $('#pkg_price').val(d.price);
                     $('#pkg_duration_days').val(d.duration_days);
-                    $('#pkg_properties_count').val(d.properties_count);
                     $(`input[name="status"][value="${d.status}"]`).prop('checked', true);
                     modal.show();
                 }
@@ -245,20 +244,24 @@ $(document).ready(function () {
     // --- DELETE ---
     $(document).on('click', '.deletePackageBtn', function () {
         const id = $(this).data('id');
-        common_delete_confirm(function () {
-            $.ajax({
-                url: '{{ route('featured-package.destroy') }}',
-                type: 'DELETE',
-                data: { id },
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-                success: function (res) {
-                    if (res.success) {
-                        toastr.success(res.message, 'Deleted', toastrOptions);
-                        setTimeout(() => location.reload(), 1000);
-                    }
+        if (!confirm('Are you sure you want to delete this featured package?')) {
+            return;
+        }
+        $.ajax({
+            url: '{{ route('featured-package.destroy') }}',
+            type: 'DELETE',
+            data: { id: id },
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            success: function (res) {
+                if (res.success) {
+                    toastr.success(res.message, 'Deleted');
+                    setTimeout(() => location.reload(), 1000);
                 }
-            });
-        }, 'Delete Package?', 'Are you sure you want to delete this featured package?');
+            },
+            error: function (xhr) {
+                console.error('Error deleting package:', xhr.responseText);
+            }
+        });
     });
 
     // --- STATUS TOGGLE ---

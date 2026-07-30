@@ -58,7 +58,7 @@ class BadgesController extends Controller
      */
     public function store(Request $request)
     {
-        $langs = explode(',', admin_default_lang());
+        $langs = array_unique(array_merge(explode(',', admin_default_lang()), array_keys($request->input('name', []))));
 
         $validated = $request->validate([
             'name.*' => 'required|string|max:255',
@@ -67,20 +67,27 @@ class BadgesController extends Controller
         ]);
 
         // Save badge base info
+        $slugName = $validated['name']['en'] ?? reset($validated['name']);
         $badge = Badges::create([
-            'slug' => Str::slug($validated['name']['en']),
+            'slug' => Str::slug($slugName),
             'icon' => $request->file_name ?? null,
             'status' => $request->status,
         ]);
 
         // Save translations
         foreach ($langs as $lang) {
-            BadgesNames::create([
-                'badge_id' => $badge->badge_id, // Make sure your primary key is `id`, not `badge_id`
-                'name' => $validated['name'][$lang] ?? '',
-                'description' => $validated['description'][$lang] ?? '',
-                'lang' => $lang,
-            ]);
+            if (isset($validated['name'][$lang])) {
+                \DB::table('badges_names')->updateOrInsert(
+                    [
+                        'badge_id' => $badge->badge_id,
+                        'lang' => $lang,
+                    ],
+                    [
+                        'name' => $validated['name'][$lang] ?? '',
+                        'description' => $validated['description'][$lang] ?? '',
+                    ]
+                );
+            }
         }
 
         return response()->json([
@@ -141,11 +148,16 @@ class BadgesController extends Controller
         ]);
 
         foreach ($validated['name'] as $lang => $name) {
-            BadgesNames::where('badge_id', $id)
-                ->where('lang', $lang)
-                ->update([
+            \DB::table('badges_names')->updateOrInsert(
+                [
+                    'badge_id' => $id,
+                    'lang' => $lang,
+                ],
+                [
                     'name' => $name,
-                ]);
+                    'description' => $validated['description'][$lang] ?? '',
+                ]
+            );
         }
 
 
