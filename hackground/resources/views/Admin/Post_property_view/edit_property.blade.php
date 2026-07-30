@@ -46,6 +46,19 @@
                 </a>
             </div>
 
+            <!-- Mode Info Alert -->
+            <div class="alert border-0 shadow-sm rounded-4 d-flex align-items-center justify-content-between p-3 mb-4" style="background: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%); border-left: 4px solid #2563eb !important;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="bg-primary text-white p-2 rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                        <i class="bi bi-info-circle fs-5"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-0 text-primary">Read-Only Summary View</h6>
+                        <small class="text-secondary">This page displays saved property details. Click the <i class="bi bi-pencil-square text-primary"></i> icon on any section header to update its values.</small>
+                    </div>
+                </div>
+            </div>
+
             <!-- Basic Details Card -->
             <div class="card border-0 shadow-sm rounded-4 mb-4">
                 <div class="card-header bg-white border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
@@ -55,65 +68,41 @@
                         </div>
                         Basic Details
                     </h5>
-                    <button class="btn btn-sm d-flex align-items-center gap-2 fw-semibold" onclick="edit('basic')" style="border: 1.5px solid #e2e8f0; border-radius: 8px; color: #475569; background: #fff; padding: 0.35rem 0.85rem; transition: all .15s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">
-                        <i class="bi bi-pencil" style="font-size:.85rem;"></i> Edit
+                    <button class="btn btn-sm btn-outline-primary fw-bold d-flex align-items-center justify-content-center rounded-3 p-2 shadow-2xs" onclick="edit('basic')" title="Edit Basic Details" style="width: 36px; height: 36px;">
+                        <i class="bi bi-pencil-square fs-6"></i>
                     </button>
                 </div>
                 <div class="card-body p-4">
-                    <div class="row g-3">
+                    <div class="row g-4">
                         <div class="col-md-6">
-                            <label class="form-label text-muted small fw-medium mb-1">Name</label>
-                            <div class="p-2 border rounded-3 bg-light text-dark fw-medium text-truncate" style="height: 42px; line-height: 24px;">
-                                {{ ucfirst($propertyData->name ?? 'N/A') }}
-                            </div>
+                            <label class="form-label text-muted small fw-medium mb-1 d-block">Name</label>
+                            <div class="fw-bold text-dark fs-6">{{ ucfirst($propertyData->name ?? 'N/A') }}</div>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label text-muted small fw-medium mb-1">Post For</label>
-                            <div class="p-2 border rounded-3 bg-light text-dark fw-medium d-flex justify-content-between align-items-center" style="height: 42px;">
-                                <span>{{ ucfirst(optional($propertyData->settings)->post_for ?? 'N/A') }}</span>
-                                <i class="bi bi-chevron-down text-muted small"></i>
-                            </div>
+                            <label class="form-label text-muted small fw-medium mb-1 d-block">Post For</label>
+                            <div class="fw-bold text-dark fs-6">{{ ucfirst(optional($propertyData->settings)->post_for ?? 'N/A') }}</div>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label text-muted small fw-medium mb-1">Property Type</label>
-                            <div class="p-2 border rounded-3 bg-light text-dark fw-medium d-flex justify-content-between align-items-center text-truncate" style="height: 42px;">
-                                <span class="text-truncate">{{ get_name_by_id('property_category_names','category_id',optional($propertyData->settings)->property_type,'en') ?? 'N/A' }}</span>
-                                <i class="bi bi-chevron-down text-muted small"></i>
-                            </div>
+                            <label class="form-label text-muted small fw-medium mb-1 d-block">Property Type</label>
+                            <div class="fw-bold text-dark fs-6">{{ get_name_by_id('property_category_names','category_id',optional($propertyData->settings)->property_type,'en') ?? 'N/A' }}</div>
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label text-muted small fw-medium mb-1">Price</label>
-                            <div class="d-flex gap-2">
-                                <div class="p-2 border rounded-3 bg-light text-dark fw-medium d-flex justify-content-between align-items-center" style="height: 42px; width: 100px;">
-                                    <span>{{ optional($propertyData->settings)->price_currency ?? 'USD' }}</span>
-                                    <i class="bi bi-chevron-down text-muted small"></i>
-                                </div>
-                                <div class="p-2 border rounded-3 bg-light text-dark fw-medium flex-grow-1" style="height: 42px; line-height: 24px;">
-                                    {{ optional($propertyData->settings)->expected_price ?? 'N/A' }}
-                                </div>
-                            </div>
+                            <label class="form-label text-muted small fw-medium mb-1 d-block">Price</label>
+                            <div class="fw-bold text-dark fs-6">{{ optional($propertyData->settings)->price_currency ?? 'USD' }} {{ optional($propertyData->settings)->expected_price ?? 'N/A' }}</div>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label text-muted small fw-medium mb-1">Project / Society Name</label>
-                            <div class="p-2 border rounded-3 bg-light text-dark fw-medium text-truncate" style="height: 42px; line-height: 24px;">
-                                {{ optional($propertyData->settings)->project_name ?? 'N/A' }}
-                            </div>
+                            <label class="form-label text-muted small fw-medium mb-1 d-block">Project / Society Name</label>
+                            <div class="fw-bold text-dark fs-6">{{ optional($propertyData->settings)->project_name ?? 'N/A' }}</div>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label text-muted small fw-medium mb-1">Property For</label>
-                            <div class="p-2 border rounded-3 bg-light text-dark fw-medium d-flex justify-content-between align-items-center text-truncate" style="height: 42px;">
-                                <span class="text-truncate">{{ get_name_by_id('property_sub_category_names','sub_category_id',optional($propertyData->settings)->property_type_for,'en') ?? 'N/A' }}</span>
-                                <i class="bi bi-chevron-down text-muted small"></i>
-                            </div>
+                            <label class="form-label text-muted small fw-medium mb-1 d-block">Property For</label>
+                            <div class="fw-bold text-dark fs-6">{{ get_name_by_id('property_sub_category_names','sub_category_id',optional($propertyData->settings)->property_type_for,'en') ?? 'N/A' }}</div>
                         </div>
 
                         <div class="col-12 mt-3">
-                            <label class="form-label text-muted small fw-medium mb-1">Message to Buyer (Optional)</label>
-                            <div class="p-3 border rounded-3 bg-light text-dark position-relative" style="min-height: 100px;">
-                                {{ optional($propertyData->additional)->buyer_message ?? 'Write a message to buyer...' }}
-                                <div class="position-absolute bottom-0 end-0 p-2 text-muted small">0 / 500</div>
-                            </div>
+                            <label class="form-label text-muted small fw-medium mb-1 d-block">Message to Buyer (Optional)</label>
+                            <div class="fw-normal text-dark fs-6">{{ optional($propertyData->additional)->buyer_message ?? 'N/A' }}</div>
                         </div>
                     </div>
                 </div>
@@ -128,31 +117,23 @@
                         </div>
                         Location
                     </h5>
-                    <button class="btn btn-sm d-flex align-items-center gap-2 fw-semibold" onclick="edit('location')" style="border: 1.5px solid #e2e8f0; border-radius: 8px; color: #475569; background: #fff; padding: 0.35rem 0.85rem; transition: all .15s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">
-                        <i class="bi bi-pencil" style="font-size:.85rem;"></i> Edit
+                    <button class="btn btn-sm btn-outline-primary fw-bold d-flex align-items-center justify-content-center rounded-3 p-2 shadow-2xs" onclick="edit('location')" title="Edit Location" style="width: 36px; height: 36px;">
+                        <i class="bi bi-pencil-square fs-6"></i>
                     </button>
                 </div>
                 <div class="card-body p-4">
-                    <div class="row g-3">
+                    <div class="row g-4">
                         <div class="col-md-3">
-                            <label class="form-label text-muted small fw-medium mb-1">City</label>
-                            <div class="p-2 border rounded-3 bg-light text-dark fw-medium d-flex justify-content-between align-items-center text-truncate" style="height: 42px;">
-                                <span class="text-truncate">{{ get_name_by_id('city_names', 'city_id', optional($propertyData->location)->city, 'en') }}</span>
-                                <i class="bi bi-chevron-down text-muted small"></i>
-                            </div>
+                            <label class="form-label text-muted small fw-medium mb-1 d-block">City</label>
+                            <div class="fw-bold text-dark fs-6">{{ get_name_by_id('city_names', 'city_id', optional($propertyData->location)->city, 'en') ?? 'N/A' }}</div>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label text-muted small fw-medium mb-1">Locality</label>
-                            <div class="p-2 border rounded-3 bg-light text-dark fw-medium d-flex justify-content-between align-items-center text-truncate" style="height: 42px;">
-                                <span class="text-truncate">{{ optional($propertyData->location)->locality ? get_name_by_id('locality_names', 'locality_id', $propertyData->location->locality, 'en') : 'N/A' }}</span>
-                                <i class="bi bi-chevron-down text-muted small"></i>
-                            </div>
+                            <label class="form-label text-muted small fw-medium mb-1 d-block">Locality</label>
+                            <div class="fw-bold text-dark fs-6">{{ optional($propertyData->location)->locality ? get_name_by_id('locality_names', 'locality_id', $propertyData->location->locality, 'en') : 'N/A' }}</div>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label text-muted small fw-medium mb-1">Address</label>
-                            <div class="p-2 border rounded-3 bg-light text-dark fw-medium text-truncate" style="height: 42px; line-height: 24px;">
-                                {{ optional($propertyData->location)->property_address ?? 'N/A' }}
-                            </div>
+                            <label class="form-label text-muted small fw-medium mb-1 d-block">Address</label>
+                            <div class="fw-bold text-dark fs-6">{{ optional($propertyData->location)->property_address ?? 'N/A' }}</div>
                         </div>
                     </div>
                 </div>
@@ -167,8 +148,8 @@
                         </div>
                         Property Features
                     </h5>
-                    <button class="btn btn-sm d-flex align-items-center gap-2 fw-semibold" onclick="edit('features')" style="border: 1.5px solid #e2e8f0; border-radius: 8px; color: #475569; background: #fff; padding: 0.35rem 0.85rem; transition: all .15s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">
-                        <i class="bi bi-pencil" style="font-size:.85rem;"></i> Edit
+                    <button class="btn btn-sm btn-outline-primary fw-bold d-flex align-items-center justify-content-center rounded-3 p-2 shadow-2xs" onclick="edit('features')" title="Edit Features" style="width: 36px; height: 36px;">
+                        <i class="bi bi-pencil-square fs-6"></i>
                     </button>
                 </div>
                 <div class="card-body p-4">
@@ -194,12 +175,22 @@
                                 <span class="text-muted small fw-medium">Flooring Types</span>
                                 <span class="fw-bold text-dark text-end">
                                     @php
-                                    $style_arr = json_decode(optional($propertyData->additional)->flooring_style);
-                                    if(is_array($style_arr) && count($style_arr) > 0) {
-                                        echo 'Multiple Types';
-                                    } else {
-                                        echo 'N/A';
+                                    $style_string = optional($propertyData->additional)->flooring_style;
+                                    $floor_types = get_floor_types();
+                                    $names = [];
+                                    if ($style_string) {
+                                        $decoded = json_decode($style_string, true);
+                                        $style_arr = is_array($decoded) ? $decoded : array_filter(explode(',', $style_string));
+                                        foreach ($style_arr as $val) {
+                                            $val = trim($val);
+                                            if (isset($floor_types[$val])) {
+                                                $names[] = $floor_types[$val];
+                                            } elseif (!empty($val)) {
+                                                $names[] = ucfirst($val);
+                                            }
+                                        }
                                     }
+                                    echo !empty($names) ? implode(', ', $names) : 'N/A';
                                     @endphp
                                 </span>
                             </div>
@@ -248,8 +239,8 @@
                         </div>
                         Additional Information
                     </h5>
-                    <button class="btn btn-sm d-flex align-items-center gap-2 fw-semibold" onclick="edit('additional')" style="border: 1.5px solid #e2e8f0; border-radius: 8px; color: #475569; background: #fff; padding: 0.35rem 0.85rem; transition: all .15s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">
-                        <i class="bi bi-pencil" style="font-size:.85rem;"></i> Edit
+                    <button class="btn btn-sm btn-outline-primary fw-bold d-flex align-items-center justify-content-center rounded-3 p-2 shadow-2xs" onclick="edit('additional')" title="Edit Additional Information" style="width: 36px; height: 36px;">
+                        <i class="bi bi-pencil-square fs-6"></i>
                     </button>
                 </div>
                 <div class="card-body p-4">
