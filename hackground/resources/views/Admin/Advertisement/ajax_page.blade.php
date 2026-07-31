@@ -1,3 +1,33 @@
+<script>
+    window.showFormErrors = function(formId, errors) {
+        formId.find('.invalid-feedback').remove();
+        formId.find('.form-control, .form-select').removeClass('is-invalid');
+        formId.find('.select2-selection').removeClass('is-invalid border-danger');
+        if (errors) {
+            $.each(errors, function(field, messages) {
+                var inputName = field.replace(/\./g, '_');
+                var baseField = field.split('.')[0];
+                var input = formId.find('[name="' + field + '"], [name="' + field + '[]"], [name="' + baseField + '[]"], [name="' + inputName + '"]');
+                if (!input.length) {
+                    input = formId.find('#' + field + ', #' + inputName + ', #' + baseField);
+                }
+                if (input.length) {
+                    input.addClass('is-invalid');
+                    var msgText = Array.isArray(messages) ? messages[0] : messages;
+                    if (input.next('.select2-container').length) {
+                        input.next('.select2-container').find('.select2-selection').addClass('is-invalid border-danger');
+                        input.next('.select2-container').after('<div class="invalid-feedback d-block">' + msgText + '</div>');
+                    } else if (input.parent().hasClass('form-floating')) {
+                        input.parent().after('<div class="invalid-feedback d-block">' + msgText + '</div>');
+                    } else {
+                        input.after('<div class="invalid-feedback d-block">' + msgText + '</div>');
+                    }
+                }
+            });
+        }
+    };
+</script>
+
 @if($page == 'add')
 <div class="modal-header">
     <h4 class="modal-title"><?php echo $title; ?></h4>
@@ -151,11 +181,40 @@
         $('.select2').select2();
     }); */
 
+    function showFormErrors(formId, errors) {
+        formId.find('.invalid-feedback').remove();
+        formId.find('.form-control, .form-select').removeClass('is-invalid');
+        if (errors) {
+            $.each(errors, function(field, messages) {
+                var inputName = field.replace(/\./g, '_');
+                var input = formId.find('[name="' + field + '"], [name="' + field + '[]"], [name="' + inputName + '"]');
+                if (!input.length) {
+                    input = formId.find('#' + field + ', #' + inputName);
+                }
+                if (input.length) {
+                    input.addClass('is-invalid');
+                    var msgText = Array.isArray(messages) ? messages[0] : messages;
+                    if (input.parent().hasClass('form-floating')) {
+                        input.parent().after('<div class="invalid-feedback d-block">' + msgText + '</div>');
+                    } else if (input.next('.select2-container').length) {
+                        input.next('.select2-container').after('<div class="invalid-feedback d-block">' + msgText + '</div>');
+                    } else {
+                        input.after('<div class="invalid-feedback d-block">' + msgText + '</div>');
+                    }
+                }
+            });
+        }
+    }
+
     function submitForm(form, event) {
         event.preventDefault();
         var formId = $(form);
         var url = $(form).attr('action');
         var submitBtn = $(form).find('button[type="submit"]');
+
+        formId.find('.invalid-feedback').remove();
+        formId.find('.form-control, .form-select').removeClass('is-invalid');
+
         submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Saving...');
         $.ajax({
             type: 'POST',
@@ -166,17 +225,18 @@
             },
             dataType: 'JSON',
             success: function(res) {
-                if (res.status == 'OK') {
+                if (res.status == 'OK' || res.status == 1 || res.success == true) {
                     if (typeof toastr !== 'undefined') {
                         toastr.success(res.message || 'Saved successfully');
                     }
                     setTimeout(() => location.reload(), 500);
                 } else {
                     submitBtn.prop('disabled', false).html('Submit');
+                    if (res.errors) {
+                        showFormErrors(formId, res.errors);
+                    }
                     if (typeof toastr !== 'undefined') {
-                        toastr.error(res.message || 'Failed to save');
-                    } else {
-                        alert(res.message || 'Failed to save');
+                        toastr.error(res.message || 'Validation failed. Please check required fields.');
                     }
                 }
             },
@@ -184,9 +244,14 @@
                 submitBtn.prop('disabled', false).html('Submit');
                 var res = xhr.responseJSON;
                 if (res && res.errors) {
-                    $.each(res.errors, function(index, error) {
-                        $("." + index + "Error").html(error);
-                    });
+                    showFormErrors(formId, res.errors);
+                    if (typeof toastr !== 'undefined') {
+                        toastr.error(res.message || 'Validation failed. Please check required fields.');
+                    }
+                } else if (res && res.message) {
+                    if (typeof toastr !== 'undefined') toastr.error(res.message);
+                } else {
+                    if (typeof toastr !== 'undefined') toastr.error('An error occurred while saving.');
                 }
             }
         });
@@ -503,6 +568,12 @@
         event.preventDefault();
         var formId = $(form);
         var url = $(form).attr('action');
+        var submitBtn = $(form).find('button[type="submit"]');
+
+        formId.find('.invalid-feedback').remove();
+        formId.find('.form-control, .form-select').removeClass('is-invalid');
+
+        submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Saving...');
         $.ajax({
             type: 'POST',
             url: url,
@@ -512,25 +583,33 @@
             },
             dataType: 'JSON',
             success: function(res) {
-                if (res.status == 'OK') {
+                if (res.status == 'OK' || res.status == 1 || res.success == true) {
                     if (typeof toastr !== 'undefined') {
                         toastr.success(res.message || 'Saved successfully');
                     }
-                    setTimeout(() => location.reload(), 800);
+                    setTimeout(() => location.reload(), 500);
                 } else {
+                    submitBtn.prop('disabled', false).html('Submit');
+                    if (res.errors) {
+                        showFormErrors(formId, res.errors);
+                    }
                     if (typeof toastr !== 'undefined') {
-                        toastr.error(res.message || 'Failed to save');
-                    } else {
-                        alert(res.message || 'Failed to save');
+                        toastr.error(res.message || 'Validation failed. Please check required fields.');
                     }
                 }
             },
             error: function(xhr) {
+                submitBtn.prop('disabled', false).html('Submit');
                 var res = xhr.responseJSON;
-                if (res.errors) {
-                    $.each(res.errors, function(index, error) {
-                        $("." + index + "Error").html(error);
-                    });
+                if (res && res.errors) {
+                    showFormErrors(formId, res.errors);
+                    if (typeof toastr !== 'undefined') {
+                        toastr.error(res.message || 'Validation failed. Please check required fields.');
+                    }
+                } else if (res && res.message) {
+                    if (typeof toastr !== 'undefined') toastr.error(res.message);
+                } else {
+                    if (typeof toastr !== 'undefined') toastr.error('An error occurred while saving.');
                 }
             }
         });
@@ -1011,59 +1090,84 @@
 @endif
 
 @if($page == 'view-request')
-<div class="modal-header">
-    <h4 class="modal-title"><?php echo $title; ?></h4>
-    <button type="button" class="btn-close" data-bs-dismiss="modal">
-
-    </button>
-
+<div class="modal-header border-0 pb-0">
+    <div class="d-flex align-items-center gap-2">
+        <div class="p-2 rounded-3 bg-primary-subtle text-primary d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+            <i class="bi bi-file-earmark-text fs-5"></i>
+        </div>
+        <div>
+            <h5 class="modal-title fw-bold mb-0">Request Details</h5>
+            <small class="text-muted">ID #{{ $detail->request_id ?? '' }}</small>
+        </div>
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
-@php  
-@endphp
-<div class="modal-body">
-    <ul>
-        <li>Advertiser Name:</li>
-        <li>{{ $detail->name }}</li>
-    </ul>
-    <ul>
-        <li>Email:</li>
-        <li>{{ $detail->email }}</li>
-    </ul>
-    <ul>
-        <li>Phone:</li>
-        <li>{{ $detail->phone }}</li>
-    </ul>
-    <ul>
-        <li>Page:</li>
-        <li>{{ $detail->page }}</li>
-    </ul>
-    <ul>
-        <li>Position:</li>
-        <li>{{ $detail->position }}</li>
-    </ul>
-    <ul>
-        <li>Duration in weeks:</li>
-        <li>{{ $detail->duration }}</li>
-    </ul>
-    <ul>
-        <li>Location:</li>
-        <li>{{ get_name_by_id('locality_names','locality_id',$detail->locality_id,'en').', '.get_name_by_id('city_names','city_id',$detail->city_id,'en') }}</li>
-    </ul>
-    <ul>
-        <li>Is banner uploaded ?</li>
-        <li>{{ $detail->has_banner == 1 ? 'Yes' : 'No' }}</li>
-    </ul>
-    @if($detail->ad_image)
-    <div>
-        <label>Ad Image</label>
-        <img src="{{ asset('user_upload/advertisement/'.$detail->ad_image) }}"  />
+
+<div class="modal-body p-4">
+    <div class="bg-light rounded-3 p-3 mb-4 border">
+        <div class="row g-3">
+            <div class="col-sm-6">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Advertiser Name</div>
+                <div class="fw-bold text-dark">{{ $detail->name ?? 'N/A' }}</div>
+            </div>
+            <div class="col-sm-6">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Email</div>
+                <div class="fw-semibold text-dark">{{ $detail->email ?? 'N/A' }}</div>
+            </div>
+            <div class="col-sm-6">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Phone</div>
+                <div class="fw-semibold text-dark">{{ $detail->phone ?? 'N/A' }}</div>
+            </div>
+            <div class="col-sm-6">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Duration</div>
+                <span class="badge bg-primary-subtle text-primary fw-semibold fs-7">{{ $detail->duration ?? 1 }} Weeks</span>
+            </div>
+            <div class="col-sm-6">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Target Page</div>
+                <span class="badge bg-secondary-subtle text-secondary text-dark fw-medium">{{ $detail->page ?? 'N/A' }}</span>
+            </div>
+            <div class="col-sm-6">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Position</div>
+                <span class="badge bg-info-subtle text-info fw-semibold">{{ $detail->position ?? 'N/A' }}</span>
+            </div>
+            <div class="col-12">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Location</div>
+                <div class="fw-semibold text-dark">
+                    <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                    {{ get_name_by_id('locality_names','locality_id',$detail->locality_id,'en').', '.get_name_by_id('city_names','city_id',$detail->city_id,'en') }}
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Banner Uploaded</div>
+                @if(($detail->has_banner ?? 0) == 1)
+                    <span class="badge bg-success-subtle text-success fw-semibold"><i class="bi bi-check-circle-fill me-1"></i> Yes</span>
+                @else
+                    <span class="badge bg-warning-subtle text-warning fw-semibold"><i class="bi bi-x-circle-fill me-1"></i> No</span>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    @if(!empty($detail->ad_image))
+    <div class="mb-3">
+        <label class="fw-semibold text-dark mb-2 d-block"><i class="bi bi-image me-1"></i> Desktop Ad Banner</label>
+        <div class="text-center p-2 border rounded-3 bg-white shadow-sm">
+            <img src="{{ asset('user_upload/advertisement/'.$detail->ad_image) }}" class="img-fluid rounded-2" style="max-height: 250px; object-fit: contain;" alt="Ad Image" />
+        </div>
     </div>
     @endif
-    @if($detail->ad_image_mobile)
-    <div>
-        <label>Ad Image for mobile</label>
-        <img src="{{ asset('user_upload/advertisement/'.$detail->ad_image_mobile) }}"  />
+
+    @if(!empty($detail->ad_image_mobile))
+    <div class="mb-3">
+        <label class="fw-semibold text-dark mb-2 d-block"><i class="bi bi-phone me-1"></i> Mobile Ad Banner</label>
+        <div class="text-center p-2 border rounded-3 bg-white shadow-sm">
+            <img src="{{ asset('user_upload/advertisement/'.$detail->ad_image_mobile) }}" class="img-fluid rounded-2" style="max-height: 250px; object-fit: contain;" alt="Mobile Ad Image" />
+        </div>
     </div>
     @endif
+</div>
+
+<div class="modal-footer border-0 pt-0">
+    <button type="button" class="btn btn-secondary px-4 rounded-pill" data-bs-dismiss="modal">Close</button>
 </div>
 @endif

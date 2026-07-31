@@ -136,12 +136,27 @@ class AdvertisementController extends Controller
 
     public function add(Request $request)
     {
+        $request->validate([
+            'category' => 'required|array|min:1',
+            'city' => 'required|array|min:1',
+            'page' => 'required',
+            'position' => 'required',
+            'ad_size' => 'required',
+            'start_date' => 'required|date',
+            'expire_date' => 'required|date|after_or_equal:start_date',
+        ], [
+            'category.required' => 'The category field is required.',
+            'category.min' => 'Please select at least one category.',
+            'city.required' => 'The city field is required.',
+            'city.min' => 'Please select at least one city.',
+        ]);
+
         $msg = array();
         $postData = $request->all();
         $ins_id = $this->advertisement->addRecord($postData);
         if($ins_id)
         {
-            if($postData['request_id'])
+            if(!empty($postData['request_id']))
             {
                 DB::table('advertisement_request')->where('request_id',$postData['request_id'])->update(['status'=>'1']);
             }
@@ -173,11 +188,26 @@ class AdvertisementController extends Controller
             $msg['status'] = 'FAIL';
             $msg['message'] = 'Failed to add Advertisement !';
         }
-        echo json_encode($msg);
+        return response()->json($msg);
     }
 
     public function edit(Request $request)
     {
+        $request->validate([
+            'category' => 'required|array|min:1',
+            'city' => 'required|array|min:1',
+            'page' => 'required',
+            'position' => 'required',
+            'ad_size' => 'required',
+            'start_date' => 'required|date',
+            'expire_date' => 'required|date|after_or_equal:start_date',
+        ], [
+            'category.required' => 'The category field is required.',
+            'category.min' => 'Please select at least one category.',
+            'city.required' => 'The city field is required.',
+            'city.min' => 'Please select at least one city.',
+        ]);
+
         $msg = array();
         $postData = $request->all();
         $id = $postData['ID'];
@@ -190,7 +220,7 @@ class AdvertisementController extends Controller
             $msg['status'] = 'FAIL';
             $msg['message'] = 'Failed to update Advertisement !';
         }
-        echo json_encode($msg);
+        return response()->json($msg);
     }
 
     public function get_option_value(Request $request){

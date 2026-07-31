@@ -370,20 +370,7 @@
         "paging": false, 
         "searching": false, 
         "info": false, 
-        "ordering": true, 
-        "order": [
-            [0, 'desc'] 
-        ], 
-        "columnDefs": [
-            { 
-                "orderable": true, 
-                "targets": [0]     
-            },
-            {
-                "orderable": false,
-                "targets": [2, 3, 4]
-            }
-        ]
+        "ordering": false
     });
 });
 </script>
