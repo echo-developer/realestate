@@ -1366,7 +1366,14 @@ class ApiModel extends Model
             $query->where('a.position', $data['position']);
         }
         if (array_key_exists('city', $data) && !empty($data['city'])) {
-            $query->where('a_l.city_id', $data['city']);
+            // Show ads targeted to this city OR global ads (no city restriction).
+            $query->where(function ($q) use ($data) {
+                $q->where('a_l.city_id', $data['city'])
+                  ->orWhereNull('a_l.city_id');
+            });
+        } else {
+            // No city context: show only global (non-city-targeted) ads.
+            $query->whereNull('a_l.city_id');
         }
         if (array_key_exists('category', $data) && !empty($data['category'])) {
             $query->where('a_c.property_category', $data['category']);

@@ -145,24 +145,13 @@ class AdvertisementPackages extends Model
 	}
 
     public function _adAttributes(){
-		$attr = array(
+				$attr = array(
 			'pages' => array(
 				array(
 					'name' => 'Home Page',
 					'slug' => 'home-page',
 					'position' => array(
 						array(
-							'name' => 'header',
-							'size' => array(
-								'972x252',
-								'720x35',
-								'820x35',
-								'920x35',
-								'620x35',
-							)
-						),
-						
-						array(
 							'name' => 'footer',
 							'size' => array(
 								'720x35',
@@ -170,42 +159,14 @@ class AdvertisementPackages extends Model
 								'920x35',
 								'620x35',
 							)
-						)
-						
+						),
 					)
 				),
-				
 				array(
-					'name' => 'Ad List Page',
+					'name' => 'Property List Page',
 					'slug' => 'listing-page',
 					'position' => array(
 						array(
-							'name' => 'header',
-							'size' => array(
-								'720x35',
-								'820x35',	
-							)
-						),
-						
-						array(
-							'name' => 'footer',
-							'size' => array(
-								'720x35',
-								'620x35',
-							)
-						),
-						
-						array(
-							'name' => 'left',
-							'size' => array(
-								'300x252',
-								'300x600',
-								'250x250',
-								'100x50',
-							)
-						),
-						
-						array(
 							'name' => 'right',
 							'size' => array(
 								'300x252',
@@ -213,26 +174,14 @@ class AdvertisementPackages extends Model
 								'250x250',
 								'100x50',
 							)
-						)
-						
+						),
 					)
 				),
-				
 				array(
-					'name' => 'Ad Detail Page',
+					'name' => 'Property Detail Page',
 					'slug' => 'detail-page',
 					'position' => array(
 						array(
-							'name' => 'header',
-							'size' => array(
-								'720x35',
-								'820x35',
-								'920x35',
-								'620x35',
-							)
-						),
-						
-						array(
 							'name' => 'footer',
 							'size' => array(
 								'720x35',
@@ -241,18 +190,15 @@ class AdvertisementPackages extends Model
 								'620x35',
 							)
 						),
-						
 						array(
 							'name' => 'right',
 							'size' => array(
 								'250x250',
 								'100x50',
 							)
-						)
-						
+						),
 					)
 				),
-				
 			)
 		);
 		
