@@ -35,27 +35,28 @@ class FaqListController extends Controller
     public function list_submit(Request $request)
     {
         $langs = array_keys($request->input('question', []));
+        if (empty($langs)) {
+            $langs = explode(',', admin_default_lang());
+        }
 
         $rules = [
             'faq_category_id' => 'required|integer|exists:faq_categories,id',
-            'status' => 'required|boolean',
+            'status' => 'required',
         ];
 
         foreach ($langs as $lang) {
             $rules["question.$lang"] = 'required|string|max:1000';
-            $rules["answer.$lang"] = 'required|string|max:2000';
+            $rules["answer.$lang"] = 'required|string';
         }
 
         $validated = $request->validate($rules);
-
         $order = $request->input('order', null);
-
-        $faqId = $request->input('faq_id');
+        $faqId = $request->input('id') ?: $request->input('faq_id');
 
         try {
             DB::beginTransaction();
 
-            if ($faqId) {
+            if (!empty($faqId)) {
                 DB::table('faq_list')->where('id', $faqId)->update([
                     'faq_category_id' => $validated['faq_category_id'],
                     'order' => $order,
@@ -72,28 +73,29 @@ class FaqListController extends Controller
                 ]);
             }
 
-            DB::table('faq_list_names')->where('faq_id', $faqId)->delete();
+            if (!empty($faqId)) {
+                DB::table('faq_list_names')->where('faq_id', $faqId)->delete();
 
-            $insertData = [];
-            foreach ($langs as $lang) {
-                $insertData[] = [
-                    'faq_id' => $faqId,
-                    'lang' => $lang,
-                    'question' => $request->input("question.$lang"),
-                    'answer' => $request->input("answer.$lang"),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+                $insertData = [];
+                foreach ($langs as $lang) {
+                    $insertData[] = [
+                        'faq_id' => $faqId,
+                        'lang' => $lang,
+                        'question' => $request->input("question.$lang"),
+                        'answer' => $request->input("answer.$lang"),
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+
+                DB::table('faq_list_names')->insert($insertData);
             }
 
-            DB::table('faq_list_names')->insert($insertData);
-
             DB::commit();
-            set_flash_message('add');
 
             return response()->json([
                 'success' => true,
-                'message' => $faqId ? 'FAQ updated successfully!' : 'FAQ created successfully!',
+                'message' => $request->input('id') ? 'FAQ updated successfully!' : 'FAQ created successfully!',
                 'faq_id' => $faqId,
             ]);
         } catch (\Exception $e) {
@@ -183,32 +185,7 @@ class FaqListController extends Controller
 
     public function update_list(Request $request)
     {
-        $faqId = $request->id;
-        $faq = FaqList::find($faqId);
-        if (!$faq) {
-            return response()->json(['error' => 'FAQ not found.'], 404);
-        }
-        $faq->faq_category_id = $request->faq_category_id;
-        $faq->order = $request->order ?? 0;
-        $faq->status = $request->status ?? 0;
-        $faq->save();
-
-        DB::table('faq_list_names')->where('faq_id', $faqId)->delete();
-        set_flash_message('update');
-        if ($request->has('question') && $request->has('answer')) {
-            $now = Carbon::now();
-            foreach ($request->question as $lang => $question) {
-                DB::table('faq_list_names')->insert([
-                    'faq_id' => $faqId,
-                    'lang' => $lang,
-                    'question' => $question,
-                    'answer' => $request->answer[$lang] ?? '',
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ]);
-            }
-        }
-        return response()->json(['message' => 'FAQ updated successfully.']);
+        return $this->list_submit($request);
     }
 
 
