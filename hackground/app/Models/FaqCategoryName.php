@@ -89,33 +89,35 @@ class FaqCategoryName extends Model
         DB::beginTransaction();
 
         try {
-
-            DB::table('faq_categories')->where('id', $data['category_id'])->update([
-                'order' => $data['order'],
+            $updateData = [
+                'order' => $data['order'] ?? null,
                 'status' => $data['status'],
                 'updated_at' => now(),
-            ]);
-            foreach ($data['name'] as $lang => $name) {
-                DB::table('faq_categories_names')
-                    ->updateOrInsert(
-                        ['category_id' => $data['category_id'], 'lang' => $lang],
-                        ['name' => $name, 'updated_at' => now()]
-                    );
+            ];
+            if (!empty($data['slug'])) {
+                $updateData['slug'] = $data['slug'];
             }
+
+            DB::table('faq_categories')->where('id', $data['category_id'])->update($updateData);
+
+            if (!empty($data['name']) && is_array($data['name'])) {
+                foreach ($data['name'] as $lang => $name) {
+                    DB::table('faq_categories_names')
+                        ->updateOrInsert(
+                            ['category_id' => $data['category_id'], 'lang' => $lang],
+                            ['name' => $name, 'updated_at' => now()]
+                        );
+                }
+            }
+
             DB::commit();
             return [
                 'message' => 'Category updated successfully.',
                 'category_id' => $data['category_id'],
             ];
         } catch (\Exception $e) {
-
-            DB::commit();
-
-
-            return [
-                'error' => 'There was an error updating the category.',
-                'details' => $e->getMessage(),
-            ];
+            DB::rollBack();
+            throw $e;
         }
     }
     public function categoryStatus($data)

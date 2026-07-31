@@ -228,10 +228,13 @@
         function Edit(id) {
             $.get(`{{ route('category_details', ':id') }}`.replace(':id', id), function(data) {
                 $('#categoryID').val(data.id);
-                $('#name_en').val(data.name.en);
-                $('#name_ar').val(data.name.ar);
+                if (data.name) {
+                    $.each(data.name, function(lang, val) {
+                        $('#name_' + lang).val(val);
+                    });
+                }
                 $('#slug').val(data.slug);
-                $('#slug').prop('readonly', true); // Slug read-only on edit
+                $('#slug').prop('readonly', false);
                 $('#order').val(data.order);
                 $('input[name="status"][value="' + data.status + '"]').prop('checked', true);
 
@@ -264,8 +267,10 @@
                 success: function(response) {
                     if (response.success) {
                         $('#modal_action').modal('hide');
-                        // toastr.success(response.message);
-                        // setTimeout(() => location.reload(), 1200);
+                        if (typeof toastr !== 'undefined') {
+                            toastr.success(response.message || 'Category saved successfully!');
+                        }
+                        setTimeout(() => location.reload(), 800);
                     }
                 },
                 error: function(xhr) {

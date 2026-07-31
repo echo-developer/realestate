@@ -32,37 +32,41 @@ class FaqController extends Controller
     public function submit_Category(Request $request)
     {
         $langs = array_keys($request->input('name', []));
-
-        $rules = [
-
-            'status' => 'required|boolean',
-            'slug' => 'required|string|unique:faq_categories,slug,' . ($request->categoryID ?? 'NULL') . ',id',
-        ];
-
-
-        foreach ($langs as $lang) {
-            $rules["name.$lang"] = 'required|string|max:250';
+        if (empty($langs)) {
+            $langs = explode(',', admin_default_lang());
         }
 
-        $validated = $request->validate($rules);
+        $rules = [
+            'status' => 'required',
+            'slug' => 'nullable|string',
+        ];
 
-        // if (empty($validated['slug'])) {
-        //     $validated['slug'] = Str::slug($request->input('name.en'));
-        // }
+        $messages = [];
+        foreach ($langs as $lang) {
+            $rules["name.$lang"] = 'required|string|max:250';
+            $messages["name.$lang.required"] = 'The Category Name (' . strtoupper($lang) . ') is required.';
+        }
+
+        $validated = $request->validate($rules, $messages);
+
+        if (empty($validated['slug']) && !empty($validated['name']['en'])) {
+            $validated['slug'] = \Illuminate\Support\Str::slug($validated['name']['en']);
+        }
 
         $validated['category_id'] = $request->input('categoryID');
         $validated['order'] = $request->input('order', null);
 
         try {
-            // if ($validated['category_id']) {
-            //     $response = $this->categoryname->updateCategory($validated);
-            // } else {
+            if (!empty($validated['category_id'])) {
+                $response = $this->categoryname->updateCategory($validated);
+                $msg = 'FAQ category updated successfully.';
+            } else {
                 $response = $this->categoryname->createCategory($validated);
-            // }
-            set_flash_message('add');
+                $msg = 'FAQ category created successfully.';
+            }
             return response()->json([
                 'success' => true,
-                'message' => $response['message'] ?? 'Category saved successfully!',
+                'message' => $response['message'] ?? $msg,
                 'category_id' => $response['category_id'] ?? null,
             ]);
         } catch (\Exception $e) {
@@ -76,57 +80,7 @@ class FaqController extends Controller
 
     public function update_faqcategory(Request $req)
     {
-        $langs = array_keys($req->input('name', []));
-
-        $rules = [
-
-            'status' => 'required|boolean',
-
-        ];
-        foreach ($langs as $lang) {
-            $rules["name.$lang"] = 'required|string|max:255';
-        }
-        $messages = [
-            'status.required' => 'The Status field is required.',
-            'status.boolean' => 'The Status must be true or false.',
-        ];
-        foreach ($langs as $lang) {
-            $messages["name.$lang.required"] = "The Name ($lang) field is required.";
-        }
-        $validated = $req->validate($rules, $messages);
-        $validated['order'] = $req->input('order', null);
-
-
-        if (empty($validated['slug'])) {
-            $validated['slug'] = Str::slug($req->input('name.en'));
-        }
-
-        $validated['category_id'] = $req->input('categoryID');
-
-        try {
-            // if ($validated['category_id']) {
-
-            //     $response = $this->categoryname->updateCategory($validated);
-            //     $msg = 'FAQ category updated successfully.';
-            // } else {
-
-                $response = $this->categoryname->createCategory($validated);
-                $msg = 'FAQ category created successfully.';
-            // }
-            set_flash_message('update');
-            return response()->json([
-                'success' => true,
-                'message' => $msg,
-                'category_id' => $response['category_id'] ?? null,
-            ]);
-        } catch (\Exception $e) {
-
-            return response()->json([
-                'success' => false,
-                'error' => 'Something went wrong! Please try again later.',
-                'details' => $e->getMessage(),
-            ], 500);
-        }
+        return $this->submit_Category($req);
     }
     public function category_details($id)
     {
