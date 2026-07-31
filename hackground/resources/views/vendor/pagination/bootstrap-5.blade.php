@@ -18,9 +18,11 @@
 
             <!-- Previous Page -->
             <li class="page-item {{ $paginator->onFirstPage() ? 'disabled' : '' }}">
-                <a href="{{ $paginator->previousPageUrl() }}" class="page-link">
-                    &laquo;
-                </a>
+                @if($paginator->onFirstPage())
+                    <span class="page-link">&laquo;</span>
+                @else
+                    <a href="{{ $paginator->previousPageUrl() }}" class="page-link">&laquo;</a>
+                @endif
             </li>
 
             <!-- Page Numbers -->
@@ -40,9 +42,11 @@
 
             <!-- Next Page -->
             <li class="page-item {{ $paginator->hasMorePages() ? '' : 'disabled' }}">
-                <a href="{{ $paginator->nextPageUrl() }}" class="page-link">
-                    &raquo;
-                </a>
+                @if($paginator->hasMorePages())
+                    <a href="{{ $paginator->nextPageUrl() }}" class="page-link">&raquo;</a>
+                @else
+                    <span class="page-link">&raquo;</span>
+                @endif
             </li>
 
             <!-- Last Page -->

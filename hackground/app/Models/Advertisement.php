@@ -36,14 +36,14 @@ class Advertisement extends Model
     {
         $query = DB::table('advertisements as a')->select('a.*');
 		$query->where('a.status', '!=', '-1');
-		if(!empty($srch['page'])) {
+		if(!empty($srch['page']) && !is_numeric($srch['page'])) {
             $query->where('a.page',$srch['page']);
         }
 		if(!empty($srch['position'])) {
             $query->where('a.position',$srch['position']);
         }
         $query->orderBy('a.advertisement_id', 'desc');
-        return $query->paginate($paginate);
+        return $query->paginate($paginate)->withQueryString();
     }
 
     public function addRecord($data)
@@ -395,14 +395,14 @@ class Advertisement extends Model
     {
         $query = DB::table('advertisement_request as a')->select('a.*');
 		$query->where('a.status', '!=', '-1');
-		if(!empty($srch['page'])) {
+		if(!empty($srch['page']) && !is_numeric($srch['page'])) {
             $query->where('a.page',$srch['page']);
         }
 		if(!empty($srch['position'])) {
             $query->where('a.position',$srch['position']);
         }
         $query->orderBy('a.request_id', 'desc');
-        return $query->paginate($paginate);
+        return $query->paginate($paginate)->withQueryString();
     }
 
 	public function get_request_details($id)

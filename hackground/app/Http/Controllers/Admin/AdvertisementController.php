@@ -145,20 +145,26 @@ class AdvertisementController extends Controller
             {
                 DB::table('advertisement_request')->where('request_id',$postData['request_id'])->update(['status'=>'1']);
             }
-            $user_id = $postData['user_id'];
+            $user_id = $postData['user_id'] ?? null;
             if($user_id)
             {
-                $username = getField('name','users','id',$user_id);
-                $email = getField('email','users','id',$user_id);
-                $data_parse = array(
-                    'USERNAME'=> $username,
-                    'PAGE'=> $postData['page'],
-                    'POSITION'=> $postData['position'],
-                    'STARTDATE'=> $postData['start_date'],
-                    'EXPIREDATE'=> $postData['expire_date'],
-                );
-                $template = 'ads-confirmed';
-                SendMail($email, $template, $data_parse);
+                try {
+                    $username = getField('name','users','id',$user_id);
+                    $email = getField('email','users','id',$user_id);
+                    if($email) {
+                        $data_parse = array(
+                            'USERNAME'=> $username,
+                            'PAGE'=> $postData['page'] ?? '',
+                            'POSITION'=> $postData['position'] ?? '',
+                            'STARTDATE'=> $postData['start_date'] ?? '',
+                            'EXPIREDATE'=> $postData['expire_date'] ?? '',
+                        );
+                        $template = 'ads-confirmed';
+                        SendMail($email, $template, $data_parse);
+                    }
+                } catch (\Throwable $e) {
+                    \Log::error('Ad mail send error: ' . $e->getMessage());
+                }
             }
            
             $msg['status'] = 'OK';
@@ -213,7 +219,7 @@ class AdvertisementController extends Controller
     public function upload_file(Request $req)
     {
         $req->validate([
-            'file' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'file' => 'required|image|mimes:jpg,jpeg,png,gif,webp,svg|max:10240',
         ]);
 
         if ($req->hasFile('file')) {

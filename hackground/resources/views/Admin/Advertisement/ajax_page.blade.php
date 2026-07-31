@@ -153,8 +153,10 @@
 
     function submitForm(form, event) {
         event.preventDefault();
-        var formId = $("#add_form");
+        var formId = $(form);
         var url = $(form).attr('action');
+        var submitBtn = $(form).find('button[type="submit"]');
+        submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Saving...');
         $.ajax({
             type: 'POST',
             url: url,
@@ -165,28 +167,23 @@
             dataType: 'JSON',
             success: function(res) {
                 if (res.status == 'OK') {
-                    Swal.fire({
-                        title: "Success!",
-                        text: res.message,
-                        icon: "success",
-                        confirmButtonText: "OK"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location = location.href;
-                        }
-                    });
+                    if (typeof toastr !== 'undefined') {
+                        toastr.success(res.message || 'Saved successfully');
+                    }
+                    setTimeout(() => location.reload(), 500);
                 } else {
-                    Swal.fire({
-                        title: "Failed!",
-                        text: res.message,
-                        icon: "error",
-                        confirmButtonText: "OK"
-                    }).then((result) => {});
+                    submitBtn.prop('disabled', false).html('Submit');
+                    if (typeof toastr !== 'undefined') {
+                        toastr.error(res.message || 'Failed to save');
+                    } else {
+                        alert(res.message || 'Failed to save');
+                    }
                 }
             },
             error: function(xhr) {
+                submitBtn.prop('disabled', false).html('Submit');
                 var res = xhr.responseJSON;
-                if (res.errors) {
+                if (res && res.errors) {
                     $.each(res.errors, function(index, error) {
                         $("." + index + "Error").html(error);
                     });
@@ -256,10 +253,12 @@
         }
     }
 
-    $("#upload_file1").on('change', function() {
-        let file = event.target.files[0];
+    $(document).off('change', '#upload_file1').on('change', '#upload_file1', function(e) {
+        let file = (e && e.target && e.target.files && e.target.files[0]) || (this && this.files && this.files[0]);
+        if (!file) return;
         let formData = new FormData();
         formData.append('file', file);
+        if (typeof toastr !== 'undefined') toastr.info('Uploading image...', '', { timeOut: 1500 });
         $.ajax({
             url: "{{ url('/ads-packages/uplaod_file') }}",
             method: 'POST',
@@ -271,22 +270,28 @@
             },
             success: function(data) {
                 if (data.status == 'OK') {
+                    if (typeof toastr !== 'undefined') toastr.success('Image uploaded successfully');
                     var html = '';
                     html += '<img id="image_preview1" src="'+data.file_path+'" style="width: 100px; height: auto;" /><input type="hidden" class="filename" name="ad_image" id="ad_image" value="'+data.file_name+'" />';
-                    html +=  '<button type="button" id="delete_image_btn1" class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>';
+                    html +=  '<button type="button" id="delete_image_btn1" class="btn btn-sm btn-danger ms-2" onclick="deleteUploadedImage(event)" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>';
                     $("#ad_image_con").html(html);
+                } else {
+                    if (typeof toastr !== 'undefined') toastr.error(data.error || 'Failed to upload image.');
                 }
             },
             error: function(xhr, status, error) {
                 console.error('AJAX Error:', error);
+                if (typeof toastr !== 'undefined') toastr.error('Image upload failed. Maximum size is 10MB.');
             }
         });
     });
 
-    $("#upload_file2").on('change', function() {
-        let file = event.target.files[0];
+    $(document).off('change', '#upload_file2').on('change', '#upload_file2', function(e) {
+        let file = (e && e.target && e.target.files && e.target.files[0]) || (this && this.files && this.files[0]);
+        if (!file) return;
         let formData = new FormData();
         formData.append('file', file);
+        if (typeof toastr !== 'undefined') toastr.info('Uploading mobile image...', '', { timeOut: 1500 });
         $.ajax({
             url: "{{ url('/ads-packages/uplaod_file') }}",
             method: 'POST',
@@ -298,22 +303,27 @@
             },
             success: function(data) {
                 if (data.status == 'OK') {
+                    if (typeof toastr !== 'undefined') toastr.success('Mobile image uploaded successfully');
                     var html = '';
                     html += '<img id="image_preview2" src="'+data.file_path+'" style="width: 100px; height: auto;" /><input type="hidden" class="filename" name="ad_image_mobile" id="ad_image_mobile" value="'+data.file_name+'" />';
-                    html +=  '<button type="button" id="delete_image_btn2" class="btn btn-sm btn-danger" onclick="deleteUploadedImage()" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>';
+                    html +=  '<button type="button" id="delete_image_btn2" class="btn btn-sm btn-danger ms-2" onclick="deleteUploadedImage(event)" title="Delete Image"><i class="bi bi-trash3-fill"></i></button>';
                     $("#ad_image_mobile_con").html(html);
+                } else {
+                    if (typeof toastr !== 'undefined') toastr.error(data.error || 'Failed to upload image.');
                 }
             },
             error: function(xhr, status, error) {
                 console.error('AJAX Error:', error);
+                if (typeof toastr !== 'undefined') toastr.error('Mobile image upload failed. Maximum size is 10MB.');
             }
         });
     });
 
-    function deleteUploadedImage() {
-        $(event.target).closest('button').siblings('img').first().attr('src', '');
-        $(event.target).closest('button').siblings('.filename').first().val('');
-        $(event.target).closest('button').hide();
+    function deleteUploadedImage(e) {
+        let target = e ? $(e.target).closest('button') : $(event.target).closest('button');
+        target.siblings('img').first().attr('src', '');
+        target.siblings('.filename').first().val('');
+        target.hide();
     }
 </script>
 @endif
@@ -491,7 +501,7 @@
 
     function submitForm(form, event) {
         event.preventDefault();
-        var formId = $("#add_form");
+        var formId = $(form);
         var url = $(form).attr('action');
         $.ajax({
             type: 'POST',
@@ -503,23 +513,16 @@
             dataType: 'JSON',
             success: function(res) {
                 if (res.status == 'OK') {
-                    Swal.fire({
-                        title: "Success!",
-                        text: res.message,
-                        icon: "success",
-                        confirmButtonText: "OK"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location = location.href;
-                        }
-                    });
+                    if (typeof toastr !== 'undefined') {
+                        toastr.success(res.message || 'Saved successfully');
+                    }
+                    setTimeout(() => location.reload(), 800);
                 } else {
-                    Swal.fire({
-                        title: "Failed!",
-                        text: res.message,
-                        icon: "error",
-                        confirmButtonText: "OK"
-                    }).then((result) => {});
+                    if (typeof toastr !== 'undefined') {
+                        toastr.error(res.message || 'Failed to save');
+                    } else {
+                        alert(res.message || 'Failed to save');
+                    }
                 }
             },
             error: function(xhr) {
@@ -849,7 +852,7 @@
 
     function submitForm(form, event) {
         event.preventDefault();
-        var formId = $("#add_form");
+        var formId = $(form);
         var url = $(form).attr('action');
         $.ajax({
             type: 'POST',
@@ -861,23 +864,16 @@
             dataType: 'JSON',
             success: function(res) {
                 if (res.status == 'OK') {
-                    Swal.fire({
-                        title: "Success!",
-                        text: res.message,
-                        icon: "success",
-                        confirmButtonText: "OK"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location = location.href;
-                        }
-                    });
+                    if (typeof toastr !== 'undefined') {
+                        toastr.success(res.message || 'Saved successfully');
+                    }
+                    setTimeout(() => location.reload(), 800);
                 } else {
-                    Swal.fire({
-                        title: "Failed!",
-                        text: res.message,
-                        icon: "error",
-                        confirmButtonText: "OK"
-                    }).then((result) => {});
+                    if (typeof toastr !== 'undefined') {
+                        toastr.error(res.message || 'Failed to save');
+                    } else {
+                        alert(res.message || 'Failed to save');
+                    }
                 }
             },
             error: function(xhr) {

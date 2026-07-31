@@ -151,7 +151,7 @@ class AdvertisementPackagesController extends Controller
     public function upload_file(Request $req)
     {
         $req->validate([
-            'file' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'file' => 'required|image|mimes:jpg,jpeg,png,gif,webp,svg|max:10240',
         ]);
 
         if ($req->hasFile('file')) {
