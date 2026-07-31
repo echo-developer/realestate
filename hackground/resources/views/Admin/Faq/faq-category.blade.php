@@ -204,19 +204,7 @@
                 "paging": false,
                 "searching": false,
                 "info": false,
-                "ordering": true,
-                "order": [
-                    [0, 'desc']
-                ],
-                "columnDefs": [{
-                        "orderable": true,
-                        "targets": [0]
-                    },
-                    {
-                        "orderable": false,
-                        "targets": [1, 2, 3, 4]
-                    }
-                ]
+                "ordering": false
             });
         });
 
@@ -340,8 +328,8 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
-                        // toastr.success(response.message);
-                        // setTimeout(() => location.reload(), 1200);
+                        toastr.success(response.message || 'Category deleted successfully.');
+                        setTimeout(() => location.reload(), 1000);
                     },
                     error: function() {
                         toastr.error('Failed to delete category.');

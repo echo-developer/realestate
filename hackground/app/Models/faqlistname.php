@@ -13,9 +13,9 @@ class faqlistname extends Model
             ->leftJoin('faq_list_names', 'faq_list.id', '=', 'faq_list_names.faq_id')
             ->leftJoin('faq_categories', 'faq_list.faq_category_id', '=', 'faq_categories.id')
             ->where([
-                'faq_list_names.lang'=> $lang,
-                'faq_list.status' => config('constants.STATUS_ACTIVE'),
-                'faq_categories.status' => config('constants.STATUS_ACTIVE'),
+                ['faq_list_names.lang', '=', $lang],
+                ['faq_list.status', '!=', config('constants.STATUS_DELETE')],
+                ['faq_categories.status', '!=', config('constants.STATUS_DELETE')],
             ])
             ->select(
                 'faq_list.id',
@@ -23,7 +23,7 @@ class faqlistname extends Model
                 'faq_list_names.question',
                 'faq_list.order',
                 'faq_list.status',
-                'faq_categories.status',
+                'faq_categories.status as category_status'
             );
 
         if ($term) {
