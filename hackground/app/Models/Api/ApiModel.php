@@ -64,7 +64,8 @@ class ApiModel extends Model
             ],
             [
                 'property_sub_category_names.lang' => $lang,
-                'property_sub_category.category_id' => $id
+                'property_sub_category.category_id' => $id,
+                'property_sub_category.status' => config('constants.STATUS_ACTIVE')
             ],
             null
         );
