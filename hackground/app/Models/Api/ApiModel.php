@@ -1377,7 +1377,12 @@ class ApiModel extends Model
             $query->whereNull('a_l.city_id');
         }
         if (array_key_exists('category', $data) && !empty($data['category'])) {
-            $query->where('a_c.property_category', $data['category']);
+            // Show ads targeted to this category OR global ads (no category restriction),
+            // so an untargeted ad doesn't vanish when a property-type filter is active.
+            $query->where(function ($q) use ($data) {
+                $q->where('a_c.property_category', $data['category'])
+                  ->orWhereNull('a_c.property_category');
+            });
         }
         $query->groupBy('a.advertisement_id');
         if (array_key_exists('limit', $data) && !empty($data['limit'])) {

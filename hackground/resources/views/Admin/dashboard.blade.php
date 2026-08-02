@@ -450,7 +450,7 @@
                 </div>
                 <div class="kpi-details">
                     <div class="kpi-title">Total Revenue</div>
-                    <div class="kpi-value">${{ number_format($data["total_revenue"] ?? 0) }}</div>
+                    <div class="kpi-value">{{ get_setting('site-currency') }}{{ number_format($data["total_revenue"] ?? 0) }}</div>
                     @if(isset($data['revenue_trend']))
                         @if($data['revenue_trend'] > 0)
                             <div class="kpi-trend trend-up"><i class="bi bi-arrow-up-right"></i> {{ $data['revenue_trend'] }}%</div>
@@ -655,7 +655,7 @@
                     <div class="mb-4">
                         <div class="rev-month-label">This Month ({{ date('M') }})</div>
                         <div class="d-flex align-items-end gap-3">
-                            <div class="rev-num-lg">${{ number_format($data['this_month_revenue'] ?? 0) }}</div>
+                            <div class="rev-num-lg">{{ get_setting('site-currency') }}{{ number_format($data['this_month_revenue'] ?? 0) }}</div>
                             <div class="{{ ($data['revenue_trend'] ?? 0) >= 0 ? 'trend-up' : 'trend-down' }} rev-trend">
                                 <i class="bi bi-arrow-{{ ($data['revenue_trend'] ?? 0) >= 0 ? 'up' : 'down' }}-right"></i> {{ abs($data['revenue_trend'] ?? 0) }}%
                             </div>
@@ -663,7 +663,7 @@
                     </div>
                     <div class="mb-4">
                         <div class="rev-month-label">Last Month</div>
-                        <div class="rev-num-sm">${{ number_format($data['last_month_revenue'] ?? 0) }}</div>
+                        <div class="rev-num-sm">{{ get_setting('site-currency') }}{{ number_format($data['last_month_revenue'] ?? 0) }}</div>
                     </div>
                     <!-- Mini Chart Canvas -->
                     <div class="flex-grow-1 rev-chart-wrap">
@@ -846,7 +846,7 @@
                                     </div>
                                 </div>
                                 <div class="text-end ms-3 flex-shrink-0">
-                                    <div class="fw-bold text-dark mb-1" style="font-size: 0.9rem;">${{ number_format($property->settings->expected_price ?? 0) }}</div>
+                                    <div class="fw-bold text-dark mb-1" style="font-size: 0.9rem;">{{ get_setting('site-currency') }}{{ number_format($property->settings->expected_price ?? 0) }}</div>
                                     <div>
                                         @if($property->status == 1)
                                             <span class="badge-soft-success">Active</span>
@@ -941,7 +941,7 @@
                                         @endif
                                         <div class="fw-bold text-dark mb-2" style="font-size: 1.1rem;">{{ $plan->name ?: 'Plan' }}</div>
                                         <div class="mb-3">
-                                            <span style="font-size: 2rem; font-weight: 800; color: #1e293b;">${{ number_format($plan->price) }}</span>
+                                            <span style="font-size: 2rem; font-weight: 800; color: #1e293b;">{{ get_setting('site-currency') }}{{ number_format($plan->price) }}</span>
                                             <span class="text-muted" style="font-size: 0.85rem;">/month</span>
                                         </div>
                                         <div class="text-muted mb-4" style="font-size: 0.85rem;">For members</div>
@@ -990,7 +990,7 @@
                                         {{ $agent->properties_count }} Properties
                                     </div>
                                     <div class="text-end" style="width: 25%;">
-                                        <div class="fw-bold text-dark" style="font-size: 0.9rem;">${{ number_format($agent->properties_count * 1250) }}</div>
+                                        <div class="fw-bold text-dark" style="font-size: 0.9rem;">{{ get_setting('site-currency') }}{{ number_format($agent->properties_count * 1250) }}</div>
                                         <div class="text-muted fw-semibold" style="font-size: 0.85rem;">Total Sales</div>
                                     </div>
                                 </div>

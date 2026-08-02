@@ -41,7 +41,7 @@
         <div class="box-body">
             
         <div class="form-group">
-            <label class="form-label d-block" for="category_key">Category </label>
+            <label class="form-label d-block" for="category_key">Category <span class="text-danger">*</span></label>
             <select class="form-select select-2" name="category[]" multiple>
                 <option value="">-Select-</option>
                 <?php foreach ($property_category as $c) { ?>
@@ -51,7 +51,7 @@
         </div>
 
         <div class="form-group">
-            <label class="form-label d-block" for="category_key">City </label>
+            <label class="form-label d-block" for="category_key">City <span class="text-danger">*</span></label>
             <select class="form-select select-2" name="city[]" multiple>
                 <option value="">-Select-</option>
                 <?php foreach ($city as $c) { ?>
@@ -67,21 +67,21 @@
                     <option value="<?php echo $page['slug']; ?>" ><?php echo $page['name']; ?></option>
                 <?php } ?>
             </select>
-            <label for="category_key">Page </label>
+            <label for="category_key">Page <span class="text-danger">*</span></label>
         </div>
 
         <div class="form-floating mb-3">
             <select class="form-select" name="position" id="position" onchange="get_size($(this))">
                 <option value="">-Select-</option>
             </select>
-            <label for="category_key">Position </label>
+            <label for="category_key">Position <span class="text-danger">*</span></label>
         </div>
 
         <div class="form-floating mb-3">
             <select class="form-select" name="ad_size">
                 <option value="">-Select-</option>
             </select>
-            <label for="category_key">Size </label>
+            <label for="category_key">Size <span class="text-danger">*</span></label>
         </div>
 
         <div class="form-floating mb-3">
@@ -142,12 +142,12 @@
 
         <div class="form-floating mb-3">
             <input type="date" class="form-control reset_field" id="start_date" name="start_date" placeholder="" autocomplete="off">
-            <label for="start_date">Start Date </label>
+            <label for="start_date">Start Date <span class="text-danger">*</span></label>
         </div>
 
         <div class="form-floating mb-3">
             <input type="date" class="form-control reset_field" id="expire_date" name="expire_date" placeholder="" autocomplete="off">
-            <label for="expire_date">Expire Date </label>
+            <label for="expire_date">Expire Date <span class="text-danger">*</span></label>
         </div>
 
         <div class="form-group">
@@ -406,7 +406,7 @@
         <div class="box-body">
             
         <div class="form-group">
-            <label class="form-label d-block" for="category_key">Category </label>
+            <label class="form-label d-block" for="category_key">Category <span class="text-danger">*</span></label>
             <select class="form-select select-2" name="category[]" multiple>
                 <option value="">-Select-</option>
                 <?php foreach ($property_category as $c) { ?>
@@ -416,7 +416,7 @@
         </div>
 
         <div class="form-group">
-            <label class="form-label d-block" for="category_key">City </label>
+            <label class="form-label d-block" for="category_key">City <span class="text-danger">*</span></label>
             <select class="form-select select-2" name="city[]" multiple>
                 <option value="">-Select-</option>
                 <?php foreach ($city as $c) { ?>
@@ -432,21 +432,21 @@
                     <option value="<?php echo $page['slug']; ?>" {{ ($detail->page == $page['slug']) ? 'selected' : '' }}><?php echo $page['name']; ?></option>
                 <?php } ?>
             </select>
-            <label for="category_key">Page </label>
+            <label for="category_key">Page <span class="text-danger">*</span></label>
         </div>
 
         <div class="form-floating mb-3">
             <select class="form-select" name="position" id="position" onchange="get_size($(this))">
                 <option value="">-Select-</option>
             </select>
-            <label for="category_key">Position </label>
+            <label for="category_key">Position <span class="text-danger">*</span></label>
         </div>
 
         <div class="form-floating mb-3">
             <select class="form-select" name="ad_size">
                 <option value="">-Select-</option>
             </select>
-            <label for="category_key">Size </label>
+            <label for="category_key">Size <span class="text-danger">*</span></label>
         </div>
 
         <div class="form-floating mb-3">
@@ -525,12 +525,12 @@
         ?>
         <div class="form-floating mb-3">
             <input type="date" value="{{ $today }}" class="form-control reset_field" id="start_date" name="start_date" placeholder="" autocomplete="off">
-            <label for="start_date">Start Date </label>
+            <label for="start_date">Start Date <span class="text-danger">*</span></label>
         </div>
 
         <div class="form-floating mb-3">
             <input type="date" value="{{ $expire }}" class="form-control reset_field" id="expire_date" name="expire_date" placeholder="" autocomplete="off">
-            <label for="expire_date">Expire Date </label>
+            <label for="expire_date">Expire Date <span class="text-danger">*</span></label>
         </div>
 
         <div class="form-group">
@@ -758,7 +758,7 @@
         <div class="box-body">
 
             <div class="form-group">
-                <label class="form-label d-block" for="category_key">Category </label>
+                <label class="form-label d-block" for="category_key">Category <span class="text-danger">*</span></label>
                 <select class="form-select select-2" name="category[]" multiple>
                     <option value="">-Select-</option>
                     <?php foreach ($property_category as $c) { ?>
@@ -770,7 +770,7 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label d-block" for="category_key">City </label>
+                <label class="form-label d-block" for="category_key">City <span class="text-danger">*</span></label>
                 <select class="form-select select-2" name="city[]" multiple>
                     <option value="">-Select-</option>
                     <?php foreach ($city as $c) { ?>
@@ -790,7 +790,7 @@
                                                                         } ?>><?php echo $page['name']; ?></option>
                     <?php } ?>
                 </select>
-                <label for="category_key">Page </label>
+                <label for="category_key">Page <span class="text-danger">*</span></label>
             </div>
 
             <div class="form-floating mb-3">                
@@ -804,7 +804,7 @@
                     @endforeach
                     @endif
                 </select>
-                <label for="category_key">Position </label>
+                <label for="category_key">Position <span class="text-danger">*</span></label>
             </div>
 
             <div class="form-floating mb-3">
@@ -818,7 +818,7 @@
                     @endforeach
                     @endif
                 </select>
-                <label for="category_key">Size </label>
+                <label for="category_key">Size <span class="text-danger">*</span></label>
             </div>
 
             <div class="form-floating mb-3">
@@ -889,12 +889,12 @@
             
             <div class="form-floating mb-3">
                 <input type="date" class="form-control reset_field" id="start_date" name="start_date" placeholder="" autocomplete="off" value="{{ !empty($detail['start_date']) ? date('Y-m-d', strtotime($detail['start_date'])) : '' }}">
-                <label for="start_date">Start Date </label>
+                <label for="start_date">Start Date <span class="text-danger">*</span></label>
             </div>
 
             <div class="form-floating mb-3">
                 <input type="date" class="form-control reset_field" id="expire_date" name="expire_date" placeholder="" autocomplete="off" value="{{ !empty($detail['expire_date']) ? date('Y-m-d', strtotime($detail['expire_date'])) : '' }}">
-                <label for="expire_date">Expire Date </label>
+                <label for="expire_date">Expire Date <span class="text-danger">*</span></label>
             </div>
 
             <div class="form-group mb-0">

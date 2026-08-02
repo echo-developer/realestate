@@ -134,7 +134,7 @@
                         @foreach ($MembershipPlans as $membershipPlan)
                         <tr>
                             <td><span class="fw-bold text-dark">{{ optional($membershipPlan->plan_type_names)->plan_name ?? 'N/A' }}</span></td>
-                            <td><span class="badge bg-light text-primary border px-2 py-1"><i class="bi bi-currency-dollar"></i> {{ $membershipPlan->price }}</span></td>
+                            <td><span class="badge bg-light text-primary border px-2 py-1">{{ get_setting('site-currency') }}{{ $membershipPlan->price }}</span></td>
                             <td><span class="text-muted"><i class="bi bi-clock"></i> {{ $membershipPlan->validity_days }} Days</span></td>
                             <td>
                                 <input data-id="{{ $membershipPlan->id }}" class="membershipPlanStatus d-none" type="checkbox"
