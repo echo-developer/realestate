@@ -1286,7 +1286,7 @@
                         <div class="col-lg-2 col-sm-4 prop-form-group">
                             <label>Price</label>
                             <div class="prop-input-prefix">
-                                <span class="prefix-icon">₹</span>
+                                <span class="prefix-icon">{{ get_setting('site-currency') }}</span>
                                 <input class="prop-form-control" type="number" placeholder="Amount" value="${bhkData ? bhkData.property_price : ''}">
                             </div>
                         </div>

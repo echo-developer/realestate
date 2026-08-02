@@ -69,7 +69,7 @@
     
                     <div class="row" style="display:none" id="price-without-banner">
                         <div class="col-12 form-group">
-                          <label for="price_without_banner">Price in INR(Without Banner) </label>
+                          <label for="price_without_banner">Price in {{ get_setting('site-currency-code') }}(Without Banner) </label>
                           <input type="text" class="form-control reset_field" id="price_without_banner" name="price_without_banner" autocomplete="off">
                         </div>
                     </div>
@@ -366,7 +366,7 @@
     
                     <div class="row" style="display:none" id="price-without-banner">
                         <div class="col-12 form-group">
-                          <label for="price_without_banner">Price in INR(Without Banner) </label>
+                          <label for="price_without_banner">Price in {{ get_setting('site-currency-code') }}(Without Banner) </label>
                           <input type="text" class="form-control reset_field" id="price_without_banner" name="price_without_banner" autocomplete="off" value="{{ !empty($detail['price_without_banner']) ? $detail['price_without_banner'] : '' }}">
                         </div>
                     </div>

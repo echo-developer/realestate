@@ -122,7 +122,7 @@
                                         <td data-label="City" class="fw-medium text-dark">{{ $act->city_id ?? 'N/A' }}</td>
                                         <td data-label="Budget" class="fw-bold text-success">
                                             @if ($act->min_budget || $act->max_budget)
-                                                ₹{{ $act->min_budget ?? '0' }} - ₹{{ $act->max_budget ?? 'Any' }}
+                                                {{ get_setting('site-currency') }}{{ $act->min_budget ?? '0' }} - {{ get_setting('site-currency') }}{{ $act->max_budget ?? 'Any' }}
                                             @else
                                                 <span class="text-muted fw-normal"><em>N/A</em></span>
                                             @endif

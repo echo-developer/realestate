@@ -65,7 +65,7 @@
                                 <th>Phone</th>
                                 <th>Email</th>
                                 <th>Address</th>
-                                <th>Loan Amount (₹)</th>
+                                <th>Loan Amount ({{ get_setting('site-currency') }})</th>
                                 <th>Tenure (Months)</th>
                                 <th>Property Identified</th>
                                 <th>Date</th>
