@@ -422,6 +422,23 @@ $userTypes = [
             </div>
 
             <div class="form-floating mb-3">
+                @php
+                    $__cpcSetting = get_setting('country-phone-code');
+                    $__allowedCpc = $__cpcSetting ? array_filter(array_map('trim', explode(',', $__cpcSetting))) : [];
+                    $__cpcList = collect(config('country_codes', []))->filter(function ($c) use ($__allowedCpc) {
+                        return empty($__allowedCpc) || in_array($c['code'], $__allowedCpc);
+                    });
+                @endphp
+                <select class="form-select" id="phone_code" name="phone_code">
+                    @foreach($__cpcList as $__cpc)
+                        <option value="{{ $__cpc['code'] }}" {{ $__cpc['code'] === '+31' ? 'selected' : '' }}>{{ $__cpc['name'] }} ({{ $__cpc['code'] }})</option>
+                    @endforeach
+                </select>
+                <label for="phone_code">Country Code</label>
+                <div class="invalid-feedback" id="phone_code_error"></div>
+            </div>
+
+            <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="user_phone" name="user_phone" placeholder="" required>
                 <label for="user_phone">Phone No</label>
                 <div class="invalid-feedback" id="user_phone_error"></div>
@@ -616,6 +633,7 @@ $userTypes = [
                         $('#usersId').val(response.id);
                         $('#user_name').val(response.name);
                         $('#user_type').val(response.user_type);
+                        $('#phone_code').val(response.phone_code || '+31');
                         $('#user_phone').val(response.phone);
                         $('#wp_num').val(response.whatsapp_no);
                         $('#user_email').val(response.email);
